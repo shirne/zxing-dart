@@ -105,7 +105,7 @@ class ErrorCorrection {
       throw Exception(
           "The number of codewords does not match the selected symbol");
     }
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = StringBuilder();
     sb.write(codewords);
     int blockCount = symbolInfo.getInterleavedBlockCount();
     if (blockCount == 1) {
@@ -117,7 +117,7 @@ class ErrorCorrection {
       List<int> errorSizes = List.generate(blockCount, (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1));
       
       for (int block = 0; block < blockCount; block++) {
-        StringBuffer temp = new StringBuffer(dataSizes[block]);
+        StringBuffer temp = StringBuffer();
         for (int d = block; d < symbolInfo.getDataCapacity(); d += blockCount) {
           temp.write(codewords[d]);
         }

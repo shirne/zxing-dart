@@ -156,7 +156,7 @@ class FinderPatternFinder {
     List<FinderPattern> patternInfo = selectBestPatterns();
     ResultPoint.orderBestPatterns(patternInfo);
 
-    return new FinderPatternInfo(patternInfo);
+    return FinderPatternInfo(patternInfo);
   }
 
   /**
@@ -532,7 +532,7 @@ class FinderPatternFinder {
         }
         if (!found) {
           FinderPattern point =
-              new FinderPattern(centerJ, centerI, estimatedModuleSize);
+              FinderPattern(centerJ, centerI, estimatedModuleSize);
           possibleCenters.add(point);
           if (resultPointCallback != null) {
             resultPointCallback!.foundPossibleResultPoint(point);

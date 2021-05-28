@@ -41,7 +41,7 @@ class AI01AndOtherAIs extends AI01decoder {
 
   @override
   String parseInformation() {
-    StringBuilder buff = new StringBuilder();
+    StringBuilder buff = StringBuilder();
 
     buff.write("(01)");
     int initialGtinPosition = buff.length;

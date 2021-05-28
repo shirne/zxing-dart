@@ -61,7 +61,7 @@ class ByteMatrix {
 
   @override
   String toString() {
-    StringBuffer result = new StringBuffer(2 * width * height + 2);
+    StringBuffer result = StringBuffer();
     for (int y = 0; y < height; ++y) {
       Uint8List bytesY = bytes[y];
       for (int x = 0; x < width; ++x) {

@@ -39,6 +39,6 @@ class URLTOResultParser extends ResultParser {
     }
     String? title = titleEnd <= 6 ? null : rawText.substring(6, titleEnd);
     String uri = rawText.substring(titleEnd + 1);
-    return new URIParsedResult(uri, title);
+    return URIParsedResult(uri, title);
   }
 }

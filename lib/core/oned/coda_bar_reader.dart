@@ -155,7 +155,7 @@ class CodaBarReader extends OneDReader {
     }
     double right = runningCount.toDouble();
 
-    Result result = new Result(
+    Result result = Result(
         decodeRowResult.toString(),
         null,
         [

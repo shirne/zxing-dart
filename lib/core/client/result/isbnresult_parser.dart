@@ -43,6 +43,6 @@ class ISBNResultParser extends ResultParser {
       return null;
     }
 
-    return new ISBNParsedResult(rawText);
+    return ISBNParsedResult(rawText);
   }
 }

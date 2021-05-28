@@ -29,7 +29,7 @@ class X12Encoder extends C40Encoder {
   @override
   void encode(EncoderContext context) {
     //step C
-    StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
       String c = context.getCurrentChar();
       context.pos++;

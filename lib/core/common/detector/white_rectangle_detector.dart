@@ -240,7 +240,7 @@ class WhiteRectangleDetector {
       int x = MathUtils.round(aX + i * xStep);
       int y = MathUtils.round(aY + i * yStep);
       if (image.get(x, y)) {
-        return new ResultPoint(x.toDouble(), y.toDouble());
+        return ResultPoint(x.toDouble(), y.toDouble());
       }
     }
     return null;

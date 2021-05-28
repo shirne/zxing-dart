@@ -177,7 +177,7 @@ class AddressBookParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(100);
+    StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(names, result);
     ParsedResult.maybeAppendList(nicknames, result);
     ParsedResult.maybeAppend(pronunciation, result);

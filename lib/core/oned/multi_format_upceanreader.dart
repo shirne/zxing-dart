@@ -113,7 +113,7 @@ class MultiFormatUPCEANReader extends OneDReader {
   
         if (ean13MayBeUPCA && canReturnUPCA) {
           // Transfer the metadata across
-          Result resultUPCA = new Result(result.getText().substring(1),
+          Result resultUPCA = Result(result.getText().substring(1),
                                          result.getRawBytes(),
                                          result.getResultPoints(),
                                          BarcodeFormat.UPC_A);

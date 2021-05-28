@@ -68,7 +68,7 @@ class Detector {
             as ResultPointCallback;
 
     FinderPatternFinder finder =
-        new FinderPatternFinder(image, resultPointCallback);
+        FinderPatternFinder(image, resultPointCallback);
     FinderPatternInfo info = finder.find(hints);
 
     return processFinderPatternInfo(info);
@@ -132,7 +132,7 @@ class Detector {
     } else {
       points = [bottomLeft, topLeft, topRight, alignmentPattern];
     }
-    return new DetectorResult(bits, points);
+    return DetectorResult(bits, points);
   }
 
   static PerspectiveTransform createTransform(

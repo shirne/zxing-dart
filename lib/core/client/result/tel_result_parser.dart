@@ -38,6 +38,6 @@ class TelResultParser extends ResultParser {
     String number = queryStart < 0
         ? rawText.substring(4)
         : rawText.substring(4, queryStart);
-    return new TelParsedResult(number, telURI, null);
+    return TelParsedResult(number, telURI, null);
   }
 }

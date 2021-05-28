@@ -81,7 +81,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     int multiple = outputWidth ~/ fullWidth;
     int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
 
-    BitMatrix output = new BitMatrix(outputWidth, outputHeight);
+    BitMatrix output = BitMatrix(outputWidth, outputHeight);
     for (int inputX = 0, outputX = leftPadding;
         inputX < inputWidth;
         inputX++, outputX += multiple) {

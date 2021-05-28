@@ -101,7 +101,7 @@ class BinaryBitmap {
   BinaryBitmap crop(int left, int top, int width, int height) {
     LuminanceSource newSource =
         binarizer.getLuminanceSource().crop(left, top, width, height);
-    return new BinaryBitmap(binarizer.createBinarizer(newSource));
+    return BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
   /**
@@ -120,7 +120,7 @@ class BinaryBitmap {
   BinaryBitmap rotateCounterClockwise() {
     LuminanceSource newSource =
         binarizer.getLuminanceSource().rotateCounterClockwise();
-    return new BinaryBitmap(binarizer.createBinarizer(newSource));
+    return BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
   /**
@@ -132,7 +132,7 @@ class BinaryBitmap {
   BinaryBitmap rotateCounterClockwise45() {
     LuminanceSource newSource =
         binarizer.getLuminanceSource().rotateCounterClockwise45();
-    return new BinaryBitmap(binarizer.createBinarizer(newSource));
+    return BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
   @override

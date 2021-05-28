@@ -24,8 +24,8 @@ import 'upceanreader.dart';
 class UPCEANExtensionSupport {
   static final List<int> EXTENSION_START_PATTERN = [1, 1, 2];
 
-  final UPCEANExtension2Support twoSupport = new UPCEANExtension2Support();
-  final UPCEANExtension5Support fiveSupport = new UPCEANExtension5Support();
+  final UPCEANExtension2Support twoSupport = UPCEANExtension2Support();
+  final UPCEANExtension5Support fiveSupport = UPCEANExtension5Support();
 
   Result decodeRow(int rowNumber, BitArray row, int rowOffset) {
     List<int> extensionStartRange = UPCEANReader.findGuardPattern(

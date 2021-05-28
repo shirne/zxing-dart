@@ -53,7 +53,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     if (row == null || row.getSize() < width) {
-      row = new BitArray(size: width);
+      row = BitArray(size: width);
     } else {
       row.clear();
     }
@@ -95,7 +95,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     int height = source.getHeight();
-    BitMatrix matrix = new BitMatrix(width, height);
+    BitMatrix matrix = BitMatrix(width, height);
 
     // Quickly calculates the histogram by sampling four rows from the image. This proved to be
     // more robust on the blackbox tests than sampling a diagonal as we used to do.
@@ -131,7 +131,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   @override
   Binarizer createBinarizer(LuminanceSource source) {
-    return new GlobalHistogramBinarizer(source);
+    return GlobalHistogramBinarizer(source);
   }
 
   void initArrays(int luminanceSize) {

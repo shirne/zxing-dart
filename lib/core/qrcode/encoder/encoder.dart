@@ -82,7 +82,7 @@ class Encoder {
 
     // This will store the header information, like mode and
     // length, as well as "header" segments like an ECI segment.
-    BitArray headerBits = new BitArray();
+    BitArray headerBits = BitArray();
 
     // Append ECI segment if applicable
     if (mode == Mode.BYTE && hasEncodingHint) {
@@ -105,7 +105,7 @@ class Encoder {
 
     // Collect data within the main segment, separately, to count its size if needed. Don't add it to
     // main payload yet.
-    BitArray dataBits = new BitArray();
+    BitArray dataBits = BitArray();
     appendBytes(content, mode, dataBits, encoding!);
 
     Version version;
@@ -115,13 +115,13 @@ class Encoder {
       version = Version.getVersionForNumber(versionNumber);
       int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
       if (!willFit(bitsNeeded, version, ecLevel!)) {
-        throw new WriterException("Data too big for requested version");
+        throw WriterException("Data too big for requested version");
       }
     } else {
       version = recommendVersion(ecLevel!, mode, headerBits, dataBits);
     }
 
-    BitArray headerAndDataBits = new BitArray();
+    BitArray headerAndDataBits = BitArray();
     headerAndDataBits.appendBitArray(headerBits);
     // Find "length" of main segment and write it
     int numLetters =
@@ -141,7 +141,7 @@ class Encoder {
     BitArray finalBits = interleaveWithECBytes(headerAndDataBits,
         version.getTotalCodewords(), numDataBytes, ecBlocks.getNumBlocks());
 
-    QRCode qrCode = new QRCode();
+    QRCode qrCode = QRCode();
 
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
@@ -149,7 +149,7 @@ class Encoder {
 
     //  Choose the mask pattern and set to "qrCode".
     int dimension = version.getDimensionForVersion();
-    ByteMatrix matrix = new ByteMatrix(dimension, dimension);
+    ByteMatrix matrix = ByteMatrix(dimension, dimension);
 
     // Enable manual selection of the pattern to be used via hint
     int maskPattern = -1;
@@ -308,7 +308,7 @@ class Encoder {
   static void terminateBits(int numDataBytes, BitArray bits) {
     int capacity = numDataBytes * 8;
     if (bits.getSize() > capacity) {
-      throw new WriterException(
+      throw WriterException(
           "data bits cannot fit in the QR Code ${bits.getSize()} > $capacity");
     }
     for (int i = 0; i < 4 && bits.getSize() < capacity; ++i) {
@@ -328,7 +328,7 @@ class Encoder {
       bits.appendBits((i & 0x01) == 0 ? 0xEC : 0x11, 8);
     }
     if (bits.getSize() != capacity) {
-      throw new WriterException("Bits size does not equal capacity");
+      throw WriterException("Bits size does not equal capacity");
     }
   }
 
@@ -345,7 +345,7 @@ class Encoder {
       List<int> numDataBytesInBlock,
       List<int> numECBytesInBlock) {
     if (blockID >= numRSBlocks) {
-      throw new WriterException("Block ID too large");
+      throw WriterException("Block ID too large");
     }
     // numRsBlocksInGroup2 = 196 % 5 = 1
     int numRsBlocksInGroup2 = numTotalBytes % numRSBlocks;
@@ -366,18 +366,18 @@ class Encoder {
     // Sanity checks.
     // 26 = 26
     if (numEcBytesInGroup1 != numEcBytesInGroup2) {
-      throw new WriterException("EC bytes mismatch");
+      throw WriterException("EC bytes mismatch");
     }
     // 5 = 4 + 1.
     if (numRSBlocks != numRsBlocksInGroup1 + numRsBlocksInGroup2) {
-      throw new WriterException("RS blocks mismatch");
+      throw WriterException("RS blocks mismatch");
     }
     // 196 = (13 + 26) * 4 + (14 + 26) * 1
     if (numTotalBytes !=
         ((numDataBytesInGroup1 + numEcBytesInGroup1) * numRsBlocksInGroup1) +
             ((numDataBytesInGroup2 + numEcBytesInGroup2) *
                 numRsBlocksInGroup2)) {
-      throw new WriterException("Total bytes mismatch");
+      throw WriterException("Total bytes mismatch");
     }
 
     if (blockID < numRsBlocksInGroup1) {
@@ -397,7 +397,7 @@ class Encoder {
       BitArray bits, int numTotalBytes, int numDataBytes, int numRSBlocks) {
     // "bits" must have "getNumDataBytes" bytes of data.
     if (bits.getSizeInBytes() != numDataBytes) {
-      throw new WriterException("Number of bits and data bytes does not match");
+      throw WriterException("Number of bits and data bytes does not match");
     }
 
     // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
@@ -426,10 +426,10 @@ class Encoder {
       dataBytesOffset += numDataBytesInBlock[0];
     }
     if (numDataBytes != dataBytesOffset) {
-      throw new WriterException("Data bytes does not match offset");
+      throw WriterException("Data bytes does not match offset");
     }
 
-    BitArray result = new BitArray();
+    BitArray result = BitArray();
 
     // First, place data blocks.
     for (int i = 0; i < maxNumDataBytes; ++i) {
@@ -451,7 +451,7 @@ class Encoder {
     }
     if (numTotalBytes != result.getSizeInBytes()) {
       // Should be same.
-      throw new WriterException(
+      throw WriterException(
           "Interleaving error: $numTotalBytes and ${result.getSizeInBytes()} differ.");
     }
 
@@ -464,7 +464,7 @@ class Encoder {
     for (int i = 0; i < numDataBytes; i++) {
       toEncode.add(dataBytes[i] & 0xFF);
     }
-    new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256)
+    ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256)
         .encode(toEncode, numEcBytesInBlock);
 
     Uint8List ecBytes = Uint8List(numEcBytesInBlock);
@@ -488,7 +488,7 @@ class Encoder {
       int numLetters, Version version, Mode mode, BitArray bits) {
     int numBits = mode.getCharacterCountBits(version);
     if (numLetters >= (1 << numBits)) {
-      throw new WriterException(
+      throw WriterException(
           "$numLetters is bigger than ${((1 << numBits) - 1)}");
     }
     bits.appendBits(numLetters, numBits);
@@ -513,7 +513,7 @@ class Encoder {
         appendKanjiBytes(content, bits);
         break;
       default:
-        throw new WriterException("Invalid mode: $mode");
+        throw WriterException("Invalid mode: $mode");
     }
   }
 
@@ -547,12 +547,12 @@ class Encoder {
     while (i < length) {
       int code1 = getAlphanumericCode(content.codeUnitAt(i));
       if (code1 == -1) {
-        throw new WriterException();
+        throw WriterException();
       }
       if (i + 1 < length) {
         int code2 = getAlphanumericCode(content.codeUnitAt(i + 1));
         if (code2 == -1) {
-          throw new WriterException();
+          throw WriterException();
         }
         // Encode two alphanumeric letters in 11 bits.
         bits.appendBits(code1 * 45 + code2, 11);
@@ -576,7 +576,7 @@ class Encoder {
   static void appendKanjiBytes(String content, BitArray bits) {
     List<int> bytes = StringUtils.SHIFT_JIS_CHARSET.encode(content);
     if (bytes.length % 2 != 0) {
-      throw new WriterException("Kanji byte size not even");
+      throw WriterException("Kanji byte size not even");
     }
     int maxI = bytes.length - 1; // bytes.length must be even
     for (int i = 0; i < maxI; i += 2) {
@@ -590,7 +590,7 @@ class Encoder {
         subtracted = code - 0xc140;
       }
       if (subtracted == -1) {
-        throw new WriterException("Invalid byte sequence");
+        throw WriterException("Invalid byte sequence");
       }
       int encoded = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff);
       bits.appendBits(encoded, 13);

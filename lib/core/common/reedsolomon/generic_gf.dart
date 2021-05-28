@@ -29,17 +29,17 @@ import 'generic_gfpoly.dart';
  */
 class GenericGF {
   static final GenericGF AZTEC_DATA_12 =
-      new GenericGF(0x1069, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
+      GenericGF(0x1069, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
   static final GenericGF AZTEC_DATA_10 =
-      new GenericGF(0x409, 1024, 1); // x^10 + x^3 + 1
+      GenericGF(0x409, 1024, 1); // x^10 + x^3 + 1
   static final GenericGF AZTEC_DATA_6 =
-      new GenericGF(0x43, 64, 1); // x^6 + x + 1
+      GenericGF(0x43, 64, 1); // x^6 + x + 1
   static final GenericGF AZTEC_PARAM =
-      new GenericGF(0x13, 16, 1); // x^4 + x + 1
+      GenericGF(0x13, 16, 1); // x^4 + x + 1
   static final GenericGF QR_CODE_FIELD_256 =
-      new GenericGF(0x011D, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
+      GenericGF(0x011D, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
   static final GenericGF DATA_MATRIX_FIELD_256 =
-      new GenericGF(0x012D, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
+      GenericGF(0x012D, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
   static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
@@ -78,8 +78,8 @@ class GenericGF {
       logTable[expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    zero = new GenericGFPoly(this, [0]);
-    one = new GenericGFPoly(this, [1]);
+    zero = GenericGFPoly(this, [0]);
+    one = GenericGFPoly(this, [1]);
   }
 
   GenericGFPoly getZero() {
@@ -102,7 +102,7 @@ class GenericGF {
     }
     List<int> coefficients = List.generate(degree + 1, (index) => 0);
     coefficients[0] = coefficient;
-    return new GenericGFPoly(this, coefficients);
+    return GenericGFPoly(this, coefficients);
   }
 
   /**

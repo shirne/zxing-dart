@@ -37,7 +37,7 @@ class MaxiCodeReader implements Reader {
   static final int MATRIX_WIDTH = 30;
   static final int MATRIX_HEIGHT = 33;
 
-  final Decoder decoder = new Decoder();
+  final Decoder decoder = Decoder();
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
@@ -45,7 +45,7 @@ class MaxiCodeReader implements Reader {
     // and can't detect it in an image
     BitMatrix bits = extractPureBits(image.getBlackMatrix());
     DecoderResult decoderResult = decoder.decode(bits, hints);
-    Result result = new Result(decoderResult.getText(),
+    Result result = Result(decoderResult.getText(),
         decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.MAXICODE);
 
     String? ecLevel = decoderResult.getECLevel();
@@ -78,7 +78,7 @@ class MaxiCodeReader implements Reader {
     int height = enclosingRectangle[3];
 
     // Now just read off the bits
-    BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
+    BitMatrix bits = BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
     for (int y = 0; y < MATRIX_HEIGHT; y++) {
       int iy = top + (y * height + height ~/ 2) ~/ MATRIX_HEIGHT;
       for (int x = 0; x < MATRIX_WIDTH; x++) {

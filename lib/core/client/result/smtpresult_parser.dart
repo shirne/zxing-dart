@@ -44,7 +44,7 @@ class SMTPResultParser extends ResultParser {
         subject = subject.substring(0, colon);
       }
     }
-    return new EmailAddressParsedResult(
+    return EmailAddressParsedResult(
         [emailAddress], null, null, subject, body);
   }
 }

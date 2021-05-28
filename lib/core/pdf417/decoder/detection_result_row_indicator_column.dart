@@ -174,10 +174,10 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
   BarcodeMetadata? getBarcodeMetadata() {
     List<Codeword?> codewords = getCodewords();
-    BarcodeValue barcodeColumnCount = new BarcodeValue();
-    BarcodeValue barcodeRowCountUpperPart = new BarcodeValue();
-    BarcodeValue barcodeRowCountLowerPart = new BarcodeValue();
-    BarcodeValue barcodeECLevel = new BarcodeValue();
+    BarcodeValue barcodeColumnCount = BarcodeValue();
+    BarcodeValue barcodeRowCountUpperPart = BarcodeValue();
+    BarcodeValue barcodeRowCountLowerPart = BarcodeValue();
+    BarcodeValue barcodeECLevel = BarcodeValue();
     for (Codeword? codeword in codewords) {
       if (codeword == null) {
         continue;
@@ -215,7 +215,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
             PDF417Common.MAX_ROWS_IN_BARCODE) {
       return null;
     }
-    BarcodeMetadata barcodeMetadata = new BarcodeMetadata(
+    BarcodeMetadata barcodeMetadata = BarcodeMetadata(
         barcodeColumnCount.getValue()[0],
         barcodeRowCountUpperPart.getValue()[0],
         barcodeRowCountLowerPart.getValue()[0],

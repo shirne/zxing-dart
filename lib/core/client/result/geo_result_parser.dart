@@ -65,6 +65,6 @@ class GeoResultParser extends ResultParser {
       //on NumberFormatException
       return null;
     }
-    return new GeoParsedResult(latitude, longitude, altitude, query);
+    return GeoParsedResult(latitude, longitude, altitude, query);
   }
 }

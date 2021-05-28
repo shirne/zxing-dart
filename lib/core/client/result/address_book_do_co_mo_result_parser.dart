@@ -64,7 +64,7 @@ class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     // honor it when found in the wild.
     String? org = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
 
-    return new AddressBookParsedResult(
+    return AddressBookParsedResult(
         ResultParser.maybeWrap(name),
         null,
         pronunciation,

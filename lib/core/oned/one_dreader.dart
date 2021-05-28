@@ -95,7 +95,7 @@ abstract class OneDReader implements Reader {
   Result doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
     int width = image.getWidth();
     int height = image.getHeight();
-    BitArray row = new BitArray(size: width);
+    BitArray row = BitArray(size: width);
 
     bool tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -158,9 +158,9 @@ abstract class OneDReader implements Reader {
             // And remember to flip the result points horizontally.
             List<ResultPoint?>? points = result.getResultPoints();
             if (points != null) {
-              points[0] = new ResultPoint(
+              points[0] = ResultPoint(
                   width - points[0]!.getX() - 1, points[0]!.getY());
-              points[1] = new ResultPoint(
+              points[1] = ResultPoint(
                   width - points[1]!.getX() - 1, points[1]!.getY());
             }
           }

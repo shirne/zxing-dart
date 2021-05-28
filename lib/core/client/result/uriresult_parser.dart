@@ -49,13 +49,13 @@ class URIResultParser extends ResultParser {
     // We specifically handle the odd "URL" scheme here for simplicity and add "URI" for fun
     // Assume anything starting this way really means to be a URI
     if (rawText.startsWith("URL:") || rawText.startsWith("URI:")) {
-      return new URIParsedResult(rawText.substring(4).trim(), null);
+      return URIParsedResult(rawText.substring(4).trim(), null);
     }
     rawText = rawText.trim();
     if (!isBasicallyValidURI(rawText) || isPossiblyMaliciousURI(rawText)) {
       return null;
     }
-    return new URIParsedResult(rawText, null);
+    return URIParsedResult(rawText, null);
   }
 
   /**

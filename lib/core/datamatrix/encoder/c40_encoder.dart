@@ -29,7 +29,7 @@ class C40Encoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     //step C
-    StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
       String c = context.getCurrentChar();
       context.pos++;
@@ -45,7 +45,7 @@ class C40Encoder implements Encoder {
 
       if (!context.hasMoreCharacters()) {
         //Avoid having a single C40 value in the last triplet
-        StringBuffer removed = new StringBuffer();
+        StringBuffer removed = StringBuffer();
         if ((buffer.length % 3) == 2 && available != 2) {
           lastCharSize =
               backtrackOneCharacter(context, buffer, removed, lastCharSize);

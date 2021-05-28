@@ -39,7 +39,7 @@ class AnyAIDecoder extends AbstractExpandedDecoder {
 
   @override
   String parseInformation() {
-    StringBuffer buf = new StringBuffer();
+    StringBuffer buf = StringBuffer();
     return this.getGeneralDecoder().decodeAllCodes(buf, HEADER_SIZE);
   }
 }

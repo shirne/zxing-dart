@@ -41,13 +41,13 @@ class AztecReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     NotFoundException? notFoundException;
     FormatException? formatException;
-    Detector detector = new Detector(image.getBlackMatrix());
+    Detector detector = Detector(image.getBlackMatrix());
     List<ResultPoint>? points;
     DecoderResult? decoderResult;
     try {
       AztecDetectorResult detectorResult = detector.detect(false);
       points = detectorResult.getPoints();
-      decoderResult = new Decoder().decode(detectorResult);
+      decoderResult = Decoder().decode(detectorResult);
     } on NotFoundException catch (e) {
       notFoundException = e;
     } on FormatException catch (e) {
@@ -57,7 +57,7 @@ class AztecReader implements Reader {
       try {
         AztecDetectorResult detectorResult = detector.detect(true);
         points = detectorResult.getPoints();
-        decoderResult = new Decoder().decode(detectorResult);
+        decoderResult = Decoder().decode(detectorResult);
       } catch (e) {
         //NotFoundException | FormatException
         if (notFoundException != null) {

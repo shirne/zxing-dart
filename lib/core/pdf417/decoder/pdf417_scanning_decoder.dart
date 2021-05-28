@@ -43,7 +43,7 @@ class PDF417ScanningDecoder {
 
   static final int MAX_ERRORS = 3;
   static final int MAX_EC_CODEWORDS = 512;
-  static final ErrorCorrection errorCorrection = new ErrorCorrection();
+  static final ErrorCorrection errorCorrection = ErrorCorrection();
 
   PDF417ScanningDecoder();
 
@@ -59,7 +59,7 @@ class PDF417ScanningDecoder {
       ResultPoint? imageBottomRight,
       int minCodewordWidth,
       int maxCodewordWidth) {
-    BoundingBox boundingBox = new BoundingBox(
+    BoundingBox boundingBox = BoundingBox(
         image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
     DetectionResultRowIndicatorColumn? leftRowIndicatorColumn;
     DetectionResultRowIndicatorColumn? rightRowIndicatorColumn;
@@ -106,10 +106,10 @@ class PDF417ScanningDecoder {
       }
       DetectionResultColumn detectionResultColumn;
       if (barcodeColumn == 0 || barcodeColumn == maxBarcodeColumn) {
-        detectionResultColumn = new DetectionResultRowIndicatorColumn(
+        detectionResultColumn = DetectionResultRowIndicatorColumn(
             boundingBox, barcodeColumn == 0);
       } else {
-        detectionResultColumn = new DetectionResultColumn(boundingBox);
+        detectionResultColumn = DetectionResultColumn(boundingBox);
       }
       detectionResult.setDetectionResultColumn(
           barcodeColumn, detectionResultColumn);
@@ -161,7 +161,7 @@ class PDF417ScanningDecoder {
     BoundingBox? boundingBox = BoundingBox.merge(
         adjustBoundingBox(leftRowIndicatorColumn),
         adjustBoundingBox(rightRowIndicatorColumn));
-    return new DetectionResult(barcodeMetadata, boundingBox);
+    return DetectionResult(barcodeMetadata, boundingBox);
   }
 
   static BoundingBox? adjustBoundingBox(
@@ -535,7 +535,7 @@ class PDF417ScanningDecoder {
     if (codeword == -1) {
       return null;
     }
-    return new Codeword(startColumn, endColumn,
+    return Codeword(startColumn, endColumn,
         getCodewordBucketNumber(decodedValue), codeword);
   }
 
@@ -694,7 +694,7 @@ class PDF417ScanningDecoder {
 
   static String barcodeToString(List<List<BarcodeValue>> barcodeMatrix) {
     try {
-      StringBuffer formatter = new StringBuffer();
+      StringBuffer formatter = StringBuffer();
       for (int row = 0; row < barcodeMatrix.length; row++) {
         formatter.write(
           "Row $row: ",

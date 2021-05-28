@@ -76,7 +76,7 @@ class WifiResultParser extends ResultParser {
     ResultParser.matchSinglePrefixedField("A:", rawText, ';', false);
     String? eapMethod = ResultParser.matchSinglePrefixedField("E:", rawText, ';', false);
 
-    return new WifiParsedResult(type, ssid, pass, hidden, identity,
+    return WifiParsedResult(type, ssid, pass, hidden, identity,
         anonymousIdentity, eapMethod, phase2Method);
   }
 }

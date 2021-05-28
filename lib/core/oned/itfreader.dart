@@ -104,7 +104,7 @@ class ITFReader extends OneDReader {
     List<int> startRange = decodeStart(row);
     List<int> endRange = decodeEnd(row);
 
-    StringBuffer result = new StringBuffer(20);
+    StringBuffer result = StringBuffer();
     decodeMiddle(row, startRange[1], endRange[0], result);
     String resultString = result.toString();
 
@@ -138,7 +138,7 @@ class ITFReader extends OneDReader {
       throw FormatException();
     }
 
-    return new Result(
+    return Result(
         resultString,
         null, // no natural byte representation for these barcodes
         [ResultPoint(startRange[1].toDouble(), rowNumber.toDouble()),

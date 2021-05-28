@@ -87,7 +87,7 @@ class QRCodeWriter implements Writer {
     int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
     int topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
 
-    BitMatrix output = new BitMatrix(outputWidth, outputHeight);
+    BitMatrix output = BitMatrix(outputWidth, outputHeight);
 
     for (int inputY = 0, outputY = topPadding;
         inputY < inputHeight;

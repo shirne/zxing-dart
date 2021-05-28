@@ -60,7 +60,7 @@ class BitMatrix {
   static BitMatrix parse(List<List<bool>> image) {
     int height = image.length;
     int width = image[0].length;
-    BitMatrix bits = new BitMatrix(width, height);
+    BitMatrix bits = BitMatrix(width, height);
     for (int i = 0; i < height; i++) {
       List<bool> imageI = image[i];
       for (int j = 0; j < width; j++) {
@@ -122,7 +122,7 @@ class BitMatrix {
       nRows++;
     }
 
-    BitMatrix matrix = new BitMatrix(rowLength, nRows);
+    BitMatrix matrix = BitMatrix(rowLength, nRows);
     for (int i = 0; i < bitsPos; i++) {
       if (bits[i]) {
         matrix.set(i % rowLength, i ~/ rowLength);
@@ -250,7 +250,7 @@ class BitMatrix {
    */
   BitArray getRow(int y, BitArray? row) {
     if (row == null || row.getSize() < width) {
-      row = new BitArray(size: width);
+      row = BitArray(size: width);
     } else {
       row.clear();
     }
@@ -273,8 +273,8 @@ class BitMatrix {
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
   void rotate180() {
-    BitArray topRow = new BitArray(size: width);
-    BitArray bottomRow = new BitArray(size: width);
+    BitArray topRow = BitArray(size: width);
+    BitArray bottomRow = BitArray(size: width);
     int maxHeight = (height + 1) ~/ 2;
     for (int i = 0; i < maxHeight; i++) {
       topRow = getRow(i, topRow);
@@ -466,7 +466,7 @@ class BitMatrix {
 
   String buildToString(
       String setString, String unsetString, String lineSeparator) {
-    StringBuffer result = new StringBuffer(height * (width + 1));
+    StringBuffer result = StringBuffer();
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         result.write(get(x, y) ? setString : unsetString);
@@ -478,7 +478,7 @@ class BitMatrix {
 
   // @override
   BitMatrix clone() {
-    return new BitMatrix(
+    return BitMatrix(
         width, height, rowSize, bits.getRange(0, bits.length).toList());
   }
 }

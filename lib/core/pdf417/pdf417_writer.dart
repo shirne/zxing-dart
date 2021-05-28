@@ -49,7 +49,7 @@ class PDF417Writer implements Writer {
       throw Exception("Can only encode PDF_417, but got $format");
     }
 
-    PDF417 encoder = new PDF417();
+    PDF417 encoder = PDF417();
     int margin = WHITE_SPACE;
     int errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
 
@@ -127,7 +127,7 @@ class PDF417Writer implements Writer {
   static BitMatrix bitMatrixFromBitArray(List<Uint8List> input, int margin) {
     // Creates the bit matrix with extra space for whitespace
     BitMatrix output =
-        new BitMatrix(input[0].length + 2 * margin, input.length + 2 * margin);
+        BitMatrix(input[0].length + 2 * margin, input.length + 2 * margin);
     output.clear();
     for (int y = 0, yOutput = output.getHeight() - margin - 1;
         y < input.length;

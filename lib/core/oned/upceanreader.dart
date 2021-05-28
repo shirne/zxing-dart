@@ -172,13 +172,13 @@ abstract class UPCEANReader extends OneDReader {
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(
-          new ResultPoint(endStart.toDouble(), rowNumber.toDouble()));
+          ResultPoint(endStart.toDouble(), rowNumber.toDouble()));
     }
 
     List<int> endRange = decodeEnd(row, endStart);
 
     if (resultPointCallback != null) {
-      resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+      resultPointCallback.foundPossibleResultPoint(ResultPoint(
           (endRange[0] + endRange[1]) / 2.0, rowNumber.toDouble()));
     }
 
@@ -202,12 +202,12 @@ abstract class UPCEANReader extends OneDReader {
     double left = (startGuardRange[1] + startGuardRange[0]) / 2.0;
     double right = (endRange[1] + endRange[0]) / 2.0;
     BarcodeFormat format = getBarcodeFormat();
-    Result decodeResult = new Result(
+    Result decodeResult = Result(
         resultString,
         null, // no natural byte representation for these barcodes
         [
-          new ResultPoint(left, rowNumber.toDouble()),
-          new ResultPoint(right, rowNumber.toDouble())
+          ResultPoint(left, rowNumber.toDouble()),
+          ResultPoint(right, rowNumber.toDouble())
         ],
         format);
 

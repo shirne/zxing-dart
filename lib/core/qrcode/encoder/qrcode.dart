@@ -59,7 +59,7 @@ class QRCode {
 
   @override
   String toString() {
-    StringBuffer result = new StringBuffer(200);
+    StringBuffer result = StringBuffer();
     result.write("<<\n");
     result.write(" mode: ");
     result.write(mode);

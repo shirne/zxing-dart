@@ -112,7 +112,7 @@ class FormatInformation {
       int targetInfo = decodeInfo[0];
       if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match
-        return new FormatInformation(decodeInfo[1]);
+        return FormatInformation(decodeInfo[1]);
       }
       int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
       if (bitsDifference < bestDifference) {
@@ -131,7 +131,7 @@ class FormatInformation {
     // Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits
     // differing means we found a match
     if (bestDifference <= 3) {
-      return new FormatInformation(bestFormatInfo);
+      return FormatInformation(bestFormatInfo);
     }
     return null;
   }

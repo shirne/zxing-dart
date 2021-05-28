@@ -31,7 +31,7 @@ import 'upceanreader.dart';
  * @author Sean Owen
  */
 class UPCAReader extends UPCEANReader {
-  final UPCEANReader ean13Reader = new EAN13Reader();
+  final UPCEANReader ean13Reader = EAN13Reader();
 
   @override
   Result decodeRow(
@@ -60,7 +60,7 @@ class UPCAReader extends UPCEANReader {
   static Result maybeReturnResult(Result result) {
     String text = result.getText();
     if (text[0] == '0') {
-      Result upcaResult = new Result(text.substring(1), null,
+      Result upcaResult = Result(text.substring(1), null,
           result.getResultPoints(), BarcodeFormat.UPC_A);
       if (result.getResultMetadata() != null) {
         upcaResult.putAllMetadata(result.getResultMetadata());

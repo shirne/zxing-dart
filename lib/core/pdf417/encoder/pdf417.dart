@@ -661,7 +661,7 @@ class PDF417 {
           "Encoded message contains too many code words, message too big (${msg.length} bytes)");
     }
     int n = sourceCodeWords + pad + 1;
-    StringBuffer sb = new StringBuffer(n);
+    StringBuffer sb = StringBuffer();
     sb.writeCharCode(n);
     sb.write(highLevel);
     for (int i = 0; i < pad; i++) {
@@ -674,7 +674,7 @@ class PDF417 {
         dataCodewords, errorCorrectionLevel);
 
     //4. step: low-level encoding
-    barcodeMatrix = new BarcodeMatrix(rows, cols);
+    barcodeMatrix = BarcodeMatrix(rows, cols);
     encodeLowLevel(
         dataCodewords + ec, cols, rows, errorCorrectionLevel, barcodeMatrix!);
   }
@@ -728,7 +728,7 @@ class PDF417 {
     }
 
     if (dimension == null) {
-      throw new WriterException("Unable to fit message in columns");
+      throw WriterException("Unable to fit message in columns");
     }
 
     return dimension;

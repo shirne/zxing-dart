@@ -48,7 +48,7 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     }
     String? subject = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
     String? body = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
-    return new EmailAddressParsedResult(tos, null, null, subject, body);
+    return EmailAddressParsedResult(tos, null, null, subject, body);
   }
 
   /**

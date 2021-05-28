@@ -25,7 +25,7 @@ import 'modulus_poly.dart';
  */
 class ModulusGF {
   static final ModulusGF PDF417_GF =
-      new ModulusGF(PDF417Common.NUMBER_OF_CODEWORDS, 3);
+      ModulusGF(PDF417Common.NUMBER_OF_CODEWORDS, 3);
 
   late List<int> expTable;
   late List<int> logTable;
@@ -45,8 +45,8 @@ class ModulusGF {
       logTable[expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    zero = new ModulusPoly(this, [0]);
-    one = new ModulusPoly(this, [1]);
+    zero = ModulusPoly(this, [0]);
+    one = ModulusPoly(this, [1]);
   }
 
   ModulusPoly getZero() {

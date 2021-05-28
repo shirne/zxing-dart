@@ -72,7 +72,7 @@ class EmailAddressResultParser extends ResultParser {
         subject = nameValues["subject"];
         body = nameValues["body"];
       }
-      return new EmailAddressParsedResult(tos, ccs, bccs, subject, body);
+      return EmailAddressParsedResult(tos, ccs, bccs, subject, body);
     } else {
       if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText)) {
         return null;

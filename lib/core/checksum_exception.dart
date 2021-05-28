@@ -23,7 +23,7 @@ import 'reader_exception.dart';
  * @author Sean Owen
  */
 class ChecksumException extends ReaderException {
-  static final ChecksumException INSTANCE = new ChecksumException();
+  static final ChecksumException INSTANCE = ChecksumException();
 
   ChecksumException([cause]) : super(cause);
 

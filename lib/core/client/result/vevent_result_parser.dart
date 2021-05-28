@@ -80,7 +80,7 @@ class VEventResultParser extends ResultParser {
     }
 
     try {
-      return new CalendarParsedResult(summary,
+      return CalendarParsedResult(summary,
                                       start,
                                       end,
                                       duration,
@@ -90,7 +90,7 @@ class VEventResultParser extends ResultParser {
                                       description,
                                       latitude,
                                       longitude);
-    } catch ( ignored) { // IllegalArgumentException
+    } catch ( _) { // IllegalArgumentException
       return null;
     }
   }

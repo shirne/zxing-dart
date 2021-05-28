@@ -54,7 +54,7 @@ class DataMatrixReader implements Reader {
       decoderResult = decoder.decodeMatrix(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
-    Result result = new Result(decoderResult.getText(),
+    Result result = Result(decoderResult.getText(),
         decoderResult.getRawBytes(), points, BarcodeFormat.DATA_MATRIX);
     List<Uint8List>? byteSegments = decoderResult.getByteSegments();
     if (byteSegments != null) {
@@ -108,7 +108,7 @@ class DataMatrixReader implements Reader {
     left += nudge;
 
     // Now just read off the bits
-    BitMatrix bits = new BitMatrix(matrixWidth, matrixHeight);
+    BitMatrix bits = BitMatrix(matrixWidth, matrixHeight);
     for (int y = 0; y < matrixHeight; y++) {
       int iOffset = top + y * calModuleSize;
       for (int x = 0; x < matrixWidth; x++) {

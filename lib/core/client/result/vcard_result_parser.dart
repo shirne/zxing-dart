@@ -89,7 +89,7 @@ class VCardResultParser extends ResultParser {
     if (geo != null && geo.length != 2) {
       geo = null;
     }
-    return new AddressBookParsedResult(toPrimaryValues(names),
+    return AddressBookParsedResult(toPrimaryValues(names),
                                        nicknames,
                                        null, 
                                        toPrimaryValues(phoneNumbers), 
@@ -231,8 +231,8 @@ class VCardResultParser extends ResultParser {
 
   static String decodeQuotedPrintable(String value, String? charset) {
     int length = value.length;
-    StringBuffer result = new StringBuffer(length);
-    BytesBuilder fragmentBuffer = new BytesBuilder();
+    StringBuffer result = StringBuffer();
+    BytesBuilder fragmentBuffer = BytesBuilder();
     for (int i = 0; i < length; i++) {
       String c = value[i];
       switch (c) {
@@ -360,7 +360,7 @@ class VCardResultParser extends ResultParser {
           start = end + 1;
         }
         components[componentIndex] = name.substring(start);
-        StringBuffer newName = new StringBuffer(100);
+        StringBuffer newName = StringBuffer();
         maybeAppendComponent(components, 3, newName);
         maybeAppendComponent(components, 1, newName);
         maybeAppendComponent(components, 2, newName);

@@ -56,7 +56,7 @@ class Code93Reader extends OneDReader {
   final List<int> counters;
 
   Code93Reader()
-      : decodeRowResult = new StringBuilder(),
+      : decodeRowResult = StringBuilder(),
         counters = List.filled(6, 0);
 
   @override
@@ -115,7 +115,7 @@ class Code93Reader extends OneDReader {
     double left = (start[1] + start[0]) / 2.0;
     double right = lastStart + lastPatternSize / 2.0;
 
-    Result resultObject = new Result(
+    Result resultObject = Result(
         resultString,
         null,
         [
@@ -195,7 +195,7 @@ class Code93Reader extends OneDReader {
 
   static String decodeExtended(String encoded) {
     int length = encoded.length;
-    StringBuffer decoded = new StringBuffer(length);
+    StringBuffer decoded = StringBuffer();
     for (int i = 0; i < length; i++) {
       int c = encoded.codeUnitAt(i);
       if (c >= 'a'.codeUnitAt(0) && c <= 'd'.codeUnitAt(0)) {

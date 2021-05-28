@@ -260,7 +260,7 @@ class AlignmentPatternFinder {
       }
       // Hadn't found this before; save it
       AlignmentPattern point =
-          new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+          AlignmentPattern(centerJ, centerI, estimatedModuleSize);
       possibleCenters.add(point);
       if (resultPointCallback != null) {
         resultPointCallback!.foundPossibleResultPoint(point);

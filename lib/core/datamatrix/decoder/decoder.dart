@@ -38,7 +38,7 @@ class Decoder {
   late ReedSolomonDecoder rsDecoder;
 
   Decoder() {
-    rsDecoder = new ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
+    rsDecoder = ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
   }
 
   /**
@@ -65,7 +65,7 @@ class Decoder {
    */
   DecoderResult decodeMatrix(BitMatrix bits) {
     // Construct a parser and read version, error-correction level
-    BitMatrixParser parser = new BitMatrixParser(bits);
+    BitMatrixParser parser = BitMatrixParser(bits);
     Version version = parser.getVersion();
 
     // Read codewords

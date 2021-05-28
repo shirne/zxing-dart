@@ -148,7 +148,7 @@ abstract class ResultParser {
       return escaped;
     }
     int max = escaped.length;
-    StringBuffer unescaped = new StringBuffer(max - 1);
+    StringBuffer unescaped = StringBuffer();
     unescaped.write(escaped.substring(0, backslash));
     bool nextIsEscaped = false;
     for (int i = backslash; i < max; i++) {

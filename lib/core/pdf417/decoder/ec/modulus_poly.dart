@@ -124,7 +124,7 @@ class ModulusPoly {
           field.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
     }
 
-    return new ModulusPoly(field, sumDiff);
+    return ModulusPoly(field, sumDiff);
   }
 
   ModulusPoly subtract(ModulusPoly other) {
@@ -156,7 +156,7 @@ class ModulusPoly {
             field.add(product[i + j], field.multiply(aCoeff, bCoefficients[j]));
       }
     }
-    return new ModulusPoly(field, product);
+    return ModulusPoly(field, product);
   }
 
   ModulusPoly negative() {
@@ -165,7 +165,7 @@ class ModulusPoly {
     for (int i = 0; i < size; i++) {
       negativeCoefficients.add(field.subtract(0, coefficients[i]));
     }
-    return new ModulusPoly(field, negativeCoefficients);
+    return ModulusPoly(field, negativeCoefficients);
   }
 
   ModulusPoly multiply(int scalar) {
@@ -180,7 +180,7 @@ class ModulusPoly {
     for (int i = 0; i < size; i++) {
       product.add(field.multiply(coefficients[i], scalar));
     }
-    return new ModulusPoly(field, product);
+    return ModulusPoly(field, product);
   }
 
   ModulusPoly multiplyByMonomial(int degree, int coefficient) {
@@ -195,12 +195,12 @@ class ModulusPoly {
     for (int i = 0; i < size; i++) {
       product[i] = field.multiply(coefficients[i], coefficient);
     }
-    return new ModulusPoly(field, product);
+    return ModulusPoly(field, product);
   }
 
   @override
   String toString() {
-    StringBuffer result = new StringBuffer(8 * getDegree());
+    StringBuffer result = StringBuffer();
     for (int degree = getDegree(); degree >= 0; degree--) {
       int coefficient = getCoefficient(degree);
       if (coefficient != 0) {

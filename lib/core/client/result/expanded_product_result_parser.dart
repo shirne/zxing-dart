@@ -151,7 +151,7 @@ class ExpandedProductResultParser extends ResultParser {
       }
     }
 
-    return new ExpandedProductParsedResult(
+    return ExpandedProductParsedResult(
         rawText,
         productID,
         sscc,
@@ -178,7 +178,7 @@ class ExpandedProductResultParser extends ResultParser {
 
     String rawTextAux = rawText.substring(i + 1);
 
-    StringBuffer buf = new StringBuffer();
+    StringBuffer buf = StringBuffer();
     for (int index = 0; index < rawTextAux.length; index++) {
       int currentChar = rawTextAux.codeUnitAt(index);
       if (currentChar == ')'.codeUnitAt(0)) {
@@ -193,7 +193,7 @@ class ExpandedProductResultParser extends ResultParser {
   }
 
   static String findValue(int i, String rawText) {
-    StringBuffer buf = new StringBuffer();
+    StringBuffer buf = StringBuffer();
     String rawTextAux = rawText.substring(i);
 
     for (int index = 0; index < rawTextAux.length; index++) {

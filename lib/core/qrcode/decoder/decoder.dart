@@ -41,7 +41,7 @@ import 'version.dart';
 class Decoder {
   final ReedSolomonDecoder rsDecoder;
 
-  Decoder() : rsDecoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+  Decoder() : rsDecoder = ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
 
   /**
    * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
@@ -70,7 +70,7 @@ class Decoder {
   DecoderResult decodeMatrix(BitMatrix bits,
       [Map<DecodeHintType, Object>? hints]) {
     // Construct a parser and read version, error-correction level
-    BitMatrixParser parser = new BitMatrixParser(bits);
+    BitMatrixParser parser = BitMatrixParser(bits);
     FormatException? fe;
     ChecksumException? ce;
     try {
@@ -106,7 +106,7 @@ class Decoder {
       DecoderResult result = decodeParser(parser, hints);
 
       // Success! Notify the caller that the code was mirrored.
-      result.setOther(new QRCodeDecoderMetaData(true));
+      result.setOther(QRCodeDecoderMetaData(true));
 
       return result;
     } on ChecksumException catch (_) {

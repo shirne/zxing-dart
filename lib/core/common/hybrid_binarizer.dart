@@ -78,7 +78,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
       List<List<int>> blackPoints =
           calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
-      BitMatrix newMatrix = new BitMatrix(width, height);
+      BitMatrix newMatrix = BitMatrix(width, height);
       calculateThresholdForBlock(luminances, subWidth, subHeight, width, height,
           blackPoints, newMatrix);
       matrix = newMatrix;
@@ -91,7 +91,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
 
   @override
   Binarizer createBinarizer(LuminanceSource source) {
-    return new HybridBinarizer(source);
+    return HybridBinarizer(source);
   }
 
   /**

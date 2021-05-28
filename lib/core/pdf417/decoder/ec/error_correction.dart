@@ -40,7 +40,7 @@ class ErrorCorrection {
    * @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
    */
   int decode(List<int> received, int numECCodewords, List<int>? erasures) {
-    ModulusPoly poly = new ModulusPoly(field, received);
+    ModulusPoly poly = ModulusPoly(field, received);
     List<int> S = List.filled(numECCodewords, 0);
     bool error = false;
     for (int i = numECCodewords; i > 0; i--) {
@@ -60,12 +60,12 @@ class ErrorCorrection {
       for (int erasure in erasures) {
         int b = field.exp(received.length - 1 - erasure);
         // Add (1 - bx) term:
-        ModulusPoly term = new ModulusPoly(field, [field.subtract(0, b), 1]);
+        ModulusPoly term = ModulusPoly(field, [field.subtract(0, b), 1]);
         knownErrors = knownErrors.multiplyPoly(term);
       }
     }
 
-    ModulusPoly syndrome = new ModulusPoly(field, S);
+    ModulusPoly syndrome = ModulusPoly(field, S);
     //syndrome = syndrome.multiply(knownErrors);
 
     List<ModulusPoly> sigmaOmega = runEuclideanAlgorithm(
@@ -164,7 +164,7 @@ class ErrorCorrection {
           field.multiply(i, errorLocator.getCoefficient(i));
     }
     ModulusPoly formalDerivative =
-        new ModulusPoly(field, formalDerivativeCoefficients);
+        ModulusPoly(field, formalDerivativeCoefficients);
 
     // This is directly applying Forney's Formula
     int s = errorLocations.length;

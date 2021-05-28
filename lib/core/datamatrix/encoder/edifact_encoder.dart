@@ -30,7 +30,7 @@ class EdifactEncoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     //step F
-    StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
       String c = context.getCurrentChar();
       encodeChar(c, buffer);
@@ -138,7 +138,7 @@ class EdifactEncoder implements Encoder {
     String cw1 = String.fromCharCode((v >> 16) & 255);
     String cw2 = String.fromCharCode((v >> 8) & 255);
     String cw3 = String.fromCharCode(v & 255);
-    StringBuffer res = new StringBuffer(3);
+    StringBuffer res = StringBuffer();
     res.write(cw1);
     if (len >= 2) {
       res.write(cw2);

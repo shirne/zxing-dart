@@ -206,8 +206,8 @@ class Detector {
             break;
           }
         }
-        result[0] = new ResultPoint(loc![0].toDouble(), startRow.toDouble());
-        result[1] = new ResultPoint(loc[1].toDouble(), startRow.toDouble());
+        result[0] = ResultPoint(loc![0].toDouble(), startRow.toDouble());
+        result[1] = ResultPoint(loc[1].toDouble(), startRow.toDouble());
         found = true;
         break;
       }
@@ -242,9 +242,9 @@ class Detector {
       }
       stopRow -= skippedRowCount + 1;
       result[2] =
-          new ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
+          ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
       result[3] =
-          new ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
+          ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
     if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
       // Arrays.fill(result, null);

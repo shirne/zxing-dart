@@ -38,7 +38,7 @@ class SMSParsedResult extends ParsedResult {
       : super(ParsedResultType.SMS);
 
   String getSMSURI() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = StringBuffer();
     result.write("sms:");
     bool first = true;
     for (int i = 0; i < numbers.length; i++) {
@@ -90,7 +90,7 @@ class SMSParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(100);
+    StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(numbers, result);
     ParsedResult.maybeAppend(subject, result);
     ParsedResult.maybeAppend(body, result);

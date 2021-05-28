@@ -48,6 +48,6 @@ class AlignmentPattern extends ResultPoint {
     double combinedX = (getX() + j) / 2.0;
     double combinedY = (getY() + i) / 2.0;
     double combinedModuleSize = (estimatedModuleSize + newModuleSize) / 2.0;
-    return new AlignmentPattern(combinedX, combinedY, combinedModuleSize);
+    return AlignmentPattern(combinedX, combinedY, combinedModuleSize);
   }
 }

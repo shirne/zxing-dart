@@ -30,7 +30,7 @@ class Point {
   final int y;
 
   ResultPoint toResultPoint() {
-    return new ResultPoint(x.toDouble(), y.toDouble());
+    return ResultPoint(x.toDouble(), y.toDouble());
   }
 
   Point(this.x, this.y);
@@ -109,7 +109,7 @@ class Detector {
     // 5. Get the corners of the matrix.
     List<ResultPoint> corners = getMatrixCornerPoints(bullsEyeCorners);
 
-    return new AztecDetectorResult(
+    return AztecDetectorResult(
         bits, corners, compact, nbDataBlocks, nbLayers);
   }
 
@@ -229,7 +229,7 @@ class Detector {
     }
     try {
       ReedSolomonDecoder rsDecoder =
-          new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
+          ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
       rsDecoder.decode(parameterWords, numECCodewords);
     } catch (ignored) {
       // ReedSolomonException
@@ -297,10 +297,10 @@ class Detector {
 
     // Expand the square by .5 pixel in each direction so that we're on the border
     // between the white square and the black square
-    ResultPoint pinax = new ResultPoint(pina.getX() + 0.5, pina.getY() - 0.5);
-    ResultPoint pinbx = new ResultPoint(pinb.getX() + 0.5, pinb.getY() + 0.5);
-    ResultPoint pincx = new ResultPoint(pinc.getX() - 0.5, pinc.getY() + 0.5);
-    ResultPoint pindx = new ResultPoint(pind.getX() - 0.5, pind.getY() - 0.5);
+    ResultPoint pinax = ResultPoint(pina.getX() + 0.5, pina.getY() - 0.5);
+    ResultPoint pinbx = ResultPoint(pinb.getX() + 0.5, pinb.getY() + 0.5);
+    ResultPoint pincx = ResultPoint(pinc.getX() - 0.5, pinc.getY() + 0.5);
+    ResultPoint pindx = ResultPoint(pind.getX() - 0.5, pind.getY() - 0.5);
 
     // Expand the square so that its corners are the centers of the points
     // just outside the bull's eye.
@@ -322,7 +322,7 @@ class Detector {
     //Get a white rectangle that can be the border of the matrix in center bull's eye or
     try {
       List<ResultPoint> cornerPoints =
-          new WhiteRectangleDetector(image).detect();
+          WhiteRectangleDetector(image).detect();
       pointA = cornerPoints[0];
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
@@ -334,13 +334,13 @@ class Detector {
       // In that case, surely in the bull's eye, we try to expand the rectangle.
       int cx = image.getWidth() ~/ 2;
       int cy = image.getHeight() ~/ 2;
-      pointA = getFirstDifferent(new Point(cx + 7, cy - 7), false, 1, -1)
+      pointA = getFirstDifferent(Point(cx + 7, cy - 7), false, 1, -1)
           .toResultPoint();
-      pointB = getFirstDifferent(new Point(cx + 7, cy + 7), false, 1, 1)
+      pointB = getFirstDifferent(Point(cx + 7, cy + 7), false, 1, 1)
           .toResultPoint();
-      pointC = getFirstDifferent(new Point(cx - 7, cy + 7), false, -1, 1)
+      pointC = getFirstDifferent(Point(cx - 7, cy + 7), false, -1, 1)
           .toResultPoint();
-      pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1)
+      pointD = getFirstDifferent(Point(cx - 7, cy - 7), false, -1, -1)
           .toResultPoint();
     }
 
@@ -355,7 +355,7 @@ class Detector {
     // in order to compute a more accurate center.
     try {
       List<ResultPoint> cornerPoints =
-          new WhiteRectangleDetector(image, 15, cx, cy).detect();
+          WhiteRectangleDetector(image, 15, cx, cy).detect();
       pointA = cornerPoints[0];
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
@@ -364,13 +364,13 @@ class Detector {
       // NotFoundException
       // This exception can be in case the initial rectangle is white
       // In that case we try to expand the rectangle.
-      pointA = getFirstDifferent(new Point(cx + 7, cy - 7), false, 1, -1)
+      pointA = getFirstDifferent(Point(cx + 7, cy - 7), false, 1, -1)
           .toResultPoint();
-      pointB = getFirstDifferent(new Point(cx + 7, cy + 7), false, 1, 1)
+      pointB = getFirstDifferent(Point(cx + 7, cy + 7), false, 1, 1)
           .toResultPoint();
-      pointC = getFirstDifferent(new Point(cx - 7, cy + 7), false, -1, 1)
+      pointC = getFirstDifferent(Point(cx - 7, cy + 7), false, -1, 1)
           .toResultPoint();
-      pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1)
+      pointD = getFirstDifferent(Point(cx - 7, cy - 7), false, -1, -1)
           .toResultPoint();
     }
 
@@ -380,7 +380,7 @@ class Detector {
     cy = MathUtils.round(
         (pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY()) / 4.0);
 
-    return new Point(cx, cy);
+    return Point(cx, cy);
   }
 
   /**
@@ -461,10 +461,10 @@ class Detector {
   bool isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4) {
     int corr = 3;
 
-    p1 = new Point(p1.getX() - corr, p1.getY() + corr);
-    p2 = new Point(p2.getX() - corr, p2.getY() - corr);
-    p3 = new Point(p3.getX() + corr, p3.getY() - corr);
-    p4 = new Point(p4.getX() + corr, p4.getY() + corr);
+    p1 = Point(p1.getX() - corr, p1.getY() + corr);
+    p2 = Point(p2.getX() - corr, p2.getY() - corr);
+    p3 = Point(p3.getX() + corr, p3.getY() - corr);
+    p4 = Point(p4.getX() + corr, p4.getY() + corr);
 
     int cInit = getColor(p4, p1);
 
@@ -548,7 +548,7 @@ class Detector {
     }
     y -= dy;
 
-    return new Point(x, y);
+    return Point(x, y);
   }
 
   /**
@@ -568,18 +568,18 @@ class Detector {
     double centery = (cornerPoints[0].getY() + cornerPoints[2].getY()) / 2.0;
 
     ResultPoint result0 =
-        new ResultPoint(centerx + ratio * dx, centery + ratio * dy);
+        ResultPoint(centerx + ratio * dx, centery + ratio * dy);
     ResultPoint result2 =
-        new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
+        ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
     dx = cornerPoints[1].getX() - cornerPoints[3].getX();
     dy = cornerPoints[1].getY() - cornerPoints[3].getY();
     centerx = (cornerPoints[1].getX() + cornerPoints[3].getX()) / 2.0;
     centery = (cornerPoints[1].getY() + cornerPoints[3].getY()) / 2.0;
     ResultPoint result1 =
-        new ResultPoint(centerx + ratio * dx, centery + ratio * dy);
+        ResultPoint(centerx + ratio * dx, centery + ratio * dy);
     ResultPoint result3 =
-        new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
+        ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
     return [result0, result1, result2, result3];
   }

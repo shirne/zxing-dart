@@ -51,6 +51,6 @@ class ProductResultParser extends ResultParser {
       normalizedProductID = rawText;
     }
 
-    return new ProductParsedResult(rawText, normalizedProductID);
+    return ProductParsedResult(rawText, normalizedProductID);
   }
 }

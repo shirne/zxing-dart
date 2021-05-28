@@ -27,7 +27,7 @@ import 'ean13_writer.dart';
  * @author qwandor@google.com (Andrew Walbran)
  */
 class UPCAWriter implements Writer {
-  final EAN13Writer subWriter = new EAN13Writer();
+  final EAN13Writer subWriter = EAN13Writer();
 
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,

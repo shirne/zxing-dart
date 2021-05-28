@@ -148,7 +148,7 @@ class PDF417HighLevelEncoder {
   static String encodeHighLevel(
       String msg, Compaction compaction, Encoding? encoding) {
     //the codewords 0..928 are encoded as Unicode characters
-    StringBuffer sb = new StringBuffer(msg.length);
+    StringBuffer sb = StringBuffer();
 
     if (encoding == null) {
       encoding = DEFAULT_ENCODING;
@@ -236,7 +236,7 @@ class PDF417HighLevelEncoder {
    */
   static int encodeText(String msg, int startpos, int count, StringBuffer sb,
       int initialSubmode) {
-    StringBuilder tmp = new StringBuilder();
+    StringBuilder tmp = StringBuilder();
     int submode = initialSubmode;
     int idx = 0;
     while (true) {
@@ -399,7 +399,7 @@ class PDF417HighLevelEncoder {
   static void encodeNumeric(
       String msg, int startpos, int count, StringBuffer sb) {
     int idx = 0;
-    StringBuilder tmp = new StringBuilder();
+    StringBuilder tmp = StringBuilder();
     BigInt num900 = BigInt.from(900);
     BigInt num0 = BigInt.from(0);
     while (idx < count) {
@@ -562,7 +562,7 @@ class PDF417HighLevelEncoder {
       sb.writeCharCode(ECI_USER_DEFINED);
       sb.writeCharCode((810900 - eci));
     } else {
-      throw new WriterException(
+      throw WriterException(
           "ECI number not in valid range from 0..811799, but was $eci");
     }
   }

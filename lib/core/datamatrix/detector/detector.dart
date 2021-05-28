@@ -75,14 +75,14 @@ class Detector {
     BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight,
         topRight, dimensionTop, dimensionRight);
 
-    return new DetectorResult(
+    return DetectorResult(
         bits, [topLeft, bottomLeft, bottomRight, topRight]);
   }
 
   static ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div) {
     double x = (to.getX() - point.getX()) / (div + 1);
     double y = (to.getY() - point.getY()) / (div + 1);
-    return new ResultPoint(point.getX() + x, point.getY() + y);
+    return ResultPoint(point.getX() + x, point.getY() + y);
   }
 
   static ResultPoint moveAway(ResultPoint point, double fromX, double fromY) {
@@ -101,7 +101,7 @@ class Detector {
       y += 1;
     }
 
-    return new ResultPoint(x, y);
+    return ResultPoint(x, y);
   }
 
   /**
@@ -210,10 +210,10 @@ class Detector {
     trTop = transitionsBetween(pointAs, pointD);
     trRight = transitionsBetween(pointCs, pointD);
 
-    ResultPoint candidate1 = new ResultPoint(
+    ResultPoint candidate1 = ResultPoint(
         pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
         pointD.getY() + (pointC.getY() - pointB.getY()) / (trTop + 1));
-    ResultPoint candidate2 = new ResultPoint(
+    ResultPoint candidate2 = ResultPoint(
         pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
         pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
 

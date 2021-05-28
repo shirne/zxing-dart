@@ -163,7 +163,7 @@ class CalendarParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(100);
+    StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(summary, result);
     ParsedResult.maybeAppend(format(startAllDay, start), result);
     ParsedResult.maybeAppend(format(endAllDay, end), result);

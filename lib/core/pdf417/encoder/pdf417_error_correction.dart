@@ -202,7 +202,7 @@ class PDF417ErrorCorrection {
       t3 = 929 - t2;
       e[0] = (t3 % 929);
     }
-    StringBuffer sb = new StringBuffer(k);
+    StringBuffer sb = StringBuffer();
     for (int j = k - 1; j >= 0; j--) {
       if (e[j] != 0) {
         e[j] = (929 - e[j]);

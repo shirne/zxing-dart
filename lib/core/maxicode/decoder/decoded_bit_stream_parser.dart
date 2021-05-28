@@ -159,7 +159,7 @@ class DecodedBitStreamParser {
         result.write(getMessage(bytes, 1, 77));
         break;
     }
-    return new DecoderResult(bytes, result.toString(), null, (mode).toString());
+    return DecoderResult(bytes, result.toString(), null, (mode).toString());
   }
 
   static int getBit(int bit, Uint8List bytes) {

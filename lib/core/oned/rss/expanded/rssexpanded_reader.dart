@@ -418,7 +418,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     List<ResultPoint> lastPoints =
         pairs[pairs.length - 1].getFinderPattern()!.getResultPoints();
 
-    Result result = new Result(
+    Result result = Result(
         resultingString,
         null,
         [firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]],
@@ -632,7 +632,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       // NotFoundException
       return null;
     }
-    return new FinderPattern(value, [start, end], start, end, rowNumber);
+    return FinderPattern(value, [start, end], start, end, rowNumber);
   }
 
   DataCharacter decodeDataCharacter(
@@ -732,7 +732,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     int gSum = GSUM[group];
     int value = vOdd * tEven + vEven + gSum;
 
-    return new DataCharacter(value, checksumPortion);
+    return DataCharacter(value, checksumPortion);
   }
 
   static bool isNotA1left(

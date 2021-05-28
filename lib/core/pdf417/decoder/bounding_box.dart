@@ -43,11 +43,11 @@ class BoundingBox {
       throw NotFoundException.getNotFoundInstance();
     }
     if (leftUnspecified) {
-      topLeft = new ResultPoint(0, topRight!.getY());
-      bottomLeft = new ResultPoint(0, bottomRight!.getY());
+      topLeft = ResultPoint(0, topRight!.getY());
+      bottomLeft = ResultPoint(0, bottomRight!.getY());
     } else if (rightUnspecified) {
-      topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
-      bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());
+      topRight = ResultPoint(image.getWidth() - 1, topLeft.getY());
+      bottomRight = ResultPoint(image.getWidth() - 1, bottomLeft.getY());
     }
     this.topLeft = topLeft;
     this.bottomLeft = bottomLeft;
@@ -77,7 +77,7 @@ class BoundingBox {
     if (rightBox == null) {
       return leftBox;
     }
-    return new BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft,
+    return BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft,
         rightBox.topRight, rightBox.bottomRight);
   }
 
@@ -94,7 +94,7 @@ class BoundingBox {
       if (newMinY < 0) {
         newMinY = 0;
       }
-      ResultPoint newTop = new ResultPoint(top.getX(), newMinY.toDouble());
+      ResultPoint newTop = ResultPoint(top.getX(), newMinY.toDouble());
       if (isLeft) {
         newTopLeft = newTop;
       } else {
@@ -109,7 +109,7 @@ class BoundingBox {
         newMaxY = image.getHeight() - 1;
       }
       ResultPoint newBottom =
-          new ResultPoint(bottom.getX(), newMaxY.toDouble());
+          ResultPoint(bottom.getX(), newMaxY.toDouble());
       if (isLeft) {
         newBottomLeft = newBottom;
       } else {
@@ -117,7 +117,7 @@ class BoundingBox {
       }
     }
 
-    return new BoundingBox(
+    return BoundingBox(
         image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
   }
 

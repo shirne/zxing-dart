@@ -22,7 +22,7 @@ import 'binary_shift_token.dart';
 import 'simple_token.dart';
 
 abstract class Token {
-  static final Token EMPTY = new SimpleToken(null, 0, 0);
+  static final Token EMPTY = SimpleToken(null, 0, 0);
 
   final Token? previous;
 
@@ -33,12 +33,12 @@ abstract class Token {
   }
 
   Token add(int value, int bitCount) {
-    return new SimpleToken(this, value, bitCount);
+    return SimpleToken(this, value, bitCount);
   }
 
   Token addBinaryShift(int start, int byteCount) {
     //int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
-    return new BinaryShiftToken(this, start, byteCount);
+    return BinaryShiftToken(this, start, byteCount);
   }
 
   void appendTo(BitArray bitArray, Uint8List text);

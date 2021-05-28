@@ -142,7 +142,7 @@ class GenericGFPoly {
           smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
     }
 
-    return new GenericGFPoly(field, sumDiff);
+    return GenericGFPoly(field, sumDiff);
   }
 
   GenericGFPoly multiply(GenericGFPoly other) {
@@ -194,7 +194,7 @@ class GenericGFPoly {
     for (int i = 0; i < size; i++) {
       product[i] = field.multiply(coefficients[i], coefficient);
     }
-    return new GenericGFPoly(field, product);
+    return GenericGFPoly(field, product);
   }
 
   List<GenericGFPoly> divide(GenericGFPoly other) {
@@ -231,7 +231,7 @@ class GenericGFPoly {
     if (isZero()) {
       return "0";
     }
-    StringBuffer result = new StringBuffer(8 * getDegree());
+    StringBuffer result = StringBuffer();
     for (int degree = getDegree(); degree >= 0; degree--) {
       int coefficient = getCoefficient(degree);
       if (coefficient != 0) {

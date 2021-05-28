@@ -58,7 +58,7 @@ class InvertedLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return new InvertedLuminanceSource(delegate.crop(left, top, width, height));
+    return InvertedLuminanceSource(delegate.crop(left, top, width, height));
   }
 
   @override
@@ -76,11 +76,11 @@ class InvertedLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource rotateCounterClockwise() {
-    return new InvertedLuminanceSource(delegate.rotateCounterClockwise());
+    return InvertedLuminanceSource(delegate.rotateCounterClockwise());
   }
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-    return new InvertedLuminanceSource(delegate.rotateCounterClockwise45());
+    return InvertedLuminanceSource(delegate.rotateCounterClockwise45());
   }
 }

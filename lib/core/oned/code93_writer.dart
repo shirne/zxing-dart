@@ -114,7 +114,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
 
   static String convertToExtended(String contents) {
     int length = contents.length;
-    StringBuffer extendedContent = new StringBuffer(length * 2);
+    StringBuffer extendedContent = StringBuffer();
     for (int i = 0; i < length; i++) {
       int character = contents.codeUnitAt(i);
       // ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING

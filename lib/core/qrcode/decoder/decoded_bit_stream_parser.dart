@@ -48,8 +48,8 @@ class DecodedBitStreamParser {
 
   static DecoderResult decode(Uint8List bytes, Version version,
       ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
-    BitSource bits = new BitSource(bytes);
-    StringBuilder result = new StringBuilder();
+    BitSource bits = BitSource(bytes);
+    StringBuilder result = StringBuilder();
     List<Uint8List> byteSegments = [Uint8List(0)]; //new ArrayList<>(1);
     int symbolSequence = -1;
     int parityData = -1;
@@ -157,7 +157,7 @@ class DecodedBitStreamParser {
       throw FormatException();
     }
 
-    return new DecoderResult(
+    return DecoderResult(
         bytes,
         result.toString(),
         byteSegments.isEmpty ? null : byteSegments,

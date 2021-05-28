@@ -48,7 +48,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       [Map<DecodeHintType, Object>? hints]) {
     List<Result> results = [];
     List<DetectorResult> detectorResults =
-        new MultiDetector(image.getBlackMatrix()).detectMulti(hints);
+        MultiDetector(image.getBlackMatrix()).detectMulti(hints);
     for (DetectorResult detectorResult in detectorResults) {
       try {
         DecoderResult decoderResult =
@@ -59,7 +59,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
           (decoderResult.getOther() as QRCodeDecoderMetaData)
               .applyMirroredCorrection(points);
         }
-        Result result = new Result(decoderResult.getText(),
+        Result result = Result(decoderResult.getText(),
             decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
         List<Uint8List>? byteSegments = decoderResult.getByteSegments();
         if (byteSegments != null) {
@@ -107,7 +107,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
 
     // sort and concatenate the SA list items
     saResults.sort(compareResult);
-    StringBuffer newText = new StringBuffer();
+    StringBuffer newText = StringBuffer();
     BytesBuilder newRawBytes = BytesBuilder();
     BytesBuilder newByteSegment = BytesBuilder();
     //ByteArrayOutputStream newRawBytes = new ByteArrayOutputStream();
@@ -127,7 +127,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       }
     }
 
-    Result newResult = new Result(
+    Result newResult = Result(
         newText.toString(),
         Uint8List.fromList(newRawBytes.takeBytes()),
         NO_POINTS,

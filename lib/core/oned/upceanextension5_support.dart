@@ -35,7 +35,7 @@ class UPCEANExtension5Support {
   ];
 
   final List<int> decodeMiddleCounters = [0,0,0,0];
-  final StringBuffer decodeRowStringBuffer = new StringBuffer();
+  final StringBuffer decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange){
 
@@ -47,11 +47,11 @@ class UPCEANExtension5Support {
     Map<ResultMetadataType,Object>? extensionData = parseExtensionString(resultString);
 
     Result extensionResult =
-        new Result(resultString,
+        Result(resultString,
                    null,
                    [
-                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0, rowNumber.toDouble()),
-                       new ResultPoint(end.toDouble(), rowNumber.toDouble()),
+                       ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0, rowNumber.toDouble()),
+                       ResultPoint(end.toDouble(), rowNumber.toDouble()),
                    ],
                    BarcodeFormat.UPC_EAN_EXTENSION);
     if (extensionData != null) {

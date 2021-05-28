@@ -36,7 +36,7 @@ class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
     }
     String uri = rawUri[0];
     return URIResultParser.isBasicallyValidURI(uri)
-        ? new URIParsedResult(uri, title)
+        ? URIParsedResult(uri, title)
         : null;
   }
 }

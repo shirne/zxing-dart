@@ -140,15 +140,15 @@ class HighLevelEncoder {
       Dimension? maxSize]) {
     //the codewords 0..255 are encoded as Unicode characters
     List<Encoder> encoders = [
-      new ASCIIEncoder(),
-      new C40Encoder(),
-      new TextEncoder(),
-      new X12Encoder(),
-      new EdifactEncoder(),
-      new Base256Encoder()
+      ASCIIEncoder(),
+      C40Encoder(),
+      TextEncoder(),
+      X12Encoder(),
+      EdifactEncoder(),
+      Base256Encoder()
     ];
 
-    EncoderContext context = new EncoderContext(msg);
+    EncoderContext context = EncoderContext(msg);
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
 

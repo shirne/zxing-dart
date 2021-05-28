@@ -35,7 +35,7 @@ class EncoderContext {
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!
     Uint8List msgBinary = latin1.encode(msg);
-    StringBuffer sb = new StringBuffer(msgBinary.length);
+    StringBuffer sb = StringBuffer();
     for (int i = 0, c = msgBinary.length; i < c; i++) {
       String ch = String.fromCharCode(msgBinary[i] & 0xff);
       if (ch == '?' && msg[i] != '?') {
@@ -46,7 +46,7 @@ class EncoderContext {
     }
     this.msg = sb.toString(); //Not Unicode here!
     shape = SymbolShapeHint.FORCE_NONE;
-    this.codewords = new StringBuffer(msg.length);
+    this.codewords = StringBuffer();
     newEncoding = -1;
   }
 

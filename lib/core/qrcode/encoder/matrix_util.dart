@@ -164,7 +164,7 @@ class MatrixUtil {
   // Embed type information. On success, modify the matrix.
   static void embedTypeInfo(
       ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix) {
-    BitArray typeInfoBits = new BitArray();
+    BitArray typeInfoBits = BitArray();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
     for (int i = 0; i < typeInfoBits.getSize(); ++i) {
@@ -200,7 +200,7 @@ class MatrixUtil {
       // Version info is necessary if version >= 7.
       return; // Don't need version info.
     }
-    BitArray versionInfoBits = new BitArray();
+    BitArray versionInfoBits = BitArray();
     makeVersionInfoBits(version, versionInfoBits);
 
     int bitIndex = 6 * 3 - 1; // It will decrease from 17 to 0.
@@ -325,7 +325,7 @@ class MatrixUtil {
   static void makeTypeInfoBits(
       ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits) {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
-      throw new WriterException("Invalid mask pattern");
+      throw WriterException("Invalid mask pattern");
     }
     int typeInfo = (ecLevel.index << 3) | maskPattern;
     bits.appendBits(typeInfo, 5);
@@ -333,13 +333,13 @@ class MatrixUtil {
     int bchCode = calculateBCHCode(typeInfo, TYPE_INFO_POLY);
     bits.appendBits(bchCode, 10);
 
-    BitArray maskBits = new BitArray();
+    BitArray maskBits = BitArray();
     maskBits.appendBits(TYPE_INFO_MASK_PATTERN, 15);
     bits.xor(maskBits);
 
     if (bits.getSize() != 15) {
       // Just in case.
-      throw new WriterException(
+      throw WriterException(
           "should not happen but we got: ${bits.getSize()}");
     }
   }
@@ -354,7 +354,7 @@ class MatrixUtil {
 
     if (bits.getSize() != 18) {
       // Just in case.
-      throw new WriterException(
+      throw WriterException(
           "should not happen but we got: ${bits.getSize()}");
     }
   }
@@ -383,7 +383,7 @@ class MatrixUtil {
   // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
   static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) {
     if (matrix.get(8, matrix.getHeight() - 8) == 0) {
-      throw new WriterException();
+      throw WriterException();
     }
     matrix.set(8, matrix.getHeight() - 8, 1);
   }
@@ -392,7 +392,7 @@ class MatrixUtil {
       int xStart, int yStart, ByteMatrix matrix) {
     for (int x = 0; x < 8; ++x) {
       if (!isEmpty(matrix.get(xStart + x, yStart))) {
-        throw new WriterException();
+        throw WriterException();
       }
       matrix.set(xStart + x, yStart, 0);
     }
@@ -402,7 +402,7 @@ class MatrixUtil {
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
       if (!isEmpty(matrix.get(xStart, yStart + y))) {
-        throw new WriterException();
+        throw WriterException();
       }
       matrix.set(xStart, yStart + y, 0);
     }

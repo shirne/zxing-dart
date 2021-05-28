@@ -24,7 +24,7 @@ import 'reader_exception.dart';
  * @author Sean Owen
  */
 class FormatException extends ReaderException {
-  static final FormatException INSTANCE = new FormatException();
+  static final FormatException INSTANCE = FormatException();
 
   FormatException([cause]) : super(cause);
 

@@ -169,7 +169,7 @@ class Encoder {
         alignmentMap[origCenter + i] = center + newOffset + 1;
       }
     }
-    BitMatrix matrix = new BitMatrix(matrixSize);
+    BitMatrix matrix = BitMatrix(matrixSize);
 
     // draw data bits
     for (int i = 0, rowOffset = 0; i < layers; i++) {
@@ -215,7 +215,7 @@ class Encoder {
       }
     }
 
-    AztecCode aztec = new AztecCode();
+    AztecCode aztec = AztecCode();
     aztec.setCompact(compact);
     aztec.setSize(matrixSize);
     aztec.setLayers(layers);
@@ -243,7 +243,7 @@ class Encoder {
 
   static BitArray generateModeMessage(
       bool compact, int layers, int messageSizeInWords) {
-    BitArray modeMessage = new BitArray();
+    BitArray modeMessage = BitArray();
     if (compact) {
       modeMessage.appendBits(layers - 1, 2);
       modeMessage.appendBits(messageSizeInWords - 1, 6);
@@ -298,12 +298,12 @@ class Encoder {
       BitArray bitArray, int totalBits, int wordSize) {
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
     int messageSizeInWords = bitArray.getSize() ~/ wordSize;
-    ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
+    ReedSolomonEncoder rs = ReedSolomonEncoder(getGF(wordSize));
     int totalWords = totalBits ~/ wordSize;
     List<int> messageWords = bitsToWords(bitArray, wordSize, totalWords);
     rs.encode(messageWords, totalWords - messageSizeInWords);
     int startPad = totalBits % wordSize;
-    BitArray messageBits = new BitArray();
+    BitArray messageBits = BitArray();
     messageBits.appendBits(0, startPad);
     for (int messageWord in messageWords) {
       messageBits.appendBits(messageWord, wordSize);
@@ -345,7 +345,7 @@ class Encoder {
   }
 
   static BitArray stuffBits(BitArray bits, int wordSize) {
-    BitArray out = new BitArray();
+    BitArray out = BitArray();
 
     int n = bits.getSize();
     int mask = (1 << wordSize) - 2;

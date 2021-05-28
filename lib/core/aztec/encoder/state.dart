@@ -29,7 +29,7 @@ import 'token.dart';
  */
 class State {
   static final State INITIAL_STATE =
-      new State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
+      State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
 
   // The current mode of the encoding (or the mode to which we'll return if
   // we're in Binary Shift mode.
@@ -77,7 +77,7 @@ class State {
       }
       bitsAdded += eciDigits.length * 4;
     }
-    return new State(token, mode, 0, bitCount + bitsAdded);
+    return State(token, mode, 0, bitCount + bitsAdded);
   }
 
   // Create a new state representing this state with a latch to a (not
@@ -93,7 +93,7 @@ class State {
     }
     int latchModeBitCount = mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     token = token.add(value, latchModeBitCount);
-    return new State(token, mode, 0, bitCount + latchModeBitCount);
+    return State(token, mode, 0, bitCount + latchModeBitCount);
   }
 
   // Create a new state representing this state, with a temporary shift
@@ -106,7 +106,7 @@ class State {
     token = token.add(
         HighLevelEncoder.SHIFT_TABLE[this.mode][mode], thisModeBitCount);
     token = token.add(value, 5);
-    return new State(token, this.mode, 0, this.bitCount + thisModeBitCount + 5);
+    return State(token, this.mode, 0, this.bitCount + thisModeBitCount + 5);
   }
 
   // Create a new state representing this state, but an additional character
@@ -130,7 +130,7 @@ class State {
             : (binaryShiftByteCount == 62)
                 ? 9
                 : 8;
-    State result = new State(
+    State result = State(
         token, mode, binaryShiftByteCount + 1, bitCount + deltaBitCount);
     if (result.binaryShiftByteCount == 2047 + 31) {
       // The string is as long as it's allowed to be.  We should end it.
@@ -149,7 +149,7 @@ class State {
     token = token.addBinaryShift(
         index - binaryShiftByteCount, binaryShiftByteCount);
     //assert token.getTotalBitCount() == this.bitCount;
-    return new State(token, mode, 0, this.bitCount);
+    return State(token, mode, 0, this.bitCount);
   }
 
   // Returns true if "this" state is better (or equal) to be in than "that"
@@ -178,7 +178,7 @@ class State {
         token = token.getPrevious()) {
       symbols.insert(0, token);
     }
-    BitArray bitArray = new BitArray();
+    BitArray bitArray = BitArray();
     // Add each token to the result.
     for (Token symbol in symbols) {
       symbol.appendTo(bitArray, text);

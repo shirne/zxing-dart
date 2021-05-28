@@ -54,7 +54,7 @@ class ReedSolomonDecoder {
    * @throws ReedSolomonException if decoding fails for any reason
    */
   void decode(List<int> received, int twoS) {
-    GenericGFPoly poly = new GenericGFPoly(field, received);
+    GenericGFPoly poly = GenericGFPoly(field, received);
     List<int> syndromeCoefficients = List.generate(twoS, (index) => 0);
     bool noError = true;
     for (int i = 0; i < twoS; i++) {
@@ -67,7 +67,7 @@ class ReedSolomonDecoder {
     if (noError) {
       return;
     }
-    GenericGFPoly syndrome = new GenericGFPoly(field, syndromeCoefficients);
+    GenericGFPoly syndrome = GenericGFPoly(field, syndromeCoefficients);
     List<GenericGFPoly> sigmaOmega =
         runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
     GenericGFPoly sigma = sigmaOmega[0];

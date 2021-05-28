@@ -141,7 +141,7 @@ class UPCEReader extends UPCEANReader {
   static String convertUPCEtoUPCA(String upce) {
     List<int> upceChars = List.generate(6, (index)=>upce.codeUnitAt(index+1));
     // upce.getChars(1, 7, upceChars, 0);
-    StringBuffer result = new StringBuffer(12);
+    StringBuffer result = StringBuffer();
     result.write(upce[0]);
     int lastChar = upceChars[5];
     switch (String.fromCharCode(lastChar)) {

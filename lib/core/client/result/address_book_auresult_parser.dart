@@ -49,7 +49,7 @@ class AddressBookAUResultParser extends ResultParser {
     String? address =
         ResultParser.matchSinglePrefixedField("ADD:", rawText, '\r', true);
     List<String>? addresses = address == null ? null : [address];
-    return new AddressBookParsedResult(
+    return AddressBookParsedResult(
         ResultParser.maybeWrap(name),
         null,
         pronunciation,

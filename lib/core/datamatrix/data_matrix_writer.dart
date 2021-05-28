@@ -86,7 +86,7 @@ class DataMatrixWriter implements Writer {
     String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);
 
     //3. step: Module placement in Matrix
-    DefaultPlacement placement = new DefaultPlacement(codewords,
+    DefaultPlacement placement = DefaultPlacement(codewords,
         symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
     placement.place();
 
@@ -106,7 +106,7 @@ class DataMatrixWriter implements Writer {
     int symbolWidth = symbolInfo.getSymbolDataWidth();
     int symbolHeight = symbolInfo.getSymbolDataHeight();
 
-    ByteMatrix matrix = new ByteMatrix(
+    ByteMatrix matrix = ByteMatrix(
         symbolInfo.getSymbolWidth(), symbolInfo.getSymbolHeight());
 
     int matrixY = 0;
@@ -179,9 +179,9 @@ class DataMatrixWriter implements Writer {
     if (reqHeight < matrixHeight || reqWidth < matrixWidth) {
       leftPadding = 0;
       topPadding = 0;
-      output = new BitMatrix(matrixWidth, matrixHeight);
+      output = BitMatrix(matrixWidth, matrixHeight);
     } else {
-      output = new BitMatrix(reqWidth, reqHeight);
+      output = BitMatrix(reqWidth, reqHeight);
     }
 
     output.clear();

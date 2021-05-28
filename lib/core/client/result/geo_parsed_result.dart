@@ -33,7 +33,7 @@ class GeoParsedResult extends ParsedResult {
       : super(ParsedResultType.GEO);
 
   String getGeoURI() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = StringBuffer();
     result.write("geo:");
     result.write(latitude);
     result.write(',');
@@ -79,7 +79,7 @@ class GeoParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(20);
+    StringBuffer result = StringBuffer();
     result.write(latitude);
     result.write(", ");
     result.write(longitude);

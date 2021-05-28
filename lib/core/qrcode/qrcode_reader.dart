@@ -40,7 +40,7 @@ import 'detector/detector.dart';
 class QRCodeReader implements Reader {
   static final List<ResultPoint> NO_POINTS = [];
 
-  final Decoder decoder = new Decoder();
+  final Decoder decoder = Decoder();
 
   Decoder getDecoder() {
     return decoder;
@@ -56,7 +56,7 @@ class QRCodeReader implements Reader {
       points = NO_POINTS;
     } else {
       DetectorResult detectorResult =
-          new Detector(image.getBlackMatrix()).detect(hints!);
+          Detector(image.getBlackMatrix()).detect(hints!);
       decoderResult = decoder.decodeMatrix(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
     }
@@ -67,7 +67,7 @@ class QRCodeReader implements Reader {
           .applyMirroredCorrection(points);
     }
 
-    Result result = new Result(decoderResult.getText(),
+    Result result = Result(decoderResult.getText(),
         decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
     List<Uint8List>? byteSegments = decoderResult.getByteSegments();
     if (byteSegments != null) {
@@ -169,7 +169,7 @@ class QRCodeReader implements Reader {
     }
 
     // Now just read off the bits
-    BitMatrix bits = new BitMatrix(matrixWidth, matrixHeight);
+    BitMatrix bits = BitMatrix(matrixWidth, matrixHeight);
     for (int y = 0; y < matrixHeight; y++) {
       int iOffset = top + (y * calModuleSize).toInt();
       for (int x = 0; x < matrixWidth; x++) {

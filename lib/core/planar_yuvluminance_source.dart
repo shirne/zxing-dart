@@ -100,7 +100,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return new PlanarYUVLuminanceSource(yuvData, dataWidth, dataHeight,
+    return PlanarYUVLuminanceSource(yuvData, dataWidth, dataHeight,
         this.left + left, this.top + top, width, height, false);
   }
 

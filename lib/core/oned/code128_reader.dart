@@ -265,7 +265,7 @@ class Code128Reader extends OneDReader {
     bool done = false;
     bool isNextShifted = false;
 
-    StringBuilder result = new StringBuilder();
+    StringBuilder result = StringBuilder();
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
@@ -551,7 +551,7 @@ class Code128Reader extends OneDReader {
     for (int i = 0; i < rawCodesSize; i++) {
       rawBytes[i] = rawCodes[i];
     }
-    Result resultObject = new Result(
+    Result resultObject = Result(
         result.toString(),
         rawBytes,
         [

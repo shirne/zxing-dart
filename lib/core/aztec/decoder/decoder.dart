@@ -84,7 +84,7 @@ class Decoder {
     Uint8List rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
     String result = getEncodedData(correctedBits.correctBits);
     DecoderResult decoderResult =
-        new DecoderResult(rawBytes, result, null, "${correctedBits.ecLevel}%");
+        DecoderResult(rawBytes, result, null, "${correctedBits.ecLevel}%");
     decoderResult.setNumBits(correctedBits.correctBits.length);
     return decoderResult;
   }
@@ -301,7 +301,7 @@ class Decoder {
     }
 
     try {
-      ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
+      ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
     } catch (ex) {
       // ReedSolomonException
@@ -338,7 +338,7 @@ class Decoder {
       }
     }
 
-    return new CorrectedBitsResult(
+    return CorrectedBitsResult(
         correctedBits, 100 * (numCodewords - numDataCodewords) ~/ numCodewords);
   }
 

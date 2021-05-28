@@ -33,7 +33,7 @@ import '../../../../not_found_exception.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class FieldParser {
-  static final Object VARIABLE_LENGTH = new Object();
+  static final Object VARIABLE_LENGTH = Object();
 
   static final List<List<Object>> TWO_DIGIT_DATA_LENGTH = [
     // "DIGITS", new Integer(LENGTH)

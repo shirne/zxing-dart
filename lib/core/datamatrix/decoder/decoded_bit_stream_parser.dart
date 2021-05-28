@@ -142,7 +142,7 @@ class DecodedBitStreamParser {
       }
     }
 
-    return new DecoderResult(bytes, result.toString(),
+    return DecoderResult(bytes, result.toString(),
         byteSegments.isEmpty ? null : byteSegments, null, symbologyModifier);
   }
 

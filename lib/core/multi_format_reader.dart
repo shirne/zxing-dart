@@ -120,7 +120,7 @@ class MultiFormatReader implements Reader {
       }
       // At end in "try harder" mode
       if (addOneDReader && tryHarder) {
-        readers.add(new MultiFormatOneDReader(hints));
+        readers.add(MultiFormatOneDReader(hints));
       }
     }
     if (readers.isEmpty) {

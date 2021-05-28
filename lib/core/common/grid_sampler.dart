@@ -33,7 +33,7 @@ import 'perspective_transform.dart';
  * @author Sean Owen
  */
 abstract class GridSampler {
-  static GridSampler gridSampler = new DefaultGridSampler();
+  static GridSampler gridSampler = DefaultGridSampler();
 
   /**
    * Sets the implementation of GridSampler used by the library. One global

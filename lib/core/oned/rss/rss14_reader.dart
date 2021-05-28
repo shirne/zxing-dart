@@ -108,7 +108,7 @@ class RSS14Reader extends AbstractRSSReader {
     int symbolValue = 4537077 * leftPair.getValue() + rightPair.getValue();
     String text = symbolValue.toString();
 
-    StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = StringBuilder();
     for (int i = 13 - text.length; i > 0; i--) {
       buffer.write('0');
     }
@@ -129,7 +129,7 @@ class RSS14Reader extends AbstractRSSReader {
         leftPair.getFinderPattern().getResultPoints();
     List<ResultPoint> rightPoints =
         rightPair.getFinderPattern().getResultPoints();
-    Result result = new Result(
+    Result result = Result(
         buffer.toString(),
         null,
         [
@@ -178,12 +178,12 @@ class RSS14Reader extends AbstractRSSReader {
           center = row.getSize() - 1 - center;
         }
         resultPointCallback.foundPossibleResultPoint(
-            new ResultPoint(center, rowNumber.toDouble()));
+            ResultPoint(center, rowNumber.toDouble()));
       }
 
       DataCharacter outside = decodeDataCharacter(row, pattern, true);
       DataCharacter inside = decodeDataCharacter(row, pattern, false);
-      return new Pair(
+      return Pair(
           1597 * outside.getValue() + inside.getValue(),
           outside.getChecksumPortion() + 4 * inside.getChecksumPortion(),
           pattern);
@@ -266,7 +266,7 @@ class RSS14Reader extends AbstractRSSReader {
       int vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, true);
       int tEven = OUTSIDE_EVEN_TOTAL_SUBSET[group];
       int gSum = OUTSIDE_GSUM[group];
-      return new DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
+      return DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
     } else {
       if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
         throw NotFoundException.getNotFoundInstance();
@@ -278,7 +278,7 @@ class RSS14Reader extends AbstractRSSReader {
       int vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
       int tOdd = INSIDE_ODD_TOTAL_SUBSET[group];
       int gSum = INSIDE_GSUM[group];
-      return new DataCharacter(vEven * tOdd + vOdd + gSum, checksumPortion);
+      return DataCharacter(vEven * tOdd + vOdd + gSum, checksumPortion);
     }
   }
 
@@ -351,7 +351,7 @@ class RSS14Reader extends AbstractRSSReader {
       start = row.getSize() - 1 - start;
       end = row.getSize() - 1 - end;
     }
-    return new FinderPattern(
+    return FinderPattern(
         value, [firstElementStart, startEnd[1]], start, end, rowNumber);
   }
 

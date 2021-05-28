@@ -47,7 +47,7 @@ abstract class AI013x0xDecoder extends AI01weightDecoder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    StringBuilder buf = new StringBuilder();
+    StringBuilder buf = StringBuilder();
 
     encodeCompressedGtin(buf, HEADER_SIZE);
     encodeCompressedWeight(

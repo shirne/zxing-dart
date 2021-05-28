@@ -75,7 +75,7 @@ class EmailAddressParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(30);
+    StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(tos, result);
     ParsedResult.maybeAppendList(ccs, result);
     ParsedResult.maybeAppendList(bccs, result);

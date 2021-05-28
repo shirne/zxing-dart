@@ -50,7 +50,7 @@ class URIParsedResult extends ParsedResult {
 
   @override
   String getDisplayResult() {
-    StringBuffer result = new StringBuffer(30);
+    StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(title, result);
     ParsedResult.maybeAppend(uri, result);
     return result.toString();

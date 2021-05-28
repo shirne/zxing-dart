@@ -32,7 +32,7 @@ import '../result_point.dart';
 class UPCEANExtension2Support {
 
   final List<int> decodeMiddleCounters = [0,0,0,0];
-  final StringBuffer decodeRowStringBuffer = new StringBuffer();
+  final StringBuffer decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange){
 

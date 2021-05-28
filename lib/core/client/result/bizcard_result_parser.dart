@@ -50,7 +50,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     String? phoneNumber3 = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("F:", rawText, true);
     String? email = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("E:", rawText, true);
 
-    return new AddressBookParsedResult(ResultParser.maybeWrap(fullName),
+    return AddressBookParsedResult(ResultParser.maybeWrap(fullName),
                                        null,
                                        null,
                                        buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),

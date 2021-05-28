@@ -80,7 +80,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
 
   static String tryToConvertToExtendedMode(String contents) {
     int length = contents.length;
-    StringBuffer extendedContent = new StringBuffer();
+    StringBuffer extendedContent = StringBuffer();
     for (int i = 0; i < length; i++) {
       String character = contents[i];
       switch (character) {

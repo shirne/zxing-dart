@@ -77,7 +77,7 @@ class DecodedBitStreamParser {
   DecodedBitStreamParser();
 
   static DecoderResult decode(List<int> codewords, String ecLevel) {
-    StringBuffer result = new StringBuffer(codewords.length * 2);
+    StringBuffer result = StringBuffer();
     Encoding encoding = latin1;
     // Get compaction mode
     int codeIndex = 1;
@@ -138,7 +138,7 @@ class DecodedBitStreamParser {
       throw FormatException();
     }
     DecoderResult decoderResult =
-        new DecoderResult(null, result.toString(), null, ecLevel);
+        DecoderResult(null, result.toString(), null, ecLevel);
     decoderResult.setOther(resultMetadata);
     return decoderResult;
   }
@@ -185,40 +185,40 @@ class DecodedBitStreamParser {
           codeIndex++;
           switch (codewords[codeIndex]) {
             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-              StringBuffer fileName = new StringBuffer();
+              StringBuffer fileName = StringBuffer();
               codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
               resultMetadata.setFileName(fileName.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-              StringBuffer sender = new StringBuffer();
+              StringBuffer sender = StringBuffer();
               codeIndex = textCompaction(codewords, codeIndex + 1, sender);
               resultMetadata.setSender(sender.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-              StringBuffer addressee = new StringBuffer();
+              StringBuffer addressee = StringBuffer();
               codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
               resultMetadata.setAddressee(addressee.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
-              StringBuffer segmentCount = new StringBuffer();
+              StringBuffer segmentCount = StringBuffer();
               codeIndex =
                   numericCompaction(codewords, codeIndex + 1, segmentCount);
               resultMetadata
                   .setSegmentCount(int.parse(segmentCount.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
-              StringBuffer timestamp = new StringBuffer();
+              StringBuffer timestamp = StringBuffer();
               codeIndex =
                   numericCompaction(codewords, codeIndex + 1, timestamp);
               resultMetadata.setTimestamp(int.parse(timestamp.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
-              StringBuffer checksum = new StringBuffer();
+              StringBuffer checksum = StringBuffer();
               codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.setChecksum(int.parse(checksum.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
-              StringBuffer fileSize = new StringBuffer();
+              StringBuffer fileSize = StringBuffer();
               codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.setFileSize(int.parse(fileSize.toString()));
               break;

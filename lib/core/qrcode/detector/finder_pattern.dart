@@ -63,7 +63,7 @@ class FinderPattern extends ResultPoint {
     double combinedY = (count * getY() + i) / combinedCount;
     double combinedModuleSize =
         (count * estimatedModuleSize + newModuleSize) / combinedCount;
-    return new FinderPattern(
+    return FinderPattern(
         combinedX, combinedY, combinedModuleSize, combinedCount);
   }
 }

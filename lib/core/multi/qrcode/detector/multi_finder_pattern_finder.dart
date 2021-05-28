@@ -176,7 +176,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           ResultPoint.orderBestPatterns(test);
 
           // Calculate the distances: a = topleft-bottomleft, b=topleft-topright, c = diagonal
-          FinderPatternInfo info = new FinderPatternInfo(test);
+          FinderPatternInfo info = FinderPatternInfo(test);
           double dA =
               ResultPoint.distance(info.getTopLeft(), info.getBottomLeft());
           double dC =

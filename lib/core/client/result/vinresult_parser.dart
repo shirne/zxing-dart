@@ -46,7 +46,7 @@ class VINResultParser extends ResultParser {
         return null;
       }
       String wmi = rawText.substring(0, 3);
-      return new VINParsedResult(rawText,
+      return VINParsedResult(rawText,
           wmi,
           rawText.substring(3, 9),
           rawText.substring(9, 17),
@@ -55,7 +55,7 @@ class VINResultParser extends ResultParser {
           modelYear(rawText.codeUnitAt(9)),
           rawText.codeUnitAt(10),
           rawText.substring(11));
-    } catch ( iae) { // IllegalArgumentException
+    } catch ( _) { // IllegalArgumentException
       return null;
     }
   }
