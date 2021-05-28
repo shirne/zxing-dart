@@ -114,7 +114,7 @@ class Detector {
           alignmentPattern = findAlignmentInRegion(
               moduleSize, estAlignmentX, estAlignmentY, i.toDouble());
           break;
-        } on NotFoundException catch (re) {
+        } on NotFoundException catch (_) {
           // try next round
         }
       }

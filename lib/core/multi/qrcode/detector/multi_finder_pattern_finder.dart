@@ -72,7 +72,9 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
       BitMatrix image, ResultPointCallback? resultPointCallback)
       : super(image, resultPointCallback);
 
-  int compare(FinderPattern center1, FinderPattern center2) {
+  int compare(FinderPattern? center1, FinderPattern? center2) {
+    if(center1 == null) return center2 == null ? 0 : -1;
+    if(center2 == null) return 1;
     double value =
         center2.getEstimatedModuleSize() - center1.getEstimatedModuleSize();
     return value < 0.0
@@ -126,13 +128,13 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     List<List<FinderPattern>> results = []; // holder for the results
 
     for (int i1 = 0; i1 < (size - 2); i1++) {
-      FinderPattern p1 = possibleCenters[i1];
+      FinderPattern? p1 = possibleCenters[i1];
       if (p1 == null) {
         continue;
       }
 
       for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
-        FinderPattern p2 = possibleCenters[i2];
+        FinderPattern? p2 = possibleCenters[i2];
         if (p2 == null) {
           continue;
         }
@@ -151,7 +153,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
         }
 
         for (int i3 = i2 + 1; i3 < size; i3++) {
-          FinderPattern p3 = possibleCenters[i3];
+          FinderPattern? p3 = possibleCenters[i3];
           if (p3 == null) {
             continue;
           }
@@ -211,7 +213,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
       }
     }
 
-    if (!results.isEmpty) {
+    if (results.isNotEmpty) {
       return List.generate(results.length,
           (index) => results[index].toList()); // results.toList();
     }

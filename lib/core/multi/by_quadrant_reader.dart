@@ -45,7 +45,7 @@ class ByQuadrantReader implements Reader {
     try {
       // No need to call makeAbsolute as results will be relative to original top left here
       return delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints);
-    } on NotFoundException catch (re) {
+    } on NotFoundException catch (_) {
       // continue
     }
 
@@ -54,7 +54,7 @@ class ByQuadrantReader implements Reader {
           image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
       makeAbsolute(result.getResultPoints(), halfWidth, 0);
       return result;
-    } on NotFoundException catch (re) {
+    } on NotFoundException catch (_) {
       // continue
     }
 
@@ -63,7 +63,7 @@ class ByQuadrantReader implements Reader {
           image.crop(0, halfHeight, halfWidth, halfHeight), hints);
       makeAbsolute(result.getResultPoints(), 0, halfHeight);
       return result;
-    } on NotFoundException catch (re) {
+    } on NotFoundException catch (_) {
       // continue
     }
 
@@ -72,7 +72,7 @@ class ByQuadrantReader implements Reader {
           image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
       makeAbsolute(result.getResultPoints(), halfWidth, halfHeight);
       return result;
-    } on NotFoundException catch (re) {
+    } on NotFoundException catch (_) {
       // continue
     }
 
@@ -91,10 +91,10 @@ class ByQuadrantReader implements Reader {
   }
 
   static void makeAbsolute(
-      List<ResultPoint> points, int leftOffset, int topOffset) {
+      List<ResultPoint?>? points, int leftOffset, int topOffset) {
     if (points != null) {
       for (int i = 0; i < points.length; i++) {
-        ResultPoint relative = points[i];
+        ResultPoint? relative = points[i];
         if (relative != null) {
           points[i] = new ResultPoint(
               relative.getX() + leftOffset, relative.getY() + topOffset);

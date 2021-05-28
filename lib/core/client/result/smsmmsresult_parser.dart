@@ -46,10 +46,10 @@ class SMSMMSResultParser extends ResultParser {
 
     // Check up front if this is a URI syntax string with query arguments
     Map<String, String>? nameValuePairs = ResultParser.parseNameValuePairs(rawText);
-    String? subject = null;
-    String? body = null;
+    String? subject;
+    String? body;
     bool querySyntax = false;
-    if (nameValuePairs != null && !nameValuePairs.isEmpty) {
+    if (nameValuePairs != null && nameValuePairs.isNotEmpty) {
       subject = nameValuePairs["subject"];
       body = nameValuePairs["body"];
       querySyntax = true;

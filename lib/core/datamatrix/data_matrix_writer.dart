@@ -59,17 +59,17 @@ class DataMatrixWriter implements Writer {
     Dimension? maxSize;
     if (hints != null) {
       SymbolShapeHint? requestedShape =
-          hints[EncodeHintType.DATA_MATRIX_SHAPE] as SymbolShapeHint;
+          hints[EncodeHintType.DATA_MATRIX_SHAPE] as SymbolShapeHint?;
       if (requestedShape != null) {
         shape = requestedShape;
       }
       // @SuppressWarnings("deprecation")
-      Dimension? requestedMinSize = hints[EncodeHintType.MIN_SIZE] as Dimension;
+      Dimension? requestedMinSize = hints[EncodeHintType.MIN_SIZE] as Dimension?;
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
       // @SuppressWarnings("deprecation")
-      Dimension? requestedMaxSize = hints[EncodeHintType.MAX_SIZE] as Dimension;
+      Dimension? requestedMaxSize = hints[EncodeHintType.MAX_SIZE] as Dimension?;
       if (requestedMaxSize != null) {
         maxSize = requestedMaxSize;
       }
@@ -87,7 +87,7 @@ class DataMatrixWriter implements Writer {
 
     //3. step: Module placement in Matrix
     DefaultPlacement placement = new DefaultPlacement(codewords,
-        symbolInfo!.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
+        symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
     placement.place();
 
     //4. step: low-level encoding

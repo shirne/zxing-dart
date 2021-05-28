@@ -47,7 +47,7 @@ class DecodedBitStreamParser {
   DecodedBitStreamParser();
 
   static DecoderResult decode(Uint8List bytes, Version version,
-      ErrorCorrectionLevel ecLevel, Map<DecodeHintType, Object>? hints) {
+      ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
     BitSource bits = new BitSource(bytes);
     StringBuilder result = new StringBuilder();
     List<Uint8List> byteSegments = [Uint8List(0)]; //new ArrayList<>(1);
@@ -232,7 +232,7 @@ class DecodedBitStreamParser {
   }
 
   static void decodeByteSegment(BitSource bits, StringBuffer result, int count,
-      CharacterSetECI currentCharacterSetECI, List<Uint8List> byteSegments,
+      CharacterSetECI? currentCharacterSetECI, List<Uint8List> byteSegments,
       [Map<DecodeHintType, Object>? hints]) {
     // Don't crash trying to read more bits than we have available.
     if (8 * count > bits.available()) {

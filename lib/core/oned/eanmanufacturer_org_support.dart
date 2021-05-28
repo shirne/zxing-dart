@@ -51,7 +51,7 @@ class EANManufacturerOrgSupport {
   }
 
   void initIfNeeded() {
-    if (!ranges.isEmpty) {
+    if (ranges.isNotEmpty) {
       return;
     }
     add([0, 19], "US/CA");

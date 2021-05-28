@@ -123,7 +123,7 @@ class DecodedBitStreamParser {
         LATCHB,
   ];
 
-  DecodedBitStreamParser() {}
+  DecodedBitStreamParser() ;
 
   static DecoderResult decode(Uint8List bytes, int mode) {
     StringBuilder result = StringBuilder();

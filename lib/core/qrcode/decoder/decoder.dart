@@ -71,8 +71,8 @@ class Decoder {
       [Map<DecodeHintType, Object>? hints]) {
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
-    FormatException? fe = null;
-    ChecksumException? ce = null;
+    FormatException? fe;
+    ChecksumException? ce;
     try {
       return decodeParser(parser, hints);
     } on FormatException catch (e) {
@@ -109,13 +109,13 @@ class Decoder {
       result.setOther(new QRCodeDecoderMetaData(true));
 
       return result;
-    } on ChecksumException catch (e) {
+    } on ChecksumException catch (_) {
       // Throw the exception from the original reading
       if (fe != null) {
         throw fe;
       }
       throw ce!; // If fe is null, this can't be
-    } on FormatException catch (e) {
+    } on FormatException catch (_) {
       // Throw the exception from the original reading
       if (fe != null) {
         throw fe;
@@ -175,7 +175,7 @@ class Decoder {
     }
     try {
       rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
-    } on ReedSolomonException catch (ignored) {
+    } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data

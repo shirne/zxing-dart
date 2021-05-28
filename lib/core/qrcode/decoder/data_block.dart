@@ -54,11 +54,11 @@ class DataBlock {
     ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
 
     // First count the total number of data blocks
-    int totalBlocks = 0;
+    //int totalBlocks = 0;
     List<ECB> ecBlockArray = ecBlocks.getECBlocks();
-    for (ECB ecBlock in ecBlockArray) {
-      totalBlocks += ecBlock.getCount();
-    }
+    //for (ECB ecBlock in ecBlockArray) {
+    //  totalBlocks += ecBlock.getCount();
+    //}
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
     List<DataBlock> result = [];
@@ -77,7 +77,7 @@ class DataBlock {
     int shorterBlocksTotalCodewords = result[0].codewords.length;
     int longerBlocksStartAt = result.length - 1;
     while (longerBlocksStartAt >= 0) {
-      int numCodewords = result[longerBlocksStartAt]!.codewords.length;
+      int numCodewords = result[longerBlocksStartAt].codewords.length;
       if (numCodewords == shorterBlocksTotalCodewords) {
         break;
       }

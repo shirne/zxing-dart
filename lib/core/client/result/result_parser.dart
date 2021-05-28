@@ -181,7 +181,7 @@ abstract class ResultParser {
     return value != null && length > 0 && length == value.length && DIGITS.hasMatch(value);
   }
 
-  static bool isSubstringOfDigits(String value, int offset, int length) {
+  static bool isSubstringOfDigits(String? value, int offset, int length) {
     if (value == null || length <= 0) {
       return false;
     }

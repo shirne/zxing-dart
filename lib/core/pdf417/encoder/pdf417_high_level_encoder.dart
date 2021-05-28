@@ -146,14 +146,14 @@ class PDF417HighLevelEncoder {
    * @return the encoded message (the char values range from 0 to 928)
    */
   static String encodeHighLevel(
-      String msg, Compaction compaction, Encoding encoding) {
+      String msg, Compaction compaction, Encoding? encoding) {
     //the codewords 0..928 are encoded as Unicode characters
     StringBuffer sb = new StringBuffer(msg.length);
 
     if (encoding == null) {
       encoding = DEFAULT_ENCODING;
     } else if (DEFAULT_ENCODING != encoding) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
+      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
         encodingECI(eci.getValue(), sb);
       }
@@ -519,7 +519,7 @@ class PDF417HighLevelEncoder {
    */
   static int determineConsecutiveBinaryCount(
       String msg, int startpos, Encoding encoding) {
-    Converter<String, List<int>> encoder = encoding.encoder;
+
     int len = msg.length;
     int idx = startpos;
     while (idx < len) {
@@ -540,6 +540,7 @@ class PDF417HighLevelEncoder {
       }
       ch = msg.codeUnitAt(idx);
 
+      // todo 判断是否超出字符集
       //if (!encoder.canEncode(ch)) {
       //  throw WriterException(
       //      "Non-encodable character detected: ${String.fromCharCode(ch)} (Unicode: $ch)");

@@ -135,7 +135,7 @@ class AlignmentPatternFinder {
 
     // Hmm, nothing we saw was observed and confirmed twice. If we had
     // any guess at all, return it.
-    if (!possibleCenters.isEmpty) {
+    if (possibleCenters.isNotEmpty) {
       return possibleCenters[0];
     }
 

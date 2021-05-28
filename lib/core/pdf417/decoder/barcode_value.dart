@@ -26,7 +26,7 @@ class BarcodeValue {
    * Add an occurrence of a value
    */
   void setValue(int value) {
-    int confidence = values[value]!;
+    int? confidence = values[value];
     if (confidence == null) {
       confidence = 0;
     }

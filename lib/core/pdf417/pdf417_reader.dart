@@ -51,7 +51,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     List<Result> result = decodeStatic(image, hints, false);
-    if (result.length == 0 || result[0] == null) {
+    if (result.length == 0 ) { // || result[0] == null
       throw NotFoundException.getNotFoundInstance();
     }
     return result[0];
@@ -62,7 +62,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
     List<Result> results = [];
     PDF417DetectorResult detectorResult =
         Detector.detect(image, hints, multiple);
-    for (List<ResultPoint> points in detectorResult.getPoints()) {
+    for (List<ResultPoint?> points in detectorResult.getPoints()) {
       DecoderResult decoderResult = PDF417ScanningDecoder.decode(
           detectorResult.getBits(),
           points[4],
@@ -71,12 +71,12 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
           points[7],
           getMinCodewordWidth(points),
           getMaxCodewordWidth(points));
-      Result result = new Result(decoderResult.getText(),
+      Result result = Result(decoderResult.getText(),
           decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL,
           decoderResult.getECLevel()!);
-      PDF417ResultMetadata pdf417ResultMetadata =
-          decoderResult.getOther() as PDF417ResultMetadata;
+      PDF417ResultMetadata? pdf417ResultMetadata =
+          decoderResult.getOther() as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {
         result.putMetadata(
             ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
@@ -102,7 +102,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
     return (p1.getX() - p2.getX()).abs().toInt();
   }
 
-  static int getMaxCodewordWidth(List<ResultPoint> p) {
+  static int getMaxCodewordWidth(List<ResultPoint?> p) {
     return Math.max(
         Math.max(
             getMaxWidth(p[0], p[4]),
@@ -116,7 +116,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
                 PDF417Common.MODULES_IN_STOP_PATTERN));
   }
 
-  static int getMinCodewordWidth(List<ResultPoint> p) {
+  static int getMinCodewordWidth(List<ResultPoint?> p) {
     return Math.min(
         Math.min(
             getMinWidth(p[0], p[4]),

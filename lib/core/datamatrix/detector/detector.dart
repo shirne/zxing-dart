@@ -21,7 +21,6 @@ import 'package:zxing/core/common/detector/white_rectangle_detector.dart';
 import 'package:zxing/core/common/detector_result.dart';
 import 'package:zxing/core/common/grid_sampler.dart';
 
-import '../../not_found_exception.dart';
 import '../../result_point.dart';
 
 /**
@@ -48,9 +47,9 @@ class Detector {
     List<ResultPoint> points = detectSolid1(cornerPoints);
     points = detectSolid2(points);
     points[3] = correctTopRight(points)!;
-    if (points[3] == null) {
-      throw NotFoundException.getNotFoundInstance();
-    }
+    //if (points[3] == null) {
+    //  throw NotFoundException.getNotFoundInstance();
+    //}
     points = shiftToModuleCenter(points);
 
     ResultPoint topLeft = points[0];

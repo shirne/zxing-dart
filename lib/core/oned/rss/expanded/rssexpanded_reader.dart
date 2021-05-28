@@ -218,7 +218,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       return this.pairs;
     }
 
-    bool tryStackedDecode = !this.rows.isEmpty;
+    bool tryStackedDecode = this.rows.isNotEmpty;
     storeRow(rowNumber); // TODO: deal with reversed rows
     if (tryStackedDecode) {
       // When the image is 180-rotated, then rows are sorted in wrong direction.
@@ -382,7 +382,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       for (ExpandedPair p in pairs) {
         bool found = false;
         for (ExpandedPair pp in r.getPairs()) {
-          if (p.equals(pp)) {
+          if (p == pp) {
             found = true;
             break;
           }
@@ -497,7 +497,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     DataCharacter leftChar =
         this.decodeDataCharacter(row, pattern!, isOddPattern, true);
 
-    if (!previousPairs.isEmpty &&
+    if (previousPairs.isNotEmpty &&
         previousPairs[previousPairs.length - 1].mustBeLast()) {
       throw NotFoundException.getNotFoundInstance();
     }

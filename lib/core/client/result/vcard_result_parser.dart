@@ -300,8 +300,8 @@ class VCardResultParser extends ResultParser {
     }
     List<String> result = [];
     for (List<String> list in lists) {
-      String value = list[0];
-      if (value != null && !value.isEmpty) {
+      String? value = list.length > 0 ? list[0] : null;
+      if (value != null && value.isNotEmpty) {
         result.add(value);
       }
     }
@@ -314,8 +314,8 @@ class VCardResultParser extends ResultParser {
     }
     List<String> result = [];
     for (List<String> list in lists) {
-      String value = list[0];
-      if (value != null && !value.isEmpty) {
+      String? value = list.length > 0 ? list[0] : null;
+      if (value != null && value.isNotEmpty) {
         String? type;
         for (int i = 1; i < list.length; i++) {
           String metadatum = list[i];
@@ -372,7 +372,7 @@ class VCardResultParser extends ResultParser {
   }
 
   static void maybeAppendComponent(List<String> components, int i, StringBuffer newName) {
-    if (components[i] != null && !components[i].isEmpty) {
+    if (components.length > i && !components[i].isNotEmpty) {
       if (newName.length > 0) {
         newName.write(' ');
       }

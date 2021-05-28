@@ -167,7 +167,7 @@ class HighLevelEncoder {
   BitArray encode() {
     State initialState = State.INITIAL_STATE;
     if (charset != null) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(charset!);
+      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(charset!);
       if (null == eci) {
         throw Exception("No ECI code for character set $charset");
       }

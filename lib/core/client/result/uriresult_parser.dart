@@ -34,7 +34,7 @@ import 'result_parser.dart';
 class URIResultParser extends ResultParser {
 
   static final RegExp ALLOWED_URI_CHARS_PATTERN =
-      RegExp(r"[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+");
+      RegExp(r"[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+");
   static final RegExp USER_IN_HOST = RegExp(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
   static final RegExp URL_WITH_PROTOCOL_PATTERN = RegExp("[a-zA-Z][a-zA-Z0-9+-.]+:");

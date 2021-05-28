@@ -43,7 +43,7 @@ class FinderPattern {
   }
 
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is FinderPattern)) {
       return false;
     }

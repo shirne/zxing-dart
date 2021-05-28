@@ -67,7 +67,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     Result result;
     try {
       result = delegate.decode(image, hints);
-    } on ReaderException catch (ignored) {
+    } on ReaderException catch (_) {
       return;
     }
     bool alreadyFound = false;
@@ -80,7 +80,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     if (!alreadyFound) {
       results.add(translateResultPoints(result, xOffset, yOffset));
     }
-    List<ResultPoint> resultPoints = result.getResultPoints();
+    List<ResultPoint?>? resultPoints = result.getResultPoints();
     if (resultPoints == null || resultPoints.length == 0) {
       return;
     }
@@ -90,7 +90,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     double minY = height.toDouble();
     double maxX = 0.0;
     double maxY = 0.0;
-    for (ResultPoint point in resultPoints) {
+    for (ResultPoint? point in resultPoints) {
       if (point == null) {
         continue;
       }
@@ -143,13 +143,13 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   }
 
   static Result translateResultPoints(Result result, int xOffset, int yOffset) {
-    List<ResultPoint> oldResultPoints = result.getResultPoints();
+    List<ResultPoint?>? oldResultPoints = result.getResultPoints();
     if (oldResultPoints == null) {
       return result;
     }
     List<ResultPoint> newResultPoints = [];
     for (int i = 0; i < oldResultPoints.length; i++) {
-      ResultPoint oldPoint = oldResultPoints[i];
+      ResultPoint? oldPoint = oldResultPoints[i];
       if (oldPoint != null) {
         newResultPoints.add(
             ResultPoint(oldPoint.getX() + xOffset, oldPoint.getY() + yOffset));

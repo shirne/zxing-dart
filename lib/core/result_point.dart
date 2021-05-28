@@ -37,7 +37,7 @@ class ResultPoint {
   }
 
   @override
-  bool equals(Object other) {
+  operator ==(Object other) {
     if (other is ResultPoint) {
       ResultPoint otherPoint = other;
       return x == otherPoint.x && y == otherPoint.y;
@@ -62,6 +62,7 @@ class ResultPoint {
    * @param patterns array of three {@code ResultPoint} to order
    */
   static void orderBestPatterns(List<ResultPoint> patterns) {
+
     // Find distances between pattern centers
     double zeroOneDistance = distance(patterns[0], patterns[1]);
     double oneTwoDistance = distance(patterns[1], patterns[2]);

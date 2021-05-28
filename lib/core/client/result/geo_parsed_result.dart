@@ -27,7 +27,7 @@ class GeoParsedResult extends ParsedResult {
   final double latitude;
   final double longitude;
   final double altitude;
-  final String query;
+  final String? query;
 
   GeoParsedResult(this.latitude, this.longitude, this.altitude, this.query)
       : super(ParsedResultType.GEO);
@@ -73,7 +73,7 @@ class GeoParsedResult extends ParsedResult {
   /**
    * @return query string associated with geo URI or null if none exists
    */
-  String getQuery() {
+  String? getQuery() {
     return query;
   }
 

@@ -39,7 +39,7 @@ class QRCodeDecoderMetaData {
    *
    * @param points Array of points to apply mirror correction to.
    */
-  void applyMirroredCorrection(List<ResultPoint> points) {
+  void applyMirroredCorrection(List<ResultPoint>? points) {
     if (!mirrored || points == null || points.length < 3) {
       return;
     }

@@ -70,7 +70,7 @@ class BoundingBox {
         this.minY = boundingBox.minY,
         this.maxY = boundingBox.maxY;
 
-  static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) {
+  static BoundingBox? merge(BoundingBox? leftBox, BoundingBox? rightBox) {
     if (leftBox == null) {
       return rightBox;
     }

@@ -34,7 +34,7 @@ class Dimension {
   }
 
   @override
-  bool equals(Object other) {
+  operator ==(Object other) {
     if (other is Dimension) {
       Dimension d = other;
       return width == d.width && height == d.height;

@@ -74,7 +74,7 @@ class ExpandedProductParsedResult extends ParsedResult {
       : super(ParsedResultType.PRODUCT);
 
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is ExpandedProductParsedResult)) {
       return false;
     }

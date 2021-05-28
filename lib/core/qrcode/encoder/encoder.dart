@@ -54,7 +54,7 @@ class Encoder {
 
   static final Encoding DEFAULT_BYTE_MODE_ENCODING = latin1;
 
-  Encoder() {}
+  Encoder();
 
   // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
   // Basically it applies four rules and summate all penalties.
@@ -86,7 +86,7 @@ class Encoder {
 
     // Append ECI segment if applicable
     if (mode == Mode.BYTE && hasEncodingHint) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding!);
+      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding!);
       if (eci != null) {
         appendECI(eci, headerBits);
       }

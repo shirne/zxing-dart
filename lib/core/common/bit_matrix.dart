@@ -73,7 +73,7 @@ class BitMatrix {
   }
 
   static BitMatrix parseString(
-      String stringRepresentation, String setString, String unsetString) {
+      String? stringRepresentation, String setString, String unsetString) {
     if (stringRepresentation == null) {
       throw Exception('IllegalArgument');
     }
@@ -248,7 +248,7 @@ class BitMatrix {
    * @return The resulting BitArray - this reference should always be used even when passing
    *         your own row
    */
-  BitArray getRow(int y, BitArray row) {
+  BitArray getRow(int y, BitArray? row) {
     if (row == null || row.getSize() < width) {
       row = new BitArray(size: width);
     } else {
@@ -430,7 +430,7 @@ class BitMatrix {
   }
 
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is BitMatrix)) {
       return false;
     }
@@ -476,7 +476,7 @@ class BitMatrix {
     return result.toString();
   }
 
-  @override
+  // @override
   BitMatrix clone() {
     return new BitMatrix(
         width, height, rowSize, bits.getRange(0, bits.length).toList());

@@ -29,7 +29,7 @@ import 'email_address_parsed_result.dart';
  */
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
   static final RegExp ATEXT_ALPHANUMERIC =
-  RegExp(r"[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+");
+  RegExp(r"[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+");
 
   @override
   EmailAddressParsedResult? parse(Result result) {

@@ -114,7 +114,7 @@ class HighLevelEncoder {
   static const int EDIFACT_ENCODATION = 4;
   static const int BASE256_ENCODATION = 5;
 
-  HighLevelEncoder() {}
+  HighLevelEncoder();
 
   static String randomize253State(int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 253) + 1;

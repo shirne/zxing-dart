@@ -121,11 +121,11 @@ class CharacterSetECI {
    * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
    *   but unsupported
    */
-  static CharacterSetECI getCharacterSetECI(Encoding charset) {
+  static CharacterSetECI? getCharacterSetECI(Encoding charset) {
     if (NAME_TO_ECI.isEmpty) {
       init();
     }
-    return NAME_TO_ECI[charset.name]!;
+    return NAME_TO_ECI[charset.name];
   }
 
   /**

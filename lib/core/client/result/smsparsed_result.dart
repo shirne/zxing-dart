@@ -25,7 +25,7 @@ import 'parsed_result_type.dart';
  */
 class SMSParsedResult extends ParsedResult {
   final List<String> numbers;
-  final List<String> vias;
+  final List<String>? vias;
   final String? subject;
   final String? body;
 
@@ -48,9 +48,9 @@ class SMSParsedResult extends ParsedResult {
         result.write(',');
       }
       result.write(numbers[i]);
-      if (vias != null && vias[i] != null) {
+      if (vias != null && vias!.length > i) {
         result.write(";via=");
-        result.write(vias[i]);
+        result.write(vias![i]);
       }
     }
     bool hasBody = body != null;
@@ -76,7 +76,7 @@ class SMSParsedResult extends ParsedResult {
     return numbers;
   }
 
-  List<String> getVias() {
+  List<String>? getVias() {
     return vias;
   }
 

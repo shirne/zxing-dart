@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
 
 import '../../result_point.dart';
 

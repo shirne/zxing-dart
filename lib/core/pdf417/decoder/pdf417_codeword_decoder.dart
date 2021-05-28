@@ -45,7 +45,7 @@ class PDF417CodewordDecoder {
     }
   }
 
-  PDF417CodewordDecoder() {}
+  PDF417CodewordDecoder();
 
   static int getDecodedValue(List<int> moduleBitCount) {
     int decodedValue = getDecodedCodewordValue(sampleBitCounts(moduleBitCount));

@@ -57,7 +57,7 @@ class MultiDetector extends Detector {
     for (FinderPatternInfo info in infos) {
       try {
         result.add(processFinderPatternInfo(info));
-      } on ReaderException catch (e) {
+      } on ReaderException catch (_) {
         // ignore
       }
     }

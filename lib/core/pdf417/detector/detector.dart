@@ -72,7 +72,7 @@ class Detector {
 
     BitMatrix bitMatrix = image.getBlackMatrix();
 
-    List<List<ResultPoint>> barcodeCoordinates =
+    List<List<ResultPoint?>> barcodeCoordinates =
         detectZero(multiple, bitMatrix);
     // Try 180, 270, 90 degree rotations, in that order
     for (int rotate = 0; barcodeCoordinates.isEmpty && rotate < 3; rotate++) {
@@ -84,7 +84,7 @@ class Detector {
       }
       barcodeCoordinates = detectZero(multiple, bitMatrix);
     }
-    return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
+    return PDF417DetectorResult(bitMatrix, barcodeCoordinates);
   }
 
   /**
@@ -94,14 +94,14 @@ class Detector {
    * @param bitMatrix bit matrix to detect barcodes in
    * @return List of ResultPoint arrays containing the coordinates of found barcodes
    */
-  static List<List<ResultPoint>> detectZero(
+  static List<List<ResultPoint?>> detectZero(
       bool multiple, BitMatrix bitMatrix) {
-    List<List<ResultPoint>> barcodeCoordinates = [];
+    List<List<ResultPoint?>> barcodeCoordinates = [];
     int row = 0;
     int column = 0;
     bool foundBarcodeInRow = false;
     while (row < bitMatrix.getHeight()) {
-      List<ResultPoint> vertices = findVertices(bitMatrix, row, column);
+      List<ResultPoint?> vertices = findVertices(bitMatrix, row, column);
 
       if (vertices[0] == null && vertices[3] == null) {
         if (!foundBarcodeInRow) {
@@ -112,12 +112,12 @@ class Detector {
         // below the lowest barcode we found so far.
         foundBarcodeInRow = false;
         column = 0;
-        for (List<ResultPoint> barcodeCoordinate in barcodeCoordinates) {
+        for (List<ResultPoint?> barcodeCoordinate in barcodeCoordinates) {
           if (barcodeCoordinate[1] != null) {
-            row = Math.max(row, barcodeCoordinate[1].getY()).toInt();
+            row = Math.max(row, barcodeCoordinate[1]!.getY()).toInt();
           }
           if (barcodeCoordinate[3] != null) {
-            row = Math.max(row, barcodeCoordinate[3].getY().toInt());
+            row = Math.max(row, barcodeCoordinate[3]!.getY().toInt());
           }
         }
         row += ROW_STEP;
@@ -131,11 +131,11 @@ class Detector {
       // if we didn't find a right row indicator column, then continue the search for the next barcode after the
       // start pattern of the barcode just found.
       if (vertices[2] != null) {
-        column = vertices[2].getX().toInt();
-        row = vertices[2].getY().toInt();
+        column = vertices[2]!.getX().toInt();
+        row = vertices[2]!.getY().toInt();
       } else {
-        column = vertices[4].getX().toInt();
-        row = vertices[4].getY().toInt();
+        column = vertices[4]!.getX().toInt();
+        row = vertices[4]!.getY().toInt();
       }
     }
     return barcodeCoordinates;

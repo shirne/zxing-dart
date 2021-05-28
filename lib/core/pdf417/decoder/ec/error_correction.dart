@@ -39,7 +39,7 @@ class ErrorCorrection {
    * @return number of errors
    * @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
    */
-  int decode(List<int> received, int numECCodewords, List<int> erasures) {
+  int decode(List<int> received, int numECCodewords, List<int>? erasures) {
     ModulusPoly poly = new ModulusPoly(field, received);
     List<int> S = List.filled(numECCodewords, 0);
     bool error = false;

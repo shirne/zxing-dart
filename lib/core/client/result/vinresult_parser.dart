@@ -119,7 +119,7 @@ class VINResultParser extends ResultParser {
     if (c >= 'J'.codeUnitAt(0) && c <= 'N'.codeUnitAt(0)) {
       return (c - 'J'.codeUnitAt(0)) + 1988;
     }
-    if (c == 'P') {
+    if (c == 'P'.codeUnitAt(0)) {
       return 1993;
     }
     if (c >= 'R'.codeUnitAt(0) && c <= 'T'.codeUnitAt(0)) {

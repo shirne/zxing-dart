@@ -49,7 +49,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
   @override
-  BitArray getBlackRow(int y, BitArray row) {
+  BitArray getBlackRow(int y, BitArray? row) {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     if (row == null || row.getSize() < width) {

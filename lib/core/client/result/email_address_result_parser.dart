@@ -46,7 +46,7 @@ class EmailAddressResultParser extends ResultParser {
         return null;
       }
       List<String>? tos;
-      if (!hostEmail.isEmpty) {
+      if (hostEmail.isNotEmpty) {
         tos = hostEmail.split(COMMA);
       }
       Map<String,String>? nameValues = ResultParser.parseNameValuePairs(rawText);

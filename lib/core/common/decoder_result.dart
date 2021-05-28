@@ -111,8 +111,8 @@ class DecoderResult {
   /**
    * @return arbitrary additional metadata
    */
-  Object getOther() {
-    return other!;
+  Object? getOther() {
+    return other;
   }
 
   void setOther(Object other) {

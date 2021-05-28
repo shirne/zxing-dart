@@ -19,7 +19,7 @@
  */
 class PDF417ResultMetadata {
   int segmentIndex = 0;
-  String fileId = '';
+  String? fileId = '';
   bool lastSegment = false;
   int segmentCount = -1;
   String sender = '';
@@ -48,7 +48,7 @@ class PDF417ResultMetadata {
    *
    * @return File ID
    */
-  String getFileId() {
+  String? getFileId() {
     return fileId;
   }
 

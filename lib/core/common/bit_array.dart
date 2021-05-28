@@ -315,7 +315,7 @@ class BitArray {
   }
 
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is BitArray)) {
       return false;
     }

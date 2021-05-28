@@ -58,7 +58,7 @@ class RGBLuminanceSource extends LuminanceSource {
         super(width ?? dataWidth, height ?? dataHeight);
 
   @override
-  Uint8List getRow(int y, Uint8List row) {
+  Uint8List getRow(int y, Uint8List? row) {
     assert(y >= 0 && y < getHeight(), "Requested row is outside the image: $y");
 
     int width = getWidth();

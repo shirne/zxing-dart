@@ -27,7 +27,7 @@ import 'luminance_source.dart';
  */
 class BinaryBitmap {
   final Binarizer binarizer;
-  late BitMatrix matrix;
+  BitMatrix? matrix;
 
   BinaryBitmap(this.binarizer);
 
@@ -78,7 +78,7 @@ class BinaryBitmap {
     if (matrix == null) {
       matrix = binarizer.getBlackMatrix();
     }
-    return matrix;
+    return matrix!;
   }
 
   /**

@@ -29,7 +29,7 @@ class DetectionResult {
 
   final BarcodeMetadata barcodeMetadata;
   final List<DetectionResultColumn?> detectionResultColumns;
-  BoundingBox boundingBox;
+  BoundingBox? boundingBox;
   final int barcodeColumnCount;
 
   DetectionResult(this.barcodeMetadata, this.boundingBox)
@@ -198,7 +198,7 @@ class DetectionResult {
   }
 
   static int adjustRowNumberIfValid(
-      int rowIndicatorRowNumber, int invalidRowCounts, Codeword codeword) {
+      int rowIndicatorRowNumber, int invalidRowCounts, Codeword? codeword) {
     if (codeword == null) {
       return invalidRowCounts;
     }
@@ -287,7 +287,7 @@ class DetectionResult {
     this.boundingBox = boundingBox;
   }
 
-  BoundingBox getBoundingBox() {
+  BoundingBox? getBoundingBox() {
     return boundingBox;
   }
 

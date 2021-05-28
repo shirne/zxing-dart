@@ -77,7 +77,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
               decoderResult.getStructuredAppendParity());
         }
         results.add(result);
-      } on ReaderException catch (re) {
+      } on ReaderException catch (_) {
         // ignore and continue
       }
     }
@@ -118,8 +118,8 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       if (saBytes != null) newRawBytes.add(saBytes);
       // @SuppressWarnings("unchecked")
       Iterable<Uint8List>? byteSegments =
-          saResult.getResultMetadata()![ResultMetadataType.BYTE_SEGMENTS]
-              as Iterable<Uint8List>;
+          saResult.getResultMetadata()?[ResultMetadataType.BYTE_SEGMENTS]
+              as Iterable<Uint8List>?;
       if (byteSegments != null) {
         for (Uint8List segment in byteSegments) {
           newByteSegment.add(segment);

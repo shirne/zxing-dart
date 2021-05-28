@@ -106,11 +106,11 @@ class Decoder {
 
     // Final decoded string result
     // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
-    StringBuffer result = new StringBuffer((correctedBits.length - 5) / 4);
+    StringBuffer result = StringBuffer();
 
     // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
     // when character encoding changes (ECI) or input ends.
-    StringBuffer decodedBytes = new StringBuffer();
+    BytesBuilder decodedBytes = BytesBuilder();
     Encoding encoding = DEFAULT_ENCODING;
 
     int index = 0;
@@ -134,7 +134,7 @@ class Decoder {
             break;
           }
           int code = readCode(correctedBits, index, 8);
-          decodedBytes.writeCharCode(code);
+          decodedBytes.addByte(code);
           index += 8;
         }
         // Go back to whatever mode we had been in
@@ -203,14 +203,14 @@ class Decoder {
         } else {
           // Though stored as a table of strings for convenience, codes actually represent 1 or 2 *bytes*.
           Uint8List b = ascii.encode(str);
-          decodedBytes.writeAll(b);
+          decodedBytes.add(b);
           // Go back to whatever mode we had been in
           shiftTable = latchTable;
         }
       }
     }
     try {
-      result.write(decodedBytes.toString());
+      result.write(encoding.decode(decodedBytes.takeBytes()));
     } catch (uee) {
       // UnsupportedEncodingException
       // can't happen

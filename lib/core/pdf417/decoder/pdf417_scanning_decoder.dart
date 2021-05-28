@@ -158,14 +158,14 @@ class PDF417ScanningDecoder {
     if (barcodeMetadata == null) {
       return null;
     }
-    BoundingBox boundingBox = BoundingBox.merge(
-        adjustBoundingBox(leftRowIndicatorColumn)!,
-        adjustBoundingBox(rightRowIndicatorColumn)!);
+    BoundingBox? boundingBox = BoundingBox.merge(
+        adjustBoundingBox(leftRowIndicatorColumn),
+        adjustBoundingBox(rightRowIndicatorColumn));
     return new DetectionResult(barcodeMetadata, boundingBox);
   }
 
   static BoundingBox? adjustBoundingBox(
-      DetectionResultRowIndicatorColumn rowIndicatorColumn) {
+      DetectionResultRowIndicatorColumn? rowIndicatorColumn) {
     if (rowIndicatorColumn == null) {
       return null;
     }
@@ -210,11 +210,11 @@ class PDF417ScanningDecoder {
   }
 
   static BarcodeMetadata? getBarcodeMetadata(
-      DetectionResultRowIndicatorColumn leftRowIndicatorColumn,
-      DetectionResultRowIndicatorColumn rightRowIndicatorColumn) {
-    BarcodeMetadata leftBarcodeMetadata;
+      DetectionResultRowIndicatorColumn? leftRowIndicatorColumn,
+      DetectionResultRowIndicatorColumn? rightRowIndicatorColumn) {
+    BarcodeMetadata? leftBarcodeMetadata;
     if (leftRowIndicatorColumn == null ||
-        (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()!) ==
+        (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()) ==
             null) {
       return rightRowIndicatorColumn == null
           ? null
@@ -227,7 +227,7 @@ class PDF417ScanningDecoder {
       return leftBarcodeMetadata;
     }
 
-    if (leftBarcodeMetadata.getColumnCount() !=
+    if (leftBarcodeMetadata!.getColumnCount() !=
             rightBarcodeMetadata!.getColumnCount() &&
         leftBarcodeMetadata.getErrorCorrectionLevel() !=
             rightBarcodeMetadata.getErrorCorrectionLevel() &&
@@ -246,7 +246,7 @@ class PDF417ScanningDecoder {
       int minCodewordWidth,
       int maxCodewordWidth) {
     DetectionResultRowIndicatorColumn rowIndicatorColumn =
-        new DetectionResultRowIndicatorColumn(boundingBox, leftToRight);
+        DetectionResultRowIndicatorColumn(boundingBox, leftToRight);
     for (int i = 0; i < 2; i++) {
       int increment = i == 0 ? 1 : -1;
       int startColumn = startPoint.getX().toInt();
@@ -472,8 +472,8 @@ class PDF417ScanningDecoder {
       skippedColumns++;
     }
     return leftToRight
-        ? detectionResult.getBoundingBox().getMinX()
-        : detectionResult.getBoundingBox().getMaxX();
+        ? detectionResult.getBoundingBox()!.getMinX()
+        : detectionResult.getBoundingBox()!.getMaxX();
   }
 
   static Codeword? detectCodeword(
@@ -625,7 +625,7 @@ class PDF417ScanningDecoder {
    * @throws ChecksumException if error correction fails
    */
   static int correctErrors(
-      List<int> codewords, List<int> erasures, int numECCodewords) {
+      List<int> codewords, List<int>? erasures, int numECCodewords) {
     if (erasures != null && erasures.length > numECCodewords / 2 + MAX_ERRORS ||
         numECCodewords < 0 ||
         numECCodewords > MAX_EC_CODEWORDS) {

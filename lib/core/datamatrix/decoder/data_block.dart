@@ -47,11 +47,11 @@ class DataBlock {
     ECBlocks ecBlocks = version.getECBlocks();
 
     // First count the total number of data blocks
-    int totalBlocks = 0;
+    //int totalBlocks = 0;
     List<ECB> ecBlockArray = ecBlocks.getECBlocks();
-    for (ECB ecBlock in ecBlockArray) {
-      totalBlocks += ecBlock.getCount();
-    }
+    //for (ECB ecBlock in ecBlockArray) {
+    //  totalBlocks += ecBlock.getCount();
+    //}
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
     List<DataBlock> result = [];

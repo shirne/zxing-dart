@@ -48,7 +48,7 @@ class ExpandedRow {
    * Two rows are equal if they contain the same pairs in the same order.
    */
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is ExpandedRow)) {
       return false;
     }

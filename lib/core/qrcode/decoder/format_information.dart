@@ -150,7 +150,7 @@ class FormatInformation {
   }
 
   @override
-  bool equals(Object o) {
+  operator ==(Object o) {
     if (!(o is FormatInformation)) {
       return false;
     }

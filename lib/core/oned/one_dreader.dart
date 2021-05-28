@@ -47,7 +47,7 @@ abstract class OneDReader implements Reader {
         BinaryBitmap rotatedImage = image.rotateCounterClockwise();
         Result result = doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
-        Map<ResultMetadataType, dynamic> metadata = result.getResultMetadata()!;
+        Map<ResultMetadataType, dynamic>? metadata = result.getResultMetadata();
         int orientation = 270;
         if (metadata != null &&
             metadata.containsKey(ResultMetadataType.ORIENTATION)) {
@@ -58,12 +58,12 @@ abstract class OneDReader implements Reader {
         }
         result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
         // Update result points
-        List<ResultPoint> points = result.getResultPoints();
+        List<ResultPoint?>? points = result.getResultPoints();
         if (points != null) {
           int height = rotatedImage.getHeight();
           for (int i = 0; i < points.length; i++) {
             points[i] =
-                ResultPoint(height - points[i].getY() - 1, points[i].getX());
+                ResultPoint(height - points[i]!.getY() - 1, points[i]!.getX());
           }
         }
         return result;
@@ -143,7 +143,7 @@ abstract class OneDReader implements Reader {
             Map<DecodeHintType, Object> newHints =
                 {}; //new EnumMap<>(DecodeHintType.class);
             newHints.addAll(hints.map<DecodeHintType, Object>(
-                (key, value) => MapEntry(key, value as Object)));
+                (key, value) => MapEntry(key, value)));
             newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             hints = newHints;
           }
@@ -156,12 +156,12 @@ abstract class OneDReader implements Reader {
             // But it was upside down, so note that
             result.putMetadata(ResultMetadataType.ORIENTATION, 180);
             // And remember to flip the result points horizontally.
-            List<ResultPoint> points = result.getResultPoints();
+            List<ResultPoint?>? points = result.getResultPoints();
             if (points != null) {
               points[0] = new ResultPoint(
-                  width - points[0].getX() - 1, points[0].getY());
+                  width - points[0]!.getX() - 1, points[0]!.getY());
               points[1] = new ResultPoint(
-                  width - points[1].getX() - 1, points[1].getY());
+                  width - points[1]!.getX() - 1, points[1]!.getY());
             }
           }
           return result;

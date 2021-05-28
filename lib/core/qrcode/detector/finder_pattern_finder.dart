@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
 
 import 'package:zxing/core/common/bit_matrix.dart';
 
@@ -47,7 +46,7 @@ class FinderPatternFinder {
   final ResultPointCallback? resultPointCallback;
 
   FinderPatternFinder(this.image,
-      [ResultPointCallback? this.resultPointCallback])
+      [ this.resultPointCallback])
       : possibleCenters = [],
         crossCheckStateCount = [0, 0, 0, 0, 0];
 

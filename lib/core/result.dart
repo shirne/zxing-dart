@@ -19,7 +19,6 @@ import 'dart:typed_data';
 import 'barcode_format.dart';
 import 'result_metadata_type.dart';
 import 'result_point.dart';
-import 'result_point.dart';
 
 /**
  * <p>Encapsulates the result of decoding a barcode within an image.</p>
@@ -30,7 +29,7 @@ class Result {
   final String text;
   final Uint8List? rawBytes;
   final int numBits;
-  List<ResultPoint> resultPoints;
+  List<ResultPoint?>? resultPoints;
   final BarcodeFormat format;
   Map<ResultMetadataType, Object>? resultMetadata;
   final int timestamp;
@@ -70,7 +69,7 @@ class Result {
    *         identifying finder patterns or the corners of the barcode. The exact meaning is
    *         specific to the type of barcode that was decoded.
    */
-  List<ResultPoint> getResultPoints() {
+  List<ResultPoint?>? getResultPoints() {
     return resultPoints;
   }
 
@@ -109,8 +108,8 @@ class Result {
     }
   }
 
-  void addResultPoints(List<ResultPoint> newPoints) {
-    resultPoints.addAll(newPoints);
+  void addResultPoints(List<ResultPoint?>? newPoints) {
+    if(newPoints != null)resultPoints!.addAll(newPoints);
   }
 
   int getTimestamp() {

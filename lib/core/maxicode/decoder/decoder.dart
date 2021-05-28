@@ -89,7 +89,7 @@ class Decoder {
     }
     try {
       rsDecoder.decode(codewordsInts, ecCodewords ~/ divisor);
-    } on ReedSolomonException catch (ignored) {
+    } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data

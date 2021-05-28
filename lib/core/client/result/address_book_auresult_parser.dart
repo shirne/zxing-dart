@@ -78,7 +78,7 @@ class AddressBookAUResultParser extends ResultParser {
       if (values == null) {
         values = List.generate(3, (index) => ''); // lazy init
       }
-      values.add(value!);
+      values.add(value);
     }
     if (values == null) {
       return null;
