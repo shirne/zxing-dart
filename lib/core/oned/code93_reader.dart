@@ -1,0 +1,294 @@
+/*
+ * Copyright 2010 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import 'package:zxing/core/common/bit_array.dart';
+import 'package:zxing/core/common/string_builder.dart';
+import 'package:zxing/core/result.dart';
+
+import '../barcode_format.dart';
+import '../checksum_exception.dart';
+import '../decode_hint_type.dart';
+import '../not_found_exception.dart';
+import '../result_metadata_type.dart';
+import '../result_point.dart';
+import 'one_dreader.dart';
+
+/**
+ * <p>Decodes Code 93 barcodes.</p>
+ *
+ * @author Sean Owen
+ * @see Code39Reader
+ */
+class Code93Reader extends OneDReader {
+  // Note that 'abcd' are dummy characters in place of control characters.
+  static final String ALPHABET_STRING =
+      r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+  static final List<int> ALPHABET = ALPHABET_STRING.codeUnits;
+
+  /**
+   * These represent the encodings of characters, as patterns of wide and narrow bars.
+   * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
+   */
+  static final List<int> CHARACTER_ENCODINGS = [
+    0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
+    0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
+    0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
+    0x196, 0x19A, 0x16C, 0x166, 0x136, 0x13A, // U-Z
+    0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
+    0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
+  ];
+  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+
+  final StringBuilder decodeRowResult;
+  final List<int> counters;
+
+  Code93Reader()
+      : decodeRowResult = new StringBuilder(),
+        counters = List.filled(6, 0);
+
+  @override
+  Result decodeRow(
+      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    List<int> start = findAsteriskPattern(row);
+    // Read off white space
+    int nextStart = row.getNextSet(start[1]);
+    int end = row.getSize();
+
+    List<int> theCounters = counters;
+    // Arrays.fill(theCounters, 0);
+    StringBuilder result = decodeRowResult;
+    result.clear();
+
+    String decodedChar;
+    int lastStart;
+    do {
+      OneDReader.recordPattern(row, nextStart, theCounters);
+      int pattern = toPattern(theCounters);
+      if (pattern < 0) {
+        throw NotFoundException.getNotFoundInstance();
+      }
+      decodedChar = patternToChar(pattern);
+      result.write(decodedChar);
+      lastStart = nextStart;
+      for (int counter in theCounters) {
+        nextStart += counter;
+      }
+      // Read off white space
+      nextStart = row.getNextSet(nextStart);
+    } while (decodedChar != '*');
+    result.deleteCharAt(result.length - 1); // remove asterisk
+
+    int lastPatternSize = 0;
+    for (int counter in theCounters) {
+      lastPatternSize += counter;
+    }
+
+    // Should be at least one more black module
+    if (nextStart == end || !row.get(nextStart)) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    if (result.length < 2) {
+      // false positive -- need at least 2 checksum digits
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    checkChecksums(result.toString());
+    // Remove checksum digits
+    result.setLength(result.length - 2);
+
+    String resultString = decodeExtended(result.toString());
+
+    double left = (start[1] + start[0]) / 2.0;
+    double right = lastStart + lastPatternSize / 2.0;
+
+    Result resultObject = new Result(
+        resultString,
+        null,
+        [
+          ResultPoint(left, rowNumber.toDouble()),
+          ResultPoint(right, rowNumber.toDouble())
+        ],
+        BarcodeFormat.CODE_93);
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]G0");
+    return resultObject;
+  }
+
+  List<int> findAsteriskPattern(BitArray row) {
+    int width = row.getSize();
+    int rowOffset = row.getNextSet(0);
+
+    // Arrays.fill(counters, 0);
+    List<int> theCounters = counters;
+    int patternStart = rowOffset;
+    bool isWhite = false;
+    int patternLength = theCounters.length;
+
+    int counterPosition = 0;
+    for (int i = rowOffset; i < width; i++) {
+      if (row.get(i) != isWhite) {
+        theCounters[counterPosition]++;
+      } else {
+        if (counterPosition == patternLength - 1) {
+          if (toPattern(theCounters) == ASTERISK_ENCODING) {
+            return [patternStart, i];
+          }
+          patternStart += theCounters[0] + theCounters[1];
+          List.copyRange(theCounters, 0, theCounters, 2, counterPosition - 1);
+          theCounters[counterPosition - 1] = 0;
+          theCounters[counterPosition] = 0;
+          counterPosition--;
+        } else {
+          counterPosition++;
+        }
+        theCounters[counterPosition] = 1;
+        isWhite = !isWhite;
+      }
+    }
+    throw NotFoundException.getNotFoundInstance();
+  }
+
+  static int toPattern(List<int> counters) {
+    int sum = 0;
+    for (int counter in counters) {
+      sum += counter;
+    }
+    int pattern = 0;
+    int max = counters.length;
+    for (int i = 0; i < max; i++) {
+      int scaled = (counters[i] * 9.0 / sum).round();
+      if (scaled < 1 || scaled > 4) {
+        return -1;
+      }
+      if ((i & 0x01) == 0) {
+        for (int j = 0; j < scaled; j++) {
+          pattern = (pattern << 1) | 0x01;
+        }
+      } else {
+        pattern <<= scaled;
+      }
+    }
+    return pattern;
+  }
+
+  static String patternToChar(int pattern) {
+    for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
+      if (CHARACTER_ENCODINGS[i] == pattern) {
+        return String.fromCharCode(ALPHABET[i]);
+      }
+    }
+    throw NotFoundException.getNotFoundInstance();
+  }
+
+  static String decodeExtended(String encoded) {
+    int length = encoded.length;
+    StringBuffer decoded = new StringBuffer(length);
+    for (int i = 0; i < length; i++) {
+      int c = encoded.codeUnitAt(i);
+      if (c >= 'a'.codeUnitAt(0) && c <= 'd'.codeUnitAt(0)) {
+        if (i >= length - 1) {
+          throw FormatException();
+        }
+        int next = encoded.codeUnitAt(i + 1);
+        String decodedChar = '\0';
+        switch (String.fromCharCode(c)) {
+          case 'd':
+            // +A to +Z map to a to z
+            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+              decodedChar = String.fromCharCode(next + 32);
+            } else {
+              throw FormatException();
+            }
+            break;
+          case 'a':
+            // $A to $Z map to control codes SH to SB
+            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+              decodedChar = String.fromCharCode(next - 64);
+            } else {
+              throw FormatException();
+            }
+            break;
+          case 'b':
+            if (next >= 'A'.codeUnitAt(0) && next <= 'E'.codeUnitAt(0)) {
+              // %A to %E map to control codes ESC to USep
+              decodedChar = String.fromCharCode(next - 38);
+            } else if (next >= 'F'.codeUnitAt(0) && next <= 'J'.codeUnitAt(0)) {
+              // %F to %J map to ; < = > ?
+              decodedChar = String.fromCharCode(next - 11);
+            } else if (next >= 'K'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
+              // %K to %O map to [ \ ] ^ _
+              decodedChar = String.fromCharCode(next + 16);
+            } else if (next >= 'P'.codeUnitAt(0) && next <= 'T'.codeUnitAt(0)) {
+              // %P to %T map to { | } ~ DEL
+              decodedChar = String.fromCharCode(next + 43);
+            } else if (next == 'U'.codeUnitAt(0)) {
+              // %U map to NUL
+              decodedChar = '\0';
+            } else if (next == 'V'.codeUnitAt(0)) {
+              // %V map to @
+              decodedChar = '@';
+            } else if (next == 'W'.codeUnitAt(0)) {
+              // %W map to `
+              decodedChar = '`';
+            } else if (next >= 'X'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+              // %X to %Z all map to DEL (127)
+              decodedChar = String.fromCharCode(127);
+            } else {
+              throw FormatException();
+            }
+            break;
+          case 'c':
+            // /A to /O map to ! to , and /Z maps to :
+            if (next >= 'A'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
+              decodedChar = String.fromCharCode(next - 32);
+            } else if (next == 'Z'.codeUnitAt(0)) {
+              decodedChar = ':';
+            } else {
+              throw FormatException();
+            }
+            break;
+        }
+        decoded.write(decodedChar);
+        // bump up i again since we read two characters
+        i++;
+      } else {
+        decoded.write(c);
+      }
+    }
+    return decoded.toString();
+  }
+
+  static void checkChecksums(String result) {
+    int length = result.length;
+    checkOneChecksum(result, length - 2, 20);
+    checkOneChecksum(result, length - 1, 15);
+  }
+
+  static void checkOneChecksum(
+      String result, int checkPosition, int weightMax) {
+    int weight = 1;
+    int total = 0;
+    for (int i = checkPosition - 1; i >= 0; i--) {
+      total += weight * ALPHABET_STRING.indexOf(result[i]);
+      if (++weight > weightMax) {
+        weight = 1;
+      }
+    }
+    if (result.codeUnitAt(checkPosition) != ALPHABET[total % 47]) {
+      throw ChecksumException.getChecksumInstance();
+    }
+  }
+}

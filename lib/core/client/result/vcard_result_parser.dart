@@ -1,0 +1,383 @@
+/*
+ * Copyright 2008 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import 'dart:convert';
+import 'dart:typed_data';
+
+import '../../result.dart';
+import 'address_book_parsed_result.dart';
+import 'result_parser.dart';
+
+/**
+ * Parses contact information formatted according to the VCard (2.1) format. This is not a complete
+ * implementation but should parse information as commonly encoded in 2D barcodes.
+ *
+ * @author Sean Owen
+ */
+class VCardResultParser extends ResultParser {
+
+  static final RegExp BEGIN_VCARD = RegExp("BEGIN:VCARD", caseSensitive: false);
+  static final RegExp VCARD_LIKE_DATE = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
+  static final RegExp CR_LF_SPACE_TAB = RegExp("\r\n[ \t]");
+  static final RegExp NEWLINE_ESCAPE = RegExp("\\\\[nN]");
+  static final RegExp VCARD_ESCAPES = RegExp("\\\\([,;\\\\])");
+  static final Pattern EQUALS = "=";
+  static final Pattern SEMICOLON = ";";
+  static final RegExp UNESCAPED_SEMICOLONS = RegExp("(?<!\\\\);+");
+  static final Pattern COMMA = ",";
+  static final RegExp SEMICOLON_OR_COMMA = RegExp("[;,]");
+
+  @override
+  AddressBookParsedResult? parse(Result result) {
+    // Although we should insist on the raw text ending with "END:VCARD", there's no reason
+    // to throw out everything else we parsed just because this was omitted. In fact, Eclair
+    // is doing just that, and we can't parse its contacts without this leniency.
+    String rawText = ResultParser.getMassagedText(result);
+    var m = BEGIN_VCARD.allMatches(rawText);
+    if (m.length < 1) {
+      return null;
+    }
+    List<List<String>>? names = matchVCardPrefixedField("FN", rawText, true, false);
+    if (names == null) {
+      // If no display names found, look for regular name fields and format them
+      names = matchVCardPrefixedField("N", rawText, true, false);
+      formatNames(names);
+    }
+    List<String>? nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
+    List<String>? nicknames = nicknameString == null ? null : nicknameString[0].split(COMMA);
+    List<List<String>>? phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
+    List<List<String>>? emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
+    List<String>? note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
+    List<List<String>>? addresses = matchVCardPrefixedField("ADR", rawText, true, true);
+    List<String>? org = matchSingleVCardPrefixedField("ORG", rawText, true, true);
+    List<String>? birthday = matchSingleVCardPrefixedField("BDAY", rawText, true, false);
+    if (birthday != null && !isLikeVCardDate(birthday[0])) {
+      birthday = null;
+    }
+    List<String>? title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
+    List<List<String>>? urls = matchVCardPrefixedField("URL", rawText, true, false);
+    List<String>? instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
+    List<String>? geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
+    List<String>? geo = geoString == null ? null : geoString[0].split(SEMICOLON_OR_COMMA);
+    if (geo != null && geo.length != 2) {
+      geo = null;
+    }
+    return new AddressBookParsedResult(toPrimaryValues(names),
+                                       nicknames,
+                                       null, 
+                                       toPrimaryValues(phoneNumbers), 
+                                       toTypes(phoneNumbers),
+                                       toPrimaryValues(emails),
+                                       toTypes(emails),
+                                       toPrimaryValue(instantMessenger),
+                                       toPrimaryValue(note),
+                                       toPrimaryValues(addresses),
+                                       toTypes(addresses),
+                                       toPrimaryValue(org),
+                                       toPrimaryValue(birthday),
+                                       toPrimaryValue(title),
+                                       toPrimaryValues(urls),
+                                       geo);
+  }
+
+  static List<List<String>>? matchVCardPrefixedField(String prefix,
+                                                    String rawText,
+                                                    bool trim,
+                                                    bool parseFieldDivider) {
+    List<List<String>>? matches;
+    int i = 0;
+    int max = rawText.length;
+    var reg = RegExp("(?:^|\n)" + prefix + "(?:;([^:]*))?:",
+        caseSensitive: false);
+
+    while (i < max) {
+
+      // At start or after newline, match prefix, followed by optional metadata 
+      // (led by ;) ultimately ending in colon
+      var regMatches = reg.allMatches(rawText, i);
+      if(regMatches.length < 1)break;
+      var matcher = regMatches.first;
+
+      i = matcher.end; // group 0 = whole pattern; end(0) is past final colon
+
+      if (i > 0) {
+        i--; // Find from i-1 not i since looking at the preceding character
+      }
+
+      String? metadataString = matcher.group(1); // group 1 = metadata substring
+      List<String>? metadata;
+      bool quotedPrintable = false;
+      String? quotedPrintableCharset;
+      String? valueType;
+      if (metadataString != null) {
+        for (String metadatum in metadataString.split(SEMICOLON)) {
+          if (metadata == null) {
+            metadata = [];
+          }
+          metadata.add(metadatum);
+          List<String> metadatumTokens = metadatum.split(EQUALS); // todo , 2
+          if (metadatumTokens.length > 1) {
+            String key = metadatumTokens[0];
+            String value = metadatumTokens[1];
+            if ("ENCODING" == key.toUpperCase() && "QUOTED-PRINTABLE" == value.toUpperCase()) {
+              quotedPrintable = true;
+            } else if ("CHARSET" == key.toUpperCase()) {
+              quotedPrintableCharset = value;
+            } else if ("VALUE" == key.toUpperCase()) {
+              valueType = value;
+            }
+          }
+        }
+      }
+
+      int matchStart = i; // Found the start of a match here
+
+      while ((i = rawText.indexOf('\n', i)) >= 0) { // Really, end in \r\n
+        if (i < rawText.length - 1 &&           // But if followed by tab or space,
+            (rawText[i + 1] == ' ' ||        // this is only a continuation
+             rawText[i + 1] == '\t')) {
+          i += 2; // Skip \n and continutation whitespace
+        } else if (quotedPrintable &&             // If preceded by = in quoted printable
+                   ((i >= 1 && rawText[i - 1] == '=') || // this is a continuation
+                    (i >= 2 && rawText[i - 2] == '='))) {
+          i++; // Skip \n
+        } else {
+          break;
+        }
+      }
+
+      if (i < 0) {
+        // No terminating end character? uh, done. Set i such that loop terminates and break
+        i = max;
+      } else if (i > matchStart) {
+        // found a match
+        if (matches == null) {
+          matches = []; // lazy init
+        }
+        if (i >= 1 && rawText[i - 1] == '\r') {
+          i--; // Back up over \r, which really should be there
+        }
+        String element = rawText.substring(matchStart, i);
+        if (trim) {
+          element = element.trim();
+        }
+        if (quotedPrintable) {
+          element = decodeQuotedPrintable(element, quotedPrintableCharset);
+          if (parseFieldDivider) {
+            element = element.replaceAll(UNESCAPED_SEMICOLONS, "\n").trim();
+          }
+        } else {
+          if (parseFieldDivider) {
+            element = element.replaceAll(UNESCAPED_SEMICOLONS, "\n").trim();
+          }
+          element = element.replaceAll(CR_LF_SPACE_TAB, "");
+          element = element.replaceAll(NEWLINE_ESCAPE, "\n");
+          element = element.replaceAll(VCARD_ESCAPES, r"$1");
+        }
+        // Only handle VALUE=uri specially
+        if ("uri" == valueType) {
+          // Don't actually support dereferencing URIs, but use scheme-specific part not URI
+          // as value, to support tel: and mailto:
+          try {
+            element = Uri.parse(element).scheme;
+          } catch ( iae) { // IllegalArgumentException
+            // ignore
+          }
+        }
+        if (metadata == null) {
+          List<String> match = [];
+          match.add(element);
+          matches.add(match);
+        } else {
+          metadata.insert(0, element);
+          matches.add(metadata);
+        }
+        i++;
+      } else {
+        i++;
+      }
+
+    }
+
+    return matches;
+  }
+
+  static String decodeQuotedPrintable(String value, String? charset) {
+    int length = value.length;
+    StringBuffer result = new StringBuffer(length);
+    BytesBuilder fragmentBuffer = new BytesBuilder();
+    for (int i = 0; i < length; i++) {
+      String c = value[i];
+      switch (c) {
+        case '\r':
+        case '\n':
+          break;
+        case '=':
+          if (i < length - 2) {
+            String nextChar = value[i + 1];
+            if (nextChar != '\r' && nextChar != '\n') {
+              String nextNextChar = value[i + 2];
+              int firstDigit = ResultParser.parseHexDigit(nextChar);
+              int secondDigit = ResultParser.parseHexDigit(nextNextChar);
+              if (firstDigit >= 0 && secondDigit >= 0) {
+                fragmentBuffer.addByte((firstDigit << 4) + secondDigit);
+              } // else ignore it, assume it was incorrectly encoded
+              i += 2;
+            }
+          }
+          break;
+        default:
+          maybeAppendFragment(fragmentBuffer, charset, result);
+          result.write(c);
+      }
+    }
+    maybeAppendFragment(fragmentBuffer, charset, result);
+    return result.toString();
+  }
+
+  static void maybeAppendFragment(BytesBuilder fragmentBuffer,
+                                          String? charset,
+                                          StringBuffer result) {
+    if (fragmentBuffer.length > 0) {
+      Uint8List fragmentBytes = fragmentBuffer.takeBytes();
+      String fragment;
+      if (charset == null) {
+        fragment = utf8.decode(fragmentBytes);
+      } else {
+        try {
+          fragment = Encoding.getByName(charset)!.decode(fragmentBytes);
+        } catch ( e) { // UnsupportedEncodingException
+          fragment = utf8.decode(fragmentBytes);
+        }
+      }
+      fragmentBuffer.clear();
+      result.write(fragment);
+    }
+  }
+
+  static List<String>? matchSingleVCardPrefixedField(String prefix,
+                                                    String rawText,
+                                                    bool trim,
+                                                    bool parseFieldDivider) {
+    List<List<String>>? values = matchVCardPrefixedField(prefix, rawText, trim, parseFieldDivider);
+    return values == null || values.isEmpty ? null : values[0];
+  }
+  
+  static String? toPrimaryValue(List<String>? list) {
+    return list == null || list.isEmpty ? null : list[0];
+  }
+  
+  static List<String>? toPrimaryValues(List<List<String>>? lists) {
+    if (lists == null || lists.isEmpty) {
+      return null;
+    }
+    List<String> result = [];
+    for (List<String> list in lists) {
+      String value = list[0];
+      if (value != null && !value.isEmpty) {
+        result.add(value);
+      }
+    }
+    return result.toList();
+  }
+  
+  static List<String>? toTypes(List<List<String>>? lists) {
+    if (lists == null || lists.isEmpty) {
+      return null;
+    }
+    List<String> result = [];
+    for (List<String> list in lists) {
+      String value = list[0];
+      if (value != null && !value.isEmpty) {
+        String? type;
+        for (int i = 1; i < list.length; i++) {
+          String metadatum = list[i];
+          int equals = metadatum.indexOf('=');
+          if (equals < 0) {
+            // take the whole thing as a usable label
+            type = metadatum;
+            break;
+          }
+          if ("TYPE" == metadatum.substring(0, equals).toUpperCase()) {
+            type = metadatum.substring(equals + 1);
+            break;
+          }
+        }
+        result.add(type!);
+      }
+    }
+    return result.toList();
+  }
+
+  static bool isLikeVCardDate(String? value) {
+    return value == null || VCARD_LIKE_DATE.hasMatch(value);
+  }
+
+  /**
+   * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
+   * "Reverend John Q. III".
+   *
+   * @param names name values to format, in place
+   */
+  static void formatNames(Iterable<List<String>>? names) {
+    if (names != null) {
+      for (List<String> list in names) {
+        String name = list[0];
+        List<String> components = List.filled(5, '');
+        int start = 0;
+        int end;
+        int componentIndex = 0;
+        while (componentIndex < components.length - 1 && (end = name.indexOf(';', start)) >= 0) {
+          components[componentIndex] = name.substring(start, end);
+          componentIndex++;
+          start = end + 1;
+        }
+        components[componentIndex] = name.substring(start);
+        StringBuffer newName = new StringBuffer(100);
+        maybeAppendComponent(components, 3, newName);
+        maybeAppendComponent(components, 1, newName);
+        maybeAppendComponent(components, 2, newName);
+        maybeAppendComponent(components, 0, newName);
+        maybeAppendComponent(components, 4, newName);
+        list[0] = newName.toString().trim();
+      }
+    }
+  }
+
+  static void maybeAppendComponent(List<String> components, int i, StringBuffer newName) {
+    if (components[i] != null && !components[i].isEmpty) {
+      if (newName.length > 0) {
+        newName.write(' ');
+      }
+      newName.write(components[i]);
+    }
+  }
+
+}
