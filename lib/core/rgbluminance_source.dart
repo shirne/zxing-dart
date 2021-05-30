@@ -51,9 +51,9 @@ class RGBLuminanceSource extends LuminanceSource {
       : luminances = (pixels is Uint8List)
             ? pixels
             : intList2Int8List(pixels as List<int>),
-        assert(left + (width ?? dataWidth) < dataWidth,
+        assert(left + (width ?? dataWidth) <= dataWidth,
             r'Crop rectangle does not fit within image data.'),
-        assert(top + (height ?? dataHeight) < dataHeight,
+        assert(top + (height ?? dataHeight) <= dataHeight,
             r'Crop rectangle does not fit within image data.'),
         super(width ?? dataWidth, height ?? dataHeight);
 
@@ -66,7 +66,7 @@ class RGBLuminanceSource extends LuminanceSource {
       row = Uint8List(width);
     }
     int offset = (y + top) * dataWidth + left;
-    List.copyRange(row, 0, luminances, offset, width);
+    List.copyRange(row, 0, luminances, offset, offset + width);
     return row;
   }
 
@@ -87,14 +87,14 @@ class RGBLuminanceSource extends LuminanceSource {
 
     // If the width matches the full width of the underlying data, perform a single copy.
     if (width == dataWidth) {
-      List.copyRange(matrix, 0, luminances, inputOffset, area);
+      List.copyRange(matrix, 0, luminances, inputOffset, inputOffset + area);
       return matrix;
     }
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      List.copyRange(matrix, outputOffset, luminances, inputOffset, width);
+      List.copyRange(matrix, outputOffset, luminances, inputOffset, inputOffset + width);
       inputOffset += dataWidth;
     }
     return matrix;

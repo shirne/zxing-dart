@@ -45,7 +45,7 @@ abstract class LuminanceSource {
    *            Always use the returned object, and ignore the .length of the array.
    * @return An array containing the luminance data.
    */
-  Uint8List getRow(int y, Uint8List row);
+  Uint8List getRow(int y, Uint8List? row);
 
   /**
    * Fetches luminance data for the underlying bitmap. Values should be fetched using:

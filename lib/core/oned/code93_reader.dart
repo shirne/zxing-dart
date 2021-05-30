@@ -147,7 +147,7 @@ class Code93Reader extends OneDReader {
             return [patternStart, i];
           }
           patternStart += theCounters[0] + theCounters[1];
-          List.copyRange(theCounters, 0, theCounters, 2, counterPosition - 1);
+          List.copyRange(theCounters, 0, theCounters, 2, counterPosition + 1);
           theCounters[counterPosition - 1] = 0;
           theCounters[counterPosition] = 0;
           counterPosition--;

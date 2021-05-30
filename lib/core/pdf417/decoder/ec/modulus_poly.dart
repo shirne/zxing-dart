@@ -40,7 +40,7 @@ class ModulusPoly {
       } else {
         this.coefficients = List.filled(coefficientsLength - firstNonZero, 0);
         List.copyRange(this.coefficients, 0, coefficients, firstNonZero,
-            this.coefficients.length);
+            firstNonZero + this.coefficients.length);
       }
     } else {
       this.coefficients = coefficients;

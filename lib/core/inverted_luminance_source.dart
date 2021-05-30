@@ -31,7 +31,7 @@ class InvertedLuminanceSource extends LuminanceSource {
       : super(delegate.getWidth(), delegate.getHeight());
 
   @override
-  Uint8List getRow(int y, Uint8List row) {
+  Uint8List getRow(int y, Uint8List? row) {
     row = delegate.getRow(y, row);
     int width = getWidth();
     for (int i = 0; i < width; i++) {

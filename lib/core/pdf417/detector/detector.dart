@@ -288,7 +288,7 @@ class Detector {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
-          List.copyRange(counters, 0, counters, 2, counterPosition - 1);
+          List.copyRange(counters, 0, counters, 2, counterPosition + 1);
           counters[counterPosition - 1] = 0;
           counters[counterPosition] = 0;
           counterPosition--;

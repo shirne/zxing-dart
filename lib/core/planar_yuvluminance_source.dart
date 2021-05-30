@@ -59,7 +59,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
       row = Uint8List(width);
     }
     int offset = (y + top) * dataWidth + left;
-    List.copyRange(row, 0, yuvData, offset, width);
+    List.copyRange(row, 0, yuvData, offset, offset + width);
     return row;
   }
 
@@ -80,14 +80,14 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
     // If the width matches the full width of the underlying data, perform a single copy.
     if (width == dataWidth) {
-      List.copyRange(matrix, 0, yuvData, inputOffset, area);
+      List.copyRange(matrix, 0, yuvData, inputOffset, inputOffset + area);
       return matrix;
     }
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      List.copyRange(matrix, outputOffset, yuvData, inputOffset, width);
+      List.copyRange(matrix, outputOffset, yuvData, inputOffset, inputOffset + width);
       inputOffset += dataWidth;
     }
     return matrix;

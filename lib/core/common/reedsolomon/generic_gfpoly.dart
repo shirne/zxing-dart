@@ -57,7 +57,7 @@ class GenericGFPoly {
         this.coefficients =
             List.generate(coefficientsLength - firstNonZero, (index) => 0);
         List.copyRange(this.coefficients, 0, coefficients, firstNonZero,
-            this.coefficients.length);
+            firstNonZero + this.coefficients.length);
       }
     } else {
       this.coefficients = coefficients;

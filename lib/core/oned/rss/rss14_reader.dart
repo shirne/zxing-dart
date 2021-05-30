@@ -342,6 +342,7 @@ class RSS14Reader extends AbstractRSSReader {
     // Make 'counters' hold 1-4
     List<int> counters = getDecodeFinderCounters();
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
+
     counters[0] = firstCounter;
     int value = AbstractRSSReader.parseFinderValue(counters, FINDER_PATTERNS);
     int start = firstElementStart;

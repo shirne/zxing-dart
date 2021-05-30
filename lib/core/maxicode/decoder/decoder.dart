@@ -67,7 +67,7 @@ class Decoder {
     }
 
     List.copyRange(datawords, 0, codewords, 0, 10);
-    List.copyRange(datawords, 10, codewords, 20, datawords.length - 10);
+    List.copyRange(datawords, 10, codewords, 20, datawords.length );
 
     return DecodedBitStreamParser.decode(datawords, mode);
   }
