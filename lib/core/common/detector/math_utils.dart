@@ -35,7 +35,14 @@ class MathUtils {
    * @return nearest {@code int}
    */
   static int round(double d) {
-    if(d.isNaN || d.isInfinite)return 0;
+    if(d.isNaN )return 0;
+    if(d.isInfinite){
+      if(d.sign == 1){
+        return MAX_VALUE;
+      }else{
+        return MIN_VALUE;
+      }
+    }
     return (d + (d < 0.0 ? -0.5 : 0.5)).toInt();
   }
 

@@ -45,8 +45,8 @@ void main() {
     expect(MathUtils.MIN_VALUE, MathUtils.round(MathUtils.MIN_VALUE.toDouble()));
 
     // todo ??
-    //expect(MathUtils.MAX_VALUE, MathUtils.round(double.maxFinite)); //Float.POSITIVE_INFINITY
-    //expect(MathUtils.MIN_VALUE, MathUtils.round(double.negativeInfinity)); //Float.NEGATIVE_INFINITY
+    expect(MathUtils.MAX_VALUE, MathUtils.round(double.infinity)); //Float.POSITIVE_INFINITY
+    expect(MathUtils.MIN_VALUE, MathUtils.round(double.negativeInfinity)); //Float.NEGATIVE_INFINITY
 
     expect(0, MathUtils.round(double.nan));
   });
