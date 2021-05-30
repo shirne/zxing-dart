@@ -16,7 +16,7 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/datamatrix/decoder/version.dart';
+import 'version.dart';
 
 /**
  * <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into

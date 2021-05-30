@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/client/result/wifi_parsed_result.dart';
 
 import '../../result.dart';
 import 'result_parser.dart';
+import 'wifi_parsed_result.dart';
 
 /**
  * <p>Parses a WIFI configuration string. Strings will be of the form:</p>

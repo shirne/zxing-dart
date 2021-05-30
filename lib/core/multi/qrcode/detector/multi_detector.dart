@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/qrcode/detector/finder_pattern_info.dart';
 
+import '../../../qrcode/detector/finder_pattern_info.dart';
 import '../../../common/bit_matrix.dart';
-
 import '../../../common/detector_result.dart';
-
 import '../../../decode_hint_type.dart';
 import '../../../not_found_exception.dart';
 import '../../../qrcode/detector/detector.dart';

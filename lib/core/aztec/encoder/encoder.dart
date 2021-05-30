@@ -17,10 +17,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/reedsolomon/generic_gf.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_encoder.dart';
+import '../../common/bit_array.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/reedsolomon/generic_gf.dart';
+import '../../common/reedsolomon/reed_solomon_encoder.dart';
 
 import 'aztec_code.dart';
 import 'high_level_encoder.dart';

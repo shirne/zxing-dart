@@ -22,8 +22,8 @@ import 'dart:math' as Math;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/character_set_eci.dart';
-import 'package:zxing/core/common/string_builder.dart';
+import '../../common/character_set_eci.dart';
+import '../../common/string_builder.dart';
 
 import '../../writer_exception.dart';
 import 'compaction.dart';

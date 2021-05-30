@@ -16,7 +16,7 @@
 
 
 
-import 'package:zxing/core/common/string_builder.dart';
+import '../../common/string_builder.dart';
 
 import 'symbol_info.dart';
 

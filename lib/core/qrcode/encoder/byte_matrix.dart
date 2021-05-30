@@ -23,12 +23,12 @@ import 'dart:typed_data';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class ByteMatrix {
-  final List<Uint8List> bytes;
+  final List<Int8List> bytes;
   final int width;
   final int height;
 
   ByteMatrix(this.width, this.height)
-      : bytes = List.generate(height, (index) => Uint8List(width));
+      : bytes = List.generate(height, (index) => Int8List(width));
 
   int getHeight() {
     return height;
@@ -45,7 +45,7 @@ class ByteMatrix {
   /**
    * @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
    */
-  List<Uint8List> getArray() {
+  List<Int8List> getArray() {
     return bytes;
   }
 
@@ -54,8 +54,8 @@ class ByteMatrix {
   }
 
   void clear(int value) {
-    for (Uint8List aByte in bytes) {
-      aByte.setAll(0, List.generate(aByte.length, (index) => value));
+    for (Int8List aByte in bytes) {
+      aByte.fillRange(0, aByte.length, value);
     }
   }
 
@@ -63,7 +63,7 @@ class ByteMatrix {
   String toString() {
     StringBuffer result = StringBuffer();
     for (int y = 0; y < height; ++y) {
-      Uint8List bytesY = bytes[y];
+      Int8List bytesY = bytes[y];
       for (int x = 0; x < width; ++x) {
         switch (bytesY[x]) {
           case 0:

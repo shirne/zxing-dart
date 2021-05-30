@@ -17,11 +17,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_source.dart';
-import 'package:zxing/core/common/character_set_eci.dart';
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/string_builder.dart';
-import 'package:zxing/core/common/string_utils.dart';
+import '../../common/bit_source.dart';
+import '../../common/character_set_eci.dart';
+import '../../common/decoder_result.dart';
+import '../../common/string_builder.dart';
+import '../../common/string_utils.dart';
 
 import '../../decode_hint_type.dart';
 import 'error_correction_level.dart';
@@ -198,7 +198,7 @@ class DecodedBitStreamParser {
       count--;
     }
 
-    result.write(StringUtils.GB2312_CHARSET.decode(buffer));
+    result.write(StringUtils.GB2312_CHARSET!.decode(buffer));
   }
 
   static void decodeKanjiSegment(
@@ -228,7 +228,7 @@ class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-    result.write(StringUtils.SHIFT_JIS_CHARSET.decode(buffer));
+    result.write(StringUtils.SHIFT_JIS_CHARSET!.decode(buffer));
   }
 
   static void decodeByteSegment(BitSource bits, StringBuffer result, int count,

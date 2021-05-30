@@ -17,11 +17,10 @@
 import 'dart:math' as Math;
 import 'dart:core';
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/qrcode/detector/finder_pattern.dart';
-import 'package:zxing/core/qrcode/detector/finder_pattern_finder.dart';
-import 'package:zxing/core/qrcode/detector/finder_pattern_info.dart';
-
+import '../../../common/bit_matrix.dart';
+import '../../../qrcode/detector/finder_pattern.dart';
+import '../../../qrcode/detector/finder_pattern_finder.dart';
+import '../../../qrcode/detector/finder_pattern_info.dart';
 import '../../../decode_hint_type.dart';
 import '../../../not_found_exception.dart';
 import '../../../result_point.dart';

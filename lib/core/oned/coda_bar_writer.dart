@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/detector/math_utils.dart';
+import '../common/detector/math_utils.dart';
 
 import '../barcode_format.dart';
 import 'coda_bar_reader.dart';

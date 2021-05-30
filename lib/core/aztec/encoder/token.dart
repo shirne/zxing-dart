@@ -16,7 +16,7 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_array.dart';
+import '../../common/bit_array.dart';
 
 import 'binary_shift_token.dart';
 import 'simple_token.dart';

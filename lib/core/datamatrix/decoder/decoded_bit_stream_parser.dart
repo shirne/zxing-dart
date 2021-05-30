@@ -17,9 +17,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_source.dart';
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/string_builder.dart';
+import '../../common/bit_source.dart';
+import '../../common/decoder_result.dart';
+import '../../common/string_builder.dart';
 
 enum Mode {
   PAD_ENCODE, // Not really a mode

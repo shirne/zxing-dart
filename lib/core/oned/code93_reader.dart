@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/string_builder.dart';
-import 'package:zxing/core/result.dart';
+import '../common/bit_array.dart';
+import '../common/string_builder.dart';
 
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
@@ -24,6 +23,7 @@ import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
+import '../result.dart';
 import 'one_dreader.dart';
 
 /**

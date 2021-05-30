@@ -17,14 +17,14 @@
 
 
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/oned/upceanreader.dart';
-
+import '../common/bit_array.dart';
 import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
+
+import 'upceanreader.dart';
 
 /**
  * @see UPCEANExtension5Support

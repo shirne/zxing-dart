@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import '../../common/detector/math_utils.dart';
 import '../../common/bit_matrix.dart';
 
 import 'error_correction_level.dart';
@@ -156,7 +157,7 @@ class Version {
   }
 
   static Version? decodeVersionInformation(int versionBits) {
-    int bestDifference = -1 << 1; // int.max
+    int bestDifference = MathUtils.MAX_VALUE; // int.max
     int bestVersion = 0;
     for (int i = 0; i < VERSION_DECODE_INFO.length; i++) {
       int targetVersion = VERSION_DECODE_INFO[i];

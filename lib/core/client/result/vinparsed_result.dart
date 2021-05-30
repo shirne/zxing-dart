@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/client/result/parsed_result_type.dart';
-
+import 'parsed_result_type.dart';
 import 'parsed_result.dart';
 
 /**

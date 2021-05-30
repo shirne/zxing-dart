@@ -28,9 +28,9 @@ import '../decode_hint_type.dart';
  */
 class StringUtils {
   static final Encoding PLATFORM_DEFAULT_ENCODING = SystemEncoding();
-  static final Encoding SHIFT_JIS_CHARSET = Encoding.getByName("SJIS")!;
-  static final Encoding GB2312_CHARSET = Encoding.getByName("GB2312")!;
-  static final Encoding EUC_JP = Encoding.getByName("EUC_JP")!;
+  static final Encoding? SHIFT_JIS_CHARSET = Encoding.getByName("SJIS");
+  static final Encoding? GB2312_CHARSET = Encoding.getByName("GB2312");
+  static final Encoding? EUC_JP = Encoding.getByName("EUC_JP");
   static final bool ASSUME_SHIFT_JIS =
       SHIFT_JIS_CHARSET == PLATFORM_DEFAULT_ENCODING ||
           EUC_JP == PLATFORM_DEFAULT_ENCODING;

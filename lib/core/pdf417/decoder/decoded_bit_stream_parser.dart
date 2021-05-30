@@ -16,8 +16,8 @@
 
 import 'dart:convert';
 
-import 'package:zxing/core/common/character_set_eci.dart';
-import 'package:zxing/core/common/decoder_result.dart';
+import '../../common/character_set_eci.dart';
+import '../../common/decoder_result.dart';
 
 import '../pdf417_result_metadata.dart';
 

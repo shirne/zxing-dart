@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/client/result/uriparsed_result.dart';
 
 import '../../result.dart';
+import 'uriparsed_result.dart';
 import 'result_parser.dart';
 
 /**

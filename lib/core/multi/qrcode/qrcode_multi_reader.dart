@@ -16,16 +16,13 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/qrcode/decoder/qrcode_decoder_meta_data.dart';
-
+import '../../qrcode/decoder/qrcode_decoder_meta_data.dart';
+import '../../common/decoder_result.dart';
 import '../../barcode_format.dart';
 import '../../common/detector_result.dart';
-
 import '../../binary_bitmap.dart';
 import '../../decode_hint_type.dart';
 import '../../qrcode/qrcode_reader.dart';
-
 import '../../reader_exception.dart';
 import '../../result.dart';
 import '../../result_metadata_type.dart';

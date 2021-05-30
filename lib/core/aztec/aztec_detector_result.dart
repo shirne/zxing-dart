@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/detector_result.dart';
+import '../common/bit_matrix.dart';
+import '../common/detector_result.dart';
 
 import '../result_point.dart';
 

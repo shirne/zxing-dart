@@ -17,14 +17,10 @@
 
 
 
-
-
-
-
-import 'package:zxing/core/client/result/uriparsed_result.dart';
-
 import '../../result.dart';
 import 'result_parser.dart';
+import 'uriparsed_result.dart';
+
 
 /**
  * Tries to parse results that are a URI of some kind.

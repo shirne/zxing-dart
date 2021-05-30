@@ -24,8 +24,8 @@
  *   http://www.piramidepse.com/
  */
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/string_builder.dart';
+import '../../../../common/bit_array.dart';
+import '../../../../common/string_builder.dart';
 
 import 'block_parsed_result.dart';
 import 'current_parsing_state.dart';

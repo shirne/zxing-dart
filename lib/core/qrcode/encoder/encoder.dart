@@ -18,12 +18,13 @@ import 'dart:math' as Math;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/character_set_eci.dart';
-import 'package:zxing/core/common/reedsolomon/generic_gf.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_encoder.dart';
-import 'package:zxing/core/common/string_utils.dart';
-import 'package:zxing/core/qrcode/decoder/mode.dart';
-import 'package:zxing/core/qrcode/decoder/version.dart';
+import '../../common/character_set_eci.dart';
+import '../../common/detector/math_utils.dart';
+import '../../common/reedsolomon/generic_gf.dart';
+import '../../common/reedsolomon/reed_solomon_encoder.dart';
+import '../../common/string_utils.dart';
+import '../../qrcode/decoder/mode.dart';
+import '../../qrcode/decoder/version.dart';
 
 import '../../common/bit_array.dart';
 
@@ -242,7 +243,7 @@ class Encoder {
   }
 
   static bool isOnlyDoubleByteKanji(String content) {
-    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET.encode(content);
+    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET!.encode(content);
     int length = bytes.length;
     if (length % 2 != 0) {
       return false;
@@ -258,7 +259,7 @@ class Encoder {
 
   static int chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel,
       Version version, ByteMatrix matrix) {
-    int minPenalty = -1 << 1; //Integer.MAX_VALUE;  // Lower penalty is better.
+    int minPenalty = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
     // We try all mask patterns to choose the best one.
     for (int maskPattern = 0;
@@ -464,6 +465,7 @@ class Encoder {
     for (int i = 0; i < numDataBytes; i++) {
       toEncode.add(dataBytes[i] & 0xFF);
     }
+    toEncode.addAll(List.filled(numEcBytesInBlock, 0));
     ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256)
         .encode(toEncode, numEcBytesInBlock);
 
@@ -574,7 +576,7 @@ class Encoder {
   }
 
   static void appendKanjiBytes(String content, BitArray bits) {
-    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET.encode(content);
+    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET!.encode(content);
     if (bytes.length % 2 != 0) {
       throw WriterException("Kanji byte size not even");
     }

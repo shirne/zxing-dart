@@ -16,9 +16,9 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/detector/math_utils.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/decoder_result.dart';
+import '../../common/detector/math_utils.dart';
 
 import '../../checksum_exception.dart';
 import '../../not_found_exception.dart';

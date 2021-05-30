@@ -38,29 +38,12 @@ class GenericGFPoly {
    * or if leading coefficient is 0 and this is not a
    * constant polynomial (that is, it is not the monomial "0")
    */
-  GenericGFPoly(this.field, this.coefficients) {
-    if (coefficients.length == 0) {
-      throw Exception('IllegalArgument');
-    }
-
-    int coefficientsLength = coefficients.length;
-    if (coefficientsLength > 1 && coefficients[0] == 0) {
-      // Leading term must be non-zero for anything except the constant polynomial "0"
-      int firstNonZero = 1;
-      while (firstNonZero < coefficientsLength &&
-          coefficients[firstNonZero] == 0) {
-        firstNonZero++;
-      }
-      if (firstNonZero == coefficientsLength) {
-        this.coefficients = [0];
-      } else {
-        this.coefficients =
-            List.generate(coefficientsLength - firstNonZero, (index) => 0);
-        List.copyRange(this.coefficients, 0, coefficients, firstNonZero,
-            firstNonZero + this.coefficients.length);
-      }
-    } else {
-      this.coefficients = coefficients;
+  GenericGFPoly(this.field, List<int> coefficients):
+        assert(coefficients.length > 0,'IllegalArgument'),
+      this.coefficients = coefficients.skipWhile((value) => value == 0).toList()
+  {
+    if(this.coefficients.length < 1){
+      this.coefficients.add(0);
     }
   }
 

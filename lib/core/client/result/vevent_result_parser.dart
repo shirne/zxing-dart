@@ -15,16 +15,10 @@
  */
 
 
-
-
-
-
-
-import 'package:zxing/core/client/result/vcard_result_parser.dart';
-
 import '../../result.dart';
 import 'calendar_parsed_result.dart';
 import 'result_parser.dart';
+import 'vcard_result_parser.dart';
 
 /**
  * Partially implements the iCalendar format's "VEVENT" format for specifying a

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/detector/math_utils.dart';
-import 'package:zxing/core/common/detector/white_rectangle_detector.dart';
-import 'package:zxing/core/common/grid_sampler.dart';
-import 'package:zxing/core/common/reedsolomon/generic_gf.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_decoder.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/detector/math_utils.dart';
+import '../../common/detector/white_rectangle_detector.dart';
+import '../../common/grid_sampler.dart';
+import '../../common/reedsolomon/generic_gf.dart';
+import '../../common/reedsolomon/reed_solomon_decoder.dart';
 
 import '../../not_found_exception.dart';
 import '../../result_point.dart';

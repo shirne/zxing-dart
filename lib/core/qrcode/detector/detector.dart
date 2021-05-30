@@ -16,12 +16,12 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/detector/math_utils.dart';
-import 'package:zxing/core/common/detector_result.dart';
-import 'package:zxing/core/common/grid_sampler.dart';
-import 'package:zxing/core/common/perspective_transform.dart';
-import 'package:zxing/core/qrcode/decoder/version.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/detector/math_utils.dart';
+import '../../common/detector_result.dart';
+import '../../common/grid_sampler.dart';
+import '../../common/perspective_transform.dart';
+import '../../qrcode/decoder/version.dart';
 
 import '../../decode_hint_type.dart';
 import '../../not_found_exception.dart';

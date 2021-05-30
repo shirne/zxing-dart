@@ -17,8 +17,9 @@
 
 
 import 'package:intl/intl.dart';
-import 'package:zxing/core/client/result/parsed_result.dart';
-import 'package:zxing/core/client/result/parsed_result_type.dart';
+
+import 'parsed_result.dart';
+import 'parsed_result_type.dart';
 
 /**
  * Represents a parsed result that encodes a calendar event at a certain time, optionally

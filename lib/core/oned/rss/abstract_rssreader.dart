@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/detector/math_utils.dart';
+import '../../common/detector/math_utils.dart';
 
 import '../../not_found_exception.dart';
 import '../one_dreader.dart';

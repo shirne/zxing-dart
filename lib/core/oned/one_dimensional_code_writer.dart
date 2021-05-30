@@ -16,7 +16,7 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/bit_matrix.dart';
+import '../common/bit_matrix.dart';
 
 import '../barcode_format.dart';
 import '../encode_hint_type.dart';

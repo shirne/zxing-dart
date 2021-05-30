@@ -24,7 +24,7 @@
  *   http://www.piramidepse.com/
  */
 
-import 'package:zxing/core/common/bit_array.dart';
+import '../../../common/bit_array.dart';
 
 import 'expanded_pair.dart';
 

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/oned/upcereader.dart';
 
+import '../../oned/upcereader.dart';
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'product_parsed_result.dart';

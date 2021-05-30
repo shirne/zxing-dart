@@ -16,6 +16,8 @@
 
 import 'dart:typed_data';
 
+import '../../common/detector/math_utils.dart';
+
 import '../../dimension.dart';
 import 'asciiencoder.dart';
 import 'base256_encoder.dart';
@@ -208,7 +210,7 @@ class HighLevelEncoder {
     while (true) {
       //step K
       if ((startpos + charsProcessed) == msg.length) {
-        int min = -1 << 1;
+        int min = MathUtils.MAX_VALUE;
         Uint8List mins = Uint8List(6);
         List<int> intCharCounts = Uint8List(6);
         min = findMinimums(charCounts, intCharCounts, min, mins);
@@ -295,7 +297,7 @@ class HighLevelEncoder {
       if (charsProcessed >= 4) {
         List<int> intCharCounts = Uint8List(6);
         Uint8List mins = Uint8List(6);
-        findMinimums(charCounts, intCharCounts, -1 << 1, mins); // int.MAX
+        findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
         int minCount = getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] <

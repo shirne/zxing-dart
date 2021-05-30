@@ -16,10 +16,10 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/detector/white_rectangle_detector.dart';
-import 'package:zxing/core/common/detector_result.dart';
-import 'package:zxing/core/common/grid_sampler.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/detector/white_rectangle_detector.dart';
+import '../../common/detector_result.dart';
+import '../../common/grid_sampler.dart';
 
 import '../../result_point.dart';
 

@@ -16,14 +16,14 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/reedsolomon/generic_gf.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_decoder.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_exception.dart';
-import 'package:zxing/core/datamatrix/decoder/version.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/decoder_result.dart';
+import '../../common/reedsolomon/generic_gf.dart';
+import '../../common/reedsolomon/reed_solomon_decoder.dart';
+import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../checksum_exception.dart';
+import 'version.dart';
 import 'bit_matrix_parser.dart';
 import 'data_block.dart';
 import 'decoded_bit_stream_parser.dart';

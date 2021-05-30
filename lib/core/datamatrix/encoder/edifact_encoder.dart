@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/string_builder.dart';
+import '../../common/string_builder.dart';
 
 import 'encoder.dart';
 

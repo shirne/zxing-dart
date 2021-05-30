@@ -16,7 +16,7 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/bit_matrix.dart';
+import '../../common/bit_matrix.dart';
 
 import '../../not_found_exception.dart';
 import '../../result_point.dart';

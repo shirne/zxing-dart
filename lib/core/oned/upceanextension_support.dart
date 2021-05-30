@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/result.dart';
-
+import '../common/bit_array.dart';
+import '../result.dart';
 import 'upceanextension2_support.dart';
 import 'upceanextension5_support.dart';
 import 'upceanreader.dart';

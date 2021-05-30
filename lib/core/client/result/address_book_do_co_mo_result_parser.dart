@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/client/result/result_parser.dart';
-
+import 'result_parser.dart';
 import '../../result.dart';
 import 'abstract_do_co_mo_result_parser.dart';
 import 'address_book_parsed_result.dart';

@@ -16,13 +16,13 @@
 
 
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/result.dart';
+import '../common/bit_array.dart';
 
 import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
+import '../result.dart';
 import 'upceanreader.dart';
 
 /**

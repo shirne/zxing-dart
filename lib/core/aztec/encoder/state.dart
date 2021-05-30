@@ -18,7 +18,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_array.dart';
+import '../../common/bit_array.dart';
 
 import 'high_level_encoder.dart';
 import 'token.dart';

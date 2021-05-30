@@ -16,8 +16,9 @@
 
 import 'dart:math' as Math;
 
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/multi/multiple_barcode_reader.dart';
+import '../common/decoder_result.dart';
+import '../common/detector/math_utils.dart';
+import '../multi/multiple_barcode_reader.dart';
 
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
@@ -97,7 +98,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   static int getMinWidth(ResultPoint? p1, ResultPoint? p2) {
     if (p1 == null || p2 == null) {
-      return -1 << 1; // Integer.MAX_VALUE;
+      return MathUtils.MAX_VALUE; // Integer.MAX_VALUE;
     }
     return (p1.getX() - p2.getX()).abs().toInt();
   }

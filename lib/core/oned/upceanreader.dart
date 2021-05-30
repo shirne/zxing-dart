@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/string_builder.dart';
+import '../common/bit_array.dart';
+import '../common/string_builder.dart';
 
 import '../barcode_format.dart';
 import '../checksum_exception.dart';

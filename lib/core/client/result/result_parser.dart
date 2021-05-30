@@ -26,14 +26,14 @@
 
 
 
-import 'package:zxing/core/client/result/product_result_parser.dart';
-import 'package:zxing/core/client/result/smsmmsresult_parser.dart';
-import 'package:zxing/core/client/result/smstommstoresult_parser.dart';
-import 'package:zxing/core/client/result/uriresult_parser.dart';
-import 'package:zxing/core/client/result/urltoresult_parser.dart';
-import 'package:zxing/core/client/result/vevent_result_parser.dart';
-import 'package:zxing/core/client/result/vinresult_parser.dart';
-import 'package:zxing/core/client/result/wifi_result_parser.dart';
+import 'product_result_parser.dart';
+import 'smsmmsresult_parser.dart';
+import 'smstommstoresult_parser.dart';
+import 'uriresult_parser.dart';
+import 'urltoresult_parser.dart';
+import 'vevent_result_parser.dart';
+import 'vinresult_parser.dart';
+import 'wifi_result_parser.dart';
 
 import '../../result.dart';
 import 'address_book_auresult_parser.dart';

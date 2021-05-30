@@ -16,9 +16,9 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/reedsolomon/reed_solomon_exception.dart';
+import '../../common/bit_matrix.dart';
+import '../../common/decoder_result.dart';
+import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../checksum_exception.dart';
 import '../../common/reedsolomon/generic_gf.dart';

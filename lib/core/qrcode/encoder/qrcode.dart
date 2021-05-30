@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/qrcode/decoder/error_correction_level.dart';
-import 'package:zxing/core/qrcode/decoder/mode.dart';
-import 'package:zxing/core/qrcode/decoder/version.dart';
+import '../../qrcode/decoder/error_correction_level.dart';
+import '../../qrcode/decoder/mode.dart';
+import '../../qrcode/decoder/version.dart';
 
 import 'byte_matrix.dart';
 

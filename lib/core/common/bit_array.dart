@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/detector/math_utils.dart';
+import 'detector/math_utils.dart';
 
 /**
  * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>

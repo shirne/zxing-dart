@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/detector/math_utils.dart';
+import '../common/detector/math_utils.dart';
 
 /**
  * @author SITA Lab (kevin.osullivan@sita.aero)

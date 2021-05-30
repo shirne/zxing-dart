@@ -17,8 +17,8 @@
 import 'dart:math' as Math;
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/decoder_result.dart';
-import 'package:zxing/core/common/string_builder.dart';
+import '../../common/decoder_result.dart';
+import '../../common/string_builder.dart';
 
 /**
  * <p>MaxiCodes can encode text or structured information as bits in one of several modes,

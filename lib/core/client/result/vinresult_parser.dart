@@ -15,11 +15,11 @@
  */
 
 
-import 'package:zxing/core/client/result/vinparsed_result.dart';
 
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'result_parser.dart';
+import 'vinparsed_result.dart';
 
 /**
  * Detects a result that is likely a vehicle identification number.

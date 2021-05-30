@@ -51,11 +51,11 @@ class MaskUtil {
    */
   static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
-    List<Uint8List> array = matrix.getArray();
+    List<Int8List> array = matrix.getArray();
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     for (int y = 0; y < height - 1; y++) {
-      Uint8List arrayY = array[y];
+      Int8List arrayY = array[y];
       for (int x = 0; x < width - 1; x++) {
         int value = arrayY[x];
         if (value == arrayY[x + 1] &&
@@ -75,12 +75,12 @@ class MaskUtil {
    */
   static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int numPenalties = 0;
-    List<Uint8List> array = matrix.getArray();
+    List<Int8List> array = matrix.getArray();
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        Uint8List arrayY = array[y]; // We can at least optimize this access
+        Int8List arrayY = array[y]; // We can at least optimize this access
         if (x + 6 < width &&
             arrayY[x] == 1 &&
             arrayY[x + 1] == 0 &&
@@ -110,7 +110,7 @@ class MaskUtil {
     return numPenalties * N3;
   }
 
-  static bool isWhiteHorizontal(Uint8List rowArray, int from, int to) {
+  static bool isWhiteHorizontal(Int8List rowArray, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, rowArray.length);
     for (int i = from; i < to; i++) {
@@ -122,7 +122,7 @@ class MaskUtil {
   }
 
   static bool isWhiteVertical(
-      List<Uint8List> array, int col, int from, int to) {
+      List<Int8List> array, int col, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, array.length);
     for (int i = from; i < to; i++) {
@@ -139,11 +139,11 @@ class MaskUtil {
    */
   static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;
-    List<Uint8List> array = matrix.getArray();
+    List<Int8List> array = matrix.getArray();
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     for (int y = 0; y < height; y++) {
-      Uint8List arrayY = array[y];
+      Int8List arrayY = array[y];
       for (int x = 0; x < width; x++) {
         if (arrayY[x] == 1) {
           numDarkCells++;
@@ -206,7 +206,7 @@ class MaskUtil {
     int penalty = 0;
     int iLimit = isHorizontal ? matrix.getHeight() : matrix.getWidth();
     int jLimit = isHorizontal ? matrix.getWidth() : matrix.getHeight();
-    List<Uint8List> array = matrix.getArray();
+    List<Int8List> array = matrix.getArray();
     for (int i = 0; i < iLimit; i++) {
       int numSameBitCells = 0;
       int prevBit = -1;

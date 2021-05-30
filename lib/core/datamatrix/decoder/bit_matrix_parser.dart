@@ -16,8 +16,8 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_matrix.dart';
-import 'package:zxing/core/datamatrix/decoder/version.dart';
+import '../../common/bit_matrix.dart';
+import 'version.dart';
 
 /**
  * @author bbrown@google.com (Brian Brown)

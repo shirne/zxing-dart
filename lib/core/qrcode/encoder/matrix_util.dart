@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/detector/math_utils.dart';
-import 'package:zxing/core/qrcode/decoder/error_correction_level.dart';
-import 'package:zxing/core/qrcode/decoder/version.dart';
+import '../../common/bit_array.dart';
+import '../../common/detector/math_utils.dart';
+import '../../qrcode/decoder/error_correction_level.dart';
+import '../../qrcode/decoder/version.dart';
 
 import '../../writer_exception.dart';
 import 'byte_matrix.dart';
@@ -151,14 +151,14 @@ class MatrixUtil {
   // - Position adjustment patterns, if need be
   static void embedBasicPatterns(Version version, ByteMatrix matrix) {
     // Let's get started with embedding big squares at corners.
-    embedPositionDetectionPatternsAndSeparators(matrix);
+    _embedPositionDetectionPatternsAndSeparators(matrix);
     // Then, embed the dark dot at the left bottom corner.
-    embedDarkDotAtLeftBottomCorner(matrix);
+    _embedDarkDotAtLeftBottomCorner(matrix);
 
     // Position adjustment patterns appear if version >= 2.
-    maybeEmbedPositionAdjustmentPatterns(version, matrix);
+    _maybeEmbedPositionAdjustmentPatterns(version, matrix);
     // Timing patterns should be embedded after position adj. patterns.
-    embedTimingPatterns(matrix);
+    _embedTimingPatterns(matrix);
   }
 
   // Embed type information. On success, modify the matrix.
@@ -236,7 +236,7 @@ class MatrixUtil {
         for (int i = 0; i < 2; ++i) {
           int xx = x - i;
           // Skip the cell if it's not empty.
-          if (!isEmpty(matrix.get(xx, y))) {
+          if (!_isEmpty(matrix.get(xx, y))) {
             continue;
           }
           bool bit;
@@ -360,55 +360,56 @@ class MatrixUtil {
   }
 
   // Check if "value" is empty.
-  static bool isEmpty(int value) {
+  static bool _isEmpty(int value) {
     return value == -1;
   }
 
-  static void embedTimingPatterns(ByteMatrix matrix) {
+  static void _embedTimingPatterns(ByteMatrix matrix) {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.getWidth() - 8; ++i) {
       int bit = (i + 1) % 2;
       // Horizontal line.
-      if (isEmpty(matrix.get(i, 6))) {
+      if (_isEmpty(matrix.get(i, 6))) {
         matrix.set(i, 6, bit);
       }
       // Vertical line.
-      if (isEmpty(matrix.get(6, i))) {
+      if (_isEmpty(matrix.get(6, i))) {
         matrix.set(6, i, bit);
       }
     }
   }
 
   // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
-  static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) {
+  static void _embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) {
     if (matrix.get(8, matrix.getHeight() - 8) == 0) {
       throw WriterException();
     }
     matrix.set(8, matrix.getHeight() - 8, 1);
   }
 
-  static void embedHorizontalSeparationPattern(
+  static void _embedHorizontalSeparationPattern(
       int xStart, int yStart, ByteMatrix matrix) {
+    
     for (int x = 0; x < 8; ++x) {
-      if (!isEmpty(matrix.get(xStart + x, yStart))) {
+      if (!_isEmpty(matrix.get(xStart + x, yStart))) {
         throw WriterException();
       }
       matrix.set(xStart + x, yStart, 0);
     }
   }
 
-  static void embedVerticalSeparationPattern(
+  static void _embedVerticalSeparationPattern(
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
-      if (!isEmpty(matrix.get(xStart, yStart + y))) {
+      if (!_isEmpty(matrix.get(xStart, yStart + y))) {
         throw WriterException();
       }
       matrix.set(xStart, yStart + y, 0);
     }
   }
 
-  static void embedPositionAdjustmentPattern(
+  static void _embedPositionAdjustmentPattern(
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 5; ++y) {
       List<int> patternY = POSITION_ADJUSTMENT_PATTERN[y];
@@ -418,7 +419,7 @@ class MatrixUtil {
     }
   }
 
-  static void embedPositionDetectionPattern(
+  static void _embedPositionDetectionPattern(
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
       List<int> patternY = POSITION_DETECTION_PATTERN[y];
@@ -429,39 +430,39 @@ class MatrixUtil {
   }
 
   // Embed position detection patterns and surrounding vertical/horizontal separators.
-  static void embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) {
+  static void _embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) {
     // Embed three big squares at corners.
     int pdpWidth = POSITION_DETECTION_PATTERN[0].length;
     // Left top corner.
-    embedPositionDetectionPattern(0, 0, matrix);
+    _embedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
-    embedPositionDetectionPattern(matrix.getWidth() - pdpWidth, 0, matrix);
+    _embedPositionDetectionPattern(matrix.getWidth() - pdpWidth, 0, matrix);
     // Left bottom corner.
-    embedPositionDetectionPattern(0, matrix.getWidth() - pdpWidth, matrix);
+    _embedPositionDetectionPattern(0, matrix.getWidth() - pdpWidth, matrix);
 
     // Embed horizontal separation patterns around the squares.
     int hspWidth = 8;
     // Left top corner.
-    embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
+    _embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
     // Right top corner.
-    embedHorizontalSeparationPattern(
+    _embedHorizontalSeparationPattern(
         matrix.getWidth() - hspWidth, hspWidth - 1, matrix);
     // Left bottom corner.
-    embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
+    _embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
 
     // Embed vertical separation patterns around the squares.
     int vspSize = 7;
     // Left top corner.
-    embedVerticalSeparationPattern(vspSize, 0, matrix);
+    _embedVerticalSeparationPattern(vspSize, 0, matrix);
     // Right top corner.
-    embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
+    _embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
     // Left bottom corner.
-    embedVerticalSeparationPattern(
+    _embedVerticalSeparationPattern(
         vspSize, matrix.getHeight() - vspSize, matrix);
   }
 
   // Embed position adjustment patterns if need be.
-  static void maybeEmbedPositionAdjustmentPatterns(
+  static void _maybeEmbedPositionAdjustmentPatterns(
       Version version, ByteMatrix matrix) {
     if (version.getVersionNumber() < 2) {
       // The patterns appear if version >= 2
@@ -472,11 +473,11 @@ class MatrixUtil {
     for (int y in coordinates) {
       if (y >= 0) {
         for (int x in coordinates) {
-          if (x >= 0 && isEmpty(matrix.get(x, y))) {
+          if (x >= 0 && _isEmpty(matrix.get(x, y))) {
             // If the cell is unset, we embed the position adjustment pattern here.
             // -2 is necessary since the x/y coordinates point to the center of the pattern, not the
             // left top corner.
-            embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
+            _embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
           }
         }
       }

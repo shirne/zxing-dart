@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/common/detector/math_utils.dart';
+import '../../common/detector/math_utils.dart';
 
 import 'error_correction_level.dart';
 
@@ -106,7 +106,7 @@ class FormatInformation {
   static FormatInformation? doDecodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
-    int bestDifference = -1 << 1; //Integer.MAX_VALUE;
+    int bestDifference = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;
     int bestFormatInfo = 0;
     for (List<int> decodeInfo in FORMAT_INFO_DECODE_LOOKUP) {
       int targetInfo = decodeInfo[0];

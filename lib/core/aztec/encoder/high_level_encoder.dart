@@ -17,8 +17,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:zxing/core/common/bit_array.dart';
-import 'package:zxing/core/common/character_set_eci.dart';
+import '../../common/bit_array.dart';
+import '../../common/character_set_eci.dart';
 
 import 'state.dart';
 

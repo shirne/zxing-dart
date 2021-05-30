@@ -15,7 +15,7 @@
  */
 
 
-import 'package:zxing/core/common/bit_matrix.dart';
+import '../../common/bit_matrix.dart';
 
 import '../../decode_hint_type.dart';
 import '../../not_found_exception.dart';
