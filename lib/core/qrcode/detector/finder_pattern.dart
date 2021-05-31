@@ -25,19 +25,19 @@ import '../../result_point.dart';
  * @author Sean Owen
  */
 class FinderPattern extends ResultPoint {
-  final double estimatedModuleSize;
-  final int count;
+  final double _estimatedModuleSize;
+  final int _count;
 
-  FinderPattern(double posX, double posY, this.estimatedModuleSize,
-      [this.count = 1])
+  FinderPattern(double posX, double posY, this._estimatedModuleSize,
+      [this._count = 1])
       : super(posX, posY);
 
   double getEstimatedModuleSize() {
-    return estimatedModuleSize;
+    return _estimatedModuleSize;
   }
 
   int getCount() {
-    return count;
+    return _count;
   }
 
   /**
@@ -46,8 +46,8 @@ class FinderPattern extends ResultPoint {
    */
   bool aboutEquals(double moduleSize, double i, double j) {
     if ((i - getY()).abs() <= moduleSize && (j - getX()).abs() <= moduleSize) {
-      double moduleSizeDiff = (moduleSize - estimatedModuleSize).abs();
-      return moduleSizeDiff <= 1.0 || moduleSizeDiff <= estimatedModuleSize;
+      double moduleSizeDiff = (moduleSize - _estimatedModuleSize).abs();
+      return moduleSizeDiff <= 1.0 || moduleSizeDiff <= _estimatedModuleSize;
     }
     return false;
   }
@@ -58,11 +58,11 @@ class FinderPattern extends ResultPoint {
    * based on count.
    */
   FinderPattern combineEstimate(double i, double j, double newModuleSize) {
-    int combinedCount = count + 1;
-    double combinedX = (count * getX() + j) / combinedCount;
-    double combinedY = (count * getY() + i) / combinedCount;
+    int combinedCount = _count + 1;
+    double combinedX = (_count * getX() + j) / combinedCount;
+    double combinedY = (_count * getY() + i) / combinedCount;
     double combinedModuleSize =
-        (count * estimatedModuleSize + newModuleSize) / combinedCount;
+        (_count * _estimatedModuleSize + newModuleSize) / combinedCount;
     return FinderPattern(
         combinedX, combinedY, combinedModuleSize, combinedCount);
   }

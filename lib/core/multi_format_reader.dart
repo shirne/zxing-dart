@@ -35,10 +35,10 @@ import 'result.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class MultiFormatReader implements Reader {
-  static final List<Reader> EMPTY_READER_ARRAY = [];
+  static final List<Reader> _EMPTY_READER_ARRAY = [];
 
-  Map<DecodeHintType, Object>? hints;
-  List<Reader>? readers;
+  Map<DecodeHintType, Object>? _hints;
+  List<Reader>? _readers;
 
   /**
    * Decode an image using the hints provided. Does not honor existing state.
@@ -51,7 +51,7 @@ class MultiFormatReader implements Reader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     setHints(hints);
-    return decodeInternal(image);
+    return _decodeInternal(image);
   }
 
   /**
@@ -64,10 +64,10 @@ class MultiFormatReader implements Reader {
    */
   Result decodeWithState(BinaryBitmap image) {
     // Make sure to set up the default state so we don't crash
-    if (readers == null) {
+    if (_readers == null) {
       setHints(null);
     }
-    return decodeInternal(image);
+    return _decodeInternal(image);
   }
 
   /**
@@ -78,7 +78,7 @@ class MultiFormatReader implements Reader {
    * @param hints The set of hints to use for subsequent calls to decode(image)
    */
   void setHints(Map<DecodeHintType, Object>? hints) {
-    this.hints = hints;
+    this._hints = hints;
 
     bool tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -138,33 +138,33 @@ class MultiFormatReader implements Reader {
         readers.add(MultiFormatOneDReader(hints));
       }
     }
-    this.readers = readers.toList();
+    this._readers = readers.toList();
   }
 
   @override
   void reset() {
-    if (readers != null) {
-      for (Reader reader in readers!) {
+    if (_readers != null) {
+      for (Reader reader in _readers!) {
         reader.reset();
       }
     }
   }
 
-  Result decodeInternal(BinaryBitmap image) {
-    if (readers != null) {
-      for (Reader reader in readers!) {
+  Result _decodeInternal(BinaryBitmap image) {
+    if (_readers != null) {
+      for (Reader reader in _readers!) {
         try {
-          return reader.decode(image, hints);
+          return reader.decode(image, _hints);
         } catch (re) {
           // continue
         }
       }
-      if (hints != null && hints!.containsKey(DecodeHintType.ALSO_INVERTED)) {
+      if (_hints != null && _hints!.containsKey(DecodeHintType.ALSO_INVERTED)) {
         // Calling all readers again with inverted image
         image.getBlackMatrix().flip();
-        for (Reader reader in readers!) {
+        for (Reader reader in _readers!) {
           try {
-            return reader.decode(image, hints);
+            return reader.decode(image, _hints);
           } catch (re) {
             // continue
           }

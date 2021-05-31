@@ -40,11 +40,11 @@ class DecodedBitStreamParser {
   /**
    * See ISO 18004:2006, 6.4.4 Table 5
    */
-  static final List<String> ALPHANUMERIC_CHARS =
+  static final List<String> _ALPHANUMERIC_CHARS =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".split('');
-  static final int GB2312_SUBSET = 1;
+  static final int _GB2312_SUBSET = 1;
 
-  DecodedBitStreamParser();
+  DecodedBitStreamParser._();
 
   static DecoderResult decode(Uint8List bytes, Version version,
       ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
@@ -93,7 +93,7 @@ class DecodedBitStreamParser {
             break;
           case Mode.ECI:
             // Count doesn't apply to ECI
-            int value = parseECIValue(bits);
+            int value = _parseECIValue(bits);
             currentCharacterSetECI =
                 CharacterSetECI.getCharacterSetECIByValue(value);
             if (currentCharacterSetECI == null) {
@@ -105,8 +105,8 @@ class DecodedBitStreamParser {
             // Chinese mode contains a sub set indicator right after mode indicator
             int subset = bits.readBits(4);
             int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-            if (subset == GB2312_SUBSET) {
-              decodeHanziSegment(bits, result, countHanzi);
+            if (subset == _GB2312_SUBSET) {
+              _decodeHanziSegment(bits, result, countHanzi);
             }
             break;
           default:
@@ -115,17 +115,17 @@ class DecodedBitStreamParser {
             int count = bits.readBits(mode.getCharacterCountBits(version));
             switch (mode) {
               case Mode.NUMERIC:
-                decodeNumericSegment(bits, result, count);
+                _decodeNumericSegment(bits, result, count);
                 break;
               case Mode.ALPHANUMERIC:
-                decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+                _decodeAlphanumericSegment(bits, result, count, fc1InEffect);
                 break;
               case Mode.BYTE:
-                decodeByteSegment(bits, result, count, currentCharacterSetECI!,
+                _decodeByteSegment(bits, result, count, currentCharacterSetECI!,
                     byteSegments, hints);
                 break;
               case Mode.KANJI:
-                decodeKanjiSegment(bits, result, count);
+                _decodeKanjiSegment(bits, result, count);
                 break;
               default:
                 throw FormatException();
@@ -170,7 +170,7 @@ class DecodedBitStreamParser {
   /**
    * See specification GBT 18284-2000
    */
-  static void decodeHanziSegment(
+  static void _decodeHanziSegment(
       BitSource bits, StringBuffer result, int count) {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
@@ -201,7 +201,7 @@ class DecodedBitStreamParser {
     result.write(StringUtils.GB2312_CHARSET!.decode(buffer));
   }
 
-  static void decodeKanjiSegment(
+  static void _decodeKanjiSegment(
       BitSource bits, StringBuffer result, int count) {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
@@ -231,7 +231,7 @@ class DecodedBitStreamParser {
     result.write(StringUtils.SHIFT_JIS_CHARSET!.decode(buffer));
   }
 
-  static void decodeByteSegment(BitSource bits, StringBuffer result, int count,
+  static void _decodeByteSegment(BitSource bits, StringBuffer result, int count,
       CharacterSetECI? currentCharacterSetECI, List<Uint8List> byteSegments,
       [Map<DecodeHintType, Object>? hints]) {
     // Don't crash trying to read more bits than we have available.
@@ -259,14 +259,14 @@ class DecodedBitStreamParser {
     byteSegments.add(readBytes);
   }
 
-  static String toAlphaNumericChar(int value) {
-    if (value >= ALPHANUMERIC_CHARS.length) {
+  static String _toAlphaNumericChar(int value) {
+    if (value >= _ALPHANUMERIC_CHARS.length) {
       throw FormatException();
     }
-    return ALPHANUMERIC_CHARS[value];
+    return _ALPHANUMERIC_CHARS[value];
   }
 
-  static void decodeAlphanumericSegment(
+  static void _decodeAlphanumericSegment(
       BitSource bits, StringBuilder result, int count, bool fc1InEffect) {
     // Read two characters at a time
     int start = result.length;
@@ -275,8 +275,8 @@ class DecodedBitStreamParser {
         throw FormatException();
       }
       int nextTwoCharsBits = bits.readBits(11);
-      result.write(toAlphaNumericChar(nextTwoCharsBits ~/ 45));
-      result.write(toAlphaNumericChar(nextTwoCharsBits % 45));
+      result.write(_toAlphaNumericChar(nextTwoCharsBits ~/ 45));
+      result.write(_toAlphaNumericChar(nextTwoCharsBits % 45));
       count -= 2;
     }
     if (count == 1) {
@@ -284,7 +284,7 @@ class DecodedBitStreamParser {
       if (bits.available() < 6) {
         throw FormatException();
       }
-      result.write(toAlphaNumericChar(bits.readBits(6)));
+      result.write(_toAlphaNumericChar(bits.readBits(6)));
     }
     // See section 6.4.8.1, 6.4.8.2
     if (fc1InEffect) {
@@ -303,7 +303,7 @@ class DecodedBitStreamParser {
     }
   }
 
-  static void decodeNumericSegment(
+  static void _decodeNumericSegment(
       BitSource bits, StringBuffer result, int count) {
     // Read three digits at a time
     while (count >= 3) {
@@ -315,9 +315,9 @@ class DecodedBitStreamParser {
       if (threeDigitsBits >= 1000) {
         throw FormatException();
       }
-      result.write(toAlphaNumericChar(threeDigitsBits ~/ 100));
-      result.write(toAlphaNumericChar((threeDigitsBits ~/ 10) % 10));
-      result.write(toAlphaNumericChar(threeDigitsBits % 10));
+      result.write(_toAlphaNumericChar(threeDigitsBits ~/ 100));
+      result.write(_toAlphaNumericChar((threeDigitsBits ~/ 10) % 10));
+      result.write(_toAlphaNumericChar(threeDigitsBits % 10));
       count -= 3;
     }
     if (count == 2) {
@@ -329,8 +329,8 @@ class DecodedBitStreamParser {
       if (twoDigitsBits >= 100) {
         throw FormatException();
       }
-      result.write(toAlphaNumericChar(twoDigitsBits ~/ 10));
-      result.write(toAlphaNumericChar(twoDigitsBits % 10));
+      result.write(_toAlphaNumericChar(twoDigitsBits ~/ 10));
+      result.write(_toAlphaNumericChar(twoDigitsBits % 10));
     } else if (count == 1) {
       // One digit left over to read
       if (bits.available() < 4) {
@@ -340,11 +340,11 @@ class DecodedBitStreamParser {
       if (digitBits >= 10) {
         throw FormatException();
       }
-      result.write(toAlphaNumericChar(digitBits));
+      result.write(_toAlphaNumericChar(digitBits));
     }
   }
 
-  static int parseECIValue(BitSource bits) {
+  static int _parseECIValue(BitSource bits) {
     int firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {
       // just one byte

@@ -25,36 +25,36 @@ import 'byte_matrix.dart';
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 class QRCode {
-  static final int NUM_MASK_PATTERNS = 8;
+  static const int NUM_MASK_PATTERNS = 8;
 
-  Mode? mode;
-  ErrorCorrectionLevel? ecLevel;
-  Version? version;
-  late int maskPattern;
-  ByteMatrix? matrix;
+  Mode? _mode;
+  ErrorCorrectionLevel? _ecLevel;
+  Version? _version;
+  late int _maskPattern;
+  ByteMatrix? _matrix;
 
   QRCode() {
-    maskPattern = -1;
+    _maskPattern = -1;
   }
 
   Mode? getMode() {
-    return mode;
+    return _mode;
   }
 
   ErrorCorrectionLevel? getECLevel() {
-    return ecLevel;
+    return _ecLevel;
   }
 
   Version? getVersion() {
-    return version;
+    return _version;
   }
 
   int getMaskPattern() {
-    return maskPattern;
+    return _maskPattern;
   }
 
   ByteMatrix? getMatrix() {
-    return matrix;
+    return _matrix;
   }
 
   @override
@@ -62,41 +62,41 @@ class QRCode {
     StringBuffer result = StringBuffer();
     result.write("<<\n");
     result.write(" mode: ");
-    result.write(mode);
+    result.write(_mode);
     result.write("\n ecLevel: ");
-    result.write(ecLevel);
+    result.write(_ecLevel);
     result.write("\n version: ");
-    result.write(version);
+    result.write(_version);
     result.write("\n maskPattern: ");
-    result.write(maskPattern);
-    if (matrix == null) {
+    result.write(_maskPattern);
+    if (_matrix == null) {
       result.write("\n matrix: null\n");
     } else {
       result.write("\n matrix:\n");
-      result.write(matrix);
+      result.write(_matrix);
     }
     result.write(">>\n");
     return result.toString();
   }
 
   void setMode(Mode value) {
-    mode = value;
+    _mode = value;
   }
 
   void setECLevel(ErrorCorrectionLevel value) {
-    ecLevel = value;
+    _ecLevel = value;
   }
 
   void setVersion(Version version) {
-    this.version = version;
+    this._version = version;
   }
 
   void setMaskPattern(int value) {
-    maskPattern = value;
+    _maskPattern = value;
   }
 
   void setMatrix(ByteMatrix value) {
-    matrix = value;
+    _matrix = value;
   }
 
   // Check if "mask_pattern" is valid.

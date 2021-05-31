@@ -32,7 +32,7 @@ import 'encoder/qrcode.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class QRCodeWriter implements Writer {
-  static final int QUIET_ZONE_SIZE = 4;
+  static const int _QUIET_ZONE_SIZE = 4;
 
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
@@ -50,7 +50,7 @@ class QRCodeWriter implements Writer {
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
-    int quietZone = QUIET_ZONE_SIZE;
+    int quietZone = _QUIET_ZONE_SIZE;
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
         errorCorrectionLevel =
@@ -62,12 +62,12 @@ class QRCodeWriter implements Writer {
     }
 
     QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
-    return renderResult(code, width, height, quietZone);
+    return _renderResult(code, width, height, quietZone);
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  static BitMatrix renderResult(
+  static BitMatrix _renderResult(
       QRCode code, int width, int height, int quietZone) {
     ByteMatrix? input = code.getMatrix();
     if (input == null) {

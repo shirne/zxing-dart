@@ -26,17 +26,17 @@ import 'version.dart';
  * @author Sean Owen
  */
 class BitMatrixParser {
-  final BitMatrix bitMatrix;
-  Version? parsedVersion;
-  FormatInformation? parsedFormatInfo;
-  bool isMirror = false;
+  final BitMatrix _bitMatrix;
+  Version? _parsedVersion;
+  FormatInformation? _parsedFormatInfo;
+  bool _isMirror = false;
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
    * @throws FormatException if dimension is not >= 21 and 1 mod 4
    */
-  BitMatrixParser(this.bitMatrix) {
-    int dimension = bitMatrix.getHeight();
+  BitMatrixParser(this._bitMatrix) {
+    int dimension = _bitMatrix.getHeight();
     if (dimension < 21 || (dimension & 0x03) != 1) {
       throw FormatException();
     }
@@ -50,39 +50,39 @@ class BitMatrixParser {
    * the valid encoding of format information
    */
   FormatInformation readFormatInformation() {
-    if (parsedFormatInfo != null) {
-      return parsedFormatInfo!;
+    if (_parsedFormatInfo != null) {
+      return _parsedFormatInfo!;
     }
 
     // Read top-left format info bits
     int formatInfoBits1 = 0;
     for (int i = 0; i < 6; i++) {
-      formatInfoBits1 = copyBit(i, 8, formatInfoBits1);
+      formatInfoBits1 = _copyBit(i, 8, formatInfoBits1);
     }
     // .. and skip a bit in the timing pattern ...
-    formatInfoBits1 = copyBit(7, 8, formatInfoBits1);
-    formatInfoBits1 = copyBit(8, 8, formatInfoBits1);
-    formatInfoBits1 = copyBit(8, 7, formatInfoBits1);
+    formatInfoBits1 = _copyBit(7, 8, formatInfoBits1);
+    formatInfoBits1 = _copyBit(8, 8, formatInfoBits1);
+    formatInfoBits1 = _copyBit(8, 7, formatInfoBits1);
     // .. and skip a bit in the timing pattern ...
     for (int j = 5; j >= 0; j--) {
-      formatInfoBits1 = copyBit(8, j, formatInfoBits1);
+      formatInfoBits1 = _copyBit(8, j, formatInfoBits1);
     }
 
     // Read the top-right/bottom-left pattern too
-    int dimension = bitMatrix.getHeight();
+    int dimension = _bitMatrix.getHeight();
     int formatInfoBits2 = 0;
     int jMin = dimension - 7;
     for (int j = dimension - 1; j >= jMin; j--) {
-      formatInfoBits2 = copyBit(8, j, formatInfoBits2);
+      formatInfoBits2 = _copyBit(8, j, formatInfoBits2);
     }
     for (int i = dimension - 8; i < dimension; i++) {
-      formatInfoBits2 = copyBit(i, 8, formatInfoBits2);
+      formatInfoBits2 = _copyBit(i, 8, formatInfoBits2);
     }
 
-    parsedFormatInfo = FormatInformation.decodeFormatInformation(
+    _parsedFormatInfo = FormatInformation.decodeFormatInformation(
         formatInfoBits1, formatInfoBits2);
-    if (parsedFormatInfo != null) {
-      return parsedFormatInfo!;
+    if (_parsedFormatInfo != null) {
+      return _parsedFormatInfo!;
     }
     throw FormatException();
   }
@@ -95,11 +95,11 @@ class BitMatrixParser {
    * the valid encoding of version information
    */
   Version readVersion() {
-    if (parsedVersion != null) {
-      return parsedVersion!;
+    if (_parsedVersion != null) {
+      return _parsedVersion!;
     }
 
-    int dimension = bitMatrix.getHeight();
+    int dimension = _bitMatrix.getHeight();
 
     int provisionalVersion = (dimension - 17) ~/ 4;
     if (provisionalVersion <= 6) {
@@ -111,14 +111,14 @@ class BitMatrixParser {
     int ijMin = dimension - 11;
     for (int j = 5; j >= 0; j--) {
       for (int i = dimension - 9; i >= ijMin; i--) {
-        versionBits = copyBit(i, j, versionBits);
+        versionBits = _copyBit(i, j, versionBits);
       }
     }
 
     Version? theParsedVersion = Version.decodeVersionInformation(versionBits);
     if (theParsedVersion != null &&
         theParsedVersion.getDimensionForVersion() == dimension) {
-      parsedVersion = theParsedVersion;
+      _parsedVersion = theParsedVersion;
       return theParsedVersion;
     }
 
@@ -126,21 +126,21 @@ class BitMatrixParser {
     versionBits = 0;
     for (int i = 5; i >= 0; i--) {
       for (int j = dimension - 9; j >= ijMin; j--) {
-        versionBits = copyBit(i, j, versionBits);
+        versionBits = _copyBit(i, j, versionBits);
       }
     }
 
     theParsedVersion = Version.decodeVersionInformation(versionBits);
     if (theParsedVersion != null &&
         theParsedVersion.getDimensionForVersion() == dimension) {
-      parsedVersion = theParsedVersion;
+      _parsedVersion = theParsedVersion;
       return theParsedVersion;
     }
     throw FormatException();
   }
 
-  int copyBit(int i, int j, int versionBits) {
-    bool bit = isMirror ? bitMatrix.get(j, i) : bitMatrix.get(i, j);
+  int _copyBit(int i, int j, int versionBits) {
+    bool bit = _isMirror ? _bitMatrix.get(j, i) : _bitMatrix.get(i, j);
     return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
@@ -159,8 +159,8 @@ class BitMatrixParser {
     // Get the data mask for the format used in this QR Code. This will exclude
     // some bits from reading as we wind through the bit matrix.
     DataMask dataMask = DataMask.values[formatInfo.getDataMask()];
-    int dimension = bitMatrix.getHeight();
-    dataMask.unmaskBitMatrix(bitMatrix, dimension);
+    int dimension = _bitMatrix.getHeight();
+    dataMask.unmaskBitMatrix(_bitMatrix, dimension);
 
     BitMatrix functionPattern = version.buildFunctionPattern();
 
@@ -185,7 +185,7 @@ class BitMatrixParser {
             // Read a bit
             bitsRead++;
             currentByte <<= 1;
-            if (bitMatrix.get(j - col, i)) {
+            if (_bitMatrix.get(j - col, i)) {
               currentByte |= 1;
             }
             // If we've made a whole byte, save it off
@@ -209,12 +209,12 @@ class BitMatrixParser {
    * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
    */
   void remask() {
-    if (parsedFormatInfo == null) {
+    if (_parsedFormatInfo == null) {
       return; // We have no format information, and have no data mask
     }
-    DataMask dataMask = DataMask.values[parsedFormatInfo!.getDataMask()];
-    int dimension = bitMatrix.getHeight();
-    dataMask.unmaskBitMatrix(bitMatrix, dimension);
+    DataMask dataMask = DataMask.values[_parsedFormatInfo!.getDataMask()];
+    int dimension = _bitMatrix.getHeight();
+    dataMask.unmaskBitMatrix(_bitMatrix, dimension);
   }
 
   /**
@@ -226,18 +226,18 @@ class BitMatrixParser {
    * @param mirror Whether to read version and format information mirrored.
    */
   void setMirror(bool mirror) {
-    parsedVersion = null;
-    parsedFormatInfo = null;
-    this.isMirror = mirror;
+    _parsedVersion = null;
+    _parsedFormatInfo = null;
+    this._isMirror = mirror;
   }
 
   /** Mirror the bit matrix in order to attempt a second reading. */
   void mirror() {
-    for (int x = 0; x < bitMatrix.getWidth(); x++) {
-      for (int y = x + 1; y < bitMatrix.getHeight(); y++) {
-        if (bitMatrix.get(x, y) != bitMatrix.get(y, x)) {
-          bitMatrix.flipPoint(y, x);
-          bitMatrix.flipPoint(x, y);
+    for (int x = 0; x < _bitMatrix.getWidth(); x++) {
+      for (int y = x + 1; y < _bitMatrix.getHeight(); y++) {
+        if (_bitMatrix.get(x, y) != _bitMatrix.get(y, x)) {
+          _bitMatrix.flipPoint(y, x);
+          _bitMatrix.flipPoint(x, y);
         }
       }
     }

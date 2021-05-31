@@ -38,12 +38,12 @@ import 'detector/detector.dart';
  * @author Sean Owen
  */
 class QRCodeReader implements Reader {
-  static final List<ResultPoint> NO_POINTS = [];
+  static final List<ResultPoint> _NO_POINTS = [];
 
-  final Decoder decoder = Decoder();
+  final Decoder _decoder = Decoder();
 
   Decoder getDecoder() {
-    return decoder;
+    return _decoder;
   }
 
   @override
@@ -51,13 +51,13 @@ class QRCodeReader implements Reader {
     DecoderResult decoderResult;
     List<ResultPoint> points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decodeMatrix(bits, hints);
-      points = NO_POINTS;
+      BitMatrix bits = _extractPureBits(image.getBlackMatrix());
+      decoderResult = _decoder.decodeMatrix(bits, hints);
+      points = _NO_POINTS;
     } else {
       DetectorResult detectorResult =
           Detector(image.getBlackMatrix()).detect(hints!);
-      decoderResult = decoder.decodeMatrix(detectorResult.getBits(), hints);
+      decoderResult = _decoder.decodeMatrix(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
     }
 
@@ -99,14 +99,14 @@ class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  static BitMatrix extractPureBits(BitMatrix image) {
+  static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? leftTopBlack = image.getTopLeftOnBit();
     List<int>? rightBottomBlack = image.getBottomRightOnBit();
     if (leftTopBlack == null || rightBottomBlack == null) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    double calModuleSize = moduleSize(leftTopBlack, image);
+    double calModuleSize = _moduleSize(leftTopBlack, image);
 
     int top = leftTopBlack[1];
     int bottom = rightBottomBlack[1];
@@ -181,7 +181,7 @@ class QRCodeReader implements Reader {
     return bits;
   }
 
-  static double moduleSize(List<int> leftTopBlack, BitMatrix image) {
+  static double _moduleSize(List<int> leftTopBlack, BitMatrix image) {
     int height = image.getHeight();
     int width = image.getWidth();
     int x = leftTopBlack[0];

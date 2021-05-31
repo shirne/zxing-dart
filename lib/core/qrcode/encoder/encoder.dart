@@ -44,7 +44,7 @@ import 'qrcode.dart';
  */
 class Encoder {
   // The original table is defined in the table 5 of JISX0510:2004 (p.19).
-  static final List<int> ALPHANUMERIC_TABLE = [
+  static const List<int> _ALPHANUMERIC_TABLE = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0x00-0x0f
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0x10-0x1f
     36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43, // 0x20-0x2f
@@ -55,11 +55,11 @@ class Encoder {
 
   static final Encoding DEFAULT_BYTE_MODE_ENCODING = latin1;
 
-  Encoder();
+  Encoder._();
 
   // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
   // Basically it applies four rules and summate all penalties.
-  static int calculateMaskPenalty(ByteMatrix matrix) {
+  static int _calculateMaskPenalty(ByteMatrix matrix) {
     return MaskUtil.applyMaskPenaltyRule1(matrix) +
         MaskUtil.applyMaskPenaltyRule2(matrix) +
         MaskUtil.applyMaskPenaltyRule3(matrix) +
@@ -79,7 +79,7 @@ class Encoder {
 
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
     // multiple modes / segments even if that were more efficient. Twould be nice.
-    Mode mode = chooseMode(content, encoding);
+    Mode mode = _chooseMode(content, encoding);
 
     // This will store the header information, like mode and
     // length, as well as "header" segments like an ECI segment.
@@ -89,7 +89,7 @@ class Encoder {
     if (mode == Mode.BYTE && hasEncodingHint) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding!);
       if (eci != null) {
-        appendECI(eci, headerBits);
+        _appendECI(eci, headerBits);
       }
     }
 
@@ -114,12 +114,12 @@ class Encoder {
       int versionNumber =
           int.parse(hints[EncodeHintType.QR_VERSION].toString());
       version = Version.getVersionForNumber(versionNumber);
-      int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
-      if (!willFit(bitsNeeded, version, ecLevel!)) {
+      int bitsNeeded = _calculateBitsNeeded(mode, headerBits, dataBits, version);
+      if (!_willFit(bitsNeeded, version, ecLevel!)) {
         throw WriterException("Data too big for requested version");
       }
     } else {
-      version = recommendVersion(ecLevel!, mode, headerBits, dataBits);
+      version = _recommendVersion(ecLevel!, mode, headerBits, dataBits);
     }
 
     BitArray headerAndDataBits = BitArray();
@@ -162,7 +162,7 @@ class Encoder {
     }
 
     if (maskPattern == -1) {
-      maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+      maskPattern = _chooseMaskPattern(finalBits, ecLevel, version, matrix);
     }
     qrCode.setMaskPattern(maskPattern);
 
@@ -178,22 +178,22 @@ class Encoder {
    *
    * @throws WriterException if the data cannot fit in any version
    */
-  static Version recommendVersion(ErrorCorrectionLevel ecLevel, Mode mode,
+  static Version _recommendVersion(ErrorCorrectionLevel ecLevel, Mode mode,
       BitArray headerBits, BitArray dataBits) {
     // Hard part: need to know version to know how many bits length takes. But need to know how many
     // bits it takes to know version. First we take a guess at version by assuming version will be
     // the minimum, 1:
-    int provisionalBitsNeeded = calculateBitsNeeded(
+    int provisionalBitsNeeded = _calculateBitsNeeded(
         mode, headerBits, dataBits, Version.getVersionForNumber(1));
-    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+    Version provisionalVersion = _chooseVersion(provisionalBitsNeeded, ecLevel);
 
     // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
     int bitsNeeded =
-        calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
-    return chooseVersion(bitsNeeded, ecLevel);
+        _calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
+    return _chooseVersion(bitsNeeded, ecLevel);
   }
 
-  static int calculateBitsNeeded(
+  static int _calculateBitsNeeded(
       Mode mode, BitArray headerBits, BitArray dataBits, Version version) {
     return headerBits.getSize() +
         mode.getCharacterCountBits(version) +
@@ -205,8 +205,8 @@ class Encoder {
    *  -1 if there is no corresponding code in the table.
    */
   static int getAlphanumericCode(int code) {
-    if (code < ALPHANUMERIC_TABLE.length) {
-      return ALPHANUMERIC_TABLE[code];
+    if (code < _ALPHANUMERIC_TABLE.length) {
+      return _ALPHANUMERIC_TABLE[code];
     }
     return -1;
   }
@@ -215,9 +215,9 @@ class Encoder {
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
-  static Mode chooseMode(String content, [Encoding? encoding]) {
+  static Mode _chooseMode(String content, [Encoding? encoding]) {
     if (StringUtils.SHIFT_JIS_CHARSET == encoding &&
-        isOnlyDoubleByteKanji(content)) {
+        _isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
     }
@@ -242,7 +242,7 @@ class Encoder {
     return Mode.BYTE;
   }
 
-  static bool isOnlyDoubleByteKanji(String content) {
+  static bool _isOnlyDoubleByteKanji(String content) {
     List<int> bytes = StringUtils.SHIFT_JIS_CHARSET!.encode(content);
     int length = bytes.length;
     if (length % 2 != 0) {
@@ -257,7 +257,7 @@ class Encoder {
     return true;
   }
 
-  static int chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel,
+  static int _chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel,
       Version version, ByteMatrix matrix) {
     int minPenalty = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
@@ -266,7 +266,7 @@ class Encoder {
         maskPattern < QRCode.NUM_MASK_PATTERNS;
         maskPattern++) {
       MatrixUtil.buildMatrix(bits, ecLevel, version, maskPattern, matrix);
-      int penalty = calculateMaskPenalty(matrix);
+      int penalty = _calculateMaskPenalty(matrix);
       if (penalty < minPenalty) {
         minPenalty = penalty;
         bestMaskPattern = maskPattern;
@@ -275,10 +275,10 @@ class Encoder {
     return bestMaskPattern;
   }
 
-  static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) {
+  static Version _chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) {
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
-      if (willFit(numInputBits, version, ecLevel)) {
+      if (_willFit(numInputBits, version, ecLevel)) {
         return version;
       }
     }
@@ -289,7 +289,7 @@ class Encoder {
    * @return true if the number of input bits will fit in a code with the specified version and
    * error correction level.
    */
-  static bool willFit(
+  static bool _willFit(
       int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
     // In the following comments, we use numbers of Version 7-H.
     // numBytes = 196
@@ -599,7 +599,7 @@ class Encoder {
     }
   }
 
-  static void appendECI(CharacterSetECI eci, BitArray bits) {
+  static void _appendECI(CharacterSetECI eci, BitArray bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
     // This is correct for values up to 127, which is all we need now.
     bits.appendBits(eci.getValue(), 8);

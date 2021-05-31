@@ -26,34 +26,34 @@ import 'result_point.dart';
  * @author Sean Owen
  */
 class Result {
-  final String text;
-  final Uint8List? rawBytes;
-  final int numBits;
-  List<ResultPoint?>? resultPoints;
-  final BarcodeFormat format;
-  Map<ResultMetadataType, Object>? resultMetadata;
-  final int timestamp;
+  final String _text;
+  final Uint8List? _rawBytes;
+  final int _numBits;
+  List<ResultPoint?>? _resultPoints;
+  final BarcodeFormat _format;
+  Map<ResultMetadataType, Object>? _resultMetadata;
+  final int _timestamp;
 
-  Result(this.text, this.rawBytes, this.resultPoints, this.format,
+  Result(this._text, this._rawBytes, this._resultPoints, this._format,
       [int? timestamp])
-      : this.numBits = rawBytes == null ? 0 : 8 * rawBytes.length,
-        this.timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+      : this._numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length,
+        this._timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
-  Result.full(this.text, this.rawBytes, this.numBits, this.resultPoints,
-      this.format, this.timestamp);
+  Result.full(this._text, this._rawBytes, this._numBits, this._resultPoints,
+      this._format, this._timestamp);
 
   /**
    * @return raw text encoded by the barcode
    */
   String getText() {
-    return text;
+    return _text;
   }
 
   /**
    * @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
    */
   Uint8List? getRawBytes() {
-    return rawBytes;
+    return _rawBytes;
   }
 
   /**
@@ -61,7 +61,7 @@ class Result {
    * @since 3.3.0
    */
   int getNumBits() {
-    return numBits;
+    return _numBits;
   }
 
   /**
@@ -70,14 +70,14 @@ class Result {
    *         specific to the type of barcode that was decoded.
    */
   List<ResultPoint?>? getResultPoints() {
-    return resultPoints;
+    return _resultPoints;
   }
 
   /**
    * @return {@link BarcodeFormat} representing the format of the barcode that was decoded
    */
   BarcodeFormat getBarcodeFormat() {
-    return format;
+    return _format;
   }
 
   /**
@@ -86,38 +86,38 @@ class Result {
    *   like orientation.
    */
   Map<ResultMetadataType, Object>? getResultMetadata() {
-    return resultMetadata;
+    return _resultMetadata;
   }
 
   void putMetadata(ResultMetadataType type, Object value) {
-    if (resultMetadata == null) {
-      resultMetadata = ResultMetadataType.values
+    if (_resultMetadata == null) {
+      _resultMetadata = ResultMetadataType.values
           .asMap()
           .map<ResultMetadataType, Object>((idx, item) => MapEntry(item, item));
     }
-    resultMetadata![type] = value;
+    _resultMetadata![type] = value;
   }
 
   void putAllMetadata(Map<ResultMetadataType, Object>? metadata) {
     if (metadata != null) {
-      if (resultMetadata == null) {
-        resultMetadata = metadata;
+      if (_resultMetadata == null) {
+        _resultMetadata = metadata;
       } else {
-        resultMetadata!.addAll(metadata);
+        _resultMetadata!.addAll(metadata);
       }
     }
   }
 
   void addResultPoints(List<ResultPoint?>? newPoints) {
-    if(newPoints != null)resultPoints!.addAll(newPoints);
+    if(newPoints != null)_resultPoints!.addAll(newPoints);
   }
 
   int getTimestamp() {
-    return timestamp;
+    return _timestamp;
   }
 
   @override
   String toString() {
-    return text;
+    return _text;
   }
 }

@@ -17,16 +17,16 @@
 import 'dart:typed_data';
 
 class BlockPair {
-  final Uint8List dataBytes;
-  final Uint8List errorCorrectionBytes;
+  final Uint8List _dataBytes;
+  final Uint8List _errorCorrectionBytes;
 
-  BlockPair(this.dataBytes, this.errorCorrectionBytes);
+  BlockPair(this._dataBytes, this._errorCorrectionBytes);
 
   Uint8List getDataBytes() {
-    return dataBytes;
+    return _dataBytes;
   }
 
   Uint8List getErrorCorrectionBytes() {
-    return errorCorrectionBytes;
+    return _errorCorrectionBytes;
   }
 }

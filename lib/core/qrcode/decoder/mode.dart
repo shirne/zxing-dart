@@ -55,10 +55,10 @@ class Mode {
     HANZI
   ];
 
-  final List<int> characterCountBitsForVersions;
-  final int bits;
+  final List<int> _characterCountBitsForVersions;
+  final int _bits;
 
-  const Mode(this.characterCountBitsForVersions, this.bits);
+  const Mode(this._characterCountBitsForVersions, this._bits);
 
   /**
    * @param bits four bits encoding a QR Code data mode
@@ -108,10 +108,10 @@ class Mode {
     } else {
       offset = 2;
     }
-    return characterCountBitsForVersions[offset];
+    return _characterCountBitsForVersions[offset];
   }
 
   int getBits() {
-    return bits;
+    return _bits;
   }
 }

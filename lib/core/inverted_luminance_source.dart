@@ -25,14 +25,14 @@ import 'luminance_source.dart';
  * @author Sean Owen
  */
 class InvertedLuminanceSource extends LuminanceSource {
-  final LuminanceSource delegate;
+  final LuminanceSource _delegate;
 
-  InvertedLuminanceSource(this.delegate)
-      : super(delegate.getWidth(), delegate.getHeight());
+  InvertedLuminanceSource(this._delegate)
+      : super(_delegate.getWidth(), _delegate.getHeight());
 
   @override
   Uint8List getRow(int y, Uint8List? row) {
-    row = delegate.getRow(y, row);
+    row = _delegate.getRow(y, row);
     int width = getWidth();
     for (int i = 0; i < width; i++) {
       row[i] = (255 - (row[i] & 0xFF));
@@ -42,7 +42,7 @@ class InvertedLuminanceSource extends LuminanceSource {
 
   @override
   Uint8List getMatrix() {
-    Uint8List matrix = delegate.getMatrix();
+    Uint8List matrix = _delegate.getMatrix();
     int length = getWidth() * getHeight();
     Uint8List invertedMatrix = Uint8List(length);
     for (int i = 0; i < length; i++) {
@@ -53,17 +53,17 @@ class InvertedLuminanceSource extends LuminanceSource {
 
   @override
   bool isCropSupported() {
-    return delegate.isCropSupported();
+    return _delegate.isCropSupported();
   }
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return InvertedLuminanceSource(delegate.crop(left, top, width, height));
+    return InvertedLuminanceSource(_delegate.crop(left, top, width, height));
   }
 
   @override
   bool isRotateSupported() {
-    return delegate.isRotateSupported();
+    return _delegate.isRotateSupported();
   }
 
   /**
@@ -71,16 +71,16 @@ class InvertedLuminanceSource extends LuminanceSource {
    */
   @override
   LuminanceSource invert() {
-    return delegate;
+    return _delegate;
   }
 
   @override
   LuminanceSource rotateCounterClockwise() {
-    return InvertedLuminanceSource(delegate.rotateCounterClockwise());
+    return InvertedLuminanceSource(_delegate.rotateCounterClockwise());
   }
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-    return InvertedLuminanceSource(delegate.rotateCounterClockwise45());
+    return InvertedLuminanceSource(_delegate.rotateCounterClockwise45());
   }
 }

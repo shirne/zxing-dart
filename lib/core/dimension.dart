@@ -18,37 +18,37 @@
  * Simply encapsulates a width and height.
  */
 class Dimension {
-  final int width;
-  final int height;
+  final int _width;
+  final int _height;
 
-  Dimension(this.width, this.height)
-      : assert(width > 0, 'Argument width must greater then zero'),
-        assert(height > 0, 'Argument height must greater then zero');
+  Dimension(this._width, this._height)
+      : assert(_width > 0, 'Argument width must greater then zero'),
+        assert(_height > 0, 'Argument height must greater then zero');
 
   int getWidth() {
-    return width;
+    return _width;
   }
 
   int getHeight() {
-    return height;
+    return _height;
   }
 
   @override
   operator ==(Object other) {
     if (other is Dimension) {
       Dimension d = other;
-      return width == d.width && height == d.height;
+      return _width == d._width && _height == d._height;
     }
     return false;
   }
 
   @override
   int get hashCode {
-    return width * 32713 + height;
+    return _width * 32713 + _height;
   }
 
   @override
   String toString() {
-    return "$width x $height";
+    return "$_width x $_height";
   }
 }

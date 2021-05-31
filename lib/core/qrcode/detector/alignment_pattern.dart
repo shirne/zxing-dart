@@ -23,9 +23,9 @@ import '../../result_point.dart';
  * @author Sean Owen
  */
 class AlignmentPattern extends ResultPoint {
-  final double estimatedModuleSize;
+  final double _estimatedModuleSize;
 
-  AlignmentPattern(double posX, double posY, this.estimatedModuleSize)
+  AlignmentPattern(double posX, double posY, this._estimatedModuleSize)
       : super(posX, posY);
 
   /**
@@ -34,8 +34,8 @@ class AlignmentPattern extends ResultPoint {
    */
   bool aboutEquals(double moduleSize, double i, double j) {
     if ((i - getY()).abs() <= moduleSize && (j - getX()).abs() <= moduleSize) {
-      double moduleSizeDiff = (moduleSize - estimatedModuleSize).abs();
-      return moduleSizeDiff <= 1.0 || moduleSizeDiff <= estimatedModuleSize;
+      double moduleSizeDiff = (moduleSize - _estimatedModuleSize).abs();
+      return moduleSizeDiff <= 1.0 || moduleSizeDiff <= _estimatedModuleSize;
     }
     return false;
   }
@@ -47,7 +47,7 @@ class AlignmentPattern extends ResultPoint {
   AlignmentPattern combineEstimate(double i, double j, double newModuleSize) {
     double combinedX = (getX() + j) / 2.0;
     double combinedY = (getY() + i) / 2.0;
-    double combinedModuleSize = (estimatedModuleSize + newModuleSize) / 2.0;
+    double combinedModuleSize = (_estimatedModuleSize + newModuleSize) / 2.0;
     return AlignmentPattern(combinedX, combinedY, combinedModuleSize);
   }
 }

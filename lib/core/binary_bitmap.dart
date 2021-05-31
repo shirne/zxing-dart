@@ -26,23 +26,23 @@ import 'luminance_source.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class BinaryBitmap {
-  final Binarizer binarizer;
-  BitMatrix? matrix;
+  final Binarizer _binarizer;
+  BitMatrix? _matrix;
 
-  BinaryBitmap(this.binarizer);
+  BinaryBitmap(this._binarizer);
 
   /**
    * @return The width of the bitmap.
    */
   int getWidth() {
-    return binarizer.getWidth();
+    return _binarizer.getWidth();
   }
 
   /**
    * @return The height of the bitmap.
    */
   int getHeight() {
-    return binarizer.getHeight();
+    return _binarizer.getHeight();
   }
 
   /**
@@ -57,7 +57,7 @@ class BinaryBitmap {
    * @throws NotFoundException if row can't be binarized
    */
   BitArray getBlackRow(int y, BitArray row) {
-    return binarizer.getBlackRow(y, row);
+    return _binarizer.getBlackRow(y, row);
   }
 
   /**
@@ -75,17 +75,17 @@ class BinaryBitmap {
     // 1. This work will never be done if the caller only installs 1D Reader objects, or if a
     //    1D Reader finds a barcode before the 2D Readers run.
     // 2. This work will only be done once even if the caller installs multiple 2D Readers.
-    if (matrix == null) {
-      matrix = binarizer.getBlackMatrix();
+    if (_matrix == null) {
+      _matrix = _binarizer.getBlackMatrix();
     }
-    return matrix!;
+    return _matrix!;
   }
 
   /**
    * @return Whether this bitmap can be cropped.
    */
   bool isCropSupported() {
-    return binarizer.getLuminanceSource().isCropSupported();
+    return _binarizer.getLuminanceSource().isCropSupported();
   }
 
   /**
@@ -100,15 +100,15 @@ class BinaryBitmap {
    */
   BinaryBitmap crop(int left, int top, int width, int height) {
     LuminanceSource newSource =
-        binarizer.getLuminanceSource().crop(left, top, width, height);
-    return BinaryBitmap(binarizer.createBinarizer(newSource));
+        _binarizer.getLuminanceSource().crop(left, top, width, height);
+    return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
   /**
    * @return Whether this bitmap supports counter-clockwise rotation.
    */
   bool isRotateSupported() {
-    return binarizer.getLuminanceSource().isRotateSupported();
+    return _binarizer.getLuminanceSource().isRotateSupported();
   }
 
   /**
@@ -119,8 +119,8 @@ class BinaryBitmap {
    */
   BinaryBitmap rotateCounterClockwise() {
     LuminanceSource newSource =
-        binarizer.getLuminanceSource().rotateCounterClockwise();
-    return BinaryBitmap(binarizer.createBinarizer(newSource));
+        _binarizer.getLuminanceSource().rotateCounterClockwise();
+    return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
   /**
@@ -131,8 +131,8 @@ class BinaryBitmap {
    */
   BinaryBitmap rotateCounterClockwise45() {
     LuminanceSource newSource =
-        binarizer.getLuminanceSource().rotateCounterClockwise45();
-    return BinaryBitmap(binarizer.createBinarizer(newSource));
+        _binarizer.getLuminanceSource().rotateCounterClockwise45();
+    return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
   @override

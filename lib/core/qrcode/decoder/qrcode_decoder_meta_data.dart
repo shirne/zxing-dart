@@ -23,15 +23,15 @@ import '../../result_point.dart';
  * @see com.google.zxing.common.DecoderResult#getOther()
  */
 class QRCodeDecoderMetaData {
-  final bool mirrored;
+  final bool _mirrored;
 
-  QRCodeDecoderMetaData(this.mirrored);
+  QRCodeDecoderMetaData(this._mirrored);
 
   /**
    * @return true if the QR Code was mirrored.
    */
   bool isMirrored() {
-    return mirrored;
+    return _mirrored;
   }
 
   /**
@@ -40,7 +40,7 @@ class QRCodeDecoderMetaData {
    * @param points Array of points to apply mirror correction to.
    */
   void applyMirroredCorrection(List<ResultPoint>? points) {
-    if (!mirrored || points == null || points.length < 3) {
+    if (!_mirrored || points == null || points.length < 3) {
       return;
     }
     ResultPoint bottomLeft = points[0];

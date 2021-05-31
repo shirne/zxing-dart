@@ -29,23 +29,23 @@ import 'luminance_source.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class PlanarYUVLuminanceSource extends LuminanceSource {
-  static final int THUMBNAIL_SCALE_FACTOR = 2;
+  static const int _THUMBNAIL_SCALE_FACTOR = 2;
 
-  final Uint8List yuvData;
-  final int dataWidth;
-  final int dataHeight;
-  final int left;
-  final int top;
+  final Uint8List _yuvData;
+  final int _dataWidth;
+  final int _dataHeight;
+  final int _left;
+  final int _top;
 
-  PlanarYUVLuminanceSource(this.yuvData, this.dataWidth, this.dataHeight,
-      this.left, this.top, int width, int height, bool isReverseHorizontal)
+  PlanarYUVLuminanceSource(this._yuvData, this._dataWidth, this._dataHeight,
+      this._left, this._top, int width, int height, bool isReverseHorizontal)
       : super(width, height) {
-    if (left + width > dataWidth || top + height > dataHeight) {
+    if (_left + width > _dataWidth || _top + height > _dataHeight) {
       throw Exception("Crop rectangle does not fit within image data.");
     }
 
     if (isReverseHorizontal) {
-      reverseHorizontal(width, height);
+      _reverseHorizontal(width, height);
     }
   }
 
@@ -58,8 +58,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     if (row == null || row.length < width) {
       row = Uint8List(width);
     }
-    int offset = (y + top) * dataWidth + left;
-    List.copyRange(row, 0, yuvData, offset, offset + width);
+    int offset = (y + _top) * _dataWidth + _left;
+    List.copyRange(row, 0, _yuvData, offset, offset + width);
     return row;
   }
 
@@ -70,25 +70,25 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
     // If the caller asks for the entire underlying image, save the copy and give them the
     // original data. The docs specifically warn that result.length must be ignored.
-    if (width == dataWidth && height == dataHeight) {
-      return yuvData;
+    if (width == _dataWidth && height == _dataHeight) {
+      return _yuvData;
     }
 
     int area = width * height;
     Uint8List matrix = Uint8List(area);
-    int inputOffset = top * dataWidth + left;
+    int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
-    if (width == dataWidth) {
-      List.copyRange(matrix, 0, yuvData, inputOffset, inputOffset + area);
+    if (width == _dataWidth) {
+      List.copyRange(matrix, 0, _yuvData, inputOffset, inputOffset + area);
       return matrix;
     }
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      List.copyRange(matrix, outputOffset, yuvData, inputOffset, inputOffset + width);
-      inputOffset += dataWidth;
+      List.copyRange(matrix, outputOffset, _yuvData, inputOffset, inputOffset + width);
+      inputOffset += _dataWidth;
     }
     return matrix;
   }
@@ -100,24 +100,24 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return PlanarYUVLuminanceSource(yuvData, dataWidth, dataHeight,
-        this.left + left, this.top + top, width, height, false);
+    return PlanarYUVLuminanceSource(_yuvData, _dataWidth, _dataHeight,
+        this._left + left, this._top + top, width, height, false);
   }
 
   List<int> renderThumbnail() {
-    int width = getWidth() ~/ THUMBNAIL_SCALE_FACTOR;
-    int height = getHeight() ~/ THUMBNAIL_SCALE_FACTOR;
+    int width = getWidth() ~/ _THUMBNAIL_SCALE_FACTOR;
+    int height = getHeight() ~/ _THUMBNAIL_SCALE_FACTOR;
     List<int> pixels = List.generate(width * height, (index) => 0);
-    Uint8List yuv = yuvData;
-    int inputOffset = top * dataWidth + left;
+    Uint8List yuv = _yuvData;
+    int inputOffset = _top * _dataWidth + _left;
 
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
       for (int x = 0; x < width; x++) {
-        int grey = yuv[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
+        int grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR] & 0xff;
         pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
       }
-      inputOffset += dataWidth * THUMBNAIL_SCALE_FACTOR;
+      inputOffset += _dataWidth * _THUMBNAIL_SCALE_FACTOR;
     }
     return pixels;
   }
@@ -126,21 +126,21 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
    * @return width of image from {@link #renderThumbnail()}
    */
   int getThumbnailWidth() {
-    return getWidth() ~/ THUMBNAIL_SCALE_FACTOR;
+    return getWidth() ~/ _THUMBNAIL_SCALE_FACTOR;
   }
 
   /**
    * @return height of image from {@link #renderThumbnail()}
    */
   int getThumbnailHeight() {
-    return getHeight() ~/ THUMBNAIL_SCALE_FACTOR;
+    return getHeight() ~/ _THUMBNAIL_SCALE_FACTOR;
   }
 
-  void reverseHorizontal(int width, int height) {
-    Uint8List yuvData = this.yuvData;
-    for (int y = 0, rowStart = top * dataWidth + left;
+  void _reverseHorizontal(int width, int height) {
+    Uint8List yuvData = this._yuvData;
+    for (int y = 0, rowStart = _top * _dataWidth + _left;
         y < height;
-        y++, rowStart += dataWidth) {
+        y++, rowStart += _dataWidth) {
       int middle = rowStart + width ~/ 2;
       for (int x1 = rowStart, x2 = rowStart + width - 1;
           x1 < middle;

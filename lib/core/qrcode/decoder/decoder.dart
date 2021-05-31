@@ -39,9 +39,9 @@ import 'version.dart';
  * @author Sean Owen
  */
 class Decoder {
-  final ReedSolomonDecoder rsDecoder;
+  final ReedSolomonDecoder _rsDecoder;
 
-  Decoder() : rsDecoder = ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
 
   /**
    * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
@@ -74,7 +74,7 @@ class Decoder {
     FormatException? fe;
     ChecksumException? ce;
     try {
-      return decodeParser(parser, hints);
+      return _decodeParser(parser, hints);
     } on FormatException catch (e) {
       fe = e;
     } on ChecksumException catch (e) {
@@ -103,7 +103,7 @@ class Decoder {
       // Prepare for a mirrored reading.
       parser.mirror();
 
-      DecoderResult result = decodeParser(parser, hints);
+      DecoderResult result = _decodeParser(parser, hints);
 
       // Success! Notify the caller that the code was mirrored.
       result.setOther(QRCodeDecoderMetaData(true));
@@ -124,7 +124,7 @@ class Decoder {
     }
   }
 
-  DecoderResult decodeParser(BitMatrixParser parser,
+  DecoderResult _decodeParser(BitMatrixParser parser,
       [Map<DecodeHintType, Object>? hints]) {
     Version version = parser.readVersion();
     ErrorCorrectionLevel ecLevel =
@@ -148,7 +148,7 @@ class Decoder {
     for (DataBlock dataBlock in dataBlocks) {
       Uint8List codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
-      correctErrors(codewordBytes, numDataCodewords);
+      _correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
         resultBytes[resultOffset++] = codewordBytes[i];
       }
@@ -166,7 +166,7 @@ class Decoder {
    * @param numDataCodewords number of codewords that are data bytes
    * @throws ChecksumException if error correction fails
    */
-  void correctErrors(Uint8List codewordBytes, int numDataCodewords) {
+  void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     List<int> codewordsInts = [];
@@ -174,7 +174,7 @@ class Decoder {
       codewordsInts.add(codewordBytes[i] & 0xFF);
     }
     try {
-      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
+      _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }

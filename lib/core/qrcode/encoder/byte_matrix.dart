@@ -23,38 +23,38 @@ import 'dart:typed_data';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class ByteMatrix {
-  final List<Int8List> bytes;
-  final int width;
-  final int height;
+  final List<Int8List> _bytes;
+  final int _width;
+  final int _height;
 
-  ByteMatrix(this.width, this.height)
-      : bytes = List.generate(height, (index) => Int8List(width));
+  ByteMatrix(this._width, this._height)
+      : _bytes = List.generate(_height, (index) => Int8List(_width));
 
   int getHeight() {
-    return height;
+    return _height;
   }
 
   int getWidth() {
-    return width;
+    return _width;
   }
 
   int get(int x, int y) {
-    return bytes[y][x];
+    return _bytes[y][x];
   }
 
   /**
    * @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
    */
   List<Int8List> getArray() {
-    return bytes;
+    return _bytes;
   }
 
   void set(int x, int y, int value) {
-    bytes[y][x] = value;
+    _bytes[y][x] = value;
   }
 
   void clear(int value) {
-    for (Int8List aByte in bytes) {
+    for (Int8List aByte in _bytes) {
       aByte.fillRange(0, aByte.length, value);
     }
   }
@@ -62,9 +62,9 @@ class ByteMatrix {
   @override
   String toString() {
     StringBuffer result = StringBuffer();
-    for (int y = 0; y < height; ++y) {
-      Int8List bytesY = bytes[y];
-      for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < _height; ++y) {
+      Int8List bytesY = _bytes[y];
+      for (int x = 0; x < _width; ++x) {
         switch (bytesY[x]) {
           case 0:
             result.write(" 0");

@@ -23,24 +23,24 @@ import 'finder_pattern.dart';
  * @author Sean Owen
  */
 class FinderPatternInfo {
-  final FinderPattern bottomLeft;
-  final FinderPattern topLeft;
-  final FinderPattern topRight;
+  final FinderPattern _bottomLeft;
+  final FinderPattern _topLeft;
+  final FinderPattern _topRight;
 
   FinderPatternInfo(List<FinderPattern> patternCenters)
-      : this.bottomLeft = patternCenters[0],
-        this.topLeft = patternCenters[1],
-        this.topRight = patternCenters[2];
+      : this._bottomLeft = patternCenters[0],
+        this._topLeft = patternCenters[1],
+        this._topRight = patternCenters[2];
 
   FinderPattern getBottomLeft() {
-    return bottomLeft;
+    return _bottomLeft;
   }
 
   FinderPattern getTopLeft() {
-    return topLeft;
+    return _topLeft;
   }
 
   FinderPattern getTopRight() {
-    return topRight;
+    return _topRight;
   }
 }

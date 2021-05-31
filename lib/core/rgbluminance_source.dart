@@ -26,11 +26,11 @@ import 'luminance_source.dart';
  * @author Betaminos
  */
 class RGBLuminanceSource extends LuminanceSource {
-  final Uint8List luminances;
-  final int dataWidth;
-  final int dataHeight;
-  final int left;
-  final int top;
+  final Uint8List _luminances;
+  final int _dataWidth;
+  final int _dataHeight;
+  final int _left;
+  final int _top;
 
   static Uint8List intList2Int8List(List<int> pixels) {
     int size = pixels.length;
@@ -46,16 +46,22 @@ class RGBLuminanceSource extends LuminanceSource {
     return luminances;
   }
 
-  RGBLuminanceSource(dynamic pixels, this.dataWidth, this.dataHeight,
-      [this.left = 0, this.top = 0, int? width, int? height])
-      : luminances = (pixels is Uint8List)
-            ? pixels
-            : intList2Int8List(pixels as List<int>),
-        assert(left + (width ?? dataWidth) <= dataWidth,
+  RGBLuminanceSource(int width, int height, List<int> pixels):
+        this._dataWidth = width,
+  this._dataHeight = height,
+  _left = 0,
+  _top = 0,
+        _luminances = intList2Int8List(pixels),
+        super(width, height);
+
+  RGBLuminanceSource._(this._luminances, this._dataWidth, this._dataHeight,
+      [this._left = 0, this._top = 0, int? width, int? height])
+      :
+        assert(_left + (width ?? _dataWidth) <= _dataWidth,
             r'Crop rectangle does not fit within image data.'),
-        assert(top + (height ?? dataHeight) <= dataHeight,
+        assert(_top + (height ?? _dataHeight) <= _dataHeight,
             r'Crop rectangle does not fit within image data.'),
-        super(width ?? dataWidth, height ?? dataHeight);
+        super(width ?? _dataWidth, height ?? _dataHeight);
 
   @override
   Uint8List getRow(int y, Uint8List? row) {
@@ -65,8 +71,8 @@ class RGBLuminanceSource extends LuminanceSource {
     if (row == null || row.length < width) {
       row = Uint8List(width);
     }
-    int offset = (y + top) * dataWidth + left;
-    List.copyRange(row, 0, luminances, offset, offset + width);
+    int offset = (y + _top) * _dataWidth + _left;
+    List.copyRange(row, 0, _luminances, offset, offset + width);
     return row;
   }
 
@@ -77,25 +83,25 @@ class RGBLuminanceSource extends LuminanceSource {
 
     // If the caller asks for the entire underlying image, save the copy and give them the
     // original data. The docs specifically warn that result.length must be ignored.
-    if (width == dataWidth && height == dataHeight) {
-      return luminances;
+    if (width == _dataWidth && height == _dataHeight) {
+      return _luminances;
     }
 
     int area = width * height;
     Uint8List matrix = Uint8List(area);
-    int inputOffset = top * dataWidth + left;
+    int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
-    if (width == dataWidth) {
-      List.copyRange(matrix, 0, luminances, inputOffset, inputOffset + area);
+    if (width == _dataWidth) {
+      List.copyRange(matrix, 0, _luminances, inputOffset, inputOffset + area);
       return matrix;
     }
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      List.copyRange(matrix, outputOffset, luminances, inputOffset, inputOffset + width);
-      inputOffset += dataWidth;
+      List.copyRange(matrix, outputOffset, _luminances, inputOffset, inputOffset + width);
+      inputOffset += _dataWidth;
     }
     return matrix;
   }
@@ -107,7 +113,7 @@ class RGBLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return RGBLuminanceSource(luminances, dataWidth, dataHeight,
-        this.left + left, this.top + top, width, height);
+    return RGBLuminanceSource._(_luminances, _dataWidth, _dataHeight,
+        this._left + left, this._top + top, width, height);
   }
 }

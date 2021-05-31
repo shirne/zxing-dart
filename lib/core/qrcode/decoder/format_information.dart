@@ -27,12 +27,12 @@ import 'error_correction_level.dart';
  * @see ErrorCorrectionLevel
  */
 class FormatInformation {
-  static final int FORMAT_INFO_MASK_QR = 0x5412;
+  static const int _FORMAT_INFO_MASK_QR = 0x5412;
 
   /**
    * See ISO 18004:2006, Annex C, Table C.1
    */
-  static final List<List<int>> FORMAT_INFO_DECODE_LOOKUP = [
+  static const List<List<int>> _FORMAT_INFO_DECODE_LOOKUP = [
     [0x5412, 0x00],
     [0x5125, 0x01],
     [0x5E7C, 0x02],
@@ -67,15 +67,15 @@ class FormatInformation {
     [0x2BED, 0x1F],
   ];
 
-  late ErrorCorrectionLevel errorCorrectionLevel;
-  late int dataMask;
+  late ErrorCorrectionLevel _errorCorrectionLevel;
+  late int _dataMask;
 
-  FormatInformation(int formatInfo) {
+  FormatInformation._(int formatInfo) {
     // Bits 3,4
-    errorCorrectionLevel =
+    _errorCorrectionLevel =
         ErrorCorrectionLevel.values[(formatInfo >> 3) & 0x03];
     // Bottom 3 bits
-    dataMask = (formatInfo & 0x07);
+    _dataMask = (formatInfo & 0x07);
   }
 
   static int numBitsDiffering(int a, int b) {
@@ -92,27 +92,27 @@ class FormatInformation {
   static FormatInformation? decodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {
     FormatInformation? formatInfo =
-        doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
+        _doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
     if (formatInfo != null) {
       return formatInfo;
     }
     // Should return null, but, some QR codes apparently
     // do not mask this info. Try again by actually masking the pattern
     // first
-    return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
-        maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
+    return _doDecodeFormatInformation(maskedFormatInfo1 ^ _FORMAT_INFO_MASK_QR,
+        maskedFormatInfo2 ^ _FORMAT_INFO_MASK_QR);
   }
 
-  static FormatInformation? doDecodeFormatInformation(
+  static FormatInformation? _doDecodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;
     int bestFormatInfo = 0;
-    for (List<int> decodeInfo in FORMAT_INFO_DECODE_LOOKUP) {
+    for (List<int> decodeInfo in _FORMAT_INFO_DECODE_LOOKUP) {
       int targetInfo = decodeInfo[0];
       if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match
-        return FormatInformation(decodeInfo[1]);
+        return FormatInformation._(decodeInfo[1]);
       }
       int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
       if (bitsDifference < bestDifference) {
@@ -131,22 +131,22 @@ class FormatInformation {
     // Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits
     // differing means we found a match
     if (bestDifference <= 3) {
-      return FormatInformation(bestFormatInfo);
+      return FormatInformation._(bestFormatInfo);
     }
     return null;
   }
 
   ErrorCorrectionLevel getErrorCorrectionLevel() {
-    return errorCorrectionLevel;
+    return _errorCorrectionLevel;
   }
 
   int getDataMask() {
-    return dataMask;
+    return _dataMask;
   }
 
   @override
   int get hashCode {
-    return (errorCorrectionLevel.index << 3) | dataMask;
+    return (_errorCorrectionLevel.index << 3) | _dataMask;
   }
 
   @override
@@ -155,7 +155,7 @@ class FormatInformation {
       return false;
     }
     FormatInformation other = o;
-    return this.errorCorrectionLevel == other.errorCorrectionLevel &&
-        this.dataMask == other.dataMask;
+    return this._errorCorrectionLevel == other._errorCorrectionLevel &&
+        this._dataMask == other._dataMask;
   }
 }

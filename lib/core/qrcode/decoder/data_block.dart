@@ -27,10 +27,10 @@ import 'version.dart';
  * @author Sean Owen
  */
 class DataBlock {
-  final int numDataCodewords;
-  final Uint8List codewords;
+  final int _numDataCodewords;
+  final Uint8List _codewords;
 
-  DataBlock(this.numDataCodewords, this.codewords);
+  DataBlock._(this._numDataCodewords, this._codewords);
 
   /**
    * <p>When QR Codes use multiple data blocks, they are actually interleaved.
@@ -68,16 +68,16 @@ class DataBlock {
         int numDataCodewords = ecBlock.getDataCodewords();
         int numBlockCodewords =
             ecBlocks.getECCodewordsPerBlock() + numDataCodewords;
-        result.add(DataBlock(numDataCodewords, Uint8List(numBlockCodewords)));
+        result.add(DataBlock._(numDataCodewords, Uint8List(numBlockCodewords)));
       }
     }
 
     // All blocks have the same amount of data, except that the last n
     // (where n may be 0) have 1 more byte. Figure out where these start.
-    int shorterBlocksTotalCodewords = result[0].codewords.length;
+    int shorterBlocksTotalCodewords = result[0]._codewords.length;
     int longerBlocksStartAt = result.length - 1;
     while (longerBlocksStartAt >= 0) {
-      int numCodewords = result[longerBlocksStartAt].codewords.length;
+      int numCodewords = result[longerBlocksStartAt]._codewords.length;
       if (numCodewords == shorterBlocksTotalCodewords) {
         break;
       }
@@ -92,30 +92,30 @@ class DataBlock {
     int rawCodewordsOffset = 0;
     for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
-        result[j].codewords[i] = rawCodewords[rawCodewordsOffset++];
+        result[j]._codewords[i] = rawCodewords[rawCodewordsOffset++];
       }
     }
     // Fill out the last data block in the longer ones
     for (int j = longerBlocksStartAt; j < numResultBlocks; j++) {
-      result[j].codewords[shorterBlocksNumDataCodewords] =
+      result[j]._codewords[shorterBlocksNumDataCodewords] =
           rawCodewords[rawCodewordsOffset++];
     }
     // Now add in error correction blocks
-    int max = result[0].codewords.length;
+    int max = result[0]._codewords.length;
     for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
         int iOffset = j < longerBlocksStartAt ? i : i + 1;
-        result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
+        result[j]._codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
       }
     }
     return result;
   }
 
   int getNumDataCodewords() {
-    return numDataCodewords;
+    return _numDataCodewords;
   }
 
   Uint8List getCodewords() {
-    return codewords;
+    return _codewords;
   }
 }

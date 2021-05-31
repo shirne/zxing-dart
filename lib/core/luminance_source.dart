@@ -28,10 +28,10 @@ import 'inverted_luminance_source.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 abstract class LuminanceSource {
-  final int width;
-  final int height;
+  final int _width;
+  final int _height;
 
-  LuminanceSource(this.width, this.height);
+  LuminanceSource(this._width, this._height);
 
   /**
    * Fetches one row of luminance data from the underlying platform's bitmap. Values range from
@@ -61,14 +61,14 @@ abstract class LuminanceSource {
    * @return The width of the bitmap.
    */
   int getWidth() {
-    return width;
+    return _width;
   }
 
   /**
    * @return The height of the bitmap.
    */
   int getHeight() {
-    return height;
+    return _height;
   }
 
   /**
@@ -131,11 +131,11 @@ abstract class LuminanceSource {
 
   @override
   String toString() {
-    Uint8List row = Uint8List(width);
+    Uint8List row = Uint8List(_width);
     StringBuffer result = StringBuffer();
-    for (int y = 0; y < height; y++) {
+    for (int y = 0; y < _height; y++) {
       row = getRow(y, row);
-      for (int x = 0; x < width; x++) {
+      for (int x = 0; x < _width; x++) {
         int luminance = row[x] & 0xFF;
         String c;
         if (luminance < 0x40) {

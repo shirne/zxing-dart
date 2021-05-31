@@ -35,15 +35,15 @@ import 'alignment_pattern.dart';
  * @author Sean Owen
  */
 class AlignmentPatternFinder {
-  final BitMatrix image;
-  final List<AlignmentPattern> possibleCenters;
-  final int startX;
-  final int startY;
-  final int width;
-  final int height;
-  final double moduleSize;
-  late List<int> crossCheckStateCount;
-  final ResultPointCallback? resultPointCallback;
+  final BitMatrix _image;
+  final List<AlignmentPattern> _possibleCenters;
+  final int _startX;
+  final int _startY;
+  final int _width;
+  final int _height;
+  final double _moduleSize;
+  late List<int> _crossCheckStateCount;
+  final ResultPointCallback? _resultPointCallback;
 
   /**
    * <p>Creates a finder that will look in a portion of the whole image.</p>
@@ -55,9 +55,9 @@ class AlignmentPatternFinder {
    * @param height height of region to search
    * @param moduleSize estimated module size so far
    */
-  AlignmentPatternFinder(this.image, this.startX, this.startY, this.width,
-      this.height, this.moduleSize, this.resultPointCallback)
-      : possibleCenters = []; // 5
+  AlignmentPatternFinder(this._image, this._startX, this._startY, this._width,
+      this._height, this._moduleSize, this._resultPointCallback)
+      : _possibleCenters = []; // 5
 
   /**
    * <p>This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
@@ -67,10 +67,10 @@ class AlignmentPatternFinder {
    * @throws NotFoundException if not found
    */
   AlignmentPattern find() {
-    int startX = this.startX;
-    int height = this.height;
-    int maxJ = startX + width;
-    int middleI = startY + (height ~/ 2);
+    int startX = this._startX;
+    int height = this._height;
+    int maxJ = startX + _width;
+    int middleI = _startY + (height ~/ 2);
     // We are looking for black/white/black modules in 1:1:1 ratio;
     // this tracks the number of black/white/black modules seen so far
     List<int> stateCount = [0, 0, 0];
@@ -85,12 +85,12 @@ class AlignmentPatternFinder {
       // Burn off leading white pixels before anything else; if we start in the middle of
       // a white run, it doesn't make sense to count its length, since we don't know if the
       // white run continued to the left of the start point
-      while (j < maxJ && !image.get(j, i)) {
+      while (j < maxJ && !_image.get(j, i)) {
         j++;
       }
       int currentState = 0;
       while (j < maxJ) {
-        if (image.get(j, i)) {
+        if (_image.get(j, i)) {
           // Black pixel
           if (currentState == 1) {
             // Counting black pixels
@@ -99,10 +99,10 @@ class AlignmentPatternFinder {
             // Counting white pixels
             if (currentState == 2) {
               // A winner?
-              if (foundPatternCross(stateCount)) {
+              if (_foundPatternCross(stateCount)) {
                 // Yes
                 AlignmentPattern? confirmed =
-                    handlePossibleCenter(stateCount, i, j);
+                    _handlePossibleCenter(stateCount, i, j);
                 if (confirmed != null) {
                   return confirmed;
                 }
@@ -125,8 +125,8 @@ class AlignmentPatternFinder {
         }
         j++;
       }
-      if (foundPatternCross(stateCount)) {
-        AlignmentPattern? confirmed = handlePossibleCenter(stateCount, i, maxJ);
+      if (_foundPatternCross(stateCount)) {
+        AlignmentPattern? confirmed = _handlePossibleCenter(stateCount, i, maxJ);
         if (confirmed != null) {
           return confirmed;
         }
@@ -135,8 +135,8 @@ class AlignmentPatternFinder {
 
     // Hmm, nothing we saw was observed and confirmed twice. If we had
     // any guess at all, return it.
-    if (possibleCenters.isNotEmpty) {
-      return possibleCenters[0];
+    if (_possibleCenters.isNotEmpty) {
+      return _possibleCenters[0];
     }
 
     throw NotFoundException.getNotFoundInstance();
@@ -146,7 +146,7 @@ class AlignmentPatternFinder {
    * Given a count of black/white/black pixels just seen and an end position,
    * figures the location of the center of this black/white/black run.
    */
-  static double centerFromEnd(List<int> stateCount, int end) {
+  static double _centerFromEnd(List<int> stateCount, int end) {
     return (end - stateCount[2]) - stateCount[1] / 2.0;
   }
 
@@ -155,8 +155,8 @@ class AlignmentPatternFinder {
    * @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
    *         used by alignment patterns to be considered a match
    */
-  bool foundPatternCross(List<int> stateCount) {
-    double moduleSize = this.moduleSize;
+  bool _foundPatternCross(List<int> stateCount) {
+    double moduleSize = this._moduleSize;
     double maxVariance = moduleSize / 2.0;
     for (int i = 0; i < 3; i++) {
       if ((moduleSize - stateCount[i]).abs() >= maxVariance) {
@@ -177,12 +177,12 @@ class AlignmentPatternFinder {
    * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of alignment pattern, or {@link double#NaN} if not found
    */
-  double crossCheckVertical(
+  double _crossCheckVertical(
       int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    BitMatrix image = this.image;
+    BitMatrix image = this._image;
 
     int maxI = image.getHeight();
-    List<int> stateCount = crossCheckStateCount;
+    List<int> stateCount = _crossCheckStateCount;
     stateCount[0] = 0;
     stateCount[1] = 0;
     stateCount[2] = 0;
@@ -228,8 +228,8 @@ class AlignmentPatternFinder {
       return double.nan;
     }
 
-    return foundPatternCross(stateCount)
-        ? centerFromEnd(stateCount, i)
+    return _foundPatternCross(stateCount)
+        ? _centerFromEnd(stateCount, i)
         : double.nan;
   }
 
@@ -244,15 +244,15 @@ class AlignmentPatternFinder {
    * @param j end of possible alignment pattern in row
    * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
    */
-  AlignmentPattern? handlePossibleCenter(List<int> stateCount, int i, int j) {
+  AlignmentPattern? _handlePossibleCenter(List<int> stateCount, int i, int j) {
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-    double centerJ = centerFromEnd(stateCount, j);
-    double centerI = crossCheckVertical(
+    double centerJ = _centerFromEnd(stateCount, j);
+    double centerI = _crossCheckVertical(
         i, centerJ.toInt(), 2 * stateCount[1], stateCountTotal);
     if (!(centerI).isNaN) {
       double estimatedModuleSize =
           (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0;
-      for (AlignmentPattern center in possibleCenters) {
+      for (AlignmentPattern center in _possibleCenters) {
         // Look for about the same center and module size:
         if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
           return center.combineEstimate(centerI, centerJ, estimatedModuleSize);
@@ -261,9 +261,9 @@ class AlignmentPatternFinder {
       // Hadn't found this before; save it
       AlignmentPattern point =
           AlignmentPattern(centerJ, centerI, estimatedModuleSize);
-      possibleCenters.add(point);
-      if (resultPointCallback != null) {
-        resultPointCallback!.foundPossibleResultPoint(point);
+      _possibleCenters.add(point);
+      if (_resultPointCallback != null) {
+        _resultPointCallback!.foundPossibleResultPoint(point);
       }
     }
     return null;

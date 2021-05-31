@@ -26,22 +26,20 @@ import 'byte_matrix.dart';
  */
 class MaskUtil {
   // Penalty weights from section 6.8.2.1
-  static final int N1 = 3;
-  static final int N2 = 3;
-  static final int N3 = 40;
-  static final int N4 = 10;
+  static const int _N1 = 3;
+  static const int _N2 = 3;
+  static const int _N3 = 40;
+  static const int _N4 = 10;
 
-  MaskUtil() {
-    // do nothing
-  }
+  MaskUtil._();
 
   /**
    * Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
    * give penalty to them. Example: 00000 or 11111.
    */
   static int applyMaskPenaltyRule1(ByteMatrix matrix) {
-    return applyMaskPenaltyRule1Internal(matrix, true) +
-        applyMaskPenaltyRule1Internal(matrix, false);
+    return _applyMaskPenaltyRule1Internal(matrix, true) +
+        _applyMaskPenaltyRule1Internal(matrix, false);
   }
 
   /**
@@ -65,7 +63,7 @@ class MaskUtil {
         }
       }
     }
-    return N2 * penalty;
+    return _N2 * penalty;
   }
 
   /**
@@ -89,8 +87,8 @@ class MaskUtil {
             arrayY[x + 4] == 1 &&
             arrayY[x + 5] == 0 &&
             arrayY[x + 6] == 1 &&
-            (isWhiteHorizontal(arrayY, x - 4, x) ||
-                isWhiteHorizontal(arrayY, x + 7, x + 11))) {
+            (_isWhiteHorizontal(arrayY, x - 4, x) ||
+                _isWhiteHorizontal(arrayY, x + 7, x + 11))) {
           numPenalties++;
         }
         if (y + 6 < height &&
@@ -101,16 +99,16 @@ class MaskUtil {
             array[y + 4][x] == 1 &&
             array[y + 5][x] == 0 &&
             array[y + 6][x] == 1 &&
-            (isWhiteVertical(array, x, y - 4, y) ||
-                isWhiteVertical(array, x, y + 7, y + 11))) {
+            (_isWhiteVertical(array, x, y - 4, y) ||
+                _isWhiteVertical(array, x, y + 7, y + 11))) {
           numPenalties++;
         }
       }
     }
-    return numPenalties * N3;
+    return numPenalties * _N3;
   }
 
-  static bool isWhiteHorizontal(Int8List rowArray, int from, int to) {
+  static bool _isWhiteHorizontal(Int8List rowArray, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, rowArray.length);
     for (int i = from; i < to; i++) {
@@ -121,7 +119,7 @@ class MaskUtil {
     return true;
   }
 
-  static bool isWhiteVertical(
+  static bool _isWhiteVertical(
       List<Int8List> array, int col, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, array.length);
@@ -153,7 +151,7 @@ class MaskUtil {
     int numTotalCells = matrix.getHeight() * matrix.getWidth();
     int fivePercentVariances =
         (numDarkCells * 2 - numTotalCells).abs() * 10 ~/ numTotalCells;
-    return fivePercentVariances * N4;
+    return fivePercentVariances * _N4;
   }
 
   /**
@@ -201,7 +199,7 @@ class MaskUtil {
    * Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
    * vertical and horizontal orders respectively.
    */
-  static int applyMaskPenaltyRule1Internal(
+  static int _applyMaskPenaltyRule1Internal(
       ByteMatrix matrix, bool isHorizontal) {
     int penalty = 0;
     int iLimit = isHorizontal ? matrix.getHeight() : matrix.getWidth();
@@ -216,14 +214,14 @@ class MaskUtil {
           numSameBitCells++;
         } else {
           if (numSameBitCells >= 5) {
-            penalty += N1 + (numSameBitCells - 5);
+            penalty += _N1 + (numSameBitCells - 5);
           }
           numSameBitCells = 1; // Include the cell itself.
           prevBit = bit;
         }
       }
       if (numSameBitCells >= 5) {
-        penalty += N1 + (numSameBitCells - 5);
+        penalty += _N1 + (numSameBitCells - 5);
       }
     }
     return penalty;

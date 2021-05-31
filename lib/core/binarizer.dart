@@ -27,12 +27,12 @@ import 'luminance_source.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 abstract class Binarizer {
-  final LuminanceSource source;
+  final LuminanceSource _source;
 
-  Binarizer(this.source);
+  Binarizer(this._source);
 
   LuminanceSource getLuminanceSource() {
-    return source;
+    return _source;
   }
 
   /**
@@ -73,10 +73,10 @@ abstract class Binarizer {
   Binarizer createBinarizer(LuminanceSource source);
 
   int getWidth() {
-    return source.getWidth();
+    return _source.getWidth();
   }
 
   int getHeight() {
-    return source.getHeight();
+    return _source.getHeight();
   }
 }

@@ -16,6 +16,8 @@
 
 import 'dart:math' as Math;
 
+import 'package:flutter/cupertino.dart';
+
 import '../../common/bit_matrix.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/detector_result.dart';
@@ -40,17 +42,17 @@ import 'finder_pattern_info.dart';
  * @author Sean Owen
  */
 class Detector {
-  final BitMatrix image;
-  ResultPointCallback? resultPointCallback;
+  final BitMatrix _image;
+  ResultPointCallback? _resultPointCallback;
 
-  Detector(this.image);
+  Detector(this._image);
 
   BitMatrix getImage() {
-    return image;
+    return _image;
   }
 
   ResultPointCallback? getResultPointCallback() {
-    return resultPointCallback;
+    return _resultPointCallback;
   }
 
   /**
@@ -62,13 +64,13 @@ class Detector {
    * @throws FormatException if a QR Code cannot be decoded
    */
   DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
-    resultPointCallback = hints == null
+    _resultPointCallback = hints == null
         ? null
         : hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback;
 
     FinderPatternFinder finder =
-        FinderPatternFinder(image, resultPointCallback);
+        FinderPatternFinder(_image, _resultPointCallback);
     FinderPatternInfo info = finder.find(hints);
 
     return processFinderPatternInfo(info);
@@ -83,7 +85,7 @@ class Detector {
     if (moduleSize < 1.0) {
       throw NotFoundException.getNotFoundInstance();
     }
-    int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+    int dimension = _computeDimension(topLeft, topRight, bottomLeft, moduleSize);
     Version provisionalVersion =
         Version.getProvisionalVersionForDimension(dimension);
     int modulesBetweenFPCenters =
@@ -121,10 +123,10 @@ class Detector {
       // If we didn't find alignment pattern... well try anyway without it
     }
 
-    PerspectiveTransform transform = createTransform(
+    PerspectiveTransform transform = _createTransform(
         topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 
-    BitMatrix bits = sampleGrid(image, transform, dimension);
+    BitMatrix bits = _sampleGrid(_image, transform, dimension);
 
     List<ResultPoint> points;
     if (alignmentPattern == null) {
@@ -135,7 +137,7 @@ class Detector {
     return DetectorResult(bits, points);
   }
 
-  static PerspectiveTransform createTransform(
+  static PerspectiveTransform _createTransform(
       ResultPoint topLeft,
       ResultPoint topRight,
       ResultPoint bottomLeft,
@@ -178,7 +180,7 @@ class Detector {
         bottomLeft.getY());
   }
 
-  static BitMatrix sampleGrid(
+  static BitMatrix _sampleGrid(
       BitMatrix image, PerspectiveTransform transform, int dimension) {
     GridSampler sampler = GridSampler.getInstance();
     return sampler.sampleGrid(image, dimension, dimension, transform);
@@ -188,7 +190,7 @@ class Detector {
    * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
    * of the finder patterns and estimated module size.</p>
    */
-  static int computeDimension(ResultPoint topLeft, ResultPoint topRight,
+  static int _computeDimension(ResultPoint topLeft, ResultPoint topRight,
       ResultPoint bottomLeft, double moduleSize) {
     int tltrCentersDimension =
         MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
@@ -219,11 +221,12 @@ class Detector {
    * @param bottomLeft detected bottom-left finder pattern center
    * @return estimated module size
    */
+  @protected
   double calculateModuleSize(
       ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft) {
     // Take the average
-    return (calculateModuleSizeOneWay(topLeft, topRight) +
-            calculateModuleSizeOneWay(topLeft, bottomLeft)) /
+    return (_calculateModuleSizeOneWay(topLeft, topRight) +
+            _calculateModuleSizeOneWay(topLeft, bottomLeft)) /
         2.0;
   }
 
@@ -232,15 +235,15 @@ class Detector {
    * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
    * width of each, measuring along the axis between their centers.</p>
    */
-  double calculateModuleSizeOneWay(
+  double _calculateModuleSizeOneWay(
       ResultPoint pattern, ResultPoint otherPattern) {
-    double moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays(
+    double moduleSizeEst1 = _sizeOfBlackWhiteBlackRunBothWays(
       pattern.getX().toInt(),
       pattern.getY().toInt(),
       otherPattern.getX().toInt(),
       otherPattern.getY().toInt(),
     );
-    double moduleSizeEst2 = sizeOfBlackWhiteBlackRunBothWays(
+    double moduleSizeEst2 = _sizeOfBlackWhiteBlackRunBothWays(
       otherPattern.getX().toInt(),
       otherPattern.getY().toInt(),
       pattern.getX().toInt(),
@@ -262,9 +265,9 @@ class Detector {
    * a finder pattern by looking for a black-white-black run from the center in the direction
    * of another point (another finder pattern center), and in the opposite direction too.
    */
-  double sizeOfBlackWhiteBlackRunBothWays(
+  double _sizeOfBlackWhiteBlackRunBothWays(
       int fromX, int fromY, int toX, int toY) {
-    double result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
+    double result = _sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 
     // Now count other way -- don't run off image though of course
     double scale = 1.0;
@@ -272,9 +275,9 @@ class Detector {
     if (otherToX < 0) {
       scale = fromX / (fromX - otherToX);
       otherToX = 0;
-    } else if (otherToX >= image.getWidth()) {
-      scale = (image.getWidth() - 1 - fromX) / (otherToX - fromX);
-      otherToX = image.getWidth() - 1;
+    } else if (otherToX >= _image.getWidth()) {
+      scale = (_image.getWidth() - 1 - fromX) / (otherToX - fromX);
+      otherToX = _image.getWidth() - 1;
     }
     int otherToY = (fromY - (toY - fromY) * scale).toInt();
 
@@ -282,13 +285,13 @@ class Detector {
     if (otherToY < 0) {
       scale = fromY / (fromY - otherToY);
       otherToY = 0;
-    } else if (otherToY >= image.getHeight()) {
-      scale = (image.getHeight() - 1 - fromY) / (otherToY - fromY);
-      otherToY = image.getHeight() - 1;
+    } else if (otherToY >= _image.getHeight()) {
+      scale = (_image.getHeight() - 1 - fromY) / (otherToY - fromY);
+      otherToY = _image.getHeight() - 1;
     }
     otherToX = (fromX + (otherToX - fromX) * scale).toInt();
 
-    result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
+    result += _sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
 
     // Middle pixel is double-counted this way; subtract 1
     return result - 1.0;
@@ -302,7 +305,7 @@ class Detector {
    * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
    * may be skewed or rotated.</p>
    */
-  double sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
+  double _sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
     // Mild variant of Bresenham's algorithm;
     // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
     bool steep = (toY - fromY).abs() > (toX - fromX).abs();
@@ -332,7 +335,7 @@ class Detector {
       // Does current pixel mean we have moved white to black or vice versa?
       // Scanning black in state 0,2 and white in state 1, so if we find the wrong
       // color, advance to next state or end if we are in state 2 already
-      if ((state == 1) == image.get(realX, realY)) {
+      if ((state == 1) == _image.get(realX, realY)) {
         if (state == 2) {
           return MathUtils.distance(
               x.toDouble(), y.toDouble(), fromX.toDouble(), fromY.toDouble());
@@ -371,6 +374,7 @@ class Detector {
    * @return {@link AlignmentPattern} if found, or null otherwise
    * @throws NotFoundException if an unexpected error occurs during detection
    */
+  @protected
   AlignmentPattern findAlignmentInRegion(double overallEstModuleSize,
       int estAlignmentX, int estAlignmentY, double allowanceFactor) {
     // Look for an alignment pattern (3 modules in size) around where it
@@ -378,26 +382,26 @@ class Detector {
     int allowance = (allowanceFactor * overallEstModuleSize).toInt();
     int alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
     int alignmentAreaRightX =
-        Math.min(image.getWidth() - 1, estAlignmentX + allowance);
+        Math.min(_image.getWidth() - 1, estAlignmentX + allowance);
     if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
     int alignmentAreaBottomY =
-        Math.min(image.getHeight() - 1, estAlignmentY + allowance);
+        Math.min(_image.getHeight() - 1, estAlignmentY + allowance);
     if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     AlignmentPatternFinder alignmentFinder = AlignmentPatternFinder(
-        image,
+        _image,
         alignmentAreaLeftX,
         alignmentAreaTopY,
         alignmentAreaRightX - alignmentAreaLeftX,
         alignmentAreaBottomY - alignmentAreaTopY,
         overallEstModuleSize,
-        resultPointCallback);
+        _resultPointCallback);
     return alignmentFinder.find();
   }
 }
