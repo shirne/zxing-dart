@@ -45,7 +45,7 @@ class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     if (rawName == null) {
       return null;
     }
-    String name = parseName(rawName[0]);
+    String name = _parseName(rawName[0]);
     String? pronunciation =
     AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
     List<String>? phoneNumbers = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("TEL:", rawText);
@@ -82,7 +82,7 @@ class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
         null);
   }
 
-  static String parseName(String name) {
+  static String _parseName(String name) {
     int comma = name.indexOf(',');
     if (comma >= 0) {
       // Format may be last,first; switch it around

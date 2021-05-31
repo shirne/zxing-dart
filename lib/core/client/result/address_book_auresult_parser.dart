@@ -42,8 +42,8 @@ class AddressBookAUResultParser extends ResultParser {
     String? pronunciation =
         ResultParser.matchSinglePrefixedField("NAME2:", rawText, '\r', true);
 
-    List<String>? phoneNumbers = matchMultipleValuePrefix("TEL", rawText);
-    List<String>? emails = matchMultipleValuePrefix("MAIL", rawText);
+    List<String>? phoneNumbers = _matchMultipleValuePrefix("TEL", rawText);
+    List<String>? emails = _matchMultipleValuePrefix("MAIL", rawText);
     String? note =
         ResultParser.matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
     String? address =
@@ -68,7 +68,7 @@ class AddressBookAUResultParser extends ResultParser {
         null);
   }
 
-  static List<String>? matchMultipleValuePrefix(String prefix, String rawText) {
+  static List<String>? _matchMultipleValuePrefix(String prefix, String rawText) {
     List<String>? values;
     // For now, always 3, and always trim
     for (int i = 1; i <= 3; i++) {

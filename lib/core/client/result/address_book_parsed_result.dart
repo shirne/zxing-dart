@@ -24,22 +24,22 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class AddressBookParsedResult extends ParsedResult {
-  final List<String>? names;
-  final List<String>? nicknames;
-  final String? pronunciation;
-  final List<String>? phoneNumbers;
-  final List<String>? phoneTypes;
-  final List<String>? emails;
-  final List<String>? emailTypes;
-  final String? instantMessenger;
-  final String? note;
-  final List<String>? addresses;
-  final List<String>? addressTypes;
-  final String? org;
-  final String? birthday;
-  final String? title;
-  final List<String>? urls;
-  final List<String>? geo;
+  final List<String>? _names;
+  final List<String>? _nicknames;
+  final String? _pronunciation;
+  final List<String>? _phoneNumbers;
+  final List<String>? _phoneTypes;
+  final List<String>? _emails;
+  final List<String>? _emailTypes;
+  final String? _instantMessenger;
+  final String? _note;
+  final List<String>? _addresses;
+  final List<String>? _addressTypes;
+  final String? _org;
+  final String? _birthday;
+  final String? _title;
+  final List<String>? _urls;
+  final List<String>? _geo;
 
   AddressBookParsedResult.quick(
       List<String>? names,
@@ -53,46 +53,46 @@ class AddressBookParsedResult extends ParsedResult {
             null, null, addresses, addressTypes, null, null, null, null, null);
 
   AddressBookParsedResult(
-      this.names,
-      this.nicknames,
-      this.pronunciation,
-      this.phoneNumbers,
-      this.phoneTypes,
-      this.emails,
-      this.emailTypes,
-      this.instantMessenger,
-      this.note,
-      this.addresses,
-      this.addressTypes,
-      this.org,
-      this.birthday,
-      this.title,
-      this.urls,
-      this.geo)
+      this._names,
+      this._nicknames,
+      this._pronunciation,
+      this._phoneNumbers,
+      this._phoneTypes,
+      this._emails,
+      this._emailTypes,
+      this._instantMessenger,
+      this._note,
+      this._addresses,
+      this._addressTypes,
+      this._org,
+      this._birthday,
+      this._title,
+      this._urls,
+      this._geo)
       : super(ParsedResultType.ADDRESSBOOK) {
-    if (phoneNumbers != null &&
-        phoneTypes != null &&
-        phoneNumbers!.length != phoneTypes!.length) {
+    if (_phoneNumbers != null &&
+        _phoneTypes != null &&
+        _phoneNumbers!.length != _phoneTypes!.length) {
       throw Exception("Phone numbers and types lengths differ");
     }
-    if (emails != null &&
-        emailTypes != null &&
-        emails!.length != emailTypes!.length) {
+    if (_emails != null &&
+        _emailTypes != null &&
+        _emails!.length != _emailTypes!.length) {
       throw Exception("Emails and types lengths differ");
     }
-    if (addresses != null &&
-        addressTypes != null &&
-        addresses!.length != addressTypes!.length) {
+    if (_addresses != null &&
+        _addressTypes != null &&
+        _addresses!.length != _addressTypes!.length) {
       throw Exception("Addresses and types lengths differ");
     }
   }
 
   List<String>? getNames() {
-    return names;
+    return _names;
   }
 
   List<String>? getNicknames() {
-    return nicknames;
+    return _nicknames;
   }
 
   /**
@@ -102,11 +102,11 @@ class AddressBookParsedResult extends ParsedResult {
    * @return The pronunciation of the getNames() field, often in hiragana or katakana.
    */
   String? getPronunciation() {
-    return pronunciation;
+    return _pronunciation;
   }
 
   List<String>? getPhoneNumbers() {
-    return phoneNumbers;
+    return _phoneNumbers;
   }
 
   /**
@@ -114,11 +114,11 @@ class AddressBookParsedResult extends ParsedResult {
    *  there is no guaranteed or standard format.
    */
   List<String>? getPhoneTypes() {
-    return phoneTypes;
+    return _phoneTypes;
   }
 
   List<String>? getEmails() {
-    return emails;
+    return _emails;
   }
 
   /**
@@ -126,19 +126,19 @@ class AddressBookParsedResult extends ParsedResult {
    *  there is no guaranteed or standard format.
    */
   List<String>? getEmailTypes() {
-    return emailTypes;
+    return _emailTypes;
   }
 
   String? getInstantMessenger() {
-    return instantMessenger;
+    return _instantMessenger;
   }
 
   String? getNote() {
-    return note;
+    return _note;
   }
 
   List<String>? getAddresses() {
-    return addresses;
+    return _addresses;
   }
 
   /**
@@ -146,51 +146,51 @@ class AddressBookParsedResult extends ParsedResult {
    *  there is no guaranteed or standard format.
    */
   List<String>? getAddressTypes() {
-    return addressTypes;
+    return _addressTypes;
   }
 
   String? getTitle() {
-    return title;
+    return _title;
   }
 
   String? getOrg() {
-    return org;
+    return _org;
   }
 
   List<String>? getURLs() {
-    return urls;
+    return _urls;
   }
 
   /**
    * @return birthday formatted as yyyyMMdd (e.g. 19780917)
    */
   String? getBirthday() {
-    return birthday;
+    return _birthday;
   }
 
   /**
    * @return a location as a latitude/longitude pair
    */
   List<String>? getGeo() {
-    return geo;
+    return _geo;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(names, result);
-    ParsedResult.maybeAppendList(nicknames, result);
-    ParsedResult.maybeAppend(pronunciation, result);
-    ParsedResult.maybeAppend(title, result);
-    ParsedResult.maybeAppend(org, result);
-    ParsedResult.maybeAppendList(addresses, result);
-    ParsedResult.maybeAppendList(phoneNumbers, result);
-    ParsedResult.maybeAppendList(emails, result);
-    ParsedResult.maybeAppend(instantMessenger, result);
-    ParsedResult.maybeAppendList(urls, result);
-    ParsedResult.maybeAppend(birthday, result);
-    ParsedResult.maybeAppendList(geo, result);
-    ParsedResult.maybeAppend(note, result);
+    ParsedResult.maybeAppendList(_names, result);
+    ParsedResult.maybeAppendList(_nicknames, result);
+    ParsedResult.maybeAppend(_pronunciation, result);
+    ParsedResult.maybeAppend(_title, result);
+    ParsedResult.maybeAppend(_org, result);
+    ParsedResult.maybeAppendList(_addresses, result);
+    ParsedResult.maybeAppendList(_phoneNumbers, result);
+    ParsedResult.maybeAppendList(_emails, result);
+    ParsedResult.maybeAppend(_instantMessenger, result);
+    ParsedResult.maybeAppendList(_urls, result);
+    ParsedResult.maybeAppend(_birthday, result);
+    ParsedResult.maybeAppendList(_geo, result);
+    ParsedResult.maybeAppend(_note, result);
     return result.toString();
   }
 }

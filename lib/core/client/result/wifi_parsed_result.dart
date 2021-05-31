@@ -23,62 +23,62 @@ import 'parsed_result_type.dart';
  * @author Vikram Aggarwal
  */
 class WifiParsedResult extends ParsedResult {
-  final String ssid;
-  final String networkEncryption;
-  final String? password;
-  final bool hidden;
-  final String? identity;
-  final String? anonymousIdentity;
-  final String? eapMethod;
-  final String? phase2Method;
+  final String _ssid;
+  final String _networkEncryption;
+  final String? _password;
+  final bool _hidden;
+  final String? _identity;
+  final String? _anonymousIdentity;
+  final String? _eapMethod;
+  final String? _phase2Method;
 
-  WifiParsedResult(this.networkEncryption, this.ssid, this.password,
-      [this.hidden = false,
-      this.identity,
-      this.anonymousIdentity,
-      this.eapMethod,
-      this.phase2Method])
+  WifiParsedResult(this._networkEncryption, this._ssid, this._password,
+      [this._hidden = false,
+      this._identity,
+      this._anonymousIdentity,
+      this._eapMethod,
+      this._phase2Method])
       : super(ParsedResultType.WIFI);
 
   String getSsid() {
-    return ssid;
+    return _ssid;
   }
 
   String getNetworkEncryption() {
-    return networkEncryption;
+    return _networkEncryption;
   }
 
   String? getPassword() {
-    return password;
+    return _password;
   }
 
   bool isHidden() {
-    return hidden;
+    return _hidden;
   }
 
   String? getIdentity() {
-    return identity;
+    return _identity;
   }
 
   String? getAnonymousIdentity() {
-    return anonymousIdentity;
+    return _anonymousIdentity;
   }
 
   String? getEapMethod() {
-    return eapMethod;
+    return _eapMethod;
   }
 
   String? getPhase2Method() {
-    return phase2Method;
+    return _phase2Method;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(ssid, result);
-    ParsedResult.maybeAppend(networkEncryption, result);
-    ParsedResult.maybeAppend(password, result);
-    ParsedResult.maybeAppend(hidden.toString(), result);
+    ParsedResult.maybeAppend(_ssid, result);
+    ParsedResult.maybeAppend(_networkEncryption, result);
+    ParsedResult.maybeAppend(_password, result);
+    ParsedResult.maybeAppend(_hidden.toString(), result);
     return result.toString();
   }
 }

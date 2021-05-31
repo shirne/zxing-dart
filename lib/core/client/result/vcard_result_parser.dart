@@ -15,19 +15,6 @@
  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -43,16 +30,16 @@ import 'result_parser.dart';
  */
 class VCardResultParser extends ResultParser {
 
-  static final RegExp BEGIN_VCARD = RegExp("BEGIN:VCARD", caseSensitive: false);
-  static final RegExp VCARD_LIKE_DATE = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
-  static final RegExp CR_LF_SPACE_TAB = RegExp("\r\n[ \t]");
-  static final RegExp NEWLINE_ESCAPE = RegExp("\\\\[nN]");
-  static final RegExp VCARD_ESCAPES = RegExp("\\\\([,;\\\\])");
-  static final Pattern EQUALS = "=";
-  static final Pattern SEMICOLON = ";";
-  static final RegExp UNESCAPED_SEMICOLONS = RegExp("(?<!\\\\);+");
-  static final Pattern COMMA = ",";
-  static final RegExp SEMICOLON_OR_COMMA = RegExp("[;,]");
+  static final RegExp _BEGIN_VCARD = RegExp("BEGIN:VCARD", caseSensitive: false);
+  static final RegExp _VCARD_LIKE_DATE = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
+  static final RegExp _CR_LF_SPACE_TAB = RegExp("\r\n[ \t]");
+  static final RegExp _NEWLINE_ESCAPE = RegExp("\\\\[nN]");
+  static final RegExp _VCARD_ESCAPES = RegExp("\\\\([,;\\\\])");
+  static final Pattern _EQUALS = "=";
+  static final Pattern _SEMICOLON = ";";
+  static final RegExp _UNESCAPED_SEMICOLONS = RegExp("(?<!\\\\);+");
+  static final Pattern _COMMA = ",";
+  static final RegExp _SEMICOLON_OR_COMMA = RegExp("[;,]");
 
   @override
   AddressBookParsedResult? parse(Result result) {
@@ -60,7 +47,7 @@ class VCardResultParser extends ResultParser {
     // to throw out everything else we parsed just because this was omitted. In fact, Eclair
     // is doing just that, and we can't parse its contacts without this leniency.
     String rawText = ResultParser.getMassagedText(result);
-    var m = BEGIN_VCARD.allMatches(rawText);
+    var m = _BEGIN_VCARD.allMatches(rawText);
     if (m.length < 1) {
       return null;
     }
@@ -68,42 +55,42 @@ class VCardResultParser extends ResultParser {
     if (names == null) {
       // If no display names found, look for regular name fields and format them
       names = matchVCardPrefixedField("N", rawText, true, false);
-      formatNames(names);
+      _formatNames(names);
     }
     List<String>? nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
-    List<String>? nicknames = nicknameString == null ? null : nicknameString[0].split(COMMA);
+    List<String>? nicknames = nicknameString == null ? null : nicknameString[0].split(_COMMA);
     List<List<String>>? phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
     List<List<String>>? emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
     List<String>? note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
     List<List<String>>? addresses = matchVCardPrefixedField("ADR", rawText, true, true);
     List<String>? org = matchSingleVCardPrefixedField("ORG", rawText, true, true);
     List<String>? birthday = matchSingleVCardPrefixedField("BDAY", rawText, true, false);
-    if (birthday != null && !isLikeVCardDate(birthday[0])) {
+    if (birthday != null && !_isLikeVCardDate(birthday[0])) {
       birthday = null;
     }
     List<String>? title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
     List<List<String>>? urls = matchVCardPrefixedField("URL", rawText, true, false);
     List<String>? instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
     List<String>? geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
-    List<String>? geo = geoString == null ? null : geoString[0].split(SEMICOLON_OR_COMMA);
+    List<String>? geo = geoString == null ? null : geoString[0].split(_SEMICOLON_OR_COMMA);
     if (geo != null && geo.length != 2) {
       geo = null;
     }
-    return AddressBookParsedResult(toPrimaryValues(names),
+    return AddressBookParsedResult(_toPrimaryValues(names),
                                        nicknames,
                                        null, 
-                                       toPrimaryValues(phoneNumbers), 
-                                       toTypes(phoneNumbers),
-                                       toPrimaryValues(emails),
-                                       toTypes(emails),
-                                       toPrimaryValue(instantMessenger),
-                                       toPrimaryValue(note),
-                                       toPrimaryValues(addresses),
-                                       toTypes(addresses),
-                                       toPrimaryValue(org),
-                                       toPrimaryValue(birthday),
-                                       toPrimaryValue(title),
-                                       toPrimaryValues(urls),
+                                       _toPrimaryValues(phoneNumbers),
+                                       _toTypes(phoneNumbers),
+                                       _toPrimaryValues(emails),
+                                       _toTypes(emails),
+                                       _toPrimaryValue(instantMessenger),
+                                       _toPrimaryValue(note),
+                                       _toPrimaryValues(addresses),
+                                       _toTypes(addresses),
+                                       _toPrimaryValue(org),
+                                       _toPrimaryValue(birthday),
+                                       _toPrimaryValue(title),
+                                       _toPrimaryValues(urls),
                                        geo);
   }
 
@@ -137,12 +124,12 @@ class VCardResultParser extends ResultParser {
       String? quotedPrintableCharset;
       String? valueType;
       if (metadataString != null) {
-        for (String metadatum in metadataString.split(SEMICOLON)) {
+        for (String metadatum in metadataString.split(_SEMICOLON)) {
           if (metadata == null) {
             metadata = [];
           }
           metadata.add(metadatum);
-          List<String> metadatumTokens = metadatum.split(EQUALS); // todo , 2
+          List<String> metadatumTokens = metadatum.split(_EQUALS); // todo , 2
           if (metadatumTokens.length > 1) {
             String key = metadatumTokens[0];
             String value = metadatumTokens[1];
@@ -189,17 +176,17 @@ class VCardResultParser extends ResultParser {
           element = element.trim();
         }
         if (quotedPrintable) {
-          element = decodeQuotedPrintable(element, quotedPrintableCharset);
+          element = _decodeQuotedPrintable(element, quotedPrintableCharset);
           if (parseFieldDivider) {
-            element = element.replaceAll(UNESCAPED_SEMICOLONS, "\n").trim();
+            element = element.replaceAll(_UNESCAPED_SEMICOLONS, "\n").trim();
           }
         } else {
           if (parseFieldDivider) {
-            element = element.replaceAll(UNESCAPED_SEMICOLONS, "\n").trim();
+            element = element.replaceAll(_UNESCAPED_SEMICOLONS, "\n").trim();
           }
-          element = element.replaceAll(CR_LF_SPACE_TAB, "");
-          element = element.replaceAll(NEWLINE_ESCAPE, "\n");
-          element = element.replaceAll(VCARD_ESCAPES, r"$1");
+          element = element.replaceAll(_CR_LF_SPACE_TAB, "");
+          element = element.replaceAll(_NEWLINE_ESCAPE, "\n");
+          element = element.replaceAll(_VCARD_ESCAPES, r"$1");
         }
         // Only handle VALUE=uri specially
         if ("uri" == valueType) {
@@ -229,7 +216,7 @@ class VCardResultParser extends ResultParser {
     return matches;
   }
 
-  static String decodeQuotedPrintable(String value, String? charset) {
+  static String _decodeQuotedPrintable(String value, String? charset) {
     int length = value.length;
     StringBuffer result = StringBuffer();
     BytesBuilder fragmentBuffer = BytesBuilder();
@@ -254,15 +241,15 @@ class VCardResultParser extends ResultParser {
           }
           break;
         default:
-          maybeAppendFragment(fragmentBuffer, charset, result);
+          _maybeAppendFragment(fragmentBuffer, charset, result);
           result.write(c);
       }
     }
-    maybeAppendFragment(fragmentBuffer, charset, result);
+    _maybeAppendFragment(fragmentBuffer, charset, result);
     return result.toString();
   }
 
-  static void maybeAppendFragment(BytesBuilder fragmentBuffer,
+  static void _maybeAppendFragment(BytesBuilder fragmentBuffer,
                                           String? charset,
                                           StringBuffer result) {
     if (fragmentBuffer.length > 0) {
@@ -290,11 +277,11 @@ class VCardResultParser extends ResultParser {
     return values == null || values.isEmpty ? null : values[0];
   }
   
-  static String? toPrimaryValue(List<String>? list) {
+  static String? _toPrimaryValue(List<String>? list) {
     return list == null || list.isEmpty ? null : list[0];
   }
   
-  static List<String>? toPrimaryValues(List<List<String>>? lists) {
+  static List<String>? _toPrimaryValues(List<List<String>>? lists) {
     if (lists == null || lists.isEmpty) {
       return null;
     }
@@ -308,7 +295,7 @@ class VCardResultParser extends ResultParser {
     return result.toList();
   }
   
-  static List<String>? toTypes(List<List<String>>? lists) {
+  static List<String>? _toTypes(List<List<String>>? lists) {
     if (lists == null || lists.isEmpty) {
       return null;
     }
@@ -336,8 +323,8 @@ class VCardResultParser extends ResultParser {
     return result.toList();
   }
 
-  static bool isLikeVCardDate(String? value) {
-    return value == null || VCARD_LIKE_DATE.hasMatch(value);
+  static bool _isLikeVCardDate(String? value) {
+    return value == null || _VCARD_LIKE_DATE.hasMatch(value);
   }
 
   /**
@@ -346,7 +333,7 @@ class VCardResultParser extends ResultParser {
    *
    * @param names name values to format, in place
    */
-  static void formatNames(Iterable<List<String>>? names) {
+  static void _formatNames(Iterable<List<String>>? names) {
     if (names != null) {
       for (List<String> list in names) {
         String name = list[0];
@@ -361,17 +348,17 @@ class VCardResultParser extends ResultParser {
         }
         components[componentIndex] = name.substring(start);
         StringBuffer newName = StringBuffer();
-        maybeAppendComponent(components, 3, newName);
-        maybeAppendComponent(components, 1, newName);
-        maybeAppendComponent(components, 2, newName);
-        maybeAppendComponent(components, 0, newName);
-        maybeAppendComponent(components, 4, newName);
+        _maybeAppendComponent(components, 3, newName);
+        _maybeAppendComponent(components, 1, newName);
+        _maybeAppendComponent(components, 2, newName);
+        _maybeAppendComponent(components, 0, newName);
+        _maybeAppendComponent(components, 4, newName);
         list[0] = newName.toString().trim();
       }
     }
   }
 
-  static void maybeAppendComponent(List<String> components, int i, StringBuffer newName) {
+  static void _maybeAppendComponent(List<String> components, int i, StringBuffer newName) {
     if (components.length > i && !components[i].isNotEmpty) {
       if (newName.length > 0) {
         newName.write(' ');

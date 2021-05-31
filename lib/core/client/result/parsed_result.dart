@@ -28,12 +28,12 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 abstract class ParsedResult {
-  final ParsedResultType type;
+  final ParsedResultType _type;
 
-  ParsedResult(this.type);
+  ParsedResult(this._type);
 
   ParsedResultType getType() {
-    return type;
+    return _type;
   }
 
   String getDisplayResult();

@@ -28,8 +28,8 @@ import 'vinparsed_result.dart';
  */
 class VINResultParser extends ResultParser {
 
-  static final RegExp IOQ = RegExp("[IOQ]");
-  static final RegExp AZ09 = RegExp("[A-Z0-9]{17}");
+  static final RegExp _IOQ = RegExp("[IOQ]");
+  static final RegExp _AZ09 = RegExp("[A-Z0-9]{17}");
 
   @override
   VINParsedResult? parse(Result result) {
@@ -37,12 +37,12 @@ class VINResultParser extends ResultParser {
       return null;
     }
     String rawText = result.getText();
-    rawText = rawText.replaceAll(IOQ, "").trim();
-    if (!AZ09.hasMatch(rawText)) {
+    rawText = rawText.replaceAll(_IOQ, "").trim();
+    if (!_AZ09.hasMatch(rawText)) {
       return null;
     }
     try {
-      if (!checkChecksum(rawText)) {
+      if (!_checkChecksum(rawText)) {
         return null;
       }
       String wmi = rawText.substring(0, 3);
@@ -50,9 +50,9 @@ class VINResultParser extends ResultParser {
           wmi,
           rawText.substring(3, 9),
           rawText.substring(9, 17),
-          countryCode(wmi),
+          _countryCode(wmi),
           rawText.substring(3, 8),
-          modelYear(rawText.codeUnitAt(9)),
+          _modelYear(rawText.codeUnitAt(9)),
           rawText.codeUnitAt(10),
           rawText.substring(11));
     } catch ( _) { // IllegalArgumentException
@@ -60,17 +60,17 @@ class VINResultParser extends ResultParser {
     }
   }
 
-  static bool checkChecksum(String vin) {
+  static bool _checkChecksum(String vin) {
     int sum = 0;
     for (int i = 0; i < vin.length; i++) {
-      sum += vinPositionWeight(i + 1) * vinCharValue(vin.codeUnitAt(i));
+      sum += _vinPositionWeight(i + 1) * _vinCharValue(vin.codeUnitAt(i));
     }
     String checkedChar = vin[8];
-    String expectedCheckChar = checkChar(sum % 11);
+    String expectedCheckChar = _checkChar(sum % 11);
     return checkedChar == expectedCheckChar;
   }
   
-  static int vinCharValue(int c) {
+  static int _vinCharValue(int c) {
     if (c >= 'A'.codeUnitAt(0) && c <= 'I'.codeUnitAt(0)) {
       return (c - 'A'.codeUnitAt(0)) + 1;
     }
@@ -86,7 +86,7 @@ class VINResultParser extends ResultParser {
     throw Exception();
   }
   
-  static int vinPositionWeight(int position) {
+  static int _vinPositionWeight(int position) {
     if (position >= 1 && position <= 7) {
       return 9 - position;
     }
@@ -102,7 +102,7 @@ class VINResultParser extends ResultParser {
     throw Exception();
   }
 
-  static String checkChar(int remainder) {
+  static String _checkChar(int remainder) {
     if (remainder < 10) {
       return String.fromCharCode('0'.codeUnitAt(0) + remainder);
     }
@@ -112,7 +112,7 @@ class VINResultParser extends ResultParser {
     throw Exception();
   }
   
-  static int modelYear(int c) {
+  static int _modelYear(int c) {
     if (c >= 'E'.codeUnitAt(0) && c <= 'H'.codeUnitAt(0)) {
       return (c - 'E'.codeUnitAt(0)) + 1984;
     }
@@ -137,7 +137,7 @@ class VINResultParser extends ResultParser {
     throw Exception();
   }
 
-  static String? countryCode(String wmi) {
+  static String? _countryCode(String wmi) {
     String c1 = wmi[0];
     int c2 = wmi.codeUnitAt(1);
     switch (c1) {

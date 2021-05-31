@@ -23,30 +23,30 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class TelParsedResult extends ParsedResult {
-  final String? number;
-  final String? telURI;
-  final String? title;
+  final String? _number;
+  final String? _telURI;
+  final String? _title;
 
-  TelParsedResult(this.number, this.telURI, this.title)
+  TelParsedResult(this._number, this._telURI, this._title)
       : super(ParsedResultType.TEL);
 
   String? getNumber() {
-    return number;
+    return _number;
   }
 
   String? getTelURI() {
-    return telURI;
+    return _telURI;
   }
 
   String? getTitle() {
-    return title;
+    return _title;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(number, result);
-    ParsedResult.maybeAppend(title, result);
+    ParsedResult.maybeAppend(_number, result);
+    ParsedResult.maybeAppend(_title, result);
     return result.toString();
   }
 }

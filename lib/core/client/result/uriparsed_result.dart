@@ -25,17 +25,17 @@ import 'uriresult_parser.dart';
  * @author Sean Owen
  */
 class URIParsedResult extends ParsedResult {
-  final String uri;
-  final String? title;
+  final String _uri;
+  final String? _title;
 
-  URIParsedResult(this.uri, this.title) : super(ParsedResultType.URI);
+  URIParsedResult(this._uri, this._title) : super(ParsedResultType.URI);
 
   String getURI() {
-    return uri;
+    return _uri;
   }
 
   String? getTitle() {
-    return title;
+    return _title;
   }
 
   /**
@@ -45,14 +45,14 @@ class URIParsedResult extends ParsedResult {
    */
   @deprecated
   bool isPossiblyMaliciousURI() {
-    return URIResultParser.isPossiblyMaliciousURI(uri);
+    return URIResultParser.isPossiblyMaliciousURI(_uri);
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(title, result);
-    ParsedResult.maybeAppend(uri, result);
+    ParsedResult.maybeAppend(_title, result);
+    ParsedResult.maybeAppend(_uri, result);
     return result.toString();
   }
 

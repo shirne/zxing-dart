@@ -28,7 +28,7 @@ import 'result_parser.dart';
  */
 class EmailAddressResultParser extends ResultParser {
 
-  static final Pattern COMMA = ",";
+  static final Pattern _COMMA = ",";
 
   @override
   EmailAddressParsedResult? parse(Result result) {
@@ -47,7 +47,7 @@ class EmailAddressResultParser extends ResultParser {
       }
       List<String>? tos;
       if (hostEmail.isNotEmpty) {
-        tos = hostEmail.split(COMMA);
+        tos = hostEmail.split(_COMMA);
       }
       Map<String,String>? nameValues = ResultParser.parseNameValuePairs(rawText);
       List<String>? ccs;
@@ -58,16 +58,16 @@ class EmailAddressResultParser extends ResultParser {
         if (tos == null) {
           String? tosString = nameValues["to"];
           if (tosString != null) {
-            tos = tosString.split(COMMA);
+            tos = tosString.split(_COMMA);
           }
         }
         String? ccString = nameValues["cc"];
         if (ccString != null) {
-          ccs = ccString.split(COMMA);
+          ccs = ccString.split(_COMMA);
         }
         String? bccString = nameValues["bcc"];
         if (bccString != null) {
-          bccs = bccString.split(COMMA);
+          bccs = bccString.split(_COMMA);
         }
         subject = nameValues["subject"];
         body = nameValues["body"];

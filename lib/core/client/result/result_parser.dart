@@ -26,6 +26,8 @@
 
 
 
+import 'package:flutter/cupertino.dart';
+
 import 'product_result_parser.dart';
 import 'smsmmsresult_parser.dart';
 import 'smstommstoresult_parser.dart';
@@ -64,7 +66,7 @@ import 'vcard_result_parser.dart';
  */
 abstract class ResultParser {
 
-  static final List<ResultParser> PARSERS = [
+  static final List<ResultParser> _parsers = [
       BookmarkDoCoMoResultParser(),
       AddressBookDoCoMoResultParser(),
       EmailDoCoMoResultParser(),
@@ -87,10 +89,10 @@ abstract class ResultParser {
       VINResultParser(),
   ];
 
-  static final RegExp DIGITS = RegExp("\\d+");
-  static final RegExp AMPERSAND = RegExp("&");
-  static final RegExp EQUALS = RegExp("=");
-  static final String BYTE_ORDER_MARK = "\ufeff";
+  static final RegExp _DIGITS = RegExp("\\d+");
+  static final RegExp _AMPERSAND = RegExp("&");
+  static final RegExp _EQUALS = RegExp("=");
+  static final String _BYTE_ORDER_MARK = "\ufeff";
 
   static final List<String> EMPTY_STR_ARRAY = [];
 
@@ -106,14 +108,14 @@ abstract class ResultParser {
 
   static String getMassagedText(Result result) {
     String text = result.getText();
-    if (text.startsWith(BYTE_ORDER_MARK)) {
+    if (text.startsWith(_BYTE_ORDER_MARK)) {
       text = text.substring(1);
     }
     return text;
   }
 
   static ParsedResult parseResult(Result theResult) {
-    for (ResultParser parser in PARSERS) {
+    for (ResultParser parser in _parsers) {
       ParsedResult? result = parser.parse(theResult);
       if (result != null) {
         return result;
@@ -122,6 +124,7 @@ abstract class ResultParser {
     return TextParsedResult(theResult.getText(), null);
   }
 
+  @protected
   static void maybeAppend(String? value, StringBuffer result) {
     if (value != null) {
       result.write('\n');
@@ -129,6 +132,7 @@ abstract class ResultParser {
     }
   }
 
+  @protected
   static void maybeAppendList(List<String>? value, StringBuffer result) {
     if (value != null) {
       for (String s in value) {
@@ -138,10 +142,12 @@ abstract class ResultParser {
     }
   }
 
+  @protected
   static List<String>? maybeWrap(String? value) {
     return value == null ? null : [ value ];
   }
 
+  @protected
   static String unescapeBackslash(String escaped) {
     int backslash = escaped.indexOf('\\');
     if (backslash < 0) {
@@ -163,6 +169,7 @@ abstract class ResultParser {
     return unescaped.toString();
   }
 
+  @protected
   static int parseHexDigit(String chr) {
     int c = chr.codeUnitAt(0);
     if (c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
@@ -177,16 +184,18 @@ abstract class ResultParser {
     return -1;
   }
 
+  @protected
   static bool isStringOfDigits(String? value, int length) {
-    return value != null && length > 0 && length == value.length && DIGITS.hasMatch(value);
+    return value != null && length > 0 && length == value.length && _DIGITS.hasMatch(value);
   }
 
+  @protected
   static bool isSubstringOfDigits(String? value, int offset, int length) {
     if (value == null || length <= 0) {
       return false;
     }
     int max = offset + length;
-    return value.length >= max && DIGITS.hasMatch(value.substring(offset, max));
+    return value.length >= max && _DIGITS.hasMatch(value.substring(offset, max));
   }
 
   static Map<String,String>? parseNameValuePairs(String uri) {
@@ -195,14 +204,14 @@ abstract class ResultParser {
       return null;
     }
     Map<String,String> result = {};
-    for (String keyValue in uri.substring(paramStart + 1).split(AMPERSAND)) {
-      appendKeyValue(keyValue, result);
+    for (String keyValue in uri.substring(paramStart + 1).split(_AMPERSAND)) {
+      _appendKeyValue(keyValue, result);
     }
     return result;
   }
 
-  static void appendKeyValue(String keyValue, Map<String,String> result) {
-    List<String> keyValueTokens = keyValue.split(EQUALS); // todo 2
+  static void _appendKeyValue(String keyValue, Map<String,String> result) {
+    List<String> keyValueTokens = keyValue.split(_EQUALS); // todo 2
     if (keyValueTokens.length == 2) {
       String key = keyValueTokens[0];
       String value = keyValueTokens[1];
@@ -241,7 +250,7 @@ abstract class ResultParser {
           // No terminating end character? uh, done. Set i such that loop terminates and break
           i = rawText.length;
           more = false;
-        } else if (countPrecedingBackslashes(rawText, i) % 2 != 0) {
+        } else if (_countPrecedingBackslashes(rawText, i) % 2 != 0) {
           // semicolon was escaped (odd count of preceding backslashes) so continue
           i++;
         } else {
@@ -267,7 +276,7 @@ abstract class ResultParser {
     return matches.toList();
   }
 
-  static int countPrecedingBackslashes(String s, int pos) {
+  static int _countPrecedingBackslashes(String s, int pos) {
     int count = 0;
     for (int i = pos - 1; i >= 0; i--) {
       if (s[i] == '\\') {

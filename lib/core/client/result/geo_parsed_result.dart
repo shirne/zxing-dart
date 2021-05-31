@@ -24,27 +24,27 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class GeoParsedResult extends ParsedResult {
-  final double latitude;
-  final double longitude;
-  final double altitude;
-  final String? query;
+  final double _latitude;
+  final double _longitude;
+  final double _altitude;
+  final String? _query;
 
-  GeoParsedResult(this.latitude, this.longitude, this.altitude, this.query)
+  GeoParsedResult(this._latitude, this._longitude, this._altitude, this._query)
       : super(ParsedResultType.GEO);
 
   String getGeoURI() {
     StringBuffer result = StringBuffer();
     result.write("geo:");
-    result.write(latitude);
+    result.write(_latitude);
     result.write(',');
-    result.write(longitude);
-    if (altitude > 0) {
+    result.write(_longitude);
+    if (_altitude > 0) {
       result.write(',');
-      result.write(altitude);
+      result.write(_altitude);
     }
-    if (query != null) {
+    if (_query != null) {
       result.write('?');
-      result.write(query);
+      result.write(_query);
     }
     return result.toString();
   }
@@ -53,44 +53,44 @@ class GeoParsedResult extends ParsedResult {
    * @return latitude in degrees
    */
   double getLatitude() {
-    return latitude;
+    return _latitude;
   }
 
   /**
    * @return longitude in degrees
    */
   double getLongitude() {
-    return longitude;
+    return _longitude;
   }
 
   /**
    * @return altitude in meters. If not specified, in the geo URI, returns 0.0
    */
   double getAltitude() {
-    return altitude;
+    return _altitude;
   }
 
   /**
    * @return query string associated with geo URI or null if none exists
    */
   String? getQuery() {
-    return query;
+    return _query;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    result.write(latitude);
+    result.write(_latitude);
     result.write(", ");
-    result.write(longitude);
-    if (altitude > 0.0) {
+    result.write(_longitude);
+    if (_altitude > 0.0) {
       result.write(", ");
-      result.write(altitude);
+      result.write(_altitude);
       result.write('m');
     }
-    if (query != null) {
+    if (_query != null) {
       result.write(" (");
-      result.write(query);
+      result.write(_query);
       result.write(')');
     }
     return result.toString();

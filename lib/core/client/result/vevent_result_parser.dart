@@ -36,25 +36,25 @@ class VEventResultParser extends ResultParser {
       return null;
     }
 
-    String? summary = matchSingleVCardPrefixedField("SUMMARY", rawText);
-    String? start = matchSingleVCardPrefixedField("DTSTART", rawText);
+    String? summary = _matchSingleVCardPrefixedField("SUMMARY", rawText);
+    String? start = _matchSingleVCardPrefixedField("DTSTART", rawText);
     if (start == null) {
       return null;
     }
-    String? end = matchSingleVCardPrefixedField("DTEND", rawText);
-    String? duration = matchSingleVCardPrefixedField("DURATION", rawText);
-    String? location = matchSingleVCardPrefixedField("LOCATION", rawText);
-    String? organizer = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText));
+    String? end = _matchSingleVCardPrefixedField("DTEND", rawText);
+    String? duration = _matchSingleVCardPrefixedField("DURATION", rawText);
+    String? location = _matchSingleVCardPrefixedField("LOCATION", rawText);
+    String? organizer = _stripMailto(_matchSingleVCardPrefixedField("ORGANIZER", rawText));
 
-    List<String>? attendees = matchVCardPrefixedField("ATTENDEE", rawText);
+    List<String>? attendees = _matchVCardPrefixedField("ATTENDEE", rawText);
     if (attendees != null) {
       for (int i = 0; i < attendees.length; i++) {
-        attendees[i] = stripMailto(attendees[i])!;
+        attendees[i] = _stripMailto(attendees[i])!;
       }
     }
-    String? description = matchSingleVCardPrefixedField("DESCRIPTION", rawText);
+    String? description = _matchSingleVCardPrefixedField("DESCRIPTION", rawText);
 
-    String? geoString = matchSingleVCardPrefixedField("GEO", rawText);
+    String? geoString = _matchSingleVCardPrefixedField("GEO", rawText);
     double latitude;
     double longitude;
     if (geoString == null) {
@@ -89,13 +89,13 @@ class VEventResultParser extends ResultParser {
     }
   }
 
-  static String? matchSingleVCardPrefixedField(String prefix,
+  static String? _matchSingleVCardPrefixedField(String prefix,
                                                       String rawText) {
     List<String>? values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, true, false);
     return values == null || values.isEmpty ? null : values[0];
   }
 
-  static List<String>? matchVCardPrefixedField(String prefix, String rawText) {
+  static List<String>? _matchVCardPrefixedField(String prefix, String rawText) {
     List<List<String>>? values = VCardResultParser.matchVCardPrefixedField(prefix, rawText, true, false);
     if (values == null || values.isEmpty) {
       return null;
@@ -106,7 +106,7 @@ class VEventResultParser extends ResultParser {
     return result;
   }
 
-  static String? stripMailto(String? s) {
+  static String? _stripMailto(String? s) {
     if (s != null && (s.startsWith("mailto:") || s.startsWith("MAILTO:"))) {
       s = s.substring(7);
     }

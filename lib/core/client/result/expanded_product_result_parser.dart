@@ -63,14 +63,14 @@ class ExpandedProductResultParser extends ResultParser {
     int i = 0;
 
     while (i < rawText.length) {
-      String? ai = findAIvalue(i, rawText);
+      String? ai = _findAIvalue(i, rawText);
       if (ai == null) {
         // Error. Code doesn't match with RSS expanded pattern
         // ExtendedProductParsedResult NOT created. Not match with RSS Expanded pattern
         return null;
       }
       i += ai.length + 2;
-      String value = findValue(i, rawText);
+      String value = _findValue(i, rawText);
       i += value.length;
 
       switch (ai) {
@@ -169,7 +169,7 @@ class ExpandedProductResultParser extends ResultParser {
         uncommonAIs);
   }
 
-  static String? findAIvalue(int i, String rawText) {
+  static String? _findAIvalue(int i, String rawText) {
     String c = rawText[i];
     // First character must be a open parenthesis.If not, ERROR
     if (c != '(') {
@@ -192,7 +192,7 @@ class ExpandedProductResultParser extends ResultParser {
     return buf.toString();
   }
 
-  static String findValue(int i, String rawText) {
+  static String _findValue(int i, String rawText) {
     StringBuffer buf = StringBuffer();
     String rawTextAux = rawText.substring(i);
 
@@ -201,7 +201,7 @@ class ExpandedProductResultParser extends ResultParser {
       if (c == '(') {
         // We look for a new AI. If it doesn't exist (ERROR), we continue
         // with the iteration
-        if (findAIvalue(index, rawTextAux) != null) {
+        if (_findAIvalue(index, rawTextAux) != null) {
           break;
         }
         buf.write('(');

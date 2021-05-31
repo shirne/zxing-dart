@@ -29,9 +29,9 @@ import 'parsed_result_type.dart';
  */
 class CalendarParsedResult extends ParsedResult {
 
-  static final RegExp RFC2445_DURATION =
+  static final RegExp _RFC2445_DURATION =
   RegExp("P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?");
-  static final List<int> RFC2445_DURATION_FIELD_UNITS = [
+  static final List<int> _RFC2445_DURATION_FIELD_UNITS = [
       7 * 24 * 60 * 60 * 1000, // 1 week
       24 * 60 * 60 * 1000, // 1 day
       60 * 60 * 1000, // 1 hour
@@ -39,55 +39,55 @@ class CalendarParsedResult extends ParsedResult {
       1000, // 1 second
   ];
 
-  static final RegExp DATE_TIME = RegExp("[0-9]{8}(T[0-9]{6}Z?)?");
+  static final RegExp _DATE_TIME = RegExp("[0-9]{8}(T[0-9]{6}Z?)?");
 
-  final String? summary;
-  late int start;
-  late bool startAllDay;
-  late int end;
-  late bool endAllDay;
-  final String? location;
-  final String? organizer;
-  final List<String>? attendees;
-  final String? description;
-  final double? latitude;
-  final double? longitude;
+  final String? _summary;
+  late int _start;
+  late bool _startAllDay;
+  late int _end;
+  late bool _endAllDay;
+  final String? _location;
+  final String? _organizer;
+  final List<String>? _attendees;
+  final String? _description;
+  final double? _latitude;
+  final double? _longitude;
 
-  CalendarParsedResult(this.summary,
+  CalendarParsedResult(this._summary,
                               String? startString,
                               String? endString,
                               String? durationString,
-                              this.location,
-                              this.organizer,
-                              this.attendees,
-      this.description,
-      this.latitude,
-      this.longitude) :super(ParsedResultType.CALENDAR){
+                              this._location,
+                              this._organizer,
+                              this._attendees,
+      this._description,
+      this._latitude,
+      this._longitude) :super(ParsedResultType.CALENDAR){
 
     try {
-      this.start = parseDate(startString);
+      this._start = _parseDate(startString);
     } catch ( pe) { // ParseException
       throw Exception(pe.toString());
     }
 
     if (endString == null) {
-      int durationMS = parseDurationMS(durationString);
-      end = durationMS < 0 ? -1 : start + durationMS;
+      int durationMS = _parseDurationMS(durationString);
+      _end = durationMS < 0 ? -1 : _start + durationMS;
     } else {
       try {
-        this.end = parseDate(endString);
+        this._end = _parseDate(endString);
       } catch ( pe) { // ParseException
         throw Exception(pe.toString());
       }
     }
 
-    this.startAllDay = startString != null && startString.length == 8;
-    this.endAllDay = endString != null && endString.length == 8;
+    this._startAllDay = startString != null && startString.length == 8;
+    this._endAllDay = endString != null && endString.length == 8;
 
   }
 
   String? getSummary() {
-    return summary;
+    return _summary;
   }
 
   /**
@@ -96,7 +96,7 @@ class CalendarParsedResult extends ParsedResult {
    */
   @deprecated
   DateTime getStart() {
-    return DateTime.fromMillisecondsSinceEpoch(start);
+    return DateTime.fromMillisecondsSinceEpoch(_start);
   }
 
   /**
@@ -104,14 +104,14 @@ class CalendarParsedResult extends ParsedResult {
    * @see #getEndTimestamp()
    */
   int getStartTimestamp() {
-    return start;
+    return _start;
   }
 
   /**
    * @return true if start time was specified as a whole day
    */
   bool isStartAllDay() {
-    return startAllDay;
+    return _startAllDay;
   }
 
   /**
@@ -120,7 +120,7 @@ class CalendarParsedResult extends ParsedResult {
    */
   @deprecated
   DateTime? getEnd() {
-    return end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(end);
+    return _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
   }
 
   /**
@@ -128,50 +128,50 @@ class CalendarParsedResult extends ParsedResult {
    * @see #getStartTimestamp()
    */
   int getEndTimestamp() {
-    return end;
+    return _end;
   }
 
   /**
    * @return true if end time was specified as a whole day
    */
   bool isEndAllDay() {
-    return endAllDay;
+    return _endAllDay;
   }
 
   String? getLocation() {
-    return location;
+    return _location;
   }
 
   String? getOrganizer() {
-    return organizer;
+    return _organizer;
   }
 
   List<String>? getAttendees() {
-    return attendees;
+    return _attendees;
   }
 
   String? getDescription() {
-    return description;
+    return _description;
   }
 
   double? getLatitude() {
-    return latitude;
+    return _latitude;
   }
 
   double? getLongitude() {
-    return longitude;
+    return _longitude;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(summary, result);
-    ParsedResult.maybeAppend(format(startAllDay, start), result);
-    ParsedResult.maybeAppend(format(endAllDay, end), result);
-    ParsedResult.maybeAppend(location, result);
-    ParsedResult.maybeAppend(organizer, result);
-    ParsedResult.maybeAppendList(attendees, result);
-    ParsedResult.maybeAppend(description, result);
+    ParsedResult.maybeAppend(_summary, result);
+    ParsedResult.maybeAppend(_format(_startAllDay, _start), result);
+    ParsedResult.maybeAppend(_format(_endAllDay, _end), result);
+    ParsedResult.maybeAppend(_location, result);
+    ParsedResult.maybeAppend(_organizer, result);
+    ParsedResult.maybeAppendList(_attendees, result);
+    ParsedResult.maybeAppend(_description, result);
     return result.toString();
   }
 
@@ -182,8 +182,8 @@ class CalendarParsedResult extends ParsedResult {
    * @param when The string to parse
    * @throws ParseException if not able to parse as a date
    */
-  static int parseDate(String? when){
-    if (when == null || !DATE_TIME.hasMatch(when)) {
+  static int _parseDate(String? when){
+    if (when == null || !_DATE_TIME.hasMatch(when)) {
       throw Exception('Date Parse error $when');
     }
     DateTime date = DateTime.parse(when);
@@ -191,7 +191,7 @@ class CalendarParsedResult extends ParsedResult {
     return date.millisecondsSinceEpoch;
   }
 
-  static String? format(bool allDay, int timestamp) {
+  static String? _format(bool allDay, int timestamp) {
     if (timestamp < 0) {
       return null;
     }
@@ -202,25 +202,25 @@ class CalendarParsedResult extends ParsedResult {
     return format.format(date);
   }
 
-  static int parseDurationMS(String? durationString) {
+  static int _parseDurationMS(String? durationString) {
     if (durationString == null) {
       return -1;
     }
-    var m = RFC2445_DURATION.firstMatch(durationString);
+    var m = _RFC2445_DURATION.firstMatch(durationString);
     if (m == null) {
       return -1;
     }
     int durationMS = 0;
-    for (int i = 0; i < RFC2445_DURATION_FIELD_UNITS.length; i++) {
+    for (int i = 0; i < _RFC2445_DURATION_FIELD_UNITS.length; i++) {
       String? fieldValue = m.group(i + 1);
       if (fieldValue != null) {
-        durationMS += RFC2445_DURATION_FIELD_UNITS[i] * int.parse(fieldValue);
+        durationMS += _RFC2445_DURATION_FIELD_UNITS[i] * int.parse(fieldValue);
       }
     }
     return durationMS;
   }
 
-  static int parseDateTimeString(String dateTimeString){
+  static int _parseDateTimeString(String dateTimeString){
     DateTime date = DateTime.parse(dateTimeString);
     return date.millisecondsSinceEpoch;
   }

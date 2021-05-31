@@ -40,7 +40,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     }
     String? firstName = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("N:", rawText, true);
     String? lastName = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("X:", rawText, true);
-    String? fullName = buildName(firstName, lastName);
+    String? fullName = _buildName(firstName, lastName);
     String? title = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("T:", rawText, true);
     String? org = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("C:", rawText, true);
     List<String>? addresses = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("A:", rawText);
@@ -52,7 +52,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     return AddressBookParsedResult(ResultParser.maybeWrap(fullName),
                                        null,
                                        null,
-                                       buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
+                                       _buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
                                        null,
         ResultParser.maybeWrap(email),
                                        null,
@@ -67,7 +67,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
                                        null);
   }
 
-  static List<String>? buildPhoneNumbers(String? number1,
+  static List<String>? _buildPhoneNumbers(String? number1,
                                             String? number2,
                                             String? number3) {
     List<String> numbers = [];
@@ -87,7 +87,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     return numbers.toList();
   }
 
-  static String? buildName(String? firstName, String? lastName) {
+  static String? _buildName(String? firstName, String? lastName) {
     if (firstName == null) {
       return lastName;
     } else {

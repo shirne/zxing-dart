@@ -24,21 +24,21 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class TextParsedResult extends ParsedResult {
-  final String text;
-  final String? language;
+  final String _text;
+  final String? _language;
 
-  TextParsedResult(this.text, this.language) : super(ParsedResultType.TEXT);
+  TextParsedResult(this._text, this._language) : super(ParsedResultType.TEXT);
 
   String getText() {
-    return text;
+    return _text;
   }
 
   String? getLanguage() {
-    return language;
+    return _language;
   }
 
   @override
   String getDisplayResult() {
-    return text;
+    return _text;
   }
 }

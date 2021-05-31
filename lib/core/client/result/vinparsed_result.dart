@@ -21,75 +21,75 @@ import 'parsed_result.dart';
  * Represents a parsed result that encodes a Vehicle Identification Number (VIN).
  */
 class VINParsedResult extends ParsedResult {
-  final String vin;
-  final String worldManufacturerID;
-  final String vehicleDescriptorSection;
-  final String vehicleIdentifierSection;
-  final String? countryCode;
-  final String vehicleAttributes;
-  final int modelYear;
-  final int plantCode;
-  final String sequentialNumber;
+  final String _vin;
+  final String _worldManufacturerID;
+  final String _vehicleDescriptorSection;
+  final String _vehicleIdentifierSection;
+  final String? _countryCode;
+  final String _vehicleAttributes;
+  final int _modelYear;
+  final int _plantCode;
+  final String _sequentialNumber;
 
   VINParsedResult(
-      this.vin,
-      this.worldManufacturerID,
-      this.vehicleDescriptorSection,
-      this.vehicleIdentifierSection,
-      this.countryCode,
-      this.vehicleAttributes,
-      this.modelYear,
-      this.plantCode,
-      this.sequentialNumber):super(ParsedResultType.VIN);
+      this._vin,
+      this._worldManufacturerID,
+      this._vehicleDescriptorSection,
+      this._vehicleIdentifierSection,
+      this._countryCode,
+      this._vehicleAttributes,
+      this._modelYear,
+      this._plantCode,
+      this._sequentialNumber):super(ParsedResultType.VIN);
 
   String getVIN() {
-    return vin;
+    return _vin;
   }
 
   String getWorldManufacturerID() {
-    return worldManufacturerID;
+    return _worldManufacturerID;
   }
 
   String getVehicleDescriptorSection() {
-    return vehicleDescriptorSection;
+    return _vehicleDescriptorSection;
   }
 
   String getVehicleIdentifierSection() {
-    return vehicleIdentifierSection;
+    return _vehicleIdentifierSection;
   }
 
   String? getCountryCode() {
-    return countryCode;
+    return _countryCode;
   }
 
   String getVehicleAttributes() {
-    return vehicleAttributes;
+    return _vehicleAttributes;
   }
 
   int getModelYear() {
-    return modelYear;
+    return _modelYear;
   }
 
   int getPlantCode() {
-    return plantCode;
+    return _plantCode;
   }
 
   String getSequentialNumber() {
-    return sequentialNumber;
+    return _sequentialNumber;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    result.write(worldManufacturerID); result.write(' ');
-    result.write(vehicleDescriptorSection); result.write(' ');
-    result.write(vehicleIdentifierSection); result.write('\n');
-    if (countryCode != null) {
-      result.write(countryCode); result.write(' ');
+    result.write(_worldManufacturerID); result.write(' ');
+    result.write(_vehicleDescriptorSection); result.write(' ');
+    result.write(_vehicleIdentifierSection); result.write('\n');
+    if (_countryCode != null) {
+      result.write(_countryCode); result.write(' ');
     }
-    result.writeCharCode(modelYear); result.write(' ');
-    result.writeCharCode(plantCode); result.write(' ');
-    result.write(sequentialNumber); result.write('\n');
+    result.writeCharCode(_modelYear); result.write(' ');
+    result.writeCharCode(_plantCode); result.write(' ');
+    result.write(_sequentialNumber); result.write('\n');
     return result.toString();
   }
 }

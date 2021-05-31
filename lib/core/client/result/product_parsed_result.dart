@@ -23,23 +23,23 @@ import 'parsed_result_type.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class ProductParsedResult extends ParsedResult {
-  final String productID;
-  final String normalizedProductID;
+  final String _productID;
+  final String _normalizedProductID;
 
-  ProductParsedResult(this.productID, [String? normalizedProductID])
-      : this.normalizedProductID = normalizedProductID ?? productID,
+  ProductParsedResult(this._productID, [String? normalizedProductID])
+      : this._normalizedProductID = normalizedProductID ?? _productID,
         super(ParsedResultType.PRODUCT);
 
   String getProductID() {
-    return productID;
+    return _productID;
   }
 
   String getNormalizedProductID() {
-    return normalizedProductID;
+    return _normalizedProductID;
   }
 
   @override
   String getDisplayResult() {
-    return productID;
+    return _productID;
   }
 }

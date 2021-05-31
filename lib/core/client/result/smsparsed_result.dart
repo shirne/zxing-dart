@@ -24,76 +24,76 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class SMSParsedResult extends ParsedResult {
-  final List<String> numbers;
-  final List<String>? vias;
-  final String? subject;
-  final String? body;
+  final List<String> _numbers;
+  final List<String>? _vias;
+  final String? _subject;
+  final String? _body;
 
-  SMSParsedResult.single(String number, String? via, this.subject, this.body)
-      : numbers = [number],
-        vias = [if(via != null)via],
+  SMSParsedResult.single(String number, String? via, this._subject, this._body)
+      : _numbers = [number],
+        _vias = [if(via != null)via],
         super(ParsedResultType.SMS);
 
-  SMSParsedResult(this.numbers, this.vias, this.subject, this.body)
+  SMSParsedResult(this._numbers, this._vias, this._subject, this._body)
       : super(ParsedResultType.SMS);
 
   String getSMSURI() {
     StringBuffer result = StringBuffer();
     result.write("sms:");
     bool first = true;
-    for (int i = 0; i < numbers.length; i++) {
+    for (int i = 0; i < _numbers.length; i++) {
       if (first) {
         first = false;
       } else {
         result.write(',');
       }
-      result.write(numbers[i]);
-      if (vias != null && vias!.length > i) {
+      result.write(_numbers[i]);
+      if (_vias != null && _vias!.length > i) {
         result.write(";via=");
-        result.write(vias![i]);
+        result.write(_vias![i]);
       }
     }
-    bool hasBody = body != null;
-    bool hasSubject = subject != null;
+    bool hasBody = _body != null;
+    bool hasSubject = _subject != null;
     if (hasBody || hasSubject) {
       result.write('?');
       if (hasBody) {
         result.write("body=");
-        result.write(body);
+        result.write(_body);
       }
       if (hasSubject) {
         if (hasBody) {
           result.write('&');
         }
         result.write("subject=");
-        result.write(subject);
+        result.write(_subject);
       }
     }
     return result.toString();
   }
 
   List<String> getNumbers() {
-    return numbers;
+    return _numbers;
   }
 
   List<String>? getVias() {
-    return vias;
+    return _vias;
   }
 
   String? getSubject() {
-    return subject;
+    return _subject;
   }
 
   String? getBody() {
-    return body;
+    return _body;
   }
 
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(numbers, result);
-    ParsedResult.maybeAppend(subject, result);
-    ParsedResult.maybeAppend(body, result);
+    ParsedResult.maybeAppendList(_numbers, result);
+    ParsedResult.maybeAppend(_subject, result);
+    ParsedResult.maybeAppend(_body, result);
     return result.toString();
   }
 }

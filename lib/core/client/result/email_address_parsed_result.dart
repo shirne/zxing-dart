@@ -24,15 +24,15 @@ import 'parsed_result_type.dart';
  * @author Sean Owen
  */
 class EmailAddressParsedResult extends ParsedResult {
-  final List<String>? tos;
-  final List<String>? ccs;
-  final List<String>? bccs;
-  final String? subject;
-  final String? body;
+  final List<String>? _tos;
+  final List<String>? _ccs;
+  final List<String>? _bccs;
+  final String? _subject;
+  final String? _body;
 
   EmailAddressParsedResult(
-      dynamic tos, [this.ccs, this.bccs, this.subject, this.body])
-      : this.tos = tos is String ? [tos] : tos as List<String>,
+      dynamic tos, [this._ccs, this._bccs, this._subject, this._body])
+      : this._tos = tos is String ? [tos] : tos as List<String>,
         super(ParsedResultType.EMAIL_ADDRESS);
 
   /**
@@ -41,27 +41,27 @@ class EmailAddressParsedResult extends ParsedResult {
    */
   @deprecated
   String? getEmailAddress() {
-    return tos == null || tos!.length == 0 ? null : tos![0];
+    return _tos == null || _tos!.length == 0 ? null : _tos![0];
   }
 
   List<String>? getTos() {
-    return tos;
+    return _tos;
   }
 
   List<String>? getCCs() {
-    return ccs;
+    return _ccs;
   }
 
   List<String>? getBCCs() {
-    return bccs;
+    return _bccs;
   }
 
   String? getSubject() {
-    return subject;
+    return _subject;
   }
 
   String? getBody() {
-    return body;
+    return _body;
   }
 
   /**
@@ -76,11 +76,11 @@ class EmailAddressParsedResult extends ParsedResult {
   @override
   String getDisplayResult() {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(tos, result);
-    ParsedResult.maybeAppendList(ccs, result);
-    ParsedResult.maybeAppendList(bccs, result);
-    ParsedResult.maybeAppend(subject, result);
-    ParsedResult.maybeAppend(body, result);
+    ParsedResult.maybeAppendList(_tos, result);
+    ParsedResult.maybeAppendList(_ccs, result);
+    ParsedResult.maybeAppendList(_bccs, result);
+    ParsedResult.maybeAppend(_subject, result);
+    ParsedResult.maybeAppend(_body, result);
     return result.toString();
   }
 }

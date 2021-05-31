@@ -29,12 +29,12 @@ import 'uriparsed_result.dart';
  */
 class URIResultParser extends ResultParser {
 
-  static final RegExp ALLOWED_URI_CHARS_PATTERN =
+  static final RegExp _ALLOWED_URI_CHARS_PATTERN =
       RegExp(r"[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+");
-  static final RegExp USER_IN_HOST = RegExp(":/*([^/@]+)@[^/]+");
+  static final RegExp _USER_IN_HOST = RegExp(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
-  static final RegExp URL_WITH_PROTOCOL_PATTERN = RegExp("[a-zA-Z][a-zA-Z0-9+-.]+:");
-  static final RegExp URL_WITHOUT_PROTOCOL_PATTERN = RegExp(
+  static final RegExp _URL_WITH_PROTOCOL_PATTERN = RegExp("[a-zA-Z][a-zA-Z0-9+-.]+:");
+  static final RegExp _URL_WITHOUT_PROTOCOL_PATTERN = RegExp(
       "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
       "(:\\d{1,5})?" + // maybe port
       r"(/|\\?|$)"); // query, path or nothing
@@ -63,7 +63,7 @@ class URIResultParser extends ResultParser {
    *  to connect to yourbank.com at first glance.
    */
   static bool isPossiblyMaliciousURI(String uri) {
-    return !ALLOWED_URI_CHARS_PATTERN.hasMatch(uri) || USER_IN_HOST.hasMatch(uri);
+    return !_ALLOWED_URI_CHARS_PATTERN.hasMatch(uri) || _USER_IN_HOST.hasMatch(uri);
   }
 
   static bool isBasicallyValidURI(String uri) {
@@ -71,7 +71,7 @@ class URIResultParser extends ResultParser {
       // Quick hack check for a common case
       return false;
     }
-    RegExpMatch? m = URL_WITH_PROTOCOL_PATTERN.firstMatch(uri);
+    RegExpMatch? m = _URL_WITH_PROTOCOL_PATTERN.firstMatch(uri);
     if(m == null){
       return false;
     }

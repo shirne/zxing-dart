@@ -72,15 +72,15 @@ class SMSMMSResultParser extends ResultParser {
     while (
         (comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
       String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
-      addNumberVia(numbers, vias, numberPart);
+      _addNumberVia(numbers, vias, numberPart);
       lastComma = comma;
     }
-    addNumberVia(numbers, vias, smsURIWithoutQuery.substring(lastComma + 1));
+    _addNumberVia(numbers, vias, smsURIWithoutQuery.substring(lastComma + 1));
 
     return SMSParsedResult(numbers.toList(), vias.toList(), subject, body);
   }
 
-  static void addNumberVia(
+  static void _addNumberVia(
       List<String> numbers, List<String> vias, String numberPart) {
     int numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
