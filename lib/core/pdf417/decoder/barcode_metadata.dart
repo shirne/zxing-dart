@@ -18,33 +18,33 @@
  * @author Guenther Grau
  */
 class BarcodeMetadata {
-  final int columnCount;
-  final int errorCorrectionLevel;
-  final int rowCountUpperPart;
-  final int rowCountLowerPart;
-  final int rowCount;
+  final int _columnCount;
+  final int _errorCorrectionLevel;
+  final int _rowCountUpperPart;
+  final int _rowCountLowerPart;
+  final int _rowCount;
 
-  BarcodeMetadata(this.columnCount, this.rowCountUpperPart,
-      this.rowCountLowerPart, this.errorCorrectionLevel)
-      : this.rowCount = rowCountUpperPart + rowCountLowerPart;
+  BarcodeMetadata(this._columnCount, this._rowCountUpperPart,
+      this._rowCountLowerPart, this._errorCorrectionLevel)
+      : this._rowCount = _rowCountUpperPart + _rowCountLowerPart;
 
   int getColumnCount() {
-    return columnCount;
+    return _columnCount;
   }
 
   int getErrorCorrectionLevel() {
-    return errorCorrectionLevel;
+    return _errorCorrectionLevel;
   }
 
   int getRowCount() {
-    return rowCount;
+    return _rowCount;
   }
 
   int getRowCountUpperPart() {
-    return rowCountUpperPart;
+    return _rowCountUpperPart;
   }
 
   int getRowCountLowerPart() {
-    return rowCountLowerPart;
+    return _rowCountLowerPart;
   }
 }

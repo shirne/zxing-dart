@@ -20,14 +20,14 @@ import 'dart:typed_data';
  * @author Jacob Haynes
  */
 class BarcodeRow {
-  final Uint8List row;
+  final Uint8List _row;
   //A tacker for position in the bar
-  int currentLocation = 0;
+  int _currentLocation = 0;
 
   /**
    * Creates a Barcode row of the width
    */
-  BarcodeRow(int width) : row = Uint8List(width);
+  BarcodeRow(int width) : _row = Uint8List(width);
 
   /**
    * Sets a specific location in the bar
@@ -36,7 +36,11 @@ class BarcodeRow {
    * @param value Black if true, white if false;
    */
   void set(int x, int value) {
-    row[x] = value;
+    _row[x] = value;
+  }
+
+  void _set(int x, bool black) {
+    _row[x] = (black ? 1 : 0);
   }
 
   /**
@@ -45,7 +49,7 @@ class BarcodeRow {
    */
   void addBar(bool black, int width) {
     for (int ii = 0; ii < width; ii++) {
-      set(currentLocation++, black ? 1 : 0);
+      _set(_currentLocation++, black);
     }
   }
 
@@ -56,9 +60,9 @@ class BarcodeRow {
    * @return the scaled row
    */
   Uint8List getScaledRow(int scale) {
-    Uint8List output = Uint8List(row.length * scale);
+    Uint8List output = Uint8List(_row.length * scale);
     for (int i = 0; i < output.length; i++) {
-      output[i] = row[i ~/ scale];
+      output[i] = _row[i ~/ scale];
     }
     return output;
   }

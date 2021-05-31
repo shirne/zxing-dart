@@ -28,9 +28,9 @@ import 'modulus_poly.dart';
  * @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
  */
 class ErrorCorrection {
-  final ModulusGF field;
+  final ModulusGF _field;
 
-  ErrorCorrection() : this.field = ModulusGF.PDF417_GF;
+  ErrorCorrection() : this._field = ModulusGF.PDF417_GF;
 
   /**
    * @param received received codewords
@@ -40,11 +40,11 @@ class ErrorCorrection {
    * @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
    */
   int decode(List<int> received, int numECCodewords, List<int>? erasures) {
-    ModulusPoly poly = ModulusPoly(field, received);
+    ModulusPoly poly = ModulusPoly(_field, received);
     List<int> S = List.filled(numECCodewords, 0);
     bool error = false;
     for (int i = numECCodewords; i > 0; i--) {
-      int eval = poly.evaluateAt(field.exp(i));
+      int eval = poly.evaluateAt(_field.exp(i));
       S[numECCodewords - i] = eval;
       if (eval != 0) {
         error = true;
@@ -55,42 +55,42 @@ class ErrorCorrection {
       return 0;
     }
 
-    ModulusPoly knownErrors = field.getOne();
+    ModulusPoly knownErrors = _field.getOne();
     if (erasures != null) {
       for (int erasure in erasures) {
-        int b = field.exp(received.length - 1 - erasure);
+        int b = _field.exp(received.length - 1 - erasure);
         // Add (1 - bx) term:
-        ModulusPoly term = ModulusPoly(field, [field.subtract(0, b), 1]);
+        ModulusPoly term = ModulusPoly(_field, [_field.subtract(0, b), 1]);
         knownErrors = knownErrors.multiplyPoly(term);
       }
     }
 
-    ModulusPoly syndrome = ModulusPoly(field, S);
+    ModulusPoly syndrome = ModulusPoly(_field, S);
     //syndrome = syndrome.multiply(knownErrors);
 
-    List<ModulusPoly> sigmaOmega = runEuclideanAlgorithm(
-        field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+    List<ModulusPoly> sigmaOmega = _runEuclideanAlgorithm(
+        _field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
     ModulusPoly sigma = sigmaOmega[0];
     ModulusPoly omega = sigmaOmega[1];
 
     //sigma = sigma.multiply(knownErrors);
 
-    List<int> errorLocations = findErrorLocations(sigma);
+    List<int> errorLocations = _findErrorLocations(sigma);
     List<int> errorMagnitudes =
-        findErrorMagnitudes(omega, sigma, errorLocations);
+        _findErrorMagnitudes(omega, sigma, errorLocations);
 
     for (int i = 0; i < errorLocations.length; i++) {
-      int position = received.length - 1 - field.log(errorLocations[i]);
+      int position = received.length - 1 - _field.log(errorLocations[i]);
       if (position < 0) {
         throw ChecksumException.getChecksumInstance();
       }
       received[position] =
-          field.subtract(received[position], errorMagnitudes[i]);
+          _field.subtract(received[position], errorMagnitudes[i]);
     }
     return errorLocations.length;
   }
 
-  List<ModulusPoly> runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) {
+  List<ModulusPoly> _runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) {
     // Assume a's degree is >= b's
     if (a.getDegree() < b.getDegree()) {
       ModulusPoly temp = a;
@@ -100,8 +100,8 @@ class ErrorCorrection {
 
     ModulusPoly rLast = a;
     ModulusPoly r = b;
-    ModulusPoly tLast = field.getZero();
-    ModulusPoly t = field.getOne();
+    ModulusPoly tLast = _field.getZero();
+    ModulusPoly t = _field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
     while (r.getDegree() >= R / 2) {
@@ -116,13 +116,13 @@ class ErrorCorrection {
         throw ChecksumException.getChecksumInstance();
       }
       r = rLastLast;
-      ModulusPoly q = field.getZero();
+      ModulusPoly q = _field.getZero();
       int denominatorLeadingTerm = rLast.getCoefficient(rLast.getDegree());
-      int dltInverse = field.inverse(denominatorLeadingTerm);
+      int dltInverse = _field.inverse(denominatorLeadingTerm);
       while (r.getDegree() >= rLast.getDegree() && !r.isZero()) {
         int degreeDiff = r.getDegree() - rLast.getDegree();
-        int scale = field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
-        q = q.add(field.buildMonomial(degreeDiff, scale));
+        int scale = _field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
+        q = q.add(_field.buildMonomial(degreeDiff, scale));
         r = r.subtract(rLast.multiplyByMonomial(degreeDiff, scale));
       }
 
@@ -134,19 +134,19 @@ class ErrorCorrection {
       throw ChecksumException.getChecksumInstance();
     }
 
-    int inverse = field.inverse(sigmaTildeAtZero);
+    int inverse = _field.inverse(sigmaTildeAtZero);
     ModulusPoly sigma = t.multiply(inverse);
     ModulusPoly omega = r.multiply(inverse);
     return [sigma, omega];
   }
 
-  List<int> findErrorLocations(ModulusPoly errorLocator) {
+  List<int> _findErrorLocations(ModulusPoly errorLocator) {
     // This is a direct application of Chien's search
     int numErrors = errorLocator.getDegree();
     List<int> result = [];
-    for (int i = 1; i < field.getSize(); i++) {
+    for (int i = 1; i < _field.getSize(); i++) {
       if (errorLocator.evaluateAt(i) == 0) {
-        result.add(field.inverse(i));
+        result.add(_field.inverse(i));
       }
     }
     if (result.length != numErrors) {
@@ -155,25 +155,25 @@ class ErrorCorrection {
     return result;
   }
 
-  List<int> findErrorMagnitudes(ModulusPoly errorEvaluator,
+  List<int> _findErrorMagnitudes(ModulusPoly errorEvaluator,
       ModulusPoly errorLocator, List<int> errorLocations) {
     int errorLocatorDegree = errorLocator.getDegree();
     List<int> formalDerivativeCoefficients = List.filled(errorLocatorDegree, 0);
     for (int i = 1; i <= errorLocatorDegree; i++) {
       formalDerivativeCoefficients[errorLocatorDegree - i] =
-          field.multiply(i, errorLocator.getCoefficient(i));
+          _field.multiply(i, errorLocator.getCoefficient(i));
     }
     ModulusPoly formalDerivative =
-        ModulusPoly(field, formalDerivativeCoefficients);
+        ModulusPoly(_field, formalDerivativeCoefficients);
 
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     List<int> result = [];
     for (int i = 0; i < s; i++) {
-      int xiInverse = field.inverse(errorLocations[i]);
-      int numerator = field.subtract(0, errorEvaluator.evaluateAt(xiInverse));
-      int denominator = field.inverse(formalDerivative.evaluateAt(xiInverse));
-      result.add(field.multiply(numerator, denominator));
+      int xiInverse = _field.inverse(errorLocations[i]);
+      int numerator = _field.subtract(0, errorEvaluator.evaluateAt(xiInverse));
+      int denominator = _field.inverse(formalDerivative.evaluateAt(xiInverse));
+      result.add(_field.multiply(numerator, denominator));
     }
     return result;
   }

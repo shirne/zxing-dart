@@ -34,16 +34,16 @@ class PDF417 {
   /**
    * The start pattern (17 bits)
    */
-  static final int START_PATTERN = 0x1fea8;
+  static const int _START_PATTERN = 0x1fea8;
   /**
    * The stop pattern (18 bits)
    */
-  static final int STOP_PATTERN = 0x3fa29;
+  static const int _STOP_PATTERN = 0x3fa29;
 
   /**
    * The codeword table from the Annex A of ISO/IEC 15438:2001(E).
    */
-  static final List<List<int>> CODEWORD_TABLE = [
+  static const List<List<int>> _CODEWORD_TABLE = [
     [
       0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e, //
       0x1a8c0, 0x1d470, 0x1a860, 0x15040, 0x1a830, 0x15020,
@@ -517,23 +517,23 @@ class PDF417 {
     ]
   ];
 
-  static final double PREFERRED_RATIO = 3.0;
-  static final double DEFAULT_MODULE_WIDTH = 0.357; //1px in mm
-  static final double HEIGHT = 2.0; //mm
+  static const double _PREFERRED_RATIO = 3.0;
+  static const double _DEFAULT_MODULE_WIDTH = 0.357; //1px in mm
+  static const double _HEIGHT = 2.0; //mm
 
-  BarcodeMatrix? barcodeMatrix;
-  bool compact;
-  Compaction compaction = Compaction.AUTO;
-  Encoding? encoding;
-  int minCols = 2;
-  int maxCols = 30;
-  int maxRows = 30;
-  int minRows = 2;
+  BarcodeMatrix? _barcodeMatrix;
+  bool _compact;
+  Compaction _compaction = Compaction.AUTO;
+  Encoding? _encoding;
+  int _minCols = 2;
+  int _maxCols = 30;
+  int _maxRows = 30;
+  int _minRows = 2;
 
-  PDF417([this.compact = false]);
+  PDF417([this._compact = false]);
 
   BarcodeMatrix? getBarcodeMatrix() {
-    return barcodeMatrix;
+    return _barcodeMatrix;
   }
 
   /**
@@ -546,7 +546,7 @@ class PDF417 {
    *          row indicator codewords)
    * @return the number of rows in the symbol (r)
    */
-  static int calculateNumberOfRows(int m, int k, int c) {
+  static int _calculateNumberOfRows(int m, int k, int c) {
     int r = ((m + 1 + k) ~/ c) + 1;
     if (c * r >= (m + 1 + k + c)) {
       r--;
@@ -565,12 +565,12 @@ class PDF417 {
    * @param r the number of rows in the symbol
    * @return the number of pad codewords
    */
-  static int getNumberOfPadCodewords(int m, int k, int c, int r) {
+  static int _getNumberOfPadCodewords(int m, int k, int c, int r) {
     int n = c * r - k;
     return n > m + 1 ? n - m - 1 : 0;
   }
 
-  static void encodeChar(int pattern, int len, BarcodeRow logic) {
+  static void _encodeChar(int pattern, int len, BarcodeRow logic) {
     int map = 1 << len - 1;
     bool last = (pattern & map) != 0; //Initialize to inverse of first bit
     int width = 0;
@@ -589,13 +589,13 @@ class PDF417 {
     logic.addBar(last, width);
   }
 
-  void encodeLowLevel(String fullCodewords, int c, int r,
+  void _encodeLowLevel(String fullCodewords, int c, int r,
       int errorCorrectionLevel, BarcodeMatrix logic) {
     int idx = 0;
     for (int y = 0; y < r; y++) {
       int cluster = y % 3;
       logic.startRow();
-      encodeChar(START_PATTERN, 17, logic.getCurrentRow());
+      _encodeChar(_START_PATTERN, 17, logic.getCurrentRow());
 
       int left;
       int right;
@@ -610,23 +610,23 @@ class PDF417 {
         right = (30 * (y ~/ 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
       }
 
-      int pattern = CODEWORD_TABLE[cluster][left];
-      encodeChar(pattern, 17, logic.getCurrentRow());
+      int pattern = _CODEWORD_TABLE[cluster][left];
+      _encodeChar(pattern, 17, logic.getCurrentRow());
 
       for (int x = 0; x < c; x++) {
-        pattern = CODEWORD_TABLE[cluster][fullCodewords.codeUnitAt(idx)];
-        encodeChar(pattern, 17, logic.getCurrentRow());
+        pattern = _CODEWORD_TABLE[cluster][fullCodewords.codeUnitAt(idx)];
+        _encodeChar(pattern, 17, logic.getCurrentRow());
         idx++;
       }
 
-      if (compact) {
-        encodeChar(STOP_PATTERN, 1,
+      if (_compact) {
+        _encodeChar(_STOP_PATTERN, 1,
             logic.getCurrentRow()); // encodes stop line for compact pdf417
       } else {
-        pattern = CODEWORD_TABLE[cluster][right];
-        encodeChar(pattern, 17, logic.getCurrentRow());
+        pattern = _CODEWORD_TABLE[cluster][right];
+        _encodeChar(pattern, 17, logic.getCurrentRow());
 
-        encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
+        _encodeChar(_STOP_PATTERN, 18, logic.getCurrentRow());
       }
     }
   }
@@ -642,16 +642,16 @@ class PDF417 {
         PDF417ErrorCorrection.getErrorCorrectionCodewordCount(
             errorCorrectionLevel);
     String highLevel =
-        PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding!);
+        PDF417HighLevelEncoder.encodeHighLevel(msg, _compaction, _encoding!);
     int sourceCodeWords = highLevel.length;
 
     List<int> dimension =
-        determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
+        _determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
 
     int cols = dimension[0];
     int rows = dimension[1];
 
-    int pad = getNumberOfPadCodewords(
+    int pad = _getNumberOfPadCodewords(
         sourceCodeWords, errorCorrectionCodeWords, cols, rows);
 
     //2. step: construct data codewords
@@ -674,9 +674,9 @@ class PDF417 {
         dataCodewords, errorCorrectionLevel);
 
     //4. step: low-level encoding
-    barcodeMatrix = BarcodeMatrix(rows, cols);
-    encodeLowLevel(
-        dataCodewords + ec, cols, rows, errorCorrectionLevel, barcodeMatrix!);
+    _barcodeMatrix = BarcodeMatrix(rows, cols);
+    _encodeLowLevel(
+        dataCodewords + ec, cols, rows, errorCorrectionLevel, _barcodeMatrix!);
   }
 
   /**
@@ -687,30 +687,30 @@ class PDF417 {
    * @param errorCorrectionCodeWords number of error correction code words
    * @return dimension object containing cols as width and rows as height
    */
-  List<int> determineDimensions(
+  List<int> _determineDimensions(
       int sourceCodeWords, int errorCorrectionCodeWords) {
     double ratio = 0.0;
     List<int>? dimension;
 
-    for (int cols = minCols; cols <= maxCols; cols++) {
-      int rows = calculateNumberOfRows(
+    for (int cols = _minCols; cols <= _maxCols; cols++) {
+      int rows = _calculateNumberOfRows(
           sourceCodeWords, errorCorrectionCodeWords, cols);
 
-      if (rows < minRows) {
+      if (rows < _minRows) {
         break;
       }
 
-      if (rows > maxRows) {
+      if (rows > _maxRows) {
         continue;
       }
 
       double newRatio =
-          ((17 * cols + 69) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
+          ((17 * cols + 69) * _DEFAULT_MODULE_WIDTH) / (rows * _HEIGHT);
 
       // ignore if previous ratio is closer to preferred ratio
       if (dimension != null &&
-          (newRatio - PREFERRED_RATIO).abs() >
-              (ratio - PREFERRED_RATIO).abs()) {
+          (newRatio - _PREFERRED_RATIO).abs() >
+              (ratio - _PREFERRED_RATIO).abs()) {
         continue;
       }
 
@@ -720,10 +720,10 @@ class PDF417 {
 
     // Handle case when min values were larger than necessary
     if (dimension == null) {
-      int rows = calculateNumberOfRows(
-          sourceCodeWords, errorCorrectionCodeWords, minCols);
-      if (rows < minRows) {
-        dimension = [minCols, minRows];
+      int rows = _calculateNumberOfRows(
+          sourceCodeWords, errorCorrectionCodeWords, _minCols);
+      if (rows < _minRows) {
+        dimension = [_minCols, _minRows];
       }
     }
 
@@ -743,30 +743,30 @@ class PDF417 {
    * @param minRows minimum allowed rows
    */
   void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
-    this.maxCols = maxCols;
-    this.minCols = minCols;
-    this.maxRows = maxRows;
-    this.minRows = minRows;
+    this._maxCols = maxCols;
+    this._minCols = minCols;
+    this._maxRows = maxRows;
+    this._minRows = minRows;
   }
 
   /**
    * @param compaction compaction mode to use
    */
   void setCompaction(Compaction compaction) {
-    this.compaction = compaction;
+    this._compaction = compaction;
   }
 
   /**
    * @param compact if true, enables compaction
    */
   void setCompact(bool compact) {
-    this.compact = compact;
+    this._compact = compact;
   }
 
   /**
    * @param encoding sets character encoding to use
    */
   void setEncoding(Encoding encoding) {
-    this.encoding = encoding;
+    this._encoding = encoding;
   }
 }

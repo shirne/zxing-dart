@@ -35,12 +35,12 @@ class PDF417Writer implements Writer {
   /**
    * default white space (margin) around the code
    */
-  static final int WHITE_SPACE = 30;
+  static const int _WHITE_SPACE = 30;
 
   /**
    * default error correction level
    */
-  static final int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+  static const int _DEFAULT_ERROR_CORRECTION_LEVEL = 2;
 
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
@@ -50,8 +50,8 @@ class PDF417Writer implements Writer {
     }
 
     PDF417 encoder = PDF417();
-    int margin = WHITE_SPACE;
-    int errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
+    int margin = _WHITE_SPACE;
+    int errorCorrectionLevel = _DEFAULT_ERROR_CORRECTION_LEVEL;
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
@@ -81,14 +81,14 @@ class PDF417Writer implements Writer {
       }
     }
 
-    return bitMatrixFromEncoder(
+    return _bitMatrixFromEncoder(
         encoder, contents, errorCorrectionLevel, width, height, margin);
   }
 
   /**
    * Takes encoder, accounts for width/height, and retrieves bit matrix
    */
-  static BitMatrix bitMatrixFromEncoder(PDF417 encoder, String contents,
+  static BitMatrix _bitMatrixFromEncoder(PDF417 encoder, String contents,
       int errorCorrectionLevel, int width, int height, int margin) {
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
@@ -97,7 +97,7 @@ class PDF417Writer implements Writer {
         encoder.getBarcodeMatrix()!.getScaledMatrix(1, aspectRatio);
     bool rotated = false;
     if ((height > width) != (originalScale[0].length < originalScale.length)) {
-      originalScale = rotateArray(originalScale);
+      originalScale = _rotateArray(originalScale);
       rotated = true;
     }
 
@@ -110,11 +110,11 @@ class PDF417Writer implements Writer {
           .getBarcodeMatrix()!
           .getScaledMatrix(scale, scale * aspectRatio);
       if (rotated) {
-        scaledMatrix = rotateArray(scaledMatrix);
+        scaledMatrix = _rotateArray(scaledMatrix);
       }
-      return bitMatrixFromBitArray(scaledMatrix, margin);
+      return _bitMatrixFromBitArray(scaledMatrix, margin);
     }
-    return bitMatrixFromBitArray(originalScale, margin);
+    return _bitMatrixFromBitArray(originalScale, margin);
   }
 
   /**
@@ -124,7 +124,7 @@ class PDF417Writer implements Writer {
    * @param margin border around the barcode
    * @return BitMatrix of the input
    */
-  static BitMatrix bitMatrixFromBitArray(List<Uint8List> input, int margin) {
+  static BitMatrix _bitMatrixFromBitArray(List<Uint8List> input, int margin) {
     // Creates the bit matrix with extra space for whitespace
     BitMatrix output =
         BitMatrix(input[0].length + 2 * margin, input.length + 2 * margin);
@@ -146,7 +146,7 @@ class PDF417Writer implements Writer {
   /**
    * Takes and rotates the it 90 degrees
    */
-  static List<Uint8List> rotateArray(List<Uint8List> bitarray) {
+  static List<Uint8List> _rotateArray(List<Uint8List> bitarray) {
     List<Uint8List> temp = List.generate(
         bitarray[0].length, (index) => Uint8List(bitarray.length));
     for (int ii = 0; ii < bitarray.length; ii++) {

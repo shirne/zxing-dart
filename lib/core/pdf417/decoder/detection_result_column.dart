@@ -21,14 +21,14 @@ import 'codeword.dart';
  * @author Guenther Grau
  */
 class DetectionResultColumn {
-  static final int MAX_NEARBY_DISTANCE = 5;
+  static const int _MAX_NEARBY_DISTANCE = 5;
 
-  final BoundingBox boundingBox;
-  final List<Codeword?> codewords;
+  final BoundingBox _boundingBox;
+  final List<Codeword?> _codewords;
 
   DetectionResultColumn(BoundingBox boundingBox)
-      : this.boundingBox = BoundingBox.copy(boundingBox),
-        codewords = List.filled(
+      : this._boundingBox = BoundingBox.copy(boundingBox),
+        _codewords = List.filled(
             boundingBox.getMaxY() - boundingBox.getMinY() + 1, null);
 
   Codeword? getCodewordNearby(int imageRow) {
@@ -36,17 +36,17 @@ class DetectionResultColumn {
     if (codeword != null) {
       return codeword;
     }
-    for (int i = 1; i < MAX_NEARBY_DISTANCE; i++) {
+    for (int i = 1; i < _MAX_NEARBY_DISTANCE; i++) {
       int nearImageRow = imageRowToCodewordIndex(imageRow) - i;
       if (nearImageRow >= 0) {
-        codeword = codewords[nearImageRow];
+        codeword = _codewords[nearImageRow];
         if (codeword != null) {
           return codeword;
         }
       }
       nearImageRow = imageRowToCodewordIndex(imageRow) + i;
-      if (nearImageRow < codewords.length) {
-        codeword = codewords[nearImageRow];
+      if (nearImageRow < _codewords.length) {
+        codeword = _codewords[nearImageRow];
         if (codeword != null) {
           return codeword;
         }
@@ -56,23 +56,23 @@ class DetectionResultColumn {
   }
 
   int imageRowToCodewordIndex(int imageRow) {
-    return imageRow - boundingBox.getMinY();
+    return imageRow - _boundingBox.getMinY();
   }
 
   void setCodeword(int imageRow, Codeword codeword) {
-    codewords[imageRowToCodewordIndex(imageRow)] = codeword;
+    _codewords[imageRowToCodewordIndex(imageRow)] = codeword;
   }
 
   Codeword? getCodeword(int imageRow) {
-    return codewords[imageRowToCodewordIndex(imageRow)];
+    return _codewords[imageRowToCodewordIndex(imageRow)];
   }
 
   BoundingBox getBoundingBox() {
-    return boundingBox;
+    return _boundingBox;
   }
 
   List<Codeword?> getCodewords() {
-    return codewords;
+    return _codewords;
   }
 
   @override
@@ -80,7 +80,7 @@ class DetectionResultColumn {
     try {
       StringBuffer formatter = StringBuffer();
       int row = 0;
-      for (Codeword? codeword in codewords) {
+      for (Codeword? codeword in _codewords) {
         if (codeword == null) {
           formatter.write("${(row++).toString()}:    |   \n");
           continue;

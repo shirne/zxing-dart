@@ -23,11 +23,15 @@ import '../pdf417_common.dart';
  * @author creatale GmbH (christoph.schulz@creatale.de)
  */
 class PDF417CodewordDecoder {
-  static final List<List<double>> RATIOS_TABLE = List.generate(
+
+  static bool _isInit = false;
+  static final List<List<double>> _RATIOS_TABLE = List.generate(
       PDF417Common.SYMBOL_TABLE.length,
       (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0));
 
   static init() {
+    if(_isInit)return;
+    _isInit = true;
     // Pre-computes the symbol ratio table.
     for (int i = 0; i < PDF417Common.SYMBOL_TABLE.length; i++) {
       int currentSymbol = PDF417Common.SYMBOL_TABLE[i];
@@ -39,23 +43,23 @@ class PDF417CodewordDecoder {
           currentSymbol >>= 1;
         }
         currentBit = currentSymbol & 0x1;
-        RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] =
+        _RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] =
             size / PDF417Common.MODULES_IN_CODEWORD;
       }
     }
   }
 
-  PDF417CodewordDecoder();
+  PDF417CodewordDecoder._();
 
   static int getDecodedValue(List<int> moduleBitCount) {
-    int decodedValue = getDecodedCodewordValue(sampleBitCounts(moduleBitCount));
+    int decodedValue = _getDecodedCodewordValue(_sampleBitCounts(moduleBitCount));
     if (decodedValue != -1) {
       return decodedValue;
     }
-    return getClosestDecodedValue(moduleBitCount);
+    return _getClosestDecodedValue(moduleBitCount);
   }
 
-  static List<int> sampleBitCounts(List<int> moduleBitCount) {
+  static List<int> _sampleBitCounts(List<int> moduleBitCount) {
     double bitCountSum = MathUtils.sum(moduleBitCount).toDouble();
     List<int> result = List.filled(PDF417Common.BARS_IN_MODULE, 0);
     int bitCountIndex = 0;
@@ -73,12 +77,12 @@ class PDF417CodewordDecoder {
     return result;
   }
 
-  static int getDecodedCodewordValue(List<int> moduleBitCount) {
-    int decodedValue = getBitValue(moduleBitCount);
+  static int _getDecodedCodewordValue(List<int> moduleBitCount) {
+    int decodedValue = _getBitValue(moduleBitCount);
     return PDF417Common.getCodeword(decodedValue) == -1 ? -1 : decodedValue;
   }
 
-  static int getBitValue(List<int> moduleBitCount) {
+  static int _getBitValue(List<int> moduleBitCount) {
     int result = 0;
     for (int i = 0; i < moduleBitCount.length; i++) {
       for (int bit = 0; bit < moduleBitCount[i]; bit++) {
@@ -88,7 +92,8 @@ class PDF417CodewordDecoder {
     return result;
   }
 
-  static int getClosestDecodedValue(List<int> moduleBitCount) {
+  static int _getClosestDecodedValue(List<int> moduleBitCount) {
+    init();
     int bitCountSum = MathUtils.sum(moduleBitCount);
     List<double> bitCountRatios = List.filled(PDF417Common.BARS_IN_MODULE, 0);
     if (bitCountSum > 1) {
@@ -98,9 +103,9 @@ class PDF417CodewordDecoder {
     }
     double bestMatchError = double.maxFinite;
     int bestMatch = -1;
-    for (int j = 0; j < RATIOS_TABLE.length; j++) {
+    for (int j = 0; j < _RATIOS_TABLE.length; j++) {
       double error = 0.0;
-      List<double> ratioTableRow = RATIOS_TABLE[j];
+      List<double> ratioTableRow = _RATIOS_TABLE[j];
       for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
         double diff = ratioTableRow[k] - bitCountRatios[k];
         error += diff * diff;

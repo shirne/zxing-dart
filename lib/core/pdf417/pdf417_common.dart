@@ -21,20 +21,20 @@ import '../common/detector/math_utils.dart';
  * @author Guenther Grau
  */
 class PDF417Common {
-  static final int NUMBER_OF_CODEWORDS = 929;
+  static const int NUMBER_OF_CODEWORDS = 929;
   // Maximum Codewords (Data + Error).
-  static final int MAX_CODEWORDS_IN_BARCODE = NUMBER_OF_CODEWORDS - 1;
-  static final int MIN_ROWS_IN_BARCODE = 3;
-  static final int MAX_ROWS_IN_BARCODE = 90;
+  static const int MAX_CODEWORDS_IN_BARCODE = NUMBER_OF_CODEWORDS - 1;
+  static const int MIN_ROWS_IN_BARCODE = 3;
+  static const int MAX_ROWS_IN_BARCODE = 90;
   // One left row indication column + max 30 data columns + one right row indicator column
   //static final int MAX_CODEWORDS_IN_ROW = 32;
-  static final int MODULES_IN_CODEWORD = 17;
-  static final int MODULES_IN_STOP_PATTERN = 18;
-  static final int BARS_IN_MODULE = 8;
+  static const int MODULES_IN_CODEWORD = 17;
+  static const int MODULES_IN_STOP_PATTERN = 18;
+  static const int BARS_IN_MODULE = 8;
 
-  static final List<int> EMPTY_INT_ARRAY = [];
+  static const List<int> _EMPTY_INT_ARRAY = [];
 
-  PDF417Common();
+  PDF417Common._();
 
   /**
    * @param moduleBitCount values to sum
@@ -46,10 +46,10 @@ class PDF417Common {
     return MathUtils.sum(moduleBitCount);
   }
 
-  @deprecated
+
   static List<int> toIntArray(List<int>? list) {
     if (list == null || list.isEmpty) {
-      return EMPTY_INT_ARRAY;
+      return _EMPTY_INT_ARRAY;
     }
     List<int> result = List.generate(list.length, (index) => list[index]);
 
@@ -66,7 +66,7 @@ class PDF417Common {
     if (i < 0) {
       return -1;
     }
-    return (CODEWORD_TABLE[i] - 1) % NUMBER_OF_CODEWORDS;
+    return (_CODEWORD_TABLE[i] - 1) % NUMBER_OF_CODEWORDS;
   }
 
   /**
@@ -74,7 +74,7 @@ class PDF417Common {
    * specification. The index of a symbol in this table corresponds to the
    * index into the codeword table.
    */
-  static final List<int> SYMBOL_TABLE = [
+  static const List<int> SYMBOL_TABLE = [
     0x1025e, 0x1027a, 0x1029e, 0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e,
     0x1035c, 0x10396, 0x103a6, 0x103ac, //
     0x10422, 0x10428, 0x10436, 0x10442, 0x10444, 0x10448, 0x10450, 0x1045e,
@@ -545,7 +545,7 @@ class PDF417Common {
   /**
    * This table contains to codewords for all symbols.
    */
-  static final List<int> CODEWORD_TABLE = [
+  static const List<int> _CODEWORD_TABLE = [
     2627, 1819, 2622, 2621, 1813, 1812, 2729, 2724, 2723, 2779, 2774, 2773, 902,
     896, 908, 868, 865, 861, 859, 2511, //
     873, 871, 1780, 835, 2493, 825, 2491, 842, 837, 844, 1764, 1762, 811, 810,

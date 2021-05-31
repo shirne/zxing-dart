@@ -40,7 +40,7 @@ import 'pdf417_result_metadata.dart';
  * @author Guenther Grau
  */
 class PDF417Reader implements Reader, MultipleBarcodeReader {
-  static final List<Result> EMPTY_RESULT_ARRAY = [];
+  static const List<Result> _EMPTY_RESULT_ARRAY = [];
 
   /**
    * Locates and decodes a PDF417 code in an image.
@@ -51,14 +51,24 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
    */
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
-    List<Result> result = decodeStatic(image, hints, false);
+    List<Result> result = _decodeStatic(image, hints, false);
     if (result.length == 0 ) { // || result[0] == null
       throw NotFoundException.getNotFoundInstance();
     }
     return result[0];
   }
 
-  static List<Result> decodeStatic(BinaryBitmap image,
+  @override
+  List<Result> decodeMultiple(BinaryBitmap image,
+      [Map<DecodeHintType, Object>? hints]) {
+    try {
+      return _decodeStatic(image, hints, true);
+    } catch (_) { //FormatException | ChecksumException
+      throw NotFoundException.getNotFoundInstance();
+    }
+  }
+
+  static List<Result> _decodeStatic(BinaryBitmap image,
       [Map<DecodeHintType, Object>? hints, bool multiple = true]) {
     List<Result> results = [];
     PDF417DetectorResult detectorResult =
@@ -70,8 +80,8 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
           points[5],
           points[6],
           points[7],
-          getMinCodewordWidth(points),
-          getMaxCodewordWidth(points));
+          _getMinCodewordWidth(points),
+          _getMaxCodewordWidth(points));
       Result result = Result(decoderResult.getText(),
           decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL,
@@ -89,44 +99,44 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
     return results.toList();
   }
 
-  static int getMaxWidth(ResultPoint? p1, ResultPoint? p2) {
+  static int _getMaxWidth(ResultPoint? p1, ResultPoint? p2) {
     if (p1 == null || p2 == null) {
       return 0;
     }
     return (p1.getX() - p2.getX()).abs().toInt();
   }
 
-  static int getMinWidth(ResultPoint? p1, ResultPoint? p2) {
+  static int _getMinWidth(ResultPoint? p1, ResultPoint? p2) {
     if (p1 == null || p2 == null) {
       return MathUtils.MAX_VALUE; // Integer.MAX_VALUE;
     }
     return (p1.getX() - p2.getX()).abs().toInt();
   }
 
-  static int getMaxCodewordWidth(List<ResultPoint?> p) {
+  static int _getMaxCodewordWidth(List<ResultPoint?> p) {
     return Math.max(
         Math.max(
-            getMaxWidth(p[0], p[4]),
-            getMaxWidth(p[6], p[2]) *
+            _getMaxWidth(p[0], p[4]),
+            _getMaxWidth(p[6], p[2]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN),
         Math.max(
-            getMaxWidth(p[1], p[5]),
-            getMaxWidth(p[7], p[3]) *
+            _getMaxWidth(p[1], p[5]),
+            _getMaxWidth(p[7], p[3]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN));
   }
 
-  static int getMinCodewordWidth(List<ResultPoint?> p) {
+  static int _getMinCodewordWidth(List<ResultPoint?> p) {
     return Math.min(
         Math.min(
-            getMinWidth(p[0], p[4]),
-            getMinWidth(p[6], p[2]) *
+            _getMinWidth(p[0], p[4]),
+            _getMinWidth(p[6], p[2]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN),
         Math.min(
-            getMinWidth(p[1], p[5]),
-            getMinWidth(p[7], p[3]) *
+            _getMinWidth(p[1], p[5]),
+            _getMinWidth(p[7], p[3]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN));
   }
@@ -134,12 +144,5 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   @override
   void reset() {
     // nothing needs to be reset
-  }
-
-  @override
-  List<Result> decodeMultiple(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints]) {
-    // TODO: implement decodeMultiple
-    throw UnimplementedError();
   }
 }

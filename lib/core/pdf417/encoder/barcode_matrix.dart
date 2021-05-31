@@ -24,30 +24,30 @@ import 'barcode_row.dart';
  * @author Jacob Haynes
  */
 class BarcodeMatrix {
-  final List<BarcodeRow> matrix;
-  int currentRow = -1;
-  final int height;
-  final int width;
+  final List<BarcodeRow> _matrix;
+  int _currentRow = -1;
+  final int _height;
+  final int _width;
 
   /**
    * @param height the height of the matrix (Rows)
    * @param width  the width of the matrix (Cols)
    */
-  BarcodeMatrix(this.height, int width)
-      : this.width = width * 17,
-        this.matrix =
-            List.generate(height, (index) => BarcodeRow((width + 4) * 17 + 1));
+  BarcodeMatrix(this._height, int width)
+      : this._width = width * 17,
+        this._matrix =
+            List.generate(_height, (index) => BarcodeRow((width + 4) * 17 + 1));
 
   void set(int x, int y, int value) {
-    matrix[y].set(x, value);
+    _matrix[y].set(x, value);
   }
 
   void startRow() {
-    ++currentRow;
+    ++_currentRow;
   }
 
   BarcodeRow getCurrentRow() {
-    return matrix[currentRow];
+    return _matrix[_currentRow];
   }
 
   List<Uint8List> getMatrix() {
@@ -56,10 +56,10 @@ class BarcodeMatrix {
 
   List<Uint8List> getScaledMatrix(int xScale, int yScale) {
     List<Uint8List> matrixOut =
-        List.generate(height * yScale, (index) => Uint8List(width * xScale));
-    int yMax = height * yScale;
+        List.generate(_height * yScale, (index) => Uint8List(_width * xScale));
+    int yMax = _height * yScale;
     for (int i = 0; i < yMax; i++) {
-      matrixOut[yMax - i - 1] = matrix[i ~/ yScale].getScaledRow(xScale);
+      matrixOut[yMax - i - 1] = _matrix[i ~/ yScale].getScaledRow(xScale);
     }
     return matrixOut;
   }

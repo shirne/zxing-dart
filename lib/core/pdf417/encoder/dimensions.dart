@@ -20,26 +20,26 @@
  * @author qwandor@google.com (Andrew Walbran)
  */
 class Dimensions {
-  final int minCols;
-  final int maxCols;
-  final int minRows;
-  final int maxRows;
+  final int _minCols;
+  final int _maxCols;
+  final int _minRows;
+  final int _maxRows;
 
-  Dimensions(this.minCols, this.maxCols, this.minRows, this.maxRows);
+  Dimensions(this._minCols, this._maxCols, this._minRows, this._maxRows);
 
   int getMinCols() {
-    return minCols;
+    return _minCols;
   }
 
   int getMaxCols() {
-    return maxCols;
+    return _maxCols;
   }
 
   int getMinRows() {
-    return minRows;
+    return _minRows;
   }
 
   int getMaxRows() {
-    return maxRows;
+    return _maxRows;
   }
 }

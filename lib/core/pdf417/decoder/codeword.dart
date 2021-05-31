@@ -18,58 +18,58 @@
  * @author Guenther Grau
  */
 class Codeword {
-  static final int BARCODE_ROW_UNKNOWN = -1;
+  static const int _BARCODE_ROW_UNKNOWN = -1;
 
-  final int startX;
-  final int endX;
-  final int bucket;
-  final int value;
-  int rowNumber = BARCODE_ROW_UNKNOWN;
+  final int _startX;
+  final int _endX;
+  final int _bucket;
+  final int _value;
+  int _rowNumber = _BARCODE_ROW_UNKNOWN;
 
-  Codeword(this.startX, this.endX, this.bucket, this.value);
+  Codeword(this._startX, this._endX, this._bucket, this._value);
 
   bool hasValidRowNumber() {
-    return isValidRowNumber(rowNumber);
+    return isValidRowNumber(_rowNumber);
   }
 
   bool isValidRowNumber(int rowNumber) {
-    return rowNumber != BARCODE_ROW_UNKNOWN && bucket == (rowNumber % 3) * 3;
+    return rowNumber != _BARCODE_ROW_UNKNOWN && _bucket == (rowNumber % 3) * 3;
   }
 
   void setRowNumberAsRowIndicatorColumn() {
-    rowNumber = (value ~/ 30) * 3 + bucket ~/ 3;
+    _rowNumber = (_value ~/ 30) * 3 + _bucket ~/ 3;
   }
 
   int getWidth() {
-    return endX - startX;
+    return _endX - _startX;
   }
 
   int getStartX() {
-    return startX;
+    return _startX;
   }
 
   int getEndX() {
-    return endX;
+    return _endX;
   }
 
   int getBucket() {
-    return bucket;
+    return _bucket;
   }
 
   int getValue() {
-    return value;
+    return _value;
   }
 
   int getRowNumber() {
-    return rowNumber;
+    return _rowNumber;
   }
 
   void setRowNumber(int rowNumber) {
-    this.rowNumber = rowNumber;
+    this._rowNumber = rowNumber;
   }
 
   @override
   String toString() {
-    return "$rowNumber|$value";
+    return "$_rowNumber|$_value";
   }
 }

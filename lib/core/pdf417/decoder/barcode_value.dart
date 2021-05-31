@@ -20,18 +20,18 @@ import '../pdf417_common.dart';
  * @author Guenther Grau
  */
 class BarcodeValue {
-  final Map<int, int> values = {};
+  final Map<int, int> _values = {};
 
   /**
    * Add an occurrence of a value
    */
   void setValue(int value) {
-    int? confidence = values[value];
+    int? confidence = _values[value];
     if (confidence == null) {
       confidence = 0;
     }
     confidence++;
-    values[value] = confidence;
+    _values[value] = confidence;
   }
 
   /**
@@ -41,7 +41,7 @@ class BarcodeValue {
   List<int> getValue() {
     int maxConfidence = -1;
     List<int> result = [];
-    for (MapEntry<int, int> entry in values.entries) {
+    for (MapEntry<int, int> entry in _values.entries) {
       if (entry.value > maxConfidence) {
         maxConfidence = entry.value;
         result.clear();
@@ -54,6 +54,6 @@ class BarcodeValue {
   }
 
   int getConfidence(int value) {
-    return values[value]!;
+    return _values[value]!;
   }
 }

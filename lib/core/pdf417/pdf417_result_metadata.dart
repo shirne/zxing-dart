@@ -18,17 +18,17 @@
  * @author Guenther Grau
  */
 class PDF417ResultMetadata {
-  int segmentIndex = 0;
-  String? fileId = '';
-  bool lastSegment = false;
-  int segmentCount = -1;
-  String sender = '';
-  String addressee = '';
-  String fileName = '';
-  int fileSize = -1;
-  int timestamp = -1;
-  int checksum = -1;
-  List<int>? optionalData;
+  int _segmentIndex = 0;
+  String? _fileId = '';
+  bool _lastSegment = false;
+  int _segmentCount = -1;
+  String _sender = '';
+  String _addressee = '';
+  String _fileName = '';
+  int _fileSize = -1;
+  int _timestamp = -1;
+  int _checksum = -1;
+  List<int>? _optionalData;
 
   /**
    * The Segment ID represents the segment of the whole file distributed over different symbols.
@@ -36,11 +36,11 @@ class PDF417ResultMetadata {
    * @return File segment index
    */
   int getSegmentIndex() {
-    return segmentIndex;
+    return _segmentIndex;
   }
 
   void setSegmentIndex(int segmentIndex) {
-    this.segmentIndex = segmentIndex;
+    this._segmentIndex = segmentIndex;
   }
 
   /**
@@ -49,11 +49,11 @@ class PDF417ResultMetadata {
    * @return File ID
    */
   String? getFileId() {
-    return fileId;
+    return _fileId;
   }
 
   void setFileId(String fileId) {
-    this.fileId = fileId;
+    this._fileId = fileId;
   }
 
   /**
@@ -62,7 +62,7 @@ class PDF417ResultMetadata {
    */
   @deprecated
   List<int>? getOptionalData() {
-    return optionalData;
+    return _optionalData;
   }
 
   /**
@@ -71,45 +71,45 @@ class PDF417ResultMetadata {
    */
   @deprecated
   void setOptionalData(List<int> optionalData) {
-    this.optionalData = optionalData;
+    this._optionalData = optionalData;
   }
 
   /**
    * @return true if it is the last segment
    */
   bool isLastSegment() {
-    return lastSegment;
+    return _lastSegment;
   }
 
   void setLastSegment(bool lastSegment) {
-    this.lastSegment = lastSegment;
+    this._lastSegment = lastSegment;
   }
 
   /**
    * @return count of segments, -1 if not set
    */
   int getSegmentCount() {
-    return segmentCount;
+    return _segmentCount;
   }
 
   void setSegmentCount(int segmentCount) {
-    this.segmentCount = segmentCount;
+    this._segmentCount = segmentCount;
   }
 
   String getSender() {
-    return sender;
+    return _sender;
   }
 
   void setSender(String sender) {
-    this.sender = sender;
+    this._sender = sender;
   }
 
   String getAddressee() {
-    return addressee;
+    return _addressee;
   }
 
   void setAddressee(String addressee) {
-    this.addressee = addressee;
+    this._addressee = addressee;
   }
 
   /**
@@ -118,11 +118,11 @@ class PDF417ResultMetadata {
    * @return filename
    */
   String getFileName() {
-    return fileName;
+    return _fileName;
   }
 
   void setFileName(String fileName) {
-    this.fileName = fileName;
+    this._fileName = fileName;
   }
 
   /**
@@ -131,11 +131,11 @@ class PDF417ResultMetadata {
    * @return filesize in bytes, -1 if not set
    */
   int getFileSize() {
-    return fileSize;
+    return _fileSize;
   }
 
   void setFileSize(int fileSize) {
-    this.fileSize = fileSize;
+    this._fileSize = fileSize;
   }
 
   /**
@@ -144,11 +144,11 @@ class PDF417ResultMetadata {
    * @return crc checksum, -1 if not set
    */
   int getChecksum() {
-    return checksum;
+    return _checksum;
   }
 
   void setChecksum(int checksum) {
-    this.checksum = checksum;
+    this._checksum = checksum;
   }
 
   /**
@@ -157,10 +157,10 @@ class PDF417ResultMetadata {
    * @return elapsed seconds, -1 if not set
    */
   int getTimestamp() {
-    return timestamp;
+    return _timestamp;
   }
 
   void setTimestamp(int timestamp) {
-    this.timestamp = timestamp;
+    this._timestamp = timestamp;
   }
 }

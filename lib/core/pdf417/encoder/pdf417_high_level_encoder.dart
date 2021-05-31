@@ -33,86 +33,86 @@ import 'compaction.dart';
  * annex P.
  */
 class PDF417HighLevelEncoder {
-  static final int blankCode = ' '.codeUnitAt(0);
+  static final int _blankCode = ' '.codeUnitAt(0);
   /**
    * code for Text compaction
    */
-  static const int TEXT_COMPACTION = 0;
+  static const int _TEXT_COMPACTION = 0;
 
   /**
    * code for Byte compaction
    */
-  static const int BYTE_COMPACTION = 1;
+  static const int _BYTE_COMPACTION = 1;
 
   /**
    * code for Numeric compaction
    */
-  static const int NUMERIC_COMPACTION = 2;
+  static const int _NUMERIC_COMPACTION = 2;
 
   /**
    * Text compaction submode Alpha
    */
-  static const int SUBMODE_ALPHA = 0;
+  static const int _SUBMODE_ALPHA = 0;
 
   /**
    * Text compaction submode Lower
    */
-  static const int SUBMODE_LOWER = 1;
+  static const int _SUBMODE_LOWER = 1;
 
   /**
    * Text compaction submode Mixed
    */
-  static const int SUBMODE_MIXED = 2;
+  static const int _SUBMODE_MIXED = 2;
 
   /**
    * Text compaction submode Punctuation
    */
-  static const int SUBMODE_PUNCTUATION = 3;
+  static const int _SUBMODE_PUNCTUATION = 3;
 
   /**
    * mode latch to Text Compaction mode
    */
-  static const int LATCH_TO_TEXT = 900;
+  static const int _LATCH_TO_TEXT = 900;
 
   /**
    * mode latch to Byte Compaction mode (number of characters NOT a multiple of 6)
    */
-  static const int LATCH_TO_BYTE_PADDED = 901;
+  static const int _LATCH_TO_BYTE_PADDED = 901;
 
   /**
    * mode latch to Numeric Compaction mode
    */
-  static const int LATCH_TO_NUMERIC = 902;
+  static const int _LATCH_TO_NUMERIC = 902;
 
   /**
    * mode shift to Byte Compaction mode
    */
-  static const int SHIFT_TO_BYTE = 913;
+  static const int _SHIFT_TO_BYTE = 913;
 
   /**
    * mode latch to Byte Compaction mode (number of characters a multiple of 6)
    */
-  static const int LATCH_TO_BYTE = 924;
+  static const int _LATCH_TO_BYTE = 924;
 
   /**
    * identifier for a user defined Extended Channel Interpretation (ECI)
    */
-  static const int ECI_USER_DEFINED = 925;
+  static const int _ECI_USER_DEFINED = 925;
 
   /**
    * identifier for a general purpose ECO format
    */
-  static const int ECI_GENERAL_PURPOSE = 926;
+  static const int _ECI_GENERAL_PURPOSE = 926;
 
   /**
    * identifier for an ECI of a character set of code page
    */
-  static const int ECI_CHARSET = 927;
+  static const int _ECI_CHARSET = 927;
 
   /**
    * Raw code table for text compaction Mixed sub-mode
    */
-  static const List<int> TEXT_MIXED_RAW = [
+  static const List<int> _TEXT_MIXED_RAW = [
     48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58, //
     35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
   ];
@@ -120,19 +120,19 @@ class PDF417HighLevelEncoder {
   /**
    * Raw code table for text compaction: Punctuation sub-mode
    */
-  static final List<int> TEXT_PUNCTUATION_RAW = [
+  static final List<int> _TEXT_PUNCTUATION_RAW = [
     59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58, //
     10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
   ];
 
-  static final Uint8List MIXED = Uint8List.fromList(
-      List.generate(128, (index) => TEXT_MIXED_RAW.indexOf(index)));
-  static final Uint8List PUNCTUATION = Uint8List.fromList(
-      List.generate(128, (index) => TEXT_PUNCTUATION_RAW.indexOf(index)));
+  static final Uint8List _MIXED = Uint8List.fromList(
+      List.generate(128, (index) => _TEXT_MIXED_RAW.indexOf(index)));
+  static final Uint8List _PUNCTUATION = Uint8List.fromList(
+      List.generate(128, (index) => _TEXT_PUNCTUATION_RAW.indexOf(index)));
 
-  static final Encoding DEFAULT_ENCODING = latin1;
+  static final Encoding _DEFAULT_ENCODING = latin1;
 
-  PDF417HighLevelEncoder();
+  PDF417HighLevelEncoder._();
 
   /**
    * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
@@ -151,67 +151,67 @@ class PDF417HighLevelEncoder {
     StringBuffer sb = StringBuffer();
 
     if (encoding == null) {
-      encoding = DEFAULT_ENCODING;
-    } else if (DEFAULT_ENCODING != encoding) {
+      encoding = _DEFAULT_ENCODING;
+    } else if (_DEFAULT_ENCODING != encoding) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
-        encodingECI(eci.getValue(), sb);
+        _encodingECI(eci.getValue(), sb);
       }
     }
 
     int len = msg.length;
     int p = 0;
-    int textSubMode = SUBMODE_ALPHA;
+    int textSubMode = _SUBMODE_ALPHA;
 
     // User selected encoding mode
     switch (compaction) {
       case Compaction.TEXT:
-        encodeText(msg, p, len, sb, textSubMode);
+        _encodeText(msg, p, len, sb, textSubMode);
         break;
       case Compaction.BYTE:
         Uint8List msgBytes = Uint8List.fromList(encoding.encode(msg));
-        encodeBinary(msgBytes, p, msgBytes.length, BYTE_COMPACTION, sb);
+        _encodeBinary(msgBytes, p, msgBytes.length, _BYTE_COMPACTION, sb);
         break;
       case Compaction.NUMERIC:
-        sb.writeCharCode(LATCH_TO_NUMERIC);
-        encodeNumeric(msg, p, len, sb);
+        sb.writeCharCode(_LATCH_TO_NUMERIC);
+        _encodeNumeric(msg, p, len, sb);
         break;
       default:
-        int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
+        int encodingMode = _TEXT_COMPACTION; //Default mode, see 4.4.2.1
         while (p < len) {
-          int n = determineConsecutiveDigitCount(msg, p);
+          int n = _determineConsecutiveDigitCount(msg, p);
           if (n >= 13) {
-            sb.writeCharCode(LATCH_TO_NUMERIC);
-            encodingMode = NUMERIC_COMPACTION;
-            textSubMode = SUBMODE_ALPHA; //Reset after latch
-            encodeNumeric(msg, p, n, sb);
+            sb.writeCharCode(_LATCH_TO_NUMERIC);
+            encodingMode = _NUMERIC_COMPACTION;
+            textSubMode = _SUBMODE_ALPHA; //Reset after latch
+            _encodeNumeric(msg, p, n, sb);
             p += n;
           } else {
-            int t = determineConsecutiveTextCount(msg, p);
+            int t = _determineConsecutiveTextCount(msg, p);
             if (t >= 5 || n == len) {
-              if (encodingMode != TEXT_COMPACTION) {
-                sb.writeCharCode(LATCH_TO_TEXT);
-                encodingMode = TEXT_COMPACTION;
+              if (encodingMode != _TEXT_COMPACTION) {
+                sb.writeCharCode(_LATCH_TO_TEXT);
+                encodingMode = _TEXT_COMPACTION;
                 textSubMode =
-                    SUBMODE_ALPHA; //start with submode alpha after latch
+                    _SUBMODE_ALPHA; //start with submode alpha after latch
               }
-              textSubMode = encodeText(msg, p, t, sb, textSubMode);
+              textSubMode = _encodeText(msg, p, t, sb, textSubMode);
               p += t;
             } else {
-              int b = determineConsecutiveBinaryCount(msg, p, encoding);
+              int b = _determineConsecutiveBinaryCount(msg, p, encoding);
               if (b == 0) {
                 b = 1;
               }
               Uint8List bytes =
                   Uint8List.fromList(encoding.encode(msg.substring(p, p + b)));
-              if (bytes.length == 1 && encodingMode == TEXT_COMPACTION) {
+              if (bytes.length == 1 && encodingMode == _TEXT_COMPACTION) {
                 //Switch for one byte (instead of latch)
-                encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb);
+                _encodeBinary(bytes, 0, 1, _TEXT_COMPACTION, sb);
               } else {
                 //Mode latch performed by encodeBinary()
-                encodeBinary(bytes, 0, bytes.length, encodingMode, sb);
-                encodingMode = BYTE_COMPACTION;
-                textSubMode = SUBMODE_ALPHA; //Reset after latch
+                _encodeBinary(bytes, 0, bytes.length, encodingMode, sb);
+                encodingMode = _BYTE_COMPACTION;
+                textSubMode = _SUBMODE_ALPHA; //Reset after latch
               }
               p += b;
             }
@@ -234,7 +234,7 @@ class PDF417HighLevelEncoder {
    * @param initialSubmode should normally be SUBMODE_ALPHA
    * @return the text submode in which this method ends
    */
-  static int encodeText(String msg, int startpos, int count, StringBuffer sb,
+  static int _encodeText(String msg, int startpos, int count, StringBuffer sb,
       int initialSubmode) {
     StringBuilder tmp = StringBuilder();
     int submode = initialSubmode;
@@ -242,84 +242,84 @@ class PDF417HighLevelEncoder {
     while (true) {
       int ch = msg.codeUnitAt(startpos + idx);
       switch (submode) {
-        case SUBMODE_ALPHA:
-          if (isAlphaUpper(ch)) {
-            if (ch == blankCode) {
+        case _SUBMODE_ALPHA:
+          if (_isAlphaUpper(ch)) {
+            if (ch == _blankCode) {
               tmp.writeCharCode(26); //space
             } else {
               tmp.write(String.fromCharCode(ch - 65));
             }
           } else {
-            if (isAlphaLower(ch)) {
-              submode = SUBMODE_LOWER;
+            if (_isAlphaLower(ch)) {
+              submode = _SUBMODE_LOWER;
               tmp.writeCharCode(27); //ll
               continue;
-            } else if (isMixed(ch)) {
-              submode = SUBMODE_MIXED;
+            } else if (_isMixed(ch)) {
+              submode = _SUBMODE_MIXED;
               tmp.writeCharCode(28); //ml
               continue;
             } else {
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(PUNCTUATION[ch]);
+              tmp.writeCharCode(_PUNCTUATION[ch]);
               break;
             }
           }
           break;
-        case SUBMODE_LOWER:
-          if (isAlphaLower(ch)) {
-            if (ch == blankCode) {
+        case _SUBMODE_LOWER:
+          if (_isAlphaLower(ch)) {
+            if (ch == _blankCode) {
               tmp.writeCharCode(26); //space
             } else {
               tmp.writeCharCode(ch - 97);
             }
           } else {
-            if (isAlphaUpper(ch)) {
+            if (_isAlphaUpper(ch)) {
               tmp.writeCharCode(27); //as
               tmp.writeCharCode(ch - 65);
               //space cannot happen here, it is also in "Lower"
               break;
-            } else if (isMixed(ch)) {
-              submode = SUBMODE_MIXED;
+            } else if (_isMixed(ch)) {
+              submode = _SUBMODE_MIXED;
               tmp.writeCharCode(28); //ml
               continue;
             } else {
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(PUNCTUATION[ch]);
+              tmp.writeCharCode(_PUNCTUATION[ch]);
               break;
             }
           }
           break;
-        case SUBMODE_MIXED:
-          if (isMixed(ch)) {
-            tmp.writeCharCode(MIXED[ch]);
+        case _SUBMODE_MIXED:
+          if (_isMixed(ch)) {
+            tmp.writeCharCode(_MIXED[ch]);
           } else {
-            if (isAlphaUpper(ch)) {
-              submode = SUBMODE_ALPHA;
+            if (_isAlphaUpper(ch)) {
+              submode = _SUBMODE_ALPHA;
               tmp.writeCharCode(28); //al
               continue;
-            } else if (isAlphaLower(ch)) {
-              submode = SUBMODE_LOWER;
+            } else if (_isAlphaLower(ch)) {
+              submode = _SUBMODE_LOWER;
               tmp.writeCharCode(27); //ll
               continue;
             } else {
               if (startpos + idx + 1 < count) {
                 int next = msg.codeUnitAt(startpos + idx + 1);
-                if (isPunctuation(next)) {
-                  submode = SUBMODE_PUNCTUATION;
+                if (_isPunctuation(next)) {
+                  submode = _SUBMODE_PUNCTUATION;
                   tmp.writeCharCode(25); //pl
                   continue;
                 }
               }
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(PUNCTUATION[ch]);
+              tmp.writeCharCode(_PUNCTUATION[ch]);
             }
           }
           break;
         default: //SUBMODE_PUNCTUATION
-          if (isPunctuation(ch)) {
-            tmp.writeCharCode(PUNCTUATION[ch]);
+          if (_isPunctuation(ch)) {
+            tmp.writeCharCode(_PUNCTUATION[ch]);
           } else {
-            submode = SUBMODE_ALPHA;
+            submode = _SUBMODE_ALPHA;
             tmp.writeCharCode(29); //al
             continue;
           }
@@ -357,15 +357,15 @@ class PDF417HighLevelEncoder {
    * @param startmode the mode from which this method starts
    * @param sb        receives the encoded codewords
    */
-  static void encodeBinary(Uint8List bytes, int startpos, int count,
+  static void _encodeBinary(Uint8List bytes, int startpos, int count,
       int startmode, StringBuffer sb) {
-    if (count == 1 && startmode == TEXT_COMPACTION) {
-      sb.writeCharCode(SHIFT_TO_BYTE);
+    if (count == 1 && startmode == _TEXT_COMPACTION) {
+      sb.writeCharCode(_SHIFT_TO_BYTE);
     } else {
       if ((count % 6) == 0) {
-        sb.writeCharCode(LATCH_TO_BYTE);
+        sb.writeCharCode(_LATCH_TO_BYTE);
       } else {
-        sb.writeCharCode(LATCH_TO_BYTE_PADDED);
+        sb.writeCharCode(_LATCH_TO_BYTE_PADDED);
       }
     }
 
@@ -396,7 +396,7 @@ class PDF417HighLevelEncoder {
     }
   }
 
-  static void encodeNumeric(
+  static void _encodeNumeric(
       String msg, int startpos, int count, StringBuffer sb) {
     int idx = 0;
     StringBuilder tmp = StringBuilder();
@@ -420,29 +420,29 @@ class PDF417HighLevelEncoder {
     }
   }
 
-  static bool isDigit(int ch) {
+  static bool _isDigit(int ch) {
     return ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0);
   }
 
-  static bool isAlphaUpper(int ch) {
-    return ch == blankCode ||
+  static bool _isAlphaUpper(int ch) {
+    return ch == _blankCode ||
         (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
   }
 
-  static bool isAlphaLower(int ch) {
-    return ch == blankCode ||
+  static bool _isAlphaLower(int ch) {
+    return ch == _blankCode ||
         (ch >= 'a'.codeUnitAt(0) && ch <= 'z'.codeUnitAt(0));
   }
 
-  static bool isMixed(int ch) {
-    return MIXED[ch] != -1;
+  static bool _isMixed(int ch) {
+    return _MIXED[ch] != -1;
   }
 
-  static bool isPunctuation(int ch) {
-    return PUNCTUATION[ch] != -1;
+  static bool _isPunctuation(int ch) {
+    return _PUNCTUATION[ch] != -1;
   }
 
-  static bool isText(String chr) {
+  static bool _isText(String chr) {
     int ch = chr.codeUnitAt(0);
     return chr == '\t' || chr == '\n' || chr == '\r' || (ch >= 32 && ch <= 126);
   }
@@ -454,13 +454,13 @@ class PDF417HighLevelEncoder {
    * @param startpos the start position within the message
    * @return the requested character count
    */
-  static int determineConsecutiveDigitCount(String msg, int startpos) {
+  static int _determineConsecutiveDigitCount(String msg, int startpos) {
     int count = 0;
     int len = msg.length;
     int idx = startpos;
     if (idx < len) {
       int ch = msg.codeUnitAt(idx);
-      while (isDigit(ch) && idx < len) {
+      while (_isDigit(ch) && idx < len) {
         count++;
         idx++;
         if (idx < len) {
@@ -478,13 +478,13 @@ class PDF417HighLevelEncoder {
    * @param startpos the start position within the message
    * @return the requested character count
    */
-  static int determineConsecutiveTextCount(String msg, int startpos) {
+  static int _determineConsecutiveTextCount(String msg, int startpos) {
     int len = msg.length;
     int idx = startpos;
     while (idx < len) {
       int ch = msg.codeUnitAt(idx);
       int numericCount = 0;
-      while (numericCount < 13 && isDigit(ch) && idx < len) {
+      while (numericCount < 13 && _isDigit(ch) && idx < len) {
         numericCount++;
         idx++;
         if (idx < len) {
@@ -501,7 +501,7 @@ class PDF417HighLevelEncoder {
       ch = msg.codeUnitAt(idx);
 
       //Check if character is encodable
-      if (!isText(String.fromCharCode(ch))) {
+      if (!_isText(String.fromCharCode(ch))) {
         break;
       }
       idx++;
@@ -517,7 +517,7 @@ class PDF417HighLevelEncoder {
    * @param encoding the charset used to convert the message to a byte array
    * @return the requested character count
    */
-  static int determineConsecutiveBinaryCount(
+  static int _determineConsecutiveBinaryCount(
       String msg, int startpos, Encoding encoding) {
 
     int len = msg.length;
@@ -526,7 +526,7 @@ class PDF417HighLevelEncoder {
       int ch = msg.codeUnitAt(idx);
       int numericCount = 0;
 
-      while (numericCount < 13 && isDigit(ch)) {
+      while (numericCount < 13 && _isDigit(ch)) {
         numericCount++;
         //textCount++;
         int i = idx + numericCount;
@@ -550,16 +550,16 @@ class PDF417HighLevelEncoder {
     return idx - startpos;
   }
 
-  static void encodingECI(int eci, StringBuffer sb) {
+  static void _encodingECI(int eci, StringBuffer sb) {
     if (eci >= 0 && eci < 900) {
-      sb.writeCharCode(ECI_CHARSET);
+      sb.writeCharCode(_ECI_CHARSET);
       sb.writeCharCode(eci);
     } else if (eci < 810900) {
-      sb.writeCharCode(ECI_GENERAL_PURPOSE);
+      sb.writeCharCode(_ECI_GENERAL_PURPOSE);
       sb.writeCharCode((eci ~/ 900 - 1));
       sb.writeCharCode((eci % 900));
     } else if (eci < 811800) {
-      sb.writeCharCode(ECI_USER_DEFINED);
+      sb.writeCharCode(_ECI_USER_DEFINED);
       sb.writeCharCode((810900 - eci));
     } else {
       throw WriterException(

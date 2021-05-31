@@ -33,7 +33,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   DetectionResultRowIndicatorColumn(BoundingBox boundingBox, this.isLeft)
       : super(boundingBox);
 
-  void setRowNumbers() {
+  void _setRowNumbers() {
     for (Codeword? codeword in getCodewords()) {
       if (codeword != null) {
         codeword.setRowNumberAsRowIndicatorColumn();
@@ -48,8 +48,8 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   void adjustCompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
     List<Codeword?> codewords = getCodewords();
-    setRowNumbers();
-    removeIncorrectCodewords(codewords, barcodeMetadata);
+    _setRowNumbers();
+    _removeIncorrectCodewords(codewords, barcodeMetadata);
     BoundingBox boundingBox = getBoundingBox();
     ResultPoint top =
         isLeft ? boundingBox.getTopLeft() : boundingBox.getTopRight();
@@ -112,7 +112,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     if (barcodeMetadata == null) {
       return null;
     }
-    adjustIncompleteIndicatorColumnRowNumbers(barcodeMetadata);
+    _adjustIncompleteIndicatorColumnRowNumbers(barcodeMetadata);
     List<int> result = List.filled(barcodeMetadata.getRowCount(), 0);
     for (Codeword? codeword in getCodewords()) {
       if (codeword != null) {
@@ -130,7 +130,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // TODO maybe we should add missing codewords to store the correct row number to make
   // finding row numbers for other columns easier
   // use row height count to make detection of invalid row numbers more reliable
-  void adjustIncompleteIndicatorColumnRowNumbers(
+  void _adjustIncompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
     BoundingBox boundingBox = getBoundingBox();
     ResultPoint top =
@@ -220,11 +220,11 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
         barcodeRowCountUpperPart.getValue()[0],
         barcodeRowCountLowerPart.getValue()[0],
         barcodeECLevel.getValue()[0]);
-    removeIncorrectCodewords(codewords, barcodeMetadata);
+    _removeIncorrectCodewords(codewords, barcodeMetadata);
     return barcodeMetadata;
   }
 
-  void removeIncorrectCodewords(
+  void _removeIncorrectCodewords(
       List<Codeword?> codewords, BarcodeMetadata barcodeMetadata) {
     // Remove codewords which do not match the metadata
     // TODO Maybe we should keep the incorrect codewords for the start and end positions?

@@ -25,36 +25,36 @@ import 'modulus_poly.dart';
  */
 class ModulusGF {
   static final ModulusGF PDF417_GF =
-      ModulusGF(PDF417Common.NUMBER_OF_CODEWORDS, 3);
+      ModulusGF._(PDF417Common.NUMBER_OF_CODEWORDS, 3);
 
-  late List<int> expTable;
-  late List<int> logTable;
-  late ModulusPoly zero;
-  late ModulusPoly one;
-  final int modulus;
+  late List<int> _expTable;
+  late List<int> _logTable;
+  late ModulusPoly _zero;
+  late ModulusPoly _one;
+  final int _modulus;
 
-  ModulusGF(this.modulus, int generator) {
-    expTable = List.filled(modulus, 0);
-    logTable = List.filled(modulus, 0);
+  ModulusGF._(this._modulus, int generator) {
+    _expTable = List.filled(_modulus, 0);
+    _logTable = List.filled(_modulus, 0);
     int x = 1;
-    for (int i = 0; i < modulus; i++) {
-      expTable[i] = x;
-      x = (x * generator) % modulus;
+    for (int i = 0; i < _modulus; i++) {
+      _expTable[i] = x;
+      x = (x * generator) % _modulus;
     }
-    for (int i = 0; i < modulus - 1; i++) {
-      logTable[expTable[i]] = i;
+    for (int i = 0; i < _modulus - 1; i++) {
+      _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    zero = ModulusPoly(this, [0]);
-    one = ModulusPoly(this, [1]);
+    _zero = ModulusPoly(this, [0]);
+    _one = ModulusPoly(this, [1]);
   }
 
   ModulusPoly getZero() {
-    return zero;
+    return _zero;
   }
 
   ModulusPoly getOne() {
-    return one;
+    return _one;
   }
 
   ModulusPoly buildMonomial(int degree, int coefficient) {
@@ -62,7 +62,7 @@ class ModulusGF {
       throw Exception();
     }
     if (coefficient == 0) {
-      return zero;
+      return _zero;
     }
     List<int> coefficients = List.filled(degree + 1, 0);
     coefficients[0] = coefficient;
@@ -70,39 +70,39 @@ class ModulusGF {
   }
 
   int add(int a, int b) {
-    return (a + b) % modulus;
+    return (a + b) % _modulus;
   }
 
   int subtract(int a, int b) {
-    return (modulus + a - b) % modulus;
+    return (_modulus + a - b) % _modulus;
   }
 
   int exp(int a) {
-    return expTable[a];
+    return _expTable[a];
   }
 
   int log(int a) {
     if (a == 0) {
       throw Exception();
     }
-    return logTable[a];
+    return _logTable[a];
   }
 
   int inverse(int a) {
     if (a == 0) {
       throw Exception('Arithmetic');
     }
-    return expTable[modulus - logTable[a] - 1];
+    return _expTable[_modulus - _logTable[a] - 1];
   }
 
   int multiply(int a, int b) {
     if (a == 0 || b == 0) {
       return 0;
     }
-    return expTable[(logTable[a] + logTable[b]) % (modulus - 1)];
+    return _expTable[(_logTable[a] + _logTable[b]) % (_modulus - 1)];
   }
 
   int getSize() {
-    return modulus;
+    return _modulus;
   }
 }

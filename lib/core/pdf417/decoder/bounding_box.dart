@@ -25,17 +25,17 @@ import '../../result_point.dart';
  * @author Guenther Grau
  */
 class BoundingBox {
-  final BitMatrix image;
-  late ResultPoint topLeft;
-  late ResultPoint bottomLeft;
-  late ResultPoint topRight;
-  late ResultPoint bottomRight;
-  late int minX;
-  late int maxX;
-  late int minY;
-  late int maxY;
+  final BitMatrix _image;
+  late ResultPoint _topLeft;
+  late ResultPoint _bottomLeft;
+  late ResultPoint _topRight;
+  late ResultPoint _bottomRight;
+  late int _minX;
+  late int _maxX;
+  late int _minY;
+  late int _maxY;
 
-  BoundingBox(this.image, ResultPoint? topLeft, ResultPoint? bottomLeft,
+  BoundingBox(this._image, ResultPoint? topLeft, ResultPoint? bottomLeft,
       ResultPoint? topRight, ResultPoint? bottomRight) {
     bool leftUnspecified = topLeft == null || bottomLeft == null;
     bool rightUnspecified = topRight == null || bottomRight == null;
@@ -46,29 +46,29 @@ class BoundingBox {
       topLeft = ResultPoint(0, topRight!.getY());
       bottomLeft = ResultPoint(0, bottomRight!.getY());
     } else if (rightUnspecified) {
-      topRight = ResultPoint(image.getWidth() - 1, topLeft.getY());
-      bottomRight = ResultPoint(image.getWidth() - 1, bottomLeft.getY());
+      topRight = ResultPoint(_image.getWidth() - 1, topLeft.getY());
+      bottomRight = ResultPoint(_image.getWidth() - 1, bottomLeft.getY());
     }
-    this.topLeft = topLeft;
-    this.bottomLeft = bottomLeft;
-    this.topRight = topRight;
-    this.bottomRight = bottomRight;
-    this.minX = Math.min(topLeft.getX().toInt(), bottomLeft.getX().toInt());
-    this.maxX = Math.max(topRight.getX().toInt(), bottomRight.getX().toInt());
-    this.minY = Math.min(topLeft.getY().toInt(), topRight.getY().toInt());
-    this.maxY = Math.max(bottomLeft.getY().toInt(), bottomRight.getY().toInt());
+    this._topLeft = topLeft;
+    this._bottomLeft = bottomLeft;
+    this._topRight = topRight;
+    this._bottomRight = bottomRight;
+    this._minX = Math.min(topLeft.getX().toInt(), bottomLeft.getX().toInt());
+    this._maxX = Math.max(topRight.getX().toInt(), bottomRight.getX().toInt());
+    this._minY = Math.min(topLeft.getY().toInt(), topRight.getY().toInt());
+    this._maxY = Math.max(bottomLeft.getY().toInt(), bottomRight.getY().toInt());
   }
 
   BoundingBox.copy(BoundingBox boundingBox)
-      : this.image = boundingBox.image,
-        this.topLeft = boundingBox.topLeft,
-        this.bottomLeft = boundingBox.bottomLeft,
-        this.topRight = boundingBox.topRight,
-        this.bottomRight = boundingBox.bottomRight,
-        this.minX = boundingBox.minX,
-        this.maxX = boundingBox.maxX,
-        this.minY = boundingBox.minY,
-        this.maxY = boundingBox.maxY;
+      : this._image = boundingBox._image,
+        this._topLeft = boundingBox._topLeft,
+        this._bottomLeft = boundingBox._bottomLeft,
+        this._topRight = boundingBox._topRight,
+        this._bottomRight = boundingBox._bottomRight,
+        this._minX = boundingBox._minX,
+        this._maxX = boundingBox._maxX,
+        this._minY = boundingBox._minY,
+        this._maxY = boundingBox._maxY;
 
   static BoundingBox? merge(BoundingBox? leftBox, BoundingBox? rightBox) {
     if (leftBox == null) {
@@ -77,19 +77,19 @@ class BoundingBox {
     if (rightBox == null) {
       return leftBox;
     }
-    return BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft,
-        rightBox.topRight, rightBox.bottomRight);
+    return BoundingBox(leftBox._image, leftBox._topLeft, leftBox._bottomLeft,
+        rightBox._topRight, rightBox._bottomRight);
   }
 
   BoundingBox addMissingRows(
       int missingStartRows, int missingEndRows, bool isLeft) {
-    ResultPoint newTopLeft = topLeft;
-    ResultPoint newBottomLeft = bottomLeft;
-    ResultPoint newTopRight = topRight;
-    ResultPoint newBottomRight = bottomRight;
+    ResultPoint newTopLeft = _topLeft;
+    ResultPoint newBottomLeft = _bottomLeft;
+    ResultPoint newTopRight = _topRight;
+    ResultPoint newBottomRight = _bottomRight;
 
     if (missingStartRows > 0) {
-      ResultPoint top = isLeft ? topLeft : topRight;
+      ResultPoint top = isLeft ? _topLeft : _topRight;
       int newMinY = top.getY().toInt() - missingStartRows;
       if (newMinY < 0) {
         newMinY = 0;
@@ -103,10 +103,10 @@ class BoundingBox {
     }
 
     if (missingEndRows > 0) {
-      ResultPoint bottom = isLeft ? bottomLeft : bottomRight;
+      ResultPoint bottom = isLeft ? _bottomLeft : _bottomRight;
       int newMaxY = bottom.getY().toInt() + missingEndRows;
-      if (newMaxY >= image.getHeight()) {
-        newMaxY = image.getHeight() - 1;
+      if (newMaxY >= _image.getHeight()) {
+        newMaxY = _image.getHeight() - 1;
       }
       ResultPoint newBottom =
           ResultPoint(bottom.getX(), newMaxY.toDouble());
@@ -118,38 +118,38 @@ class BoundingBox {
     }
 
     return BoundingBox(
-        image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
+        _image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
   }
 
   int getMinX() {
-    return minX;
+    return _minX;
   }
 
   int getMaxX() {
-    return maxX;
+    return _maxX;
   }
 
   int getMinY() {
-    return minY;
+    return _minY;
   }
 
   int getMaxY() {
-    return maxY;
+    return _maxY;
   }
 
   ResultPoint getTopLeft() {
-    return topLeft;
+    return _topLeft;
   }
 
   ResultPoint getTopRight() {
-    return topRight;
+    return _topRight;
   }
 
   ResultPoint getBottomLeft() {
-    return bottomLeft;
+    return _bottomLeft;
   }
 
   ResultPoint getBottomRight() {
-    return bottomRight;
+    return _bottomRight;
   }
 }

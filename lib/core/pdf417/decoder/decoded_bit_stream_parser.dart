@@ -21,7 +21,7 @@ import '../../common/decoder_result.dart';
 
 import '../pdf417_result_metadata.dart';
 
-enum Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
+enum _Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
 
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
@@ -30,39 +30,39 @@ enum Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
  * @author Guenther Grau
  */
 class DecodedBitStreamParser {
-  static const int TEXT_COMPACTION_MODE_LATCH = 900;
-  static const int BYTE_COMPACTION_MODE_LATCH = 901;
-  static const int NUMERIC_COMPACTION_MODE_LATCH = 902;
-  static const int BYTE_COMPACTION_MODE_LATCH_6 = 924;
-  static const int ECI_USER_DEFINED = 925;
-  static const int ECI_GENERAL_PURPOSE = 926;
-  static const int ECI_CHARSET = 927;
-  static const int BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
-  static const int BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
-  static const int MACRO_PDF417_TERMINATOR = 922;
-  static const int MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
-  static const int MAX_NUMERIC_CODEWORDS = 15;
+  static const int _TEXT_COMPACTION_MODE_LATCH = 900;
+  static const int _BYTE_COMPACTION_MODE_LATCH = 901;
+  static const int _NUMERIC_COMPACTION_MODE_LATCH = 902;
+  static const int _BYTE_COMPACTION_MODE_LATCH_6 = 924;
+  static const int _ECI_USER_DEFINED = 925;
+  static const int _ECI_GENERAL_PURPOSE = 926;
+  static const int _ECI_CHARSET = 927;
+  static const int _BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
+  static const int _BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
+  static const int _MACRO_PDF417_TERMINATOR = 922;
+  static const int _MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
+  static const int _MAX_NUMERIC_CODEWORDS = 15;
 
-  static const int MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME = 0;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT = 1;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP = 2;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_SENDER = 3;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE = 4;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE = 5;
-  static const int MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM = 6;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME = 0;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT = 1;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP = 2;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_SENDER = 3;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE = 4;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE = 5;
+  static const int _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM = 6;
 
-  static const int PL = 25;
-  static const int LL = 27;
-  static const int AS = 27;
-  static const int ML = 28;
-  static const int AL = 28;
-  static const int PS = 29;
-  static const int PAL = 29;
+  static const int _PL = 25;
+  static const int _LL = 27;
+  static const int _AS = 27;
+  static const int _ML = 28;
+  static const int _AL = 28;
+  static const int _PS = 29;
+  static const int _PAL = 29;
 
-  static final List<int> PUNCT_CHARS =
+  static final List<int> _PUNCT_CHARS =
       r";<>@[\\]_`~!\r\t,:\n-.$/\" "|*()?{}'".codeUnits;
 
-  static final List<int> MIXED_CHARS = r"0123456789&\r\t,:#-.$/+%*=^".codeUnits;
+  static final List<int> _MIXED_CHARS = r"0123456789&\r\t,:#-.$/+%*=^".codeUnits;
 
   /**
    * Table containing values for the exponent of 900.
@@ -72,9 +72,9 @@ class DecodedBitStreamParser {
   static final List<BigInt> EXP900 =
       List.generate(16, (index) => _nineHundred.pow(index));
 
-  static final int NUMBER_OF_SEQUENCE_CODEWORDS = 2;
+  static const int _NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
-  DecodedBitStreamParser();
+  DecodedBitStreamParser._();
 
   static DecoderResult decode(List<int> codewords, String ecLevel) {
     StringBuffer result = StringBuffer();
@@ -85,39 +85,39 @@ class DecodedBitStreamParser {
     PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
     while (codeIndex < codewords[0]) {
       switch (code) {
-        case TEXT_COMPACTION_MODE_LATCH:
-          codeIndex = textCompaction(codewords, codeIndex, result);
+        case _TEXT_COMPACTION_MODE_LATCH:
+          codeIndex = _textCompaction(codewords, codeIndex, result);
           break;
-        case BYTE_COMPACTION_MODE_LATCH:
-        case BYTE_COMPACTION_MODE_LATCH_6:
+        case _BYTE_COMPACTION_MODE_LATCH:
+        case _BYTE_COMPACTION_MODE_LATCH_6:
           codeIndex =
-              byteCompaction(code, codewords, encoding, codeIndex, result);
+              _byteCompaction(code, codewords, encoding, codeIndex, result);
           break;
-        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+        case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
           result.writeCharCode(codewords[codeIndex++]);
           break;
-        case NUMERIC_COMPACTION_MODE_LATCH:
-          codeIndex = numericCompaction(codewords, codeIndex, result);
+        case _NUMERIC_COMPACTION_MODE_LATCH:
+          codeIndex = _numericCompaction(codewords, codeIndex, result);
           break;
-        case ECI_CHARSET:
+        case _ECI_CHARSET:
           CharacterSetECI charsetECI =
               CharacterSetECI.getCharacterSetECIByValue(
                   codewords[codeIndex++])!;
           encoding = charsetECI.getCharset()!;
           break;
-        case ECI_GENERAL_PURPOSE:
+        case _ECI_GENERAL_PURPOSE:
           // Can't do anything with generic ECI; skip its 2 characters
           codeIndex += 2;
           break;
-        case ECI_USER_DEFINED:
+        case _ECI_USER_DEFINED:
           // Can't do anything with user ECI; skip its 1 character
           codeIndex++;
           break;
-        case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+        case _BEGIN_MACRO_PDF417_CONTROL_BLOCK:
           codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
           break;
-        case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-        case MACRO_PDF417_TERMINATOR:
+        case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+        case _MACRO_PDF417_TERMINATOR:
           // Should not see these outside a macro block
           throw FormatException();
         default:
@@ -125,7 +125,7 @@ class DecodedBitStreamParser {
           // appeared to be missing the starting mode. In these cases defaulting
           // to text compaction seems to work.
           codeIndex--;
-          codeIndex = textCompaction(codewords, codeIndex, result);
+          codeIndex = _textCompaction(codewords, codeIndex, result);
           break;
       }
       if (codeIndex < codewords.length) {
@@ -146,16 +146,16 @@ class DecodedBitStreamParser {
   // @SuppressWarnings("deprecation")
   static int decodeMacroBlock(
       List<int> codewords, int codeIndex, PDF417ResultMetadata resultMetadata) {
-    if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
+    if (codeIndex + _NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
       throw FormatException();
     }
-    List<int> segmentIndexArray = List.filled(NUMBER_OF_SEQUENCE_CODEWORDS, 0);
-    for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
+    List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
+    for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
       segmentIndexArray[i] = codewords[codeIndex];
     }
-    resultMetadata.setSegmentIndex(int.parse(decodeBase900toBase10(
-        segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS)));
+    resultMetadata.setSegmentIndex(int.parse(_decodeBase900toBase10(
+        segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS)));
 
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
@@ -163,8 +163,8 @@ class DecodedBitStreamParser {
     String fileId = "";
     for (int i = 0;
         codeIndex < codewords[0] &&
-            codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
-            codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD;
+            codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
+            codewords[codeIndex] != _BEGIN_MACRO_PDF417_OPTIONAL_FIELD;
         i++, codeIndex++) {
       fileId += codewords[codeIndex].toString().padLeft(3, '0');
     }
@@ -175,58 +175,58 @@ class DecodedBitStreamParser {
     resultMetadata.setFileId(fileId);
 
     int optionalFieldsStart = -1;
-    if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+    if (codewords[codeIndex] == _BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       optionalFieldsStart = codeIndex + 1;
     }
 
     while (codeIndex < codewords[0]) {
       switch (codewords[codeIndex]) {
-        case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+        case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
           codeIndex++;
           switch (codewords[codeIndex]) {
-            case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
+            case _MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
               StringBuffer fileName = StringBuffer();
-              codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
+              codeIndex = _textCompaction(codewords, codeIndex + 1, fileName);
               resultMetadata.setFileName(fileName.toString());
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
+            case _MACRO_PDF417_OPTIONAL_FIELD_SENDER:
               StringBuffer sender = StringBuffer();
-              codeIndex = textCompaction(codewords, codeIndex + 1, sender);
+              codeIndex = _textCompaction(codewords, codeIndex + 1, sender);
               resultMetadata.setSender(sender.toString());
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
+            case _MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
               StringBuffer addressee = StringBuffer();
-              codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
+              codeIndex = _textCompaction(codewords, codeIndex + 1, addressee);
               resultMetadata.setAddressee(addressee.toString());
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
+            case _MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
               StringBuffer segmentCount = StringBuffer();
               codeIndex =
-                  numericCompaction(codewords, codeIndex + 1, segmentCount);
+                  _numericCompaction(codewords, codeIndex + 1, segmentCount);
               resultMetadata
                   .setSegmentCount(int.parse(segmentCount.toString()));
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
+            case _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
               StringBuffer timestamp = StringBuffer();
               codeIndex =
-                  numericCompaction(codewords, codeIndex + 1, timestamp);
+                  _numericCompaction(codewords, codeIndex + 1, timestamp);
               resultMetadata.setTimestamp(int.parse(timestamp.toString()));
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
+            case _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
               StringBuffer checksum = StringBuffer();
-              codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
+              codeIndex = _numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.setChecksum(int.parse(checksum.toString()));
               break;
-            case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
+            case _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
               StringBuffer fileSize = StringBuffer();
-              codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
+              codeIndex = _numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.setFileSize(int.parse(fileSize.toString()));
               break;
             default:
               throw FormatException();
           }
           break;
-        case MACRO_PDF417_TERMINATOR:
+        case _MACRO_PDF417_TERMINATOR:
           codeIndex++;
           resultMetadata.setLastSegment(true);
           break;
@@ -259,7 +259,7 @@ class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  static int textCompaction(
+  static int _textCompaction(
       List<int> codewords, int codeIndex, StringBuffer result) {
     // 2 character per codeword
     List<int> textCompactionData =
@@ -272,33 +272,33 @@ class DecodedBitStreamParser {
     bool end = false;
     while ((codeIndex < codewords[0]) && !end) {
       int code = codewords[codeIndex++];
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
+      if (code < _TEXT_COMPACTION_MODE_LATCH) {
         textCompactionData[index] = code ~/ 30;
         textCompactionData[index + 1] = code % 30;
         index += 2;
       } else {
         switch (code) {
-          case TEXT_COMPACTION_MODE_LATCH:
+          case _TEXT_COMPACTION_MODE_LATCH:
             // reinitialize text compaction mode to alpha sub mode
-            textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
+            textCompactionData[index++] = _TEXT_COMPACTION_MODE_LATCH;
             break;
-          case BYTE_COMPACTION_MODE_LATCH:
-          case BYTE_COMPACTION_MODE_LATCH_6:
-          case NUMERIC_COMPACTION_MODE_LATCH:
-          case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-          case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-          case MACRO_PDF417_TERMINATOR:
+          case _BYTE_COMPACTION_MODE_LATCH:
+          case _BYTE_COMPACTION_MODE_LATCH_6:
+          case _NUMERIC_COMPACTION_MODE_LATCH:
+          case _BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+          case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+          case _MACRO_PDF417_TERMINATOR:
             codeIndex--;
             end = true;
             break;
-          case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+          case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
             // The Mode Shift codeword 913 shall cause a temporary
             // switch from Text Compaction mode to Byte Compaction mode.
             // This switch shall be in effect for only the next codeword,
             // after which the mode shall revert to the prevailing sub-mode
             // of the Text Compaction mode. Codeword 913 is only available
             // in Text Compaction mode; its use is described in 5.4.2.4.
-            textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+            textCompactionData[index] = _MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
             code = codewords[codeIndex++];
             byteCompactionData[index] = code;
             index++;
@@ -306,7 +306,7 @@ class DecodedBitStreamParser {
         }
       }
     }
-    decodeTextCompaction(textCompactionData, byteCompactionData, index, result);
+    _decodeTextCompaction(textCompactionData, byteCompactionData, index, result);
     return codeIndex;
   }
 
@@ -326,20 +326,20 @@ class DecodedBitStreamParser {
    * @param length             The size of the text compaction and byte compaction data.
    * @param result             The decoded data is appended to the result.
    */
-  static void decodeTextCompaction(List<int> textCompactionData,
+  static void _decodeTextCompaction(List<int> textCompactionData,
       List<int> byteCompactionData, int length, StringBuffer result) {
     // Beginning from an initial state of the Alpha sub-mode
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
     // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
     // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
-    Mode subMode = Mode.ALPHA;
-    Mode priorToShiftMode = Mode.ALPHA;
+    _Mode subMode = _Mode.ALPHA;
+    _Mode priorToShiftMode = _Mode.ALPHA;
     int i = 0;
     while (i < length) {
       int subModeCh = textCompactionData[i];
       int ch = 0;
       switch (subMode) {
-        case Mode.ALPHA:
+        case _Mode.ALPHA:
           // Alpha (uppercase alphabetic)
           if (subModeCh < 26) {
             // Upper case Alpha Character
@@ -349,28 +349,28 @@ class DecodedBitStreamParser {
               case 26:
                 ch = ' '.codeUnitAt(0);
                 break;
-              case LL:
-                subMode = Mode.LOWER;
+              case _LL:
+                subMode = _Mode.LOWER;
                 break;
-              case ML:
-                subMode = Mode.MIXED;
+              case _ML:
+                subMode = _Mode.MIXED;
                 break;
-              case PS:
+              case _PS:
                 // Shift to punctuation
                 priorToShiftMode = subMode;
-                subMode = Mode.PUNCT_SHIFT;
+                subMode = _Mode.PUNCT_SHIFT;
                 break;
-              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+              case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 result.writeCharCode(byteCompactionData[i]);
                 break;
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
             }
           }
           break;
 
-        case Mode.LOWER:
+        case _Mode.LOWER:
           // Lower (lowercase alphabetic)
           if (subModeCh < 26) {
             ch = 'a'.codeUnitAt(0) + subModeCh;
@@ -379,79 +379,79 @@ class DecodedBitStreamParser {
               case 26:
                 ch = ' '.codeUnitAt(0);
                 break;
-              case AS:
+              case _AS:
                 // Shift to alpha
                 priorToShiftMode = subMode;
-                subMode = Mode.ALPHA_SHIFT;
+                subMode = _Mode.ALPHA_SHIFT;
                 break;
-              case ML:
-                subMode = Mode.MIXED;
+              case _ML:
+                subMode = _Mode.MIXED;
                 break;
-              case PS:
+              case _PS:
                 // Shift to punctuation
                 priorToShiftMode = subMode;
-                subMode = Mode.PUNCT_SHIFT;
+                subMode = _Mode.PUNCT_SHIFT;
                 break;
-              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+              case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 // TODO Does this need to use the current character encoding? See other occurrences below
                 result.writeCharCode(byteCompactionData[i]);
                 break;
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
             }
           }
           break;
 
-        case Mode.MIXED:
+        case _Mode.MIXED:
           // Mixed (numeric and some punctuation)
-          if (subModeCh < PL) {
-            ch = MIXED_CHARS[subModeCh];
+          if (subModeCh < _PL) {
+            ch = _MIXED_CHARS[subModeCh];
           } else {
             switch (subModeCh) {
-              case PL:
-                subMode = Mode.PUNCT;
+              case _PL:
+                subMode = _Mode.PUNCT;
                 break;
               case 26:
                 ch = ' '.codeUnitAt(0);
                 break;
-              case LL:
-                subMode = Mode.LOWER;
+              case _LL:
+                subMode = _Mode.LOWER;
                 break;
-              case AL:
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _AL:
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
-              case PS:
+              case _PS:
                 // Shift to punctuation
                 priorToShiftMode = subMode;
-                subMode = Mode.PUNCT_SHIFT;
+                subMode = _Mode.PUNCT_SHIFT;
                 break;
-              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+              case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 result.writeCharCode(byteCompactionData[i]);
                 break;
             }
           }
           break;
 
-        case Mode.PUNCT:
+        case _Mode.PUNCT:
           // Punctuation
-          if (subModeCh < PAL) {
-            ch = PUNCT_CHARS[subModeCh];
+          if (subModeCh < _PAL) {
+            ch = _PUNCT_CHARS[subModeCh];
           } else {
             switch (subModeCh) {
-              case PAL:
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _PAL:
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
-              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+              case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 result.writeCharCode(byteCompactionData[i]);
                 break;
             }
           }
           break;
 
-        case Mode.ALPHA_SHIFT:
+        case _Mode.ALPHA_SHIFT:
           // Restore sub-mode
           subMode = priorToShiftMode;
           if (subModeCh < 26) {
@@ -461,25 +461,25 @@ class DecodedBitStreamParser {
               case 26:
                 ch = ' '.codeUnitAt(0);
                 break;
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
             }
           }
           break;
 
-        case Mode.PUNCT_SHIFT:
+        case _Mode.PUNCT_SHIFT:
           // Restore sub-mode
           subMode = priorToShiftMode;
-          if (subModeCh < PAL) {
-            ch = PUNCT_CHARS[subModeCh];
+          if (subModeCh < _PAL) {
+            ch = _PUNCT_CHARS[subModeCh];
           } else {
             switch (subModeCh) {
-              case PAL:
-              case TEXT_COMPACTION_MODE_LATCH:
-                subMode = Mode.ALPHA;
+              case _PAL:
+              case _TEXT_COMPACTION_MODE_LATCH:
+                subMode = _Mode.ALPHA;
                 break;
-              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+              case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 // PS before Shift-to-Byte is used as a padding character,
                 // see 5.4.2.4 of the specification
                 result.writeCharCode(byteCompactionData[i]);
@@ -508,7 +508,7 @@ class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  static int byteCompaction(int mode, List<int> codewords, Encoding encoding,
+  static int _byteCompaction(int mode, List<int> codewords, Encoding encoding,
       int codeIndex, StringBuffer result) {
     List<int> decodedBytes = [];
     int count = 0;
@@ -516,7 +516,7 @@ class DecodedBitStreamParser {
     bool end = false;
 
     switch (mode) {
-      case BYTE_COMPACTION_MODE_LATCH:
+      case _BYTE_COMPACTION_MODE_LATCH:
         // Total number of Byte Compaction characters to be encoded
         // is not a multiple of 6
 
@@ -529,13 +529,13 @@ class DecodedBitStreamParser {
           nextCode = codewords[codeIndex++];
           // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
           switch (nextCode) {
-            case TEXT_COMPACTION_MODE_LATCH:
-            case BYTE_COMPACTION_MODE_LATCH:
-            case NUMERIC_COMPACTION_MODE_LATCH:
-            case BYTE_COMPACTION_MODE_LATCH_6:
-            case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-            case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-            case MACRO_PDF417_TERMINATOR:
+            case _TEXT_COMPACTION_MODE_LATCH:
+            case _BYTE_COMPACTION_MODE_LATCH:
+            case _NUMERIC_COMPACTION_MODE_LATCH:
+            case _BYTE_COMPACTION_MODE_LATCH_6:
+            case _BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+            case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+            case _MACRO_PDF417_TERMINATOR:
               codeIndex--;
               end = true;
               break;
@@ -555,7 +555,7 @@ class DecodedBitStreamParser {
 
         // if the end of all codewords is reached the last codeword needs to be added
         if (codeIndex == codewords[0] &&
-            nextCode < TEXT_COMPACTION_MODE_LATCH) {
+            nextCode < _TEXT_COMPACTION_MODE_LATCH) {
           byteCompactedCodewords[count++] = nextCode;
         }
 
@@ -568,24 +568,24 @@ class DecodedBitStreamParser {
 
         break;
 
-      case BYTE_COMPACTION_MODE_LATCH_6:
+      case _BYTE_COMPACTION_MODE_LATCH_6:
         // Total number of Byte Compaction characters to be encoded
         // is an integer multiple of 6
         while (codeIndex < codewords[0] && !end) {
           int code = codewords[codeIndex++];
-          if (code < TEXT_COMPACTION_MODE_LATCH) {
+          if (code < _TEXT_COMPACTION_MODE_LATCH) {
             count++;
             // Base 900
             value = 900 * value + code;
           } else {
             switch (code) {
-              case TEXT_COMPACTION_MODE_LATCH:
-              case BYTE_COMPACTION_MODE_LATCH:
-              case NUMERIC_COMPACTION_MODE_LATCH:
-              case BYTE_COMPACTION_MODE_LATCH_6:
-              case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-              case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-              case MACRO_PDF417_TERMINATOR:
+              case _TEXT_COMPACTION_MODE_LATCH:
+              case _BYTE_COMPACTION_MODE_LATCH:
+              case _NUMERIC_COMPACTION_MODE_LATCH:
+              case _BYTE_COMPACTION_MODE_LATCH_6:
+              case _BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+              case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+              case _MACRO_PDF417_TERMINATOR:
                 codeIndex--;
                 end = true;
                 break;
@@ -621,43 +621,43 @@ class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  static int numericCompaction(
+  static int _numericCompaction(
       List<int> codewords, int codeIndex, StringBuffer result) {
     int count = 0;
     bool end = false;
 
-    List<int> numericCodewords = List.filled(MAX_NUMERIC_CODEWORDS, 0);
+    List<int> numericCodewords = List.filled(_MAX_NUMERIC_CODEWORDS, 0);
 
     while (codeIndex < codewords[0] && !end) {
       int code = codewords[codeIndex++];
       if (codeIndex == codewords[0]) {
         end = true;
       }
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
+      if (code < _TEXT_COMPACTION_MODE_LATCH) {
         numericCodewords[count] = code;
         count++;
       } else {
         switch (code) {
-          case TEXT_COMPACTION_MODE_LATCH:
-          case BYTE_COMPACTION_MODE_LATCH:
-          case BYTE_COMPACTION_MODE_LATCH_6:
-          case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-          case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-          case MACRO_PDF417_TERMINATOR:
+          case _TEXT_COMPACTION_MODE_LATCH:
+          case _BYTE_COMPACTION_MODE_LATCH:
+          case _BYTE_COMPACTION_MODE_LATCH_6:
+          case _BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+          case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+          case _MACRO_PDF417_TERMINATOR:
             codeIndex--;
             end = true;
             break;
         }
       }
-      if ((count % MAX_NUMERIC_CODEWORDS == 0 ||
-              code == NUMERIC_COMPACTION_MODE_LATCH ||
+      if ((count % _MAX_NUMERIC_CODEWORDS == 0 ||
+              code == _NUMERIC_COMPACTION_MODE_LATCH ||
               end) &&
           count > 0) {
         // Re-invoking Numeric Compaction mode (by using codeword 902
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        result.write(decodeBase900toBase10(numericCodewords, count));
+        result.write(_decodeBase900toBase10(numericCodewords, count));
         count = 0;
       }
     }
@@ -707,7 +707,7 @@ class DecodedBitStreamParser {
 
      Remove leading 1 =>  Result is 000213298174000
    */
-  static String decodeBase900toBase10(List<int> codewords, int count) {
+  static String _decodeBase900toBase10(List<int> codewords, int count) {
     BigInt result = BigInt.zero;
     for (int i = 0; i < count; i++) {
       result = result + (EXP900[count - i - 1] + (BigInt.from(codewords[i])));

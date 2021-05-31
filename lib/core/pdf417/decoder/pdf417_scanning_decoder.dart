@@ -39,13 +39,13 @@ import 'pdf417_codeword_decoder.dart';
  * @author Guenther Grau
  */
 class PDF417ScanningDecoder {
-  static final int CODEWORD_SKEW_SIZE = 2;
+  static const int _CODEWORD_SKEW_SIZE = 2;
 
-  static final int MAX_ERRORS = 3;
-  static final int MAX_EC_CODEWORDS = 512;
+  static const int _MAX_ERRORS = 3;
+  static const int _MAX_EC_CODEWORDS = 512;
   static final ErrorCorrection errorCorrection = ErrorCorrection();
 
-  PDF417ScanningDecoder();
+  PDF417ScanningDecoder._();
 
   // TODO don't pass in minCodewordWidth and maxCodewordWidth, pass in barcode columns for start and stop pattern
   // columns. That way width can be deducted from the pattern column.
@@ -66,14 +66,14 @@ class PDF417ScanningDecoder {
     DetectionResult? detectionResult;
     for (bool firstPass = true;; firstPass = false) {
       if (imageTopLeft != null) {
-        leftRowIndicatorColumn = getRowIndicatorColumn(image, boundingBox,
+        leftRowIndicatorColumn = _getRowIndicatorColumn(image, boundingBox,
             imageTopLeft, true, minCodewordWidth, maxCodewordWidth);
       }
       if (imageTopRight != null) {
-        rightRowIndicatorColumn = getRowIndicatorColumn(image, boundingBox,
+        rightRowIndicatorColumn = _getRowIndicatorColumn(image, boundingBox,
             imageTopRight, false, minCodewordWidth, maxCodewordWidth);
       }
-      detectionResult = merge(leftRowIndicatorColumn, rightRowIndicatorColumn);
+      detectionResult = _merge(leftRowIndicatorColumn, rightRowIndicatorColumn);
       if (detectionResult == null) {
         throw NotFoundException.getNotFoundInstance();
       }
@@ -119,7 +119,7 @@ class PDF417ScanningDecoder {
       for (int imageRow = boundingBox.getMinY();
           imageRow <= boundingBox.getMaxY();
           imageRow++) {
-        startColumn = getStartColumn(
+        startColumn = _getStartColumn(
             detectionResult, barcodeColumn, imageRow, leftToRight);
         if (startColumn < 0 || startColumn > boundingBox.getMaxX()) {
           if (previousStartColumn == -1) {
@@ -127,7 +127,7 @@ class PDF417ScanningDecoder {
           }
           startColumn = previousStartColumn;
         }
-        Codeword? codeword = detectCodeword(
+        Codeword? codeword = _detectCodeword(
             image,
             boundingBox.getMinX(),
             boundingBox.getMaxX(),
@@ -144,27 +144,27 @@ class PDF417ScanningDecoder {
         }
       }
     }
-    return createDecoderResult(detectionResult);
+    return _createDecoderResult(detectionResult);
   }
 
-  static DetectionResult? merge(
+  static DetectionResult? _merge(
       DetectionResultRowIndicatorColumn? leftRowIndicatorColumn,
       DetectionResultRowIndicatorColumn? rightRowIndicatorColumn) {
     if (leftRowIndicatorColumn == null && rightRowIndicatorColumn == null) {
       return null;
     }
     BarcodeMetadata? barcodeMetadata =
-        getBarcodeMetadata(leftRowIndicatorColumn!, rightRowIndicatorColumn!);
+        _getBarcodeMetadata(leftRowIndicatorColumn!, rightRowIndicatorColumn!);
     if (barcodeMetadata == null) {
       return null;
     }
     BoundingBox? boundingBox = BoundingBox.merge(
-        adjustBoundingBox(leftRowIndicatorColumn),
-        adjustBoundingBox(rightRowIndicatorColumn));
+        _adjustBoundingBox(leftRowIndicatorColumn),
+        _adjustBoundingBox(rightRowIndicatorColumn));
     return DetectionResult(barcodeMetadata, boundingBox);
   }
 
-  static BoundingBox? adjustBoundingBox(
+  static BoundingBox? _adjustBoundingBox(
       DetectionResultRowIndicatorColumn? rowIndicatorColumn) {
     if (rowIndicatorColumn == null) {
       return null;
@@ -173,7 +173,7 @@ class PDF417ScanningDecoder {
     if (rowHeights == null) {
       return null;
     }
-    int maxRowHeight = getMax(rowHeights);
+    int maxRowHeight = _getMax(rowHeights);
     int missingStartRows = 0;
     for (int rowHeight in rowHeights) {
       missingStartRows += maxRowHeight - rowHeight;
@@ -201,7 +201,7 @@ class PDF417ScanningDecoder {
         missingStartRows, missingEndRows, rowIndicatorColumn.isLeft);
   }
 
-  static int getMax(List<int> values) {
+  static int _getMax(List<int> values) {
     int maxValue = -1;
     for (int value in values) {
       maxValue = Math.max(maxValue, value);
@@ -209,7 +209,7 @@ class PDF417ScanningDecoder {
     return maxValue;
   }
 
-  static BarcodeMetadata? getBarcodeMetadata(
+  static BarcodeMetadata? _getBarcodeMetadata(
       DetectionResultRowIndicatorColumn? leftRowIndicatorColumn,
       DetectionResultRowIndicatorColumn? rightRowIndicatorColumn) {
     BarcodeMetadata? leftBarcodeMetadata;
@@ -238,7 +238,7 @@ class PDF417ScanningDecoder {
     return leftBarcodeMetadata;
   }
 
-  static DetectionResultRowIndicatorColumn getRowIndicatorColumn(
+  static DetectionResultRowIndicatorColumn _getRowIndicatorColumn(
       BitMatrix image,
       BoundingBox boundingBox,
       ResultPoint startPoint,
@@ -254,7 +254,7 @@ class PDF417ScanningDecoder {
           imageRow <= boundingBox.getMaxY() &&
               imageRow >= boundingBox.getMinY();
           imageRow += increment) {
-        Codeword? codeword = detectCodeword(
+        Codeword? codeword = _detectCodeword(
             image,
             0,
             image.getWidth(),
@@ -276,13 +276,13 @@ class PDF417ScanningDecoder {
     return rowIndicatorColumn;
   }
 
-  static void adjustCodewordCount(
+  static void _adjustCodewordCount(
       DetectionResult detectionResult, List<List<BarcodeValue>> barcodeMatrix) {
     BarcodeValue barcodeMatrix01 = barcodeMatrix[0][1];
     List<int> numberOfCodewords = barcodeMatrix01.getValue();
     int calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
             detectionResult.getBarcodeRowCount() -
-        getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
+        _getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
     if (numberOfCodewords.length == 0) {
       if (calculatedNumberOfCodewords < 1 ||
           calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
@@ -299,10 +299,10 @@ class PDF417ScanningDecoder {
     }
   }
 
-  static DecoderResult createDecoderResult(DetectionResult detectionResult) {
+  static DecoderResult _createDecoderResult(DetectionResult detectionResult) {
     List<List<BarcodeValue>> barcodeMatrix =
-        createBarcodeMatrix(detectionResult);
-    adjustCodewordCount(detectionResult, barcodeMatrix);
+        _createBarcodeMatrix(detectionResult);
+    _adjustCodewordCount(detectionResult, barcodeMatrix);
     List<int> erasures = [];
     List<int> codewords = List.filled(
         detectionResult.getBarcodeRowCount() *
@@ -332,7 +332,7 @@ class PDF417ScanningDecoder {
     for (int i = 0; i < ambiguousIndexValues.length; i++) {
       ambiguousIndexValues[i] = ambiguousIndexValuesList[i];
     }
-    return createDecoderResultFromAmbiguousValues(
+    return _createDecoderResultFromAmbiguousValues(
         detectionResult.getBarcodeECLevel(),
         codewords,
         PDF417Common.toIntArray(erasures),
@@ -353,7 +353,7 @@ class PDF417ScanningDecoder {
    * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
    * be the same length as the ambiguousIndexes array
    */
-  static DecoderResult createDecoderResultFromAmbiguousValues(
+  static DecoderResult _createDecoderResultFromAmbiguousValues(
       int ecLevel,
       List<int> codewords,
       List<int> erasureArray,
@@ -368,7 +368,7 @@ class PDF417ScanningDecoder {
             ambiguousIndexValues[i][ambiguousIndexCount[i]];
       }
       try {
-        return decodeCodewords(codewords, ecLevel, erasureArray);
+        return _decodeCodewords(codewords, ecLevel, erasureArray);
       } catch (ignored) {
         // ChecksumException
         //
@@ -391,7 +391,7 @@ class PDF417ScanningDecoder {
     throw ChecksumException.getChecksumInstance();
   }
 
-  static List<List<BarcodeValue>> createBarcodeMatrix(
+  static List<List<BarcodeValue>> _createBarcodeMatrix(
       DetectionResult detectionResult) {
     List<List<BarcodeValue>> barcodeMatrix = List.generate(
         detectionResult.getBarcodeRowCount(),
@@ -420,17 +420,17 @@ class PDF417ScanningDecoder {
     return barcodeMatrix;
   }
 
-  static bool isValidBarcodeColumn(
+  static bool _isValidBarcodeColumn(
       DetectionResult detectionResult, int barcodeColumn) {
     return barcodeColumn >= 0 &&
         barcodeColumn <= detectionResult.getBarcodeColumnCount() + 1;
   }
 
-  static int getStartColumn(DetectionResult detectionResult, int barcodeColumn,
+  static int _getStartColumn(DetectionResult detectionResult, int barcodeColumn,
       int imageRow, bool leftToRight) {
     int offset = leftToRight ? 1 : -1;
     Codeword? codeword;
-    if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+    if (_isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
       codeword = detectionResult
           .getDetectionResultColumn(barcodeColumn - offset)!
           .getCodeword(imageRow);
@@ -444,7 +444,7 @@ class PDF417ScanningDecoder {
     if (codeword != null) {
       return leftToRight ? codeword.getStartX() : codeword.getEndX();
     }
-    if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+    if (_isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
       codeword = detectionResult
           .getDetectionResultColumn(barcodeColumn - offset)!
           .getCodewordNearby(imageRow);
@@ -454,7 +454,7 @@ class PDF417ScanningDecoder {
     }
     int skippedColumns = 0;
 
-    while (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+    while (_isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
       barcodeColumn -= offset;
       for (Codeword? previousRowCodeword in detectionResult
           .getDetectionResultColumn(barcodeColumn)!
@@ -476,7 +476,7 @@ class PDF417ScanningDecoder {
         : detectionResult.getBoundingBox()!.getMaxX();
   }
 
-  static Codeword? detectCodeword(
+  static Codeword? _detectCodeword(
       BitMatrix image,
       int minColumn,
       int maxColumn,
@@ -485,13 +485,13 @@ class PDF417ScanningDecoder {
       int imageRow,
       int minCodewordWidth,
       int maxCodewordWidth) {
-    startColumn = adjustCodewordStartColumn(
+    startColumn = _adjustCodewordStartColumn(
         image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
     // we usually know fairly exact now how long a codeword is. We should provide minimum and maximum expected length
     // and try to adjust the read pixels, e.g. remove single pixel errors or try to cut off exceeding pixels.
     // min and maxCodewordWidth should not be used as they are calculated for the whole barcode an can be inaccurate
     // for the current position
-    List<int>? moduleBitCount = getModuleBitCount(
+    List<int>? moduleBitCount = _getModuleBitCount(
         image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
     if (moduleBitCount == null) {
       return null;
@@ -523,7 +523,7 @@ class PDF417ScanningDecoder {
 
     // We could also use the width of surrounding codewords for more accurate results, but this seems
     // sufficient for now
-    if (!checkCodewordSkew(
+    if (!_checkCodewordSkew(
         codewordBitCount, minCodewordWidth, maxCodewordWidth)) {
       // We could try to use the startX and endX position of the codeword in the same column in the previous row,
       // create the bit count from it and normalize it to 8. This would help with single pixel errors.
@@ -536,10 +536,10 @@ class PDF417ScanningDecoder {
       return null;
     }
     return Codeword(startColumn, endColumn,
-        getCodewordBucketNumber(decodedValue), codeword);
+        _getCodewordBucketNumber(decodedValue), codeword);
   }
 
-  static List<int>? getModuleBitCount(BitMatrix image, int minColumn,
+  static List<int>? _getModuleBitCount(BitMatrix image, int minColumn,
       int maxColumn, bool leftToRight, int startColumn, int imageRow) {
     int imageColumn = startColumn;
     List<int> moduleBitCount = List.filled(8, 0);
@@ -564,11 +564,11 @@ class PDF417ScanningDecoder {
     return null;
   }
 
-  static int getNumberOfECCodeWords(int barcodeECLevel) {
+  static int _getNumberOfECCodeWords(int barcodeECLevel) {
     return 2 << barcodeECLevel;
   }
 
-  static int adjustCodewordStartColumn(BitMatrix image, int minColumn,
+  static int _adjustCodewordStartColumn(BitMatrix image, int minColumn,
       int maxColumn, bool leftToRight, int codewordStartColumn, int imageRow) {
     int correctedStartColumn = codewordStartColumn;
     int increment = leftToRight ? -1 : 1;
@@ -579,7 +579,7 @@ class PDF417ScanningDecoder {
               : correctedStartColumn < maxColumn) &&
           leftToRight == image.get(correctedStartColumn, imageRow)) {
         if ((codewordStartColumn - correctedStartColumn).abs() >
-            CODEWORD_SKEW_SIZE) {
+            _CODEWORD_SKEW_SIZE) {
           return codewordStartColumn;
         }
         correctedStartColumn += increment;
@@ -590,13 +590,13 @@ class PDF417ScanningDecoder {
     return correctedStartColumn;
   }
 
-  static bool checkCodewordSkew(
+  static bool _checkCodewordSkew(
       int codewordSize, int minCodewordWidth, int maxCodewordWidth) {
-    return minCodewordWidth - CODEWORD_SKEW_SIZE <= codewordSize &&
-        codewordSize <= maxCodewordWidth + CODEWORD_SKEW_SIZE;
+    return minCodewordWidth - _CODEWORD_SKEW_SIZE <= codewordSize &&
+        codewordSize <= maxCodewordWidth + _CODEWORD_SKEW_SIZE;
   }
 
-  static DecoderResult decodeCodewords(
+  static DecoderResult _decodeCodewords(
       List<int> codewords, int ecLevel, List<int> erasures) {
     if (codewords.length == 0) {
       throw FormatException();
@@ -604,8 +604,8 @@ class PDF417ScanningDecoder {
 
     int numECCodewords = 1 << (ecLevel + 1);
     int correctedErrorsCount =
-        correctErrors(codewords, erasures, numECCodewords);
-    verifyCodewordCount(codewords, numECCodewords);
+        _correctErrors(codewords, erasures, numECCodewords);
+    _verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
     DecoderResult decoderResult =
@@ -624,11 +624,11 @@ class PDF417ScanningDecoder {
    * @param numECCodewords number of error correction codewords that are available in codewords
    * @throws ChecksumException if error correction fails
    */
-  static int correctErrors(
+  static int _correctErrors(
       List<int> codewords, List<int>? erasures, int numECCodewords) {
-    if (erasures != null && erasures.length > numECCodewords / 2 + MAX_ERRORS ||
+    if (erasures != null && erasures.length > numECCodewords / 2 + _MAX_ERRORS ||
         numECCodewords < 0 ||
-        numECCodewords > MAX_EC_CODEWORDS) {
+        numECCodewords > _MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
       throw ChecksumException.getChecksumInstance();
     }
@@ -638,7 +638,7 @@ class PDF417ScanningDecoder {
   /**
    * Verify that all is OK with the codeword array.
    */
-  static void verifyCodewordCount(List<int> codewords, int numECCodewords) {
+  static void _verifyCodewordCount(List<int> codewords, int numECCodewords) {
     if (codewords.length < 4) {
       // Codeword array size should be at least 4 allowing for
       // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
@@ -661,7 +661,7 @@ class PDF417ScanningDecoder {
     }
   }
 
-  static List<int> getBitCountForCodeword(int codeword) {
+  static List<int> _getBitCountForCodeword(int codeword) {
     List<int> result = List.filled(8, 0);
     int previousValue = 0;
     int i = result.length - 1;
@@ -679,11 +679,11 @@ class PDF417ScanningDecoder {
     return result;
   }
 
-  static int getCodewordBucketNumber(int codeword) {
-    return getCodewordBucketNumberList(getBitCountForCodeword(codeword));
+  static int _getCodewordBucketNumber(int codeword) {
+    return _getCodewordBucketNumberList(_getBitCountForCodeword(codeword));
   }
 
-  static int getCodewordBucketNumberList(List<int> moduleBitCount) {
+  static int _getCodewordBucketNumberList(List<int> moduleBitCount) {
     return (moduleBitCount[0] -
             moduleBitCount[2] +
             moduleBitCount[4] -

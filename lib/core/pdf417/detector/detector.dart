@@ -32,27 +32,27 @@ import 'pdf417_detector_result.dart';
  * @author Guenther Grau
  */
 class Detector {
-  static final List<int> INDEXES_START_PATTERN = [0, 4, 1, 5];
-  static final List<int> INDEXES_STOP_PATTERN = [6, 2, 7, 3];
-  static final double MAX_AVG_VARIANCE = 0.42;
-  static final double MAX_INDIVIDUAL_VARIANCE = 0.8;
+  static const List<int> _INDEXES_START_PATTERN = [0, 4, 1, 5];
+  static const List<int> _INDEXES_STOP_PATTERN = [6, 2, 7, 3];
+  static const double _MAX_AVG_VARIANCE = 0.42;
+  static const double _MAX_INDIVIDUAL_VARIANCE = 0.8;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
-  static final List<int> START_PATTERN = [8, 1, 1, 1, 1, 1, 1, 3];
+  static const List<int> _START_PATTERN = [8, 1, 1, 1, 1, 1, 1, 3];
   // 1111111 0 1 000 1 0 1 00 1
-  static final List<int> STOP_PATTERN = [7, 1, 1, 3, 1, 1, 1, 2, 1];
-  static final int MAX_PIXEL_DRIFT = 3;
-  static final int MAX_PATTERN_DRIFT = 5;
+  static const List<int> _STOP_PATTERN = [7, 1, 1, 3, 1, 1, 1, 2, 1];
+  static const int _MAX_PIXEL_DRIFT = 3;
+  static const int _MAX_PATTERN_DRIFT = 5;
   // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
   // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
-  static final int SKIPPED_ROW_COUNT_MAX = 25;
+  static const int _SKIPPED_ROW_COUNT_MAX = 25;
   // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
   // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
-  static final int ROW_STEP = 5;
-  static final int BARCODE_MIN_HEIGHT = 10;
+  static const int _ROW_STEP = 5;
+  static const int _BARCODE_MIN_HEIGHT = 10;
 
-  Detector();
+  Detector._();
 
   /**
    * <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
@@ -73,7 +73,7 @@ class Detector {
     BitMatrix bitMatrix = image.getBlackMatrix();
 
     List<List<ResultPoint?>> barcodeCoordinates =
-        detectZero(multiple, bitMatrix);
+        _detect(multiple, bitMatrix);
     // Try 180, 270, 90 degree rotations, in that order
     for (int rotate = 0; barcodeCoordinates.isEmpty && rotate < 3; rotate++) {
       bitMatrix = bitMatrix.clone();
@@ -82,7 +82,7 @@ class Detector {
       } else {
         bitMatrix.rotate90();
       }
-      barcodeCoordinates = detectZero(multiple, bitMatrix);
+      barcodeCoordinates = _detect(multiple, bitMatrix);
     }
     return PDF417DetectorResult(bitMatrix, barcodeCoordinates);
   }
@@ -94,14 +94,14 @@ class Detector {
    * @param bitMatrix bit matrix to detect barcodes in
    * @return List of ResultPoint arrays containing the coordinates of found barcodes
    */
-  static List<List<ResultPoint?>> detectZero(
+  static List<List<ResultPoint?>> _detect(
       bool multiple, BitMatrix bitMatrix) {
     List<List<ResultPoint?>> barcodeCoordinates = [];
     int row = 0;
     int column = 0;
     bool foundBarcodeInRow = false;
     while (row < bitMatrix.getHeight()) {
-      List<ResultPoint?> vertices = findVertices(bitMatrix, row, column);
+      List<ResultPoint?> vertices = _findVertices(bitMatrix, row, column);
 
       if (vertices[0] == null && vertices[3] == null) {
         if (!foundBarcodeInRow) {
@@ -120,7 +120,7 @@ class Detector {
             row = Math.max(row, barcodeCoordinate[3]!.getY().toInt());
           }
         }
-        row += ROW_STEP;
+        row += _ROW_STEP;
         continue;
       }
       foundBarcodeInRow = true;
@@ -156,48 +156,48 @@ class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  static List<ResultPoint> findVertices(
+  static List<ResultPoint> _findVertices(
       BitMatrix matrix, int startRow, int startColumn) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
     List<ResultPoint> result = List.generate(8, (index) => ResultPoint(0, 0));
-    copyToResult(
+    _copyToResult(
         result,
-        findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, START_PATTERN)!,
-        INDEXES_START_PATTERN);
+        _findRowsWithPattern(
+            matrix, height, width, startRow, startColumn, _START_PATTERN)!,
+        _INDEXES_START_PATTERN);
 
     startColumn = result[4].getX().toInt();
     startRow = result[4].getY().toInt();
 
-    copyToResult(
+    _copyToResult(
         result,
-        findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, STOP_PATTERN)!,
-        INDEXES_STOP_PATTERN);
+        _findRowsWithPattern(
+            matrix, height, width, startRow, startColumn, _STOP_PATTERN)!,
+        _INDEXES_STOP_PATTERN);
 
     return result;
   }
 
-  static void copyToResult(List<ResultPoint?> result,
+  static void _copyToResult(List<ResultPoint?> result,
       List<ResultPoint> tmpResult, List<int> destinationIndexes) {
     for (int i = 0; i < destinationIndexes.length; i++) {
       result[destinationIndexes[i]] = tmpResult[i];
     }
   }
 
-  static List<ResultPoint>? findRowsWithPattern(BitMatrix matrix, int height,
+  static List<ResultPoint>? _findRowsWithPattern(BitMatrix matrix, int height,
       int width, int startRow, int startColumn, List<int> pattern) {
     List<ResultPoint> result = List.generate(4, (index) => ResultPoint(0, 0));
     bool found = false;
     List<int> counters = List.generate(pattern.length, (index) => 0);
-    for (; startRow < height; startRow += ROW_STEP) {
-      List<int>? loc = findGuardPattern(
+    for (; startRow < height; startRow += _ROW_STEP) {
+      List<int>? loc = _findGuardPattern(
           matrix, startColumn, startRow, width, pattern, counters);
       if (loc != null) {
         while (startRow > 0) {
-          List<int>? previousRowLoc = findGuardPattern(
+          List<int>? previousRowLoc = _findGuardPattern(
               matrix, startColumn, --startRow, width, pattern, counters);
           if (previousRowLoc != null) {
             loc = previousRowLoc;
@@ -221,19 +221,19 @@ class Detector {
         result[1].getX().toInt()
       ];
       for (; stopRow < height; stopRow++) {
-        List<int>? loc = findGuardPattern(
+        List<int>? loc = _findGuardPattern(
             matrix, previousRowLoc[0], stopRow, width, pattern, counters);
         // a found pattern is only considered to belong to the same barcode if the start and end positions
         // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
         // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
         // larger drift and don't check for skipped rows.
         if (loc != null &&
-            (previousRowLoc[0] - loc[0]).abs() < MAX_PATTERN_DRIFT &&
-            (previousRowLoc[1] - loc[1]).abs() < MAX_PATTERN_DRIFT) {
+            (previousRowLoc[0] - loc[0]).abs() < _MAX_PATTERN_DRIFT &&
+            (previousRowLoc[1] - loc[1]).abs() < _MAX_PATTERN_DRIFT) {
           previousRowLoc = loc;
           skippedRowCount = 0;
         } else {
-          if (skippedRowCount > SKIPPED_ROW_COUNT_MAX) {
+          if (skippedRowCount > _SKIPPED_ROW_COUNT_MAX) {
             break;
           } else {
             skippedRowCount++;
@@ -246,7 +246,7 @@ class Detector {
       result[3] =
           ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
-    if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
+    if (stopRow - startRow < _BARCODE_MIN_HEIGHT) {
       // Arrays.fill(result, null);
       return null;
     }
@@ -263,7 +263,7 @@ class Detector {
    * @param counters array of counters, as long as pattern, to re-use
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  static List<int>? findGuardPattern(BitMatrix matrix, int column, int row,
+  static List<int>? _findGuardPattern(BitMatrix matrix, int column, int row,
       int width, List<int> pattern, List<int> counters) {
     //Arrays.fill(counters, 0, counters.length, 0);
     int patternStart = column;
@@ -272,7 +272,7 @@ class Detector {
     // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels
     while (matrix.get(patternStart, row) &&
         patternStart > 0 &&
-        pixelDrift++ < MAX_PIXEL_DRIFT) {
+        pixelDrift++ < _MAX_PIXEL_DRIFT) {
       patternStart--;
     }
     int x = patternStart;
@@ -284,7 +284,7 @@ class Detector {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+          if (_patternMatchVariance(counters, pattern) < _MAX_AVG_VARIANCE) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -300,7 +300,7 @@ class Detector {
       }
     }
     if (counterPosition == patternLength - 1 &&
-        patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+        _patternMatchVariance(counters, pattern) < _MAX_AVG_VARIANCE) {
       return [patternStart, x - 1];
     }
     return null;
@@ -316,7 +316,7 @@ class Detector {
    * @param pattern expected pattern
    * @return ratio of total variance between counters and pattern compared to total pattern size
    */
-  static double patternMatchVariance(List<int> counters, List<int> pattern) {
+  static double _patternMatchVariance(List<int> counters, List<int> pattern) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
@@ -333,7 +333,7 @@ class Detector {
     // Scale up patternLength so that intermediate values below like scaledCounter will have
     // more "significant digits".
     double unitBarWidth = total / patternLength;
-    double maxIndividualVariance = MAX_INDIVIDUAL_VARIANCE * unitBarWidth;
+    double maxIndividualVariance = _MAX_INDIVIDUAL_VARIANCE * unitBarWidth;
 
     double totalVariance = 0.0;
     for (int x = 0; x < numCounters; x++) {

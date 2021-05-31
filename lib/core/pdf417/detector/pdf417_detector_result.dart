@@ -22,16 +22,16 @@ import '../../result_point.dart';
  * @author Guenther Grau
  */
 class PDF417DetectorResult {
-  final BitMatrix bits;
-  final List<List<ResultPoint?>> points;
+  final BitMatrix _bits;
+  final List<List<ResultPoint?>> _points;
 
-  PDF417DetectorResult(this.bits, this.points);
+  PDF417DetectorResult(this._bits, this._points);
 
   BitMatrix getBits() {
-    return bits;
+    return _bits;
   }
 
   List<List<ResultPoint?>> getPoints() {
-    return points;
+    return _points;
   }
 }

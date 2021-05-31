@@ -20,10 +20,10 @@ import 'modulus_gf.dart';
  * @author Sean Owen
  */
 class ModulusPoly {
-  final ModulusGF field;
-  late List<int> coefficients;
+  final ModulusGF _field;
+  late List<int> _coefficients;
 
-  ModulusPoly(this.field, List<int> coefficients) {
+  ModulusPoly(this._field, List<int> coefficients) {
     if (coefficients.length == 0) {
       throw Exception();
     }
@@ -36,40 +36,40 @@ class ModulusPoly {
         firstNonZero++;
       }
       if (firstNonZero == coefficientsLength) {
-        this.coefficients = [];
+        this._coefficients = [];
       } else {
-        this.coefficients = List.filled(coefficientsLength - firstNonZero, 0);
-        List.copyRange(this.coefficients, 0, coefficients, firstNonZero,
-            firstNonZero + this.coefficients.length);
+        this._coefficients = List.filled(coefficientsLength - firstNonZero, 0);
+        List.copyRange(this._coefficients, 0, coefficients, firstNonZero,
+            firstNonZero + this._coefficients.length);
       }
     } else {
-      this.coefficients = coefficients;
+      this._coefficients = coefficients;
     }
   }
 
   List<int> getCoefficients() {
-    return coefficients;
+    return _coefficients;
   }
 
   /**
    * @return degree of this polynomial
    */
   int getDegree() {
-    return coefficients.length - 1;
+    return _coefficients.length - 1;
   }
 
   /**
    * @return true iff this polynomial is the monomial "0"
    */
   bool isZero() {
-    return coefficients[0] == 0;
+    return _coefficients[0] == 0;
   }
 
   /**
    * @return coefficient of x^degree term in this polynomial
    */
   int getCoefficient(int degree) {
-    return coefficients[coefficients.length - 1 - degree];
+    return _coefficients[_coefficients.length - 1 - degree];
   }
 
   /**
@@ -83,21 +83,21 @@ class ModulusPoly {
     if (a == 1) {
       // Just the sum of the coefficients
       int result = 0;
-      for (int coefficient in coefficients) {
-        result = field.add(result, coefficient);
+      for (int coefficient in _coefficients) {
+        result = _field.add(result, coefficient);
       }
       return result;
     }
-    int result = coefficients[0];
-    int size = coefficients.length;
+    int result = _coefficients[0];
+    int size = _coefficients.length;
     for (int i = 1; i < size; i++) {
-      result = field.add(field.multiply(a, result), coefficients[i]);
+      result = _field.add(_field.multiply(a, result), _coefficients[i]);
     }
     return result;
   }
 
   ModulusPoly add(ModulusPoly other) {
-    if (field != other.field) {
+    if (_field != other._field) {
       throw Exception("ModulusPolys do not have same ModulusGF field");
     }
     if (isZero()) {
@@ -107,8 +107,8 @@ class ModulusPoly {
       return this;
     }
 
-    List<int> smallerCoefficients = this.coefficients;
-    List<int> largerCoefficients = other.coefficients;
+    List<int> smallerCoefficients = this._coefficients;
+    List<int> largerCoefficients = other._coefficients;
     if (smallerCoefficients.length > largerCoefficients.length) {
       List<int> temp = smallerCoefficients;
       smallerCoefficients = largerCoefficients;
@@ -121,14 +121,14 @@ class ModulusPoly {
 
     for (int i = lengthDiff; i < largerCoefficients.length; i++) {
       sumDiff[i] =
-          field.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+          _field.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
     }
 
-    return ModulusPoly(field, sumDiff);
+    return ModulusPoly(_field, sumDiff);
   }
 
   ModulusPoly subtract(ModulusPoly other) {
-    if (field != other.field) {
+    if (_field != other._field) {
       throw Exception("ModulusPolys do not have same ModulusGF field");
     }
     if (other.isZero()) {
@@ -138,49 +138,49 @@ class ModulusPoly {
   }
 
   ModulusPoly multiplyPoly(ModulusPoly other) {
-    if (field != other.field) {
+    if (_field != other._field) {
       throw Exception("ModulusPolys do not have same ModulusGF field");
     }
     if (isZero() || other.isZero()) {
-      return field.getZero();
+      return _field.getZero();
     }
-    List<int> aCoefficients = this.coefficients;
+    List<int> aCoefficients = this._coefficients;
     int aLength = aCoefficients.length;
-    List<int> bCoefficients = other.coefficients;
+    List<int> bCoefficients = other._coefficients;
     int bLength = bCoefficients.length;
     List<int> product = List.filled(aLength + bLength - 1, 0);
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
         product[i + j] =
-            field.add(product[i + j], field.multiply(aCoeff, bCoefficients[j]));
+            _field.add(product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
       }
     }
-    return ModulusPoly(field, product);
+    return ModulusPoly(_field, product);
   }
 
   ModulusPoly negative() {
-    int size = coefficients.length;
+    int size = _coefficients.length;
     List<int> negativeCoefficients = [];
     for (int i = 0; i < size; i++) {
-      negativeCoefficients.add(field.subtract(0, coefficients[i]));
+      negativeCoefficients.add(_field.subtract(0, _coefficients[i]));
     }
-    return ModulusPoly(field, negativeCoefficients);
+    return ModulusPoly(_field, negativeCoefficients);
   }
 
   ModulusPoly multiply(int scalar) {
     if (scalar == 0) {
-      return field.getZero();
+      return _field.getZero();
     }
     if (scalar == 1) {
       return this;
     }
-    int size = coefficients.length;
+    int size = _coefficients.length;
     List<int> product = []; // size
     for (int i = 0; i < size; i++) {
-      product.add(field.multiply(coefficients[i], scalar));
+      product.add(_field.multiply(_coefficients[i], scalar));
     }
-    return ModulusPoly(field, product);
+    return ModulusPoly(_field, product);
   }
 
   ModulusPoly multiplyByMonomial(int degree, int coefficient) {
@@ -188,14 +188,14 @@ class ModulusPoly {
       throw Exception();
     }
     if (coefficient == 0) {
-      return field.getZero();
+      return _field.getZero();
     }
-    int size = coefficients.length;
+    int size = _coefficients.length;
     List<int> product = List.filled(size + degree, 0);
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(coefficients[i], coefficient);
+      product[i] = _field.multiply(_coefficients[i], coefficient);
     }
-    return ModulusPoly(field, product);
+    return ModulusPoly(_field, product);
   }
 
   @override
