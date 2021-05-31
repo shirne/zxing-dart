@@ -28,28 +28,28 @@ import 'dart:typed_data';
  * @author Sean Owen
  */
 class BitSource {
-  final Uint8List bytes;
-  int byteOffset = 0;
-  int bitOffset = 0;
+  final Uint8List _bytes;
+  int _byteOffset = 0;
+  int _bitOffset = 0;
 
   /**
    * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
    * Bits are read within a byte from most-significant to least-significant bit.
    */
-  BitSource(this.bytes);
+  BitSource(this._bytes);
 
   /**
    * @return index of next bit in current byte which would be read by the next call to {@link #readBits(int)}.
    */
   int getBitOffset() {
-    return bitOffset;
+    return _bitOffset;
   }
 
   /**
    * @return index of next byte in input byte array which would be read by the next call to {@link #readBits(int)}.
    */
   int getByteOffset() {
-    return byteOffset;
+    return _byteOffset;
   }
 
   /**
@@ -66,25 +66,25 @@ class BitSource {
     int result = 0;
 
     // First, read remainder from current byte
-    if (bitOffset > 0) {
-      int bitsLeft = 8 - bitOffset;
+    if (_bitOffset > 0) {
+      int bitsLeft = 8 - _bitOffset;
       int toRead = Math.min(numBits, bitsLeft);
       int bitsToNotRead = bitsLeft - toRead;
       int mask = (0xFF >> (8 - toRead)) << bitsToNotRead;
-      result = (bytes[byteOffset] & mask) >> bitsToNotRead;
+      result = (_bytes[_byteOffset] & mask) >> bitsToNotRead;
       numBits -= toRead;
-      bitOffset += toRead;
-      if (bitOffset == 8) {
-        bitOffset = 0;
-        byteOffset++;
+      _bitOffset += toRead;
+      if (_bitOffset == 8) {
+        _bitOffset = 0;
+        _byteOffset++;
       }
     }
 
     // Next read whole bytes
     if (numBits > 0) {
       while (numBits >= 8) {
-        result = (result << 8) | (bytes[byteOffset] & 0xFF);
-        byteOffset++;
+        result = (result << 8) | (_bytes[_byteOffset] & 0xFF);
+        _byteOffset++;
         numBits -= 8;
       }
 
@@ -93,8 +93,8 @@ class BitSource {
         int bitsToNotRead = 8 - numBits;
         int mask = (0xFF >> bitsToNotRead) << bitsToNotRead;
         result =
-            (result << numBits) | ((bytes[byteOffset] & mask) >> bitsToNotRead);
-        bitOffset += numBits;
+            (result << numBits) | ((_bytes[_byteOffset] & mask) >> bitsToNotRead);
+        _bitOffset += numBits;
       }
     }
 
@@ -105,6 +105,6 @@ class BitSource {
    * @return number of bits that can be read successfully
    */
   int available() {
-    return 8 * (bytes.length - byteOffset) - bitOffset;
+    return 8 * (_bytes.length - _byteOffset) - _bitOffset;
   }
 }

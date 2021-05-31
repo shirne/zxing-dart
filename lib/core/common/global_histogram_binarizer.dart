@@ -34,17 +34,17 @@ import 'bit_matrix.dart';
  * @author Sean Owen
  */
 class GlobalHistogramBinarizer extends Binarizer {
-  static final int LUMINANCE_BITS = 5;
-  static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+  static const int _luminanceBits = 5;
+  static const int _luminanceShift = 8 - _luminanceBits;
+  static const int _luminanceBuckets = 1 << _luminanceBits;
   static final Uint8List EMPTY = Uint8List(0);
 
-  Uint8List luminances;
-  final List<int> buckets;
+  Uint8List _luminances;
+  final List<int> _buckets;
 
   GlobalHistogramBinarizer(LuminanceSource source)
-      : luminances = EMPTY,
-        buckets = List.generate(LUMINANCE_BUCKETS, (index) => 0),
+      : _luminances = EMPTY,
+        _buckets = List.generate(_luminanceBuckets, (index) => 0),
         super(source);
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
@@ -53,18 +53,18 @@ class GlobalHistogramBinarizer extends Binarizer {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     if (row == null || row.getSize() < width) {
-      row = BitArray(size: width);
+      row = BitArray( width);
     } else {
       row.clear();
     }
 
-    initArrays(width);
-    Uint8List localLuminances = source.getRow(y, luminances);
-    List<int> localBuckets = buckets;
+    _initArrays(width);
+    Uint8List localLuminances = source.getRow(y, _luminances);
+    List<int> localBuckets = _buckets;
     for (int x = 0; x < width; x++) {
-      localBuckets[(localLuminances[x] & 0xff) >> LUMINANCE_SHIFT]++;
+      localBuckets[(localLuminances[x] & 0xff) >> _luminanceShift]++;
     }
-    int blackPoint = estimateBlackPoint(localBuckets);
+    int blackPoint = _estimateBlackPoint(localBuckets);
 
     if (width < 3) {
       // Special case for very small images
@@ -99,18 +99,18 @@ class GlobalHistogramBinarizer extends Binarizer {
 
     // Quickly calculates the histogram by sampling four rows from the image. This proved to be
     // more robust on the blackbox tests than sampling a diagonal as we used to do.
-    initArrays(width);
-    List<int> localBuckets = buckets;
+    _initArrays(width);
+    List<int> localBuckets = _buckets;
     for (int y = 1; y < 5; y++) {
       int row = height * y ~/ 5;
-      Uint8List localLuminances = source.getRow(row, luminances);
+      Uint8List localLuminances = source.getRow(row, _luminances);
       int right = (width * 4) ~/ 5;
       for (int x = width ~/ 5; x < right; x++) {
         int pixel = localLuminances[x] & 0xff;
-        localBuckets[pixel >> LUMINANCE_SHIFT]++;
+        localBuckets[pixel >> _luminanceShift]++;
       }
     }
-    int blackPoint = estimateBlackPoint(localBuckets);
+    int blackPoint = _estimateBlackPoint(localBuckets);
 
     // We delay reading the entire image luminance until the black point estimation succeeds.
     // Although we end up reading four rows twice, it is consistent with our motto of
@@ -134,16 +134,16 @@ class GlobalHistogramBinarizer extends Binarizer {
     return GlobalHistogramBinarizer(source);
   }
 
-  void initArrays(int luminanceSize) {
-    if (luminances.length < luminanceSize) {
-      luminances = Uint8List(luminanceSize);
+  void _initArrays(int luminanceSize) {
+    if (_luminances.length < luminanceSize) {
+      _luminances = Uint8List(luminanceSize);
     }
-    for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-      buckets[x] = 0;
+    for (int x = 0; x < _luminanceBuckets; x++) {
+      _buckets[x] = 0;
     }
   }
 
-  static int estimateBlackPoint(List<int> buckets) {
+  static int _estimateBlackPoint(List<int> buckets) {
     // Find the tallest peak in the histogram.
     int numBuckets = buckets.length;
     int maxBucketCount = 0;
@@ -200,6 +200,6 @@ class GlobalHistogramBinarizer extends Binarizer {
       }
     }
 
-    return bestValley << LUMINANCE_SHIFT;
+    return bestValley << _luminanceShift;
   }
 }

@@ -26,28 +26,32 @@ import 'detector/math_utils.dart';
  * @author Sean Owen
  */
 class BitArray {
-  late List<int> bits;
-  int size;
+  late List<int> _bits;
+  int _size;
 
-  BitArray({List<int>? bits, this.size = 0}) {
-    if (bits == null) {
-      this.bits = makeArray(size);
+  BitArray([this._size = 0]) {
+    if (_size == 0) {
+      this._bits = [0];
+    }else{
+      this._bits = _makeArray(_size);
     }
   }
 
+  BitArray.test(this._bits, this._size);
+
   int getSize() {
-    return size;
+    return _size;
   }
 
   int getSizeInBytes() {
-    return (size + 7) ~/ 8;
+    return (_size + 7) ~/ 8;
   }
 
-  void ensureCapacity(int size) {
-    if (size > bits.length * 32) {
-      List<int> newBits = makeArray(size);
-      List.copyRange(newBits, 0, bits, 0, bits.length);
-      this.bits = newBits;
+  void _ensureCapacity(int size) {
+    if (size > _bits.length * 32) {
+      List<int> newBits = _makeArray(size);
+      List.copyRange(newBits, 0, _bits, 0, _bits.length);
+      this._bits = newBits;
     }
   }
 
@@ -56,7 +60,7 @@ class BitArray {
    * @return true iff bit i is set
    */
   bool get(int i) {
-    return (bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
+    return (_bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
   }
 
   /**
@@ -65,7 +69,7 @@ class BitArray {
    * @param i bit to set
    */
   void set(int i) {
-    bits[i ~/ 32] |= 1 << (i & 0x1F);
+    _bits[i ~/ 32] |= 1 << (i & 0x1F);
   }
 
   /**
@@ -74,7 +78,7 @@ class BitArray {
    * @param i bit to set
    */
   void flip(int i) {
-    bits[i ~/ 32] ^= 1 << (i & 0x1F);
+    _bits[i ~/ 32] ^= 1 << (i & 0x1F);
   }
 
   /**
@@ -84,22 +88,22 @@ class BitArray {
    * @see #getNextUnset(int)
    */
   int getNextSet(int from) {
-    if (from >= size) {
-      return size;
+    if (from >= _size) {
+      return _size;
     }
     int bitsOffset = from ~/ 32;
-    int currentBits = bits[bitsOffset];
+    int currentBits = _bits[bitsOffset];
     // mask off lesser bits first
     currentBits &= -(1 << (from & 0x1F));
     while (currentBits == 0) {
-      if (++bitsOffset == bits.length) {
-        return size;
+      if (++bitsOffset == _bits.length) {
+        return _size;
       }
-      currentBits = bits[bitsOffset];
+      currentBits = _bits[bitsOffset];
     }
     int result =
         (bitsOffset * 32) + MathUtils.numberOfTrailingZeros(currentBits);
-    return math.min(result, size);
+    return math.min(result, _size);
   }
 
   /**
@@ -108,22 +112,22 @@ class BitArray {
    * @see #getNextSet(int)
    */
   int getNextUnset(int from) {
-    if (from >= size) {
-      return size;
+    if (from >= _size) {
+      return _size;
     }
     int bitsOffset = from ~/ 32;
-    int currentBits = ~bits[bitsOffset];
+    int currentBits = ~_bits[bitsOffset];
     // mask off lesser bits first
     currentBits &= -(1 << (from & 0x1F));
     while (currentBits == 0) {
-      if (++bitsOffset == bits.length) {
-        return size;
+      if (++bitsOffset == _bits.length) {
+        return _size;
       }
-      currentBits = ~bits[bitsOffset];
+      currentBits = ~_bits[bitsOffset];
     }
     int result =
         (bitsOffset * 32) + MathUtils.numberOfTrailingZeros(currentBits);
-    return math.min(result, size);
+    return math.min(result, _size);
   }
 
   /**
@@ -134,7 +138,7 @@ class BitArray {
    * corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   void setBulk(int i, int newBits) {
-    bits[i ~/ 32] = newBits;
+    _bits[i ~/ 32] = newBits;
   }
 
   /**
@@ -144,7 +148,7 @@ class BitArray {
    * @param end end of range, exclusive
    */
   void setRange(int start, int end) {
-    if (end < start || start < 0 || end > size) {
+    if (end < start || start < 0 || end > _size) {
       throw Exception(r'Illegal Argument');
     }
     if (end == start) {
@@ -158,7 +162,7 @@ class BitArray {
       int lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
       int mask = (2 << lastBit) - (1 << firstBit);
-      bits[i] |= mask;
+      _bits[i] |= mask;
     }
   }
 
@@ -166,9 +170,9 @@ class BitArray {
    * Clears all bits (sets to false).
    */
   void clear() {
-    int max = bits.length;
+    int max = _bits.length;
     for (int i = 0; i < max; i++) {
-      bits[i] = 0;
+      _bits[i] = 0;
     }
   }
 
@@ -182,7 +186,7 @@ class BitArray {
    * @throws IllegalArgumentException if end is less than start or the range is not contained in the array
    */
   bool isRange(int start, int end, bool value) {
-    if (end < start || start < 0 || end > size) {
+    if (end < start || start < 0 || end > _size) {
       throw Exception(r'Illegal Argument');
     }
     if (end == start) {
@@ -199,7 +203,7 @@ class BitArray {
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
-      if ((bits[i] & mask) != (value ? mask : 0)) {
+      if ((_bits[i] & mask) != (value ? mask : 0)) {
         return false;
       }
     }
@@ -207,11 +211,11 @@ class BitArray {
   }
 
   void appendBit(bool bit) {
-    ensureCapacity(size + 1);
+    _ensureCapacity(_size + 1);
     if (bit) {
-      bits[size ~/ 32] |= 1 << (size & 0x1F);
+      _bits[_size ~/ 32] |= 1 << (_size & 0x1F);
     }
-    size++;
+    _size++;
   }
 
   /**
@@ -225,27 +229,27 @@ class BitArray {
   void appendBits(int value, int numBits) {
     assert(numBits >= 0 && numBits <= 32, r'Num bits must be between 0 and 32');
 
-    ensureCapacity(size + numBits);
+    _ensureCapacity(_size + numBits);
     for (int numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
       appendBit(((value >> (numBitsLeft - 1)) & 0x01) == 1);
     }
   }
 
   void appendBitArray(BitArray other) {
-    int otherSize = other.size;
-    ensureCapacity(size + otherSize);
+    int otherSize = other._size;
+    _ensureCapacity(_size + otherSize);
     for (int i = 0; i < otherSize; i++) {
       appendBit(other.get(i));
     }
   }
 
   void xor(BitArray other) {
-    assert(size == other.size, r"Sizes don't match");
+    assert(_size == other._size, r"Sizes don't match");
 
-    for (int i = 0; i < bits.length; i++) {
+    for (int i = 0; i < _bits.length; i++) {
       // The last int could be incomplete (i.e. not have 32 bits in
       // it) but there is no problem since 0 XOR 0 == 0.
-      bits[i] ^= other.bits[i];
+      _bits[i] ^= other._bits[i];
     }
   }
 
@@ -275,19 +279,19 @@ class BitArray {
    *         significant bit is bit 0.
    */
   List<int> getBitArray() {
-    return bits;
+    return _bits;
   }
 
   /**
    * Reverses all bits in the array.
    */
   void reverse() {
-    List<int> newBits = List.generate(bits.length, (index) => 0);
+    List<int> newBits = List.generate(_bits.length, (index) => 0);
     // reverse all int's first
-    int len = (size - 1) ~/ 32;
+    int len = (_size - 1) ~/ 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
-      int x = bits[i];
+      int x = _bits[i];
       x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1);
       x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2);
       x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4);
@@ -296,8 +300,8 @@ class BitArray {
       newBits[len - i] = x;
     }
     // now correct the int's if the bit size isn't a multiple of 32
-    if (size != oldBitsLen * 32) {
-      int leftOffset = oldBitsLen * 32 - size;
+    if (_size != oldBitsLen * 32) {
+      int leftOffset = oldBitsLen * 32 - _size;
       int currentInt = newBits[0] >> leftOffset;
       for (int i = 1; i < oldBitsLen; i++) {
         int nextInt = newBits[i];
@@ -307,10 +311,10 @@ class BitArray {
       }
       newBits[oldBitsLen - 1] = currentInt;
     }
-    bits = newBits;
+    _bits = newBits;
   }
 
-  static List<int> makeArray(int size) {
+  static List<int> _makeArray(int size) {
     return List.generate((size + 31) ~/ 32, (index) => 0);
   }
 
@@ -320,18 +324,18 @@ class BitArray {
       return false;
     }
     BitArray other = o;
-    return size == other.size && bits == other.bits;
+    return _size == other._size && _bits == other._bits;
   }
 
   @override
   int get hashCode {
-    return 31 * size + bits.hashCode;
+    return 31 * _size + _bits.hashCode;
   }
 
   @override
   String toString() {
     StringBuffer result = StringBuffer();
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < _size; i++) {
       if ((i & 0x07) == 0) {
         result.write(' ');
       }
@@ -341,6 +345,6 @@ class BitArray {
   }
 
   BitArray clone() {
-    return BitArray(bits: bits.getRange(0, bits.length).toList(), size: size);
+    return BitArray.test( _bits.getRange(0, _bits.length).toList(), _size);
   }
 }

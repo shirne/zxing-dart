@@ -40,9 +40,9 @@ import 'generic_gfpoly.dart';
  * @author sanfordsquires
  */
 class ReedSolomonDecoder {
-  final GenericGF field;
+  final GenericGF _field;
 
-  ReedSolomonDecoder(this.field);
+  ReedSolomonDecoder(this._field);
 
   /**
    * <p>Decodes given set of received codewords, which include both data and error-correction
@@ -54,11 +54,11 @@ class ReedSolomonDecoder {
    * @throws ReedSolomonException if decoding fails for any reason
    */
   void decode(List<int> received, int twoS) {
-    GenericGFPoly poly = GenericGFPoly(field, received);
-    List<int> syndromeCoefficients = List.generate(twoS, (index) => 0);
+    GenericGFPoly poly = GenericGFPoly(_field, received);
+    List<int> syndromeCoefficients = List.filled(twoS, 0);
     bool noError = true;
     for (int i = 0; i < twoS; i++) {
-      int eval = poly.evaluateAt(field.exp(i + field.getGeneratorBase()));
+      int eval = poly.evaluateAt(_field.exp(i + _field.getGeneratorBase()));
       syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
       if (eval != 0) {
         noError = false;
@@ -67,15 +67,15 @@ class ReedSolomonDecoder {
     if (noError) {
       return;
     }
-    GenericGFPoly syndrome = GenericGFPoly(field, syndromeCoefficients);
+    GenericGFPoly syndrome = GenericGFPoly(_field, syndromeCoefficients);
     List<GenericGFPoly> sigmaOmega =
-        runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
+      _runEuclideanAlgorithm(_field.buildMonomial(twoS, 1), syndrome, twoS);
     GenericGFPoly sigma = sigmaOmega[0];
     GenericGFPoly omega = sigmaOmega[1];
-    List<int> errorLocations = findErrorLocations(sigma);
-    List<int> errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
+    List<int> errorLocations = _findErrorLocations(sigma);
+    List<int> errorMagnitudes = _findErrorMagnitudes(omega, errorLocations);
     for (int i = 0; i < errorLocations.length; i++) {
-      int position = received.length - 1 - field.log(errorLocations[i]);
+      int position = received.length - 1 - _field.log(errorLocations[i]);
       if (position < 0) {
         throw Exception("Bad error location");
       }
@@ -84,7 +84,7 @@ class ReedSolomonDecoder {
     }
   }
 
-  List<GenericGFPoly> runEuclideanAlgorithm(
+  List<GenericGFPoly> _runEuclideanAlgorithm(
       GenericGFPoly a, GenericGFPoly b, int R) {
     // Assume a's degree is >= b's
     if (a.getDegree() < b.getDegree()) {
@@ -95,8 +95,8 @@ class ReedSolomonDecoder {
 
     GenericGFPoly rLast = a;
     GenericGFPoly r = b;
-    GenericGFPoly tLast = field.getZero();
-    GenericGFPoly t = field.getOne();
+    GenericGFPoly tLast = _field.getZero();
+    GenericGFPoly t = _field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
     while (r.getDegree() >= R / 2) {
@@ -111,13 +111,13 @@ class ReedSolomonDecoder {
         throw Exception("r_{i-1} was zero");
       }
       r = rLastLast;
-      GenericGFPoly q = field.getZero();
+      GenericGFPoly q = _field.getZero();
       int denominatorLeadingTerm = rLast.getCoefficient(rLast.getDegree());
-      int dltInverse = field.inverse(denominatorLeadingTerm);
+      int dltInverse = _field.inverse(denominatorLeadingTerm);
       while (r.getDegree() >= rLast.getDegree() && !r.isZero()) {
         int degreeDiff = r.getDegree() - rLast.getDegree();
-        int scale = field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
-        q = q.addOrSubtract(field.buildMonomial(degreeDiff, scale));
+        int scale = _field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
+        q = q.addOrSubtract(_field.buildMonomial(degreeDiff, scale));
         r = r.addOrSubtract(rLast.multiplyByMonomial(degreeDiff, scale));
       }
 
@@ -133,13 +133,13 @@ class ReedSolomonDecoder {
       throw Exception("sigmaTilde(0) was zero");
     }
 
-    int inverse = field.inverse(sigmaTildeAtZero);
+    int inverse = _field.inverse(sigmaTildeAtZero);
     GenericGFPoly sigma = t.multiplyInt(inverse);
     GenericGFPoly omega = r.multiplyInt(inverse);
     return [sigma, omega];
   }
 
-  List<int> findErrorLocations(GenericGFPoly errorLocator) {
+  List<int> _findErrorLocations(GenericGFPoly errorLocator) {
     // This is a direct application of Chien's search
     int numErrors = errorLocator.getDegree();
     if (numErrors == 1) {
@@ -148,9 +148,9 @@ class ReedSolomonDecoder {
     }
     List<int> result = List.generate(numErrors, (index) => 0);
     int e = 0;
-    for (int i = 1; i < field.getSize() && e < numErrors; i++) {
+    for (int i = 1; i < _field.getSize() && e < numErrors; i++) {
       if (errorLocator.evaluateAt(i) == 0) {
-        result[e] = field.inverse(i);
+        result[e] = _field.inverse(i);
         e++;
       }
     }
@@ -160,13 +160,13 @@ class ReedSolomonDecoder {
     return result;
   }
 
-  List<int> findErrorMagnitudes(
+  List<int> _findErrorMagnitudes(
       GenericGFPoly errorEvaluator, List<int> errorLocations) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     List<int> result = List.generate(s, (index) => 0);
     for (int i = 0; i < s; i++) {
-      int xiInverse = field.inverse(errorLocations[i]);
+      int xiInverse = _field.inverse(errorLocations[i]);
       int denominator = 1;
       for (int j = 0; j < s; j++) {
         if (i != j) {
@@ -174,15 +174,15 @@ class ReedSolomonDecoder {
           //    GenericGF.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
           // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
           // Below is a funny-looking workaround from Steven Parkes
-          int term = field.multiply(errorLocations[j], xiInverse);
+          int term = _field.multiply(errorLocations[j], xiInverse);
           int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
-          denominator = field.multiply(denominator, termPlus1);
+          denominator = _field.multiply(denominator, termPlus1);
         }
       }
-      result[i] = field.multiply(
-          errorEvaluator.evaluateAt(xiInverse), field.inverse(denominator));
-      if (field.getGeneratorBase() != 0) {
-        result[i] = field.multiply(result[i], xiInverse);
+      result[i] = _field.multiply(
+          errorEvaluator.evaluateAt(xiInverse), _field.inverse(denominator));
+      if (_field.getGeneratorBase() != 0) {
+        result[i] = _field.multiply(result[i], xiInverse);
       }
     }
     return result;

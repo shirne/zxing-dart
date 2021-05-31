@@ -30,16 +30,16 @@ import 'math_utils.dart';
  * @author David Olivier
  */
 class WhiteRectangleDetector {
-  static const int INIT_SIZE = 10;
-  static const int CORR = 1;
+  static const int _INIT_SIZE = 10;
+  static const int _CORR = 1;
 
-  final BitMatrix image;
-  final int height;
-  final int width;
-  final int leftInit;
-  final int rightInit;
-  final int downInit;
-  final int upInit;
+  final BitMatrix _image;
+  final int _height;
+  final int _width;
+  final int _leftInit;
+  final int _rightInit;
+  final int _downInit;
+  final int _upInit;
 
   /**
    * @param image barcode image to find a rectangle in
@@ -48,17 +48,17 @@ class WhiteRectangleDetector {
    * @param y y position of search center
    * @throws NotFoundException if image is too small to accommodate {@code initSize}
    */
-  WhiteRectangleDetector(this.image, [int initSize = INIT_SIZE, int? x, int? y])
-      : height = image.getHeight(),
-        width = image.getWidth(),
-        leftInit = (x ?? image.getWidth() ~/ 2) - initSize ~/ 2,
-        rightInit = (x ?? image.getWidth() ~/ 2) + initSize ~/ 2,
-        upInit = (y ?? image.getHeight() ~/ 2) - initSize ~/ 2,
-        downInit = (y ?? image.getHeight() ~/ 2) + initSize ~/ 2 {
-    if (upInit < 0 ||
-        leftInit < 0 ||
-        downInit >= height ||
-        rightInit >= width) {
+  WhiteRectangleDetector(this._image, [int initSize = _INIT_SIZE, int? x, int? y])
+      : _height = _image.getHeight(),
+        _width = _image.getWidth(),
+        _leftInit = (x ?? _image.getWidth() ~/ 2) - initSize ~/ 2,
+        _rightInit = (x ?? _image.getWidth() ~/ 2) + initSize ~/ 2,
+        _upInit = (y ?? _image.getHeight() ~/ 2) - initSize ~/ 2,
+        _downInit = (y ?? _image.getHeight() ~/ 2) + initSize ~/ 2 {
+    if (_upInit < 0 ||
+        _leftInit < 0 ||
+        _downInit >= _height ||
+        _rightInit >= _width) {
       throw NotFoundException.getNotFoundInstance();
     }
   }
@@ -78,10 +78,10 @@ class WhiteRectangleDetector {
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   List<ResultPoint> detect() {
-    int left = leftInit;
-    int right = rightInit;
-    int up = upInit;
-    int down = downInit;
+    int left = _leftInit;
+    int right = _rightInit;
+    int up = _upInit;
+    int down = _downInit;
     bool sizeExceeded = false;
     bool aBlackPointFoundOnBorder = true;
 
@@ -98,7 +98,7 @@ class WhiteRectangleDetector {
       // .....
       bool rightBorderNotWhite = true;
       while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight) &&
-          right < width) {
+          right < _width) {
         rightBorderNotWhite = containsBlackPoint(up, down, right, false);
         if (rightBorderNotWhite) {
           right++;
@@ -109,7 +109,7 @@ class WhiteRectangleDetector {
         }
       }
 
-      if (right >= width) {
+      if (right >= _width) {
         sizeExceeded = true;
         break;
       }
@@ -119,7 +119,7 @@ class WhiteRectangleDetector {
       // .___.
       bool bottomBorderNotWhite = true;
       while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) &&
-          down < height) {
+          down < _height) {
         bottomBorderNotWhite = containsBlackPoint(left, right, down, true);
         if (bottomBorderNotWhite) {
           down++;
@@ -130,7 +130,7 @@ class WhiteRectangleDetector {
         }
       }
 
-      if (down >= height) {
+      if (down >= _height) {
         sizeExceeded = true;
         break;
       }
@@ -239,7 +239,7 @@ class WhiteRectangleDetector {
     for (int i = 0; i < dist; i++) {
       int x = MathUtils.round(aX + i * xStep);
       int y = MathUtils.round(aY + i * yStep);
-      if (image.get(x, y)) {
+      if (_image.get(x, y)) {
         return ResultPoint(x.toDouble(), y.toDouble());
       }
     }
@@ -277,19 +277,19 @@ class WhiteRectangleDetector {
     double ti = t.getX();
     double tj = t.getY();
 
-    if (yi < width / 2.0) {
+    if (yi < _width / 2.0) {
       return [
-        ResultPoint(ti - CORR, tj + CORR),
-        ResultPoint(zi + CORR, zj + CORR),
-        ResultPoint(xi - CORR, xj - CORR),
-        ResultPoint(yi + CORR, yj - CORR)
+        ResultPoint(ti - _CORR, tj + _CORR),
+        ResultPoint(zi + _CORR, zj + _CORR),
+        ResultPoint(xi - _CORR, xj - _CORR),
+        ResultPoint(yi + _CORR, yj - _CORR)
       ];
     } else {
       return [
-        ResultPoint(ti + CORR, tj + CORR),
-        ResultPoint(zi + CORR, zj - CORR),
-        ResultPoint(xi - CORR, xj + CORR),
-        ResultPoint(yi - CORR, yj - CORR)
+        ResultPoint(ti + _CORR, tj + _CORR),
+        ResultPoint(zi + _CORR, zj - _CORR),
+        ResultPoint(xi - _CORR, xj + _CORR),
+        ResultPoint(yi - _CORR, yj - _CORR)
       ];
     }
   }
@@ -306,13 +306,13 @@ class WhiteRectangleDetector {
   bool containsBlackPoint(int a, int b, int fixed, bool horizontal) {
     if (horizontal) {
       for (int x = a; x <= b; x++) {
-        if (image.get(x, fixed)) {
+        if (_image.get(x, fixed)) {
           return true;
         }
       }
     } else {
       for (int y = a; y <= b; y++) {
-        if (image.get(fixed, y)) {
+        if (_image.get(fixed, y)) {
           return true;
         }
       }

@@ -30,11 +30,11 @@ import '../bit_matrix.dart';
  */
 @deprecated
 class MonochromeRectangleDetector {
-  static final int MAX_MODULES = 32;
+  static final int _MAX_MODULES = 32;
 
-  final BitMatrix image;
+  final BitMatrix _image;
 
-  MonochromeRectangleDetector(this.image);
+  MonochromeRectangleDetector(this._image);
 
   /**
    * <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
@@ -47,12 +47,12 @@ class MonochromeRectangleDetector {
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   List<ResultPoint> detect() {
-    int height = image.getHeight();
-    int width = image.getWidth();
+    int height = _image.getHeight();
+    int width = _image.getWidth();
     int halfHeight = height ~/ 2;
     int halfWidth = width ~/ 2;
-    int deltaY = Math.max(1, height ~/ (MAX_MODULES * 8));
-    int deltaX = Math.max(1, width ~/ (MAX_MODULES * 8));
+    int deltaY = Math.max(1, height ~/ (_MAX_MODULES * 8));
+    int deltaX = Math.max(1, width ~/ (_MAX_MODULES * 8));
 
     int top = 0;
     int bottom = height;
@@ -167,8 +167,8 @@ class MonochromeRectangleDetector {
     int start = center;
     while (start >= minDim) {
       if (horizontal
-          ? image.get(start, fixedDimension)
-          : image.get(fixedDimension, start)) {
+          ? _image.get(start, fixedDimension)
+          : _image.get(fixedDimension, start)) {
         start--;
       } else {
         int whiteRunStart = start;
@@ -176,8 +176,8 @@ class MonochromeRectangleDetector {
           start--;
         } while (start >= minDim &&
             !(horizontal
-                ? image.get(start, fixedDimension)
-                : image.get(fixedDimension, start)));
+                ? _image.get(start, fixedDimension)
+                : _image.get(fixedDimension, start)));
         int whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
           start = whiteRunStart;
@@ -191,8 +191,8 @@ class MonochromeRectangleDetector {
     int end = center;
     while (end < maxDim) {
       if (horizontal
-          ? image.get(end, fixedDimension)
-          : image.get(fixedDimension, end)) {
+          ? _image.get(end, fixedDimension)
+          : _image.get(fixedDimension, end)) {
         end++;
       } else {
         int whiteRunStart = end;
@@ -200,8 +200,8 @@ class MonochromeRectangleDetector {
           end++;
         } while (end < maxDim &&
             !(horizontal
-                ? image.get(end, fixedDimension)
-                : image.get(fixedDimension, end)));
+                ? _image.get(end, fixedDimension)
+                : _image.get(fixedDimension, end)));
         int whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
           end = whiteRunStart;

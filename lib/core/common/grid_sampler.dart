@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../not_found_exception.dart';
 import 'bit_matrix.dart';
 import 'default_grid_sampler.dart';
@@ -33,7 +35,7 @@ import 'perspective_transform.dart';
  * @author Sean Owen
  */
 abstract class GridSampler {
-  static GridSampler gridSampler = DefaultGridSampler();
+  static GridSampler _gridSampler = DefaultGridSampler();
 
   /**
    * Sets the implementation of GridSampler used by the library. One global
@@ -45,14 +47,14 @@ abstract class GridSampler {
    * @param newGridSampler The platform-specific object to install.
    */
   static void setGridSampler(GridSampler newGridSampler) {
-    gridSampler = newGridSampler;
+    _gridSampler = newGridSampler;
   }
 
   /**
    * @return the current implementation of GridSampler
    */
   static GridSampler getInstance() {
-    return gridSampler;
+    return _gridSampler;
   }
 
   /**
@@ -123,6 +125,7 @@ abstract class GridSampler {
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws NotFoundException if an endpoint is lies outside the image boundaries
    */
+  @protected
   static checkAndNudgePoints(BitMatrix image, List<double> points) {
     int width = image.getWidth();
     int height = image.getHeight();

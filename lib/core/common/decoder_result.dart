@@ -24,29 +24,29 @@ import 'dart:typed_data';
  * @author Sean Owen
  */
 class DecoderResult {
-  final Uint8List? rawBytes;
-  int numBits;
-  final String text;
-  final List<Uint8List>? byteSegments;
-  final String? ecLevel;
-  int? errorsCorrected;
-  int? erasures;
-  Object? other;
-  final int structuredAppendParity;
-  final int structuredAppendSequenceNumber;
-  final int symbologyModifier;
+  final Uint8List? _rawBytes;
+  int _numBits;
+  final String _text;
+  final List<Uint8List>? _byteSegments;
+  final String? _ecLevel;
+  int? _errorsCorrected;
+  int? _erasures;
+  Object? _other;
+  final int _structuredAppendParity;
+  final int _structuredAppendSequenceNumber;
+  final int _symbologyModifier;
 
-  DecoderResult(this.rawBytes, this.text, this.byteSegments, this.ecLevel,
-      [this.structuredAppendSequenceNumber = -1,
-      this.structuredAppendParity = -1,
-      this.symbologyModifier = 0])
-      : numBits = rawBytes == null ? 0 : 8 * rawBytes.length;
+  DecoderResult(this._rawBytes, this._text, this._byteSegments, this._ecLevel,
+      [this._structuredAppendSequenceNumber = -1,
+      this._structuredAppendParity = -1,
+      this._symbologyModifier = 0])
+      : _numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length;
 
   /**
    * @return raw bytes representing the result, or {@code null} if not applicable
    */
   Uint8List getRawBytes() {
-    return rawBytes!;
+    return _rawBytes!;
   }
 
   /**
@@ -54,7 +54,7 @@ class DecoderResult {
    * @since 3.3.0
    */
   int getNumBits() {
-    return numBits;
+    return _numBits;
   }
 
   /**
@@ -62,76 +62,76 @@ class DecoderResult {
    * @since 3.3.0
    */
   void setNumBits(int numBits) {
-    this.numBits = numBits;
+    this._numBits = numBits;
   }
 
   /**
    * @return text representation of the result
    */
   String getText() {
-    return text;
+    return _text;
   }
 
   /**
    * @return list of byte segments in the result, or {@code null} if not applicable
    */
   List<Uint8List>? getByteSegments() {
-    return byteSegments;
+    return _byteSegments;
   }
 
   /**
    * @return name of error correction level used, or {@code null} if not applicable
    */
   String? getECLevel() {
-    return ecLevel;
+    return _ecLevel;
   }
 
   /**
    * @return number of errors corrected, or {@code null} if not applicable
    */
   int getErrorsCorrected() {
-    return errorsCorrected!;
+    return _errorsCorrected!;
   }
 
   void setErrorsCorrected(int errorsCorrected) {
-    this.errorsCorrected = errorsCorrected;
+    this._errorsCorrected = errorsCorrected;
   }
 
   /**
    * @return number of erasures corrected, or {@code null} if not applicable
    */
   int getErasures() {
-    return erasures!;
+    return _erasures!;
   }
 
   void setErasures(int erasures) {
-    this.erasures = erasures;
+    this._erasures = erasures;
   }
 
   /**
    * @return arbitrary additional metadata
    */
   Object? getOther() {
-    return other;
+    return _other;
   }
 
   void setOther(Object other) {
-    this.other = other;
+    this._other = other;
   }
 
   bool hasStructuredAppend() {
-    return structuredAppendParity >= 0 && structuredAppendSequenceNumber >= 0;
+    return _structuredAppendParity >= 0 && _structuredAppendSequenceNumber >= 0;
   }
 
   int getStructuredAppendParity() {
-    return structuredAppendParity;
+    return _structuredAppendParity;
   }
 
   int getStructuredAppendSequenceNumber() {
-    return structuredAppendSequenceNumber;
+    return _structuredAppendSequenceNumber;
   }
 
   int getSymbologyModifier() {
-    return symbologyModifier;
+    return _symbologyModifier;
   }
 }

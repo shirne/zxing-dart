@@ -43,13 +43,13 @@ class GenericGF {
   static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-  late List<int> expTable;
-  late List<int> logTable;
-  late GenericGFPoly zero;
-  late GenericGFPoly one;
-  final int size;
-  final int primitive;
-  final int generatorBase;
+  late List<int> _expTable;
+  late List<int> _logTable;
+  late GenericGFPoly _zero;
+  late GenericGFPoly _one;
+  final int _size;
+  final int _primitive;
+  final int _generatorBase;
 
   /**
    * Create a representation of GF(size) using the given primitive polynomial.
@@ -62,32 +62,32 @@ class GenericGF {
    *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
    *  In most cases it should be 1, but for QR code it is 0.
    */
-  GenericGF(this.primitive, this.size, this.generatorBase) {
-    expTable = List.generate(size, (index) => 0);
-    logTable = List.generate(size, (index) => 0);
+  GenericGF(this._primitive, this._size, this._generatorBase) {
+    _expTable = List.filled(_size, 0);
+    _logTable = List.filled(_size, 0);
     int x = 1;
-    for (int i = 0; i < size; i++) {
-      expTable[i] = x;
+    for (int i = 0; i < _size; i++) {
+      _expTable[i] = x;
       x *= 2; // we're assuming the generator alpha is 2
-      if (x >= size) {
-        x ^= primitive;
-        x &= size - 1;
+      if (x >= _size) {
+        x ^= _primitive;
+        x &= _size - 1;
       }
     }
-    for (int i = 0; i < size - 1; i++) {
-      logTable[expTable[i]] = i;
+    for (int i = 0; i < _size - 1; i++) {
+      _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    zero = GenericGFPoly(this, [0]);
-    one = GenericGFPoly(this, [1]);
+    _zero = GenericGFPoly(this, [0]);
+    _one = GenericGFPoly(this, [1]);
   }
 
   GenericGFPoly getZero() {
-    return zero;
+    return _zero;
   }
 
   GenericGFPoly getOne() {
-    return one;
+    return _one;
   }
 
   /**
@@ -98,7 +98,7 @@ class GenericGF {
       throw Exception('IllegalArgument');
     }
     if (coefficient == 0) {
-      return zero;
+      return _zero;
     }
     List<int> coefficients = List.generate(degree + 1, (index) => 0);
     coefficients[0] = coefficient;
@@ -118,7 +118,7 @@ class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
-    return expTable[a];
+    return _expTable[a];
   }
 
   /**
@@ -128,7 +128,7 @@ class GenericGF {
     if (a == 0) {
       throw Exception('IllegalArgument');
     }
-    return logTable[a];
+    return _logTable[a];
   }
 
   /**
@@ -138,7 +138,7 @@ class GenericGF {
     if (a == 0) {
       throw Exception('Arithmetic');
     }
-    return expTable[size - logTable[a] - 1];
+    return _expTable[_size - _logTable[a] - 1];
   }
 
   /**
@@ -148,19 +148,19 @@ class GenericGF {
     if (a == 0 || b == 0) {
       return 0;
     }
-    return expTable[(logTable[a] + logTable[b]) % (size - 1)];
+    return _expTable[(_logTable[a] + _logTable[b]) % (_size - 1)];
   }
 
   int getSize() {
-    return size;
+    return _size;
   }
 
   int getGeneratorBase() {
-    return generatorBase;
+    return _generatorBase;
   }
 
   @override
   String toString() {
-    return "GF(0x${primitive.toRadixString(16)},$size)";
+    return "GF(0x${_primitive.toRadixString(16)},$_size)";
   }
 }

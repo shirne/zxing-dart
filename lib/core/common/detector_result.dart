@@ -25,16 +25,16 @@ import 'bit_matrix.dart';
  * @author Sean Owen
  */
 class DetectorResult {
-  final BitMatrix bits;
-  final List<ResultPoint> points;
+  final BitMatrix _bits;
+  final List<ResultPoint> _points;
 
-  DetectorResult(this.bits, this.points);
+  DetectorResult(this._bits, this._points);
 
   BitMatrix getBits() {
-    return bits;
+    return _bits;
   }
 
   List<ResultPoint> getPoints() {
-    return points;
+    return _points;
   }
 }

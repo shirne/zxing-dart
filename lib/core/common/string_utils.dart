@@ -27,13 +27,13 @@ import '../decode_hint_type.dart';
  * @author Alex Dupre
  */
 class StringUtils {
-  static final Encoding PLATFORM_DEFAULT_ENCODING = SystemEncoding();
+  static final Encoding _PLATFORM_DEFAULT_ENCODING = SystemEncoding();
   static final Encoding? SHIFT_JIS_CHARSET = Encoding.getByName("SJIS");
   static final Encoding? GB2312_CHARSET = Encoding.getByName("GB2312");
-  static final Encoding? EUC_JP = Encoding.getByName("EUC_JP");
-  static final bool ASSUME_SHIFT_JIS =
-      SHIFT_JIS_CHARSET == PLATFORM_DEFAULT_ENCODING ||
-          EUC_JP == PLATFORM_DEFAULT_ENCODING;
+  static final Encoding? _EUC_JP = Encoding.getByName("EUC_JP");
+  static final bool _ASSUME_SHIFT_JIS =
+      SHIFT_JIS_CHARSET == _PLATFORM_DEFAULT_ENCODING ||
+          _EUC_JP == _PLATFORM_DEFAULT_ENCODING;
 
   // Retained for ABI compatibility with earlier versions
   static final String SHIFT_JIS = "SJIS";
@@ -200,7 +200,7 @@ class StringUtils {
     }
     // Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done
     if (canBeShiftJIS &&
-        (ASSUME_SHIFT_JIS ||
+        (_ASSUME_SHIFT_JIS ||
             sjisMaxKatakanaWordLength >= 3 ||
             sjisMaxDoubleBytesWordLength >= 3)) {
       return SHIFT_JIS_CHARSET;
@@ -228,6 +228,6 @@ class StringUtils {
       return utf8;
     }
     // Otherwise, we take a wild guess with platform encoding
-    return PLATFORM_DEFAULT_ENCODING;
+    return _PLATFORM_DEFAULT_ENCODING;
   }
 }

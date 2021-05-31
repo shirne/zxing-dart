@@ -42,13 +42,13 @@ import 'global_histogram_binarizer.dart';
 class HybridBinarizer extends GlobalHistogramBinarizer {
   // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
   // So this is the smallest dimension in each axis we can accept.
-  static final int BLOCK_SIZE_POWER = 3;
-  static final int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
-  static final int BLOCK_SIZE_MASK = BLOCK_SIZE - 1; // ...0011...11
-  static final int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
-  static final int MIN_DYNAMIC_RANGE = 24;
+  static const int BLOCK_SIZE_POWER = 3;
+  static const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
+  static const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1; // ...0011...11
+  static const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
+  static const int MIN_DYNAMIC_RANGE = 24;
 
-  BitMatrix? matrix;
+  BitMatrix? _matrix;
 
   HybridBinarizer(LuminanceSource source) : super(source);
 
@@ -59,8 +59,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
    */
   @override
   BitMatrix getBlackMatrix() {
-    if (matrix != null) {
-      return matrix!;
+    if (_matrix != null) {
+      return _matrix!;
     }
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
@@ -76,17 +76,17 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         subHeight++;
       }
       List<List<int>> blackPoints =
-          calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+          _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
       BitMatrix newMatrix = BitMatrix(width, height);
-      calculateThresholdForBlock(luminances, subWidth, subHeight, width, height,
+      _calculateThresholdForBlock(luminances, subWidth, subHeight, width, height,
           blackPoints, newMatrix);
-      matrix = newMatrix;
+      _matrix = newMatrix;
     } else {
       // If the image is too small, fall back to the global histogram approach.
-      matrix = super.getBlackMatrix();
+      _matrix = super.getBlackMatrix();
     }
-    return matrix!;
+    return _matrix!;
   }
 
   @override
@@ -99,7 +99,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
    * of the blocks around it. Also handles the corner cases (fractional blocks are computed based
    * on the last pixels in the row/column which are also used in the previous block).
    */
-  static void calculateThresholdForBlock(
+  static void _calculateThresholdForBlock(
       Uint8List luminances,
       int subWidth,
       int subHeight,
@@ -114,13 +114,13 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
       if (yoffset > maxYOffset) {
         yoffset = maxYOffset;
       }
-      int top = cap(y, subHeight - 3);
+      int top = _cap(y, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
         int xoffset = x << BLOCK_SIZE_POWER;
         if (xoffset > maxXOffset) {
           xoffset = maxXOffset;
         }
-        int left = cap(x, subWidth - 3);
+        int left = _cap(x, subWidth - 3);
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
           List<int> blackRow = blackPoints[top + z];
@@ -131,19 +131,19 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
               blackRow[left + 2];
         }
         int average = sum ~/ 25;
-        thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
+        _thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
       }
     }
   }
 
-  static int cap(int value, int max) {
+  static int _cap(int value, int max) {
     return value < 2 ? 2 : Math.min(value, max);
   }
 
   /**
    * Applies a single threshold to a block of pixels.
    */
-  static void thresholdBlock(Uint8List luminances, int xoffset, int yoffset,
+  static void _thresholdBlock(Uint8List luminances, int xoffset, int yoffset,
       int threshold, int stride, BitMatrix matrix) {
     for (int y = 0, offset = yoffset * stride + xoffset;
         y < BLOCK_SIZE;
@@ -162,7 +162,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
    * See the following thread for a discussion of this algorithm:
    *  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
    */
-  static List<List<int>> calculateBlackPoints(Uint8List luminances,
+  static List<List<int>> _calculateBlackPoints(Uint8List luminances,
       int subWidth, int subHeight, int width, int height) {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;

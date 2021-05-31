@@ -83,33 +83,33 @@ class CharacterSetECI {
     GB18030,
     EUC_KR,
   ];
-  static final Map<int, CharacterSetECI> VALUE_TO_ECI = {};
-  static final Map<String, CharacterSetECI> NAME_TO_ECI = {};
+  static final Map<int, CharacterSetECI> _valueToEci = {};
+  static final Map<String, CharacterSetECI> _nameToEci = {};
   static init() {
     for (CharacterSetECI eci in values) {
-      for (int value in eci.indexs) {
-        VALUE_TO_ECI[value] = eci;
+      for (int value in eci._indexs) {
+        _valueToEci[value] = eci;
       }
-      NAME_TO_ECI[eci.name] = eci;
-      for (String name in eci.otherEncodingNames) {
-        NAME_TO_ECI[name] = eci;
+      _nameToEci[eci.name] = eci;
+      for (String name in eci._otherEncodingNames) {
+        _nameToEci[name] = eci;
       }
     }
   }
 
-  final List<int> indexs;
+  final List<int> _indexs;
   final String name;
-  final List<String> otherEncodingNames;
+  final List<String> _otherEncodingNames;
 
   CharacterSetECI(this.name, dynamic value, [dynamic otherEncodingNames])
-      : indexs = (value is int) ? [value] : value as List<int>,
-        otherEncodingNames =
+      : _indexs = (value is int) ? [value] : value as List<int>,
+        _otherEncodingNames =
             (otherEncodingNames == null || otherEncodingNames is String)
                 ? [otherEncodingNames]
                 : otherEncodingNames as List<String>;
 
   int getValue() {
-    return indexs[0];
+    return _indexs[0];
   }
 
   Encoding? getCharset() {
@@ -122,10 +122,10 @@ class CharacterSetECI {
    *   but unsupported
    */
   static CharacterSetECI? getCharacterSetECI(Encoding charset) {
-    if (NAME_TO_ECI.isEmpty) {
+    if (_nameToEci.isEmpty) {
       init();
     }
-    return NAME_TO_ECI[charset.name];
+    return _nameToEci[charset.name];
   }
 
   /**
@@ -138,10 +138,10 @@ class CharacterSetECI {
     if (value < 0 || value >= 900) {
       throw FormatException();
     }
-    if (VALUE_TO_ECI.isEmpty) {
+    if (_valueToEci.isEmpty) {
       init();
     }
-    return VALUE_TO_ECI[value];
+    return _valueToEci[value];
   }
 
   /**
@@ -150,6 +150,9 @@ class CharacterSetECI {
    *   but unsupported
    */
   static CharacterSetECI? getCharacterSetECIByName(String name) {
-    return NAME_TO_ECI[name];
+    if (_nameToEci.isEmpty) {
+      init();
+    }
+    return _nameToEci[name];
   }
 }

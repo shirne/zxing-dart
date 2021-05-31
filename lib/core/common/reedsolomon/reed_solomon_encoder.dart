@@ -24,25 +24,25 @@ import 'generic_gfpoly.dart';
  * @author William Rucklidge
  */
 class ReedSolomonEncoder {
-  final GenericGF field;
-  final List<GenericGFPoly> cachedGenerators;
+  final GenericGF _field;
+  final List<GenericGFPoly> _cachedGenerators;
 
-  ReedSolomonEncoder(this.field) : cachedGenerators = [] {
-    cachedGenerators.add(GenericGFPoly(field, [1]));
+  ReedSolomonEncoder(this._field) : _cachedGenerators = [] {
+    _cachedGenerators.add(GenericGFPoly(_field, [1]));
   }
 
-  GenericGFPoly buildGenerator(int degree) {
-    if (degree >= cachedGenerators.length) {
+  GenericGFPoly _buildGenerator(int degree) {
+    if (degree >= _cachedGenerators.length) {
       GenericGFPoly lastGenerator =
-          cachedGenerators[cachedGenerators.length - 1];
-      for (int d = cachedGenerators.length; d <= degree; d++) {
+        _cachedGenerators[_cachedGenerators.length - 1];
+      for (int d = _cachedGenerators.length; d <= degree; d++) {
         GenericGFPoly nextGenerator = lastGenerator.multiply(GenericGFPoly(
-            field, [1, field.exp(d - 1 + field.getGeneratorBase())]));
-        cachedGenerators.add(nextGenerator);
+            _field, [1, _field.exp(d - 1 + _field.getGeneratorBase())]));
+        _cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
       }
     }
-    return cachedGenerators[degree];
+    return _cachedGenerators[degree];
   }
 
   void encode(List<int> toEncode, int ecBytes) {
@@ -53,10 +53,10 @@ class ReedSolomonEncoder {
     if (dataBytes <= 0) {
       throw Exception("No data bytes provided");
     }
-    GenericGFPoly generator = buildGenerator(ecBytes);
+    GenericGFPoly generator = _buildGenerator(ecBytes);
     List<int> infoCoefficients = List.generate(dataBytes, (index) => 0);
     List.copyRange(infoCoefficients, 0, toEncode, 0, dataBytes);
-    GenericGFPoly info = GenericGFPoly(field, infoCoefficients);
+    GenericGFPoly info = GenericGFPoly(_field, infoCoefficients);
     info = info.multiplyByMonomial(ecBytes, 1);
     GenericGFPoly remainder = info.divide(generator)[1];
     List<int> coefficients = remainder.getCoefficients();

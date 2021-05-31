@@ -32,10 +32,10 @@ import 'bit_array.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 class BitMatrix {
-  int width;
-  int height;
-  int rowSize;
-  List<int> bits;
+  int _width;
+  int _height;
+  int _rowSize;
+  List<int> _bits;
 
   /**
    * Creates an empty {@code BitMatrix}.
@@ -43,13 +43,14 @@ class BitMatrix {
    * @param width bit matrix width
    * @param height bit matrix height
    */
-  BitMatrix(this.width, [int? height, int? rowSize, List<int>? bits])
-      : this.height = height ?? width,
-        rowSize = rowSize ?? (width + 31) ~/ 32,
-        bits = bits ??
-            List.generate((rowSize ?? (width + 31) ~/ 32) * (height ?? width),
-                (index) => 0),
-        assert(width > 0, "Both dimensions must be greater than 0");
+  BitMatrix(this._width, [int? height])
+      : this._height = height ?? _width,
+        _rowSize = (_width + 31) ~/ 32,
+        _bits = List.filled(((_width + 31) ~/ 32) * (height ?? _width),
+                0),
+        assert(_width > 0, "Both dimensions must be greater than 0");
+
+  BitMatrix._(this._width, this._height, this._rowSize, this._bits);
 
   /**
    * Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
@@ -139,8 +140,8 @@ class BitMatrix {
    * @return value of given bit in matrix
    */
   bool get(int x, int y) {
-    int offset = y * rowSize + (x ~/ 32);
-    return ((bits[offset] >> (x & 0x1f)) & 1) != 0;
+    int offset = y * _rowSize + (x ~/ 32);
+    return ((_bits[offset] >> (x & 0x1f)) & 1) != 0;
   }
 
   /**
@@ -150,13 +151,13 @@ class BitMatrix {
    * @param y The vertical component (i.e. which row)
    */
   void set(int x, int y) {
-    int offset = y * rowSize + (x ~/ 32);
-    bits[offset] |= 1 << (x & 0x1f);
+    int offset = y * _rowSize + (x ~/ 32);
+    _bits[offset] |= 1 << (x & 0x1f);
   }
 
   void unset(int x, int y) {
-    int offset = y * rowSize + (x ~/ 32);
-    bits[offset] &= ~(1 << (x & 0x1f));
+    int offset = y * _rowSize + (x ~/ 32);
+    _bits[offset] &= ~(1 << (x & 0x1f));
   }
 
   /**
@@ -166,17 +167,17 @@ class BitMatrix {
    * @param y The vertical component (i.e. which row)
    */
   void flipPoint(int x, int y) {
-    int offset = y * rowSize + (x ~/ 32);
-    bits[offset] ^= 1 << (x & 0x1f);
+    int offset = y * _rowSize + (x ~/ 32);
+    _bits[offset] ^= 1 << (x & 0x1f);
   }
 
   /**
    * <p>Flips every bit in the matrix.</p>
    */
   void flip() {
-    int max = bits.length;
+    int max = _bits.length;
     for (int i = 0; i < max; i++) {
-      bits[i] = ~bits[i];
+      _bits[i] = ~_bits[i];
     }
   }
 
@@ -187,17 +188,17 @@ class BitMatrix {
    * @param mask XOR mask
    */
   void xor(BitMatrix mask) {
-    if (width != mask.width ||
-        height != mask.height ||
-        rowSize != mask.rowSize) {
+    if (_width != mask._width ||
+        _height != mask._height ||
+        _rowSize != mask._rowSize) {
       throw Exception("input matrix dimensions do not match");
     }
-    BitArray rowArray = BitArray(size: width);
-    for (int y = 0; y < height; y++) {
-      int offset = y * rowSize;
+    BitArray rowArray = BitArray( _width);
+    for (int y = 0; y < _height; y++) {
+      int offset = y * _rowSize;
       List<int> row = mask.getRow(y, rowArray).getBitArray();
-      for (int x = 0; x < rowSize; x++) {
-        bits[offset + x] ^= row[x];
+      for (int x = 0; x < _rowSize; x++) {
+        _bits[offset + x] ^= row[x];
       }
     }
   }
@@ -206,9 +207,9 @@ class BitMatrix {
    * Clears all bits (sets to false).
    */
   void clear() {
-    int max = bits.length;
+    int max = _bits.length;
     for (int i = 0; i < max; i++) {
-      bits[i] = 0;
+      _bits[i] = 0;
     }
   }
 
@@ -229,13 +230,13 @@ class BitMatrix {
     }
     int right = left + width;
     int bottom = top + height;
-    if (bottom > this.height || right > this.width) {
+    if (bottom > this._height || right > this._width) {
       throw Exception("The region must fit inside the matrix");
     }
     for (int y = top; y < bottom; y++) {
-      int offset = y * rowSize;
+      int offset = y * _rowSize;
       for (int x = left; x < right; x++) {
-        bits[offset + (x ~/ 32)] |= 1 << (x & 0x1f);
+        _bits[offset + (x ~/ 32)] |= 1 << (x & 0x1f);
       }
     }
   }
@@ -249,14 +250,14 @@ class BitMatrix {
    *         your own row
    */
   BitArray getRow(int y, BitArray? row) {
-    if (row == null || row.getSize() < width) {
-      row = BitArray(size: width);
+    if (row == null || row.getSize() < _width) {
+      row = BitArray(_width);
     } else {
       row.clear();
     }
-    int offset = y * rowSize;
-    for (int x = 0; x < rowSize; x++) {
-      row.setBulk(x * 32, bits[offset + x]);
+    int offset = y * _rowSize;
+    for (int x = 0; x < _rowSize; x++) {
+      row.setBulk(x * 32, _bits[offset + x]);
     }
     return row;
   }
@@ -266,19 +267,19 @@ class BitMatrix {
    * @param row {@link BitArray} to copy from
    */
   void setRow(int y, BitArray row) {
-    List.copyRange(bits, y * rowSize, row.getBitArray(), 0, rowSize);
+    List.copyRange(_bits, y * _rowSize, row.getBitArray(), 0, _rowSize);
   }
 
   /**
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
   void rotate180() {
-    BitArray topRow = BitArray(size: width);
-    BitArray bottomRow = BitArray(size: width);
-    int maxHeight = (height + 1) ~/ 2;
+    BitArray topRow = BitArray( _width);
+    BitArray bottomRow = BitArray(_width);
+    int maxHeight = (_height + 1) ~/ 2;
     for (int i = 0; i < maxHeight; i++) {
       topRow = getRow(i, topRow);
-      int bottomRowIndex = height - 1 - i;
+      int bottomRowIndex = _height - 1 - i;
       bottomRow = getRow(bottomRowIndex, bottomRow);
       topRow.reverse();
       bottomRow.reverse();
@@ -291,24 +292,24 @@ class BitMatrix {
    * Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
    */
   void rotate90() {
-    int newWidth = height;
-    int newHeight = width;
+    int newWidth = _height;
+    int newHeight = _width;
     int newRowSize = (newWidth + 31) ~/ 32;
     List<int> newBits = List.generate(newRowSize * newHeight, (index) => 0);
 
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        int offset = y * rowSize + (x ~/ 32);
-        if (((bits[offset] >> (x & 0x1f)) & 1) != 0) {
+    for (int y = 0; y < _height; y++) {
+      for (int x = 0; x < _width; x++) {
+        int offset = y * _rowSize + (x ~/ 32);
+        if (((_bits[offset] >> (x & 0x1f)) & 1) != 0) {
           int newOffset = (newHeight - 1 - x) * newRowSize + (y ~/ 32);
           newBits[newOffset] |= 1 << (y & 0x1f);
         }
       }
     }
-    width = newWidth;
-    height = newHeight;
-    rowSize = newRowSize;
-    bits = newBits;
+    _width = newWidth;
+    _height = newHeight;
+    _rowSize = newRowSize;
+    _bits = newBits;
   }
 
   /**
@@ -317,14 +318,14 @@ class BitMatrix {
    * @return {@code left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
    */
   List<int>? getEnclosingRectangle() {
-    int left = width;
-    int top = height;
+    int left = _width;
+    int top = _height;
     int right = -1;
     int bottom = -1;
 
-    for (int y = 0; y < height; y++) {
-      for (int x32 = 0; x32 < rowSize; x32++) {
-        int theBits = bits[y * rowSize + x32];
+    for (int y = 0; y < _height; y++) {
+      for (int x32 = 0; x32 < _rowSize; x32++) {
+        int theBits = _bits[y * _rowSize + x32];
         if (theBits != 0) {
           if (y < top) {
             top = y;
@@ -368,16 +369,16 @@ class BitMatrix {
    */
   List<int>? getTopLeftOnBit() {
     int bitsOffset = 0;
-    while (bitsOffset < bits.length && bits[bitsOffset] == 0) {
+    while (bitsOffset < _bits.length && _bits[bitsOffset] == 0) {
       bitsOffset++;
     }
-    if (bitsOffset == bits.length) {
+    if (bitsOffset == _bits.length) {
       return null;
     }
-    int y = bitsOffset ~/ rowSize;
-    int x = (bitsOffset % rowSize) * 32;
+    int y = bitsOffset ~/ _rowSize;
+    int x = (bitsOffset % _rowSize) * 32;
 
-    int theBits = bits[bitsOffset];
+    int theBits = _bits[bitsOffset];
     int bit = 0;
     while ((theBits << (31 - bit)) == 0) {
       bit++;
@@ -387,18 +388,18 @@ class BitMatrix {
   }
 
   List<int>? getBottomRightOnBit() {
-    int bitsOffset = bits.length - 1;
-    while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
+    int bitsOffset = _bits.length - 1;
+    while (bitsOffset >= 0 && _bits[bitsOffset] == 0) {
       bitsOffset--;
     }
     if (bitsOffset < 0) {
       return null;
     }
 
-    int y = bitsOffset ~/ rowSize;
-    int x = (bitsOffset % rowSize) * 32;
+    int y = bitsOffset ~/ _rowSize;
+    int x = (bitsOffset % _rowSize) * 32;
 
-    int theBits = bits[bitsOffset];
+    int theBits = _bits[bitsOffset];
     int bit = 31;
     while ((theBits >> bit) == 0) {
       bit--;
@@ -412,21 +413,21 @@ class BitMatrix {
    * @return The width of the matrix
    */
   int getWidth() {
-    return width;
+    return _width;
   }
 
   /**
    * @return The height of the matrix
    */
   int getHeight() {
-    return height;
+    return _height;
   }
 
   /**
    * @return The row size of the matrix
    */
   int getRowSize() {
-    return rowSize;
+    return _rowSize;
   }
 
   @override
@@ -435,19 +436,19 @@ class BitMatrix {
       return false;
     }
     BitMatrix other = o;
-    return width == other.width &&
-        height == other.height &&
-        rowSize == other.rowSize &&
-        bits == other.bits;
+    return _width == other._width &&
+        _height == other._height &&
+        _rowSize == other._rowSize &&
+        _bits == other._bits;
   }
 
   @override
   int get hashCode {
-    int hash = width;
-    hash = 31 * hash + width;
-    hash = 31 * hash + height;
-    hash = 31 * hash + rowSize;
-    hash = 31 * hash + bits.hashCode;
+    int hash = _width;
+    hash = 31 * hash + _width;
+    hash = 31 * hash + _height;
+    hash = 31 * hash + _rowSize;
+    hash = 31 * hash + _bits.hashCode;
     return hash;
   }
 
@@ -461,14 +462,14 @@ class BitMatrix {
       [String setString = "X ",
       String unsetString = "  ",
       String lineSeparator = "\n"]) {
-    return buildToString(setString, unsetString, lineSeparator);
+    return _buildToString(setString, unsetString, lineSeparator);
   }
 
-  String buildToString(
+  String _buildToString(
       String setString, String unsetString, String lineSeparator) {
     StringBuffer result = StringBuffer();
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
+    for (int y = 0; y < _height; y++) {
+      for (int x = 0; x < _width; x++) {
         result.write(get(x, y) ? setString : unsetString);
       }
       result.write(lineSeparator);
@@ -478,7 +479,7 @@ class BitMatrix {
 
   // @override
   BitMatrix clone() {
-    return BitMatrix(
-        width, height, rowSize, bits.getRange(0, bits.length).toList());
+    return BitMatrix._(
+        _width, _height, _rowSize, _bits.getRange(0, _bits.length).toList());
   }
 }
