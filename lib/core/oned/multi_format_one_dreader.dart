@@ -36,9 +36,9 @@ import 'rss/rss14_reader.dart';
  * @author Sean Owen
  */
 class MultiFormatOneDReader extends OneDReader {
-  static final List<OneDReader> EMPTY_ONED_ARRAY = [];
+  static const List<OneDReader> _EMPTY_ONED_ARRAY = [];
 
-  late List<OneDReader> readers;
+  late List<OneDReader> _readers;
 
   MultiFormatOneDReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
@@ -86,13 +86,13 @@ class MultiFormatOneDReader extends OneDReader {
       readers.add(RSS14Reader());
       readers.add(RSSExpandedReader());
     }
-    this.readers = readers.toList();
+    this._readers = readers.toList();
   }
 
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    for (OneDReader reader in readers) {
+    for (OneDReader reader in _readers) {
       try {
         return reader.decodeRow(rowNumber, row, hints);
       } catch (re) {
@@ -106,7 +106,7 @@ class MultiFormatOneDReader extends OneDReader {
 
   @override
   void reset() {
-    for (Reader reader in readers) {
+    for (Reader reader in _readers) {
       reader.reset();
     }
   }

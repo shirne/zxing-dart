@@ -31,18 +31,18 @@ import 'decoded_object.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class DecodedChar extends DecodedObject {
-  final int value;
+  final int _value;
 
   static final int FNC1 = r'$'
       .codeUnitAt(0); // It's not in Alphanumeric neither in ISO/IEC 646 charset
 
-  DecodedChar(int newPosition, this.value) : super(newPosition);
+  DecodedChar(int newPosition, this._value) : super(newPosition);
 
   int getValue() {
-    return this.value;
+    return this._value;
   }
 
   bool isFNC1() {
-    return this.value == FNC1;
+    return this._value == FNC1;
   }
 }

@@ -28,7 +28,7 @@ import '../writer.dart';
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
 abstract class OneDimensionalCodeWriter implements Writer {
-  static final RegExp NUMERIC = RegExp(r"[0-9]+");
+  static final RegExp _NUMERIC = RegExp(r"[0-9]+");
 
   /**
    * Encode the contents following specified format.
@@ -60,7 +60,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     }
 
     List<bool> code = encodeContent(contents);
-    return renderResult(code, width, height, sidesMargin);
+    return _renderResult(code, width, height, sidesMargin);
   }
 
   List<BarcodeFormat>? getSupportedWriteFormats() {
@@ -70,7 +70,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /**
    * @return a byte array of horizontal pixels (0 = white, 1 = black)
    */
-  static BitMatrix renderResult(
+  static BitMatrix _renderResult(
       List<bool> code, int width, int height, int sidesMargin) {
     int inputWidth = code.length;
     // Add quiet zone on both sides.
@@ -97,7 +97,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
    * @throws IllegalArgumentException if input contains characters other than digits 0-9.
    */
   static void checkNumeric(String contents) {
-    if (!NUMERIC.hasMatch(contents)) {
+    if (!_NUMERIC.hasMatch(contents)) {
       throw Exception("Input should only contain digits 0-9");
     }
   }

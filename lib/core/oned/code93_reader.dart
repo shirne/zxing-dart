@@ -34,15 +34,15 @@ import 'one_dreader.dart';
  */
 class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
-  static final String ALPHABET_STRING =
+  static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
-  static final List<int> ALPHABET = ALPHABET_STRING.codeUnits;
+  static final List<int> _ALPHABET = ALPHABET_STRING.codeUnits;
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars.
    * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
    */
-  static final List<int> CHARACTER_ENCODINGS = [
+  static const List<int> CHARACTER_ENCODINGS = [
     0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
     0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
     0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
@@ -52,35 +52,35 @@ class Code93Reader extends OneDReader {
   ];
   static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
-  final StringBuilder decodeRowResult;
-  final List<int> counters;
+  final StringBuilder _decodeRowResult;
+  final List<int> _counters;
 
   Code93Reader()
-      : decodeRowResult = StringBuilder(),
-        counters = List.filled(6, 0);
+      : _decodeRowResult = StringBuilder(),
+        _counters = List.filled(6, 0);
 
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    List<int> start = findAsteriskPattern(row);
+    List<int> start = _findAsteriskPattern(row);
     // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 
-    List<int> theCounters = counters;
+    List<int> theCounters = _counters;
     // Arrays.fill(theCounters, 0);
-    StringBuilder result = decodeRowResult;
+    StringBuilder result = _decodeRowResult;
     result.clear();
 
     String decodedChar;
     int lastStart;
     do {
       OneDReader.recordPattern(row, nextStart, theCounters);
-      int pattern = toPattern(theCounters);
+      int pattern = _toPattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.getNotFoundInstance();
       }
-      decodedChar = patternToChar(pattern);
+      decodedChar = _patternToChar(pattern);
       result.write(decodedChar);
       lastStart = nextStart;
       for (int counter in theCounters) {
@@ -106,11 +106,11 @@ class Code93Reader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    checkChecksums(result.toString());
+    _checkChecksums(result.toString());
     // Remove checksum digits
     result.setLength(result.length - 2);
 
-    String resultString = decodeExtended(result.toString());
+    String resultString = _decodeExtended(result.toString());
 
     double left = (start[1] + start[0]) / 2.0;
     double right = lastStart + lastPatternSize / 2.0;
@@ -127,12 +127,12 @@ class Code93Reader extends OneDReader {
     return resultObject;
   }
 
-  List<int> findAsteriskPattern(BitArray row) {
+  List<int> _findAsteriskPattern(BitArray row) {
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 
     // Arrays.fill(counters, 0);
-    List<int> theCounters = counters;
+    List<int> theCounters = _counters;
     int patternStart = rowOffset;
     bool isWhite = false;
     int patternLength = theCounters.length;
@@ -143,7 +143,7 @@ class Code93Reader extends OneDReader {
         theCounters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (toPattern(theCounters) == ASTERISK_ENCODING) {
+          if (_toPattern(theCounters) == ASTERISK_ENCODING) {
             return [patternStart, i];
           }
           patternStart += theCounters[0] + theCounters[1];
@@ -161,7 +161,7 @@ class Code93Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  static int toPattern(List<int> counters) {
+  static int _toPattern(List<int> counters) {
     int sum = 0;
     for (int counter in counters) {
       sum += counter;
@@ -184,16 +184,16 @@ class Code93Reader extends OneDReader {
     return pattern;
   }
 
-  static String patternToChar(int pattern) {
+  static String _patternToChar(int pattern) {
     for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
       if (CHARACTER_ENCODINGS[i] == pattern) {
-        return String.fromCharCode(ALPHABET[i]);
+        return String.fromCharCode(_ALPHABET[i]);
       }
     }
     throw NotFoundException.getNotFoundInstance();
   }
 
-  static String decodeExtended(String encoded) {
+  static String _decodeExtended(String encoded) {
     int length = encoded.length;
     StringBuffer decoded = StringBuffer();
     for (int i = 0; i < length; i++) {
@@ -271,13 +271,13 @@ class Code93Reader extends OneDReader {
     return decoded.toString();
   }
 
-  static void checkChecksums(String result) {
+  static void _checkChecksums(String result) {
     int length = result.length;
-    checkOneChecksum(result, length - 2, 20);
-    checkOneChecksum(result, length - 1, 15);
+    _checkOneChecksum(result, length - 2, 20);
+    _checkOneChecksum(result, length - 1, 15);
   }
 
-  static void checkOneChecksum(
+  static void _checkOneChecksum(
       String result, int checkPosition, int weightMax) {
     int weight = 1;
     int total = 0;
@@ -287,7 +287,7 @@ class Code93Reader extends OneDReader {
         weight = 1;
       }
     }
-    if (result.codeUnitAt(checkPosition) != ALPHABET[total % 47]) {
+    if (result.codeUnitAt(checkPosition) != _ALPHABET[total % 47]) {
       throw ChecksumException.getChecksumInstance();
     }
   }

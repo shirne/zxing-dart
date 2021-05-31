@@ -35,23 +35,23 @@ import 'ai01weight_decoder.dart';
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 abstract class AI013x0xDecoder extends AI01weightDecoder {
-  static final int HEADER_SIZE = 4 + 1;
-  static final int WEIGHT_SIZE = 15;
+  static const int _HEADER_SIZE = 4 + 1;
+  static const int _WEIGHT_SIZE = 15;
 
   AI013x0xDecoder(BitArray information) : super(information);
 
   @override
   String parseInformation() {
     if (this.getInformation().getSize() !=
-        HEADER_SIZE + AI01decoder.GTIN_SIZE + WEIGHT_SIZE) {
+        _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuilder buf = StringBuilder();
 
-    encodeCompressedGtin(buf, HEADER_SIZE);
+    encodeCompressedGtin(buf, _HEADER_SIZE);
     encodeCompressedWeight(
-        buf, HEADER_SIZE + AI01decoder.GTIN_SIZE, WEIGHT_SIZE);
+        buf, _HEADER_SIZE + AI01decoder.GTIN_SIZE, _WEIGHT_SIZE);
 
     return buf.toString();
   }

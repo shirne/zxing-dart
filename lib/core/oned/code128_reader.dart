@@ -34,7 +34,7 @@ import 'one_dreader.dart';
  * @author Sean Owen
  */
 class Code128Reader extends OneDReader {
-  static final List<List<int>> CODE_PATTERNS = [
+  static const List<List<int>> CODE_PATTERNS = [
     [2, 1, 2, 2, 2, 2], // 0
     [2, 2, 2, 1, 2, 2],
     [2, 2, 2, 2, 2, 1],
@@ -144,27 +144,27 @@ class Code128Reader extends OneDReader {
     [2, 3, 3, 1, 1, 1, 2]
   ];
 
-  static const double MAX_AVG_VARIANCE = 0.25;
-  static const double MAX_INDIVIDUAL_VARIANCE = 0.7;
+  static const double _MAX_AVG_VARIANCE = 0.25;
+  static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
 
-  static const int CODE_SHIFT = 98;
+  static const int _CODE_SHIFT = 98;
 
-  static const int CODE_CODE_C = 99;
-  static const int CODE_CODE_B = 100;
-  static const int CODE_CODE_A = 101;
+  static const int _CODE_CODE_C = 99;
+  static const int _CODE_CODE_B = 100;
+  static const int _CODE_CODE_A = 101;
 
-  static const int CODE_FNC_1 = 102;
-  static const int CODE_FNC_2 = 97;
-  static const int CODE_FNC_3 = 96;
-  static const int CODE_FNC_4_A = 101;
-  static const int CODE_FNC_4_B = 100;
+  static const int _CODE_FNC_1 = 102;
+  static const int _CODE_FNC_2 = 97;
+  static const int _CODE_FNC_3 = 96;
+  static const int _CODE_FNC_4_A = 101;
+  static const int _CODE_FNC_4_B = 100;
 
-  static const int CODE_START_A = 103;
-  static const int CODE_START_B = 104;
-  static const int CODE_START_C = 105;
-  static const int CODE_STOP = 106;
+  static const int _CODE_START_A = 103;
+  static const int _CODE_START_B = 104;
+  static const int _CODE_START_C = 105;
+  static const int _CODE_STOP = 106;
 
-  static List<int> findStartPattern(BitArray row) {
+  static List<int> _findStartPattern(BitArray row) {
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 
@@ -179,13 +179,13 @@ class Code128Reader extends OneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          double bestVariance = MAX_AVG_VARIANCE;
+          double bestVariance = _MAX_AVG_VARIANCE;
           int bestMatch = -1;
-          for (int startCode = CODE_START_A;
-              startCode <= CODE_START_C;
+          for (int startCode = _CODE_START_A;
+              startCode <= _CODE_START_C;
               startCode++) {
             double variance = OneDReader.patternMatchVariance(
-                counters, CODE_PATTERNS[startCode], MAX_INDIVIDUAL_VARIANCE);
+                counters, CODE_PATTERNS[startCode], _MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
               bestMatch = startCode;
@@ -212,14 +212,14 @@ class Code128Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  static int decodeCode(BitArray row, List<int> counters, int rowOffset) {
+  static int _decodeCode(BitArray row, List<int> counters, int rowOffset) {
     OneDReader.recordPattern(row, rowOffset, counters);
-    double bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+    double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     for (int d = 0; d < CODE_PATTERNS.length; d++) {
       List<int> pattern = CODE_PATTERNS[d];
       double variance = OneDReader.patternMatchVariance(
-          counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+          counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = d;
@@ -241,7 +241,7 @@ class Code128Reader extends OneDReader {
 
     int symbologyModifier = 0;
 
-    List<int> startPatternInfo = findStartPattern(row);
+    List<int> startPatternInfo = _findStartPattern(row);
     int startCode = startPatternInfo[2];
 
     List<int> rawCodes = List.filled(20, 0);
@@ -249,14 +249,14 @@ class Code128Reader extends OneDReader {
 
     int codeSet;
     switch (startCode) {
-      case CODE_START_A:
-        codeSet = CODE_CODE_A;
+      case _CODE_START_A:
+        codeSet = _CODE_CODE_A;
         break;
-      case CODE_START_B:
-        codeSet = CODE_CODE_B;
+      case _CODE_START_B:
+        codeSet = _CODE_CODE_B;
         break;
-      case CODE_START_C:
-        codeSet = CODE_CODE_C;
+      case _CODE_START_C:
+        codeSet = _CODE_CODE_C;
         break;
       default:
         throw FormatException();
@@ -287,17 +287,17 @@ class Code128Reader extends OneDReader {
       lastCode = code;
 
       // Decode another code from image
-      code = decodeCode(row, counters, nextStart);
+      code = _decodeCode(row, counters, nextStart);
 
       rawCodes.add(code);
 
       // Remember whether the last code was printable or not (excluding CODE_STOP)
-      if (code != CODE_STOP) {
+      if (code != _CODE_STOP) {
         lastCharacterWasPrintable = true;
       }
 
       // Add to checksum computation (if not CODE_STOP of course)
-      if (code != CODE_STOP) {
+      if (code != _CODE_STOP) {
         multiplier++;
         checksumTotal += multiplier * code;
       }
@@ -310,14 +310,14 @@ class Code128Reader extends OneDReader {
 
       // Take care of illegal start codes
       switch (code) {
-        case CODE_START_A:
-        case CODE_START_B:
-        case CODE_START_C:
+        case _CODE_START_A:
+        case _CODE_START_B:
+        case _CODE_START_C:
           throw FormatException();
       }
 
       switch (codeSet) {
-        case CODE_CODE_A:
+        case _CODE_CODE_A:
           if (code < 64) {
             if (shiftUpperMode == upperMode) {
               result.write(String.fromCharCode(' '.codeUnitAt(0) + code));
@@ -335,11 +335,11 @@ class Code128Reader extends OneDReader {
           } else {
             // Don't let CODE_STOP, which always appears, affect whether whether we think the last
             // code was printable or not.
-            if (code != CODE_STOP) {
+            if (code != _CODE_STOP) {
               lastCharacterWasPrintable = false;
             }
             switch (code) {
-              case CODE_FNC_1:
+              case _CODE_FNC_1:
                 if (result.length == 0) {
                   // FNC1 at first or second character determines the symbology
                   symbologyModifier = 1;
@@ -357,13 +357,13 @@ class Code128Reader extends OneDReader {
                   }
                 }
                 break;
-              case CODE_FNC_2:
+              case _CODE_FNC_2:
                 symbologyModifier = 4;
                 break;
-              case CODE_FNC_3:
+              case _CODE_FNC_3:
                 // do nothing?
                 break;
-              case CODE_FNC_4_A:
+              case _CODE_FNC_4_A:
                 if (!upperMode && shiftUpperMode) {
                   upperMode = true;
                   shiftUpperMode = false;
@@ -374,23 +374,23 @@ class Code128Reader extends OneDReader {
                   shiftUpperMode = true;
                 }
                 break;
-              case CODE_SHIFT:
+              case _CODE_SHIFT:
                 isNextShifted = true;
-                codeSet = CODE_CODE_B;
+                codeSet = _CODE_CODE_B;
                 break;
-              case CODE_CODE_B:
-                codeSet = CODE_CODE_B;
+              case _CODE_CODE_B:
+                codeSet = _CODE_CODE_B;
                 break;
-              case CODE_CODE_C:
-                codeSet = CODE_CODE_C;
+              case _CODE_CODE_C:
+                codeSet = _CODE_CODE_C;
                 break;
-              case CODE_STOP:
+              case _CODE_STOP:
                 done = true;
                 break;
             }
           }
           break;
-        case CODE_CODE_B:
+        case _CODE_CODE_B:
           if (code < 96) {
             if (shiftUpperMode == upperMode) {
               result.writeCharCode(' '.codeUnitAt(0) + code);
@@ -399,11 +399,11 @@ class Code128Reader extends OneDReader {
             }
             shiftUpperMode = false;
           } else {
-            if (code != CODE_STOP) {
+            if (code != _CODE_STOP) {
               lastCharacterWasPrintable = false;
             }
             switch (code) {
-              case CODE_FNC_1:
+              case _CODE_FNC_1:
                 if (result.length == 0) {
                   // FNC1 at first or second character determines the symbology
                   symbologyModifier = 1;
@@ -421,13 +421,13 @@ class Code128Reader extends OneDReader {
                   }
                 }
                 break;
-              case CODE_FNC_2:
+              case _CODE_FNC_2:
                 symbologyModifier = 4;
                 break;
-              case CODE_FNC_3:
+              case _CODE_FNC_3:
                 // do nothing?
                 break;
-              case CODE_FNC_4_B:
+              case _CODE_FNC_4_B:
                 if (!upperMode && shiftUpperMode) {
                   upperMode = true;
                   shiftUpperMode = false;
@@ -438,34 +438,34 @@ class Code128Reader extends OneDReader {
                   shiftUpperMode = true;
                 }
                 break;
-              case CODE_SHIFT:
+              case _CODE_SHIFT:
                 isNextShifted = true;
-                codeSet = CODE_CODE_A;
+                codeSet = _CODE_CODE_A;
                 break;
-              case CODE_CODE_A:
-                codeSet = CODE_CODE_A;
+              case _CODE_CODE_A:
+                codeSet = _CODE_CODE_A;
                 break;
-              case CODE_CODE_C:
-                codeSet = CODE_CODE_C;
+              case _CODE_CODE_C:
+                codeSet = _CODE_CODE_C;
                 break;
-              case CODE_STOP:
+              case _CODE_STOP:
                 done = true;
                 break;
             }
           }
           break;
-        case CODE_CODE_C:
+        case _CODE_CODE_C:
           if (code < 100) {
             if (code < 10) {
               result.write('0');
             }
             result.write(code);
           } else {
-            if (code != CODE_STOP) {
+            if (code != _CODE_STOP) {
               lastCharacterWasPrintable = false;
             }
             switch (code) {
-              case CODE_FNC_1:
+              case _CODE_FNC_1:
                 if (result.length == 0) {
                   // FNC1 at first or second character determines the symbology
                   symbologyModifier = 1;
@@ -483,16 +483,16 @@ class Code128Reader extends OneDReader {
                   }
                 }
                 break;
-              case CODE_FNC_2:
+              case _CODE_FNC_2:
                 symbologyModifier = 4;
                 break;
-              case CODE_CODE_A:
-                codeSet = CODE_CODE_A;
+              case _CODE_CODE_A:
+                codeSet = _CODE_CODE_A;
                 break;
-              case CODE_CODE_B:
-                codeSet = CODE_CODE_B;
+              case _CODE_CODE_B:
+                codeSet = _CODE_CODE_B;
                 break;
-              case CODE_STOP:
+              case _CODE_STOP:
                 done = true;
                 break;
             }
@@ -502,7 +502,7 @@ class Code128Reader extends OneDReader {
 
       // Unshift back to another code set if we were shifted
       if (unshift) {
-        codeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
+        codeSet = codeSet == _CODE_CODE_A ? _CODE_CODE_B : _CODE_CODE_A;
       }
     }
 
@@ -536,7 +536,7 @@ class Code128Reader extends OneDReader {
     // Only bother if the result had at least one character, and if the checksum digit happened to
     // be a printable character. If it was just interpreted as a control code, nothing to remove.
     if (resultLength > 0 && lastCharacterWasPrintable) {
-      if (codeSet == CODE_CODE_C) {
+      if (codeSet == _CODE_CODE_C) {
         result.delete(resultLength - 2, resultLength);
       } else {
         result.delete(resultLength - 1, resultLength);

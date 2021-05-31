@@ -41,17 +41,13 @@ abstract class UPCEANReader extends OneDReader {
   // These two values are critical for determining how permissive the decoding will be.
   // We've arrived at these values through a lot of trial and error. Setting them any higher
   // lets false positives creep in quickly.
-  static const double MAX_AVG_VARIANCE = 0.48;
-  static const double MAX_INDIVIDUAL_VARIANCE = 0.7;
+  static const double _MAX_AVG_VARIANCE = 0.48;
+  static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
 
   /**
    * Start/end guard pattern.
    */
-  static const List<int> START_END_PATTERN = [
-    1,
-    1,
-    1,
-  ];
+  static const List<int> START_END_PATTERN = [ 1, 1, 1,];
 
   /**
    * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
@@ -102,9 +98,9 @@ abstract class UPCEANReader extends OneDReader {
     }
   } */
 
-  final StringBuilder decodeRowStringBuffer = StringBuilder();
-  final UPCEANExtensionSupport extensionReader = UPCEANExtensionSupport();
-  final EANManufacturerOrgSupport eanManSupport = EANManufacturerOrgSupport();
+  final StringBuilder _decodeRowStringBuffer = StringBuilder();
+  final UPCEANExtensionSupport _extensionReader = UPCEANExtensionSupport();
+  final EANManufacturerOrgSupport _eanManSupport = EANManufacturerOrgSupport();
 
   UPCEANReader();
 
@@ -117,7 +113,7 @@ abstract class UPCEANReader extends OneDReader {
       counters.fillRange(0, counters.length, 0);
       //Arrays.fill(counters, 0, START_END_PATTERN.length, 0);
       startRange =
-          findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
+          _findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
       int start = startRange[0];
       nextStart = startRange[1];
       // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
@@ -166,7 +162,7 @@ abstract class UPCEANReader extends OneDReader {
           rowNumber.toDouble()));
     }
 
-    StringBuilder result = decodeRowStringBuffer;
+    StringBuilder result = _decodeRowStringBuffer;
     result.clear();
     int endStart = decodeMiddle(row, startGuardRange!, result);
 
@@ -215,7 +211,7 @@ abstract class UPCEANReader extends OneDReader {
 
     try {
       Result extensionResult =
-          extensionReader.decodeRow(rowNumber, row, endRange[1]);
+          _extensionReader.decodeRow(rowNumber, row, endRange[1]);
       decodeResult.putMetadata(
           ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
@@ -243,7 +239,7 @@ abstract class UPCEANReader extends OneDReader {
     }
 
     if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
-      String? countryID = eanManSupport.lookupCountryIdentifier(resultString);
+      String? countryID = _eanManSupport.lookupCountryIdentifier(resultString);
       if (countryID != null) {
         decodeResult.putMetadata(
             ResultMetadataType.POSSIBLE_COUNTRY, countryID);
@@ -307,7 +303,14 @@ abstract class UPCEANReader extends OneDReader {
   }
 
   List<int> decodeEnd(BitArray row, int endStart) {
-    return findGuardPattern(row, endStart, false, START_END_PATTERN);
+    return _findGuardPattern(row, endStart, false, START_END_PATTERN);
+  }
+
+  static List<int> findGuardPattern(BitArray row,
+      int rowOffset,
+    bool whiteFirst,
+      List<int> pattern) {
+    return _findGuardPattern(row, rowOffset, whiteFirst, pattern, List.filled(pattern.length, 0));
   }
 
   /**
@@ -321,7 +324,7 @@ abstract class UPCEANReader extends OneDReader {
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws NotFoundException if pattern is not found
    */
-  static List<int> findGuardPattern(
+  static List<int> _findGuardPattern(
       BitArray row, int rowOffset, bool whiteFirst, List<int> pattern,
       [List<int>? counters]) {
     if (counters == null) {
@@ -340,8 +343,8 @@ abstract class UPCEANReader extends OneDReader {
       } else {
         if (counterPosition == patternLength - 1) {
           if (OneDReader.patternMatchVariance(
-                  counters, pattern, MAX_INDIVIDUAL_VARIANCE) <
-              MAX_AVG_VARIANCE) {
+                  counters, pattern, _MAX_INDIVIDUAL_VARIANCE) <
+              _MAX_AVG_VARIANCE) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -374,13 +377,13 @@ abstract class UPCEANReader extends OneDReader {
   static int decodeDigit(BitArray row, List<int> counters, int rowOffset,
       List<List<int>> patterns) {
     OneDReader.recordPattern(row, rowOffset, counters);
-    double bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+    double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     int max = patterns.length;
     for (int i = 0; i < max; i++) {
       List<int> pattern = patterns[i];
       double variance = OneDReader.patternMatchVariance(
-          counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+          counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;

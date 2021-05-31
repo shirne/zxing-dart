@@ -33,9 +33,9 @@ import '../../../../not_found_exception.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class FieldParser {
-  static final Object VARIABLE_LENGTH = Object();
+  static final Object _VARIABLE_LENGTH = Object();
 
-  static final List<List<Object>> TWO_DIGIT_DATA_LENGTH = [
+  static final List<List<Object>> _TWO_DIGIT_DATA_LENGTH = [
     // "DIGITS", new Integer(LENGTH)
     //    or
     // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
@@ -44,7 +44,7 @@ class FieldParser {
     ["01", 14],
     ["02", 14],
 
-    ["10", VARIABLE_LENGTH, 20],
+    ["10", _VARIABLE_LENGTH, 20],
     ["11", 6],
     ["12", 6],
     ["13", 6],
@@ -52,55 +52,55 @@ class FieldParser {
     ["17", 6],
 
     ["20", 2],
-    ["21", VARIABLE_LENGTH, 20],
-    ["22", VARIABLE_LENGTH, 29],
+    ["21", _VARIABLE_LENGTH, 20],
+    ["22", _VARIABLE_LENGTH, 29],
 
-    ["30", VARIABLE_LENGTH, 8],
-    ["37", VARIABLE_LENGTH, 8],
+    ["30", _VARIABLE_LENGTH, 8],
+    ["37", _VARIABLE_LENGTH, 8],
 
     //internal company codes
-    ["90", VARIABLE_LENGTH, 30],
-    ["91", VARIABLE_LENGTH, 30],
-    ["92", VARIABLE_LENGTH, 30],
-    ["93", VARIABLE_LENGTH, 30],
-    ["94", VARIABLE_LENGTH, 30],
-    ["95", VARIABLE_LENGTH, 30],
-    ["96", VARIABLE_LENGTH, 30],
-    ["97", VARIABLE_LENGTH, 30],
-    ["98", VARIABLE_LENGTH, 30],
-    ["99", VARIABLE_LENGTH, 30],
+    ["90", _VARIABLE_LENGTH, 30],
+    ["91", _VARIABLE_LENGTH, 30],
+    ["92", _VARIABLE_LENGTH, 30],
+    ["93", _VARIABLE_LENGTH, 30],
+    ["94", _VARIABLE_LENGTH, 30],
+    ["95", _VARIABLE_LENGTH, 30],
+    ["96", _VARIABLE_LENGTH, 30],
+    ["97", _VARIABLE_LENGTH, 30],
+    ["98", _VARIABLE_LENGTH, 30],
+    ["99", _VARIABLE_LENGTH, 30],
   ];
 
-  static final List<List<Object>> THREE_DIGIT_DATA_LENGTH = [
+  static final List<List<Object>> _THREE_DIGIT_DATA_LENGTH = [
     // Same format as above
 
-    ["240", VARIABLE_LENGTH, 30],
-    ["241", VARIABLE_LENGTH, 30],
-    ["242", VARIABLE_LENGTH, 6],
-    ["250", VARIABLE_LENGTH, 30],
-    ["251", VARIABLE_LENGTH, 30],
-    ["253", VARIABLE_LENGTH, 17],
-    ["254", VARIABLE_LENGTH, 20],
+    ["240", _VARIABLE_LENGTH, 30],
+    ["241", _VARIABLE_LENGTH, 30],
+    ["242", _VARIABLE_LENGTH, 6],
+    ["250", _VARIABLE_LENGTH, 30],
+    ["251", _VARIABLE_LENGTH, 30],
+    ["253", _VARIABLE_LENGTH, 17],
+    ["254", _VARIABLE_LENGTH, 20],
 
-    ["400", VARIABLE_LENGTH, 30],
-    ["401", VARIABLE_LENGTH, 30],
+    ["400", _VARIABLE_LENGTH, 30],
+    ["401", _VARIABLE_LENGTH, 30],
     ["402", 17],
-    ["403", VARIABLE_LENGTH, 30],
+    ["403", _VARIABLE_LENGTH, 30],
     ["410", 13],
     ["411", 13],
     ["412", 13],
     ["413", 13],
     ["414", 13],
-    ["420", VARIABLE_LENGTH, 20],
-    ["421", VARIABLE_LENGTH, 15],
+    ["420", _VARIABLE_LENGTH, 20],
+    ["421", _VARIABLE_LENGTH, 15],
     ["422", 3],
-    ["423", VARIABLE_LENGTH, 15],
+    ["423", _VARIABLE_LENGTH, 15],
     ["424", 3],
     ["425", 3],
     ["426", 3],
   ];
 
-  static final List<List<Object>> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = [
+  static final List<List<Object>> _THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = [
     // Same format as above
 
     ["310", 6],
@@ -155,38 +155,38 @@ class FieldParser {
     ["367", 6],
     ["368", 6],
     ["369", 6],
-    ["390", VARIABLE_LENGTH, 15],
-    ["391", VARIABLE_LENGTH, 18],
-    ["392", VARIABLE_LENGTH, 15],
-    ["393", VARIABLE_LENGTH, 18],
-    ["703", VARIABLE_LENGTH, 30],
+    ["390", _VARIABLE_LENGTH, 15],
+    ["391", _VARIABLE_LENGTH, 18],
+    ["392", _VARIABLE_LENGTH, 15],
+    ["393", _VARIABLE_LENGTH, 18],
+    ["703", _VARIABLE_LENGTH, 30],
   ];
 
-  static final List<List<Object>> FOUR_DIGIT_DATA_LENGTH = [
+  static final List<List<Object>> _FOUR_DIGIT_DATA_LENGTH = [
     // Same format as above
 
     ["7001", 13],
-    ["7002", VARIABLE_LENGTH, 30],
+    ["7002", _VARIABLE_LENGTH, 30],
     ["7003", 10],
 
     ["8001", 14],
-    ["8002", VARIABLE_LENGTH, 20],
-    ["8003", VARIABLE_LENGTH, 30],
-    ["8004", VARIABLE_LENGTH, 30],
+    ["8002", _VARIABLE_LENGTH, 20],
+    ["8003", _VARIABLE_LENGTH, 30],
+    ["8004", _VARIABLE_LENGTH, 30],
     ["8005", 6],
     ["8006", 18],
-    ["8007", VARIABLE_LENGTH, 30],
-    ["8008", VARIABLE_LENGTH, 12],
+    ["8007", _VARIABLE_LENGTH, 30],
+    ["8008", _VARIABLE_LENGTH, 12],
     ["8018", 18],
-    ["8020", VARIABLE_LENGTH, 25],
+    ["8020", _VARIABLE_LENGTH, 25],
     ["8100", 6],
     ["8101", 10],
     ["8102", 2],
-    ["8110", VARIABLE_LENGTH, 70],
-    ["8200", VARIABLE_LENGTH, 70],
+    ["8110", _VARIABLE_LENGTH, 70],
+    ["8200", _VARIABLE_LENGTH, 70],
   ];
 
-  FieldParser();
+  FieldParser._();
 
   static String? parseFieldsInGeneralPurpose(String rawInformation) {
     if (rawInformation.isEmpty) {
@@ -201,12 +201,12 @@ class FieldParser {
 
     String firstTwoDigits = rawInformation.substring(0, 2);
 
-    for (List<Object> dataLength in TWO_DIGIT_DATA_LENGTH) {
+    for (List<Object> dataLength in _TWO_DIGIT_DATA_LENGTH) {
       if (dataLength[0] == firstTwoDigits) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(2, dataLength[2] as int, rawInformation);
+        if (dataLength[1] == _VARIABLE_LENGTH) {
+          return _processVariableAI(2, dataLength[2] as int, rawInformation);
         }
-        return processFixedAI(2, dataLength[1] as int, rawInformation);
+        return _processFixedAI(2, dataLength[1] as int, rawInformation);
       }
     }
 
@@ -216,21 +216,21 @@ class FieldParser {
 
     String firstThreeDigits = rawInformation.substring(0, 3);
 
-    for (List<Object> dataLength in THREE_DIGIT_DATA_LENGTH) {
+    for (List<Object> dataLength in _THREE_DIGIT_DATA_LENGTH) {
       if (dataLength[0] == firstThreeDigits) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(3, dataLength[2] as int, rawInformation);
+        if (dataLength[1] == _VARIABLE_LENGTH) {
+          return _processVariableAI(3, dataLength[2] as int, rawInformation);
         }
-        return processFixedAI(3, dataLength[1] as int, rawInformation);
+        return _processFixedAI(3, dataLength[1] as int, rawInformation);
       }
     }
 
-    for (List<Object> dataLength in THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH) {
+    for (List<Object> dataLength in _THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH) {
       if (dataLength[0] == firstThreeDigits) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(4, dataLength[2] as int, rawInformation);
+        if (dataLength[1] == _VARIABLE_LENGTH) {
+          return _processVariableAI(4, dataLength[2] as int, rawInformation);
         }
-        return processFixedAI(4, dataLength[1] as int, rawInformation);
+        return _processFixedAI(4, dataLength[1] as int, rawInformation);
       }
     }
 
@@ -240,19 +240,19 @@ class FieldParser {
 
     String firstFourDigits = rawInformation.substring(0, 4);
 
-    for (List<Object> dataLength in FOUR_DIGIT_DATA_LENGTH) {
+    for (List<Object> dataLength in _FOUR_DIGIT_DATA_LENGTH) {
       if (dataLength[0] == firstFourDigits) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(4, dataLength[2] as int, rawInformation);
+        if (dataLength[1] == _VARIABLE_LENGTH) {
+          return _processVariableAI(4, dataLength[2] as int, rawInformation);
         }
-        return processFixedAI(4, dataLength[1] as int, rawInformation);
+        return _processFixedAI(4, dataLength[1] as int, rawInformation);
       }
     }
 
     throw NotFoundException.getNotFoundInstance();
   }
 
-  static String processFixedAI(
+  static String _processFixedAI(
       int aiSize, int fieldSize, String rawInformation) {
     if (rawInformation.length < aiSize) {
       throw NotFoundException.getNotFoundInstance();
@@ -271,7 +271,7 @@ class FieldParser {
     return parsedAI == null ? result : result + parsedAI;
   }
 
-  static String processVariableAI(
+  static String _processVariableAI(
       int aiSize, int variableFieldSize, String rawInformation) {
     String ai = rawInformation.substring(0, aiSize);
     int maxSize = Math.min(rawInformation.length, aiSize + variableFieldSize);

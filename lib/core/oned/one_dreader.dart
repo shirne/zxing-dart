@@ -38,14 +38,14 @@ abstract class OneDReader implements Reader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     try {
-      return doDecode(image, hints);
+      return _doDecode(image, hints);
     } catch (nfe) {
       // NotFoundException
       bool tryHarder =
           hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported()) {
         BinaryBitmap rotatedImage = image.rotateCounterClockwise();
-        Result result = doDecode(rotatedImage, hints);
+        Result result = _doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
         Map<ResultMetadataType, dynamic>? metadata = result.getResultMetadata();
         int orientation = 270;
@@ -92,7 +92,7 @@ abstract class OneDReader implements Reader {
    * @return The contents of the decoded barcode
    * @throws NotFoundException Any spontaneous errors which occur
    */
-  Result doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
+  Result _doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
     int width = image.getWidth();
     int height = image.getHeight();
     BitArray row = BitArray( width);

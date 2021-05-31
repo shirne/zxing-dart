@@ -18,21 +18,21 @@ import 'data_character.dart';
 import 'finder_pattern.dart';
 
 class Pair extends DataCharacter {
-  final FinderPattern finderPattern;
-  int count = 0;
+  final FinderPattern _finderPattern;
+  int _count = 0;
 
-  Pair(int value, int checksumPortion, this.finderPattern)
+  Pair(int value, int checksumPortion, this._finderPattern)
       : super(value, checksumPortion);
 
   FinderPattern getFinderPattern() {
-    return finderPattern;
+    return _finderPattern;
   }
 
   int getCount() {
-    return count;
+    return _count;
   }
 
   void incrementCount() {
-    count++;
+    _count++;
   }
 }

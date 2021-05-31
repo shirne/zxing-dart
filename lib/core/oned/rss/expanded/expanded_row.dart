@@ -20,28 +20,28 @@ import 'expanded_pair.dart';
  * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
  */
 class ExpandedRow {
-  final List<ExpandedPair> pairs;
-  final int rowNumber;
+  final List<ExpandedPair> _pairs;
+  final int _rowNumber;
   /** Did this row of the image have to be reversed (mirrored) to recognize the pairs? */
-  final bool wasReversed;
+  final bool _wasReversed;
 
-  ExpandedRow(this.pairs, this.rowNumber, this.wasReversed);
+  ExpandedRow(this._pairs, this._rowNumber, this._wasReversed);
 
   List<ExpandedPair> getPairs() {
-    return this.pairs;
+    return this._pairs;
   }
 
   int getRowNumber() {
-    return this.rowNumber;
+    return this._rowNumber;
   }
 
   bool isEquivalent(List<ExpandedPair> otherPairs) {
-    return this.pairs == otherPairs;
+    return this._pairs == otherPairs;
   }
 
   @override
   String toString() {
-    return "{ $pairs }";
+    return "{ $_pairs }";
   }
 
   /**
@@ -53,11 +53,11 @@ class ExpandedRow {
       return false;
     }
     ExpandedRow that = o;
-    return this.pairs == that.pairs && wasReversed == that.wasReversed;
+    return this._pairs == that._pairs && _wasReversed == that._wasReversed;
   }
 
   @override
   int get hashCode {
-    return pairs.hashCode ^ wasReversed.hashCode;
+    return _pairs.hashCode ^ _wasReversed.hashCode;
   }
 }

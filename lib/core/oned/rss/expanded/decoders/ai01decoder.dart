@@ -34,7 +34,7 @@ import 'abstract_expanded_decoder.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 abstract class AI01decoder extends AbstractExpandedDecoder {
-  static final int GTIN_SIZE = 40;
+  static const int GTIN_SIZE = 40;
 
   AI01decoder(BitArray information) : super(information);
 
@@ -61,10 +61,10 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
       buf.write(currentBlock);
     }
 
-    appendCheckDigit(buf, initialBufferPosition);
+    _appendCheckDigit(buf, initialBufferPosition);
   }
 
-  static void appendCheckDigit(StringBuilder buf, int currentPos) {
+  static void _appendCheckDigit(StringBuilder buf, int currentPos) {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
       int digit = buf.codePointAt(i + currentPos) - '0'.codeUnitAt(0);

@@ -31,17 +31,17 @@ import 'upceanreader.dart';
  */
 class UPCEANExtension2Support {
 
-  final List<int> decodeMiddleCounters = [0,0,0,0];
-  final StringBuffer decodeRowStringBuffer = StringBuffer();
+  final List<int> _decodeMiddleCounters = [0,0,0,0];
+  final StringBuffer _decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange){
 
-    StringBuffer result = decodeRowStringBuffer;
+    StringBuffer result = _decodeRowStringBuffer;
     result.clear();
-    int end = decodeMiddle(row, extensionStartRange, result);
+    int end = _decodeMiddle(row, extensionStartRange, result);
 
     String resultString = result.toString();
-    Map<ResultMetadataType,Object>? extensionData = parseExtensionString(resultString);
+    Map<ResultMetadataType,Object>? extensionData = _parseExtensionString(resultString);
 
     Result? extensionResult =
         Result(resultString,
@@ -56,8 +56,8 @@ class UPCEANExtension2Support {
     return extensionResult;
   }
 
-  int decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
-    List<int> counters = decodeMiddleCounters;
+  int _decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
+    List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
@@ -99,7 +99,7 @@ class UPCEANExtension2Support {
    * @return formatted interpretation of raw content as a {@link Map} mapping
    *  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
    */
-  static Map<ResultMetadataType,Object>? parseExtensionString(String raw) {
+  static Map<ResultMetadataType,Object>? _parseExtensionString(String raw) {
     if (raw.length != 2) {
       return null;
     }

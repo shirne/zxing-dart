@@ -40,7 +40,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
     for (int i = 0; i < length; i++) {
       int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
       if (indexInString < 0) {
-        contents = tryToConvertToExtendedMode(contents);
+        contents = _tryToConvertToExtendedMode(contents);
         length = contents.length;
         if (length > 80) {
           throw Exception(
@@ -53,7 +53,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
     List<int> widths = List.filled(9, 0);
     int codeWidth = 24 + 1 + (13 * length);
     List<bool> result = List.filled(codeWidth, false);
-    toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
+    _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     int pos = OneDimensionalCodeWriter.appendPattern(result, 0, widths, true);
     List<int> narrowWhite = [1];
     pos +=
@@ -61,24 +61,24 @@ class Code39Writer extends OneDimensionalCodeWriter {
     //append next character to byte matrix
     for (int i = 0; i < length; i++) {
       int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
-      toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
+      _toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
       pos += OneDimensionalCodeWriter.appendPattern(
           result, pos, narrowWhite, false);
     }
-    toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
+    _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
     return result;
   }
 
-  static void toIntArray(int a, List<int> toReturn) {
+  static void _toIntArray(int a, List<int> toReturn) {
     for (int i = 0; i < 9; i++) {
       int temp = a & (1 << (8 - i));
       toReturn[i] = temp == 0 ? 1 : 2;
     }
   }
 
-  static String tryToConvertToExtendedMode(String contents) {
+  static String _tryToConvertToExtendedMode(String contents) {
     int length = contents.length;
     StringBuffer extendedContent = StringBuffer();
     for (int i = 0; i < length; i++) {

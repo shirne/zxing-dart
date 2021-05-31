@@ -16,7 +16,7 @@
 
 /** Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G. */
 class RSSUtils {
-  RSSUtils();
+  RSSUtils._();
 
   static int getRSSvalue(List<int> widths, int maxWidth, bool noNarrow) {
     int n = 0;
@@ -31,12 +31,12 @@ class RSSUtils {
       for (narrowMask |= 1 << bar;
           elmWidth < widths[bar];
           elmWidth++, narrowMask &= ~(1 << bar)) {
-        int subVal = combins(n - elmWidth - 1, elements - bar - 2);
+        int subVal = _combins(n - elmWidth - 1, elements - bar - 2);
         if (noNarrow &&
             (narrowMask == 0) &&
             (n - elmWidth - (elements - bar - 1) >= elements - bar - 1)) {
           subVal -=
-              combins(n - elmWidth - (elements - bar), elements - bar - 2);
+              _combins(n - elmWidth - (elements - bar), elements - bar - 2);
         }
         if (elements - bar - 1 > 1) {
           int lessVal = 0;
@@ -44,7 +44,7 @@ class RSSUtils {
               mxwElement > maxWidth;
               mxwElement--) {
             lessVal +=
-                combins(n - elmWidth - mxwElement - 1, elements - bar - 3);
+                _combins(n - elmWidth - mxwElement - 1, elements - bar - 3);
           }
           subVal -= lessVal * (elements - 1 - bar);
         } else if (n - elmWidth > maxWidth) {
@@ -57,7 +57,7 @@ class RSSUtils {
     return val;
   }
 
-  static int combins(int n, int r) {
+  static int _combins(int n, int r) {
     int maxDenom;
     int minDenom;
     if (n - r > r) {

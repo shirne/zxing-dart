@@ -34,7 +34,7 @@ import 'ai01decoder.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class AI01AndOtherAIs extends AI01decoder {
-  static final int HEADER_SIZE =
+  static const int _HEADER_SIZE =
       1 + 1 + 2; //first bit encodes the linkage flag,
   //the second one is the encodation method, and the other two are for the variable length
   AI01AndOtherAIs(BitArray information) : super(information);
@@ -47,12 +47,12 @@ class AI01AndOtherAIs extends AI01decoder {
     int initialGtinPosition = buff.length;
     int firstGtinDigit = this
         .getGeneralDecoder()
-        .extractNumericValueFromBitArray(HEADER_SIZE, 4);
+        .extractNumericValueFromBitArray(_HEADER_SIZE, 4);
     buff.write(firstGtinDigit);
 
     this.encodeCompressedGtinWithoutAI(
-        buff, HEADER_SIZE + 4, initialGtinPosition);
+        buff, _HEADER_SIZE + 4, initialGtinPosition);
 
-    return this.getGeneralDecoder().decodeAllCodes(buff, HEADER_SIZE + 44);
+    return this.getGeneralDecoder().decodeAllCodes(buff, _HEADER_SIZE + 44);
   }
 }

@@ -31,23 +31,23 @@ import 'decoded_object.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class DecodedInformation extends DecodedObject {
-  final String newString;
-  final int remainingValue;
-  final bool remaining;
+  final String _newString;
+  final int _remainingValue;
+  final bool _remaining;
 
-  DecodedInformation(int newPosition, this.newString, [this.remainingValue = 0])
-      : this.remaining = true,
+  DecodedInformation(int newPosition, this._newString, [this._remainingValue = 0])
+      : this._remaining = true,
         super(newPosition);
 
   String getNewString() {
-    return this.newString;
+    return this._newString;
   }
 
   bool isRemaining() {
-    return this.remaining;
+    return this._remaining;
   }
 
   int getRemainingValue() {
-    return this.remainingValue;
+    return this._remainingValue;
   }
 }

@@ -39,9 +39,9 @@ import 'upcereader.dart';
  */
 class MultiFormatUPCEANReader extends OneDReader {
 
-  static final List<UPCEANReader> EMPTY_READER_ARRAY = [];
+  static const List<UPCEANReader> _EMPTY_READER_ARRAY = [];
 
-  late List<UPCEANReader> readers;
+  late List<UPCEANReader> _readers;
 
   MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
@@ -67,7 +67,7 @@ class MultiFormatUPCEANReader extends OneDReader {
       readers.add(EAN8Reader());
       readers.add(UPCEReader());
     }
-    this.readers = readers.toList();
+    this._readers = readers.toList();
   }
 
   @override
@@ -76,7 +76,7 @@ class MultiFormatUPCEANReader extends OneDReader {
                           Map<DecodeHintType, Object>? hints){
     // Compute this location once and reuse it on multiple implementations
     List<int>? startGuardPattern = UPCEANReader.findStartGuardPattern(row);
-    for (UPCEANReader reader in readers) {
+    for (UPCEANReader reader in _readers) {
       try {
         Result result = reader.decodeRow(rowNumber, row, hints, startGuardPattern);
         // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
@@ -119,7 +119,7 @@ class MultiFormatUPCEANReader extends OneDReader {
 
   @override
   void reset() {
-    for (Reader reader in readers) {
+    for (Reader reader in _readers) {
       reader.reset();
     }
   }

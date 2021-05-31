@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
 
@@ -33,7 +35,7 @@ class UPCEReader extends UPCEANReader {
    * The pattern that marks the middle, and end, of a UPC-E pattern.
    * There is no "second half" to a UPC-E barcode.
    */
-  static final List<int> MIDDLE_END_PATTERN = [1, 1, 1, 1, 1, 1];
+  static const List<int> _MIDDLE_END_PATTERN = [1, 1, 1, 1, 1, 1];
 
   // For an UPC-E barcode, the final digit is represented by the parities used
   // to encode the middle six digits, according to the table below.
@@ -64,18 +66,19 @@ class UPCEReader extends UPCEANReader {
    * even-odd parity encodings of digits that imply both the number system (0 or 1)
    * used, and the check digit.
    */
-  static final List<List<int>> NUMSYS_AND_CHECK_DIGIT_PATTERNS = [
+  static const List<List<int>> NUMSYS_AND_CHECK_DIGIT_PATTERNS = [
     [0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25],
     [0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A]
   ];
 
-  final List<int> decodeMiddleCounters = [0, 0, 0, 0];
+  final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
 
   UPCEReader();
 
   @override
+  @protected
   int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
-    List<int> counters = decodeMiddleCounters;
+    List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
@@ -97,22 +100,24 @@ class UPCEReader extends UPCEANReader {
       }
     }
 
-    determineNumSysAndCheckDigit(result, lgPatternFound);
+    _determineNumSysAndCheckDigit(result, lgPatternFound);
 
     return rowOffset;
   }
 
   @override
+  @protected
   List<int> decodeEnd(BitArray row, int endStart) {
-    return UPCEANReader.findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN);
+    return UPCEANReader.findGuardPattern(row, endStart, true, _MIDDLE_END_PATTERN);
   }
 
   @override
+  @protected
   bool checkChecksum(String s) {
     return super.checkChecksum(convertUPCEtoUPCA(s));
   }
 
-  static void determineNumSysAndCheckDigit(
+  static void _determineNumSysAndCheckDigit(
       StringBuilder resultString, int lgPatternFound) {
     for (int numSys = 0; numSys <= 1; numSys++) {
       for (int d = 0; d < 10; d++) {

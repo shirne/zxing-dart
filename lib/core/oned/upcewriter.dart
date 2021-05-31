@@ -29,7 +29,7 @@ import 'upcereader.dart';
  */
 class UPCEWriter extends UPCEANWriter {
 
-  static final int CODE_WIDTH = 3 + // start guard
+  static const int _CODE_WIDTH = 3 + // start guard
       (7 * 6) + // bars
       6; // end guard
 
@@ -75,7 +75,7 @@ class UPCEWriter extends UPCEANWriter {
 
     int checkDigit = int.parse(contents[7]);
     int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
-    List<bool> result = List.filled(CODE_WIDTH, false);
+    List<bool> result = List.filled(_CODE_WIDTH, false);
 
     int pos = OneDimensionalCodeWriter.appendPattern(result, 0, UPCEANReader.START_END_PATTERN, true);
 

@@ -40,18 +40,18 @@ import 'general_app_id_decoder.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 abstract class AbstractExpandedDecoder {
-  final BitArray information;
-  final GeneralAppIdDecoder generalDecoder;
+  final BitArray _information;
+  final GeneralAppIdDecoder _generalDecoder;
 
-  AbstractExpandedDecoder(this.information)
-      : this.generalDecoder = GeneralAppIdDecoder(information);
+  AbstractExpandedDecoder(this._information)
+      : this._generalDecoder = GeneralAppIdDecoder(_information);
 
   BitArray getInformation() {
-    return information;
+    return _information;
   }
 
   GeneralAppIdDecoder getGeneralDecoder() {
-    return generalDecoder;
+    return _generalDecoder;
   }
 
   String parseInformation();

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../barcode_format.dart';
 import 'ean13_reader.dart';
 import 'one_dimensional_code_writer.dart';
@@ -27,13 +29,14 @@ import 'upceanwriter.dart';
  */
 class EAN13Writer extends UPCEANWriter {
 
-  static final int CODE_WIDTH = 3 + // start guard
+  static const int _CODE_WIDTH = 3 + // start guard
       (7 * 6) + // left bars
       5 + // middle guard
       (7 * 6) + // right bars
       3; // end guard
 
   @override
+  @protected
   List<BarcodeFormat> getSupportedWriteFormats() {
     return [BarcodeFormat.EAN_13];
   }
@@ -70,7 +73,7 @@ class EAN13Writer extends UPCEANWriter {
 
     int firstDigit = int.parse(contents[0]);
     int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
-    List<bool> result = List.filled(CODE_WIDTH, false);
+    List<bool> result = List.filled(_CODE_WIDTH, false);
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);

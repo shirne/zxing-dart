@@ -25,13 +25,13 @@ import 'upceanreader.dart';
  * @author Sean Owen
  */
 class EAN8Reader extends UPCEANReader {
-  final List<int> decodeMiddleCounters = [0, 0, 0, 0];
+  final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
 
   EAN8Reader();
 
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuffer result) {
-    List<int> counters = decodeMiddleCounters;
+    List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;

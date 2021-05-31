@@ -30,21 +30,21 @@ import 'upceanreader.dart';
  */
 class UPCEANExtension5Support {
 
-  static final List<int> CHECK_DIGIT_ENCODINGS = [
+  static const List<int> _CHECK_DIGIT_ENCODINGS = [
       0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05 // 
   ];
 
-  final List<int> decodeMiddleCounters = [0,0,0,0];
-  final StringBuffer decodeRowStringBuffer = StringBuffer();
+  final List<int> _decodeMiddleCounters = [0,0,0,0];
+  final StringBuffer _decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange){
 
-    StringBuffer result = decodeRowStringBuffer;
+    StringBuffer result = _decodeRowStringBuffer;
     result.clear();
-    int end = decodeMiddle(row, extensionStartRange, result);
+    int end = _decodeMiddle(row, extensionStartRange, result);
 
     String resultString = result.toString();
-    Map<ResultMetadataType,Object>? extensionData = parseExtensionString(resultString);
+    Map<ResultMetadataType,Object>? extensionData = _parseExtensionString(resultString);
 
     Result extensionResult =
         Result(resultString,
@@ -60,8 +60,8 @@ class UPCEANExtension5Support {
     return extensionResult;
   }
 
-  int decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
-    List<int> counters = decodeMiddleCounters;
+  int _decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
+    List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
@@ -91,15 +91,15 @@ class UPCEANExtension5Support {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int checkDigit = determineCheckDigit(lgPatternFound);
-    if (extensionChecksum(resultString.toString()) != checkDigit) {
+    int checkDigit = _determineCheckDigit(lgPatternFound);
+    if (_extensionChecksum(resultString.toString()) != checkDigit) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     return rowOffset;
   }
 
-  static int extensionChecksum(String s) {
+  static int _extensionChecksum(String s) {
     int length = s.length;
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
@@ -113,10 +113,10 @@ class UPCEANExtension5Support {
     return sum % 10;
   }
 
-  static int determineCheckDigit(int lgPatternFound)
+  static int _determineCheckDigit(int lgPatternFound)
      {
     for (int d = 0; d < 10; d++) {
-      if (lgPatternFound == CHECK_DIGIT_ENCODINGS[d]) {
+      if (lgPatternFound == _CHECK_DIGIT_ENCODINGS[d]) {
         return d;
       }
     }
@@ -128,11 +128,11 @@ class UPCEANExtension5Support {
    * @return formatted interpretation of raw content as a {@link Map} mapping
    *  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
    */
-  static Map<ResultMetadataType,Object>? parseExtensionString(String raw) {
+  static Map<ResultMetadataType,Object>? _parseExtensionString(String raw) {
     if (raw.length != 5) {
       return null;
     }
-    Object? value = parseExtension5String(raw);
+    Object? value = _parseExtension5String(raw);
     if (value == null) {
       return null;
     }
@@ -141,7 +141,7 @@ class UPCEANExtension5Support {
     return result;
   }
 
-  static String? parseExtension5String(String raw) {
+  static String? _parseExtension5String(String raw) {
     String currency;
     switch (raw[0]) {
       case '0':

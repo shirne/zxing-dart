@@ -31,31 +31,31 @@ import '../finder_pattern.dart';
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 class ExpandedPair {
-  final DataCharacter? leftChar;
-  final DataCharacter? rightChar;
-  final FinderPattern? finderPattern;
+  final DataCharacter? _leftChar;
+  final DataCharacter? _rightChar;
+  final FinderPattern? _finderPattern;
 
-  ExpandedPair(this.leftChar, this.rightChar, this.finderPattern);
+  ExpandedPair(this._leftChar, this._rightChar, this._finderPattern);
 
   DataCharacter? getLeftChar() {
-    return this.leftChar;
+    return this._leftChar;
   }
 
   DataCharacter? getRightChar() {
-    return this.rightChar;
+    return this._rightChar;
   }
 
   FinderPattern? getFinderPattern() {
-    return this.finderPattern;
+    return this._finderPattern;
   }
 
   bool mustBeLast() {
-    return this.rightChar == null;
+    return this._rightChar == null;
   }
 
   @override
   String toString() {
-    return "[ $leftChar , $rightChar : ${finderPattern == null ? "null" : finderPattern!.getValue()} ]";
+    return "[ $_leftChar , $_rightChar : ${_finderPattern == null ? "null" : _finderPattern!.getValue()} ]";
   }
 
   @override
@@ -64,13 +64,13 @@ class ExpandedPair {
       return false;
     }
     ExpandedPair that = o;
-    return (leftChar == that.leftChar) &&
-        (rightChar == that.rightChar) &&
-        (finderPattern == that.finderPattern);
+    return (_leftChar == that._leftChar) &&
+        (_rightChar == that._rightChar) &&
+        (_finderPattern == that._finderPattern);
   }
 
   @override
   int get hashCode {
-    return leftChar.hashCode ^ rightChar.hashCode ^ finderPattern.hashCode;
+    return _leftChar.hashCode ^ _rightChar.hashCode ^ _finderPattern.hashCode;
   }
 }

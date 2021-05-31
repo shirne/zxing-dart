@@ -21,19 +21,19 @@ import 'upceanextension5_support.dart';
 import 'upceanreader.dart';
 
 class UPCEANExtensionSupport {
-  static final List<int> EXTENSION_START_PATTERN = [1, 1, 2];
+  static const List<int> _EXTENSION_START_PATTERN = [1, 1, 2];
 
-  final UPCEANExtension2Support twoSupport = UPCEANExtension2Support();
-  final UPCEANExtension5Support fiveSupport = UPCEANExtension5Support();
+  final UPCEANExtension2Support _twoSupport = UPCEANExtension2Support();
+  final UPCEANExtension5Support _fiveSupport = UPCEANExtension5Support();
 
   Result decodeRow(int rowNumber, BitArray row, int rowOffset) {
     List<int> extensionStartRange = UPCEANReader.findGuardPattern(
-        row, rowOffset, false, EXTENSION_START_PATTERN);
+        row, rowOffset, false, _EXTENSION_START_PATTERN);
     try {
-      return fiveSupport.decodeRow(rowNumber, row, extensionStartRange);
+      return _fiveSupport.decodeRow(rowNumber, row, extensionStartRange);
     } catch (ignored) {
       // ReaderException
-      return twoSupport.decodeRow(rowNumber, row, extensionStartRange);
+      return _twoSupport.decodeRow(rowNumber, row, extensionStartRange);
     }
   }
 }

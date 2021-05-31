@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../../common/detector/math_utils.dart';
 
 import '../../not_found_exception.dart';
@@ -24,57 +26,65 @@ import '../one_dreader.dart';
  * of formats.
  */
 abstract class AbstractRSSReader extends OneDReader {
-  static final double MAX_AVG_VARIANCE = 0.2;
-  static final double MAX_INDIVIDUAL_VARIANCE = 0.45;
+  static const double _MAX_AVG_VARIANCE = 0.2;
+  static const double _MAX_INDIVIDUAL_VARIANCE = 0.45;
 
-  static final double MIN_FINDER_PATTERN_RATIO = 9.5 / 12.0;
-  static final double MAX_FINDER_PATTERN_RATIO = 12.5 / 14.0;
+  static const double _MIN_FINDER_PATTERN_RATIO = 9.5 / 12.0;
+  static const double _MAX_FINDER_PATTERN_RATIO = 12.5 / 14.0;
 
-  final List<int> decodeFinderCounters;
-  final List<int> dataCharacterCounters;
-  final List<double> oddRoundingErrors;
-  final List<double> evenRoundingErrors;
-  final List<int> oddCounts;
-  final List<int> evenCounts;
+  final List<int> _decodeFinderCounters;
+  final List<int> _dataCharacterCounters;
+  final List<double> _oddRoundingErrors;
+  final List<double> _evenRoundingErrors;
+  final List<int> _oddCounts;
+  final List<int> _evenCounts;
 
+  @protected
   AbstractRSSReader()
-      : decodeFinderCounters = List.generate(4, (index) => 0),
-        dataCharacterCounters = List.generate(8, (index) => 0),
-        oddRoundingErrors = List.generate(4, (index) => 0),
-        evenRoundingErrors = List.generate(4, (index) => 0),
-        oddCounts = List.generate(4, (index) => 0),
-        evenCounts = List.generate(4, (index) => 0);
+      : _decodeFinderCounters = List.generate(4, (index) => 0),
+        _dataCharacterCounters = List.generate(8, (index) => 0),
+        _oddRoundingErrors = List.generate(4, (index) => 0),
+        _evenRoundingErrors = List.generate(4, (index) => 0),
+        _oddCounts = List.generate(4, (index) => 0),
+        _evenCounts = List.generate(4, (index) => 0);
 
+  @protected
   List<int> getDecodeFinderCounters() {
-    return decodeFinderCounters;
+    return _decodeFinderCounters;
   }
 
+  @protected
   List<int> getDataCharacterCounters() {
-    return dataCharacterCounters;
+    return _dataCharacterCounters;
   }
 
+  @protected
   List<double> getOddRoundingErrors() {
-    return oddRoundingErrors;
+    return _oddRoundingErrors;
   }
 
+  @protected
   List<double> getEvenRoundingErrors() {
-    return evenRoundingErrors;
+    return _evenRoundingErrors;
   }
 
+  @protected
   List<int> getOddCounts() {
-    return oddCounts;
+    return _oddCounts;
   }
 
+  @protected
   List<int> getEvenCounts() {
-    return evenCounts;
+    return _evenCounts;
   }
 
+  @protected
   static int parseFinderValue(
       List<int> counters, List<List<int>> finderPatterns) {
     for (int value = 0; value < finderPatterns.length; value++) {
       if (OneDReader.patternMatchVariance(
-              counters, finderPatterns[value], MAX_INDIVIDUAL_VARIANCE) <
-          MAX_AVG_VARIANCE) {
+              counters, finderPatterns[value], _MAX_INDIVIDUAL_VARIANCE) <
+          _MAX_AVG_VARIANCE) {
         return value;
       }
     }
@@ -87,10 +97,12 @@ abstract class AbstractRSSReader extends OneDReader {
    * @deprecated call {@link MathUtils#sum(List<int>)}
    */
   @deprecated
+  @protected
   static int count(List<int> array) {
     return MathUtils.sum(array);
   }
 
+  @protected
   static void increment(List<int> array, List<double> errors) {
     int index = 0;
     double biggestError = errors[0];
@@ -103,6 +115,7 @@ abstract class AbstractRSSReader extends OneDReader {
     array[index]++;
   }
 
+  @protected
   static void decrement(List<int> array, List<double> errors) {
     int index = 0;
     double biggestError = errors[0];
@@ -115,12 +128,13 @@ abstract class AbstractRSSReader extends OneDReader {
     array[index]--;
   }
 
+  @protected
   static bool isFinderPattern(List<int> counters) {
     int firstTwoSum = counters[0] + counters[1];
     int sum = firstTwoSum + counters[2] + counters[3];
     double ratio = firstTwoSum / sum;
-    if (ratio >= MIN_FINDER_PATTERN_RATIO &&
-        ratio <= MAX_FINDER_PATTERN_RATIO) {
+    if (ratio >= _MIN_FINDER_PATTERN_RATIO &&
+        ratio <= _MAX_FINDER_PATTERN_RATIO) {
       // passes ratio test in spec, but see if the counts are unreasonable
       int minCounter = MathUtils.MAX_VALUE;
       int maxCounter = MathUtils.MIN_VALUE;

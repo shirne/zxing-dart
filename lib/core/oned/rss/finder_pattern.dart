@@ -20,26 +20,26 @@ import '../../result_point.dart';
  * Encapsulates an RSS barcode finder pattern, including its start/end position and row.
  */
 class FinderPattern {
-  final int value;
-  final List<int> startEnd;
-  final List<ResultPoint> resultPoints;
+  final int _value;
+  final List<int> _startEnd;
+  final List<ResultPoint> _resultPoints;
 
-  FinderPattern(this.value, this.startEnd, int start, int end, int rowNumber)
-      : resultPoints = [
+  FinderPattern(this._value, this._startEnd, int start, int end, int rowNumber)
+      : _resultPoints = [
           ResultPoint(start.toDouble(), rowNumber.toDouble()),
           ResultPoint(end.toDouble(), rowNumber.toDouble())
         ];
 
   int getValue() {
-    return value;
+    return _value;
   }
 
   List<int> getStartEnd() {
-    return startEnd;
+    return _startEnd;
   }
 
   List<ResultPoint> getResultPoints() {
-    return resultPoints;
+    return _resultPoints;
   }
 
   @override
@@ -48,11 +48,11 @@ class FinderPattern {
       return false;
     }
     FinderPattern that = o;
-    return value == that.value;
+    return _value == that._value;
   }
 
   @override
   int get hashCode {
-    return value;
+    return _value;
   }
 }

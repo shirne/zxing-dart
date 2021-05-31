@@ -35,24 +35,24 @@ import 'decoded_information.dart';
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 class AI01393xDecoder extends AI01decoder {
-  static final int HEADER_SIZE = 5 + 1 + 2;
-  static final int LAST_DIGIT_SIZE = 2;
-  static final int FIRST_THREE_DIGITS_SIZE = 10;
+  static const int _HEADER_SIZE = 5 + 1 + 2;
+  static const int _LAST_DIGIT_SIZE = 2;
+  static const int _FIRST_THREE_DIGITS_SIZE = 10;
 
   AI01393xDecoder(BitArray information) : super(information);
 
   @override
   String parseInformation() {
-    if (this.getInformation().getSize() < HEADER_SIZE + AI01decoder.GTIN_SIZE) {
+    if (this.getInformation().getSize() < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuilder buf = StringBuilder();
 
-    encodeCompressedGtin(buf, HEADER_SIZE);
+    encodeCompressedGtin(buf, _HEADER_SIZE);
 
     int lastAIdigit = this.getGeneralDecoder().extractNumericValueFromBitArray(
-        HEADER_SIZE + AI01decoder.GTIN_SIZE, LAST_DIGIT_SIZE);
+        _HEADER_SIZE + AI01decoder.GTIN_SIZE, _LAST_DIGIT_SIZE);
 
     buf.write("(393");
     buf.write(lastAIdigit);
@@ -61,8 +61,8 @@ class AI01393xDecoder extends AI01decoder {
     int firstThreeDigits = this
         .getGeneralDecoder()
         .extractNumericValueFromBitArray(
-            HEADER_SIZE + AI01decoder.GTIN_SIZE + LAST_DIGIT_SIZE,
-            FIRST_THREE_DIGITS_SIZE);
+            _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE,
+            _FIRST_THREE_DIGITS_SIZE);
     if (firstThreeDigits / 100 == 0) {
       buf.write('0');
     }
@@ -74,10 +74,10 @@ class AI01393xDecoder extends AI01decoder {
     DecodedInformation generalInformation = this
         .getGeneralDecoder()
         .decodeGeneralPurposeField(
-            HEADER_SIZE +
+            _HEADER_SIZE +
                 AI01decoder.GTIN_SIZE +
-                LAST_DIGIT_SIZE +
-                FIRST_THREE_DIGITS_SIZE,
+                _LAST_DIGIT_SIZE +
+                _FIRST_THREE_DIGITS_SIZE,
             null);
     buf.write(generalInformation.getNewString());
 

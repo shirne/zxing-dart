@@ -62,14 +62,14 @@ class EAN13Reader extends UPCEANReader {
     0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A //
   ];
 
-  final List<int> decodeMiddleCounters = [0, 0, 0, 0];
+  final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
 
   EAN13Reader();
 
   @override
   int decodeMiddle(
       BitArray row, List<int> startRange, StringBuilder resultString) {
-    List<int> counters = decodeMiddleCounters.toList();
+    List<int> counters = _decodeMiddleCounters.toList();
     int end = row.getSize();
     int rowOffset = startRange[1];
 
@@ -87,7 +87,7 @@ class EAN13Reader extends UPCEANReader {
       }
     }
 
-    determineFirstDigit(resultString, lgPatternFound);
+    _determineFirstDigit(resultString, lgPatternFound);
 
     List<int> middleRange = UPCEANReader.findGuardPattern(
         row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
@@ -120,7 +120,7 @@ class EAN13Reader extends UPCEANReader {
    *  encode digits
    * @throws NotFoundException if first digit cannot be determined
    */
-  static void determineFirstDigit(
+  static void _determineFirstDigit(
       StringBuilder resultString, int lgPatternFound) {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {

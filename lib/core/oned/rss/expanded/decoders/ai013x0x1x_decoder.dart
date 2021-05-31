@@ -24,6 +24,8 @@
  *   http://www.piramidepse.com/
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
@@ -36,44 +38,44 @@ import 'ai01weight_decoder.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class AI013x0x1xDecoder extends AI01weightDecoder {
-  static final int HEADER_SIZE = 7 + 1;
-  static final int WEIGHT_SIZE = 20;
-  static final int DATE_SIZE = 16;
+  static const int _HEADER_SIZE = 7 + 1;
+  static const int _WEIGHT_SIZE = 20;
+  static const int _DATE_SIZE = 16;
 
-  final String dateCode;
-  final String firstAIdigits;
+  final String _dateCode;
+  final String _firstAIdigits;
 
-  AI013x0x1xDecoder(BitArray information, this.firstAIdigits, this.dateCode)
+  AI013x0x1xDecoder(BitArray information, this._firstAIdigits, this._dateCode)
       : super(information);
 
   @override
   String parseInformation() {
     if (this.getInformation().getSize() !=
-        HEADER_SIZE + AI01decoder.GTIN_SIZE + WEIGHT_SIZE + DATE_SIZE) {
+        _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE + _DATE_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuilder buf = StringBuilder();
 
-    encodeCompressedGtin(buf, HEADER_SIZE);
+    encodeCompressedGtin(buf, _HEADER_SIZE);
     encodeCompressedWeight(
-        buf, HEADER_SIZE + AI01decoder.GTIN_SIZE, WEIGHT_SIZE);
-    encodeCompressedDate(
-        buf, HEADER_SIZE + AI01decoder.GTIN_SIZE + WEIGHT_SIZE);
+        buf, _HEADER_SIZE + AI01decoder.GTIN_SIZE, _WEIGHT_SIZE);
+    _encodeCompressedDate(
+        buf, _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE);
 
     return buf.toString();
   }
 
-  void encodeCompressedDate(StringBuffer buf, int currentPos) {
+  void _encodeCompressedDate(StringBuffer buf, int currentPos) {
     int numericDate = this
         .getGeneralDecoder()
-        .extractNumericValueFromBitArray(currentPos, DATE_SIZE);
+        .extractNumericValueFromBitArray(currentPos, _DATE_SIZE);
     if (numericDate == 38400) {
       return;
     }
 
     buf.write('(');
-    buf.write(this.dateCode);
+    buf.write(this._dateCode);
     buf.write(')');
 
     int day = numericDate % 32;
@@ -97,14 +99,16 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   }
 
   @override
+  @protected
   void addWeightCode(StringBuffer buf, int weight) {
     buf.write('(');
-    buf.write(this.firstAIdigits);
+    buf.write(this._firstAIdigits);
     buf.write(weight / 100000);
     buf.write(')');
   }
 
   @override
+  @protected
   int checkWeight(int weight) {
     return weight % 100000;
   }

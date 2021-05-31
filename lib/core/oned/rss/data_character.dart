@@ -18,22 +18,22 @@
  * Encapsulates a since character value in an RSS barcode, including its checksum information.
  */
 class DataCharacter {
-  final int value;
-  final int checksumPortion;
+  final int _value;
+  final int _checksumPortion;
 
-  DataCharacter(this.value, this.checksumPortion);
+  DataCharacter(this._value, this._checksumPortion);
 
   int getValue() {
-    return value;
+    return _value;
   }
 
   int getChecksumPortion() {
-    return checksumPortion;
+    return _checksumPortion;
   }
 
   @override
   String toString() {
-    return "$value($checksumPortion)";
+    return "$_value($_checksumPortion)";
   }
 
   @override
@@ -42,11 +42,11 @@ class DataCharacter {
       return false;
     }
     DataCharacter that = o;
-    return value == that.value && checksumPortion == that.checksumPortion;
+    return _value == that._value && _checksumPortion == that._checksumPortion;
   }
 
   @override
   int get hashCode {
-    return value ^ checksumPortion;
+    return _value ^ _checksumPortion;
   }
 }

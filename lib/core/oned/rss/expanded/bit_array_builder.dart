@@ -33,7 +33,7 @@ import 'expanded_pair.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class BitArrayBuilder {
-  BitArrayBuilder();
+  BitArrayBuilder._();
 
   static BitArray buildBitArray(List<ExpandedPair> pairs) {
     int charNumber = (pairs.length * 2) - 1;

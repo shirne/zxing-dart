@@ -27,7 +27,7 @@ import 'ean13_writer.dart';
  * @author qwandor@google.com (Andrew Walbran)
  */
 class UPCAWriter implements Writer {
-  final EAN13Writer subWriter = EAN13Writer();
+  final EAN13Writer _subWriter = EAN13Writer();
 
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
@@ -36,7 +36,7 @@ class UPCAWriter implements Writer {
       throw Exception("Can only encode UPC-A, but got $format");
     }
     // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
-    return subWriter.encode(
+    return _subWriter.encode(
         '0' + contents, BarcodeFormat.EAN_13, width, height, hints);
   }
 }

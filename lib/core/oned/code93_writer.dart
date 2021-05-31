@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
+
 import '../barcode_format.dart';
 import 'code93_reader.dart';
 import 'one_dimensional_code_writer.dart';
@@ -23,6 +25,7 @@ import 'one_dimensional_code_writer.dart';
  */
 class Code93Writer extends OneDimensionalCodeWriter {
   @override
+  @protected
   List<BarcodeFormat> getSupportedWriteFormats() {
     return [BarcodeFormat.CODE_93];
   }
@@ -46,26 +49,26 @@ class Code93Writer extends OneDimensionalCodeWriter {
     List<bool> result = List.filled(codeWidth, false);
 
     //start character (*)
-    int pos = appendPattern(result, 0, Code93Reader.ASTERISK_ENCODING);
+    int pos = _appendPattern(result, 0, Code93Reader.ASTERISK_ENCODING);
 
     for (int i = 0; i < length; i++) {
       int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
-      pos += appendPattern(
+      pos += _appendPattern(
           result, pos, Code93Reader.CHARACTER_ENCODINGS[indexInString]);
     }
 
     //add two checksums
-    int check1 = computeChecksumIndex(contents, 20);
-    pos += appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
+    int check1 = _computeChecksumIndex(contents, 20);
+    pos += _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
 
     //append the contents to reflect the first checksum added
     contents += Code93Reader.ALPHABET_STRING[check1];
 
-    int check2 = computeChecksumIndex(contents, 15);
-    pos += appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
+    int check2 = _computeChecksumIndex(contents, 15);
+    pos += _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
 
     //end character (*)
-    pos += appendPattern(result, pos, Code93Reader.ASTERISK_ENCODING);
+    pos += _appendPattern(result, pos, Code93Reader.ASTERISK_ENCODING);
 
     //termination bar (single black bar)
     result[pos] = true;
@@ -90,7 +93,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     return 9;
   }
 
-  static int appendPattern(List<bool> target, int pos, int a) {
+  static int _appendPattern(List<bool> target, int pos, int a) {
     for (int i = 0; i < 9; i++) {
       int temp = a & (1 << (8 - i));
       target[pos + i] = temp != 0;
@@ -98,7 +101,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     return 9;
   }
 
-  static int computeChecksumIndex(String contents, int maxWeight) {
+  static int _computeChecksumIndex(String contents, int maxWeight) {
     int weight = 1;
     int total = 0;
 

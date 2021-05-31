@@ -31,19 +31,19 @@ import 'upceanreader.dart';
  * @author Sean Owen
  */
 class UPCAReader extends UPCEANReader {
-  final UPCEANReader ean13Reader = EAN13Reader();
+  final UPCEANReader _ean13Reader = EAN13Reader();
 
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints,
       [List<int>? startGuardRange]) {
-    return maybeReturnResult(
-        ean13Reader.decodeRow(rowNumber, row, hints, startGuardRange));
+    return _maybeReturnResult(
+        _ean13Reader.decodeRow(rowNumber, row, hints, startGuardRange));
   }
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
-    return maybeReturnResult(ean13Reader.decode(image, hints));
+    return _maybeReturnResult(_ean13Reader.decode(image, hints));
   }
 
   @override
@@ -54,10 +54,10 @@ class UPCAReader extends UPCEANReader {
   @override
   int decodeMiddle(
       BitArray row, List<int> startRange, StringBuilder resultString) {
-    return ean13Reader.decodeMiddle(row, startRange, resultString);
+    return _ean13Reader.decodeMiddle(row, startRange, resultString);
   }
 
-  static Result maybeReturnResult(Result result) {
+  static Result _maybeReturnResult(Result result) {
     String text = result.getText();
     if (text[0] == '0') {
       Result upcaResult = Result(text.substring(1), null,

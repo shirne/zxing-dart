@@ -33,13 +33,13 @@ import 'abstract_expanded_decoder.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class AnyAIDecoder extends AbstractExpandedDecoder {
-  static final int HEADER_SIZE = 2 + 1 + 2;
+  static const int _HEADER_SIZE = 2 + 1 + 2;
 
   AnyAIDecoder(BitArray information) : super(information);
 
   @override
   String parseInformation() {
     StringBuffer buf = StringBuffer();
-    return this.getGeneralDecoder().decodeAllCodes(buf, HEADER_SIZE);
+    return this.getGeneralDecoder().decodeAllCodes(buf, _HEADER_SIZE);
   }
 }

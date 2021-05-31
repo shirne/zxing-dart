@@ -28,11 +28,11 @@
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 abstract class DecodedObject {
-  final int newPosition;
+  final int _newPosition;
 
-  DecodedObject(this.newPosition);
+  DecodedObject(this._newPosition);
 
   int getNewPosition() {
-    return this.newPosition;
+    return this._newPosition;
   }
 }

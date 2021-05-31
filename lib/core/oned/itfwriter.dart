@@ -15,6 +15,8 @@
  */
 
 
+import 'package:flutter/cupertino.dart';
+
 import '../barcode_format.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -25,28 +27,29 @@ import 'one_dimensional_code_writer.dart';
  */
 class ITFWriter extends OneDimensionalCodeWriter {
 
-  static final List<int> START_PATTERN = [1, 1, 1, 1];
-  static final List<int> END_PATTERN = [3, 1, 1];
+  static const List<int> _START_PATTERN = [1, 1, 1, 1];
+  static const List<int> _END_PATTERN = [3, 1, 1];
 
-  static final int W = 3; // Pixel width of a 3x wide line
-  static final int N = 1; // Pixed width of a narrow line
+  static const int _W = 3; // Pixel width of a 3x wide line
+  static const int _N = 1; // Pixed width of a narrow line
 
   // See ITFReader.PATTERNS
 
-  static final List<List<int>> PATTERNS = [
-      [N, N, W, W, N], // 0
-      [W, N, N, N, W], // 1
-      [N, W, N, N, W], // 2
-      [W, W, N, N, N], // 3
-      [N, N, W, N, W], // 4
-      [W, N, W, N, N], // 5
-      [N, W, W, N, N], // 6
-      [N, N, N, W, W], // 7
-      [W, N, N, W, N], // 8
-      [N, W, N, W, N]  // 9
+  static const List<List<int>> _PATTERNS = [
+      [_N, _N, _W, _W, _N], // 0
+      [_W, _N, _N, _N, _W], // 1
+      [_N, _W, _N, _N, _W], // 2
+      [_W, _W, _N, _N, _N], // 3
+      [_N, _N, _W, _N, _W], // 4
+      [_W, _N, _W, _N, _N], // 5
+      [_N, _W, _W, _N, _N], // 6
+      [_N, _N, _N, _W, _W], // 7
+      [_W, _N, _N, _W, _N], // 8
+      [_N, _W, _N, _W, _N]  // 9
   ];
 
   @override
+  @protected
   List<BarcodeFormat> getSupportedWriteFormats() {
     return [BarcodeFormat.ITF];
   }
@@ -65,18 +68,18 @@ class ITFWriter extends OneDimensionalCodeWriter {
     OneDimensionalCodeWriter.checkNumeric(contents);
 
     List<bool> result = List.filled(9 + 9 * length, false);
-    int pos = OneDimensionalCodeWriter.appendPattern(result, 0, START_PATTERN, true);
+    int pos = OneDimensionalCodeWriter.appendPattern(result, 0, _START_PATTERN, true);
     for (int i = 0; i < length; i += 2) {
       int one = int.parse(contents[i]);
       int two = int.parse(contents[i+1]);
       List<int> encoding = List.filled(10, 0);
       for (int j = 0; j < 5; j++) {
-        encoding[2 * j] = PATTERNS[one][j];
-        encoding[2 * j + 1] = PATTERNS[two][j];
+        encoding[2 * j] = _PATTERNS[one][j];
+        encoding[2 * j + 1] = _PATTERNS[two][j];
       }
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, encoding, true);
     }
-    OneDimensionalCodeWriter.appendPattern(result, pos, END_PATTERN, true);
+    OneDimensionalCodeWriter.appendPattern(result, pos, _END_PATTERN, true);
 
     return result;
   }

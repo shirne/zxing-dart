@@ -36,7 +36,7 @@ import 'one_dreader.dart';
  * @see Code93Reader
  */
 class Code39Reader extends OneDReader {
-  static final String ALPHABET_STRING =
+  static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
   /**
@@ -44,7 +44,7 @@ class Code39Reader extends OneDReader {
    * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
    * with 1s representing "wide" and 0s representing narrow.
    */
-  static final List<int> CHARACTER_ENCODINGS = [
+  static const List<int> CHARACTER_ENCODINGS = [
     0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
     0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
     0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -52,12 +52,12 @@ class Code39Reader extends OneDReader {
     0x0A2, 0x08A, 0x02A // /-%
   ];
 
-  static final int ASTERISK_ENCODING = 0x094;
+  static const int ASTERISK_ENCODING = 0x094;
 
-  final bool usingCheckDigit;
-  final bool extendedMode;
-  final StringBuilder decodeRowResult;
-  final List<int> counters;
+  final bool _usingCheckDigit;
+  final bool _extendedMode;
+  final StringBuilder _decodeRowResult;
+  final List<int> _counters;
 
   /**
    * Creates a reader that can be configured to check the last character as a check digit,
@@ -69,19 +69,19 @@ class Code39Reader extends OneDReader {
    * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
    * text.
    */
-  Code39Reader([this.usingCheckDigit = false, this.extendedMode = false])
-      : decodeRowResult = StringBuilder(),
-        counters = List.filled(9, 0);
+  Code39Reader([this._usingCheckDigit = false, this._extendedMode = false])
+      : _decodeRowResult = StringBuilder(),
+        _counters = List.filled(9, 0);
 
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    List<int> theCounters = counters;
+    List<int> theCounters = _counters;
 
-    StringBuilder result = decodeRowResult;
+    StringBuilder result = _decodeRowResult;
     result.clear();
 
-    List<int> start = findAsteriskPattern(row, theCounters);
+    List<int> start = _findAsteriskPattern(row, theCounters);
     // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
@@ -90,11 +90,11 @@ class Code39Reader extends OneDReader {
     int lastStart;
     do {
       OneDReader.recordPattern(row, nextStart, theCounters);
-      int pattern = toNarrowWidePattern(theCounters);
+      int pattern = _toNarrowWidePattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.getNotFoundInstance();
       }
-      decodedChar = patternToChar(pattern);
+      decodedChar = _patternToChar(pattern);
       result.write(decodedChar);
       lastStart = nextStart;
       for (int counter in theCounters) {
@@ -117,11 +117,11 @@ class Code39Reader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    if (usingCheckDigit) {
+    if (_usingCheckDigit) {
       int max = result.length - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
+        total += ALPHABET_STRING.indexOf(_decodeRowResult.charAt(i));
       }
       if (result.codePointAt(max) != ALPHABET_STRING.codeUnitAt(total % 43)) {
         throw ChecksumException.getChecksumInstance();
@@ -135,8 +135,8 @@ class Code39Reader extends OneDReader {
     }
 
     String resultString;
-    if (extendedMode) {
-      resultString = decodeExtended(result.toString());
+    if (_extendedMode) {
+      resultString = _decodeExtended(result.toString());
     } else {
       resultString = result.toString();
     }
@@ -156,7 +156,7 @@ class Code39Reader extends OneDReader {
     return resultObject;
   }
 
-  static List<int> findAsteriskPattern(BitArray row, List<int> counters) {
+  static List<int> _findAsteriskPattern(BitArray row, List<int> counters) {
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 
@@ -171,7 +171,7 @@ class Code39Reader extends OneDReader {
       } else {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
-          if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
+          if (_toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
               row.isRange(Math.max(0, patternStart - ((i - patternStart) ~/ 2)),
                   patternStart, false)) {
             return [patternStart, i];
@@ -193,7 +193,7 @@ class Code39Reader extends OneDReader {
 
   // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
   // per image when using some of our blackbox images.
-  static int toNarrowWidePattern(List<int> counters) {
+  static int _toNarrowWidePattern(List<int> counters) {
     int numCounters = counters.length;
     int maxNarrowCounter = 0;
     int wideCounters;
@@ -236,7 +236,7 @@ class Code39Reader extends OneDReader {
     return -1;
   }
 
-  static String patternToChar(int pattern) {
+  static String _patternToChar(int pattern) {
     for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
       if (CHARACTER_ENCODINGS[i] == pattern) {
         return ALPHABET_STRING[i];
@@ -248,7 +248,7 @@ class Code39Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  static String decodeExtended(String encoded) {
+  static String _decodeExtended(String encoded) {
     int length = encoded.length;
     StringBuffer decoded = StringBuffer();
     for (int i = 0; i < length; i++) {

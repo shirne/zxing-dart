@@ -31,38 +31,38 @@ import 'decoded_object.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class DecodedNumeric extends DecodedObject {
-  final int firstDigit;
-  final int secondDigit;
+  final int _firstDigit;
+  final int _secondDigit;
 
   static final int FNC1 = 10;
 
-  DecodedNumeric(int newPosition, this.firstDigit, this.secondDigit)
+  DecodedNumeric(int newPosition, this._firstDigit, this._secondDigit)
       : super(newPosition) {
-    if (firstDigit < 0 ||
-        firstDigit > 10 ||
-        secondDigit < 0 ||
-        secondDigit > 10) {
+    if (_firstDigit < 0 ||
+        _firstDigit > 10 ||
+        _secondDigit < 0 ||
+        _secondDigit > 10) {
       throw FormatException();
     }
   }
 
   int getFirstDigit() {
-    return this.firstDigit;
+    return this._firstDigit;
   }
 
   int getSecondDigit() {
-    return this.secondDigit;
+    return this._secondDigit;
   }
 
   int getValue() {
-    return this.firstDigit * 10 + this.secondDigit;
+    return this._firstDigit * 10 + this._secondDigit;
   }
 
   bool isFirstDigitFNC1() {
-    return this.firstDigit == FNC1;
+    return this._firstDigit == FNC1;
   }
 
   bool isSecondDigitFNC1() {
-    return this.secondDigit == FNC1;
+    return this._secondDigit == FNC1;
   }
 }

@@ -31,16 +31,16 @@ import 'decoded_information.dart';
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 class BlockParsedResult {
-  final DecodedInformation? decodedInformation;
-  final bool finished;
+  final DecodedInformation? _decodedInformation;
+  final bool _finished;
 
-  BlockParsedResult([this.decodedInformation, this.finished = false]);
+  BlockParsedResult([this._decodedInformation, this._finished = false]);
 
   DecodedInformation? getDecodedInformation() {
-    return this.decodedInformation;
+    return this._decodedInformation;
   }
 
   bool isFinished() {
-    return this.finished;
+    return this._finished;
   }
 }
