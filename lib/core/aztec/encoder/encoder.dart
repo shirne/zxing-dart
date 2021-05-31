@@ -34,10 +34,10 @@ class Encoder {
   static const int DEFAULT_EC_PERCENT =
       33; // default minimal percentage of error check words
   static const int DEFAULT_AZTEC_LAYERS = 0;
-  static const int MAX_NB_BITS = 32;
-  static const int MAX_NB_BITS_COMPACT = 4;
+  static const int _MAX_NB_BITS = 32;
+  static const int _MAX_NB_BITS_COMPACT = 4;
 
-  static const List<int> WORD_SIZE = [
+  static const List<int> _WORD_SIZE = [
     4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, //
     10, 10, 10, 10, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12
   ];
@@ -94,11 +94,11 @@ class Encoder {
     if (userSpecifiedLayers != DEFAULT_AZTEC_LAYERS) {
       compact = userSpecifiedLayers < 0;
       layers = (userSpecifiedLayers).abs();
-      if (layers > (compact ? MAX_NB_BITS_COMPACT : MAX_NB_BITS)) {
+      if (layers > (compact ? _MAX_NB_BITS_COMPACT : _MAX_NB_BITS)) {
         throw Exception("Illegal value $userSpecifiedLayers for layers");
       }
-      totalBitsLayer = totalBitsInLayer(layers, compact);
-      wordSize = WORD_SIZE[layers];
+      totalBitsLayer = _totalBitsInLayer(layers, compact);
+      wordSize = _WORD_SIZE[layers];
       int usableBitsInLayers = totalBitsLayer - (totalBitsLayer % wordSize);
       stuffedBits = stuffBits(bits, wordSize);
       if (stuffedBits.getSize() + eccBits > usableBitsInLayers) {
@@ -115,19 +115,19 @@ class Encoder {
       // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
       // is the same size, but has more data.
       for (int i = 0;; i++) {
-        if (i > MAX_NB_BITS) {
+        if (i > _MAX_NB_BITS) {
           throw Exception("Data too large for an Aztec code");
         }
         compact = i <= 3;
         layers = compact ? i + 1 : i;
-        totalBitsLayer = totalBitsInLayer(layers, compact);
+        totalBitsLayer = _totalBitsInLayer(layers, compact);
         if (totalSizeBits > totalBitsLayer) {
           continue;
         }
         // [Re]stuff the bits if this is the first opportunity, or if the
         // wordSize has changed
-        if (stuffedBits == null || wordSize != WORD_SIZE[layers]) {
-          wordSize = WORD_SIZE[layers];
+        if (stuffedBits == null || wordSize != _WORD_SIZE[layers]) {
+          wordSize = _WORD_SIZE[layers];
           stuffedBits = stuffBits(bits, wordSize);
         }
         int usableBitsInLayers = totalBitsLayer - (totalBitsLayer % wordSize);
@@ -141,7 +141,7 @@ class Encoder {
       }
     }
     BitArray messageBits =
-        generateCheckWords(stuffedBits, totalBitsLayer, wordSize);
+        _generateCheckWords(stuffedBits, totalBitsLayer, wordSize);
 
     // generate mode message
     int messageSizeInWords = stuffedBits.getSize() ~/ wordSize;
@@ -198,13 +198,13 @@ class Encoder {
     }
 
     // draw mode message
-    drawModeMessage(matrix, compact, matrixSize, modeMessage);
+    _drawModeMessage(matrix, compact, matrixSize, modeMessage);
 
     // draw alignment marks
     if (compact) {
-      drawBullsEye(matrix, matrixSize ~/ 2, 5);
+      _drawBullsEye(matrix, matrixSize ~/ 2, 5);
     } else {
-      drawBullsEye(matrix, matrixSize ~/ 2, 7);
+      _drawBullsEye(matrix, matrixSize ~/ 2, 7);
       for (int i = 0, j = 0; i < baseMatrixSize / 2 - 1; i += 15, j += 16) {
         for (int k = (matrixSize ~/ 2) & 1; k < matrixSize; k += 2) {
           matrix.set(matrixSize ~/ 2 - j, k);
@@ -224,7 +224,7 @@ class Encoder {
     return aztec;
   }
 
-  static void drawBullsEye(BitMatrix matrix, int center, int size) {
+  static void _drawBullsEye(BitMatrix matrix, int center, int size) {
     for (int i = 0; i < size; i += 2) {
       for (int j = center - i; j <= center + i; j++) {
         matrix.set(j, center - i);
@@ -247,16 +247,16 @@ class Encoder {
     if (compact) {
       modeMessage.appendBits(layers - 1, 2);
       modeMessage.appendBits(messageSizeInWords - 1, 6);
-      modeMessage = generateCheckWords(modeMessage, 28, 4);
+      modeMessage = _generateCheckWords(modeMessage, 28, 4);
     } else {
       modeMessage.appendBits(layers - 1, 5);
       modeMessage.appendBits(messageSizeInWords - 1, 11);
-      modeMessage = generateCheckWords(modeMessage, 40, 4);
+      modeMessage = _generateCheckWords(modeMessage, 40, 4);
     }
     return modeMessage;
   }
 
-  static void drawModeMessage(
+  static void _drawModeMessage(
       BitMatrix matrix, bool compact, int matrixSize, BitArray modeMessage) {
     int center = matrixSize ~/ 2;
     if (compact) {
@@ -294,13 +294,13 @@ class Encoder {
     }
   }
 
-  static BitArray generateCheckWords(
+  static BitArray _generateCheckWords(
       BitArray bitArray, int totalBits, int wordSize) {
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
     int messageSizeInWords = bitArray.getSize() ~/ wordSize;
-    ReedSolomonEncoder rs = ReedSolomonEncoder(getGF(wordSize));
+    ReedSolomonEncoder rs = ReedSolomonEncoder(_getGF(wordSize));
     int totalWords = totalBits ~/ wordSize;
-    List<int> messageWords = bitsToWords(bitArray, wordSize, totalWords);
+    List<int> messageWords = _bitsToWords(bitArray, wordSize, totalWords);
     rs.encode(messageWords, totalWords - messageSizeInWords);
     int startPad = totalBits % wordSize;
     BitArray messageBits = BitArray();
@@ -311,7 +311,7 @@ class Encoder {
     return messageBits;
   }
 
-  static List<int> bitsToWords(
+  static List<int> _bitsToWords(
       BitArray stuffedBits, int wordSize, int totalWords) {
     List<int> message = [];
     int i = 0;
@@ -327,7 +327,7 @@ class Encoder {
     return message;
   }
 
-  static GenericGF getGF(int wordSize) {
+  static GenericGF _getGF(int wordSize) {
     switch (wordSize) {
       case 4:
         return GenericGF.AZTEC_PARAM;
@@ -369,7 +369,7 @@ class Encoder {
     return out;
   }
 
-  static int totalBitsInLayer(int layers, bool compact) {
+  static int _totalBitsInLayer(int layers, bool compact) {
     return ((compact ? 88 : 112) + 16 * layers) * layers;
   }
 }

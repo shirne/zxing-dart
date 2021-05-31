@@ -24,12 +24,12 @@ import 'simple_token.dart';
 abstract class Token {
   static final Token EMPTY = SimpleToken(null, 0, 0);
 
-  final Token? previous;
+  final Token? _previous;
 
-  Token(this.previous);
+  Token(this._previous);
 
   Token? getPrevious() {
-    return previous;
+    return _previous;
   }
 
   Token add(int value, int bitCount) {

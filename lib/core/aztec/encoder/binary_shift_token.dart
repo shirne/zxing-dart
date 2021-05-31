@@ -22,36 +22,36 @@ import '../../common/bit_array.dart';
 import 'token.dart';
 
 class BinaryShiftToken extends Token {
-  final int binaryShiftStart;
-  final int binaryShiftByteCount;
+  final int _binaryShiftStart;
+  final int _binaryShiftByteCount;
 
   BinaryShiftToken(
-      Token previous, this.binaryShiftStart, this.binaryShiftByteCount)
+      Token previous, this._binaryShiftStart, this._binaryShiftByteCount)
       : super(previous);
 
   @override
   void appendTo(BitArray bitArray, Uint8List text) {
-    for (int i = 0; i < binaryShiftByteCount; i++) {
-      if (i == 0 || (i == 31 && binaryShiftByteCount <= 62)) {
+    for (int i = 0; i < _binaryShiftByteCount; i++) {
+      if (i == 0 || (i == 31 && _binaryShiftByteCount <= 62)) {
         // We need a header before the first character, and before
         // character 31 when the total byte code is <= 62
         bitArray.appendBits(31, 5); // BINARY_SHIFT
-        if (binaryShiftByteCount > 62) {
-          bitArray.appendBits(binaryShiftByteCount - 31, 16);
+        if (_binaryShiftByteCount > 62) {
+          bitArray.appendBits(_binaryShiftByteCount - 31, 16);
         } else if (i == 0) {
           // 1 <= binaryShiftByteCode <= 62
-          bitArray.appendBits(Math.min(binaryShiftByteCount, 31), 5);
+          bitArray.appendBits(Math.min(_binaryShiftByteCount, 31), 5);
         } else {
           // 32 <= binaryShiftCount <= 62 and i == 31
-          bitArray.appendBits(binaryShiftByteCount - 31, 5);
+          bitArray.appendBits(_binaryShiftByteCount - 31, 5);
         }
       }
-      bitArray.appendBits(text[binaryShiftStart + i], 8);
+      bitArray.appendBits(text[_binaryShiftStart + i], 8);
     }
   }
 
   @override
   String toString() {
-    return "<$binaryShiftStart::${binaryShiftStart + binaryShiftByteCount - 1}>";
+    return "<$_binaryShiftStart::${_binaryShiftStart + _binaryShiftByteCount - 1}>";
   }
 }

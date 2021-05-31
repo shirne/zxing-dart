@@ -22,64 +22,64 @@ import '../../common/bit_matrix.dart';
  * @author Rustam Abdullaev
  */
 class AztecCode {
-  bool compact = false;
-  int size = 0;
-  int layers = 0;
-  int codeWords = 0;
-  BitMatrix? matrix;
+  bool _compact = false;
+  int _size = 0;
+  int _layers = 0;
+  int _codeWords = 0;
+  BitMatrix? _matrix;
 
   /**
    * @return {@code true} if compact instead of full mode
    */
   bool isCompact() {
-    return compact;
+    return _compact;
   }
 
   void setCompact(bool compact) {
-    this.compact = compact;
+    this._compact = compact;
   }
 
   /**
    * @return size in pixels (width and height)
    */
   int getSize() {
-    return size;
+    return _size;
   }
 
   void setSize(int size) {
-    this.size = size;
+    this._size = size;
   }
 
   /**
    * @return number of levels
    */
   int getLayers() {
-    return layers;
+    return _layers;
   }
 
   void setLayers(int layers) {
-    this.layers = layers;
+    this._layers = layers;
   }
 
   /**
    * @return number of data codewords
    */
   int getCodeWords() {
-    return codeWords;
+    return _codeWords;
   }
 
   void setCodeWords(int codeWords) {
-    this.codeWords = codeWords;
+    this._codeWords = codeWords;
   }
 
   /**
    * @return the symbol image
    */
   BitMatrix? getMatrix() {
-    return matrix;
+    return _matrix;
   }
 
   void setMatrix(BitMatrix matrix) {
-    this.matrix = matrix;
+    this._matrix = matrix;
   }
 }

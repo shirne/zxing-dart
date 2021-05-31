@@ -33,37 +33,37 @@ class State {
 
   // The current mode of the encoding (or the mode to which we'll return if
   // we're in Binary Shift mode.
-  final int mode;
+  final int _mode;
   // The list of tokens that we output.  If we are in Binary Shift mode, this
   // token list does *not* yet included the token for those bytes
-  final Token token;
+  final Token _token;
   // If non-zero, the number of most recent bytes that should be output
   // in Binary Shift mode.
-  final int binaryShiftByteCount;
+  final int _binaryShiftByteCount;
   // The total number of bits generated (including Binary Shift).
-  final int bitCount;
+  final int _bitCount;
 
-  State(this.token, this.mode, this.binaryShiftByteCount, this.bitCount);
+  State(this._token, this._mode, this._binaryShiftByteCount, this._bitCount);
 
   int getMode() {
-    return mode;
+    return _mode;
   }
 
   Token getToken() {
-    return token;
+    return _token;
   }
 
   int getBinaryShiftByteCount() {
-    return binaryShiftByteCount;
+    return _binaryShiftByteCount;
   }
 
   int getBitCount() {
-    return bitCount;
+    return _bitCount;
   }
 
   State appendFLGn(int eci) {
     State result = shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
-    Token token = result.token;
+    Token token = result._token;
     int bitsAdded = 3;
     if (eci < 0) {
       token = token.add(0, 3); // 0: FNC1
@@ -77,17 +77,17 @@ class State {
       }
       bitsAdded += eciDigits.length * 4;
     }
-    return State(token, mode, 0, bitCount + bitsAdded);
+    return State(token, _mode, 0, _bitCount + bitsAdded);
   }
 
   // Create a new state representing this state with a latch to a (not
   // necessary different) mode, and then a code.
   State latchAndAppend(int mode, int value) {
     //assert binaryShiftByteCount == 0;
-    int bitCount = this.bitCount;
-    Token token = this.token;
-    if (mode != this.mode) {
-      int latch = HighLevelEncoder.LATCH_TABLE[this.mode][mode];
+    int bitCount = this._bitCount;
+    Token token = this._token;
+    if (mode != this._mode) {
+      int latch = HighLevelEncoder.LATCH_TABLE[this._mode][mode];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
     }
@@ -100,23 +100,23 @@ class State {
   // to a different mode to output a single value.
   State shiftAndAppend(int mode, int value) {
     //assert binaryShiftByteCount == 0 && this.mode != mode;
-    Token token = this.token;
-    int thisModeBitCount = this.mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
+    Token token = this._token;
+    int thisModeBitCount = this._mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
     token = token.add(
-        HighLevelEncoder.SHIFT_TABLE[this.mode][mode], thisModeBitCount);
+        HighLevelEncoder.SHIFT_TABLE[this._mode][mode], thisModeBitCount);
     token = token.add(value, 5);
-    return State(token, this.mode, 0, this.bitCount + thisModeBitCount + 5);
+    return State(token, this._mode, 0, this._bitCount + thisModeBitCount + 5);
   }
 
   // Create a new state representing this state, but an additional character
   // output in Binary Shift mode.
   State addBinaryShiftChar(int index) {
-    Token token = this.token;
-    int mode = this.mode;
-    int bitCount = this.bitCount;
-    if (this.mode == HighLevelEncoder.MODE_PUNCT ||
-        this.mode == HighLevelEncoder.MODE_DIGIT) {
+    Token token = this._token;
+    int mode = this._mode;
+    int bitCount = this._bitCount;
+    if (this._mode == HighLevelEncoder.MODE_PUNCT ||
+        this._mode == HighLevelEncoder.MODE_DIGIT) {
       //assert binaryShiftByteCount == 0;
       int latch =
           HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
@@ -125,14 +125,14 @@ class State {
       mode = HighLevelEncoder.MODE_UPPER;
     }
     int deltaBitCount =
-        (binaryShiftByteCount == 0 || binaryShiftByteCount == 31)
+        (_binaryShiftByteCount == 0 || _binaryShiftByteCount == 31)
             ? 18
-            : (binaryShiftByteCount == 62)
+            : (_binaryShiftByteCount == 62)
                 ? 9
                 : 8;
     State result = State(
-        token, mode, binaryShiftByteCount + 1, bitCount + deltaBitCount);
-    if (result.binaryShiftByteCount == 2047 + 31) {
+        token, mode, _binaryShiftByteCount + 1, bitCount + deltaBitCount);
+    if (result._binaryShiftByteCount == 2047 + 31) {
       // The string is as long as it's allowed to be.  We should end it.
       result = result.endBinaryShift(index + 1);
     }
@@ -142,38 +142,38 @@ class State {
   // Create the state identical to this one, but we are no longer in
   // Binary Shift mode.
   State endBinaryShift(int index) {
-    if (binaryShiftByteCount == 0) {
+    if (_binaryShiftByteCount == 0) {
       return this;
     }
-    Token token = this.token;
+    Token token = this._token;
     token = token.addBinaryShift(
-        index - binaryShiftByteCount, binaryShiftByteCount);
+        index - _binaryShiftByteCount, _binaryShiftByteCount);
     //assert token.getTotalBitCount() == this.bitCount;
-    return State(token, mode, 0, this.bitCount);
+    return State(token, _mode, 0, this._bitCount);
   }
 
   // Returns true if "this" state is better (or equal) to be in than "that"
   // state under all possible circumstances.
   bool isBetterThanOrEqualTo(State other) {
-    int newModeBitCount = this.bitCount +
-        (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
-    if (this.binaryShiftByteCount < other.binaryShiftByteCount) {
+    int newModeBitCount = this._bitCount +
+        (HighLevelEncoder.LATCH_TABLE[this._mode][other._mode] >> 16);
+    if (this._binaryShiftByteCount < other._binaryShiftByteCount) {
       // add additional B/S encoding cost of other, if any
       newModeBitCount +=
-          calculateBinaryShiftCost(other) - calculateBinaryShiftCost(this);
-    } else if (this.binaryShiftByteCount > other.binaryShiftByteCount &&
-        other.binaryShiftByteCount > 0) {
+          _calculateBinaryShiftCost(other) - _calculateBinaryShiftCost(this);
+    } else if (this._binaryShiftByteCount > other._binaryShiftByteCount &&
+        other._binaryShiftByteCount > 0) {
       // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
       newModeBitCount += 10;
     }
-    return newModeBitCount <= other.bitCount;
+    return newModeBitCount <= other._bitCount;
   }
 
   BitArray toBitArray(Uint8List text) {
     // Reverse the tokens, so that they are in the order that they should
     // be output
     List<Token> symbols = [];
-    for (Token? token = endBinaryShift(text.length).token;
+    for (Token? token = endBinaryShift(text.length)._token;
         token != null;
         token = token.getPrevious()) {
       symbols.insert(0, token);
@@ -189,17 +189,17 @@ class State {
 
   @override
   String toString() {
-    return "${HighLevelEncoder.MODE_NAMES[mode]} bits=$bitCount bytes=$binaryShiftByteCount";
+    return "${HighLevelEncoder.MODE_NAMES[_mode]} bits=$_bitCount bytes=$_binaryShiftByteCount";
   }
 
-  static int calculateBinaryShiftCost(State state) {
-    if (state.binaryShiftByteCount > 62) {
+  static int _calculateBinaryShiftCost(State state) {
+    if (state._binaryShiftByteCount > 62) {
       return 21; // B/S with extended length
     }
-    if (state.binaryShiftByteCount > 31) {
+    if (state._binaryShiftByteCount > 31) {
       return 20; // two B/S
     }
-    if (state.binaryShiftByteCount > 0) {
+    if (state._binaryShiftByteCount > 0) {
       return 10; // one B/S
     }
     return 0;

@@ -48,20 +48,20 @@ class AztecWriter implements Writer {
         layers = int.parse(hints[EncodeHintType.AZTEC_LAYERS].toString());
       }
     }
-    return encodeStatic(
+    return _encodeStatic(
         contents, format, width, height, charset, eccPercent, layers);
   }
 
-  static BitMatrix encodeStatic(String contents, BarcodeFormat format,
+  static BitMatrix _encodeStatic(String contents, BarcodeFormat format,
       int width, int height, Encoding? charset, int eccPercent, int layers) {
     if (format != BarcodeFormat.AZTEC) {
       throw Exception("Can only encode AZTEC, but got $format");
     }
     AztecCode aztec = Encoder.encode(contents, eccPercent, layers, charset);
-    return renderResult(aztec, width, height);
+    return _renderResult(aztec, width, height);
   }
 
-  static BitMatrix renderResult(AztecCode code, int width, int height) {
+  static BitMatrix _renderResult(AztecCode code, int width, int height) {
     BitMatrix? input = code.getMatrix();
     if (input == null) {
       throw Exception();

@@ -25,7 +25,7 @@ import '../../common/reedsolomon/reed_solomon_decoder.dart';
 
 import '../aztec_detector_result.dart';
 
-enum Table { UPPER, LOWER, MIXED, DIGIT, PUNCT, BINARY }
+enum _Table { UPPER, LOWER, MIXED, DIGIT, PUNCT, BINARY }
 
 class CorrectedBitsResult {
   final List<bool> correctBits;
@@ -41,48 +41,48 @@ class CorrectedBitsResult {
  * @author David Olivier
  */
 class Decoder {
-  static final List<String> UPPER_TABLE = [
+  static const List<String> _UPPER_TABLE = [
     "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", //
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", //
     "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
   ];
 
-  static final List<String> LOWER_TABLE = [
+  static const List<String> _LOWER_TABLE = [
     "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", //
     "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", //
     "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
   ];
 
-  static final List<String> MIXED_TABLE = [
+  static const List<String> _MIXED_TABLE = [
     "CTRL_PS", " ", "\1", "\2", "\3", "\4", "\5", "\6", "\7", "\b", "\t",
     "\n", //
     "\13", "\f", "\r", "\33", "\34", "\35", "\36", "\37", "@", "\\", "^", "_",
     "`", "|", "~", "\177", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
   ];
 
-  static final List<String> PUNCT_TABLE = [
+  static const List<String> _PUNCT_TABLE = [
     "FLG(n)", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", r"$", "%", "&",
     "'", "(", ")", //
     "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{",
     "}", "CTRL_UL"
   ];
 
-  static final List<String> DIGIT_TABLE = [
+  static const List<String> _DIGIT_TABLE = [
     "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", //
     "9", ",", ".", "CTRL_UL", "CTRL_US"
   ];
 
-  static final Encoding DEFAULT_ENCODING = latin1;
+  static const Encoding _DEFAULT_ENCODING = latin1;
 
-  late AztecDetectorResult ddata;
+  late AztecDetectorResult _ddata;
 
   DecoderResult decode(AztecDetectorResult detectorResult) {
-    ddata = detectorResult;
+    _ddata = detectorResult;
     BitMatrix matrix = detectorResult.getBits();
-    List<bool> rawbits = extractBits(matrix);
-    CorrectedBitsResult correctedBits = correctBits(rawbits);
+    List<bool> rawbits = _extractBits(matrix);
+    CorrectedBitsResult correctedBits = _correctBits(rawbits);
     Uint8List rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
-    String result = getEncodedData(correctedBits.correctBits);
+    String result = _getEncodedData(correctedBits.correctBits);
     DecoderResult decoderResult =
         DecoderResult(rawBytes, result, null, "${correctedBits.ecLevel}%");
     decoderResult.setNumBits(correctedBits.correctBits.length);
@@ -91,7 +91,7 @@ class Decoder {
 
   // This method is used for testing the high-level encoder
   static String highLevelDecode(List<bool> correctedBits) {
-    return getEncodedData(correctedBits);
+    return _getEncodedData(correctedBits);
   }
 
   /**
@@ -99,10 +99,10 @@ class Decoder {
    *
    * @return the decoded string
    */
-  static String getEncodedData(List<bool> correctedBits) {
+  static String _getEncodedData(List<bool> correctedBits) {
     int endIndex = correctedBits.length;
-    Table latchTable = Table.UPPER; // table most recently latched to
-    Table shiftTable = Table.UPPER; // table to use for the next read
+    _Table latchTable = _Table.UPPER; // table most recently latched to
+    _Table shiftTable = _Table.UPPER; // table to use for the next read
 
     // Final decoded string result
     // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
@@ -111,21 +111,21 @@ class Decoder {
     // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
     // when character encoding changes (ECI) or input ends.
     BytesBuilder decodedBytes = BytesBuilder();
-    Encoding encoding = DEFAULT_ENCODING;
+    Encoding encoding = _DEFAULT_ENCODING;
 
     int index = 0;
     while (index < endIndex) {
-      if (shiftTable == Table.BINARY) {
+      if (shiftTable == _Table.BINARY) {
         if (endIndex - index < 5) {
           break;
         }
-        int length = readCode(correctedBits, index, 5);
+        int length = _readCode(correctedBits, index, 5);
         index += 5;
         if (length == 0) {
           if (endIndex - index < 11) {
             break;
           }
-          length = readCode(correctedBits, index, 11) + 31;
+          length = _readCode(correctedBits, index, 11) + 31;
           index += 11;
         }
         for (int charCount = 0; charCount < length; charCount++) {
@@ -133,25 +133,25 @@ class Decoder {
             index = endIndex; // Force outer loop to exit
             break;
           }
-          int code = readCode(correctedBits, index, 8);
+          int code = _readCode(correctedBits, index, 8);
           decodedBytes.addByte(code);
           index += 8;
         }
         // Go back to whatever mode we had been in
         shiftTable = latchTable;
       } else {
-        int size = shiftTable == Table.DIGIT ? 4 : 5;
+        int size = shiftTable == _Table.DIGIT ? 4 : 5;
         if (endIndex - index < size) {
           break;
         }
-        int code = readCode(correctedBits, index, size);
+        int code = _readCode(correctedBits, index, size);
         index += size;
-        String str = getCharacter(shiftTable, code);
+        String str = _getCharacter(shiftTable, code);
         if ("FLG(n)" == str) {
           if (endIndex - index < 3) {
             break;
           }
-          int n = readCode(correctedBits, index, 3);
+          int n = _readCode(correctedBits, index, 3);
           index += 3;
           switch (n) {
             case 0:
@@ -176,7 +176,7 @@ class Decoder {
                 break;
               }
               while (n-- > 0) {
-                int nextDigit = readCode(correctedBits, index, 4);
+                int nextDigit = _readCode(correctedBits, index, 4);
                 index += 4;
                 if (nextDigit < 2 || nextDigit > 11) {
                   throw FormatException(); // Not a decimal digit
@@ -196,7 +196,7 @@ class Decoder {
           // Our test case dlusbs.png for issue #642 exercises that.
           latchTable =
               shiftTable; // Latch the current mode, so as to return to Upper after U/S B/S
-          shiftTable = getTable(str[5]);
+          shiftTable = _getTable(str[5]);
           if (str[6] == 'L') {
             latchTable = shiftTable;
           }
@@ -222,21 +222,21 @@ class Decoder {
   /**
    * gets the table corresponding to the char passed
    */
-  static Table getTable(String t) {
+  static _Table _getTable(String t) {
     switch (t) {
       case 'L':
-        return Table.LOWER;
+        return _Table.LOWER;
       case 'P':
-        return Table.PUNCT;
+        return _Table.PUNCT;
       case 'M':
-        return Table.MIXED;
+        return _Table.MIXED;
       case 'D':
-        return Table.DIGIT;
+        return _Table.DIGIT;
       case 'B':
-        return Table.BINARY;
+        return _Table.BINARY;
       case 'U':
       default:
-        return Table.UPPER;
+        return _Table.UPPER;
     }
   }
 
@@ -246,18 +246,18 @@ class Decoder {
    * @param table the table used
    * @param code the code of the character
    */
-  static String getCharacter(Table table, int code) {
+  static String _getCharacter(_Table table, int code) {
     switch (table) {
-      case Table.UPPER:
-        return UPPER_TABLE[code];
-      case Table.LOWER:
-        return LOWER_TABLE[code];
-      case Table.MIXED:
-        return MIXED_TABLE[code];
-      case Table.PUNCT:
-        return PUNCT_TABLE[code];
-      case Table.DIGIT:
-        return DIGIT_TABLE[code];
+      case _Table.UPPER:
+        return _UPPER_TABLE[code];
+      case _Table.LOWER:
+        return _LOWER_TABLE[code];
+      case _Table.MIXED:
+        return _MIXED_TABLE[code];
+      case _Table.PUNCT:
+        return _PUNCT_TABLE[code];
+      case _Table.DIGIT:
+        return _DIGIT_TABLE[code];
       default:
         // Should not reach here.
         throw Exception("Bad table");
@@ -270,17 +270,17 @@ class Decoder {
    * @return the corrected array
    * @throws FormatException if the input contains too many errors
    */
-  CorrectedBitsResult correctBits(List<bool> rawbits) {
+  CorrectedBitsResult _correctBits(List<bool> rawbits) {
     GenericGF gf;
     int codewordSize;
 
-    if (ddata.getNbLayers() <= 2) {
+    if (_ddata.getNbLayers() <= 2) {
       codewordSize = 6;
       gf = GenericGF.AZTEC_DATA_6;
-    } else if (ddata.getNbLayers() <= 8) {
+    } else if (_ddata.getNbLayers() <= 8) {
       codewordSize = 8;
       gf = GenericGF.AZTEC_DATA_8;
-    } else if (ddata.getNbLayers() <= 22) {
+    } else if (_ddata.getNbLayers() <= 22) {
       codewordSize = 10;
       gf = GenericGF.AZTEC_DATA_10;
     } else {
@@ -288,7 +288,7 @@ class Decoder {
       gf = GenericGF.AZTEC_DATA_12;
     }
 
-    int numDataCodewords = ddata.getNbDatablocks();
+    int numDataCodewords = _ddata.getNbDatablocks();
     int numCodewords = rawbits.length ~/ codewordSize;
     if (numCodewords < numDataCodewords) {
       throw FormatException();
@@ -297,7 +297,7 @@ class Decoder {
 
     List<int> dataWords = List.filled(numCodewords, 0);
     for (int i = 0; i < numCodewords; i++, offset += codewordSize) {
-      dataWords[i] = readCode(rawbits, offset, codewordSize);
+      dataWords[i] = _readCode(rawbits, offset, codewordSize);
     }
 
     try {
@@ -347,13 +347,13 @@ class Decoder {
    *
    * @return the array of bits
    */
-  List<bool> extractBits(BitMatrix matrix) {
-    bool compact = ddata.isCompact();
-    int layers = ddata.getNbLayers();
+  List<bool> _extractBits(BitMatrix matrix) {
+    bool compact = _ddata.isCompact();
+    int layers = _ddata.getNbLayers();
     int baseMatrixSize =
         (compact ? 11 : 14) + layers * 4; // not including alignment lines
     List<int> alignmentMap = List.filled(baseMatrixSize, 0);
-    List<bool> rawbits = List.filled(totalBitsInLayer(layers, compact), false);
+    List<bool> rawbits = List.filled(_totalBitsInLayer(layers, compact), false);
 
     if (compact) {
       for (int i = 0; i < alignmentMap.length; i++) {
@@ -402,7 +402,7 @@ class Decoder {
   /**
    * Reads a code of given length and at given index in an array of bits
    */
-  static int readCode(List<bool> rawbits, int startIndex, int length) {
+  static int _readCode(List<bool> rawbits, int startIndex, int length) {
     int res = 0;
     for (int i = startIndex; i < startIndex + length; i++) {
       res <<= 1;
@@ -416,12 +416,12 @@ class Decoder {
   /**
    * Reads a code of length 8 in an array of bits, padding with zeros
    */
-  static int readByte(List<bool> rawbits, int startIndex) {
+  static int _readByte(List<bool> rawbits, int startIndex) {
     int n = rawbits.length - startIndex;
     if (n >= 8) {
-      return readCode(rawbits, startIndex, 8);
+      return _readCode(rawbits, startIndex, 8);
     }
-    return (readCode(rawbits, startIndex, n) << (8 - n));
+    return (_readCode(rawbits, startIndex, n) << (8 - n));
   }
 
   /**
@@ -430,12 +430,12 @@ class Decoder {
   static Uint8List convertBoolArrayToByteArray(List<bool> boolArr) {
     Uint8List byteArr = Uint8List((boolArr.length + 7) ~/ 8);
     for (int i = 0; i < byteArr.length; i++) {
-      byteArr[i] = readByte(boolArr, 8 * i);
+      byteArr[i] = _readByte(boolArr, 8 * i);
     }
     return byteArr;
   }
 
-  static int totalBitsInLayer(int layers, bool compact) {
+  static int _totalBitsInLayer(int layers, bool compact) {
     return ((compact ? 88 : 112) + 16 * layers) * layers;
   }
 }

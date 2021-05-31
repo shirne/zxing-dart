@@ -95,7 +95,7 @@ class HighLevelEncoder {
 
   // A reverse mapping from [mode][char] to the encoding for that character
   // in that mode.  An entry of 0 indicates no mapping exists.
-  static final List<List<int>> CHAR_MAP = List.generate(
+  static final List<List<int>> _CHAR_MAP = List.generate(
       5,
       (idx) => List.generate(256, (index) {
             if (idx == MODE_UPPER) {
@@ -156,29 +156,29 @@ class HighLevelEncoder {
             return -1;
           })); // mode shift codes, per table
 
-  final Uint8List text;
-  final Encoding? charset;
+  final Uint8List _text;
+  final Encoding? _charset;
 
-  HighLevelEncoder(this.text, [this.charset]);
+  HighLevelEncoder(this._text, [this._charset]);
 
   /**
    * @return text represented by this encoder encoded as a {@link BitArray}
    */
   BitArray encode() {
     State initialState = State.INITIAL_STATE;
-    if (charset != null) {
-      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(charset!);
+    if (_charset != null) {
+      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(_charset!);
       if (null == eci) {
-        throw Exception("No ECI code for character set $charset");
+        throw Exception("No ECI code for character set $_charset");
       }
       initialState = initialState.appendFLGn(eci.getValue());
     }
     List<State> states = [initialState];
-    for (int index = 0; index < text.length; index++) {
+    for (int index = 0; index < _text.length; index++) {
       int pairCode;
       String nextChar =
-          String.fromCharCode(index + 1 < text.length ? text[index + 1] : 0);
-      switch (String.fromCharCode(text[index])) {
+          String.fromCharCode(index + 1 < _text.length ? _text[index + 1] : 0);
+      switch (String.fromCharCode(_text[index])) {
         case '\r':
           pairCode = nextChar == '\n' ? 2 : 0;
           break;
@@ -197,11 +197,11 @@ class HighLevelEncoder {
       if (pairCode > 0) {
         // We have one of the four special PUNCT pairs.  Treat them specially.
         // Get a new set of states for the two new characters.
-        states = updateStateListForPair(states, index, pairCode);
+        states = _updateStateListForPair(states, index, pairCode);
         index++;
       } else {
         // Get a new set of states for the new character.
-        states = updateStateListForChar(states, index);
+        states = _updateStateListForChar(states, index);
       }
     }
     State minState = states.singleWhere((element) {
@@ -215,29 +215,29 @@ class HighLevelEncoder {
     //  }
     //});
     // Convert it to a bit array, and return.
-    return minState.toBitArray(text);
+    return minState.toBitArray(_text);
   }
 
   // We update a set of states for a new character by updating each state
   // for the new character, merging the results, and then removing the
   // non-optimal states.
-  List<State> updateStateListForChar(Iterable<State> states, int index) {
+  List<State> _updateStateListForChar(Iterable<State> states, int index) {
     List<State> result = [];
     for (State state in states) {
-      updateStateForChar(state, index, result);
+      _updateStateForChar(state, index, result);
     }
-    return simplifyStates(result);
+    return _simplifyStates(result);
   }
 
   // Return a set of states that represent the possible ways of updating this
   // state for the next character.  The resulting set of states are added to
   // the "result" list.
-  void updateStateForChar(State state, int index, List<State> result) {
-    int ch = text[index] & 0xFF;
-    bool charInCurrentTable = CHAR_MAP[state.getMode()][ch] > 0;
+  void _updateStateForChar(State state, int index, List<State> result) {
+    int ch = _text[index] & 0xFF;
+    bool charInCurrentTable = _CHAR_MAP[state.getMode()][ch] > 0;
     State? stateNoBinary;
     for (int mode = 0; mode <= MODE_PUNCT; mode++) {
-      int charInMode = CHAR_MAP[mode][ch];
+      int charInMode = _CHAR_MAP[mode][ch];
       if (charInMode > 0) {
         if (stateNoBinary == null) {
           // Only create stateNoBinary the first time it's required.
@@ -264,7 +264,7 @@ class HighLevelEncoder {
       }
     }
     if (state.getBinaryShiftByteCount() > 0 ||
-        CHAR_MAP[state.getMode()][ch] == 0) {
+        _CHAR_MAP[state.getMode()][ch] == 0) {
       // It's never worthwhile to go into binary shift mode if you're not already
       // in binary shift mode, and the character exists in your current mode.
       // That can never save bits over just outputting the char in the current mode.
@@ -273,16 +273,16 @@ class HighLevelEncoder {
     }
   }
 
-  static List<State> updateStateListForPair(
+  static List<State> _updateStateListForPair(
       Iterable<State> states, int index, int pairCode) {
     List<State> result = [];
     for (State state in states) {
-      updateStateForPair(state, index, pairCode, result);
+      _updateStateForPair(state, index, pairCode, result);
     }
-    return simplifyStates(result);
+    return _simplifyStates(result);
   }
 
-  static void updateStateForPair(
+  static void _updateStateForPair(
       State state, int index, int pairCode, List<State> result) {
     State stateNoBinary = state.endBinaryShift(index);
     // Possibility 1.  Latch to MODE_PUNCT, and then append this code
@@ -308,7 +308,7 @@ class HighLevelEncoder {
     }
   }
 
-  static List<State> simplifyStates(Iterable<State> states) {
+  static List<State> _simplifyStates(Iterable<State> states) {
     return states
         .where((newEle) =>
             states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))

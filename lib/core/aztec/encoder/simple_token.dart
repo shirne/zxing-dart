@@ -22,20 +22,20 @@ import 'token.dart';
 
 class SimpleToken extends Token {
   // For normal words, indicates value and bitCount
-  final int value;
-  final int bitCount;
+  final int _value;
+  final int _bitCount;
 
-  SimpleToken(Token? previous, this.value, this.bitCount) : super(previous);
+  SimpleToken(Token? previous, this._value, this._bitCount) : super(previous);
 
   @override
   void appendTo(BitArray bitArray, Uint8List text) {
-    bitArray.appendBits(value, bitCount);
+    bitArray.appendBits(_value, _bitCount);
   }
 
   @override
   String toString() {
-    int value = this.value & ((1 << bitCount) - 1);
-    value |= 1 << bitCount;
-    return '<${(value | (1 << bitCount)).toRadixString(2).substring(1)}>';
+    int value = this._value & ((1 << _bitCount) - 1);
+    value |= 1 << _bitCount;
+    return '<${(value | (1 << _bitCount)).toRadixString(2).substring(1)}>';
   }
 }

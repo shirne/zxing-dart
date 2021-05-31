@@ -26,23 +26,23 @@ import '../result_point.dart';
  * @author Sean Owen
  */
 class AztecDetectorResult extends DetectorResult {
-  final bool compact;
-  final int nbDatablocks;
-  final int nbLayers;
+  final bool _compact;
+  final int _nbDatablocks;
+  final int _nbLayers;
 
-  AztecDetectorResult(BitMatrix bits, List<ResultPoint> points, this.compact,
-      this.nbDatablocks, this.nbLayers)
+  AztecDetectorResult(BitMatrix bits, List<ResultPoint> points, this._compact,
+      this._nbDatablocks, this._nbLayers)
       : super(bits, points);
 
   int getNbLayers() {
-    return nbLayers;
+    return _nbLayers;
   }
 
   int getNbDatablocks() {
-    return nbDatablocks;
+    return _nbDatablocks;
   }
 
   bool isCompact() {
-    return compact;
+    return _compact;
   }
 }
