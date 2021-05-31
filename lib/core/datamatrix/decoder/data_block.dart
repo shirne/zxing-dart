@@ -26,10 +26,10 @@ import 'version.dart';
  * @author bbrown@google.com (Brian Brown)
  */
 class DataBlock {
-  final int numDataCodewords;
-  final Uint8List codewords;
+  final int _numDataCodewords;
+  final Uint8List _codewords;
 
-  DataBlock(this.numDataCodewords, this.codewords);
+  DataBlock._(this._numDataCodewords, this._codewords);
 
   /**
    * <p>When Data Matrix Codes use multiple data blocks, they actually interleave the bytes of each of them.
@@ -60,7 +60,7 @@ class DataBlock {
       for (int i = 0; i < ecBlock.getCount(); i++) {
         int numDataCodewords = ecBlock.getDataCodewords();
         int numBlockCodewords = ecBlocks.getECCodewords() + numDataCodewords;
-        result.add(DataBlock(numDataCodewords, Uint8List(numBlockCodewords)));
+        result.add(DataBlock._(numDataCodewords, Uint8List(numBlockCodewords)));
       }
     }
     int numResultBlocks = result.length;
@@ -68,7 +68,7 @@ class DataBlock {
     // All blocks have the same amount of data, except that the last n
     // (where n may be 0) have 1 less byte. Figure out where these start.
     // TODO(bbrown): There is only one case where there is a difference for Data Matrix for size 144
-    int longerBlocksTotalCodewords = result[0].codewords.length;
+    int longerBlocksTotalCodewords = result[0]._codewords.length;
     //int shorterBlocksTotalCodewords = longerBlocksTotalCodewords - 1;
 
     int longerBlocksNumDataCodewords =
@@ -79,7 +79,7 @@ class DataBlock {
     int rawCodewordsOffset = 0;
     for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
-        result[j].codewords[i] = rawCodewords[rawCodewordsOffset++];
+        result[j]._codewords[i] = rawCodewords[rawCodewordsOffset++];
       }
     }
 
@@ -87,17 +87,17 @@ class DataBlock {
     bool specialVersion = version.getVersionNumber() == 24;
     int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
     for (int j = 0; j < numLongerBlocks; j++) {
-      result[j].codewords[longerBlocksNumDataCodewords - 1] =
+      result[j]._codewords[longerBlocksNumDataCodewords - 1] =
           rawCodewords[rawCodewordsOffset++];
     }
 
     // Now add in error correction blocks
-    int max = result[0].codewords.length;
+    int max = result[0]._codewords.length;
     for (int i = longerBlocksNumDataCodewords; i < max; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
         int jOffset = specialVersion ? (j + 8) % numResultBlocks : j;
         int iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
-        result[jOffset].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
+        result[jOffset]._codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
       }
     }
 
@@ -109,10 +109,10 @@ class DataBlock {
   }
 
   int getNumDataCodewords() {
-    return numDataCodewords;
+    return _numDataCodewords;
   }
 
   Uint8List getCodewords() {
-    return codewords;
+    return _codewords;
   }
 }

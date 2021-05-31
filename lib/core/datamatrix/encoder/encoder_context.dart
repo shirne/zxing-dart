@@ -22,15 +22,16 @@ import 'symbol_info.dart';
 import 'symbol_shape_hint.dart';
 
 class EncoderContext {
-  late String msg;
-  SymbolShapeHint? shape;
-  Dimension? minSize;
-  Dimension? maxSize;
-  late StringBuffer codewords;
+  late String _msg;
+  SymbolShapeHint? _shape;
+  Dimension? _minSize;
+  Dimension? _maxSize;
+  late StringBuffer _codewords;
+  late int _newEncoding;
+  SymbolInfo? _symbolInfo;
+  late int _skipAtEnd;
+
   late int pos;
-  late int newEncoding;
-  SymbolInfo? symbolInfo;
-  late int skipAtEnd;
 
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!
@@ -44,90 +45,90 @@ class EncoderContext {
       }
       sb.write(ch);
     }
-    this.msg = sb.toString(); //Not Unicode here!
-    shape = SymbolShapeHint.FORCE_NONE;
-    this.codewords = StringBuffer();
-    newEncoding = -1;
+    this._msg = sb.toString(); //Not Unicode here!
+    _shape = SymbolShapeHint.FORCE_NONE;
+    this._codewords = StringBuffer();
+    _newEncoding = -1;
   }
 
   void setSymbolShape(SymbolShapeHint shape) {
-    this.shape = shape;
+    this._shape = shape;
   }
 
   void setSizeConstraints(Dimension? minSize, Dimension? maxSize) {
-    this.minSize = minSize;
-    this.maxSize = maxSize;
+    this._minSize = minSize;
+    this._maxSize = maxSize;
   }
 
   String getMessage() {
-    return this.msg;
+    return this._msg;
   }
 
   void setSkipAtEnd(int count) {
-    this.skipAtEnd = count;
+    this._skipAtEnd = count;
   }
 
   String getCurrentChar() {
-    return msg[pos];
+    return _msg[pos];
   }
 
   String getCurrent() {
-    return msg[pos];
+    return _msg[pos];
   }
 
   StringBuffer getCodewords() {
-    return codewords;
+    return _codewords;
   }
 
   void writeCodewords(String codewords) {
-    this.codewords.write(codewords);
+    this._codewords.write(codewords);
   }
 
   void writeCodeword(dynamic codeword) {
-    this.codewords.write(
+    this._codewords.write(
         codeword is int ? String.fromCharCode(codeword) : codeword.toString());
   }
 
   int getCodewordCount() {
-    return this.codewords.length;
+    return this._codewords.length;
   }
 
   int getNewEncoding() {
-    return newEncoding;
+    return _newEncoding;
   }
 
   void signalEncoderChange(int encoding) {
-    this.newEncoding = encoding;
+    this._newEncoding = encoding;
   }
 
   void resetEncoderSignal() {
-    this.newEncoding = -1;
+    this._newEncoding = -1;
   }
 
   bool hasMoreCharacters() {
-    return pos < getTotalMessageCharCount();
+    return pos < _getTotalMessageCharCount();
   }
 
-  int getTotalMessageCharCount() {
-    return msg.length - skipAtEnd;
+  int _getTotalMessageCharCount() {
+    return _msg.length - _skipAtEnd;
   }
 
   int getRemainingCharacters() {
-    return getTotalMessageCharCount() - pos;
+    return _getTotalMessageCharCount() - pos;
   }
 
   SymbolInfo? getSymbolInfo() {
-    return symbolInfo;
+    return _symbolInfo;
   }
 
   void updateSymbolInfo([int? len]) {
     if (len == null) len = getCodewordCount();
-    if (this.symbolInfo == null || len > this.symbolInfo!.getDataCapacity()) {
-      this.symbolInfo = SymbolInfo.lookupDm(len, shape, minSize, maxSize, true);
+    if (this._symbolInfo == null || len > this._symbolInfo!.getDataCapacity()) {
+      this._symbolInfo = SymbolInfo.lookupDm(len, _shape, _minSize, _maxSize, true);
     }
   }
 
   void resetSymbolInfo() {
-    this.symbolInfo = null;
+    this._symbolInfo = null;
   }
 }

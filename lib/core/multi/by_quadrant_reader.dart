@@ -31,9 +31,9 @@ import '../result_point.dart';
  * @see GenericMultipleBarcodeReader
  */
 class ByQuadrantReader implements Reader {
-  final Reader delegate;
+  final Reader _delegate;
 
-  ByQuadrantReader(this.delegate);
+  ByQuadrantReader(this._delegate);
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
@@ -44,33 +44,33 @@ class ByQuadrantReader implements Reader {
 
     try {
       // No need to call makeAbsolute as results will be relative to original top left here
-      return delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints);
+      return _delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints);
     } on NotFoundException catch (_) {
       // continue
     }
 
     try {
-      Result result = delegate.decode(
+      Result result = _delegate.decode(
           image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
-      makeAbsolute(result.getResultPoints(), halfWidth, 0);
+      _makeAbsolute(result.getResultPoints(), halfWidth, 0);
       return result;
     } on NotFoundException catch (_) {
       // continue
     }
 
     try {
-      Result result = delegate.decode(
+      Result result = _delegate.decode(
           image.crop(0, halfHeight, halfWidth, halfHeight), hints);
-      makeAbsolute(result.getResultPoints(), 0, halfHeight);
+      _makeAbsolute(result.getResultPoints(), 0, halfHeight);
       return result;
     } on NotFoundException catch (_) {
       // continue
     }
 
     try {
-      Result result = delegate.decode(
+      Result result = _delegate.decode(
           image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
-      makeAbsolute(result.getResultPoints(), halfWidth, halfHeight);
+      _makeAbsolute(result.getResultPoints(), halfWidth, halfHeight);
       return result;
     } on NotFoundException catch (_) {
       // continue
@@ -80,17 +80,17 @@ class ByQuadrantReader implements Reader {
     int quarterHeight = halfHeight ~/ 2;
     BinaryBitmap center =
         image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
-    Result result = delegate.decode(center, hints);
-    makeAbsolute(result.getResultPoints(), quarterWidth, quarterHeight);
+    Result result = _delegate.decode(center, hints);
+    _makeAbsolute(result.getResultPoints(), quarterWidth, quarterHeight);
     return result;
   }
 
   @override
   void reset() {
-    delegate.reset();
+    _delegate.reset();
   }
 
-  static void makeAbsolute(
+  static void _makeAbsolute(
       List<ResultPoint?>? points, int leftOffset, int topOffset) {
     if (points != null) {
       for (int i = 0; i < points.length; i++) {

@@ -48,12 +48,12 @@ class C40Encoder implements Encoder {
         StringBuffer removed = StringBuffer();
         if ((buffer.length % 3) == 2 && available != 2) {
           lastCharSize =
-              backtrackOneCharacter(context, buffer, removed, lastCharSize);
+              _backtrackOneCharacter(context, buffer, removed, lastCharSize);
         }
         while (
             (buffer.length % 3) == 1 && (lastCharSize > 3 || available != 1)) {
           lastCharSize =
-              backtrackOneCharacter(context, buffer, removed, lastCharSize);
+              _backtrackOneCharacter(context, buffer, removed, lastCharSize);
         }
         break;
       }
@@ -72,7 +72,7 @@ class C40Encoder implements Encoder {
     handleEOD(context, buffer);
   }
 
-  int backtrackOneCharacter(EncoderContext context, StringBuilder buffer,
+  int _backtrackOneCharacter(EncoderContext context, StringBuilder buffer,
       StringBuffer removed, int lastCharSize) {
     int count = buffer.length;
     buffer.delete(count - lastCharSize, count);
@@ -84,7 +84,7 @@ class C40Encoder implements Encoder {
   }
 
   static void writeNextTriplet(EncoderContext context, StringBuilder buffer) {
-    context.writeCodewords(encodeToCodewords(buffer.toString()));
+    context.writeCodewords(_encodeToCodewords(buffer.toString()));
     buffer.delete(0, 3);
   }
 
@@ -178,7 +178,7 @@ class C40Encoder implements Encoder {
     return len;
   }
 
-  static String encodeToCodewords(String sb) {
+  static String _encodeToCodewords(String sb) {
     int v = (1600 * sb.codeUnitAt(0)) +
         (40 * sb.codeUnitAt(1)) +
         sb.codeUnitAt(2) +

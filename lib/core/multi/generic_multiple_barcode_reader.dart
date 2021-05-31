@@ -38,35 +38,35 @@ import 'multiple_barcode_reader.dart';
  * @author Sean Owen
  */
 class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
-  static final int MIN_DIMENSION_TO_RECUR = 100;
-  static final int MAX_DEPTH = 4;
+  static const int _MIN_DIMENSION_TO_RECUR = 100;
+  static const int _MAX_DEPTH = 4;
 
-  static final List<Result> EMPTY_RESULT_ARRAY = [];
+  static const List<Result> EMPTY_RESULT_ARRAY = [];
 
-  final Reader delegate;
+  final Reader _delegate;
 
-  GenericMultipleBarcodeReader(this.delegate);
+  GenericMultipleBarcodeReader(this._delegate);
 
   @override
   List<Result> decodeMultiple(BinaryBitmap image,
       [Map<DecodeHintType, Object>? hints]) {
     List<Result> results = [];
-    doDecodeMultiple(image, hints, results, 0, 0, 0);
+    _doDecodeMultiple(image, hints, results, 0, 0, 0);
     if (results.isEmpty) {
       throw NotFoundException.getNotFoundInstance();
     }
     return results.toList();
   }
 
-  void doDecodeMultiple(BinaryBitmap image, Map<DecodeHintType, Object>? hints,
+  void _doDecodeMultiple(BinaryBitmap image, Map<DecodeHintType, Object>? hints,
       List<Result> results, int xOffset, int yOffset, int currentDepth) {
-    if (currentDepth > MAX_DEPTH) {
+    if (currentDepth > _MAX_DEPTH) {
       return;
     }
 
     Result result;
     try {
-      result = delegate.decode(image, hints);
+      result = _delegate.decode(image, hints);
     } on ReaderException catch (_) {
       return;
     }
@@ -78,7 +78,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       }
     }
     if (!alreadyFound) {
-      results.add(translateResultPoints(result, xOffset, yOffset));
+      results.add(_translateResultPoints(result, xOffset, yOffset));
     }
     List<ResultPoint?>? resultPoints = result.getResultPoints();
     if (resultPoints == null || resultPoints.length == 0) {
@@ -111,18 +111,18 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     }
 
     // Decode left of barcode
-    if (minX > MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(image.crop(0, 0, minX.toInt(), height), hints, results,
+    if (minX > _MIN_DIMENSION_TO_RECUR) {
+      _doDecodeMultiple(image.crop(0, 0, minX.toInt(), height), hints, results,
           xOffset, yOffset, currentDepth + 1);
     }
     // Decode above barcode
-    if (minY > MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(image.crop(0, 0, width, minY.toInt()), hints, results,
+    if (minY > _MIN_DIMENSION_TO_RECUR) {
+      _doDecodeMultiple(image.crop(0, 0, width, minY.toInt()), hints, results,
           xOffset, yOffset, currentDepth + 1);
     }
     // Decode right of barcode
-    if (maxX < width - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(
+    if (maxX < width - _MIN_DIMENSION_TO_RECUR) {
+      _doDecodeMultiple(
           image.crop(maxX.toInt(), 0, width - maxX.toInt(), height),
           hints,
           results,
@@ -131,8 +131,8 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
           currentDepth + 1);
     }
     // Decode below barcode
-    if (maxY < height - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(
+    if (maxY < height - _MIN_DIMENSION_TO_RECUR) {
+      _doDecodeMultiple(
           image.crop(0, maxY.toInt(), width, height - maxY.toInt()),
           hints,
           results,
@@ -142,7 +142,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     }
   }
 
-  static Result translateResultPoints(Result result, int xOffset, int yOffset) {
+  static Result _translateResultPoints(Result result, int xOffset, int yOffset) {
     List<ResultPoint?>? oldResultPoints = result.getResultPoints();
     if (oldResultPoints == null) {
       return result;

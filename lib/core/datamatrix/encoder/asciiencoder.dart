@@ -30,7 +30,7 @@ class ASCIIEncoder implements Encoder {
     int n = HighLevelEncoder.determineConsecutiveDigitCount(
         context.getMessage(), context.pos);
     if (n >= 2) {
-      context.writeCodeword(encodeASCIIDigits(context.getMessage()[context.pos],
+      context.writeCodeword(_encodeASCIIDigits(context.getMessage()[context.pos],
           context.getMessage()[context.pos + 1]));
       context.pos += 2;
     } else {
@@ -73,7 +73,7 @@ class ASCIIEncoder implements Encoder {
     }
   }
 
-  static String encodeASCIIDigits(String digit1, String digit2) {
+  static String _encodeASCIIDigits(String digit1, String digit2) {
     if (HighLevelEncoder.isDigit(digit1) && HighLevelEncoder.isDigit(digit2)) {
       int num = (digit1.codeUnitAt(0) - 48) * 10 + (digit2.codeUnitAt(0) - 48);
       return String.fromCharCode(num + 130);

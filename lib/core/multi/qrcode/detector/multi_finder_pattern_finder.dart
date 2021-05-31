@@ -41,37 +41,37 @@ import '../../../result_point_callback.dart';
  * @author Hannes Erven
  */
 class MultiFinderPatternFinder extends FinderPatternFinder {
-  static final List<FinderPatternInfo> EMPTY_RESULT_ARRAY = [];
-  static final List<FinderPattern> EMPTY_FP_ARRAY = [];
-  static final List<List<FinderPattern>> EMPTY_FP_2D_ARRAY = [];
+  static final List<FinderPatternInfo> _EMPTY_RESULT_ARRAY = [];
+  static final List<FinderPattern> _EMPTY_FP_ARRAY = [];
+  static final List<List<FinderPattern>> _EMPTY_FP_2D_ARRAY = [];
 
   // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
   // since it limits the number of regions to decode
 
   // max. legal count of modules per QR code edge (177)
-  static final double MAX_MODULE_COUNT_PER_EDGE = 180;
+  static const double _MAX_MODULE_COUNT_PER_EDGE = 180;
   // min. legal count per modules per QR code edge (11)
-  static final double MIN_MODULE_COUNT_PER_EDGE = 9;
+  static const double _MIN_MODULE_COUNT_PER_EDGE = 9;
 
   /**
    * More or less arbitrary cutoff point for determining if two finder patterns might belong
    * to the same code if they differ less than DIFF_MODSIZE_CUTOFF_PERCENT percent in their
    * estimated modules sizes.
    */
-  static final double DIFF_MODSIZE_CUTOFF_PERCENT = 0.05;
+  static const double _DIFF_MODSIZE_CUTOFF_PERCENT = 0.05;
 
   /**
    * More or less arbitrary cutoff point for determining if two finder patterns might belong
    * to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
    * estimated modules sizes.
    */
-  static final double DIFF_MODSIZE_CUTOFF = 0.5;
+  static const double _DIFF_MODSIZE_CUTOFF = 0.5;
 
   MultiFinderPatternFinder(
       BitMatrix image, ResultPointCallback? resultPointCallback)
       : super(image, resultPointCallback);
 
-  int compare(FinderPattern? center1, FinderPattern? center2) {
+  int _compare(FinderPattern? center1, FinderPattern? center2) {
     if(center1 == null) return center2 == null ? 0 : -1;
     if(center2 == null) return 1;
     double value =
@@ -89,7 +89,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
    *         size differs from the average among those patterns the least
    * @throws NotFoundException if 3 such finder patterns do not exist
    */
-  List<List<FinderPattern>> selectMultipleBestPatterns() {
+  List<List<FinderPattern>> _selectMultipleBestPatterns() {
     List<FinderPattern> possibleCenters = super.getPossibleCenters();
     int size = possibleCenters.length;
 
@@ -106,7 +106,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     }
 
     // Sort by estimated module size to speed up the upcoming checks
-    possibleCenters.sort(compare);
+    possibleCenters.sort(_compare);
     //Collections.sort(possibleCenters, new ModuleSizeComparator());
 
     /*
@@ -144,8 +144,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
             Math.min(p1.getEstimatedModuleSize(), p2.getEstimatedModuleSize());
         double vModSize12A =
             (p1.getEstimatedModuleSize() - p2.getEstimatedModuleSize()).abs();
-        if (vModSize12A > DIFF_MODSIZE_CUTOFF &&
-            vModSize12 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
+        if (vModSize12A > _DIFF_MODSIZE_CUTOFF &&
+            vModSize12 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
           // break, since elements are ordered by the module size deviation there cannot be
           // any more interesting elements for the given p1.
           break;
@@ -164,8 +164,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
                       p2.getEstimatedModuleSize(), p3.getEstimatedModuleSize());
           double vModSize23A =
               (p2.getEstimatedModuleSize() - p3.getEstimatedModuleSize()).abs();
-          if (vModSize23A > DIFF_MODSIZE_CUTOFF &&
-              vModSize23 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
+          if (vModSize23A > _DIFF_MODSIZE_CUTOFF &&
+              vModSize23 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
             // break, since elements are ordered by the module size deviation there cannot be
             // any more interesting elements for the given p1.
             break;
@@ -186,8 +186,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           // Check the sizes
           double estimatedModuleCount =
               (dA + dB) / (p1.getEstimatedModuleSize() * 2.0);
-          if (estimatedModuleCount > MAX_MODULE_COUNT_PER_EDGE ||
-              estimatedModuleCount < MIN_MODULE_COUNT_PER_EDGE) {
+          if (estimatedModuleCount > _MAX_MODULE_COUNT_PER_EDGE ||
+              estimatedModuleCount < _MIN_MODULE_COUNT_PER_EDGE) {
             continue;
           }
 
@@ -283,7 +283,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
         handlePossibleCenter(stateCount, i, maxJ);
       }
     } // for i=iSkip-1 ...
-    List<List<FinderPattern>> patternInfo = selectMultipleBestPatterns();
+    List<List<FinderPattern>> patternInfo = _selectMultipleBestPatterns();
     List<FinderPatternInfo> result = [];
     for (List<FinderPattern> pattern in patternInfo) {
       ResultPoint.orderBestPatterns(pattern);
@@ -291,7 +291,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     }
 
     if (result.isEmpty) {
-      return EMPTY_RESULT_ARRAY;
+      return _EMPTY_RESULT_ARRAY;
     } else {
       return result.toList();
     }

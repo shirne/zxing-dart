@@ -37,21 +37,21 @@ import 'detector/detector.dart';
  * @author bbrown@google.com (Brian Brown)
  */
 class DataMatrixReader implements Reader {
-  static final List<ResultPoint> NO_POINTS = [];
+  static const List<ResultPoint> _NO_POINTS = [];
 
-  final Decoder decoder = Decoder();
+  final Decoder _decoder = Decoder();
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     DecoderResult decoderResult;
     List<ResultPoint> points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decodeMatrix(bits);
-      points = NO_POINTS;
+      BitMatrix bits = _extractPureBits(image.getBlackMatrix());
+      decoderResult = _decoder.decodeMatrix(bits);
+      points = _NO_POINTS;
     } else {
       DetectorResult detectorResult = Detector(image.getBlackMatrix()).detect();
-      decoderResult = decoder.decodeMatrix(detectorResult.getBits());
+      decoderResult = _decoder.decodeMatrix(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
     Result result = Result(decoderResult.getText(),
@@ -80,14 +80,14 @@ class DataMatrixReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  static BitMatrix extractPureBits(BitMatrix image) {
+  static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? leftTopBlack = image.getTopLeftOnBit();
     List<int>? rightBottomBlack = image.getBottomRightOnBit();
     if (leftTopBlack == null || rightBottomBlack == null) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int calModuleSize = moduleSize(leftTopBlack, image);
+    int calModuleSize = _moduleSize(leftTopBlack, image);
 
     int top = leftTopBlack[1];
     int bottom = rightBottomBlack[1];
@@ -120,7 +120,7 @@ class DataMatrixReader implements Reader {
     return bits;
   }
 
-  static int moduleSize(List<int> leftTopBlack, BitMatrix image) {
+  static int _moduleSize(List<int> leftTopBlack, BitMatrix image) {
     int width = image.getWidth();
     int x = leftTopBlack[0];
     int y = leftTopBlack[1];

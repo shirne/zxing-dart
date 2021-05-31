@@ -20,10 +20,10 @@ import 'dart:typed_data';
  * Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
  */
 class DefaultPlacement {
-  final String codewords;
-  final int numrows;
-  final int numcols;
-  final Uint8List bits;
+  final String _codewords;
+  final int _numrows;
+  final int _numcols;
+  final Uint8List _bits;
 
   /**
    * Main constructor
@@ -32,32 +32,32 @@ class DefaultPlacement {
    * @param numcols   the number of columns
    * @param numrows   the number of rows
    */
-  DefaultPlacement(this.codewords, this.numcols, this.numrows)
-      : this.bits =
-            Uint8List.fromList(List.generate(numcols * numrows, (index) => -1));
+  DefaultPlacement(this._codewords, this._numcols, this._numrows)
+      : this._bits =
+            Uint8List.fromList(List.generate(_numcols * _numrows, (index) => -1));
 
   int getNumrows() {
-    return numrows;
+    return _numrows;
   }
 
   int getNumcols() {
-    return numcols;
+    return _numcols;
   }
 
   Uint8List getBits() {
-    return bits;
+    return _bits;
   }
 
   bool getBit(int col, int row) {
-    return bits[row * numcols + col] == 1;
+    return _bits[row * _numcols + col] == 1;
   }
 
-  void setBit(int col, int row, bool bit) {
-    bits[row * numcols + col] = (bit ? 1 : 0);
+  void _setBit(int col, int row, bool bit) {
+    _bits[row * _numcols + col] = (bit ? 1 : 0);
   }
 
-  bool noBit(int col, int row) {
-    return bits[row * numcols + col] < 0;
+  bool _noBit(int col, int row) {
+    return _bits[row * _numcols + col] < 0;
   }
 
   void place() {
@@ -67,63 +67,63 @@ class DefaultPlacement {
 
     do {
       // repeatedly first check for one of the special corner cases, then...
-      if ((row == numrows) && (col == 0)) {
-        corner1(pos++);
+      if ((row == _numrows) && (col == 0)) {
+        _corner1(pos++);
       }
-      if ((row == numrows - 2) && (col == 0) && ((numcols % 4) != 0)) {
-        corner2(pos++);
+      if ((row == _numrows - 2) && (col == 0) && ((_numcols % 4) != 0)) {
+        _corner2(pos++);
       }
-      if ((row == numrows - 2) && (col == 0) && (numcols % 8 == 4)) {
-        corner3(pos++);
+      if ((row == _numrows - 2) && (col == 0) && (_numcols % 8 == 4)) {
+        _corner3(pos++);
       }
-      if ((row == numrows + 4) && (col == 2) && ((numcols % 8) == 0)) {
-        corner4(pos++);
+      if ((row == _numrows + 4) && (col == 2) && ((_numcols % 8) == 0)) {
+        _corner4(pos++);
       }
       // sweep upward diagonally, inserting successive characters...
       do {
-        if ((row < numrows) && (col >= 0) && noBit(col, row)) {
-          utah(row, col, pos++);
+        if ((row < _numrows) && (col >= 0) && _noBit(col, row)) {
+          _utah(row, col, pos++);
         }
         row -= 2;
         col += 2;
-      } while (row >= 0 && (col < numcols));
+      } while (row >= 0 && (col < _numcols));
       row++;
       col += 3;
 
       // and then sweep downward diagonally, inserting successive characters, ...
       do {
-        if ((row >= 0) && (col < numcols) && noBit(col, row)) {
-          utah(row, col, pos++);
+        if ((row >= 0) && (col < _numcols) && _noBit(col, row)) {
+          _utah(row, col, pos++);
         }
         row += 2;
         col -= 2;
-      } while ((row < numrows) && (col >= 0));
+      } while ((row < _numrows) && (col >= 0));
       row += 3;
       col++;
 
       // ...until the entire array is scanned
-    } while ((row < numrows) || (col < numcols));
+    } while ((row < _numrows) || (col < _numcols));
 
     // Lastly, if the lower right-hand corner is untouched, fill in fixed pattern
-    if (noBit(numcols - 1, numrows - 1)) {
-      setBit(numcols - 1, numrows - 1, true);
-      setBit(numcols - 2, numrows - 2, true);
+    if (_noBit(_numcols - 1, _numrows - 1)) {
+      _setBit(_numcols - 1, _numrows - 1, true);
+      _setBit(_numcols - 2, _numrows - 2, true);
     }
   }
 
-  void module(int row, int col, int pos, int bit) {
+  void _module(int row, int col, int pos, int bit) {
     if (row < 0) {
-      row += numrows;
-      col += 4 - ((numrows + 4) % 8);
+      row += _numrows;
+      col += 4 - ((_numrows + 4) % 8);
     }
     if (col < 0) {
-      col += numcols;
-      row += 4 - ((numcols + 4) % 8);
+      col += _numcols;
+      row += 4 - ((_numcols + 4) % 8);
     }
     // Note the conversion:
-    int v = codewords.codeUnitAt(pos);
+    int v = _codewords.codeUnitAt(pos);
     v &= 1 << (8 - bit);
-    setBit(col, row, v != 0);
+    _setBit(col, row, v != 0);
   }
 
   /**
@@ -133,58 +133,58 @@ class DefaultPlacement {
    * @param col the column
    * @param pos character position
    */
-  void utah(int row, int col, int pos) {
-    module(row - 2, col - 2, pos, 1);
-    module(row - 2, col - 1, pos, 2);
-    module(row - 1, col - 2, pos, 3);
-    module(row - 1, col - 1, pos, 4);
-    module(row - 1, col, pos, 5);
-    module(row, col - 2, pos, 6);
-    module(row, col - 1, pos, 7);
-    module(row, col, pos, 8);
+  void _utah(int row, int col, int pos) {
+    _module(row - 2, col - 2, pos, 1);
+    _module(row - 2, col - 1, pos, 2);
+    _module(row - 1, col - 2, pos, 3);
+    _module(row - 1, col - 1, pos, 4);
+    _module(row - 1, col, pos, 5);
+    _module(row, col - 2, pos, 6);
+    _module(row, col - 1, pos, 7);
+    _module(row, col, pos, 8);
   }
 
-  void corner1(int pos) {
-    module(numrows - 1, 0, pos, 1);
-    module(numrows - 1, 1, pos, 2);
-    module(numrows - 1, 2, pos, 3);
-    module(0, numcols - 2, pos, 4);
-    module(0, numcols - 1, pos, 5);
-    module(1, numcols - 1, pos, 6);
-    module(2, numcols - 1, pos, 7);
-    module(3, numcols - 1, pos, 8);
+  void _corner1(int pos) {
+    _module(_numrows - 1, 0, pos, 1);
+    _module(_numrows - 1, 1, pos, 2);
+    _module(_numrows - 1, 2, pos, 3);
+    _module(0, _numcols - 2, pos, 4);
+    _module(0, _numcols - 1, pos, 5);
+    _module(1, _numcols - 1, pos, 6);
+    _module(2, _numcols - 1, pos, 7);
+    _module(3, _numcols - 1, pos, 8);
   }
 
-  void corner2(int pos) {
-    module(numrows - 3, 0, pos, 1);
-    module(numrows - 2, 0, pos, 2);
-    module(numrows - 1, 0, pos, 3);
-    module(0, numcols - 4, pos, 4);
-    module(0, numcols - 3, pos, 5);
-    module(0, numcols - 2, pos, 6);
-    module(0, numcols - 1, pos, 7);
-    module(1, numcols - 1, pos, 8);
+  void _corner2(int pos) {
+    _module(_numrows - 3, 0, pos, 1);
+    _module(_numrows - 2, 0, pos, 2);
+    _module(_numrows - 1, 0, pos, 3);
+    _module(0, _numcols - 4, pos, 4);
+    _module(0, _numcols - 3, pos, 5);
+    _module(0, _numcols - 2, pos, 6);
+    _module(0, _numcols - 1, pos, 7);
+    _module(1, _numcols - 1, pos, 8);
   }
 
-  void corner3(int pos) {
-    module(numrows - 3, 0, pos, 1);
-    module(numrows - 2, 0, pos, 2);
-    module(numrows - 1, 0, pos, 3);
-    module(0, numcols - 2, pos, 4);
-    module(0, numcols - 1, pos, 5);
-    module(1, numcols - 1, pos, 6);
-    module(2, numcols - 1, pos, 7);
-    module(3, numcols - 1, pos, 8);
+  void _corner3(int pos) {
+    _module(_numrows - 3, 0, pos, 1);
+    _module(_numrows - 2, 0, pos, 2);
+    _module(_numrows - 1, 0, pos, 3);
+    _module(0, _numcols - 2, pos, 4);
+    _module(0, _numcols - 1, pos, 5);
+    _module(1, _numcols - 1, pos, 6);
+    _module(2, _numcols - 1, pos, 7);
+    _module(3, _numcols - 1, pos, 8);
   }
 
-  void corner4(int pos) {
-    module(numrows - 1, 0, pos, 1);
-    module(numrows - 1, numcols - 1, pos, 2);
-    module(0, numcols - 3, pos, 3);
-    module(0, numcols - 2, pos, 4);
-    module(0, numcols - 1, pos, 5);
-    module(1, numcols - 3, pos, 6);
-    module(1, numcols - 2, pos, 7);
-    module(1, numcols - 1, pos, 8);
+  void _corner4(int pos) {
+    _module(_numrows - 1, 0, pos, 1);
+    _module(_numrows - 1, _numcols - 1, pos, 2);
+    _module(0, _numcols - 3, pos, 3);
+    _module(0, _numcols - 2, pos, 4);
+    _module(0, _numcols - 1, pos, 5);
+    _module(1, _numcols - 3, pos, 6);
+    _module(1, _numcols - 2, pos, 7);
+    _module(1, _numcols - 1, pos, 8);
   }
 }

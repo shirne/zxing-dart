@@ -30,10 +30,10 @@ import '../../result_point.dart';
  * @author Sean Owen
  */
 class Detector {
-  final BitMatrix image;
-  final WhiteRectangleDetector rectangleDetector;
+  final BitMatrix _image;
+  final WhiteRectangleDetector _rectangleDetector;
 
-  Detector(this.image) : this.rectangleDetector = WhiteRectangleDetector(image);
+  Detector(this._image) : this._rectangleDetector = WhiteRectangleDetector(_image);
 
   /**
    * <p>Detects a Data Matrix Code in an image.</p>
@@ -42,23 +42,23 @@ class Detector {
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   DetectorResult detect() {
-    List<ResultPoint> cornerPoints = rectangleDetector.detect();
+    List<ResultPoint> cornerPoints = _rectangleDetector.detect();
 
-    List<ResultPoint> points = detectSolid1(cornerPoints);
-    points = detectSolid2(points);
-    points[3] = correctTopRight(points)!;
+    List<ResultPoint> points = _detectSolid1(cornerPoints);
+    points = _detectSolid2(points);
+    points[3] = _correctTopRight(points)!;
     //if (points[3] == null) {
     //  throw NotFoundException.getNotFoundInstance();
     //}
-    points = shiftToModuleCenter(points);
+    points = _shiftToModuleCenter(points);
 
     ResultPoint topLeft = points[0];
     ResultPoint bottomLeft = points[1];
     ResultPoint bottomRight = points[2];
     ResultPoint topRight = points[3];
 
-    int dimensionTop = transitionsBetween(topLeft, topRight) + 1;
-    int dimensionRight = transitionsBetween(bottomRight, topRight) + 1;
+    int dimensionTop = _transitionsBetween(topLeft, topRight) + 1;
+    int dimensionRight = _transitionsBetween(bottomRight, topRight) + 1;
     if ((dimensionTop & 0x01) == 1) {
       dimensionTop += 1;
     }
@@ -72,20 +72,20 @@ class Detector {
       dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
     }
 
-    BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight,
+    BitMatrix bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight,
         topRight, dimensionTop, dimensionRight);
 
     return DetectorResult(
         bits, [topLeft, bottomLeft, bottomRight, topRight]);
   }
 
-  static ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div) {
+  static ResultPoint _shiftPoint(ResultPoint point, ResultPoint to, int div) {
     double x = (to.getX() - point.getX()) / (div + 1);
     double y = (to.getY() - point.getY()) / (div + 1);
     return ResultPoint(point.getX() + x, point.getY() + y);
   }
 
-  static ResultPoint moveAway(ResultPoint point, double fromX, double fromY) {
+  static ResultPoint _moveAway(ResultPoint point, double fromX, double fromY) {
     double x = point.getX();
     double y = point.getY();
 
@@ -107,7 +107,7 @@ class Detector {
   /**
    * Detect a solid side which has minimum transition.
    */
-  List<ResultPoint> detectSolid1(List<ResultPoint> cornerPoints) {
+  List<ResultPoint> _detectSolid1(List<ResultPoint> cornerPoints) {
     // 0  2
     // 1  3
     ResultPoint pointA = cornerPoints[0];
@@ -115,10 +115,10 @@ class Detector {
     ResultPoint pointC = cornerPoints[3];
     ResultPoint pointD = cornerPoints[2];
 
-    int trAB = transitionsBetween(pointA, pointB);
-    int trBC = transitionsBetween(pointB, pointC);
-    int trCD = transitionsBetween(pointC, pointD);
-    int trDA = transitionsBetween(pointD, pointA);
+    int trAB = _transitionsBetween(pointA, pointB);
+    int trBC = _transitionsBetween(pointB, pointC);
+    int trCD = _transitionsBetween(pointC, pointD);
+    int trDA = _transitionsBetween(pointD, pointA);
 
     // 0..3
     // :  :
@@ -152,7 +152,7 @@ class Detector {
   /**
    * Detect a second solid side next to first solid side.
    */
-  List<ResultPoint> detectSolid2(List<ResultPoint> points) {
+  List<ResultPoint> _detectSolid2(List<ResultPoint> points) {
     // A..D
     // :  :
     // B--C
@@ -163,11 +163,11 @@ class Detector {
 
     // Transition detection on the edge is not stable.
     // To safely detect, shift the points to the module center.
-    int tr = transitionsBetween(pointA, pointD);
-    ResultPoint pointBs = shiftPoint(pointB, pointC, (tr + 1) * 4);
-    ResultPoint pointCs = shiftPoint(pointC, pointB, (tr + 1) * 4);
-    int trBA = transitionsBetween(pointBs, pointA);
-    int trCD = transitionsBetween(pointCs, pointD);
+    int tr = _transitionsBetween(pointA, pointD);
+    ResultPoint pointBs = _shiftPoint(pointB, pointC, (tr + 1) * 4);
+    ResultPoint pointCs = _shiftPoint(pointC, pointB, (tr + 1) * 4);
+    int trBA = _transitionsBetween(pointBs, pointA);
+    int trCD = _transitionsBetween(pointCs, pointD);
 
     // 0..3
     // |  :
@@ -192,7 +192,7 @@ class Detector {
   /**
    * Calculates the corner position of the white top right module.
    */
-  ResultPoint? correctTopRight(List<ResultPoint> points) {
+  ResultPoint? _correctTopRight(List<ResultPoint> points) {
     // A..D
     // |  :
     // B--C
@@ -202,13 +202,13 @@ class Detector {
     ResultPoint pointD = points[3];
 
     // shift points for safe transition detection.
-    int trTop = transitionsBetween(pointA, pointD);
-    int trRight = transitionsBetween(pointB, pointD);
-    ResultPoint pointAs = shiftPoint(pointA, pointB, (trRight + 1) * 4);
-    ResultPoint pointCs = shiftPoint(pointC, pointB, (trTop + 1) * 4);
+    int trTop = _transitionsBetween(pointA, pointD);
+    int trRight = _transitionsBetween(pointB, pointD);
+    ResultPoint pointAs = _shiftPoint(pointA, pointB, (trRight + 1) * 4);
+    ResultPoint pointCs = _shiftPoint(pointC, pointB, (trTop + 1) * 4);
 
-    trTop = transitionsBetween(pointAs, pointD);
-    trRight = transitionsBetween(pointCs, pointD);
+    trTop = _transitionsBetween(pointAs, pointD);
+    trRight = _transitionsBetween(pointCs, pointD);
 
     ResultPoint candidate1 = ResultPoint(
         pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
@@ -217,20 +217,20 @@ class Detector {
         pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
         pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
 
-    if (!isValid(candidate1)) {
-      if (isValid(candidate2)) {
+    if (!_isValid(candidate1)) {
+      if (_isValid(candidate2)) {
         return candidate2;
       }
       return null;
     }
-    if (!isValid(candidate2)) {
+    if (!_isValid(candidate2)) {
       return candidate1;
     }
 
-    int sumc1 = transitionsBetween(pointAs, candidate1) +
-        transitionsBetween(pointCs, candidate1);
-    int sumc2 = transitionsBetween(pointAs, candidate2) +
-        transitionsBetween(pointCs, candidate2);
+    int sumc1 = _transitionsBetween(pointAs, candidate1) +
+        _transitionsBetween(pointCs, candidate1);
+    int sumc2 = _transitionsBetween(pointAs, candidate2) +
+        _transitionsBetween(pointCs, candidate2);
 
     if (sumc1 > sumc2) {
       return candidate1;
@@ -242,7 +242,7 @@ class Detector {
   /**
    * Shift the edge points to the module center.
    */
-  List<ResultPoint> shiftToModuleCenter(List<ResultPoint> points) {
+  List<ResultPoint> _shiftToModuleCenter(List<ResultPoint> points) {
     // A..D
     // |  :
     // B--C
@@ -252,16 +252,16 @@ class Detector {
     ResultPoint pointD = points[3];
 
     // calculate pseudo dimensions
-    int dimH = transitionsBetween(pointA, pointD) + 1;
-    int dimV = transitionsBetween(pointC, pointD) + 1;
+    int dimH = _transitionsBetween(pointA, pointD) + 1;
+    int dimV = _transitionsBetween(pointC, pointD) + 1;
 
     // shift points for safe dimension detection
-    ResultPoint pointAs = shiftPoint(pointA, pointB, dimV * 4);
-    ResultPoint pointCs = shiftPoint(pointC, pointB, dimH * 4);
+    ResultPoint pointAs = _shiftPoint(pointA, pointB, dimV * 4);
+    ResultPoint pointCs = _shiftPoint(pointC, pointB, dimH * 4);
 
     //  calculate more precise dimensions
-    dimH = transitionsBetween(pointAs, pointD) + 1;
-    dimV = transitionsBetween(pointCs, pointD) + 1;
+    dimH = _transitionsBetween(pointAs, pointD) + 1;
+    dimV = _transitionsBetween(pointCs, pointD) + 1;
     if ((dimH & 0x01) == 1) {
       dimH += 1;
     }
@@ -275,35 +275,35 @@ class Detector {
         (pointA.getX() + pointB.getX() + pointC.getX() + pointD.getX()) / 4;
     double centerY =
         (pointA.getY() + pointB.getY() + pointC.getY() + pointD.getY()) / 4;
-    pointA = moveAway(pointA, centerX, centerY);
-    pointB = moveAway(pointB, centerX, centerY);
-    pointC = moveAway(pointC, centerX, centerY);
-    pointD = moveAway(pointD, centerX, centerY);
+    pointA = _moveAway(pointA, centerX, centerY);
+    pointB = _moveAway(pointB, centerX, centerY);
+    pointC = _moveAway(pointC, centerX, centerY);
+    pointD = _moveAway(pointD, centerX, centerY);
 
     ResultPoint pointBs;
     ResultPoint pointDs;
 
     // shift points to the center of each modules
-    pointAs = shiftPoint(pointA, pointB, dimV * 4);
-    pointAs = shiftPoint(pointAs, pointD, dimH * 4);
-    pointBs = shiftPoint(pointB, pointA, dimV * 4);
-    pointBs = shiftPoint(pointBs, pointC, dimH * 4);
-    pointCs = shiftPoint(pointC, pointD, dimV * 4);
-    pointCs = shiftPoint(pointCs, pointB, dimH * 4);
-    pointDs = shiftPoint(pointD, pointC, dimV * 4);
-    pointDs = shiftPoint(pointDs, pointA, dimH * 4);
+    pointAs = _shiftPoint(pointA, pointB, dimV * 4);
+    pointAs = _shiftPoint(pointAs, pointD, dimH * 4);
+    pointBs = _shiftPoint(pointB, pointA, dimV * 4);
+    pointBs = _shiftPoint(pointBs, pointC, dimH * 4);
+    pointCs = _shiftPoint(pointC, pointD, dimV * 4);
+    pointCs = _shiftPoint(pointCs, pointB, dimH * 4);
+    pointDs = _shiftPoint(pointD, pointC, dimV * 4);
+    pointDs = _shiftPoint(pointDs, pointA, dimH * 4);
 
     return [pointAs, pointBs, pointCs, pointDs];
   }
 
-  bool isValid(ResultPoint p) {
+  bool _isValid(ResultPoint p) {
     return p.getX() >= 0 &&
-        p.getX() < image.getWidth() &&
+        p.getX() < _image.getWidth() &&
         p.getY() > 0 &&
-        p.getY() < image.getHeight();
+        p.getY() < _image.getHeight();
   }
 
-  static BitMatrix sampleGrid(
+  static BitMatrix _sampleGrid(
       BitMatrix image,
       ResultPoint topLeft,
       ResultPoint bottomLeft,
@@ -338,7 +338,7 @@ class Detector {
   /**
    * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
    */
-  int transitionsBetween(ResultPoint from, ResultPoint to) {
+  int _transitionsBetween(ResultPoint from, ResultPoint to) {
     // See QR Code Detector, sizeOfBlackWhiteBlackRun()
     int fromX = from.getX().toInt();
     int fromY = from.getY().toInt();
@@ -360,9 +360,9 @@ class Detector {
     int ystep = fromY < toY ? 1 : -1;
     int xstep = fromX < toX ? 1 : -1;
     int transitions = 0;
-    bool inBlack = image.get(steep ? fromY : fromX, steep ? fromX : fromY);
+    bool inBlack = _image.get(steep ? fromY : fromX, steep ? fromX : fromY);
     for (int x = fromX, y = fromY; x != toX; x += xstep) {
-      bool isBlack = image.get(steep ? y : x, steep ? x : y);
+      bool isBlack = _image.get(steep ? y : x, steep ? x : y);
       if (isBlack != inBlack) {
         transitions++;
         inBlack = isBlack;

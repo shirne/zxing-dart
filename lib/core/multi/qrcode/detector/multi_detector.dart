@@ -33,7 +33,7 @@ import 'multi_finder_pattern_finder.dart';
  * @author Hannes Erven
  */
 class MultiDetector extends Detector {
-  static final List<DetectorResult> EMPTY_DETECTOR_RESULTS = [];
+  static const List<DetectorResult> _EMPTY_DETECTOR_RESULTS = [];
 
   MultiDetector(BitMatrix image) : super(image);
 
@@ -60,7 +60,7 @@ class MultiDetector extends Detector {
       }
     }
     if (result.isEmpty) {
-      return EMPTY_DETECTOR_RESULTS;
+      return _EMPTY_DETECTOR_RESULTS;
     } else {
       return result.toList();
     }

@@ -33,12 +33,12 @@ class EdifactEncoder implements Encoder {
     StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
       String c = context.getCurrentChar();
-      encodeChar(c, buffer);
+      _encodeChar(c, buffer);
       context.pos++;
 
       int count = buffer.length;
       if (count >= 4) {
-        context.writeCodewords(encodeToCodewords(buffer));
+        context.writeCodewords(_encodeToCodewords(buffer));
         buffer.delete(0, 4);
 
         int newMode = HighLevelEncoder.lookAheadTest(
@@ -51,7 +51,7 @@ class EdifactEncoder implements Encoder {
       }
     }
     buffer.write(String.fromCharCode(31)); //Unlatch
-    handleEOD(context, buffer);
+    _handleEOD(context, buffer);
   }
 
   /**
@@ -60,7 +60,7 @@ class EdifactEncoder implements Encoder {
    * @param context the encoder context
    * @param buffer  the buffer with the remaining encoded characters
    */
-  static void handleEOD(EncoderContext context, StringBuilder buffer) {
+  static void _handleEOD(EncoderContext context, StringBuilder buffer) {
     try {
       int count = buffer.length;
       if (count == 0) {
@@ -87,7 +87,7 @@ class EdifactEncoder implements Encoder {
         throw Exception("Count must not exceed 4");
       }
       int restChars = count - 1;
-      String encoded = encodeToCodewords(buffer);
+      String encoded = _encodeToCodewords(buffer);
       bool endOfSymbolReached = !context.hasMoreCharacters();
       bool restInAscii = endOfSymbolReached && restChars <= 2;
 
@@ -113,7 +113,7 @@ class EdifactEncoder implements Encoder {
     }
   }
 
-  static void encodeChar(String chr, StringBuffer sb) {
+  static void _encodeChar(String chr, StringBuffer sb) {
     int c = chr.codeUnitAt(0);
     if (c >= ' '.codeUnitAt(0) && c <= '?'.codeUnitAt(0)) {
       sb.write(c);
@@ -124,7 +124,7 @@ class EdifactEncoder implements Encoder {
     }
   }
 
-  static String encodeToCodewords(StringBuilder sb) {
+  static String _encodeToCodewords(StringBuilder sb) {
     int len = sb.length;
     if (len == 0) {
       throw Exception("StringBuffer must not be empty");

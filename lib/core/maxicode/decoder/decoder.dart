@@ -34,32 +34,32 @@ import 'decoded_bit_stream_parser.dart';
  * @author Manuel Kasten
  */
 class Decoder {
-  static final int ALL = 0;
-  static final int EVEN = 1;
-  static final int ODD = 2;
+  static const int _ALL = 0;
+  static const int _EVEN = 1;
+  static const int _ODD = 2;
 
-  final ReedSolomonDecoder rsDecoder;
+  final ReedSolomonDecoder _rsDecoder;
 
-  Decoder() : rsDecoder = ReedSolomonDecoder(GenericGF.MAXICODE_FIELD_64);
+  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.MAXICODE_FIELD_64);
 
   DecoderResult decode(BitMatrix bits, [Map<DecodeHintType, Object>? hints]) {
     BitMatrixParser parser = BitMatrixParser(bits);
     Uint8List codewords = parser.readCodewords();
 
-    correctErrors(codewords, 0, 10, 10, ALL);
+    _correctErrors(codewords, 0, 10, 10, _ALL);
     int mode = codewords[0] & 0x0F;
     Uint8List datawords;
     switch (mode) {
       case 2:
       case 3:
       case 4:
-        correctErrors(codewords, 20, 84, 40, EVEN);
-        correctErrors(codewords, 20, 84, 40, ODD);
+        _correctErrors(codewords, 20, 84, 40, _EVEN);
+        _correctErrors(codewords, 20, 84, 40, _ODD);
         datawords = Uint8List(94);
         break;
       case 5:
-        correctErrors(codewords, 20, 68, 56, EVEN);
-        correctErrors(codewords, 20, 68, 56, ODD);
+        _correctErrors(codewords, 20, 68, 56, _EVEN);
+        _correctErrors(codewords, 20, 68, 56, _ODD);
         datawords = Uint8List(78);
         break;
       default:
@@ -72,30 +72,30 @@ class Decoder {
     return DecodedBitStreamParser.decode(datawords, mode);
   }
 
-  void correctErrors(Uint8List codewordBytes, int start, int dataCodewords,
+  void _correctErrors(Uint8List codewordBytes, int start, int dataCodewords,
       int ecCodewords, int mode) {
     int codewords = dataCodewords + ecCodewords;
 
     // in EVEN or ODD mode only half the codewords
-    int divisor = mode == ALL ? 1 : 2;
+    int divisor = mode == _ALL ? 1 : 2;
 
     // First read into an array of ints
     List<int> codewordsInts = List.generate(
         codewords ~/ divisor, (index) => 0); //codewords ~/ divisor
     for (int i = 0; i < codewords; i++) {
-      if ((mode == ALL) || (i % 2 == (mode - 1))) {
+      if ((mode == _ALL) || (i % 2 == (mode - 1))) {
         codewordsInts[i ~/ divisor] = codewordBytes[i + start] & 0xFF;
       }
     }
     try {
-      rsDecoder.decode(codewordsInts, ecCodewords ~/ divisor);
+      _rsDecoder.decode(codewordsInts, ecCodewords ~/ divisor);
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords
     for (int i = 0; i < dataCodewords; i++) {
-      if ((mode == ALL) || (i % 2 == (mode - 1))) {
+      if ((mode == _ALL) || (i % 2 == (mode - 1))) {
         codewordBytes[i + start] = codewordsInts[i ~/ divisor];
       }
     }

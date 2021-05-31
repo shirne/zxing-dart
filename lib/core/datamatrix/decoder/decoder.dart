@@ -35,11 +35,9 @@ import 'decoded_bit_stream_parser.dart';
  * @author bbrown@google.com (Brian Brown)
  */
 class Decoder {
-  late ReedSolomonDecoder rsDecoder;
+  final ReedSolomonDecoder _rsDecoder;
 
-  Decoder() {
-    rsDecoder = ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
-  }
+  Decoder():_rsDecoder = ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
 
   /**
    * <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
@@ -86,7 +84,7 @@ class Decoder {
       DataBlock dataBlock = dataBlocks[j];
       Uint8List codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
-      correctErrors(codewordBytes, numDataCodewords);
+      _correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
         // De-interlace data blocks.
         resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
@@ -105,14 +103,14 @@ class Decoder {
    * @param numDataCodewords number of codewords that are data bytes
    * @throws ChecksumException if error correction fails
    */
-  void correctErrors(Uint8List codewordBytes, int numDataCodewords) {
+  void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     List<int> codewordsInts =
         List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF);
 
     try {
-      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
+      _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }

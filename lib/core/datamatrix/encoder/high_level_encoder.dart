@@ -37,7 +37,7 @@ class HighLevelEncoder {
   /**
    * Padding character
    */
-  static const int PAD = 129;
+  static const int _PAD = 129;
   /**
    * mode latch to C40 encodation mode
    */
@@ -49,15 +49,15 @@ class HighLevelEncoder {
   /**
    * FNC1 Codeword
    */
-  //static const int FNC1 = 232;
+  //static const int _FNC1 = 232;
   /**
    * Structured Append Codeword
    */
-  //static const int STRUCTURED_APPEND = 233;
+  //static const int _STRUCTURED_APPEND = 233;
   /**
    * Reader Programming
    */
-  //static const int READER_PROGRAMMING = 234;
+  //static const int _READER_PROGRAMMING = 234;
   /**
    * Upper Shift
    */
@@ -65,11 +65,11 @@ class HighLevelEncoder {
   /**
    * 05 Macro
    */
-  static const int MACRO_05 = 236;
+  static const int _MACRO_05 = 236;
   /**
    * 06 Macro
    */
-  static const int MACRO_06 = 237;
+  static const int _MACRO_06 = 237;
   /**
    * mode latch to ANSI X.12 encodation mode
    */
@@ -85,7 +85,7 @@ class HighLevelEncoder {
   /**
    * ECI character (Extended Channel Interpretation)
    */
-  //static const int ECI = 241;
+  //static const int _ECI = 241;
 
   /**
    * Unlatch from C40 encodation
@@ -99,15 +99,15 @@ class HighLevelEncoder {
   /**
    * 05 Macro header
    */
-  static const String MACRO_05_HEADER = "[)>\u001E05\u001D";
+  static const String _MACRO_05_HEADER = "[)>\u001E05\u001D";
   /**
    * 06 Macro header
    */
-  static const String MACRO_06_HEADER = "[)>\u001E06\u001D";
+  static const String _MACRO_06_HEADER = "[)>\u001E06\u001D";
   /**
    * Macro trailer
    */
-  static const String MACRO_TRAILER = "\u001E\u0004";
+  static const String _MACRO_TRAILER = "\u001E\u0004";
 
   static const int ASCII_ENCODATION = 0;
   static const int C40_ENCODATION = 1;
@@ -116,11 +116,11 @@ class HighLevelEncoder {
   static const int EDIFACT_ENCODATION = 4;
   static const int BASE256_ENCODATION = 5;
 
-  HighLevelEncoder();
+  HighLevelEncoder._();
 
-  static String randomize253State(int codewordPosition) {
+  static String _randomize253State(int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
-    int tempVariable = PAD + pseudoRandom;
+    int tempVariable = _PAD + pseudoRandom;
     return String.fromCharCode(
         tempVariable <= 254 ? tempVariable : tempVariable - 254);
   }
@@ -154,14 +154,14 @@ class HighLevelEncoder {
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
 
-    if (msg.startsWith(MACRO_05_HEADER) && msg.endsWith(MACRO_TRAILER)) {
-      context.writeCodeword(MACRO_05);
+    if (msg.startsWith(_MACRO_05_HEADER) && msg.endsWith(_MACRO_TRAILER)) {
+      context.writeCodeword(_MACRO_05);
       context.setSkipAtEnd(2);
-      context.pos += MACRO_05_HEADER.length;
-    } else if (msg.startsWith(MACRO_06_HEADER) && msg.endsWith(MACRO_TRAILER)) {
-      context.writeCodeword(MACRO_06);
+      context.pos += _MACRO_05_HEADER.length;
+    } else if (msg.startsWith(_MACRO_06_HEADER) && msg.endsWith(_MACRO_TRAILER)) {
+      context.writeCodeword(_MACRO_06);
       context.setSkipAtEnd(2);
-      context.pos += MACRO_06_HEADER.length;
+      context.pos += _MACRO_06_HEADER.length;
     }
 
     int encodingMode = ASCII_ENCODATION; //Default mode
@@ -184,10 +184,10 @@ class HighLevelEncoder {
     //Padding
     StringBuffer codewords = context.getCodewords();
     if (codewords.length < capacity) {
-      codewords.write(PAD);
+      codewords.write(_PAD);
     }
     while (codewords.length < capacity) {
-      codewords.write(randomize253State(codewords.length + 1));
+      codewords.write(_randomize253State(codewords.length + 1));
     }
 
     return context.getCodewords().toString();
@@ -213,8 +213,8 @@ class HighLevelEncoder {
         int min = MathUtils.MAX_VALUE;
         Uint8List mins = Uint8List(6);
         List<int> intCharCounts = Uint8List(6);
-        min = findMinimums(charCounts, intCharCounts, min, mins);
-        int minCount = getMinimumCount(mins);
+        min = _findMinimums(charCounts, intCharCounts, min, mins);
+        int minCount = _getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] == min) {
           return ASCII_ENCODATION;
@@ -251,7 +251,7 @@ class HighLevelEncoder {
       }
 
       //step M
-      if (isNativeC40(c)) {
+      if (_isNativeC40(c)) {
         charCounts[C40_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[C40_ENCODATION] += 8.0 / 3.0;
@@ -260,7 +260,7 @@ class HighLevelEncoder {
       }
 
       //step N
-      if (isNativeText(c)) {
+      if (_isNativeText(c)) {
         charCounts[TEXT_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[TEXT_ENCODATION] += 8.0 / 3.0;
@@ -269,7 +269,7 @@ class HighLevelEncoder {
       }
 
       //step O
-      if (isNativeX12(c)) {
+      if (_isNativeX12(c)) {
         charCounts[X12_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[X12_ENCODATION] += 13.0 / 3.0;
@@ -278,7 +278,7 @@ class HighLevelEncoder {
       }
 
       //step P
-      if (isNativeEDIFACT(c)) {
+      if (_isNativeEDIFACT(c)) {
         charCounts[EDIFACT_ENCODATION] += 3.0 / 4.0;
       } else if (isExtendedASCII(c)) {
         charCounts[EDIFACT_ENCODATION] += 17.0 / 4.0;
@@ -287,7 +287,7 @@ class HighLevelEncoder {
       }
 
       // step Q
-      if (isSpecialB256(c)) {
+      if (_isSpecialB256(c)) {
         charCounts[BASE256_ENCODATION] += 4.0;
       } else {
         charCounts[BASE256_ENCODATION]++;
@@ -297,8 +297,8 @@ class HighLevelEncoder {
       if (charsProcessed >= 4) {
         List<int> intCharCounts = Uint8List(6);
         Uint8List mins = Uint8List(6);
-        findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
-        int minCount = getMinimumCount(mins);
+        _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
+        int minCount = _getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] <
                 intCharCounts[BASE256_ENCODATION] &&
@@ -342,10 +342,10 @@ class HighLevelEncoder {
             int p = startpos + charsProcessed + 1;
             while (p < msg.length) {
               int tc = msg.codeUnitAt(p);
-              if (isX12TermSep(tc)) {
+              if (_isX12TermSep(tc)) {
                 return X12_ENCODATION;
               }
-              if (!isNativeX12(tc)) {
+              if (!_isNativeX12(tc)) {
                 break;
               }
               p++;
@@ -357,7 +357,7 @@ class HighLevelEncoder {
     }
   }
 
-  static int findMinimums(List<double> charCounts, List<int> intCharCounts,
+  static int _findMinimums(List<double> charCounts, List<int> intCharCounts,
       int min, Uint8List mins) {
     mins.fillRange(0, mins.length, 0);
     for (int i = 0; i < 6; i++) {
@@ -374,7 +374,7 @@ class HighLevelEncoder {
     return min;
   }
 
-  static int getMinimumCount(Uint8List mins) {
+  static int _getMinimumCount(Uint8List mins) {
     int minCount = 0;
     for (int i = 0; i < 6; i++) {
       minCount += mins[i];
@@ -400,7 +400,7 @@ class HighLevelEncoder {
     return ch >= 128 && ch <= 255;
   }
 
-  static bool isNativeC40(dynamic chr) {
+  static bool _isNativeC40(dynamic chr) {
     int ch = 0;
     if (ch is String)
       ch = chr.codeUnitAt(0);
@@ -411,7 +411,7 @@ class HighLevelEncoder {
         (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
   }
 
-  static bool isNativeText(dynamic chr) {
+  static bool _isNativeText(dynamic chr) {
     int ch = 0;
     if (ch is String)
       ch = chr.codeUnitAt(0);
@@ -422,19 +422,19 @@ class HighLevelEncoder {
         (ch >= 'a'.codeUnitAt(0) && ch <= 'z'.codeUnitAt(0));
   }
 
-  static bool isNativeX12(dynamic chr) {
+  static bool _isNativeX12(dynamic chr) {
     int ch = 0;
     if (ch is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return isX12TermSep(ch) ||
+    return _isX12TermSep(ch) ||
         (ch == ' '.codeUnitAt(0)) ||
         (ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0)) ||
         (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
   }
 
-  static bool isX12TermSep(dynamic chr) {
+  static bool _isX12TermSep(dynamic chr) {
     int ch = 0;
     if (ch is String)
       ch = chr.codeUnitAt(0);
@@ -446,7 +446,7 @@ class HighLevelEncoder {
         (ch == '>'.codeUnitAt(0));
   }
 
-  static bool isNativeEDIFACT(dynamic chr) {
+  static bool _isNativeEDIFACT(dynamic chr) {
     int ch = 0;
     if (ch is String)
       ch = chr.codeUnitAt(0);
@@ -455,7 +455,7 @@ class HighLevelEncoder {
     return ch >= ' '.codeUnitAt(0) && ch <= '^'.codeUnitAt(0);
   }
 
-  static bool isSpecialB256(dynamic chr) {
+  static bool _isSpecialB256(dynamic chr) {
     return false; //TODO NOT IMPLEMENTED YET!!!
   }
 

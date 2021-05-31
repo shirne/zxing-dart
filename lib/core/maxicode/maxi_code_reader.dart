@@ -33,20 +33,20 @@ import 'decoder/decoder.dart';
  * This implementation can detect and decode a MaxiCode in an image.
  */
 class MaxiCodeReader implements Reader {
-  static final List<ResultPoint> NO_POINTS = [];
-  static final int MATRIX_WIDTH = 30;
-  static final int MATRIX_HEIGHT = 33;
+  static const List<ResultPoint> _NO_POINTS = [];
+  static const int _MATRIX_WIDTH = 30;
+  static const int _MATRIX_HEIGHT = 33;
 
-  final Decoder decoder = Decoder();
+  final Decoder _decoder = Decoder();
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     // Note that MaxiCode reader effectively always assumes PURE_BARCODE mode
     // and can't detect it in an image
-    BitMatrix bits = extractPureBits(image.getBlackMatrix());
-    DecoderResult decoderResult = decoder.decode(bits, hints);
+    BitMatrix bits = _extractPureBits(image.getBlackMatrix());
+    DecoderResult decoderResult = _decoder.decode(bits, hints);
     Result result = Result(decoderResult.getText(),
-        decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.MAXICODE);
+        decoderResult.getRawBytes(), _NO_POINTS, BarcodeFormat.MAXICODE);
 
     String? ecLevel = decoderResult.getECLevel();
     if (ecLevel != null) {
@@ -66,7 +66,7 @@ class MaxiCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  static BitMatrix extractPureBits(BitMatrix image) {
+  static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? enclosingRectangle = image.getEnclosingRectangle();
     if (enclosingRectangle == null) {
       throw NotFoundException.getNotFoundInstance();
@@ -78,16 +78,16 @@ class MaxiCodeReader implements Reader {
     int height = enclosingRectangle[3];
 
     // Now just read off the bits
-    BitMatrix bits = BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
-    for (int y = 0; y < MATRIX_HEIGHT; y++) {
-      int iy = top + (y * height + height ~/ 2) ~/ MATRIX_HEIGHT;
-      for (int x = 0; x < MATRIX_WIDTH; x++) {
+    BitMatrix bits = BitMatrix(_MATRIX_WIDTH, _MATRIX_HEIGHT);
+    for (int y = 0; y < _MATRIX_HEIGHT; y++) {
+      int iy = top + (y * height + height ~/ 2) ~/ _MATRIX_HEIGHT;
+      for (int x = 0; x < _MATRIX_WIDTH; x++) {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
         int ix = left +
             Math.min(
                 (x * width + width ~/ 2 + (y & 0x01) * width ~/ 2) ~/
-                    MATRIX_WIDTH,
+                    _MATRIX_WIDTH,
                 width);
         if (image.get(ix, iy)) {
           bits.set(x, y);

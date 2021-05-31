@@ -17,7 +17,7 @@
 import 'symbol_info.dart';
 
 class DataMatrixSymbolInfo144 extends SymbolInfo {
-  DataMatrixSymbolInfo144() : super(false, 1558, 620, 22, 22, 36, -1, 62);
+  const DataMatrixSymbolInfo144() : super(false, 1558, 620, 22, 22, 36, -1, 62);
 
   @override
   int getInterleavedBlockCount() {

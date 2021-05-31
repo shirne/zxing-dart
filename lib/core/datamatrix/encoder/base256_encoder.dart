@@ -62,11 +62,11 @@ class Base256Encoder implements Encoder {
     }
     for (int i = 0, c = buffer.length; i < c; i++) {
       context.writeCodeword(
-          randomize255State(buffer.charAt(i), context.getCodewordCount() + 1));
+          _randomize255State(buffer.charAt(i), context.getCodewordCount() + 1));
     }
   }
 
-  static String randomize255State(String ch, int codewordPosition) {
+  static String _randomize255State(String ch, int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 255) + 1;
     int tempVariable = ch.codeUnitAt(0) + pseudoRandom;
     if (tempVariable <= 255) {

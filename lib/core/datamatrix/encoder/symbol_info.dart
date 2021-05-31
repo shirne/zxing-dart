@@ -24,7 +24,7 @@ import 'symbol_shape_hint.dart';
  * @version $Id$
  */
 class SymbolInfo {
-  static final List<SymbolInfo> PROD_SYMBOLS = [
+  static const List<SymbolInfo> PROD_SYMBOLS = [
     SymbolInfo(false, 3, 5, 8, 8, 1),
     SymbolInfo(false, 5, 7, 10, 10, 1),
     /*rect*/ SymbolInfo(true, 5, 7, 16, 6, 1),
@@ -57,16 +57,17 @@ class SymbolInfo {
     DataMatrixSymbolInfo144(),
   ];
 
-  static List<SymbolInfo> symbols = PROD_SYMBOLS;
+  static List<SymbolInfo> _symbols = PROD_SYMBOLS;
 
-  final bool rectangular;
-  final int dataCapacity;
-  final int errorCodewords;
+  final bool _rectangular;
+  final int _dataCapacity;
+  final int _errorCodewords;
+  final int _dataRegions;
+  final int _rsBlockData;
+  final int _rsBlockError;
+
   final int matrixWidth;
   final int matrixHeight;
-  final int dataRegions;
-  final int rsBlockData;
-  final int rsBlockError;
 
   /**
    * Overrides the symbol info set used by this class. Used for testing purposes.
@@ -74,14 +75,14 @@ class SymbolInfo {
    * @param override the symbol info set to use
    */
   static void overrideSymbolSet(List<SymbolInfo> override) {
-    symbols = override;
+    _symbols = override;
   }
 
-  SymbolInfo(this.rectangular, this.dataCapacity, this.errorCodewords,
-      this.matrixWidth, this.matrixHeight, this.dataRegions,
+  const SymbolInfo(this._rectangular, this._dataCapacity, this._errorCodewords,
+      this.matrixWidth, this.matrixHeight, this._dataRegions,
       [int? rsBlockData, int? rsBlockError])
-      : rsBlockData = rsBlockData ?? dataCapacity,
-        rsBlockError = rsBlockError ?? errorCodewords;
+      : _rsBlockData = rsBlockData ?? _dataCapacity,
+        _rsBlockError = rsBlockError ?? _errorCodewords;
 
   static SymbolInfo? lookupRect(
       int dataCodewords, bool allowRectangular, bool fail) {
@@ -98,11 +99,11 @@ class SymbolInfo {
 
   static SymbolInfo? lookupDm(int dataCodewords, SymbolShapeHint? shape,
       Dimension? minSize, Dimension? maxSize, bool fail) {
-    for (SymbolInfo symbol in symbols) {
-      if (shape == SymbolShapeHint.FORCE_SQUARE && symbol.rectangular) {
+    for (SymbolInfo symbol in _symbols) {
+      if (shape == SymbolShapeHint.FORCE_SQUARE && symbol._rectangular) {
         continue;
       }
-      if (shape == SymbolShapeHint.FORCE_RECTANGLE && !symbol.rectangular) {
+      if (shape == SymbolShapeHint.FORCE_RECTANGLE && !symbol._rectangular) {
         continue;
       }
       if (minSize != null &&
@@ -115,7 +116,7 @@ class SymbolInfo {
               symbol.getSymbolHeight() > maxSize.getHeight())) {
         continue;
       }
-      if (dataCodewords <= symbol.dataCapacity) {
+      if (dataCodewords <= symbol._dataCapacity) {
         return symbol;
       }
     }
@@ -126,8 +127,8 @@ class SymbolInfo {
     return null;
   }
 
-  int getHorizontalDataRegions() {
-    switch (dataRegions) {
+  int _getHorizontalDataRegions() {
+    switch (_dataRegions) {
       case 1:
         return 1;
       case 2:
@@ -142,8 +143,8 @@ class SymbolInfo {
     }
   }
 
-  int getVerticalDataRegions() {
-    switch (dataRegions) {
+  int _getVerticalDataRegions() {
+    switch (_dataRegions) {
       case 1:
       case 2:
         return 1;
@@ -159,55 +160,55 @@ class SymbolInfo {
   }
 
   int getSymbolDataWidth() {
-    return getHorizontalDataRegions() * matrixWidth;
+    return _getHorizontalDataRegions() * matrixWidth;
   }
 
   int getSymbolDataHeight() {
-    return getVerticalDataRegions() * matrixHeight;
+    return _getVerticalDataRegions() * matrixHeight;
   }
 
   int getSymbolWidth() {
-    return getSymbolDataWidth() + (getHorizontalDataRegions() * 2);
+    return getSymbolDataWidth() + (_getHorizontalDataRegions() * 2);
   }
 
   int getSymbolHeight() {
-    return getSymbolDataHeight() + (getVerticalDataRegions() * 2);
+    return getSymbolDataHeight() + (_getVerticalDataRegions() * 2);
   }
 
   int getCodewordCount() {
-    return dataCapacity + errorCodewords;
+    return _dataCapacity + _errorCodewords;
   }
 
   int getInterleavedBlockCount() {
-    return dataCapacity ~/ rsBlockData;
+    return _dataCapacity ~/ _rsBlockData;
   }
 
   int getDataCapacity() {
-    return dataCapacity;
+    return _dataCapacity;
   }
 
   int getErrorCodewords() {
-    return errorCodewords;
+    return _errorCodewords;
   }
 
   int getDataLengthForInterleavedBlock(int index) {
-    return rsBlockData;
+    return _rsBlockData;
   }
 
   int getErrorLengthForInterleavedBlock(int index) {
-    return rsBlockError;
+    return _rsBlockError;
   }
 
   @override
   String toString() {
-    return (rectangular ? "Rectangular Symbol:" : "Square Symbol:") +
+    return (_rectangular ? "Rectangular Symbol:" : "Square Symbol:") +
         " data region $matrixWidth"
             'x$matrixHeight'
             ", symbol size ${getSymbolWidth()}"
             'x${getSymbolHeight()}'
             ", symbol data size ${getSymbolDataWidth()}"
             'x${getSymbolDataHeight()}'
-            ", codewords $dataCapacity"
-            '+$errorCodewords';
+            ", codewords $_dataCapacity"
+            '+$_errorCodewords';
   }
 }

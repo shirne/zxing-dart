@@ -91,7 +91,7 @@ class DataMatrixWriter implements Writer {
     placement.place();
 
     //4. step: low-level encoding
-    return encodeLowLevel(placement, symbolInfo, width, height);
+    return _encodeLowLevel(placement, symbolInfo, width, height);
   }
 
   /**
@@ -101,7 +101,7 @@ class DataMatrixWriter implements Writer {
    * @param symbolInfo The symbol info to encode.
    * @return The bit matrix generated.
    */
-  static BitMatrix encodeLowLevel(DefaultPlacement placement,
+  static BitMatrix _encodeLowLevel(DefaultPlacement placement,
       SymbolInfo symbolInfo, int width, int height) {
     int symbolWidth = symbolInfo.getSymbolDataWidth();
     int symbolHeight = symbolInfo.getSymbolDataHeight();
@@ -149,7 +149,7 @@ class DataMatrixWriter implements Writer {
       }
     }
 
-    return convertByteMatrixToBitMatrix(matrix, width, height);
+    return _convertByteMatrixToBitMatrix(matrix, width, height);
   }
 
   /**
@@ -160,7 +160,7 @@ class DataMatrixWriter implements Writer {
    * @param matrix The input matrix.
    * @return The output matrix.
    */
-  static BitMatrix convertByteMatrixToBitMatrix(
+  static BitMatrix _convertByteMatrixToBitMatrix(
       ByteMatrix matrix, int reqWidth, int reqHeight) {
     int matrixWidth = matrix.getWidth();
     int matrixHeight = matrix.getHeight();

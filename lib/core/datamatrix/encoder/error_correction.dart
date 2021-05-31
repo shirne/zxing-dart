@@ -29,13 +29,13 @@ class ErrorCorrection {
    * Lookup table which factors to use for which number of error correction codewords.
    * See FACTORS.
    */
-  static final List<int> FACTOR_SETS
+  static const List<int> _FACTOR_SETS
       = [5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68];
 
   /**
    * Precomputed polynomial factors for ECC 200.
    */
-  static final List<List<int>> FACTORS = [
+  static const List<List<int>> _FACTORS = [
       [228, 48, 15, 111, 62],
       [23, 68, 144, 134, 240, 92, 254],
       [28, 24, 185, 166, 223, 248, 116, 255, 110, 61],
@@ -71,27 +71,27 @@ class ErrorCorrection {
           181, 241, 59, 52, 172, 25, 49, 232, 211, 189, 64, 54, 108, 153, 132, 63,
           96, 103, 82, 186]];
 
-  static const int MODULO_VALUE = 0x12D;
+  static const int _MODULO_VALUE = 0x12D;
 
-  static bool isInit = false;
-  static late List<int> LOG = List.filled(255, 0);
-  static late List<int> ALOG = List.filled(255, 0);
+  static bool _isInit = false;
+  static final List<int> _LOG = List.filled(255, 0);
+  static final List<int> _ALOG = List.filled(255, 0);
 
   static init(){
-    if(isInit)return;
-    isInit = true;
+    if(_isInit)return;
+    _isInit = true;
     int p = 1;
     for (int i = 0; i < 255; i++) {
-      ALOG[i] = p;
-      LOG[p] = i;
+      _ALOG[i] = p;
+      _LOG[p] = i;
       p *= 2;
       if (p >= 256) {
-        p ^= MODULO_VALUE;
+        p ^= _MODULO_VALUE;
       }
     }
   }
 
-  ErrorCorrection();
+  ErrorCorrection._();
 
   /**
    * Creates the ECC200 error correction for an encoded message.
@@ -109,7 +109,7 @@ class ErrorCorrection {
     sb.write(codewords);
     int blockCount = symbolInfo.getInterleavedBlockCount();
     if (blockCount == 1) {
-      String ecc = createECCBlock(codewords, symbolInfo.getErrorCodewords());
+      String ecc = _createECCBlock(codewords, symbolInfo.getErrorCodewords());
       sb.write(ecc);
     } else {
       //sb.setLength(sb.capacity());
@@ -121,7 +121,7 @@ class ErrorCorrection {
         for (int d = block; d < symbolInfo.getDataCapacity(); d += blockCount) {
           temp.write(codewords[d]);
         }
-        String ecc = createECCBlock(temp.toString(), errorSizes[block]);
+        String ecc = _createECCBlock(temp.toString(), errorSizes[block]);
         int pos = 0;
         for (int e = block; e < errorSizes[block] * blockCount; e += blockCount) {
           sb.setCharAt(symbolInfo.getDataCapacity() + e, ecc[pos++]);
@@ -132,10 +132,10 @@ class ErrorCorrection {
 
   }
 
-  static String createECCBlock(String codewords, int numECWords) {
+  static String _createECCBlock(String codewords, int numECWords) {
     int table = -1;
-    for (int i = 0; i < FACTOR_SETS.length; i++) {
-      if (FACTOR_SETS[i] == numECWords) {
+    for (int i = 0; i < _FACTOR_SETS.length; i++) {
+      if (_FACTOR_SETS[i] == numECWords) {
         table = i;
         break;
       }
@@ -144,20 +144,20 @@ class ErrorCorrection {
       throw Exception(
           "Illegal number of error correction codewords specified: $numECWords");
     }
-    List<int> poly = FACTORS[table];
+    List<int> poly = _FACTORS[table];
     List<int> ecc = List.generate(numECWords, (index) => 0);
     init();
     for (int i = 0; i < codewords.length; i++) {
       int m = ecc[numECWords - 1] ^ codewords.codeUnitAt(i);
       for (int k = numECWords - 1; k > 0; k--) {
         if (m != 0 && poly[k] != 0) {
-          ecc[k] = (ecc[k - 1] ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255]);
+          ecc[k] = (ecc[k - 1] ^ _ALOG[(_LOG[m] + _LOG[poly[k]]) % 255]);
         } else {
           ecc[k] = ecc[k - 1];
         }
       }
       if (m != 0 && poly[0] != 0) {
-        ecc[0] = ALOG[(LOG[m] + LOG[poly[0]]) % 255];
+        ecc[0] = _ALOG[(_LOG[m] + _LOG[poly[0]]) % 255];
       } else {
         ecc[0] = 0;
       }

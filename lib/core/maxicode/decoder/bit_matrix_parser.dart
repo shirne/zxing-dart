@@ -23,7 +23,7 @@ import '../../common/bit_matrix.dart';
  * @author Manuel Kasten
  */
 class BitMatrixParser {
-  static final List<List<int>> BITNR = [
+  static const List<List<int>> _BITNR = [
     [121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2],
     [123,122,129,128,135,134,141,140,147,146,153,152,159,158,165,164,171,170,177,176,183,182,189,188,195,194,201,200,816, -3],
     [125,124,131,130,137,136,143,142,149,148,155,154,161,160,167,166,173,172,179,178,185,184,191,190,197,196,203,202,818,817],
@@ -59,22 +59,22 @@ class BitMatrixParser {
     [737,736,743,742,749,748,755,754,761,760,767,766,773,772,779,778,785,784,791,790,797,796,803,802,809,808,815,814,863,862]
   ];
 
-  final BitMatrix bitMatrix;
+  final BitMatrix _bitMatrix;
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
    */
-  BitMatrixParser(this.bitMatrix);
+  BitMatrixParser(this._bitMatrix);
 
   Uint8List readCodewords() {
     Uint8List result = Uint8List(144);
-    int height = bitMatrix.getHeight();
-    int width = bitMatrix.getWidth();
+    int height = _bitMatrix.getHeight();
+    int width = _bitMatrix.getWidth();
     for (int y = 0; y < height; y++) {
-      List<int> bitnrRow = BITNR[y];
+      List<int> bitnrRow = _BITNR[y];
       for (int x = 0; x < width; x++) {
         int bit = bitnrRow[x];
-        if (bit >= 0 && bitMatrix.get(x, y)) {
+        if (bit >= 0 && _bitMatrix.get(x, y)) {
           result[bit ~/ 6] |= (1 << (5 - (bit % 6)));
         }
       }

@@ -37,8 +37,8 @@ import 'detector/multi_detector.dart';
  * @author Hannes Erven
  */
 class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
-  static final List<Result> EMPTY_RESULT_ARRAY = [];
-  static final List<ResultPoint> NO_POINTS = [];
+  static final List<Result> _EMPTY_RESULT_ARRAY = [];
+  static final List<ResultPoint> _NO_POINTS = [];
 
   @override
   List<Result> decodeMultiple(BinaryBitmap image,
@@ -79,7 +79,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       }
     }
     if (results.isEmpty) {
-      return EMPTY_RESULT_ARRAY;
+      return _EMPTY_RESULT_ARRAY;
     } else {
       results = processStructuredAppend(results);
       return results.toList();
@@ -103,7 +103,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     }
 
     // sort and concatenate the SA list items
-    saResults.sort(compareResult);
+    saResults.sort(_compareResult);
     StringBuffer newText = StringBuffer();
     BytesBuilder newRawBytes = BytesBuilder();
     BytesBuilder newByteSegment = BytesBuilder();
@@ -127,7 +127,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     Result newResult = Result(
         newText.toString(),
         Uint8List.fromList(newRawBytes.takeBytes()),
-        NO_POINTS,
+        _NO_POINTS,
         BarcodeFormat.QR_CODE);
     if (newByteSegment.length > 0) {
       newResult.putMetadata(
@@ -137,7 +137,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     return newResults;
   }
 
-  static int compareResult(Result a, Result b) {
+  static int _compareResult(Result a, Result b) {
     int aNumber =
         a.getResultMetadata()![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
             as int;

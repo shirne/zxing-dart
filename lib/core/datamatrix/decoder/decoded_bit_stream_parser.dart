@@ -21,7 +21,7 @@ import '../../common/bit_source.dart';
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
 
-enum Mode {
+enum _Mode {
   PAD_ENCODE, // Not really a mode
   ASCII_ENCODE,
   C40_ENCODE,
@@ -46,13 +46,13 @@ class DecodedBitStreamParser {
    * See ISO 16022:2006, Annex C Table C.1
    * The C40 Basic Character Set (*'s used for placeholders for the shift values)
    */
-  static final List<String> C40_BASIC_SET_CHARS = [
+  static const List<String> _C40_BASIC_SET_CHARS = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', //
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   ];
 
-  static final List<String> C40_SHIFT2_SET_CHARS = [
+  static const List<String> _C40_SHIFT2_SET_CHARS = [
     '!', '"', '#', r'$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', //
     '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
   ];
@@ -61,64 +61,64 @@ class DecodedBitStreamParser {
    * See ISO 16022:2006, Annex C Table C.2
    * The Text Basic Character Set (*'s used for placeholders for the shift values)
    */
-  static final List<String> TEXT_BASIC_SET_CHARS = [
+  static const List<String> _TEXT_BASIC_SET_CHARS = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
     'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   ];
 
   // Shift 2 for Text is the same encoding as C40
-  static final List<String> TEXT_SHIFT2_SET_CHARS = C40_SHIFT2_SET_CHARS;
+  static const List<String> _TEXT_SHIFT2_SET_CHARS = _C40_SHIFT2_SET_CHARS;
 
-  static final List<String> TEXT_SHIFT3_SET_CHARS = [
+  static const List<String> _TEXT_SHIFT3_SET_CHARS = [
     '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', //
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}',
-    '~', String.fromCharCode(127)
+    '~', '\x7f'
   ];
 
-  DecodedBitStreamParser();
+  DecodedBitStreamParser._();
 
   static DecoderResult decode(Uint8List bytes) {
     BitSource bits = BitSource(bytes);
     StringBuffer result = StringBuffer();
     StringBuilder resultTrailer = StringBuilder();
     List<Uint8List> byteSegments = [Uint8List(0)];
-    Mode mode = Mode.ASCII_ENCODE;
+    _Mode mode = _Mode.ASCII_ENCODE;
     Set<int> fnc1Positions =
         {}; // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
     int symbologyModifier;
     bool isECIencoded = false;
     do {
-      if (mode == Mode.ASCII_ENCODE) {
-        mode = decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions);
+      if (mode == _Mode.ASCII_ENCODE) {
+        mode = _decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions);
       } else {
         switch (mode) {
-          case Mode.C40_ENCODE:
-            decodeC40Segment(bits, result, fnc1Positions);
+          case _Mode.C40_ENCODE:
+            _decodeC40Segment(bits, result, fnc1Positions);
             break;
-          case Mode.TEXT_ENCODE:
-            decodeTextSegment(bits, result, fnc1Positions);
+          case _Mode.TEXT_ENCODE:
+            _decodeTextSegment(bits, result, fnc1Positions);
             break;
-          case Mode.ANSIX12_ENCODE:
-            decodeAnsiX12Segment(bits, result);
+          case _Mode.ANSIX12_ENCODE:
+            _decodeAnsiX12Segment(bits, result);
             break;
-          case Mode.EDIFACT_ENCODE:
-            decodeEdifactSegment(bits, result);
+          case _Mode.EDIFACT_ENCODE:
+            _decodeEdifactSegment(bits, result);
             break;
-          case Mode.BASE256_ENCODE:
-            decodeBase256Segment(bits, result, byteSegments);
+          case _Mode.BASE256_ENCODE:
+            _decodeBase256Segment(bits, result, byteSegments);
             break;
-          case Mode.ECI_ENCODE:
+          case _Mode.ECI_ENCODE:
             isECIencoded =
                 true; // ECI detection only, atm continue decoding as ASCII
             break;
           default:
             throw FormatException();
         }
-        mode = Mode.ASCII_ENCODE;
+        mode = _Mode.ASCII_ENCODE;
       }
-    } while (mode != Mode.PAD_ENCODE && bits.available() > 0);
+    } while (mode != _Mode.PAD_ENCODE && bits.available() > 0);
     if (resultTrailer.length > 0) {
       result.write(resultTrailer);
     }
@@ -149,7 +149,7 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
    */
-  static Mode decodeAsciiSegment(BitSource bits, StringBuffer result,
+  static _Mode _decodeAsciiSegment(BitSource bits, StringBuffer result,
       StringBuilder resultTrailer, Set<int> fnc1positions) {
     bool upperShift = false;
     do {
@@ -163,10 +163,10 @@ class DecodedBitStreamParser {
           //upperShift = false;
         }
         result.write(String.fromCharCode(oneByte - 1));
-        return Mode.ASCII_ENCODE;
+        return _Mode.ASCII_ENCODE;
       } else if (oneByte == 129) {
         // Pad
-        return Mode.PAD_ENCODE;
+        return _Mode.PAD_ENCODE;
       } else if (oneByte <= 229) {
         // 2-digit data 00-99 (Numeric Value + 130)
         int value = oneByte - 130;
@@ -178,9 +178,9 @@ class DecodedBitStreamParser {
       } else {
         switch (oneByte) {
           case 230: // Latch to C40 encodation
-            return Mode.C40_ENCODE;
+            return _Mode.C40_ENCODE;
           case 231: // Latch to Base 256 encodation
-            return Mode.BASE256_ENCODE;
+            return _Mode.BASE256_ENCODE;
           case 232: // FNC1
             fnc1positions.add(result.length);
             result.writeCharCode(29); // translate as ASCII 29
@@ -202,13 +202,13 @@ class DecodedBitStreamParser {
             resultTrailer.insert(0, "\u001E\u0004");
             break;
           case 238: // Latch to ANSI X12 encodation
-            return Mode.ANSIX12_ENCODE;
+            return _Mode.ANSIX12_ENCODE;
           case 239: // Latch to Text encodation
-            return Mode.TEXT_ENCODE;
+            return _Mode.TEXT_ENCODE;
           case 240: // Latch to EDIFACT encodation
-            return Mode.EDIFACT_ENCODE;
+            return _Mode.EDIFACT_ENCODE;
           case 241: // ECI Character
-            return Mode.ECI_ENCODE;
+            return _Mode.ECI_ENCODE;
           default:
             // Not to be used in ASCII encodation
             // but work around encoders that end with 254, latch back to ASCII
@@ -219,13 +219,13 @@ class DecodedBitStreamParser {
         }
       }
     } while (bits.available() > 0);
-    return Mode.ASCII_ENCODE;
+    return _Mode.ASCII_ENCODE;
   }
 
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  static void decodeC40Segment(
+  static void _decodeC40Segment(
       BitSource bits, StringBuffer result, Set<int> fnc1positions) {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
@@ -246,7 +246,7 @@ class DecodedBitStreamParser {
         return;
       }
 
-      parseTwoBytes(firstByte, bits.readBits(8), cValues);
+      _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
@@ -254,8 +254,8 @@ class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else if (cValue < C40_BASIC_SET_CHARS.length) {
-              int c40char = C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+            } else if (cValue < _C40_BASIC_SET_CHARS.length) {
+              int c40char = _C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.write(String.fromCharCode(c40char + 128));
                 upperShift = false;
@@ -276,8 +276,8 @@ class DecodedBitStreamParser {
             shift = 0;
             break;
           case 2:
-            if (cValue < C40_SHIFT2_SET_CHARS.length) {
-              int c40char = C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _C40_SHIFT2_SET_CHARS.length) {
+              int c40char = _C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.write(String.fromCharCode(c40char + 128));
                 upperShift = false;
@@ -318,7 +318,7 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  static void decodeTextSegment(
+  static void _decodeTextSegment(
       BitSource bits, StringBuffer result, Set<int> fnc1positions) {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
@@ -338,7 +338,7 @@ class DecodedBitStreamParser {
         return;
       }
 
-      parseTwoBytes(firstByte, bits.readBits(8), cValues);
+      _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
@@ -346,8 +346,8 @@ class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else if (cValue < TEXT_BASIC_SET_CHARS.length) {
-              int textChar = TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+            } else if (cValue < _TEXT_BASIC_SET_CHARS.length) {
+              int textChar = _TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.write(String.fromCharCode(textChar + 128));
                 upperShift = false;
@@ -369,8 +369,8 @@ class DecodedBitStreamParser {
             break;
           case 2:
             // Shift 2 for Text is the same encoding as C40
-            if (cValue < TEXT_SHIFT2_SET_CHARS.length) {
-              int textChar = TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _TEXT_SHIFT2_SET_CHARS.length) {
+              int textChar = _TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.write(String.fromCharCode(textChar + 128));
                 upperShift = false;
@@ -393,8 +393,8 @@ class DecodedBitStreamParser {
             shift = 0;
             break;
           case 3:
-            if (cValue < TEXT_SHIFT3_SET_CHARS.length) {
-              int textChar = TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _TEXT_SHIFT3_SET_CHARS.length) {
+              int textChar = _TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.write(String.fromCharCode(textChar + 128));
                 upperShift = false;
@@ -416,7 +416,7 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.7
    */
-  static void decodeAnsiX12Segment(BitSource bits, StringBuffer result) {
+  static void _decodeAnsiX12Segment(BitSource bits, StringBuffer result) {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
 
@@ -432,7 +432,7 @@ class DecodedBitStreamParser {
         return;
       }
 
-      parseTwoBytes(firstByte, bits.readBits(8), cValues);
+      _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
@@ -465,7 +465,7 @@ class DecodedBitStreamParser {
     } while (bits.available() > 0);
   }
 
-  static void parseTwoBytes(int firstByte, int secondByte, List<int> result) {
+  static void _parseTwoBytes(int firstByte, int secondByte, List<int> result) {
     int fullBitValue = (firstByte << 8) + secondByte - 1;
     int temp = fullBitValue ~/ 1600;
     result[0] = temp;
@@ -478,7 +478,7 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
    */
-  static void decodeEdifactSegment(BitSource bits, StringBuffer result) {
+  static void _decodeEdifactSegment(BitSource bits, StringBuffer result) {
     do {
       // If there is only two or less bytes left then it will be encoded as ASCII
       if (bits.available() <= 16) {
@@ -511,11 +511,11 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.9 and Annex B, B.2
    */
-  static void decodeBase256Segment(
+  static void _decodeBase256Segment(
       BitSource bits, StringBuffer result, List<Uint8List> byteSegments) {
     // Figure out how long the Base 256 Segment is.
     int codewordPosition = 1 + bits.getByteOffset(); // position is 1-indexed
-    int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
+    int d1 = _unrandomize255State(bits.readBits(8), codewordPosition++);
     int count;
     if (d1 == 0) {
       // Read the remainder of the symbol
@@ -524,7 +524,7 @@ class DecodedBitStreamParser {
       count = d1;
     } else {
       count = 250 * (d1 - 249) +
-          unrandomize255State(bits.readBits(8), codewordPosition++);
+          _unrandomize255State(bits.readBits(8), codewordPosition++);
     }
 
     // We're seeing NegativeArraySizeException errors from users.
@@ -539,7 +539,7 @@ class DecodedBitStreamParser {
       if (bits.available() < 8) {
         throw FormatException();
       }
-      bytes[i] = unrandomize255State(bits.readBits(8), codewordPosition++);
+      bytes[i] = _unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byteSegments.add(bytes);
     result.write(latin1.decode(Uint8List.fromList(bytes)));
@@ -548,7 +548,7 @@ class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, Annex B, B.2
    */
-  static int unrandomize255State(
+  static int _unrandomize255State(
       int randomizedBase256Codeword, int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
