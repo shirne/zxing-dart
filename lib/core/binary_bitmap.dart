@@ -56,7 +56,7 @@ class BinaryBitmap {
    * @return The array of bits for this row (true means black).
    * @throws NotFoundException if row can't be binarized
    */
-  BitArray getBlackRow(int y, BitArray row) {
+  BitArray getBlackRow(int y, BitArray? row) {
     return _binarizer.getBlackRow(y, row);
   }
 

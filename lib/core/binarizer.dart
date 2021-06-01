@@ -49,7 +49,7 @@ abstract class Binarizer {
    * @return The array of bits for this row (true means black).
    * @throws NotFoundException if row can't be binarized
    */
-  BitArray getBlackRow(int y, BitArray row);
+  BitArray getBlackRow(int y, BitArray? row);
 
   /**
    * Converts a 2D array of luminance data to 1 bit data. As above, assume this method is expensive
