@@ -25,10 +25,8 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * A very difficult set of images taken with extreme shadows and highlights.
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// A very difficult set of images taken with extreme shadows and highlights.
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('EAN13BlackBox4TestCase', () {

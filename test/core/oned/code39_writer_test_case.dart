@@ -29,9 +29,7 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * Tests {@link Code39Writer}.
- */
+/// Tests {@link Code39Writer}.
 void main(){
 
   void doTest(String input, String expected) {

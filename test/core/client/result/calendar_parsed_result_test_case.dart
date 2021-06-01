@@ -24,11 +24,9 @@ import 'package:zxing/zxing.dart';
 
 import '../../utils.dart';
 
-/**
- * Tests {@link CalendarParsedResult}.
- *
- * @author Sean Owen
- */
+/// Tests {@link CalendarParsedResult}.
+///
+/// @author Sean Owen
 void main(){
 
   final double EPSILON = 1.0E-10;

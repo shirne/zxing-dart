@@ -38,10 +38,8 @@ import 'package:zxing/oned.dart';
 
 import 'binary_util.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 void main(){
 
   test('testNoAi', (){

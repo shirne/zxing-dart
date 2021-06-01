@@ -25,17 +25,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/client.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * Tests {@link WifiParsedResult}.
- *
- * @author Vikram Aggarwal
- */
+/// Tests {@link WifiParsedResult}.
+///
+/// @author Vikram Aggarwal
 void main(){
 
 
-  /**
-   * Given the string contents for the barcode, check that it matches our expectations
-   */
+  /// Given the string contents for the barcode, check that it matches our expectations
   void doTest(String contents,
       String ssid,
       String? password,
@@ -71,9 +67,7 @@ void main(){
     // TODO(vikrama) Need a test for SB as well.
   });
 
-  /**
-   * Put in checks for the length of the password for wep.
-   */
+  /// Put in checks for the length of the password for wep.
   test('testWpa', () {
     doTest("WIFI:S:TenChars;P:wow;T:WPA;;", "TenChars", "wow", "WPA");
     doTest("WIFI:S:TenChars;P:space is silent;T:WPA;;", "TenChars", "space is silent", "WPA");

@@ -31,9 +31,7 @@ import 'package:zxing/common.dart';
 import 'package:zxing/oned.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Daisuke Makiuchi
- */
+/// @author Daisuke Makiuchi
 void main(){
   void doTest(String expectedResult, String encodedResult){
     Code93Reader sut = new Code93Reader();

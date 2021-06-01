@@ -25,11 +25,9 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('AztecBlackBox2TestCase', () {

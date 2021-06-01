@@ -22,11 +22,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/oned.dart';
 
-/**
- * Tests {@link EANManufacturerOrgSupport}.
- * 
- * @author Sean Owen
- */
+/// Tests {@link EANManufacturerOrgSupport}.
+/// 
+/// @author Sean Owen
 void main(){
 
   test('testLookup', () {

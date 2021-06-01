@@ -21,9 +21,7 @@ import 'package:zxing/zxing.dart';
 import '../common/abstract_black_box.dart';
 import '../common/abstract_black_box_test_case.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main(){
 
   test('QRCodeBlackBox1TestCase', () {

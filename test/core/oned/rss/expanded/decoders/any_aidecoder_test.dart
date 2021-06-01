@@ -32,9 +32,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'abstract_decoder_test.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 void main(){
 
   final String header = ".....";

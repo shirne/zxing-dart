@@ -38,12 +38,10 @@ void main(){
   });
 }
 
-/**
- * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
- * several barcodes can be properly combined again to yield the original data content.
- *
- * @author Guenther Grau
- */
+/// This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
+/// several barcodes can be properly combined again to yield the original data content.
+///
+/// @author Guenther Grau
 class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase);
 

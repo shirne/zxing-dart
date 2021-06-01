@@ -27,9 +27,7 @@ import '../../utils.dart';
 
 
 
-/**
- * Tests {@link Decoder}.
- */
+/// Tests {@link Decoder}.
 void main(){
 
   final List<ResultPoint> NO_POINTS = [];

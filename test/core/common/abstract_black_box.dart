@@ -27,10 +27,8 @@ import 'logger.dart';
 import 'properties.dart';
 import 'test_result.dart';
 
-/**
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// @author Sean Owen
+/// @author dswitkin@google.com (Daniel Switkin)
 class AbstractBlackBoxTestCase {
   static final Logger _log = Logger.getLogger(AbstractBlackBoxTestCase);
 
@@ -187,16 +185,14 @@ class AbstractBlackBoxTestCase {
     }
   }
 
-  /**
-   * Adds a new test for the current directory of images.
-   *
-   * @param mustPassCount The number of images which must decode for the test to pass.
-   * @param tryHarderCount The number of images which must pass using the try harder flag.
-   * @param maxMisreads Maximum number of images which can fail due to successfully reading the wrong contents
-   * @param maxTryHarderMisreads Maximum number of images which can fail due to successfully
-   *                             reading the wrong contents using the try harder flag
-   * @param rotation The rotation in degrees clockwise to use for this test.
-   */
+  /// Adds a new test for the current directory of images.
+  ///
+  /// @param mustPassCount The number of images which must decode for the test to pass.
+  /// @param tryHarderCount The number of images which must pass using the try harder flag.
+  /// @param maxMisreads Maximum number of images which can fail due to successfully reading the wrong contents
+  /// @param maxTryHarderMisreads Maximum number of images which can fail due to successfully
+  ///                             reading the wrong contents using the try harder flag
+  /// @param rotation The rotation in degrees clockwise to use for this test.
   void addTest(int mustPassCount, int tryHarderCount, double rotation,
       [int maxMisreads = 0, int maxTryHarderMisreads = 0]) {
     _testResults.add(new TestResult(mustPassCount, tryHarderCount, maxMisreads,

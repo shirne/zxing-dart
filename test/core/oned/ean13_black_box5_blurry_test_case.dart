@@ -25,10 +25,8 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * A set of blurry images taken with a fixed-focus device.
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// A set of blurry images taken with a fixed-focus device.
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('EAN13BlackBox5BlurryTestCase', () {

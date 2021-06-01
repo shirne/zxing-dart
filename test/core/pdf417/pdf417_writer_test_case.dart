@@ -20,9 +20,7 @@ import 'package:zxing/common.dart';
 import 'package:zxing/pdf417.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * Tests {@link PDF417Writer}.
- */
+/// Tests {@link PDF417Writer}.
 void main(){
 
   test('testDataMatrixImageWriter', (){

@@ -35,10 +35,8 @@ import 'package:zxing/zxing.dart';
 
 import '../../../common/abstract_black_box.dart';
 
-/**
- * A test of {@link RSSExpandedReader} against a fixed test set of images including
- * stacked RSS barcodes.
- */
+/// A test of {@link RSSExpandedReader} against a fixed test set of images including
+/// stacked RSS barcodes.
 void main(){
     
   test('RSSExpandedStackedBlackBox2TestCase', () {

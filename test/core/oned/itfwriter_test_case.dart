@@ -29,9 +29,7 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * Tests {@link ITFWriter}.
- */
+/// Tests {@link ITFWriter}.
 void main(){
 
 

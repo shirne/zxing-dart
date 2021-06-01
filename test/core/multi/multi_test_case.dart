@@ -28,9 +28,7 @@ import 'package:zxing/zxing.dart';
 import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
 
-/**
- * Tests {@link MultipleBarcodeReader}.
- */
+/// Tests {@link MultipleBarcodeReader}.
 void main(){
 
   test('testMulti', () async{

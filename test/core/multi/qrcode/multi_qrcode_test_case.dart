@@ -29,9 +29,7 @@ import '../../common/abstract_black_box.dart';
 
 
 
-/**
- * Tests {@link QRCodeMultiReader}.
- */
+/// Tests {@link QRCodeMultiReader}.
 void main(){
 
   test('testMultiQRCodes', () async{

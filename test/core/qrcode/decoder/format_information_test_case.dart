@@ -18,9 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/qrcode.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main(){
   final int MASKED_TEST_FORMAT_INFO = 0x2BED;
   final int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;

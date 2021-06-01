@@ -25,10 +25,8 @@ import 'abstract_black_box.dart';
 import 'test_result.dart';
 
 
-/**
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// @author Sean Owen
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
   //AbstractBlackBoxTestCase testCase = AbstractBlackBoxTestCase();
 

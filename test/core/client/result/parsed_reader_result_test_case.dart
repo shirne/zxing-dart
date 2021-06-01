@@ -32,12 +32,10 @@ import 'package:intl/intl.dart';
 import 'package:zxing/client.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * Tests {@link ParsedResult}.
- *
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// Tests {@link ParsedResult}.
+///
+/// @author Sean Owen
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   //@Before

@@ -29,9 +29,7 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * Tests {@link Code93Writer}.
- */
+/// Tests {@link Code93Writer}.
 void main(){
   void doTest(String input, String expected) {
     BitMatrix result = Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);

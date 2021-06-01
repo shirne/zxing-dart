@@ -30,9 +30,7 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * @author qwandor@google.com (Andrew Walbran)
- */
+/// @author qwandor@google.com (Andrew Walbran)
 void main(){
 
   test('testEncode', () {

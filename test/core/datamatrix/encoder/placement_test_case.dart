@@ -19,9 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'debug_placement.dart';
 
-/**
- * Tests the DataMatrix placement algorithm.
- */
+/// Tests the DataMatrix placement algorithm.
 void main(){
 
   final Pattern SPACE = " ";

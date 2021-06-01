@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * Tests {@link MaxiCodeReader} against a fixed set of test images.
- */
+/// Tests {@link MaxiCodeReader} against a fixed set of test images.
 void main(){
 
   test('Maxicode1TestCase', () {

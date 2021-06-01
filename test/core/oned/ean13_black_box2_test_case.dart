@@ -25,11 +25,9 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * This is a set of mobile image taken at 480x360 with difficult lighting.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// This is a set of mobile image taken at 480x360 with difficult lighting.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('EAN13BlackBox2TestCase', () {

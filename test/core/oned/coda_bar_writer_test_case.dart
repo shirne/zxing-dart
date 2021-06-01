@@ -29,10 +29,8 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
- * @author Sean Owen
- */
+/// @author dsbnatut@gmail.com (Kazuki Nishiura)
+/// @author Sean Owen
 void main(){
 
 

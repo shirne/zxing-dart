@@ -18,10 +18,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
+/// @author satorux@google.com (Satoru Takabayashi) - creator
+/// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 void main() {
   int getUnsignedInt(BitArray v) {
     int result = 0;

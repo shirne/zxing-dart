@@ -16,9 +16,7 @@
 
 
 
-/**
- * Encapsulates the result of one test over a batch of black-box images.
- */
+/// Encapsulates the result of one test over a batch of black-box images.
 class TestResult {
 
   final int mustPassCount;

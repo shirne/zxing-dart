@@ -25,11 +25,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/client.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * Tests {@link ISBNParsedResult}.
- *
- * @author Sean Owen
- */
+/// Tests {@link ISBNParsedResult}.
+///
+/// @author Sean Owen
 void main(){
 
   void doTest(String contents) {

@@ -23,10 +23,8 @@ import 'package:zxing/zxing.dart';
 import '../common/abstract_black_box.dart';
 import '../common/abstract_black_box_test_case.dart';
 
-/**
- * These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
- * rotation, which was a weak spot.
- */
+/// These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
+/// rotation, which was a weak spot.
 void main(){
 
 

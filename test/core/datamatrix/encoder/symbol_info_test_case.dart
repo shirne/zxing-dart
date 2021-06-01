@@ -24,9 +24,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/datamatrix.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * Tests the SymbolInfo class.
- */
+/// Tests the SymbolInfo class.
 void main(){
 
   test('testSymbolInfo', () {

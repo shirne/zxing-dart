@@ -36,9 +36,7 @@ import 'package:zxing/zxing.dart';
 
 import 'test_case_util.dart';
 
-/**
- * Tests {@link RSSExpandedReader} handling of stacked RSS barcodes.
- */
+/// Tests {@link RSSExpandedReader} handling of stacked RSS barcodes.
 void main(){
 
   test('testDecodingRowByRow', () async{

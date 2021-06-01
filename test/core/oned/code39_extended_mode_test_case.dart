@@ -31,9 +31,7 @@ import 'package:zxing/common.dart';
 import 'package:zxing/oned.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Michael Jahn
- */
+/// @author Michael Jahn
 void main(){
   void doTest(String expectedResult, String encodedResult){
     Code39Reader sut = new Code39Reader(false, true);

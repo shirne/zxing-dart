@@ -26,9 +26,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * Inverted barcodes
- */
+/// Inverted barcodes
 void main(){
 
   test('InvertedDataMatrixBlackBoxTestCase', () {

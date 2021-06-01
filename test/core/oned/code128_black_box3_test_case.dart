@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main(){
 
   test('Code128BlackBox3TestCase', () {

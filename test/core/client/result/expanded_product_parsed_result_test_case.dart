@@ -31,10 +31,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/client.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
- * @author Agustín Delgado, Servinform, S.A.
- */
+/// @author Antonio Manuel Benjumea Conde, Servinform, S.A.
+/// @author Agustín Delgado, Servinform, S.A.
 void main(){
 
   test('testRSSExpanded', () {

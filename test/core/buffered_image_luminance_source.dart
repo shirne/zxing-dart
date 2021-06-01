@@ -22,13 +22,11 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:zxing/zxing.dart';
 
 
-/**
- * This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author code@elektrowolle.de (Wolfgang Jung)
- */
+/// This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Sean Owen
+/// @author code@elektrowolle.de (Wolfgang Jung)
 class BufferedImageLuminanceSource extends LuminanceSource {
 
   static final double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
@@ -132,11 +130,9 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     return new BufferedImageLuminanceSource(image, this.left + left, this.top + top, width, height);
   }
 
-  /**
-   * This is always true, since the image is a gray-scale image.
-   *
-   * @return true
-   */
+  /// This is always true, since the image is a gray-scale image.
+  ///
+  /// @return true
   @override
   bool isRotateSupported() {
     return true;

@@ -23,9 +23,7 @@ import 'package:zxing/zxing.dart';
 
 import 'reed_solomon.dart';
 
-/**
- * @author Rustam Abdullaev
- */
+/// @author Rustam Abdullaev
 void main() {
 
 

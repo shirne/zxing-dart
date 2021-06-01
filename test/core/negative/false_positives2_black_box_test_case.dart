@@ -22,11 +22,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../common/abstract_negative_black_box.dart';
 
-/**
- * Additional random images with high contrast patterns which should not find any barcodes.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// Additional random images with high contrast patterns which should not find any barcodes.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('FalsePositives2BlackBoxTestCase', () {

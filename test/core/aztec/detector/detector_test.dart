@@ -20,11 +20,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/aztec.dart';
 import 'package:zxing/common.dart';
 
-/**
- * Tests for the Detector
- *
- * @author Frank Yellin
- */
+/// Tests for the Detector
+///
+/// @author Frank Yellin
 void mian() {
   // Rotates a square BitMatrix to the right by 90 degrees
   BitMatrix rotateRight(BitMatrix input) {

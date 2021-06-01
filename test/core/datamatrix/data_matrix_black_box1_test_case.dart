@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * @author bbrown@google.com (Brian Brown)
- */
+/// @author bbrown@google.com (Brian Brown)
 void main(){
 
 

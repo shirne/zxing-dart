@@ -27,11 +27,9 @@ import 'package:zxing/zxing.dart';
 
 import '../../utils.dart';
 
-/**
- * Tests [@link AddressBookParsedResult].
- *
- * @author Sean Owen
- */
+/// Tests [@link AddressBookParsedResult].
+///
+/// @author Sean Owen
 void main(){
 
   void doTest(String contents,

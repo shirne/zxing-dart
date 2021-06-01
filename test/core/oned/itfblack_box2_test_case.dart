@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('ITFBlackBox2TestCase', () {

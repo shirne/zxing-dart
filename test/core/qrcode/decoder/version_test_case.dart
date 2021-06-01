@@ -23,9 +23,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/qrcode.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main(){
 
   //@Test(expected = IllegalArgumentException.class)

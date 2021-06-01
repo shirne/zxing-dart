@@ -26,11 +26,9 @@ import 'package:zxing/zxing.dart';
 import '../common/abstract_black_box.dart';
 import '../common/abstract_black_box_test_case.dart';
 
-/**
- * Tests of various QR Codes from t-shirts, which are notoriously not flat.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// Tests of various QR Codes from t-shirts, which are notoriously not flat.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('QRCodeBlackBox4TestCase', () {

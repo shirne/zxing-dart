@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * @author David Olivier
- */
+/// @author David Olivier
 void main(){
 
   test('AztecBlackBox1TestCase', () {

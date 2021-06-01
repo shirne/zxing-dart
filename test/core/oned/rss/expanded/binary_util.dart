@@ -32,9 +32,7 @@
 
 import 'package:zxing/common.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class BinaryUtil {
 
   static final Pattern ONE = "1";

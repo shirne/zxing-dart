@@ -21,9 +21,7 @@ import 'package:zxing/zxing.dart';
 import '../common/abstract_black_box.dart';
 import '../common/abstract_black_box_test_case.dart';
 
-/**
- * Tests {@link PDF417Reader} against more sample images.
- */
+/// Tests {@link PDF417Reader} against more sample images.
 void main(){
 
   test('PDF417BlackBox3TestCase', () {

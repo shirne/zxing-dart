@@ -24,11 +24,9 @@ import '../common/abstract_black_box_test_case.dart';
 
 
 
-/**
- * This test consists of perfect, computer-generated images. We should have 100% passing.
- *
- * @author SITA Lab (kevin.osullivan@sita.aero)
- */
+/// This test consists of perfect, computer-generated images. We should have 100% passing.
+///
+/// @author SITA Lab (kevin.osullivan@sita.aero)
 void main(){
 
 

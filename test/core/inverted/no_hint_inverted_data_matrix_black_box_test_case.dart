@@ -22,9 +22,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../common/abstract_negative_black_box.dart';
 
-/**
- * Without hint inverted barcodes should not be found.
- */
+/// Without hint inverted barcodes should not be found.
 void main(){
 
   test('NoHintInvertedDataMatrixBlackBoxTestCase', () {

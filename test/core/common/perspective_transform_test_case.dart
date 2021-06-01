@@ -21,9 +21,7 @@ import 'package:zxing/zxing.dart';
 
 
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main() {
 
   final int accp = 10000;

@@ -21,10 +21,8 @@ import 'package:zxing/zxing.dart';
 import '../planar_yuvluminance_source_test_case.dart';
 
 
-/**
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// @author Sean Owen
+/// @author dswitkin@google.com (Daniel Switkin)
 void main() {
 
   final List<int> BIT_MATRIX_POINTS = [ 1, 2, 2, 0, 3, 1 ];

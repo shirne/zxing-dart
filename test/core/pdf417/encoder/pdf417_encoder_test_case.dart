@@ -22,9 +22,7 @@ import 'package:zxing/pdf417.dart';
 import 'package:zxing/zxing.dart';
 
 
-/**
- * Tests {@link PDF417HighLevelEncoder}.
- */
+/// Tests {@link PDF417HighLevelEncoder}.
 void main(){
 
   test('testEncodeAuto', (){

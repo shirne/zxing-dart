@@ -19,9 +19,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/datamatrix.dart';
 
-/**
- * Tests for {@link HighLevelEncoder}.
- */
+/// Tests for {@link HighLevelEncoder}.
 void main(){
 
   final List<SymbolInfo> TEST_SYMBOLS = [
@@ -66,13 +64,11 @@ void main(){
   }
 
 
-  /**
-   * Convert a string of char codewords into a different string which lists each character
-   * using its decimal value.
-   *
-   * @param codewords the codewords
-   * @return the visualized codewords
-   */
+  /// Convert a string of char codewords into a different string which lists each character
+  /// using its decimal value.
+  ///
+  /// @param codewords the codewords
+  /// @return the visualized codewords
   String visualize(String codewords) {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < codewords.length; i++) {

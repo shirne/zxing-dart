@@ -29,9 +29,7 @@ import 'package:zxing/zxing.dart';
 
 import '../utils.dart';
 
-/**
- * @author Ari Pollak
- */
+/// @author Ari Pollak
 void main(){
 
   test('testEncode', () {

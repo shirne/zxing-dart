@@ -21,9 +21,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
 import 'package:zxing/zxing.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main() {
 
 

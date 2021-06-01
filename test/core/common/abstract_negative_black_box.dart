@@ -39,12 +39,10 @@ class TestResult {
   }
 }
 
-/**
- * This abstract class looks for negative results, i.e. it only allows a certain number of false
- * positives in images which should not decode. This helps ensure that we are not too lenient.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// This abstract class looks for negative results, i.e. it only allows a certain number of false
+/// positives in images which should not decode. This helps ensure that we are not too lenient.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
   static final Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase);
@@ -100,13 +98,11 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     }
   }
 
-  /**
-   * Make sure ZXing does NOT find a barcode in the image.
-   *
-   * @param image The image to test
-   * @param rotationInDegrees The amount of rotation to apply
-   * @return true if nothing found, false if a non-existent barcode was detected
-   */
+  /// Make sure ZXing does NOT find a barcode in the image.
+  ///
+  /// @param image The image to test
+  /// @param rotationInDegrees The amount of rotation to apply
+  /// @return true if nothing found, false if a non-existent barcode was detected
   bool checkForFalsePositives(BufferImage image, double rotationInDegrees) {
     BufferImage rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
     LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);

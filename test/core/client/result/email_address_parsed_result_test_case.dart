@@ -22,11 +22,9 @@ import 'package:zxing/zxing.dart';
 
 import '../../utils.dart';
 
-/**
- * Tests {@link EmailAddressParsedResult}.
- *
- * @author Sean Owen
- */
+/// Tests {@link EmailAddressParsedResult}.
+///
+/// @author Sean Owen
 void main(){
 
 

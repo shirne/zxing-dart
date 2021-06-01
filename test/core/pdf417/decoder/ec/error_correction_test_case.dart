@@ -24,9 +24,7 @@ import 'abstract_error_correction_test_case.dart';
 
 
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 void main(){
 
   final List<int> PDF417_TEST = [

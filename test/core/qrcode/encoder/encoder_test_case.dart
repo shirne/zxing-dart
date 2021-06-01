@@ -22,10 +22,8 @@ import 'package:zxing/qrcode.dart';
 import 'package:zxing/zxing.dart';
 
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author mysen@google.com (Chris Mysen) - ported from C++
- */
+/// @author satorux@google.com (Satoru Takabayashi) - creator
+/// @author mysen@google.com (Chris Mysen) - ported from C++
 void main(){
 
   test('testGetAlphanumericCode', () {

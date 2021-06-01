@@ -18,9 +18,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/datamatrix.dart';
 
-/**
- * Tests for the ECC200 error correction.
- */
+/// Tests for the ECC200 error correction.
 void main(){
 
   String visualize(String codewords) {

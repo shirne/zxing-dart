@@ -25,9 +25,7 @@ import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/**
- * @author kevin.osullivan@sita.aero
- */
+/// @author kevin.osullivan@sita.aero
 void main(){
 
   test('ITFBlackBox1TestCase', () {

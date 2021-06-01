@@ -21,14 +21,10 @@ import 'package:zxing/pdf417.dart';
 import 'package:zxing/zxing.dart';
 
 
-/**
- * Tests {@link DecodedBitStreamParser}.
- */
+/// Tests {@link DecodedBitStreamParser}.
 void main(){
 
-  /**
-   * Tests the first sample given in ISO/IEC 15438:2015(E) - Annex H.4
-   */
+  /// Tests the first sample given in ISO/IEC 15438:2015(E) - Annex H.4
   test('testStandardSample1', (){
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     List<int> sampleCodes = [20, 928, 111, 100, 17, 53, 923, 1, 111, 104, 923, 3, 64, 416, 34, 923, 4, 258, 446, 67,
@@ -52,9 +48,7 @@ void main(){
   });
 
 
-  /**
-   * Tests the second given in ISO/IEC 15438:2015(E) - Annex H.4
-   */
+  /// Tests the second given in ISO/IEC 15438:2015(E) - Annex H.4
   test('testStandardSample2', (){
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     List<int> sampleCodes = [11, 928, 111, 103, 17, 53, 923, 1, 111, 104, 922,
@@ -77,9 +71,7 @@ void main(){
   });
 
 
-  /**
-   * Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
-   */
+  /// Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
   test('testStandardSample3', (){
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     List<int> sampleCodes = [7, 928, 111, 100, 100, 200, 300,
