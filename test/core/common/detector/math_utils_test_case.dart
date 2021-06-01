@@ -66,4 +66,30 @@ void main() {
     expect(0, MathUtils.sum([-1,1]));
   });
 
+  test('numberOfTrailingZeros', (){
+    Map<int, int> tZeros = {
+      0 : 32,
+      1 : 0,
+      7 : 0,
+      8 : 3,
+      15 : 0,
+      16 : 4,
+      17 : 0,
+      110 : 1,
+      124 : 2,
+      156 : 2,
+      263 : 0,
+      998 : 1,
+      65536 : 16,
+      75216 : 4,
+      452216 : 3,
+      3599263 : 0,
+      2599265 : 0,
+      521145851 : 0
+    };
+    tZeros.forEach((key, value) {
+      expect(MathUtils.numberOfTrailingZeros(key),value, reason: "$key => $value");
+    });
+
+  });
 }

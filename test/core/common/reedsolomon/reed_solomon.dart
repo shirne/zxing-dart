@@ -1,0 +1,112 @@
+import 'dart:math';
+
+import 'package:zxing/common.dart';
+
+
+final int DECODER_RANDOM_TEST_ITERATIONS = 3;
+final int DECODER_TEST_ITERATIONS = 10;
+
+String arrayToString(List<int> data) {
+  StringBuilder sb = new StringBuilder("{");
+  for (int i = 0; i < data.length; i++) {
+    sb.write(i > 0 ? ",${data[i].toRadixString(16)}" : "${data[i].toRadixString(16)}", );
+  }
+  sb.write('}');
+  return sb.toString();
+}
+
+Random getPseudoRandom() {
+  return Random(0xDEADBEEF);
+}
+
+void assertDataEquals(String message, List<int> expected, List<int> received) {
+  for (int i = 0; i < expected.length; i++) {
+    assert(expected[i] == received[i], "$message. Mismatch at $i. Expected $expected, got ${received.getRange(0, expected.length)}");
+  }
+}
+
+void corrupt(List<int> received, int howMany, Random random, int max) {
+  Set<int> corrupted = Set();
+  for (int j = 0; j < howMany; j++) {
+    int location = random.nextInt(received.length);
+    int value = random.nextInt(max);
+    if (corrupted.contains(location) || received[location] == value) {
+      j--;
+    } else {
+      corrupted.add(location);
+      received[location] = value;
+    }
+  }
+}
+
+void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
+  ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+  List<int> messageExpected = List.filled(dataWords.length + ecWords.length, 0);
+  List<int> message = List.filled(dataWords.length + ecWords.length, 0);
+  List.copyRange(messageExpected, 0, dataWords, 0, dataWords.length);
+  //System.arraycopy(dataWords, 0, messageExpected, 0, dataWords.length);
+  List.copyRange(messageExpected, dataWords.length, ecWords, 0, ecWords.length);
+  List.copyRange(message, 0, dataWords, 0, dataWords.length);
+  encoder.encode(message, ecWords.length);
+  assertDataEquals( "Encode in $field (${dataWords.length},${ecWords.length}) failed", messageExpected, message,);
+}
+
+void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
+  ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
+  List<int> message = List.filled(dataWords.length + ecWords.length, 0);
+  int maxErrors = ecWords.length ~/ 2;
+  Random random = getPseudoRandom();
+  int iterations = field.getSize() > 256 ? 1 : DECODER_TEST_ITERATIONS;
+  for (int j = 0; j < iterations; j++) {
+    for (int i = 0; i < ecWords.length; i++) {
+      if (i > 10 && i < ecWords.length / 2 - 10) {
+        // performance improvement - skip intermediate cases in long-running tests
+        i += ecWords.length ~/ 10;
+      }
+      List.copyRange(message, 0, dataWords, 0, dataWords.length);
+      List.copyRange(message, dataWords.length, ecWords, 0, ecWords.length);
+      corrupt(message, i, random, field.getSize());
+      try {
+        decoder.decode(message, ecWords.length);
+      } catch ( e) { // ReedSolomonException
+        // fail only if maxErrors exceeded
+        assert(i > maxErrors, "Decode in $field (${dataWords.length},${ecWords.length}) failed at $i errors: $e");
+        // else stop
+        break;
+      }
+      if (i < maxErrors) {
+        assertDataEquals("Decode in $field (${dataWords.length}, ${ecWords.length}) failed at $i errors", dataWords, message, );
+      }
+    }
+  }
+}
+
+void testEncodeDecode(GenericGF field, List<int> dataWords, List<int> ecWords) {
+  testEncoder(field, dataWords, ecWords);
+  testDecoder(field, dataWords, ecWords);
+}
+
+
+
+void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
+  assert(dataSize > 0 && dataSize <= field.getSize() - 3, "Invalid data size for $field" );
+  assert(ecSize > 0 && ecSize + dataSize <= field.getSize(), "Invalid ECC size for $field" );
+  ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+  List<int> message = List.filled(dataSize + ecSize, 0);
+  List<int> dataWords = List.filled(dataSize, 0);
+  List<int> ecWords = List.filled(ecSize, 0);
+  Random random = getPseudoRandom();
+  int iterations = field.getSize() > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
+  for (int i = 0; i < iterations; i++) {
+    // generate random data
+    for (int k = 0; k < dataSize; k++) {
+      dataWords[k] = random.nextInt(field.getSize());
+    }
+    // generate ECC words
+    List.copyRange(message, 0, dataWords, 0, dataWords.length);
+    encoder.encode(message, ecWords.length);
+    List.copyRange(ecWords, 0, message, dataSize, ecSize);
+    // check to see if Decoder can fix up to ecWords/2 random errors
+    testDecoder(field, dataWords, ecWords);
+  }
+}
