@@ -42,7 +42,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   GlobalHistogramBinarizer(LuminanceSource source)
       : _luminances = EMPTY,
-        _buckets = List.generate(_luminanceBuckets, (index) => 0),
+        _buckets = List.filled(_luminanceBuckets, 0),
         super(source);
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.

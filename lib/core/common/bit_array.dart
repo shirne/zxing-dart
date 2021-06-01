@@ -18,6 +18,8 @@ import 'dart:math' as math;
 
 import 'dart:typed_data';
 
+import 'package:fixnum/fixnum.dart';
+
 import 'detector/math_utils.dart';
 import 'utils.dart';
 
@@ -184,7 +186,7 @@ class BitArray {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
-      int mask = (2 << lastBit) - (1 << firstBit) & 0xFFFFFFFF;
+      int mask = (2 << lastBit) - (1 << firstBit) ;
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
@@ -257,7 +259,7 @@ class BitArray {
 
   /// @return underlying array of ints. The first element holds the first 32 bits, and the least
   ///         significant bit is bit 0.
-  List<int> getBitArray() {
+  Int32List getBitArray() {
     return _bits;
   }
 
@@ -268,25 +270,25 @@ class BitArray {
     int len = (_size - 1) ~/ 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
-      int x = _bits[i];
+      var x = Int32(_bits[i]);
       x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1);
       x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2);
       x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4);
       x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8);
       x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16);
-      newBits[len - i] = x;
+      newBits[len - i] = x.toInt();
     }
     // now correct the int's if the bit size isn't a multiple of 32
     if (_size != oldBitsLen * 32) {
       int leftOffset = oldBitsLen * 32 - _size;
-      int currentInt = newBits[0] >> leftOffset;
+      var currentInt = Int32(newBits[0]).shiftRightUnsigned(leftOffset);
       for (int i = 1; i < oldBitsLen; i++) {
-        int nextInt = newBits[i];
-        currentInt |= nextInt << (32 - leftOffset);
-        newBits[i - 1] = currentInt;
-        currentInt = nextInt >> leftOffset;
+        var nextInt = Int32(newBits[i]);
+        currentInt |= (nextInt << (32 - leftOffset)).toSigned(32);
+        newBits[i - 1] = currentInt.toInt();
+        currentInt = nextInt.shiftRightUnsigned(leftOffset);
       }
-      newBits[oldBitsLen - 1] = currentInt;
+      newBits[oldBitsLen - 1] = currentInt.toInt();
     }
     _bits = newBits;
   }

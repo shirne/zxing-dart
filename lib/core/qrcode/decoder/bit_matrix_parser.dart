@@ -217,7 +217,7 @@ class BitMatrixParser {
     this._isMirror = mirror;
   }
 
-  /** Mirror the bit matrix in order to attempt a second reading. */
+  /// Mirror the bit matrix in order to attempt a second reading.
   void mirror() {
     for (int x = 0; x < _bitMatrix.getWidth(); x++) {
       for (int y = x + 1; y < _bitMatrix.getHeight(); y++) {

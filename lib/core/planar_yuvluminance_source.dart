@@ -105,7 +105,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   List<int> renderThumbnail() {
     int width = getWidth() ~/ _THUMBNAIL_SCALE_FACTOR;
     int height = getHeight() ~/ _THUMBNAIL_SCALE_FACTOR;
-    List<int> pixels = List.generate(width * height, (index) => 0);
+    List<int> pixels = List.filled(width * height, 0);
     Int8List yuv = _yuvData;
     int inputOffset = _top * _dataWidth + _left;
 

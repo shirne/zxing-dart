@@ -157,7 +157,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;
     List<List<int>> blackPoints = List.generate(
-        subHeight, (index) => List.generate(subWidth, (index) => 0));
+        subHeight, (index) => List.filled(subWidth, 0));
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
       if (yoffset > maxYOffset) {

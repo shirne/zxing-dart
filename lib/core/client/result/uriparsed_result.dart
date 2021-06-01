@@ -57,7 +57,7 @@ class URIParsedResult extends ParsedResult {
   static String massageURI(String uri) {
     uri = uri.trim();
     int protocolEnd = uri.indexOf(':');
-    if (protocolEnd < 0 || isColonFollowedByPortNumber(uri, protocolEnd)) {
+    if (protocolEnd < 0 || _isColonFollowedByPortNumber(uri, protocolEnd)) {
       // No protocol, or found a colon, but it looks like it is after the host, so the protocol is still missing,
       // so assume http
       uri = "http://" + uri;
@@ -65,7 +65,7 @@ class URIParsedResult extends ParsedResult {
     return uri;
   }
 
-  static bool isColonFollowedByPortNumber(String uri, int protocolEnd) {
+  static bool _isColonFollowedByPortNumber(String uri, int protocolEnd) {
     int start = protocolEnd + 1;
     int nextSlash = uri.indexOf('/', start);
     if (nextSlash < 0) {

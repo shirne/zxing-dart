@@ -33,7 +33,7 @@ class Mode {
   static const KANJI = const Mode([8, 10, 12], 0x08);
   static const FNC1_SECOND_POSITION = const Mode([0, 0, 0], 0x09);
 
-  /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
+  /// See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
   static const HANZI = const Mode([8, 10, 12], 0x0D);
 
   static const values = [

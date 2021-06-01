@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
 import 'generic_gf.dart';
 
 /// <p>Represents a polynomial whose coefficients are elements of a GF.
@@ -25,7 +27,7 @@ import 'generic_gf.dart';
 /// @author Sean Owen
 class GenericGFPoly {
   final GenericGF _field;
-  late List<int> _coefficients;
+  late Int32List _coefficients;
 
   /// @param field the {@link GenericGF} instance representing the field to use
   /// to perform computations
@@ -34,16 +36,16 @@ class GenericGFPoly {
   /// @throws IllegalArgumentException if argument is null or empty,
   /// or if leading coefficient is 0 and this is not a
   /// constant polynomial (that is, it is not the monomial "0")
-  GenericGFPoly(this._field, List<int> coefficients):
+  GenericGFPoly(this._field, Int32List coefficients):
         assert(coefficients.length > 0,'IllegalArgument'),
-      this._coefficients = coefficients.skipWhile((value) => value == 0).toList()
+      this._coefficients = Int32List.fromList(coefficients.skipWhile((value) => value == 0).toList())
   {
     if(this._coefficients.length < 1){
-      this._coefficients.add(0);
+      this._coefficients = Int32List(1);
     }
   }
 
-  List<int> getCoefficients() {
+  Int32List getCoefficients() {
     return _coefficients;
   }
 
@@ -103,7 +105,7 @@ class GenericGFPoly {
       smallerCoefficients = largerCoefficients;
       largerCoefficients = temp;
     }
-    List<int> sumDiff = List.generate(largerCoefficients.length, (index) => 0);
+    Int32List sumDiff = Int32List(largerCoefficients.length);
     int lengthDiff = largerCoefficients.length - smallerCoefficients.length;
     // Copy high-order terms only found in higher-degree polynomial's coefficients
     List.copyRange(sumDiff, 0, largerCoefficients, 0, lengthDiff);
@@ -123,11 +125,11 @@ class GenericGFPoly {
     if (isZero() || other.isZero()) {
       return _field.getZero();
     }
-    List<int> aCoefficients = this._coefficients;
+    Int32List aCoefficients = this._coefficients;
     int aLength = aCoefficients.length;
-    List<int> bCoefficients = other._coefficients;
+    Int32List bCoefficients = other._coefficients;
     int bLength = bCoefficients.length;
-    List<int> product = List.generate(aLength + bLength - 1, (index) => 0);
+    Int32List product = Int32List(aLength + bLength - 1);
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
@@ -146,7 +148,7 @@ class GenericGFPoly {
       return this;
     }
     int size = _coefficients.length;
-    List<int> product = List.generate(size, (index) => 0);
+    Int32List product = Int32List(size);
     for (int i = 0; i < size; i++) {
       product[i] = _field.multiply(_coefficients[i], scalar);
     }
@@ -161,7 +163,7 @@ class GenericGFPoly {
       return _field.getZero();
     }
     int size = _coefficients.length;
-    List<int> product = List.generate(size + degree, (index) => 0);
+    Int32List product = Int32List(size + degree);
     for (int i = 0; i < size; i++) {
       product[i] = _field.multiply(_coefficients[i], coefficient);
     }

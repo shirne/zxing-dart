@@ -285,7 +285,7 @@ class Decoder {
     }
     int offset = rawbits.length % codewordSize;
 
-    List<int> dataWords = List.filled(numCodewords, 0);
+    Int32List dataWords = Int32List(numCodewords);
     for (int i = 0; i < numCodewords; i++, offset += codewordSize) {
       dataWords[i] = _readCode(rawbits, offset, codewordSize);
     }

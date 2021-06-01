@@ -98,8 +98,8 @@ class Decoder {
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
-    List<int> codewordsInts =
-        List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF);
+    Int32List codewordsInts =
+    Int32List.fromList(List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF));
 
     try {
       _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);

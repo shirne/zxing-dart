@@ -137,7 +137,7 @@ class ErrorCorrection {
           "Illegal number of error correction codewords specified: $numECWords");
     }
     List<int> poly = _FACTORS[table];
-    List<int> ecc = List.generate(numECWords, (index) => 0);
+    List<int> ecc = List.filled(numECWords, 0);
     init();
     for (int i = 0; i < codewords.length; i++) {
       int m = ecc[numECWords - 1] ^ codewords.codeUnitAt(i);

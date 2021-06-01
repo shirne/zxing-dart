@@ -39,12 +39,12 @@ abstract class AbstractRSSReader extends OneDReader {
 
   @protected
   AbstractRSSReader()
-      : _decodeFinderCounters = List.generate(4, (index) => 0),
-        _dataCharacterCounters = List.generate(8, (index) => 0),
-        _oddRoundingErrors = List.generate(4, (index) => 0),
-        _evenRoundingErrors = List.generate(4, (index) => 0),
-        _oddCounts = List.generate(4, (index) => 0),
-        _evenCounts = List.generate(4, (index) => 0);
+      : _decodeFinderCounters = List.filled(4, 0),
+        _dataCharacterCounters = List.filled(8, 0),
+        _oddRoundingErrors = List.filled(4, 0),
+        _evenRoundingErrors = List.filled(4, 0),
+        _oddCounts = List.filled(4, 0),
+        _evenCounts = List.filled(4, 0);
 
   @protected
   List<int> getDecodeFinderCounters() {

@@ -19,12 +19,12 @@
 ///
 /// @author Sean Owen
 enum ErrorCorrectionLevel {
-  /** M = ~15% correction */
+  /// M = ~15% correction
   M, //(0x00),
-  /** L = ~7% correction */
+  /// L = ~7% correction
   L, //(0x01),
-  /** H = ~30% correction */
+  /// H = ~30% correction
   H, //(0x02),
-  /** Q = ~25% correction */
+  /// Q = ~25% correction
   Q, //(0x03),
 }

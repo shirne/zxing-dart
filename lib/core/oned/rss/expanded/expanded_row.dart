@@ -22,7 +22,8 @@ import 'expanded_pair.dart';
 class ExpandedRow {
   final List<ExpandedPair> _pairs;
   final int _rowNumber;
-  /** Did this row of the image have to be reversed (mirrored) to recognize the pairs? */
+
+  /// Did this row of the image have to be reversed (mirrored) to recognize the pairs?
   final bool _wasReversed;
 
   ExpandedRow(this._pairs, this._rowNumber, this._wasReversed);

@@ -71,7 +71,7 @@ class DefaultGridSampler extends GridSampler {
       throw NotFoundException.getNotFoundInstance();
     }
     BitMatrix bits = BitMatrix(dimensionX, dimensionY);
-    List<double> points = List.generate(2 * dimensionX, (index) => 0);
+    List<double> points = List.filled(2 * dimensionX, 0);
     for (int y = 0; y < dimensionY; y++) {
       int max = points.length;
       double iValue = y + 0.5;

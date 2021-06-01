@@ -183,7 +183,7 @@ class Detector {
       int width, int startRow, int startColumn, List<int> pattern) {
     List<ResultPoint> result = List.generate(4, (index) => ResultPoint(0, 0));
     bool found = false;
-    List<int> counters = List.generate(pattern.length, (index) => 0);
+    List<int> counters = List.filled(pattern.length, 0);
     for (; startRow < height; startRow += _ROW_STEP) {
       List<int>? loc = _findGuardPattern(
           matrix, startColumn, startRow, width, pattern, counters);

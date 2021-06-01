@@ -35,7 +35,7 @@ class URIResultParser extends ResultParser {
   static final RegExp _URL_WITHOUT_PROTOCOL_PATTERN = RegExp(
       "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
       "(:\\d{1,5})?" + // maybe port
-      r"(/|\\?|$)"); // query, path or nothing
+      r"(/|\?|$)"); // query, path or nothing
 
   @override
   URIParsedResult? parse(Result result) {

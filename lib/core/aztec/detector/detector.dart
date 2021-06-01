@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
 import '../../common/bit_matrix.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/detector/white_rectangle_detector.dart';
@@ -214,7 +216,7 @@ class Detector {
     }
 
     int numECCodewords = numCodewords - numDataCodewords;
-    List<int> parameterWords = List.filled(numCodewords, 0);
+    Int32List parameterWords = Int32List(numCodewords);
     for (int i = numCodewords - 1; i >= 0; --i) {
       parameterWords[i] = parameterData & 0xF;
       parameterData >>= 4;

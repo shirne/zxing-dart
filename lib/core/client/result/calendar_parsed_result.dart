@@ -204,9 +204,4 @@ class CalendarParsedResult extends ParsedResult {
     return durationMS;
   }
 
-  static int _parseDateTimeString(String dateTimeString){
-    DateTime date = DateTime.parse(dateTimeString);
-    return date.millisecondsSinceEpoch;
-  }
-
 }

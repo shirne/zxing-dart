@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
+import 'package:fixnum/fixnum.dart';
+
 import 'generic_gfpoly.dart';
 
 /// <p>This class contains utility methods for performing mathematical operations over
@@ -41,8 +45,8 @@ class GenericGF {
   static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-  late List<int> _expTable;
-  late List<int> _logTable;
+  late Int32List _expTable;
+  late Int32List _logTable;
   late GenericGFPoly _zero;
   late GenericGFPoly _one;
   final int _size;
@@ -59,8 +63,8 @@ class GenericGF {
   ///  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
   ///  In most cases it should be 1, but for QR code it is 0.
   GenericGF(this._primitive, this._size, this._generatorBase) {
-    _expTable = List.filled(_size, 0);
-    _logTable = List.filled(_size, 0);
+    _expTable = Int32List(_size);
+    _logTable = Int32List(_size);
     int x = 1;
     for (int i = 0; i < _size; i++) {
       _expTable[i] = x;
@@ -74,8 +78,8 @@ class GenericGF {
       _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    _zero = GenericGFPoly(this, [0]);
-    _one = GenericGFPoly(this, [1]);
+    _zero = GenericGFPoly(this, Int32List.fromList([0]));
+    _one = GenericGFPoly(this, Int32List.fromList([1]));
   }
 
   GenericGFPoly getZero() {
@@ -94,7 +98,7 @@ class GenericGF {
     if (coefficient == 0) {
       return _zero;
     }
-    List<int> coefficients = List.generate(degree + 1, (index) => 0);
+    Int32List coefficients = Int32List(degree + 1);
     coefficients[0] = coefficient;
     return GenericGFPoly(this, coefficients);
   }
@@ -103,7 +107,7 @@ class GenericGF {
   ///
   /// @return sum/difference of a and b
   static int addOrSubtract(int a, int b) {
-    return a ^ b;
+    return (Int32(a) ^ Int32(b)).toInt();
   }
 
   /// @return 2 to the power of a in GF(size)

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
 import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
 
@@ -49,9 +51,9 @@ class ReedSolomonDecoder {
   /// @param received data and error-correction codewords
   /// @param twoS number of error-correction codewords available
   /// @throws ReedSolomonException if decoding fails for any reason
-  void decode(List<int> received, int twoS) {
+  void decode(Int32List received, int twoS) {
     GenericGFPoly poly = GenericGFPoly(_field, received);
-    List<int> syndromeCoefficients = List.filled(twoS, 0);
+    Int32List syndromeCoefficients = Int32List(twoS);
     bool noError = true;
     for (int i = 0; i < twoS; i++) {
       int eval = poly.evaluateAt(_field.exp(i + _field.getGeneratorBase()));
@@ -135,14 +137,14 @@ class ReedSolomonDecoder {
     return [sigma, omega];
   }
 
-  List<int> _findErrorLocations(GenericGFPoly errorLocator) {
+  Int32List _findErrorLocations(GenericGFPoly errorLocator) {
     // This is a direct application of Chien's search
     int numErrors = errorLocator.getDegree();
     if (numErrors == 1) {
       // shortcut
-      return [errorLocator.getCoefficient(1)];
+      return Int32List.fromList([errorLocator.getCoefficient(1)]);
     }
-    List<int> result = List.generate(numErrors, (index) => 0);
+    Int32List result = Int32List(numErrors);
     int e = 0;
     for (int i = 1; i < _field.getSize() && e < numErrors; i++) {
       if (errorLocator.evaluateAt(i) == 0) {
@@ -156,11 +158,11 @@ class ReedSolomonDecoder {
     return result;
   }
 
-  List<int> _findErrorMagnitudes(
+  Int32List _findErrorMagnitudes(
       GenericGFPoly errorEvaluator, List<int> errorLocations) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
-    List<int> result = List.generate(s, (index) => 0);
+    Int32List result = Int32List(s);
     for (int i = 0; i < s; i++) {
       int xiInverse = _field.inverse(errorLocations[i]);
       int denominator = 1;

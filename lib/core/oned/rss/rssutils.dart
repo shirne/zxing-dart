@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/** Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G. */
+/// Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G.
 class RSSUtils {
   RSSUtils._();
 

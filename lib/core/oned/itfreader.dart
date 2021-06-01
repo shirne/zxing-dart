@@ -48,7 +48,7 @@ class ITFReader extends OneDReader {
   static const int _w = 2; // Pixel width of a 2x wide line
   static const int _N = 1; // Pixed width of a narrow line
 
-  /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
+  /// Valid ITF lengths. Anything longer than the largest value is also allowed.
   static const List<int> _DEFAULT_ALLOWED_LENGTHS = [6, 8, 10, 12, 14];
 
   // Stores the actual narrow line width of the image being decoded.

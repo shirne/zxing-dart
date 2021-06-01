@@ -68,7 +68,7 @@ class CodaBarReader extends OneDReader {
 
   CodaBarReader()
       : _decodeRowResult = StringBuilder(),
-        _counters = List.generate(80, (index) => 0),
+        _counters = List.filled(80, 0),
         _counterLength = 0;
 
   @override
@@ -254,7 +254,7 @@ class CodaBarReader extends OneDReader {
     _counters[_counterLength] = e;
     _counterLength++;
     if (_counterLength >= _counters.length) {
-      List<int> temp = List.generate(_counterLength * 2, (index) => 0);
+      List<int> temp = List.filled(_counterLength * 2, 0);
       List.copyRange(temp, 0, _counters, 0, _counterLength);
       _counters = temp;
     }

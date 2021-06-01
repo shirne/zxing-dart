@@ -177,7 +177,7 @@ class PDF417ErrorCorrection {
   static String generateErrorCorrection(
       String dataCodewords, int errorCorrectionLevel) {
     int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    List<int> e = List.generate(k, (index) => 0);
+    List<int> e = List.filled(k, 0);
     int sld = dataCodewords.length;
     for (int i = 0; i < sld; i++) {
       int t1 = (dataCodewords.codeUnitAt(i) + e[e.length - 1]) % 929;

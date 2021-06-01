@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
 import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
 
@@ -26,7 +28,7 @@ class ReedSolomonEncoder {
   final List<GenericGFPoly> _cachedGenerators;
 
   ReedSolomonEncoder(this._field) : _cachedGenerators = [] {
-    _cachedGenerators.add(GenericGFPoly(_field, [1]));
+    _cachedGenerators.add(GenericGFPoly(_field, Int32List.fromList([1])));
   }
 
   GenericGFPoly _buildGenerator(int degree) {
@@ -35,7 +37,7 @@ class ReedSolomonEncoder {
         _cachedGenerators[_cachedGenerators.length - 1];
       for (int d = _cachedGenerators.length; d <= degree; d++) {
         GenericGFPoly nextGenerator = lastGenerator.multiply(GenericGFPoly(
-            _field, [1, _field.exp(d - 1 + _field.getGeneratorBase())]));
+            _field, Int32List.fromList([1, _field.exp(d - 1 + _field.getGeneratorBase())])));
         _cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
       }
@@ -52,7 +54,7 @@ class ReedSolomonEncoder {
       throw Exception("No data bytes provided");
     }
     GenericGFPoly generator = _buildGenerator(ecBytes);
-    List<int> infoCoefficients = List.generate(dataBytes, (index) => 0);
+    Int32List infoCoefficients = Int32List(dataBytes);
     List.copyRange(infoCoefficients, 0, toEncode, 0, dataBytes);
     GenericGFPoly info = GenericGFPoly(_field, infoCoefficients);
     info = info.multiplyByMonomial(ecBytes, 1);
