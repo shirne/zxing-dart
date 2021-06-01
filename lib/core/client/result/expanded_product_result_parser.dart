@@ -29,12 +29,10 @@ import '../../result.dart';
 import 'expanded_product_parsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Parses strings of digits that represent a RSS Extended code.
- * 
- * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
- * @author Agustín Delgado, Servinform, S.A.
- */
+/// Parses strings of digits that represent a RSS Extended code.
+/// 
+/// @author Antonio Manuel Benjumea Conde, Servinform, S.A.
+/// @author Agustín Delgado, Servinform, S.A.
 class ExpandedProductResultParser extends ResultParser {
   @override
   ExpandedProductParsedResult? parse(Result result) {

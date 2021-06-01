@@ -30,9 +30,7 @@ import '../../../../common/bit_array.dart';
 
 import 'ai01decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 abstract class AI01weightDecoder extends AI01decoder {
   AI01weightDecoder(BitArray information) : super(information);
 

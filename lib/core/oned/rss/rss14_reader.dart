@@ -32,9 +32,7 @@ import 'finder_pattern.dart';
 import 'pair.dart';
 import 'rssutils.dart';
 
-/**
- * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
- */
+/// Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
 class RSS14Reader extends AbstractRSSReader {
   static const List<int> _OUTSIDE_EVEN_TOTAL_SUBSET = [1, 10, 34, 70, 126];
   static const List<int> _INSIDE_ODD_TOTAL_SUBSET = [4, 20, 48, 81];

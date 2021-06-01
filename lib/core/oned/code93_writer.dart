@@ -20,9 +20,7 @@ import '../barcode_format.dart';
 import 'code93_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
-/**
- * This object renders a CODE93 code as a BitMatrix
- */
+/// This object renders a CODE93 code as a BitMatrix
 class Code93Writer extends OneDimensionalCodeWriter {
   @override
   @protected
@@ -30,10 +28,8 @@ class Code93Writer extends OneDimensionalCodeWriter {
     return [BarcodeFormat.CODE_93];
   }
 
-  /**
-   * @param contents barcode contents to encode. It should not be encoded for extended characters.
-   * @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
-   */
+  /// @param contents barcode contents to encode. It should not be encoded for extended characters.
+  /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
   @override
   List<bool> encodeContent(String contents) {
     contents = convertToExtended(contents);
@@ -76,14 +72,12 @@ class Code93Writer extends OneDimensionalCodeWriter {
     return result;
   }
 
-  /**
-   * @param target output to append to
-   * @param pos start position
-   * @param pattern pattern to append
-   * @param startColor unused
-   * @return 9
-   * @deprecated without replacement; intended as an internal-only method
-   */
+  /// @param target output to append to
+  /// @param pos start position
+  /// @param pattern pattern to append
+  /// @param startColor unused
+  /// @return 9
+  /// @deprecated without replacement; intended as an internal-only method
   @deprecated
   static int appendPatternDpr(
       List<bool> target, int pos, List<int> pattern, bool startColor) {

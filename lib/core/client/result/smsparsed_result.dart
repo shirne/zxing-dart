@@ -17,12 +17,10 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes an SMS message, including recipients, subject
- * and body text.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes an SMS message, including recipients, subject
+/// and body text.
+///
+/// @author Sean Owen
 class SMSParsedResult extends ParsedResult {
   final List<String> _numbers;
   final List<String>? _vias;

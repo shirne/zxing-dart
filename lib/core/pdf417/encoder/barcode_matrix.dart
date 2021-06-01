@@ -18,21 +18,17 @@ import 'dart:typed_data';
 
 import 'barcode_row.dart';
 
-/**
- * Holds all of the information for a barcode in a format where it can be easily accessible
- *
- * @author Jacob Haynes
- */
+/// Holds all of the information for a barcode in a format where it can be easily accessible
+///
+/// @author Jacob Haynes
 class BarcodeMatrix {
   final List<BarcodeRow> _matrix;
   int _currentRow = -1;
   final int _height;
   final int _width;
 
-  /**
-   * @param height the height of the matrix (Rows)
-   * @param width  the width of the matrix (Cols)
-   */
+  /// @param height the height of the matrix (Rows)
+  /// @param width  the width of the matrix (Cols)
   BarcodeMatrix(this._height, int width)
       : this._width = width * 17,
         this._matrix =

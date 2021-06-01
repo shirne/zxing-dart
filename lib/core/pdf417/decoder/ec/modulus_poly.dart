@@ -16,9 +16,7 @@
 
 import 'modulus_gf.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 class ModulusPoly {
   final ModulusGF _field;
   late List<int> _coefficients;
@@ -51,30 +49,22 @@ class ModulusPoly {
     return _coefficients;
   }
 
-  /**
-   * @return degree of this polynomial
-   */
+  /// @return degree of this polynomial
   int getDegree() {
     return _coefficients.length - 1;
   }
 
-  /**
-   * @return true iff this polynomial is the monomial "0"
-   */
+  /// @return true iff this polynomial is the monomial "0"
   bool isZero() {
     return _coefficients[0] == 0;
   }
 
-  /**
-   * @return coefficient of x^degree term in this polynomial
-   */
+  /// @return coefficient of x^degree term in this polynomial
   int getCoefficient(int degree) {
     return _coefficients[_coefficients.length - 1 - degree];
   }
 
-  /**
-   * @return evaluation of this polynomial at a given point
-   */
+  /// @return evaluation of this polynomial at a given point
   int evaluateAt(int a) {
     if (a == 0) {
       // Just return the x^0 coefficient

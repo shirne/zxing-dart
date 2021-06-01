@@ -18,16 +18,14 @@ import 'dart:typed_data';
 
 import 'luminance_source.dart';
 
-/**
- * This object extends LuminanceSource around an array of YUV data returned from the camera driver,
- * with the option to crop to a rectangle within the full data. This can be used to exclude
- * superfluous pixels around the perimeter and speed up decoding.
- *
- * It works for any pixel format where the Y channel is planar and appears first, including
- * YCbCr_420_SP and YCbCr_422_SP.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// This object extends LuminanceSource around an array of YUV data returned from the camera driver,
+/// with the option to crop to a rectangle within the full data. This can be used to exclude
+/// superfluous pixels around the perimeter and speed up decoding.
+///
+/// It works for any pixel format where the Y channel is planar and appears first, including
+/// YCbCr_420_SP and YCbCr_422_SP.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 class PlanarYUVLuminanceSource extends LuminanceSource {
   static const int _THUMBNAIL_SCALE_FACTOR = 2;
 
@@ -122,16 +120,12 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     return pixels;
   }
 
-  /**
-   * @return width of image from {@link #renderThumbnail()}
-   */
+  /// @return width of image from {@link #renderThumbnail()}
   int getThumbnailWidth() {
     return getWidth() ~/ _THUMBNAIL_SCALE_FACTOR;
   }
 
-  /**
-   * @return height of image from {@link #renderThumbnail()}
-   */
+  /// @return height of image from {@link #renderThumbnail()}
   int getThumbnailHeight() {
     return getHeight() ~/ _THUMBNAIL_SCALE_FACTOR;
   }

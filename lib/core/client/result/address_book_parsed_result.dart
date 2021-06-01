@@ -17,12 +17,10 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes contact information, like that in an address book
- * entry.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes contact information, like that in an address book
+/// entry.
+///
+/// @author Sean Owen
 class AddressBookParsedResult extends ParsedResult {
   final List<String>? _names;
   final List<String>? _nicknames;
@@ -95,12 +93,10 @@ class AddressBookParsedResult extends ParsedResult {
     return _nicknames;
   }
 
-  /**
-   * In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
-   * is often provided, called furigana, which spells the name phonetically.
-   *
-   * @return The pronunciation of the getNames() field, often in hiragana or katakana.
-   */
+  /// In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
+  /// is often provided, called furigana, which spells the name phonetically.
+  ///
+  /// @return The pronunciation of the getNames() field, often in hiragana or katakana.
   String? getPronunciation() {
     return _pronunciation;
   }
@@ -109,10 +105,8 @@ class AddressBookParsedResult extends ParsedResult {
     return _phoneNumbers;
   }
 
-  /**
-   * @return optional descriptions of the type of each phone number. It could be like "HOME", but,
-   *  there is no guaranteed or standard format.
-   */
+  /// @return optional descriptions of the type of each phone number. It could be like "HOME", but,
+  ///  there is no guaranteed or standard format.
   List<String>? getPhoneTypes() {
     return _phoneTypes;
   }
@@ -121,10 +115,8 @@ class AddressBookParsedResult extends ParsedResult {
     return _emails;
   }
 
-  /**
-   * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
-   *  there is no guaranteed or standard format.
-   */
+  /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+  ///  there is no guaranteed or standard format.
   List<String>? getEmailTypes() {
     return _emailTypes;
   }
@@ -141,10 +133,8 @@ class AddressBookParsedResult extends ParsedResult {
     return _addresses;
   }
 
-  /**
-   * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
-   *  there is no guaranteed or standard format.
-   */
+  /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+  ///  there is no guaranteed or standard format.
   List<String>? getAddressTypes() {
     return _addressTypes;
   }
@@ -161,16 +151,12 @@ class AddressBookParsedResult extends ParsedResult {
     return _urls;
   }
 
-  /**
-   * @return birthday formatted as yyyyMMdd (e.g. 19780917)
-   */
+  /// @return birthday formatted as yyyyMMdd (e.g. 19780917)
   String? getBirthday() {
     return _birthday;
   }
 
-  /**
-   * @return a location as a latitude/longitude pair
-   */
+  /// @return a location as a latitude/longitude pair
   List<String>? getGeo() {
     return _geo;
   }

@@ -29,9 +29,7 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'decoder/decoder.dart';
 
-/**
- * This implementation can detect and decode a MaxiCode in an image.
- */
+/// This implementation can detect and decode a MaxiCode in an image.
 class MaxiCodeReader implements Reader {
   static const List<ResultPoint> _NO_POINTS = [];
   static const int _MATRIX_WIDTH = 30;
@@ -60,12 +58,10 @@ class MaxiCodeReader implements Reader {
     // do nothing
   }
 
-  /**
-   * This method detects a code in a "pure" image -- that is, pure monochrome image
-   * which contains only an unrotated, unskewed, image of a code, with some white border
-   * around it. This is a specialized method that works exceptionally fast in this special
-   * case.
-   */
+  /// This method detects a code in a "pure" image -- that is, pure monochrome image
+  /// which contains only an unrotated, unskewed, image of a code, with some white border
+  /// around it. This is a specialized method that works exceptionally fast in this special
+  /// case.
   static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? enclosingRectangle = image.getEnclosingRectangle();
     if (enclosingRectangle == null) {

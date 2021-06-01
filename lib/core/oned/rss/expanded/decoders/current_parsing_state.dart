@@ -26,9 +26,7 @@
 
 enum _State { NUMERIC, ALPHA, ISO_IEC_646 }
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class CurrentParsingState {
   int _position = 0;
   _State _encoding = _State.NUMERIC;

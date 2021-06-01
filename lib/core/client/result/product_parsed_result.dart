@@ -17,11 +17,9 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes a product by an identifier of some kind.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// Represents a parsed result that encodes a product by an identifier of some kind.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 class ProductParsedResult extends ParsedResult {
   final String _productID;
   final String _normalizedProductID;

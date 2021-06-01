@@ -18,13 +18,11 @@ import 'dart:typed_data';
 
 import 'luminance_source.dart';
 
-/**
- * This class is used to help decode images from files which arrive as RGB data from
- * an ARGB pixel array. It does not support rotation.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Betaminos
- */
+/// This class is used to help decode images from files which arrive as RGB data from
+/// an ARGB pixel array. It does not support rotation.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Betaminos
 class RGBLuminanceSource extends LuminanceSource {
   final Uint8List _luminances;
   final int _dataWidth;

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * Simply encapsulates a width and height.
- */
+/// Simply encapsulates a width and height.
 class Dimension {
   final int _width;
   final int _height;

@@ -16,25 +16,19 @@
 
 import 'dart:typed_data';
 
-/**
- * @author Jacob Haynes
- */
+/// @author Jacob Haynes
 class BarcodeRow {
   final Uint8List _row;
   //A tacker for position in the bar
   int _currentLocation = 0;
 
-  /**
-   * Creates a Barcode row of the width
-   */
+  /// Creates a Barcode row of the width
   BarcodeRow(int width) : _row = Uint8List(width);
 
-  /**
-   * Sets a specific location in the bar
-   *
-   * @param x The location in the bar
-   * @param value Black if true, white if false;
-   */
+  /// Sets a specific location in the bar
+  ///
+  /// @param x The location in the bar
+  /// @param value Black if true, white if false;
   void set(int x, int value) {
     _row[x] = value;
   }
@@ -43,22 +37,18 @@ class BarcodeRow {
     _row[x] = (black ? 1 : 0);
   }
 
-  /**
-   * @param black A bool which is true if the bar black false if it is white
-   * @param width How many spots wide the bar is.
-   */
+  /// @param black A bool which is true if the bar black false if it is white
+  /// @param width How many spots wide the bar is.
   void addBar(bool black, int width) {
     for (int ii = 0; ii < width; ii++) {
       _set(_currentLocation++, black);
     }
   }
 
-  /**
-   * This function scales the row
-   *
-   * @param scale How much you want the image to be scaled, must be greater than or equal to 1.
-   * @return the scaled row
-   */
+  /// This function scales the row
+  ///
+  /// @param scale How much you want the image to be scaled, must be greater than or equal to 1.
+  /// @return the scaled row
   Uint8List getScaledRow(int scale) {
     Uint8List output = Uint8List(_row.length * scale);
     for (int i = 0; i < output.length; i++) {

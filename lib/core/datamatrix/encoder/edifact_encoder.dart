@@ -54,12 +54,10 @@ class EdifactEncoder implements Encoder {
     _handleEOD(context, buffer);
   }
 
-  /**
-   * Handle "end of data" situations
-   *
-   * @param context the encoder context
-   * @param buffer  the buffer with the remaining encoded characters
-   */
+  /// Handle "end of data" situations
+  ///
+  /// @param context the encoder context
+  /// @param buffer  the buffer with the remaining encoded characters
   static void _handleEOD(EncoderContext context, StringBuilder buffer) {
     try {
       int count = buffer.length;

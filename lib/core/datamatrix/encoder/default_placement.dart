@@ -16,22 +16,18 @@
 
 import 'dart:typed_data';
 
-/**
- * Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
- */
+/// Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
 class DefaultPlacement {
   final String _codewords;
   final int _numrows;
   final int _numcols;
   final Uint8List _bits;
 
-  /**
-   * Main constructor
-   *
-   * @param codewords the codewords to place
-   * @param numcols   the number of columns
-   * @param numrows   the number of rows
-   */
+  /// Main constructor
+  ///
+  /// @param codewords the codewords to place
+  /// @param numcols   the number of columns
+  /// @param numrows   the number of rows
   DefaultPlacement(this._codewords, this._numcols, this._numrows)
       : this._bits =
             Uint8List.fromList(List.generate(_numcols * _numrows, (index) => -1));
@@ -126,13 +122,11 @@ class DefaultPlacement {
     _setBit(col, row, v != 0);
   }
 
-  /**
-   * Places the 8 bits of a utah-shaped symbol character in ECC200.
-   *
-   * @param row the row
-   * @param col the column
-   * @param pos character position
-   */
+  /// Places the 8 bits of a utah-shaped symbol character in ECC200.
+  ///
+  /// @param row the row
+  /// @param col the column
+  /// @param pos character position
   void _utah(int row, int col, int pos) {
     _module(row - 2, col - 2, pos, 1);
     _module(row - 2, col - 1, pos, 2);

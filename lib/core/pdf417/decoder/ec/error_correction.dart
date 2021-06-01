@@ -18,27 +18,23 @@ import '../../../checksum_exception.dart';
 import 'modulus_gf.dart';
 import 'modulus_poly.dart';
 
-/**
- * <p>PDF417 error correction implementation.</p>
- *
- * <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
- * is quite useful in understanding the algorithm.</p>
- *
- * @author Sean Owen
- * @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
- */
+/// <p>PDF417 error correction implementation.</p>
+///
+/// <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
+/// is quite useful in understanding the algorithm.</p>
+///
+/// @author Sean Owen
+/// @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
 class ErrorCorrection {
   final ModulusGF _field;
 
   ErrorCorrection() : this._field = ModulusGF.PDF417_GF;
 
-  /**
-   * @param received received codewords
-   * @param numECCodewords number of those codewords used for EC
-   * @param erasures location of erasures
-   * @return number of errors
-   * @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
-   */
+  /// @param received received codewords
+  /// @param numECCodewords number of those codewords used for EC
+  /// @param erasures location of erasures
+  /// @return number of errors
+  /// @throws ChecksumException if errors cannot be corrected, maybe because of too many errors
   int decode(List<int> received, int numECCodewords, List<int>? erasures) {
     ModulusPoly poly = ModulusPoly(_field, received);
     List<int> S = List.filled(numECCodewords, 0);

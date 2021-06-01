@@ -18,11 +18,9 @@ import '../../dimension.dart';
 import 'data_matrix_symbol_info144.dart';
 import 'symbol_shape_hint.dart';
 
-/**
- * Symbol info table for DataMatrix.
- *
- * @version $Id$
- */
+/// Symbol info table for DataMatrix.
+///
+/// @version $Id$
 class SymbolInfo {
   static const List<SymbolInfo> PROD_SYMBOLS = [
     SymbolInfo(false, 3, 5, 8, 8, 1),
@@ -69,11 +67,9 @@ class SymbolInfo {
   final int matrixWidth;
   final int matrixHeight;
 
-  /**
-   * Overrides the symbol info set used by this class. Used for testing purposes.
-   *
-   * @param override the symbol info set to use
-   */
+  /// Overrides the symbol info set used by this class. Used for testing purposes.
+  ///
+  /// @param override the symbol info set to use
   static void overrideSymbolSet(List<SymbolInfo> override) {
     _symbols = override;
   }

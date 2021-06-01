@@ -23,12 +23,10 @@ import '../pdf417_result_metadata.dart';
 
 enum _Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
 
-/**
- * <p>This class contains the methods for decoding the PDF417 codewords.</p>
- *
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author Guenther Grau
- */
+/// <p>This class contains the methods for decoding the PDF417 codewords.</p>
+///
+/// @author SITA Lab (kevin.osullivan@sita.aero)
+/// @author Guenther Grau
 class DecodedBitStreamParser {
   static const int _TEXT_COMPACTION_MODE_LATCH = 900;
   static const int _BYTE_COMPACTION_MODE_LATCH = 901;
@@ -64,10 +62,8 @@ class DecodedBitStreamParser {
 
   static final List<int> _MIXED_CHARS = r"0123456789&\r\t,:#-.$/+%*=^".codeUnits;
 
-  /**
-   * Table containing values for the exponent of 900.
-   * This is used in the numeric compaction decode algorithm.
-   */
+  /// Table containing values for the exponent of 900.
+  /// This is used in the numeric compaction decode algorithm.
   static final BigInt _nineHundred = BigInt.from(900);
   static final List<BigInt> EXP900 =
       List.generate(16, (index) => _nineHundred.pow(index));
@@ -249,16 +245,14 @@ class DecodedBitStreamParser {
     return codeIndex;
   }
 
-  /**
-   * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
-   * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
-   * well as selected control characters.
-   *
-   * @param codewords The array of codewords (data + error)
-   * @param codeIndex The current index into the codeword array.
-   * @param result    The decoded data is appended to the result.
-   * @return The next index into the codeword array.
-   */
+  /// Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
+  /// encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
+  /// well as selected control characters.
+  ///
+  /// @param codewords The array of codewords (data + error)
+  /// @param codeIndex The current index into the codeword array.
+  /// @param result    The decoded data is appended to the result.
+  /// @return The next index into the codeword array.
   static int _textCompaction(
       List<int> codewords, int codeIndex, StringBuffer result) {
     // 2 character per codeword
@@ -310,22 +304,20 @@ class DecodedBitStreamParser {
     return codeIndex;
   }
 
-  /**
-   * The Text Compaction mode includes all the printable ASCII characters
-   * (i.e. values from 32 to 126) and three ASCII control characters: HT or tab
-   * (ASCII value 9), LF or line feed (ASCII value 10), and CR or carriage
-   * return (ASCII value 13). The Text Compaction mode also includes various latch
-   * and shift characters which are used exclusively within the mode. The Text
-   * Compaction mode encodes up to 2 characters per codeword. The compaction rules
-   * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
-   * switches are defined in 5.4.2.3.
-   *
-   * @param textCompactionData The text compaction data.
-   * @param byteCompactionData The byte compaction data if there
-   *                           was a mode shift.
-   * @param length             The size of the text compaction and byte compaction data.
-   * @param result             The decoded data is appended to the result.
-   */
+  /// The Text Compaction mode includes all the printable ASCII characters
+  /// (i.e. values from 32 to 126) and three ASCII control characters: HT or tab
+  /// (ASCII value 9), LF or line feed (ASCII value 10), and CR or carriage
+  /// return (ASCII value 13). The Text Compaction mode also includes various latch
+  /// and shift characters which are used exclusively within the mode. The Text
+  /// Compaction mode encodes up to 2 characters per codeword. The compaction rules
+  /// for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
+  /// switches are defined in 5.4.2.3.
+  ///
+  /// @param textCompactionData The text compaction data.
+  /// @param byteCompactionData The byte compaction data if there
+  ///                           was a mode shift.
+  /// @param length             The size of the text compaction and byte compaction data.
+  /// @param result             The decoded data is appended to the result.
   static void _decodeTextCompaction(List<int> textCompactionData,
       List<int> byteCompactionData, int length, StringBuffer result) {
     // Beginning from an initial state of the Alpha sub-mode
@@ -496,18 +488,16 @@ class DecodedBitStreamParser {
     }
   }
 
-  /**
-   * Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
-   * This includes all ASCII characters value 0 to 127 inclusive and provides for international
-   * character set support.
-   *
-   * @param mode      The byte compaction mode i.e. 901 or 924
-   * @param codewords The array of codewords (data + error)
-   * @param encoding  Currently active character encoding
-   * @param codeIndex The current index into the codeword array.
-   * @param result    The decoded data is appended to the result.
-   * @return The next index into the codeword array.
-   */
+  /// Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
+  /// This includes all ASCII characters value 0 to 127 inclusive and provides for international
+  /// character set support.
+  ///
+  /// @param mode      The byte compaction mode i.e. 901 or 924
+  /// @param codewords The array of codewords (data + error)
+  /// @param encoding  Currently active character encoding
+  /// @param codeIndex The current index into the codeword array.
+  /// @param result    The decoded data is appended to the result.
+  /// @return The next index into the codeword array.
   static int _byteCompaction(int mode, List<int> codewords, Encoding encoding,
       int codeIndex, StringBuffer result) {
     List<int> decodedBytes = [];
@@ -613,14 +603,12 @@ class DecodedBitStreamParser {
     return codeIndex;
   }
 
-  /**
-   * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
-   *
-   * @param codewords The array of codewords (data + error)
-   * @param codeIndex The current index into the codeword array.
-   * @param result    The decoded data is appended to the result.
-   * @return The next index into the codeword array.
-   */
+  /// Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
+  ///
+  /// @param codewords The array of codewords (data + error)
+  /// @param codeIndex The current index into the codeword array.
+  /// @param result    The decoded data is appended to the result.
+  /// @return The next index into the codeword array.
   static int _numericCompaction(
       List<int> codewords, int codeIndex, StringBuffer result) {
     int count = 0;
@@ -664,13 +652,11 @@ class DecodedBitStreamParser {
     return codeIndex;
   }
 
-  /**
-   * Convert a list of Numeric Compacted codewords from Base 900 to Base 10.
-   *
-   * @param codewords The array of codewords
-   * @param count     The number of codewords
-   * @return The decoded string representing the Numeric data.
-   */
+  /// Convert a list of Numeric Compacted codewords from Base 900 to Base 10.
+  ///
+  /// @param codewords The array of codewords
+  /// @param count     The number of codewords
+  /// @return The decoded string representing the Numeric data.
   /*
      EXAMPLE
      Encode the fifteen digit numeric string 000213298174000

@@ -24,10 +24,8 @@ import 'byte_matrix.dart';
 import 'mask_util.dart';
 import 'qrcode.dart';
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
+/// @author satorux@google.com (Satoru Takabayashi) - creator
+/// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class MatrixUtil {
   static const List<List<int>> _POSITION_DETECTION_PATTERN = [
     [1, 1, 1, 1, 1, 1, 1],

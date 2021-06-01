@@ -28,11 +28,9 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
-/**
- * <p>Decodes Code 128 barcodes.</p>
- *
- * @author Sean Owen
- */
+/// <p>Decodes Code 128 barcodes.</p>
+///
+/// @author Sean Owen
 class Code128Reader extends OneDReader {
   static const List<List<int>> CODE_PATTERNS = [
     [2, 1, 2, 2, 2, 2], // 0

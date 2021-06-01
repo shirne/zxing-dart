@@ -28,39 +28,33 @@ import 'bit_matrix_parser.dart';
 import 'data_block.dart';
 import 'decoded_bit_stream_parser.dart';
 
-/**
- * <p>The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
- * the Data Matrix Code from an image.</p>
- *
- * @author bbrown@google.com (Brian Brown)
- */
+/// <p>The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
+/// the Data Matrix Code from an image.</p>
+///
+/// @author bbrown@google.com (Brian Brown)
 class Decoder {
   final ReedSolomonDecoder _rsDecoder;
 
   Decoder():_rsDecoder = ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
 
-  /**
-   * <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
-   * "true" is taken to mean a black module.</p>
-   *
-   * @param image booleans representing white/black Data Matrix Code modules
-   * @return text and bytes encoded within the Data Matrix Code
-   * @throws FormatException if the Data Matrix Code cannot be decoded
-   * @throws ChecksumException if error correction fails
-   */
+  /// <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
+  /// "true" is taken to mean a black module.</p>
+  ///
+  /// @param image booleans representing white/black Data Matrix Code modules
+  /// @return text and bytes encoded within the Data Matrix Code
+  /// @throws FormatException if the Data Matrix Code cannot be decoded
+  /// @throws ChecksumException if error correction fails
   DecoderResult decode(List<List<bool>> image) {
     return decodeMatrix(BitMatrix.parse(image));
   }
 
-  /**
-   * <p>Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
-   * to mean a black module.</p>
-   *
-   * @param bits booleans representing white/black Data Matrix Code modules
-   * @return text and bytes encoded within the Data Matrix Code
-   * @throws FormatException if the Data Matrix Code cannot be decoded
-   * @throws ChecksumException if error correction fails
-   */
+  /// <p>Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
+  /// to mean a black module.</p>
+  ///
+  /// @param bits booleans representing white/black Data Matrix Code modules
+  /// @return text and bytes encoded within the Data Matrix Code
+  /// @throws FormatException if the Data Matrix Code cannot be decoded
+  /// @throws ChecksumException if error correction fails
   DecoderResult decodeMatrix(BitMatrix bits) {
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = BitMatrixParser(bits);
@@ -95,14 +89,12 @@ class Decoder {
     return DecodedBitStreamParser.decode(resultBytes);
   }
 
-  /**
-   * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
-   * correct the errors in-place using Reed-Solomon error correction.</p>
-   *
-   * @param codewordBytes data and error correction codewords
-   * @param numDataCodewords number of codewords that are data bytes
-   * @throws ChecksumException if error correction fails
-   */
+  /// <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+  /// correct the errors in-place using Reed-Solomon error correction.</p>
+  ///
+  /// @param codewordBytes data and error correction codewords
+  /// @param numDataCodewords number of codewords that are data bytes
+  /// @throws ChecksumException if error correction fails
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints

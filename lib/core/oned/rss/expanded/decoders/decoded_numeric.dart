@@ -26,10 +26,8 @@
 
 import 'decoded_object.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class DecodedNumeric extends DecodedObject {
   final int _firstDigit;
   final int _secondDigit;

@@ -17,11 +17,9 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes a telephone number.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes a telephone number.
+///
+/// @author Sean Owen
 class TelParsedResult extends ParsedResult {
   final String? _number;
   final String? _telURI;

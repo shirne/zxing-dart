@@ -17,12 +17,10 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * A simple result type encapsulating a string that has no further
- * interpretation.
- * 
- * @author Sean Owen
- */
+/// A simple result type encapsulating a string that has no further
+/// interpretation.
+/// 
+/// @author Sean Owen
 class TextParsedResult extends ParsedResult {
   final String _text;
   final String? _language;

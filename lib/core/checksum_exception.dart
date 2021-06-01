@@ -16,12 +16,10 @@
 
 import 'reader_exception.dart';
 
-/**
- * Thrown when a barcode was successfully detected and decoded, but
- * was not returned because its checksum feature failed.
- *
- * @author Sean Owen
- */
+/// Thrown when a barcode was successfully detected and decoded, but
+/// was not returned because its checksum feature failed.
+///
+/// @author Sean Owen
 class ChecksumException extends ReaderException {
   static final ChecksumException _INSTANCE = ChecksumException();
 

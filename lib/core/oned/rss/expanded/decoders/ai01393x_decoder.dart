@@ -31,9 +31,7 @@ import '../../../../not_found_exception.dart';
 import 'ai01decoder.dart';
 import 'decoded_information.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01393xDecoder extends AI01decoder {
   static const int _HEADER_SIZE = 5 + 1 + 2;
   static const int _LAST_DIGIT_SIZE = 2;

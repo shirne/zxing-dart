@@ -32,20 +32,16 @@ enum _Mode {
   ECI_ENCODE
 }
 
-/**
- * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
- * in one Data Matrix Code. This class decodes the bits back into text.</p>
- *
- * <p>See ISO 16022:2006, 5.2.1 - 5.2.9.2</p>
- *
- * @author bbrown@google.com (Brian Brown)
- * @author Sean Owen
- */
+/// <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
+/// in one Data Matrix Code. This class decodes the bits back into text.</p>
+///
+/// <p>See ISO 16022:2006, 5.2.1 - 5.2.9.2</p>
+///
+/// @author bbrown@google.com (Brian Brown)
+/// @author Sean Owen
 class DecodedBitStreamParser {
-  /**
-   * See ISO 16022:2006, Annex C Table C.1
-   * The C40 Basic Character Set (*'s used for placeholders for the shift values)
-   */
+  /// See ISO 16022:2006, Annex C Table C.1
+  /// The C40 Basic Character Set (*'s used for placeholders for the shift values)
   static const List<String> _C40_BASIC_SET_CHARS = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', //
@@ -57,10 +53,8 @@ class DecodedBitStreamParser {
     '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
   ];
 
-  /**
-   * See ISO 16022:2006, Annex C Table C.2
-   * The Text Basic Character Set (*'s used for placeholders for the shift values)
-   */
+  /// See ISO 16022:2006, Annex C Table C.2
+  /// The Text Basic Character Set (*'s used for placeholders for the shift values)
   static const List<String> _TEXT_BASIC_SET_CHARS = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
@@ -146,9 +140,7 @@ class DecodedBitStreamParser {
         byteSegments.isEmpty ? null : byteSegments, null, symbologyModifier);
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
-   */
+  /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
   static _Mode _decodeAsciiSegment(BitSource bits, StringBuffer result,
       StringBuilder resultTrailer, Set<int> fnc1positions) {
     bool upperShift = false;
@@ -222,9 +214,7 @@ class DecodedBitStreamParser {
     return _Mode.ASCII_ENCODE;
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
-   */
+  /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
   static void _decodeC40Segment(
       BitSource bits, StringBuffer result, Set<int> fnc1positions) {
     // Three C40 values are encoded in a 16-bit value as
@@ -315,9 +305,7 @@ class DecodedBitStreamParser {
     } while (bits.available() > 0);
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
-   */
+  /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
   static void _decodeTextSegment(
       BitSource bits, StringBuffer result, Set<int> fnc1positions) {
     // Three Text values are encoded in a 16-bit value as
@@ -413,9 +401,7 @@ class DecodedBitStreamParser {
     } while (bits.available() > 0);
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.7
-   */
+  /// See ISO 16022:2006, 5.2.7
   static void _decodeAnsiX12Segment(BitSource bits, StringBuffer result) {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
@@ -475,9 +461,7 @@ class DecodedBitStreamParser {
     result[2] = fullBitValue - temp * 40;
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
-   */
+  /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
   static void _decodeEdifactSegment(BitSource bits, StringBuffer result) {
     do {
       // If there is only two or less bytes left then it will be encoded as ASCII
@@ -508,9 +492,7 @@ class DecodedBitStreamParser {
     } while (bits.available() > 0);
   }
 
-  /**
-   * See ISO 16022:2006, 5.2.9 and Annex B, B.2
-   */
+  /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
   static void _decodeBase256Segment(
       BitSource bits, StringBuffer result, List<Uint8List> byteSegments) {
     // Figure out how long the Base 256 Segment is.
@@ -545,9 +527,7 @@ class DecodedBitStreamParser {
     result.write(latin1.decode(Uint8List.fromList(bytes)));
   }
 
-  /**
-   * See ISO 16022:2006, Annex B, B.2
-   */
+  /// See ISO 16022:2006, Annex B, B.2
   static int _unrandomize255State(
       int randomizedBase256Codeword, int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;

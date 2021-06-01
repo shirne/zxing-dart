@@ -17,11 +17,9 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes a product ISBN number.
- *
- * @author jbreiden@google.com (Jeff Breidenbach)
- */
+/// Represents a parsed result that encodes a product ISBN number.
+///
+/// @author jbreiden@google.com (Jeff Breidenbach)
 class ISBNParsedResult extends ParsedResult {
   final String _isbn;
 

@@ -34,10 +34,8 @@ import 'decoded_information.dart';
 import 'decoded_numeric.dart';
 import 'field_parser.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class GeneralAppIdDecoder {
   final BitArray _information;
   final CurrentParsingState _current = CurrentParsingState();

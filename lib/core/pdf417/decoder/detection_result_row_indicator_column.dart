@@ -24,9 +24,7 @@ import 'bounding_box.dart';
 import 'codeword.dart';
 import 'detection_result_column.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   final bool isLeft;
 

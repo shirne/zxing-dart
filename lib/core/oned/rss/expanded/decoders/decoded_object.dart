@@ -24,9 +24,7 @@
  *   http://www.piramidepse.com/
  */
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 abstract class DecodedObject {
   final int _newPosition;
 

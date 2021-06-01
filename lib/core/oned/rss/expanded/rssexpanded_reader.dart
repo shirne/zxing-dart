@@ -43,10 +43,8 @@ import 'decoders/abstract_expanded_decoder.dart';
 import 'expanded_pair.dart';
 import 'expanded_row.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class RSSExpandedReader extends AbstractRSSReader {
   static const List<int> _SYMBOL_WIDEST = [7, 5, 4, 3, 1];
   static const List<int> _EVEN_TOTAL_SUBSET = [4, 20, 52, 104, 204];

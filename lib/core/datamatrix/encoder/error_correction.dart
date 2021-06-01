@@ -20,21 +20,15 @@ import '../../common/string_builder.dart';
 
 import 'symbol_info.dart';
 
-/**
- * Error Correction Code for ECC200.
- */
+/// Error Correction Code for ECC200.
 class ErrorCorrection {
 
-  /**
-   * Lookup table which factors to use for which number of error correction codewords.
-   * See FACTORS.
-   */
+  /// Lookup table which factors to use for which number of error correction codewords.
+  /// See FACTORS.
   static const List<int> _FACTOR_SETS
       = [5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68];
 
-  /**
-   * Precomputed polynomial factors for ECC 200.
-   */
+  /// Precomputed polynomial factors for ECC 200.
   static const List<List<int>> _FACTORS = [
       [228, 48, 15, 111, 62],
       [23, 68, 144, 134, 240, 92, 254],
@@ -93,13 +87,11 @@ class ErrorCorrection {
 
   ErrorCorrection._();
 
-  /**
-   * Creates the ECC200 error correction for an encoded message.
-   *
-   * @param codewords  the codewords
-   * @param symbolInfo information about the symbol to be encoded
-   * @return the codewords with interleaved error correction.
-   */
+  /// Creates the ECC200 error correction for an encoded message.
+  ///
+  /// @param codewords  the codewords
+  /// @param symbolInfo information about the symbol to be encoded
+  /// @return the codewords with interleaved error correction.
   static String encodeECC200(String codewords, SymbolInfo symbolInfo) {
     if (codewords.length != symbolInfo.getDataCapacity()) {
       throw Exception(

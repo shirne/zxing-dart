@@ -18,20 +18,16 @@ import '../../common/detector/math_utils.dart';
 
 import 'error_correction_level.dart';
 
-/**
- * <p>Encapsulates a QR Code's format information, including the data mask used and
- * error correction level.</p>
- *
- * @author Sean Owen
- * @see DataMask
- * @see ErrorCorrectionLevel
- */
+/// <p>Encapsulates a QR Code's format information, including the data mask used and
+/// error correction level.</p>
+///
+/// @author Sean Owen
+/// @see DataMask
+/// @see ErrorCorrectionLevel
 class FormatInformation {
   static const int _FORMAT_INFO_MASK_QR = 0x5412;
 
-  /**
-   * See ISO 18004:2006, Annex C, Table C.1
-   */
+  /// See ISO 18004:2006, Annex C, Table C.1
   static const List<List<int>> _FORMAT_INFO_DECODE_LOOKUP = [
     [0x5412, 0x00],
     [0x5125, 0x01],
@@ -82,13 +78,11 @@ class FormatInformation {
     return MathUtils.bitCount(a ^ b);
   }
 
-  /**
-   * @param maskedFormatInfo1 format info indicator, with mask still applied
-   * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
-   *  to establish best match
-   * @return information about the format it specifies, or {@code null}
-   *  if doesn't seem to match any known pattern
-   */
+  /// @param maskedFormatInfo1 format info indicator, with mask still applied
+  /// @param maskedFormatInfo2 second copy of same info; both are checked at the same time
+  ///  to establish best match
+  /// @return information about the format it specifies, or {@code null}
+  ///  if doesn't seem to match any known pattern
   static FormatInformation? decodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {
     FormatInformation? formatInfo =

@@ -18,11 +18,9 @@ import '../../result.dart';
 import 'result_parser.dart';
 import 'tel_parsed_result.dart';
 
-/**
- * Parses a "tel:" URI result, which specifies a phone number.
- *
- * @author Sean Owen
- */
+/// Parses a "tel:" URI result, which specifies a phone number.
+///
+/// @author Sean Owen
 class TelResultParser extends ResultParser {
   @override
   TelParsedResult? parse(Result result) {

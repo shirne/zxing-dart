@@ -33,10 +33,8 @@ import '../../../../not_found_exception.dart';
 import 'ai01decoder.dart';
 import 'ai01weight_decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class AI013x0x1xDecoder extends AI01weightDecoder {
   static const int _HEADER_SIZE = 7 + 1;
   static const int _WEIGHT_SIZE = 20;

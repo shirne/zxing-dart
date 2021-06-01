@@ -34,21 +34,17 @@ import 'detector/pdf417_detector_result.dart';
 import 'pdf417_common.dart';
 import 'pdf417_result_metadata.dart';
 
-/**
- * This implementation can detect and decode PDF417 codes in an image.
- *
- * @author Guenther Grau
- */
+/// This implementation can detect and decode PDF417 codes in an image.
+///
+/// @author Guenther Grau
 class PDF417Reader implements Reader, MultipleBarcodeReader {
   static const List<Result> _EMPTY_RESULT_ARRAY = [];
 
-  /**
-   * Locates and decodes a PDF417 code in an image.
-   *
-   * @return a String representing the content encoded by the PDF417 code
-   * @throws NotFoundException if a PDF417 code cannot be found,
-   * @throws FormatException if a PDF417 cannot be decoded
-   */
+  /// Locates and decodes a PDF417 code in an image.
+  ///
+  /// @return a String representing the content encoded by the PDF417 code
+  /// @throws NotFoundException if a PDF417 code cannot be found,
+  /// @throws FormatException if a PDF417 cannot be decoded
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     List<Result> result = _decodeStatic(image, hints, false);

@@ -26,20 +26,18 @@ import '../../../not_found_exception.dart';
 import '../../../result_point.dart';
 import '../../../result_point_callback.dart';
 
-/**
- * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
- * markers at three corners of a QR Code.</p>
- *
- * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
- *
- * <p>In contrast to {@link FinderPatternFinder}, this class will return an array of all possible
- * QR code locations in the image.</p>
- *
- * <p>Use the TRY_HARDER hint to ask for a more thorough detection.</p>
- *
- * @author Sean Owen
- * @author Hannes Erven
- */
+/// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+/// markers at three corners of a QR Code.</p>
+///
+/// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+///
+/// <p>In contrast to {@link FinderPatternFinder}, this class will return an array of all possible
+/// QR code locations in the image.</p>
+///
+/// <p>Use the TRY_HARDER hint to ask for a more thorough detection.</p>
+///
+/// @author Sean Owen
+/// @author Hannes Erven
 class MultiFinderPatternFinder extends FinderPatternFinder {
   static final List<FinderPatternInfo> _EMPTY_RESULT_ARRAY = [];
   static final List<FinderPattern> _EMPTY_FP_ARRAY = [];
@@ -53,18 +51,14 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   // min. legal count per modules per QR code edge (11)
   static const double _MIN_MODULE_COUNT_PER_EDGE = 9;
 
-  /**
-   * More or less arbitrary cutoff point for determining if two finder patterns might belong
-   * to the same code if they differ less than DIFF_MODSIZE_CUTOFF_PERCENT percent in their
-   * estimated modules sizes.
-   */
+  /// More or less arbitrary cutoff point for determining if two finder patterns might belong
+  /// to the same code if they differ less than DIFF_MODSIZE_CUTOFF_PERCENT percent in their
+  /// estimated modules sizes.
   static const double _DIFF_MODSIZE_CUTOFF_PERCENT = 0.05;
 
-  /**
-   * More or less arbitrary cutoff point for determining if two finder patterns might belong
-   * to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
-   * estimated modules sizes.
-   */
+  /// More or less arbitrary cutoff point for determining if two finder patterns might belong
+  /// to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
+  /// estimated modules sizes.
   static const double _DIFF_MODSIZE_CUTOFF = 0.5;
 
   MultiFinderPatternFinder(
@@ -83,12 +77,10 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
             : 0;
   }
 
-  /**
-   * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-   *         those that have been detected at least 2 times, and whose module
-   *         size differs from the average among those patterns the least
-   * @throws NotFoundException if 3 such finder patterns do not exist
-   */
+  /// @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+  ///         those that have been detected at least 2 times, and whose module
+  ///         size differs from the average among those patterns the least
+  /// @throws NotFoundException if 3 such finder patterns do not exist
   List<List<FinderPattern>> _selectMultipleBestPatterns() {
     List<FinderPattern> possibleCenters = super.getPossibleCenters();
     int size = possibleCenters.length;

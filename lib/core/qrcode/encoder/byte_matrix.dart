@@ -16,12 +16,10 @@
 
 import 'dart:typed_data';
 
-/**
- * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
- * -1, 0, and 1, I'm going to use less memory and go with bytes.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
+/// -1, 0, and 1, I'm going to use less memory and go with bytes.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 class ByteMatrix {
   final List<Int8List> _bytes;
   final int _width;
@@ -42,9 +40,7 @@ class ByteMatrix {
     return _bytes[y][x];
   }
 
-  /**
-   * @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
-   */
+  /// @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
   List<Int8List> getArray() {
     return _bytes;
   }

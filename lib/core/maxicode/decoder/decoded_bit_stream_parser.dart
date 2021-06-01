@@ -20,13 +20,11 @@ import 'dart:typed_data';
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
 
-/**
- * <p>MaxiCodes can encode text or structured information as bits in one of several modes,
- * with multiple character sets in one code. This class decodes the bits back into text.</p>
- *
- * @author mike32767
- * @author Manuel Kasten
- */
+/// <p>MaxiCodes can encode text or structured information as bits in one of several modes,
+/// with multiple character sets in one code. This class decodes the bits back into text.</p>
+///
+/// @author mike32767
+/// @author Manuel Kasten
 class DecodedBitStreamParser {
   static const String _SHIFTA = '\uFFF0';
   static const String _SHIFTB = '\uFFF1';

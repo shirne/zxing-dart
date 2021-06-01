@@ -22,11 +22,9 @@ import 'result_parser.dart';
 import 'uriparsed_result.dart';
 
 
-/**
- * Tries to parse results that are a URI of some kind.
- * 
- * @author Sean Owen
- */
+/// Tries to parse results that are a URI of some kind.
+/// 
+/// @author Sean Owen
 class URIResultParser extends ResultParser {
 
   static final RegExp _ALLOWED_URI_CHARS_PATTERN =
@@ -54,14 +52,12 @@ class URIResultParser extends ResultParser {
     return URIParsedResult(rawText, null);
   }
 
-  /**
-   * @return true if the URI contains suspicious patterns that may suggest it intends to
-   *  mislead the user about its true nature. At the moment this looks for the presence
-   *  of user/password syntax in the host/authority portion of a URI which may be used
-   *  in attempts to make the URI's host appear to be other than it is. Example:
-   *  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
-   *  to connect to yourbank.com at first glance.
-   */
+  /// @return true if the URI contains suspicious patterns that may suggest it intends to
+  ///  mislead the user about its true nature. At the moment this looks for the presence
+  ///  of user/password syntax in the host/authority portion of a URI which may be used
+  ///  in attempts to make the URI's host appear to be other than it is. Example:
+  ///  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
+  ///  to connect to yourbank.com at first glance.
   static bool isPossiblyMaliciousURI(String uri) {
     return !_ALLOWED_URI_CHARS_PATTERN.hasMatch(uri) || _USER_IN_HOST.hasMatch(uri);
   }

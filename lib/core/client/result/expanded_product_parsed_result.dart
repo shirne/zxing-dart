@@ -27,13 +27,11 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes extended product information as encoded
- * by the RSS format, like weight, price, dates, etc.
- *
- * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
- * @author Agustín Delgado, Servinform, S.A.
- */
+/// Represents a parsed result that encodes extended product information as encoded
+/// by the RSS format, like weight, price, dates, etc.
+///
+/// @author Antonio Manuel Benjumea Conde, Servinform, S.A.
+/// @author Agustín Delgado, Servinform, S.A.
 class ExpandedProductParsedResult extends ParsedResult {
   static const String KILOGRAM = "KG";
   static const String POUND = "LB";

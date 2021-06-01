@@ -28,10 +28,8 @@ import '../../../common/bit_array.dart';
 
 import 'expanded_pair.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class BitArrayBuilder {
   BitArrayBuilder._();
 

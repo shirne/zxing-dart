@@ -22,11 +22,9 @@ import '../barcode_format.dart';
 import 'coda_bar_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
-/**
- * This class renders CodaBar as {@code List<bool>}.
- *
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
- */
+/// This class renders CodaBar as {@code List<bool>}.
+///
+/// @author dsbnatut@gmail.com (Kazuki Nishiura)
 class CodaBarWriter extends OneDimensionalCodeWriter {
   static const List<String> _START_END_CHARS = ['A', 'B', 'C', 'D'];
   static const List<String> _ALT_START_END_CHARS = ['T', 'N', '*', 'E'];

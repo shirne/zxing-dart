@@ -31,11 +31,9 @@ import 'aztec_detector_result.dart';
 import 'decoder/decoder.dart';
 import 'detector/detector.dart';
 
-/**
- * This implementation can detect and decode Aztec codes in an image.
- *
- * @author David Olivier
- */
+/// This implementation can detect and decode Aztec codes in an image.
+///
+/// @author David Olivier
 class AztecReader implements Reader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {

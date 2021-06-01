@@ -22,19 +22,15 @@ import 'data_mask.dart';
 import 'format_information.dart';
 import 'version.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 class BitMatrixParser {
   final BitMatrix _bitMatrix;
   Version? _parsedVersion;
   FormatInformation? _parsedFormatInfo;
   bool _isMirror = false;
 
-  /**
-   * @param bitMatrix {@link BitMatrix} to parse
-   * @throws FormatException if dimension is not >= 21 and 1 mod 4
-   */
+  /// @param bitMatrix {@link BitMatrix} to parse
+  /// @throws FormatException if dimension is not >= 21 and 1 mod 4
   BitMatrixParser(this._bitMatrix) {
     int dimension = _bitMatrix.getHeight();
     if (dimension < 21 || (dimension & 0x03) != 1) {
@@ -42,13 +38,11 @@ class BitMatrixParser {
     }
   }
 
-  /**
-   * <p>Reads format information from one of its two locations within the QR Code.</p>
-   *
-   * @return {@link FormatInformation} encapsulating the QR Code's format info
-   * @throws FormatException if both format information locations cannot be parsed as
-   * the valid encoding of format information
-   */
+  /// <p>Reads format information from one of its two locations within the QR Code.</p>
+  ///
+  /// @return {@link FormatInformation} encapsulating the QR Code's format info
+  /// @throws FormatException if both format information locations cannot be parsed as
+  /// the valid encoding of format information
   FormatInformation readFormatInformation() {
     if (_parsedFormatInfo != null) {
       return _parsedFormatInfo!;
@@ -87,13 +81,11 @@ class BitMatrixParser {
     throw FormatException();
   }
 
-  /**
-   * <p>Reads version information from one of its two locations within the QR Code.</p>
-   *
-   * @return {@link Version} encapsulating the QR Code's version
-   * @throws FormatException if both version information locations cannot be parsed as
-   * the valid encoding of version information
-   */
+  /// <p>Reads version information from one of its two locations within the QR Code.</p>
+  ///
+  /// @return {@link Version} encapsulating the QR Code's version
+  /// @throws FormatException if both version information locations cannot be parsed as
+  /// the valid encoding of version information
   Version readVersion() {
     if (_parsedVersion != null) {
       return _parsedVersion!;
@@ -144,14 +136,12 @@ class BitMatrixParser {
     return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
-  /**
-   * <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
-   * correct order in order to reconstruct the codewords bytes contained within the
-   * QR Code.</p>
-   *
-   * @return bytes encoded within the QR Code
-   * @throws FormatException if the exact number of bytes expected is not read
-   */
+  /// <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
+  /// correct order in order to reconstruct the codewords bytes contained within the
+  /// QR Code.</p>
+  ///
+  /// @return bytes encoded within the QR Code
+  /// @throws FormatException if the exact number of bytes expected is not read
   Uint8List readCodewords() {
     FormatInformation formatInfo = readFormatInformation();
     Version version = readVersion();
@@ -205,9 +195,7 @@ class BitMatrixParser {
     return result;
   }
 
-  /**
-   * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
-   */
+  /// Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
   void remask() {
     if (_parsedFormatInfo == null) {
       return; // We have no format information, and have no data mask
@@ -217,14 +205,12 @@ class BitMatrixParser {
     dataMask.unmaskBitMatrix(_bitMatrix, dimension);
   }
 
-  /**
-   * Prepare the parser for a mirrored operation.
-   * This flag has effect only on the {@link #readFormatInformation()} and the
-   * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
-   * {@link #mirror()} method should be called.
-   *
-   * @param mirror Whether to read version and format information mirrored.
-   */
+  /// Prepare the parser for a mirrored operation.
+  /// This flag has effect only on the {@link #readFormatInformation()} and the
+  /// {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
+  /// {@link #mirror()} method should be called.
+  ///
+  /// @param mirror Whether to read version and format information mirrored.
   void setMirror(bool mirror) {
     _parsedVersion = null;
     _parsedFormatInfo = null;

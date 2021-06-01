@@ -21,11 +21,9 @@ import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'ean13_writer.dart';
 
-/**
- * This object renders a UPC-A code as a {@link BitMatrix}.
- *
- * @author qwandor@google.com (Andrew Walbran)
- */
+/// This object renders a UPC-A code as a {@link BitMatrix}.
+///
+/// @author qwandor@google.com (Andrew Walbran)
 class UPCAWriter implements Writer {
   final EAN13Writer _subWriter = EAN13Writer();
 

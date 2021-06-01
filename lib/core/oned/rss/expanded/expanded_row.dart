@@ -18,9 +18,7 @@ import '../../../common/utils.dart';
 
 import 'expanded_pair.dart';
 
-/**
- * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
- */
+/// One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
 class ExpandedRow {
   final List<ExpandedPair> _pairs;
   final int _rowNumber;
@@ -46,9 +44,7 @@ class ExpandedRow {
     return "{ $_pairs }";
   }
 
-  /**
-   * Two rows are equal if they contain the same pairs in the same order.
-   */
+  /// Two rows are equal if they contain the same pairs in the same order.
   @override
   operator ==(Object o) {
     if (!(o is ExpandedRow)) {

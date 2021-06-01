@@ -22,11 +22,9 @@ import 'one_dimensional_code_writer.dart';
 
 enum _CType { UNCODABLE, ONE_DIGIT, TWO_DIGITS, FNC_1 }
 
-/**
- * This object renders a CODE128 code as a {@link BitMatrix}.
- *
- * @author erik.barbara@gmail.com (Erik Barbara)
- */
+/// This object renders a CODE128 code as a {@link BitMatrix}.
+///
+/// @author erik.barbara@gmail.com (Erik Barbara)
 class Code128Writer extends OneDimensionalCodeWriter {
   static const int _CODE_START_A = 103;
   static const int _CODE_START_B = 104;

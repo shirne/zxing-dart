@@ -25,22 +25,20 @@ import '../result.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
-/**
- * <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
- *
- * <p>This Reader will scan ITF barcodes of certain lengths only.
- * At the moment it reads length 6, 8, 10, 12, 14, 16, 18, 20, 24, and 44 as these have appeared "in the wild". Not all
- * lengths are scanned, especially shorter ones, to avoid false positives. This in turn is due to a lack of
- * required checksum function.</p>
- *
- * <p>The checksum is optional and is not applied by this Reader. The consumer of the decoded
- * value will have to apply a checksum if required.</p>
- *
- * <p><a href="http://en.wikipedia.org/wiki/Interleaved_2_of_5">http://en.wikipedia.org/wiki/Interleaved_2_of_5</a>
- * is a great reference for Interleaved 2 of 5 information.</p>
- *
- * @author kevin.osullivan@sita.aero, SITA Lab.
- */
+/// <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
+///
+/// <p>This Reader will scan ITF barcodes of certain lengths only.
+/// At the moment it reads length 6, 8, 10, 12, 14, 16, 18, 20, 24, and 44 as these have appeared "in the wild". Not all
+/// lengths are scanned, especially shorter ones, to avoid false positives. This in turn is due to a lack of
+/// required checksum function.</p>
+///
+/// <p>The checksum is optional and is not applied by this Reader. The consumer of the decoded
+/// value will have to apply a checksum if required.</p>
+///
+/// <p><a href="http://en.wikipedia.org/wiki/Interleaved_2_of_5">http://en.wikipedia.org/wiki/Interleaved_2_of_5</a>
+/// is a great reference for Interleaved 2 of 5 information.</p>
+///
+/// @author kevin.osullivan@sita.aero, SITA Lab.
 class ITFReader extends OneDReader {
 
   static const double _MAX_AVG_VARIANCE = 0.38;
@@ -56,12 +54,10 @@ class ITFReader extends OneDReader {
   // Stores the actual narrow line width of the image being decoded.
   int _narrowLineWidth = -1;
 
-  /**
-   * Start/end guard pattern.
-   *
-   * Note: The end pattern is reversed because the row is reversed before
-   * searching for the END_PATTERN
-   */
+  /// Start/end guard pattern.
+  ///
+  /// Note: The end pattern is reversed because the row is reversed before
+  /// searching for the END_PATTERN
   static const List<int> _START_PATTERN = [_N, _N, _N, _N];
   static const List<List<int>> _END_PATTERN_REVERSED = [
       [_N, _N, _w], // 2x
@@ -70,9 +66,7 @@ class ITFReader extends OneDReader {
 
   // See ITFWriter.PATTERNS
 
-  /**
-   * Patterns of Wide / Narrow lines to indicate each digit
-   */
+  /// Patterns of Wide / Narrow lines to indicate each digit
   static const List<List<int>> _PATTERNS = [
       [_N, _N, _w, _w, _N], // 0
       [_w, _N, _N, _N, _w], // 1
@@ -146,12 +140,10 @@ class ITFReader extends OneDReader {
         BarcodeFormat.ITF);
   }
 
-  /**
-   * @param row          row of black/white values to search
-   * @param payloadStart offset of start pattern
-   * @param resultString {@link StringBuffer} to append decoded chars to
-   * @throws NotFoundException if decoding could not complete successfully
-   */
+  /// @param row          row of black/white values to search
+  /// @param payloadStart offset of start pattern
+  /// @param resultString {@link StringBuffer} to append decoded chars to
+  /// @throws NotFoundException if decoding could not complete successfully
   static void _decodeMiddle(BitArray row,
                                    int payloadStart,
                                    int payloadEnd,
@@ -188,13 +180,11 @@ class ITFReader extends OneDReader {
     }
   }
 
-  /**
-   * Identify where the start of the middle / payload section starts.
-   *
-   * @param row row of black/white values to search
-   * @return Array, containing index of start of 'start block' and end of
-   *         'start block'
-   */
+  /// Identify where the start of the middle / payload section starts.
+  ///
+  /// @param row row of black/white values to search
+  /// @return Array, containing index of start of 'start block' and end of
+  ///         'start block'
   List<int> _decodeStart(BitArray row){
     int endStart = _skipWhiteSpace(row);
     List<int> startPattern = _findGuardPattern(row, endStart, _START_PATTERN);
@@ -209,21 +199,19 @@ class ITFReader extends OneDReader {
     return startPattern;
   }
 
-  /**
-   * The start & end patterns must be pre/post fixed by a quiet zone. This
-   * zone must be at least 10 times the width of a narrow line.  Scan back until
-   * we either get to the start of the barcode or match the necessary number of
-   * quiet zone pixels.
-   *
-   * Note: Its assumed the row is reversed when using this method to find
-   * quiet zone after the end pattern.
-   *
-   * ref: http://www.barcode-1.net/i25code.html
-   *
-   * @param row bit array representing the scanned barcode.
-   * @param startPattern index into row of the start or end pattern.
-   * @throws NotFoundException if the quiet zone cannot be found
-   */
+  /// The start & end patterns must be pre/post fixed by a quiet zone. This
+  /// zone must be at least 10 times the width of a narrow line.  Scan back until
+  /// we either get to the start of the barcode or match the necessary number of
+  /// quiet zone pixels.
+  ///
+  /// Note: Its assumed the row is reversed when using this method to find
+  /// quiet zone after the end pattern.
+  ///
+  /// ref: http://www.barcode-1.net/i25code.html
+  ///
+  /// @param row bit array representing the scanned barcode.
+  /// @param startPattern index into row of the start or end pattern.
+  /// @throws NotFoundException if the quiet zone cannot be found
   void _validateQuietZone(BitArray row, int startPattern){
 
     int quietCount = this._narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
@@ -243,13 +231,11 @@ class ITFReader extends OneDReader {
     }
   }
 
-  /**
-   * Skip all whitespace until we get to the first black line.
-   *
-   * @param row row of black/white values to search
-   * @return index of the first black line.
-   * @throws NotFoundException
-   */
+  /// Skip all whitespace until we get to the first black line.
+  ///
+  /// @param row row of black/white values to search
+  /// @return index of the first black line.
+  /// @throws NotFoundException
   static int _skipWhiteSpace(BitArray row){
     int width = row.getSize();
     int endStart = row.getNextSet(0);
@@ -260,13 +246,11 @@ class ITFReader extends OneDReader {
     return endStart;
   }
 
-  /**
-   * Identify where the end of the middle / payload section ends.
-   *
-   * @param row row of black/white values to search
-   * @return Array, containing index of start of 'end block' and end of 'end
-   *         block'
-   */
+  /// Identify where the end of the middle / payload section ends.
+  ///
+  /// @param row row of black/white values to search
+  /// @return Array, containing index of start of 'end block' and end of 'end
+  ///         block'
   List<int> _decodeEnd(BitArray row){
 
     // For convenience, reverse the row and then
@@ -300,15 +284,13 @@ class ITFReader extends OneDReader {
     }
   }
 
-  /**
-   * @param row       row of black/white values to search
-   * @param rowOffset position to start search
-   * @param pattern   pattern of counts of number of black and white pixels that are
-   *                  being searched for as a pattern
-   * @return start/end horizontal offset of guard pattern, as an array of two
-   *         ints
-   * @throws NotFoundException if pattern is not found
-   */
+  /// @param row       row of black/white values to search
+  /// @param rowOffset position to start search
+  /// @param pattern   pattern of counts of number of black and white pixels that are
+  ///                  being searched for as a pattern
+  /// @return start/end horizontal offset of guard pattern, as an array of two
+  ///         ints
+  /// @throws NotFoundException if pattern is not found
   static List<int> _findGuardPattern(BitArray row,
                                         int rowOffset,
                                         List<int> pattern){
@@ -342,14 +324,12 @@ class ITFReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * Attempts to decode a sequence of ITF black/white lines into single
-   * digit.
-   *
-   * @param counters the counts of runs of observed black/white/black/... values
-   * @return The decoded digit
-   * @throws NotFoundException if digit cannot be decoded
-   */
+  /// Attempts to decode a sequence of ITF black/white lines into single
+  /// digit.
+  ///
+  /// @param counters the counts of runs of observed black/white/black/... values
+  /// @return The decoded digit
+  /// @throws NotFoundException if digit cannot be decoded
   static int _decodeDigit(List<int> counters){
     double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;

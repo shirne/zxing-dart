@@ -21,11 +21,9 @@ import '../../result.dart';
 import 'result_parser.dart';
 import 'vinparsed_result.dart';
 
-/**
- * Detects a result that is likely a vehicle identification number.
- *
- * @author Sean Owen
- */
+/// Detects a result that is likely a vehicle identification number.
+///
+/// @author Sean Owen
 class VINResultParser extends ResultParser {
 
   static final RegExp _IOQ = RegExp("[IOQ]");

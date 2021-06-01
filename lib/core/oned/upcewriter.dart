@@ -22,11 +22,9 @@ import 'upceanreader.dart';
 import 'upceanwriter.dart';
 import 'upcereader.dart';
 
-/**
- * This object renders an UPC-E code as a {@link BitMatrix}.
- *
- * @author 0979097955s@gmail.com (RX)
- */
+/// This object renders an UPC-E code as a {@link BitMatrix}.
+///
+/// @author 0979097955s@gmail.com (RX)
 class UPCEWriter extends UPCEANWriter {
 
   static const int _CODE_WIDTH = 3 + // start guard

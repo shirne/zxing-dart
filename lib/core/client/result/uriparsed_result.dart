@@ -19,11 +19,9 @@ import 'parsed_result_type.dart';
 import 'result_parser.dart';
 import 'uriresult_parser.dart';
 
-/**
- * A simple result type encapsulating a URI that has no further interpretation.
- *
- * @author Sean Owen
- */
+/// A simple result type encapsulating a URI that has no further interpretation.
+///
+/// @author Sean Owen
 class URIParsedResult extends ParsedResult {
   final String _uri;
   final String? _title;
@@ -38,11 +36,9 @@ class URIParsedResult extends ParsedResult {
     return _title;
   }
 
-  /**
-   * @return true if the URI contains suspicious patterns that may suggest it intends to
-   *  mislead the user about its true nature
-   * @deprecated see {@link URIResultParser#isPossiblyMaliciousURI(String)}
-   */
+  /// @return true if the URI contains suspicious patterns that may suggest it intends to
+  ///  mislead the user about its true nature
+  /// @deprecated see {@link URIResultParser#isPossiblyMaliciousURI(String)}
   @deprecated
   bool isPossiblyMaliciousURI() {
     return URIResultParser.isPossiblyMaliciousURI(_uri);
@@ -56,10 +52,8 @@ class URIParsedResult extends ParsedResult {
     return result.toString();
   }
 
-  /**
-   * Transforms a string that represents a URI into something more proper, by adding or canonicalizing
-   * the protocol.
-   */
+  /// Transforms a string that represents a URI into something more proper, by adding or canonicalizing
+  /// the protocol.
   static String massageURI(String uri) {
     uri = uri.trim();
     int protocolEnd = uri.indexOf(':');

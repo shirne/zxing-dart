@@ -18,10 +18,8 @@ import 'dart:typed_data';
 
 import '../../common/bit_matrix.dart';
 
-/**
- * @author mike32767
- * @author Manuel Kasten
- */
+/// @author mike32767
+/// @author Manuel Kasten
 class BitMatrixParser {
   static const List<List<int>> _BITNR = [
     [121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2],
@@ -61,9 +59,7 @@ class BitMatrixParser {
 
   final BitMatrix _bitMatrix;
 
-  /**
-   * @param bitMatrix {@link BitMatrix} to parse
-   */
+  /// @param bitMatrix {@link BitMatrix} to parse
   BitMatrixParser(this._bitMatrix);
 
   Uint8List readCodewords() {

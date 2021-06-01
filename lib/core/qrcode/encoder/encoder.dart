@@ -38,10 +38,8 @@ import 'mask_util.dart';
 import 'matrix_util.dart';
 import 'qrcode.dart';
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
+/// @author satorux@google.com (Satoru Takabayashi) - creator
+/// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class Encoder {
   // The original table is defined in the table 5 of JISX0510:2004 (p.19).
   static const List<int> _ALPHANUMERIC_TABLE = [
@@ -173,11 +171,9 @@ class Encoder {
     return qrCode;
   }
 
-  /**
-   * Decides the smallest version of QR code that will contain all of the provided data.
-   *
-   * @throws WriterException if the data cannot fit in any version
-   */
+  /// Decides the smallest version of QR code that will contain all of the provided data.
+  ///
+  /// @throws WriterException if the data cannot fit in any version
   static Version _recommendVersion(ErrorCorrectionLevel ecLevel, Mode mode,
       BitArray headerBits, BitArray dataBits) {
     // Hard part: need to know version to know how many bits length takes. But need to know how many
@@ -200,10 +196,8 @@ class Encoder {
         dataBits.getSize();
   }
 
-  /**
-   * @return the code point of the table used in alphanumeric mode or
-   *  -1 if there is no corresponding code in the table.
-   */
+  /// @return the code point of the table used in alphanumeric mode or
+  ///  -1 if there is no corresponding code in the table.
   static int getAlphanumericCode(int code) {
     if (code < _ALPHANUMERIC_TABLE.length) {
       return _ALPHANUMERIC_TABLE[code];
@@ -215,10 +209,8 @@ class Encoder {
     return _chooseMode(content, null);
   }
 
-  /**
-   * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
-   * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
-   */
+  /// Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
+  /// if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
   static Mode _chooseMode(String content, [Encoding? encoding]) {
     if (StringUtils.SHIFT_JIS_CHARSET == encoding &&
         _isOnlyDoubleByteKanji(content)) {
@@ -289,10 +281,8 @@ class Encoder {
     throw WriterException("Data too big");
   }
 
-  /**
-   * @return true if the number of input bits will fit in a code with the specified version and
-   * error correction level.
-   */
+  /// @return true if the number of input bits will fit in a code with the specified version and
+  /// error correction level.
   static bool _willFit(
       int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
     // In the following comments, we use numbers of Version 7-H.
@@ -307,9 +297,7 @@ class Encoder {
     return numDataBytes >= totalInputBytes;
   }
 
-  /**
-   * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
-   */
+  /// Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
   static void terminateBits(int numDataBytes, BitArray bits) {
     int capacity = numDataBytes * 8;
     if (bits.getSize() > capacity) {
@@ -337,11 +325,9 @@ class Encoder {
     }
   }
 
-  /**
-   * Get number of data bytes and number of error correction bytes for block id "blockID". Store
-   * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
-   * JISX0510:2004 (p.30)
-   */
+  /// Get number of data bytes and number of error correction bytes for block id "blockID". Store
+  /// the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
+  /// JISX0510:2004 (p.30)
   static void getNumDataBytesAndNumECBytesForBlockID(
       int numTotalBytes,
       int numDataBytes,
@@ -394,10 +380,8 @@ class Encoder {
     }
   }
 
-  /**
-   * Interleave "bits" with corresponding error correction bytes. On success, store the result in
-   * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
-   */
+  /// Interleave "bits" with corresponding error correction bytes. On success, store the result in
+  /// "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
   static BitArray interleaveWithECBytes(
       BitArray bits, int numTotalBytes, int numDataBytes, int numRSBlocks) {
     // "bits" must have "getNumDataBytes" bytes of data.
@@ -480,16 +464,12 @@ class Encoder {
     return ecBytes;
   }
 
-  /**
-   * Append mode info. On success, store the result in "bits".
-   */
+  /// Append mode info. On success, store the result in "bits".
   static void appendModeInfo(Mode mode, BitArray bits) {
     bits.appendBits(mode.getBits(), 4);
   }
 
-  /**
-   * Append length info. On success, store the result in "bits".
-   */
+  /// Append length info. On success, store the result in "bits".
   static void appendLengthInfo(
       int numLetters, Version version, Mode mode, BitArray bits) {
     int numBits = mode.getCharacterCountBits(version);
@@ -500,9 +480,7 @@ class Encoder {
     bits.appendBits(numLetters, numBits);
   }
 
-  /**
-   * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
-   */
+  /// Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
   static void appendBytes(
       String content, Mode mode, BitArray bits, Encoding encoding) {
     switch (mode) {

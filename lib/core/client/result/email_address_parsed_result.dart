@@ -17,12 +17,10 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes an email message including recipients, subject
- * and body text.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes an email message including recipients, subject
+/// and body text.
+///
+/// @author Sean Owen
 class EmailAddressParsedResult extends ParsedResult {
   final List<String>? _tos;
   final List<String>? _ccs;
@@ -35,10 +33,8 @@ class EmailAddressParsedResult extends ParsedResult {
       : this._tos = tos is String ? [tos] : tos as List<String>,
         super(ParsedResultType.EMAIL_ADDRESS);
 
-  /**
-   * @return first elements of {@link #getTos()} or {@code null} if none
-   * @deprecated use {@link #getTos()}
-   */
+  /// @return first elements of {@link #getTos()} or {@code null} if none
+  /// @deprecated use {@link #getTos()}
   @deprecated
   String? getEmailAddress() {
     return _tos == null || _tos!.length == 0 ? null : _tos![0];
@@ -64,10 +60,8 @@ class EmailAddressParsedResult extends ParsedResult {
     return _body;
   }
 
-  /**
-   * @return "mailto:"
-   * @deprecated without replacement
-   */
+  /// @return "mailto:"
+  /// @deprecated without replacement
   @deprecated
   String getMailtoURI() {
     return "mailto:";

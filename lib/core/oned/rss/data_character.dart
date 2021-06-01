@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * Encapsulates a since character value in an RSS barcode, including its checksum information.
- */
+/// Encapsulates a since character value in an RSS barcode, including its checksum information.
 class DataCharacter {
   final int _value;
   final int _checksumPortion;

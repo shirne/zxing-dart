@@ -30,12 +30,10 @@ import 'encoder/high_level_encoder.dart';
 import 'encoder/symbol_info.dart';
 import 'encoder/symbol_shape_hint.dart';
 
-/**
- * This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Guillaume Le Biller Added to zxing lib.
- */
+/// This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Guillaume Le Biller Added to zxing lib.
 class DataMatrixWriter implements Writer {
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
@@ -94,13 +92,11 @@ class DataMatrixWriter implements Writer {
     return _encodeLowLevel(placement, symbolInfo, width, height);
   }
 
-  /**
-   * Encode the given symbol info to a bit matrix.
-   *
-   * @param placement  The DataMatrix placement.
-   * @param symbolInfo The symbol info to encode.
-   * @return The bit matrix generated.
-   */
+  /// Encode the given symbol info to a bit matrix.
+  ///
+  /// @param placement  The DataMatrix placement.
+  /// @param symbolInfo The symbol info to encode.
+  /// @return The bit matrix generated.
   static BitMatrix _encodeLowLevel(DefaultPlacement placement,
       SymbolInfo symbolInfo, int width, int height) {
     int symbolWidth = symbolInfo.getSymbolDataWidth();
@@ -152,14 +148,12 @@ class DataMatrixWriter implements Writer {
     return _convertByteMatrixToBitMatrix(matrix, width, height);
   }
 
-  /**
-   * Convert the ByteMatrix to BitMatrix.
-   *
-   * @param reqHeight The requested height of the image (in pixels) with the Datamatrix code
-   * @param reqWidth The requested width of the image (in pixels) with the Datamatrix code
-   * @param matrix The input matrix.
-   * @return The output matrix.
-   */
+  /// Convert the ByteMatrix to BitMatrix.
+  ///
+  /// @param reqHeight The requested height of the image (in pixels) with the Datamatrix code
+  /// @param reqWidth The requested width of the image (in pixels) with the Datamatrix code
+  /// @param matrix The input matrix.
+  /// @return The output matrix.
   static BitMatrix _convertByteMatrixToBitMatrix(
       ByteMatrix matrix, int reqWidth, int reqHeight) {
     int matrixWidth = matrix.getWidth();

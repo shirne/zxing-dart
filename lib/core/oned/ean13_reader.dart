@@ -21,13 +21,11 @@ import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import 'upceanreader.dart';
 
-/**
- * <p>Implements decoding of the EAN-13 format.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author alasdair@google.com (Alasdair Mackintosh)
- */
+/// <p>Implements decoding of the EAN-13 format.</p>
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Sean Owen
+/// @author alasdair@google.com (Alasdair Mackintosh)
 class EAN13Reader extends UPCEANReader {
   // For an EAN-13 barcode, the first digit is represented by the parities used
   // to encode the next six digits, according to the table below. For example,
@@ -110,16 +108,14 @@ class EAN13Reader extends UPCEANReader {
     return BarcodeFormat.EAN_13;
   }
 
-  /**
-   * Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
-   * digits in a barcode, determines the implicitly encoded first digit and adds it to the
-   * result string.
-   *
-   * @param resultString string to insert decoded first digit into
-   * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
-   *  encode digits
-   * @throws NotFoundException if first digit cannot be determined
-   */
+  /// Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
+  /// digits in a barcode, determines the implicitly encoded first digit and adds it to the
+  /// result string.
+  ///
+  /// @param resultString string to insert decoded first digit into
+  /// @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
+  ///  encode digits
+  /// @throws NotFoundException if first digit cannot be determined
   static void _determineFirstDigit(
       StringBuilder resultString, int lgPatternFound) {
     for (int d = 0; d < 10; d++) {

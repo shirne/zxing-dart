@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-/**
- * Enumerates barcode formats known to this package. Please keep alphabetized.
- *
- * @author Sean Owen
- */
+/// Enumerates barcode formats known to this package. Please keep alphabetized.
+///
+/// @author Sean Owen
 enum BarcodeFormat {
   /** Aztec 2D barcode format. */
   AZTEC,

@@ -23,18 +23,14 @@ import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import 'upceanreader.dart';
 
-/**
- * <p>Implements decoding of the UPC-E format.</p>
- * <p><a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
- * UPC-E information.</p>
- *
- * @author Sean Owen
- */
+/// <p>Implements decoding of the UPC-E format.</p>
+/// <p><a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
+/// UPC-E information.</p>
+///
+/// @author Sean Owen
 class UPCEReader extends UPCEANReader {
-  /**
-   * The pattern that marks the middle, and end, of a UPC-E pattern.
-   * There is no "second half" to a UPC-E barcode.
-   */
+  /// The pattern that marks the middle, and end, of a UPC-E pattern.
+  /// There is no "second half" to a UPC-E barcode.
   static const List<int> _MIDDLE_END_PATTERN = [1, 1, 1, 1, 1, 1];
 
   // For an UPC-E barcode, the final digit is represented by the parities used
@@ -61,11 +57,9 @@ class UPCEReader extends UPCEANReader {
   //                0    1    1   0   0    1   == 0x19
   //
 
-  /**
-   * See {@link #L_AND_G_PATTERNS}; these values similarly represent patterns of
-   * even-odd parity encodings of digits that imply both the number system (0 or 1)
-   * used, and the check digit.
-   */
+  /// See {@link #L_AND_G_PATTERNS}; these values similarly represent patterns of
+  /// even-odd parity encodings of digits that imply both the number system (0 or 1)
+  /// used, and the check digit.
   static const List<List<int>> NUMSYS_AND_CHECK_DIGIT_PATTERNS = [
     [0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25],
     [0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A]
@@ -137,12 +131,10 @@ class UPCEReader extends UPCEANReader {
     return BarcodeFormat.UPC_E;
   }
 
-  /**
-   * Expands a UPC-E value back into its full, equivalent UPC-A code value.
-   *
-   * @param upce UPC-E code as string of digits
-   * @return equivalent UPC-A code as string of digits
-   */
+  /// Expands a UPC-E value back into its full, equivalent UPC-A code value.
+  ///
+  /// @param upce UPC-E code as string of digits
+  /// @return equivalent UPC-A code as string of digits
   static String convertUPCEtoUPCA(String upce) {
     List<int> upceChars = List.generate(6, (index)=>upce.codeUnitAt(index+1));
     // upce.getChars(1, 7, upceChars, 0);

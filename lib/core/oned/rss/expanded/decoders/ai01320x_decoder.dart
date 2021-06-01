@@ -30,9 +30,7 @@ import '../../../../common/bit_array.dart';
 
 import 'ai013x0x_decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01320xDecoder extends AI013x0xDecoder {
   AI01320xDecoder(BitArray information) : super(information);
 

@@ -27,12 +27,10 @@ import '../../decode_hint_type.dart';
 import 'bit_matrix_parser.dart';
 import 'decoded_bit_stream_parser.dart';
 
-/**
- * <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
- * the MaxiCode from an image.</p>
- *
- * @author Manuel Kasten
- */
+/// <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
+/// the MaxiCode from an image.</p>
+///
+/// @author Manuel Kasten
 class Decoder {
   static const int _ALL = 0;
   static const int _EVEN = 1;

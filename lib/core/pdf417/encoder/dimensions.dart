@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-/**
- * Data object to specify the minimum and maximum number of rows and columns for a PDF417 barcode.
- *
- * @author qwandor@google.com (Andrew Walbran)
- */
+/// Data object to specify the minimum and maximum number of rows and columns for a PDF417 barcode.
+///
+/// @author qwandor@google.com (Andrew Walbran)
 class Dimensions {
   final int _minCols;
   final int _maxCols;

@@ -19,12 +19,10 @@ import '../common/detector_result.dart';
 
 import '../result_point.dart';
 
-/**
- * <p>Extends {@link DetectorResult} with more information specific to the Aztec format,
- * like the number of layers and whether it's compact.</p>
- *
- * @author Sean Owen
- */
+/// <p>Extends {@link DetectorResult} with more information specific to the Aztec format,
+/// like the number of layers and whether it's compact.</p>
+///
+/// @author Sean Owen
 class AztecDetectorResult extends DetectorResult {
   final bool _compact;
   final int _nbDatablocks;

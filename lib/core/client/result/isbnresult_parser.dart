@@ -19,15 +19,11 @@ import '../../result.dart';
 import 'isbnparsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Parses strings of digits that represent a ISBN.
- * 
- * @author jbreiden@google.com (Jeff Breidenbach)
- */
+/// Parses strings of digits that represent a ISBN.
+/// 
+/// @author jbreiden@google.com (Jeff Breidenbach)
 class ISBNResultParser extends ResultParser {
-  /**
-   * See <a href="http://www.bisg.org/isbn-13/for.dummies.html">ISBN-13 For Dummies</a>
-   */
+  /// See <a href="http://www.bisg.org/isbn-13/for.dummies.html">ISBN-13 For Dummies</a>
   @override
   ISBNParsedResult? parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();

@@ -35,9 +35,7 @@ import 'detection_result_row_indicator_column.dart';
 import 'ec/error_correction.dart';
 import 'pdf417_codeword_decoder.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class PDF417ScanningDecoder {
   static const int _CODEWORD_SKEW_SIZE = 2;
 
@@ -340,19 +338,17 @@ class PDF417ScanningDecoder {
         ambiguousIndexValues);
   }
 
-  /**
-   * This method deals with the fact, that the decoding process doesn't always yield a single most likely value. The
-   * current error correction implementation doesn't deal with erasures very well, so it's better to provide a value
-   * for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of
-   * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
-   * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
-   * so decoding the normal barcodes is not affected by this.
-   *
-   * @param erasureArray contains the indexes of erasures
-   * @param ambiguousIndexes array with the indexes that have more than one most likely value
-   * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
-   * be the same length as the ambiguousIndexes array
-   */
+  /// This method deals with the fact, that the decoding process doesn't always yield a single most likely value. The
+  /// current error correction implementation doesn't deal with erasures very well, so it's better to provide a value
+  /// for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of
+  /// the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
+  /// ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
+  /// so decoding the normal barcodes is not affected by this.
+  ///
+  /// @param erasureArray contains the indexes of erasures
+  /// @param ambiguousIndexes array with the indexes that have more than one most likely value
+  /// @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
+  /// be the same length as the ambiguousIndexes array
   static DecoderResult _createDecoderResultFromAmbiguousValues(
       int ecLevel,
       List<int> codewords,
@@ -615,15 +611,13 @@ class PDF417ScanningDecoder {
     return decoderResult;
   }
 
-  /**
-   * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
-   * correct the errors in-place.</p>
-   *
-   * @param codewords   data and error correction codewords
-   * @param erasures positions of any known erasures
-   * @param numECCodewords number of error correction codewords that are available in codewords
-   * @throws ChecksumException if error correction fails
-   */
+  /// <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+  /// correct the errors in-place.</p>
+  ///
+  /// @param codewords   data and error correction codewords
+  /// @param erasures positions of any known erasures
+  /// @param numECCodewords number of error correction codewords that are available in codewords
+  /// @throws ChecksumException if error correction fails
   static int _correctErrors(
       List<int> codewords, List<int>? erasures, int numECCodewords) {
     if (erasures != null && erasures.length > numECCodewords / 2 + _MAX_ERRORS ||
@@ -635,9 +629,7 @@ class PDF417ScanningDecoder {
     return errorCorrection.decode(codewords, numECCodewords, erasures);
   }
 
-  /**
-   * Verify that all is OK with the codeword array.
-   */
+  /// Verify that all is OK with the codeword array.
   static void _verifyCodewordCount(List<int> codewords, int numECCodewords) {
     if (codewords.length < 4) {
       // Codeword array size should be at least 4 allowing for

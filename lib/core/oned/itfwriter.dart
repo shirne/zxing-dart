@@ -20,11 +20,9 @@ import 'package:flutter/cupertino.dart';
 import '../barcode_format.dart';
 import 'one_dimensional_code_writer.dart';
 
-/**
- * This object renders a ITF code as a {@link BitMatrix}.
- *
- * @author erik.barbara@gmail.com (Erik Barbara)
- */
+/// This object renders a ITF code as a {@link BitMatrix}.
+///
+/// @author erik.barbara@gmail.com (Erik Barbara)
 class ITFWriter extends OneDimensionalCodeWriter {
 
   static const List<int> _START_PATTERN = [1, 1, 1, 1];

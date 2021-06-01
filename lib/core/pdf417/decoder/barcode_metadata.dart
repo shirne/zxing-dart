@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class BarcodeMetadata {
   final int _columnCount;
   final int _errorCorrectionLevel;

@@ -21,10 +21,8 @@ import '../../common/detector/math_utils.dart';
 import '../../not_found_exception.dart';
 import '../one_dreader.dart';
 
-/**
- * Superclass of {@link OneDReader} implementations that read barcodes in the RSS family
- * of formats.
- */
+/// Superclass of {@link OneDReader} implementations that read barcodes in the RSS family
+/// of formats.
 abstract class AbstractRSSReader extends OneDReader {
   static const double _MAX_AVG_VARIANCE = 0.2;
   static const double _MAX_INDIVIDUAL_VARIANCE = 0.45;
@@ -91,11 +89,9 @@ abstract class AbstractRSSReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * @param array values to sum
-   * @return sum of values
-   * @deprecated call {@link MathUtils#sum(List<int>)}
-   */
+  /// @param array values to sum
+  /// @return sum of values
+  /// @deprecated call {@link MathUtils#sum(List<int>)}
   @deprecated
   @protected
   static int count(List<int> array) {

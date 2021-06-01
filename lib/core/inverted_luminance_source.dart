@@ -18,12 +18,10 @@ import 'dart:typed_data';
 
 import 'luminance_source.dart';
 
-/**
- * A wrapper implementation of {@link LuminanceSource} which inverts the luminances it returns -- black becomes
- * white and vice versa, and each value becomes (255-value).
- *
- * @author Sean Owen
- */
+/// A wrapper implementation of {@link LuminanceSource} which inverts the luminances it returns -- black becomes
+/// white and vice versa, and each value becomes (255-value).
+///
+/// @author Sean Owen
 class InvertedLuminanceSource extends LuminanceSource {
   final LuminanceSource _delegate;
 
@@ -66,9 +64,7 @@ class InvertedLuminanceSource extends LuminanceSource {
     return _delegate.isRotateSupported();
   }
 
-  /**
-   * @return original delegate {@link LuminanceSource} since invert undoes itself
-   */
+  /// @return original delegate {@link LuminanceSource} since invert undoes itself
   @override
   LuminanceSource invert() {
     return _delegate;

@@ -20,12 +20,10 @@ import 'dart:typed_data';
 
 import '../decode_hint_type.dart';
 
-/**
- * Common string-related functions.
- *
- * @author Sean Owen
- * @author Alex Dupre
- */
+/// Common string-related functions.
+///
+/// @author Sean Owen
+/// @author Alex Dupre
 class StringUtils {
   static final Encoding _PLATFORM_DEFAULT_ENCODING = SystemEncoding();
   static final Encoding? SHIFT_JIS_CHARSET = Encoding.getByName("SJIS");
@@ -41,13 +39,11 @@ class StringUtils {
 
   StringUtils();
 
-  /**
-   * @param bytes bytes encoding a string, whose encoding should be guessed
-   * @param hints decode hints if applicable
-   * @return name of guessed encoding; at the moment will only guess one of:
-   *  "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
-   *  of these can possibly be correct
-   */
+  /// @param bytes bytes encoding a string, whose encoding should be guessed
+  /// @param hints decode hints if applicable
+  /// @return name of guessed encoding; at the moment will only guess one of:
+  ///  "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
+  ///  of these can possibly be correct
   static String guessEncoding(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     Encoding? c = guessCharset(bytes, hints);
@@ -61,15 +57,13 @@ class StringUtils {
     return c!.name;
   }
 
-  /**
-   * @param bytes bytes encoding a string, whose encoding should be guessed
-   * @param hints decode hints if applicable
-   * @return Charset of guessed encoding; at the moment will only guess one of:
-   *  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
-   *  {@link StandardCharsets#ISO_8859_1}, {@link StandardCharsets#UTF_16},
-   *  or the platform default encoding if
-   *  none of these can possibly be correct
-   */
+  /// @param bytes bytes encoding a string, whose encoding should be guessed
+  /// @param hints decode hints if applicable
+  /// @return Charset of guessed encoding; at the moment will only guess one of:
+  ///  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
+  ///  {@link StandardCharsets#ISO_8859_1}, {@link StandardCharsets#UTF_16},
+  ///  or the platform default encoding if
+  ///  none of these can possibly be correct
   static Encoding? guessCharset(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {

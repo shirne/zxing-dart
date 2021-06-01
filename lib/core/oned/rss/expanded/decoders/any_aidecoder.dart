@@ -28,10 +28,8 @@ import '../../../../common/bit_array.dart';
 
 import 'abstract_expanded_decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class AnyAIDecoder extends AbstractExpandedDecoder {
   static const int _HEADER_SIZE = 2 + 1 + 2;
 

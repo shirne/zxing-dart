@@ -19,9 +19,7 @@ import 'bit_matrix.dart';
 import 'grid_sampler.dart';
 import 'perspective_transform.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 class DefaultGridSampler extends GridSampler {
   @override
   BitMatrix sampleGridBulk(

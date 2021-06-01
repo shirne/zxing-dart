@@ -32,11 +32,9 @@ import 'decoder/decoder.dart';
 import 'decoder/qrcode_decoder_meta_data.dart';
 import 'detector/detector.dart';
 
-/**
- * This implementation can detect and decode QR Codes in an image.
- *
- * @author Sean Owen
- */
+/// This implementation can detect and decode QR Codes in an image.
+///
+/// @author Sean Owen
 class QRCodeReader implements Reader {
   static final List<ResultPoint> _NO_POINTS = [];
 
@@ -93,12 +91,10 @@ class QRCodeReader implements Reader {
     // do nothing
   }
 
-  /**
-   * This method detects a code in a "pure" image -- that is, pure monochrome image
-   * which contains only an unrotated, unskewed, image of a code, with some white border
-   * around it. This is a specialized method that works exceptionally fast in this special
-   * case.
-   */
+  /// This method detects a code in a "pure" image -- that is, pure monochrome image
+  /// which contains only an unrotated, unskewed, image of a code, with some white border
+  /// around it. This is a specialized method that works exceptionally fast in this special
+  /// case.
   static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? leftTopBlack = image.getTopLeftOnBit();
     List<int>? rightBottomBlack = image.getBottomRightOnBit();

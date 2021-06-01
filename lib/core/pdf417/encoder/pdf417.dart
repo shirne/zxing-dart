@@ -27,22 +27,14 @@ import 'compaction.dart';
 import 'pdf417_error_correction.dart';
 import 'pdf417_high_level_encoder.dart';
 
-/**
- * Top-level class for the logic part of the PDF417 implementation.
- */
+/// Top-level class for the logic part of the PDF417 implementation.
 class PDF417 {
-  /**
-   * The start pattern (17 bits)
-   */
+  /// The start pattern (17 bits)
   static const int _START_PATTERN = 0x1fea8;
-  /**
-   * The stop pattern (18 bits)
-   */
+  /// The stop pattern (18 bits)
   static const int _STOP_PATTERN = 0x3fa29;
 
-  /**
-   * The codeword table from the Annex A of ISO/IEC 15438:2001(E).
-   */
+  /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
   static const List<List<int>> _CODEWORD_TABLE = [
     [
       0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e, //
@@ -536,16 +528,14 @@ class PDF417 {
     return _barcodeMatrix;
   }
 
-  /**
-   * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
-   *
-   * @param m the number of source codewords prior to the additional of the Symbol Length
-   *          Descriptor and any pad codewords
-   * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
-   *          row indicator codewords)
-   * @return the number of rows in the symbol (r)
-   */
+  /// Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
+  ///
+  /// @param m the number of source codewords prior to the additional of the Symbol Length
+  ///          Descriptor and any pad codewords
+  /// @param k the number of error correction codewords
+  /// @param c the number of columns in the symbol in the data region (excluding start, stop and
+  ///          row indicator codewords)
+  /// @return the number of rows in the symbol (r)
   static int _calculateNumberOfRows(int m, int k, int c) {
     int r = ((m + 1 + k) ~/ c) + 1;
     if (c * r >= (m + 1 + k + c)) {
@@ -554,17 +544,15 @@ class PDF417 {
     return r;
   }
 
-  /**
-   * Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
-   *
-   * @param m the number of source codewords prior to the additional of the Symbol Length
-   *          Descriptor and any pad codewords
-   * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
-   *          row indicator codewords)
-   * @param r the number of rows in the symbol
-   * @return the number of pad codewords
-   */
+  /// Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
+  ///
+  /// @param m the number of source codewords prior to the additional of the Symbol Length
+  ///          Descriptor and any pad codewords
+  /// @param k the number of error correction codewords
+  /// @param c the number of columns in the symbol in the data region (excluding start, stop and
+  ///          row indicator codewords)
+  /// @param r the number of rows in the symbol
+  /// @return the number of pad codewords
   static int _getNumberOfPadCodewords(int m, int k, int c, int r) {
     int n = c * r - k;
     return n > m + 1 ? n - m - 1 : 0;
@@ -631,11 +619,9 @@ class PDF417 {
     }
   }
 
-  /**
-   * @param msg message to encode
-   * @param errorCorrectionLevel PDF417 error correction level to use
-   * @throws WriterException if the contents cannot be encoded in this format
-   */
+  /// @param msg message to encode
+  /// @param errorCorrectionLevel PDF417 error correction level to use
+  /// @throws WriterException if the contents cannot be encoded in this format
   void generateBarcodeLogic(String msg, int errorCorrectionLevel) {
     //1. step: High-level encoding
     int errorCorrectionCodeWords =
@@ -679,14 +665,12 @@ class PDF417 {
         dataCodewords + ec, cols, rows, errorCorrectionLevel, _barcodeMatrix!);
   }
 
-  /**
-   * Determine optimal nr of columns and rows for the specified number of
-   * codewords.
-   *
-   * @param sourceCodeWords number of code words
-   * @param errorCorrectionCodeWords number of error correction code words
-   * @return dimension object containing cols as width and rows as height
-   */
+  /// Determine optimal nr of columns and rows for the specified number of
+  /// codewords.
+  ///
+  /// @param sourceCodeWords number of code words
+  /// @param errorCorrectionCodeWords number of error correction code words
+  /// @return dimension object containing cols as width and rows as height
   List<int> _determineDimensions(
       int sourceCodeWords, int errorCorrectionCodeWords) {
     double ratio = 0.0;
@@ -734,14 +718,12 @@ class PDF417 {
     return dimension;
   }
 
-  /**
-   * Sets max/min row/col values
-   *
-   * @param maxCols maximum allowed columns
-   * @param minCols minimum allowed columns
-   * @param maxRows maximum allowed rows
-   * @param minRows minimum allowed rows
-   */
+  /// Sets max/min row/col values
+  ///
+  /// @param maxCols maximum allowed columns
+  /// @param minCols minimum allowed columns
+  /// @param maxRows maximum allowed rows
+  /// @param minRows minimum allowed rows
   void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
     this._maxCols = maxCols;
     this._minCols = minCols;
@@ -749,23 +731,17 @@ class PDF417 {
     this._minRows = minRows;
   }
 
-  /**
-   * @param compaction compaction mode to use
-   */
+  /// @param compaction compaction mode to use
   void setCompaction(Compaction compaction) {
     this._compaction = compaction;
   }
 
-  /**
-   * @param compact if true, enables compaction
-   */
+  /// @param compact if true, enables compaction
   void setCompact(bool compact) {
     this._compact = compact;
   }
 
-  /**
-   * @param encoding sets character encoding to use
-   */
+  /// @param encoding sets character encoding to use
   void setEncoding(Encoding encoding) {
     this._encoding = encoding;
   }

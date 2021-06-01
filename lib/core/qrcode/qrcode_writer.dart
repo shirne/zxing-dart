@@ -26,11 +26,9 @@ import 'encoder/byte_matrix.dart';
 import 'encoder/encoder.dart';
 import 'encoder/qrcode.dart';
 
-/**
- * This object renders a QR Code as a BitMatrix 2D array of greyscale values.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- */
+/// This object renders a QR Code as a BitMatrix 2D array of greyscale values.
+///
+/// @author dswitkin@google.com (Daniel Switkin)
 class QRCodeWriter implements Writer {
   static const int _QUIET_ZONE_SIZE = 4;
 

@@ -49,13 +49,11 @@ class Point {
   }
 }
 
-/**
- * Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
- * is rotated or skewed, or partially obscured.
- *
- * @author David Olivier
- * @author Frank Yellin
- */
+/// Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
+/// is rotated or skewed, or partially obscured.
+///
+/// @author David Olivier
+/// @author Frank Yellin
 class Detector {
   static const List<int> _EXPECTED_CORNER_BITS = [
     0xee0, // 07340  XXX .XX X.. ...
@@ -74,13 +72,11 @@ class Detector {
 
   Detector(this._image);
 
-  /**
-   * Detects an Aztec Code in an image.
-   *
-   * @param isMirror if true, image is a mirror-image of original
-   * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
-   * @throws NotFoundException if no Aztec Code can be found
-   */
+  /// Detects an Aztec Code in an image.
+  ///
+  /// @param isMirror if true, image is a mirror-image of original
+  /// @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
+  /// @throws NotFoundException if no Aztec Code can be found
   AztecDetectorResult detect([bool isMirror = false]) {
     // 1. Get the center of the aztec matrix
     Point pCenter = _getMatrixCenter();
@@ -113,12 +109,10 @@ class Detector {
         bits, corners, _compact, _nbDataBlocks, _nbLayers);
   }
 
-  /**
-   * Extracts the number of data layers and data blocks from the layer around the bull's eye.
-   *
-   * @param bullsEyeCorners the array of bull's eye corners
-   * @throws NotFoundException in case of too many errors or invalid parameters
-   */
+  /// Extracts the number of data layers and data blocks from the layer around the bull's eye.
+  ///
+  /// @param bullsEyeCorners the array of bull's eye corners
+  /// @throws NotFoundException in case of too many errors or invalid parameters
   void _extractParameters(List<ResultPoint> bullsEyeCorners) {
     if (!_isValidPoint(bullsEyeCorners[0]) ||
         !_isValidPoint(bullsEyeCorners[1]) ||
@@ -202,13 +196,11 @@ class Detector {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * Corrects the parameter bits using Reed-Solomon algorithm.
-   *
-   * @param parameterData parameter bits
-   * @param compact true if this is a compact Aztec code
-   * @throws NotFoundException if the array contains too many errors
-   */
+  /// Corrects the parameter bits using Reed-Solomon algorithm.
+  ///
+  /// @param parameterData parameter bits
+  /// @param compact true if this is a compact Aztec code
+  /// @throws NotFoundException if the array contains too many errors
   static int _getCorrectedParameterData(int parameterData, bool compact) {
     int numCodewords;
     int numDataCodewords;
@@ -243,15 +235,13 @@ class Detector {
     return result;
   }
 
-  /**
-   * Finds the corners of a bull-eye centered on the passed point.
-   * This returns the centers of the diagonal points just outside the bull's eye
-   * Returns [topRight, bottomRight, bottomLeft, topLeft]
-   *
-   * @param pCenter Center point
-   * @return The corners of the bull-eye
-   * @throws NotFoundException If no valid bull-eye can be found
-   */
+  /// Finds the corners of a bull-eye centered on the passed point.
+  /// This returns the centers of the diagonal points just outside the bull's eye
+  /// Returns [topRight, bottomRight, bottomLeft, topLeft]
+  ///
+  /// @param pCenter Center point
+  /// @return The corners of the bull-eye
+  /// @throws NotFoundException If no valid bull-eye can be found
   List<ResultPoint> _getBullsEyeCorners(Point pCenter) {
     Point pina = pCenter;
     Point pinb = pCenter;
@@ -308,11 +298,9 @@ class Detector {
         2 * _nbCenterLayers);
   }
 
-  /**
-   * Finds a candidate center point of an Aztec code from an image
-   *
-   * @return the center point
-   */
+  /// Finds a candidate center point of an Aztec code from an image
+  ///
+  /// @return the center point
   Point _getMatrixCenter() {
     ResultPoint pointA;
     ResultPoint pointB;
@@ -383,21 +371,17 @@ class Detector {
     return Point(cx, cy);
   }
 
-  /**
-   * Gets the Aztec code corners from the bull's eye corners and the parameters.
-   *
-   * @param bullsEyeCorners the array of bull's eye corners
-   * @return the array of aztec code corners
-   */
+  /// Gets the Aztec code corners from the bull's eye corners and the parameters.
+  ///
+  /// @param bullsEyeCorners the array of bull's eye corners
+  /// @return the array of aztec code corners
   List<ResultPoint> _getMatrixCornerPoints(List<ResultPoint> bullsEyeCorners) {
     return _expandSquare(bullsEyeCorners, 2 * _nbCenterLayers, _getDimension());
   }
 
-  /**
-   * Creates a BitMatrix by sampling the provided image.
-   * topLeft, topRight, bottomRight, and bottomLeft are the centers of the squares on the
-   * diagonal just outside the bull's eye.
-   */
+  /// Creates a BitMatrix by sampling the provided image.
+  /// topLeft, topRight, bottomRight, and bottomLeft are the centers of the squares on the
+  /// diagonal just outside the bull's eye.
   BitMatrix _sampleGrid(BitMatrix image, ResultPoint topLeft,
       ResultPoint topRight, ResultPoint bottomRight, ResultPoint bottomLeft) {
     GridSampler sampler = GridSampler.getInstance();
@@ -428,14 +412,12 @@ class Detector {
         bottomLeft.getY());
   }
 
-  /**
-   * Samples a line.
-   *
-   * @param p1   start point (inclusive)
-   * @param p2   end point (exclusive)
-   * @param size number of bits
-   * @return the array of bits as an int (first bit is high-order bit of result)
-   */
+  /// Samples a line.
+  ///
+  /// @param p1   start point (inclusive)
+  /// @param p2   end point (exclusive)
+  /// @param size number of bits
+  /// @return the array of bits as an int (first bit is high-order bit of result)
   int _sampleLine(ResultPoint p1, ResultPoint p2, int size) {
     int result = 0;
 
@@ -454,10 +436,8 @@ class Detector {
     return result;
   }
 
-  /**
-   * @return true if the border of the rectangle passed in parameter is compound of white points only
-   *         or black points only
-   */
+  /// @return true if the border of the rectangle passed in parameter is compound of white points only
+  ///         or black points only
   bool _isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4) {
     int corr = 3;
 
@@ -489,11 +469,9 @@ class Detector {
     return c == cInit;
   }
 
-  /**
-   * Gets the color of a segment
-   *
-   * @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
-   */
+  /// Gets the color of a segment
+  ///
+  /// @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
   int _getColor(Point p1, Point p2) {
     double d = _distance(p1, p2);
     double dx = (p2.getX() - p1.getX()) / d;
@@ -523,9 +501,7 @@ class Detector {
     return (errRatio <= 0.1) == colorModel ? 1 : -1;
   }
 
-  /**
-   * Gets the coordinate of the first point with a different color in the given direction
-   */
+  /// Gets the coordinate of the first point with a different color in the given direction
   Point _getFirstDifferent(Point init, bool color, int dx, int dy) {
     int x = init.getX() + dx;
     int y = init.getY() + dy;
@@ -551,14 +527,12 @@ class Detector {
     return Point(x, y);
   }
 
-  /**
-   * Expand the square represented by the corner points by pushing out equally in all directions
-   *
-   * @param cornerPoints the corners of the square, which has the bull's eye at its center
-   * @param oldSide the original length of the side of the square in the target bit matrix
-   * @param newSide the new length of the size of the square in the target bit matrix
-   * @return the corners of the expanded square
-   */
+  /// Expand the square represented by the corner points by pushing out equally in all directions
+  ///
+  /// @param cornerPoints the corners of the square, which has the bull's eye at its center
+  /// @param oldSide the original length of the side of the square in the target bit matrix
+  /// @param newSide the new length of the size of the square in the target bit matrix
+  /// @return the corners of the expanded square
   static List<ResultPoint> _expandSquare(
       List<ResultPoint> cornerPoints, int oldSide, int newSide) {
     double ratio = newSide / (2.0 * oldSide);

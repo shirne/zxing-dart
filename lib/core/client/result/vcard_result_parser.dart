@@ -22,12 +22,10 @@ import '../../result.dart';
 import 'address_book_parsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Parses contact information formatted according to the VCard (2.1) format. This is not a complete
- * implementation but should parse information as commonly encoded in 2D barcodes.
- *
- * @author Sean Owen
- */
+/// Parses contact information formatted according to the VCard (2.1) format. This is not a complete
+/// implementation but should parse information as commonly encoded in 2D barcodes.
+///
+/// @author Sean Owen
 class VCardResultParser extends ResultParser {
 
   static final RegExp _BEGIN_VCARD = RegExp("BEGIN:VCARD", caseSensitive: false);
@@ -327,12 +325,10 @@ class VCardResultParser extends ResultParser {
     return value == null || _VCARD_LIKE_DATE.hasMatch(value);
   }
 
-  /**
-   * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
-   * "Reverend John Q. III".
-   *
-   * @param names name values to format, in place
-   */
+  /// Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
+  /// "Reverend John Q. III".
+  ///
+  /// @param names name values to format, in place
   static void _formatNames(Iterable<List<String>>? names) {
     if (names != null) {
       for (List<String> list in names) {

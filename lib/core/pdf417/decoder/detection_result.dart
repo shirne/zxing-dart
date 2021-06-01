@@ -21,9 +21,7 @@ import 'codeword.dart';
 import 'detection_result_column.dart';
 import 'detection_result_row_indicator_column.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class DetectionResult {
   static const int _ADJUST_ROW_NUMBER_SKIP = 2;
 
@@ -62,10 +60,8 @@ class DetectionResult {
   // TODO ensure that no detected codewords with unknown row number are left
   // we should be able to estimate the row height and use it as a hint for the row number
   // we should also fill the rows top to bottom and bottom to top
-  /**
-   * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords
-   * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
-   */
+  /// @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords
+  /// will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
   int _adjustRowNumbers() {
     int unadjustedCount = _adjustRowNumbersByRow();
     if (unadjustedCount == 0) {
@@ -256,9 +252,7 @@ class DetectionResult {
     }
   }
 
-  /**
-   * @return true, if row number was adjusted, false otherwise
-   */
+  /// @return true, if row number was adjusted, false otherwise
   static bool _adjustRowNumber(Codeword? codeword, Codeword? otherCodeword) {
     if (otherCodeword == null) {
       return false;

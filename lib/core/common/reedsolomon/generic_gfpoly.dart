@@ -16,28 +16,24 @@
 
 import 'generic_gf.dart';
 
-/**
- * <p>Represents a polynomial whose coefficients are elements of a GF.
- * Instances of this class are immutable.</p>
- *
- * <p>Much credit is due to William Rucklidge since portions of this code are an indirect
- * port of his C++ Reed-Solomon implementation.</p>
- *
- * @author Sean Owen
- */
+/// <p>Represents a polynomial whose coefficients are elements of a GF.
+/// Instances of this class are immutable.</p>
+///
+/// <p>Much credit is due to William Rucklidge since portions of this code are an indirect
+/// port of his C++ Reed-Solomon implementation.</p>
+///
+/// @author Sean Owen
 class GenericGFPoly {
   final GenericGF _field;
   late List<int> _coefficients;
 
-  /**
-   * @param field the {@link GenericGF} instance representing the field to use
-   * to perform computations
-   * @param coefficients coefficients as ints representing elements of GF(size), arranged
-   * from most significant (highest-power term) coefficient to least significant
-   * @throws IllegalArgumentException if argument is null or empty,
-   * or if leading coefficient is 0 and this is not a
-   * constant polynomial (that is, it is not the monomial "0")
-   */
+  /// @param field the {@link GenericGF} instance representing the field to use
+  /// to perform computations
+  /// @param coefficients coefficients as ints representing elements of GF(size), arranged
+  /// from most significant (highest-power term) coefficient to least significant
+  /// @throws IllegalArgumentException if argument is null or empty,
+  /// or if leading coefficient is 0 and this is not a
+  /// constant polynomial (that is, it is not the monomial "0")
   GenericGFPoly(this._field, List<int> coefficients):
         assert(coefficients.length > 0,'IllegalArgument'),
       this._coefficients = coefficients.skipWhile((value) => value == 0).toList()
@@ -51,30 +47,22 @@ class GenericGFPoly {
     return _coefficients;
   }
 
-  /**
-   * @return degree of this polynomial
-   */
+  /// @return degree of this polynomial
   int getDegree() {
     return _coefficients.length - 1;
   }
 
-  /**
-   * @return true iff this polynomial is the monomial "0"
-   */
+  /// @return true iff this polynomial is the monomial "0"
   bool isZero() {
     return _coefficients[0] == 0;
   }
 
-  /**
-   * @return coefficient of x^degree term in this polynomial
-   */
+  /// @return coefficient of x^degree term in this polynomial
   int getCoefficient(int degree) {
     return _coefficients[_coefficients.length - 1 - degree];
   }
 
-  /**
-   * @return evaluation of this polynomial at a given point
-   */
+  /// @return evaluation of this polynomial at a given point
   int evaluateAt(int a) {
     if (a == 0) {
       // Just return the x^0 coefficient

@@ -18,12 +18,10 @@ import '../../result.dart';
 import 'email_address_parsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
- * {@code smtp[:subject[:body]]}.</p>
- *
- * @author Sean Owen
- */
+/// <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
+/// {@code smtp[:subject[:body]]}.</p>
+///
+/// @author Sean Owen
 class SMTPResultParser extends ResultParser {
   @override
   EmailAddressParsedResult? parse(Result result) {

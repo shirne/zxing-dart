@@ -23,14 +23,12 @@ import '../../decode_hint_type.dart';
 import '../../result_point.dart';
 import 'pdf417_detector_result.dart';
 
-/**
- * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
- * PDF417 Code is rotated or skewed, or partially obscured.</p>
- *
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Guenther Grau
- */
+/// <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
+/// PDF417 Code is rotated or skewed, or partially obscured.</p>
+///
+/// @author SITA Lab (kevin.osullivan@sita.aero)
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Guenther Grau
 class Detector {
   static const List<int> _INDEXES_START_PATTERN = [0, 4, 1, 5];
   static const List<int> _INDEXES_STOP_PATTERN = [6, 2, 7, 3];
@@ -54,16 +52,14 @@ class Detector {
 
   Detector._();
 
-  /**
-   * <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
-   *
-   * @param image barcode image to decode
-   * @param hints optional hints to detector
-   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
-   * be found and returned
-   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
-   * @throws NotFoundException if no PDF417 Code can be found
-   */
+  /// <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
+  ///
+  /// @param image barcode image to decode
+  /// @param hints optional hints to detector
+  /// @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
+  /// be found and returned
+  /// @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
+  /// @throws NotFoundException if no PDF417 Code can be found
   static PDF417DetectorResult detect(
       BinaryBitmap image, Map<DecodeHintType, Object>? hints, bool multiple) {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
@@ -87,13 +83,11 @@ class Detector {
     return PDF417DetectorResult(bitMatrix, barcodeCoordinates);
   }
 
-  /**
-   * Detects PDF417 codes in an image. Only checks 0 degree rotation
-   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
-   * be found and returned
-   * @param bitMatrix bit matrix to detect barcodes in
-   * @return List of ResultPoint arrays containing the coordinates of found barcodes
-   */
+  /// Detects PDF417 codes in an image. Only checks 0 degree rotation
+  /// @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
+  /// be found and returned
+  /// @param bitMatrix bit matrix to detect barcodes in
+  /// @return List of ResultPoint arrays containing the coordinates of found barcodes
   static List<List<ResultPoint?>> _detect(
       bool multiple, BitMatrix bitMatrix) {
     List<List<ResultPoint?>> barcodeCoordinates = [];
@@ -141,21 +135,19 @@ class Detector {
     return barcodeCoordinates;
   }
 
-  /**
-   * Locate the vertices and the codewords area of a black blob using the Start
-   * and Stop patterns as locators.
-   *
-   * @param matrix the scanned barcode image.
-   * @return an array containing the vertices:
-   *           vertices[0] x, y top left barcode
-   *           vertices[1] x, y bottom left barcode
-   *           vertices[2] x, y top right barcode
-   *           vertices[3] x, y bottom right barcode
-   *           vertices[4] x, y top left codeword area
-   *           vertices[5] x, y bottom left codeword area
-   *           vertices[6] x, y top right codeword area
-   *           vertices[7] x, y bottom right codeword area
-   */
+  /// Locate the vertices and the codewords area of a black blob using the Start
+  /// and Stop patterns as locators.
+  ///
+  /// @param matrix the scanned barcode image.
+  /// @return an array containing the vertices:
+  ///           vertices[0] x, y top left barcode
+  ///           vertices[1] x, y bottom left barcode
+  ///           vertices[2] x, y top right barcode
+  ///           vertices[3] x, y bottom right barcode
+  ///           vertices[4] x, y top left codeword area
+  ///           vertices[5] x, y bottom left codeword area
+  ///           vertices[6] x, y top right codeword area
+  ///           vertices[7] x, y bottom right codeword area
   static List<ResultPoint> _findVertices(
       BitMatrix matrix, int startRow, int startColumn) {
     int height = matrix.getHeight();
@@ -253,16 +245,14 @@ class Detector {
     return result;
   }
 
-  /**
-   * @param matrix row of black/white values to search
-   * @param column x position to start search
-   * @param row y position to start search
-   * @param width the number of pixels to search on this row
-   * @param pattern pattern of counts of number of black and white pixels that are
-   *                 being searched for as a pattern
-   * @param counters array of counters, as long as pattern, to re-use
-   * @return start/end horizontal offset of guard pattern, as an array of two ints.
-   */
+  /// @param matrix row of black/white values to search
+  /// @param column x position to start search
+  /// @param row y position to start search
+  /// @param width the number of pixels to search on this row
+  /// @param pattern pattern of counts of number of black and white pixels that are
+  ///                 being searched for as a pattern
+  /// @param counters array of counters, as long as pattern, to re-use
+  /// @return start/end horizontal offset of guard pattern, as an array of two ints.
   static List<int>? _findGuardPattern(BitMatrix matrix, int column, int row,
       int width, List<int> pattern, List<int> counters) {
     //Arrays.fill(counters, 0, counters.length, 0);
@@ -306,16 +296,14 @@ class Detector {
     return null;
   }
 
-  /**
-   * Determines how closely a set of observed counts of runs of black/white
-   * values matches a given target pattern. This is reported as the ratio of
-   * the total variance from the expected pattern proportions across all
-   * pattern elements, to the length of the pattern.
-   *
-   * @param counters observed counters
-   * @param pattern expected pattern
-   * @return ratio of total variance between counters and pattern compared to total pattern size
-   */
+  /// Determines how closely a set of observed counts of runs of black/white
+  /// values matches a given target pattern. This is reported as the ratio of
+  /// the total variance from the expected pattern proportions across all
+  /// pattern elements, to the length of the pattern.
+  ///
+  /// @param counters observed counters
+  /// @param pattern expected pattern
+  /// @return ratio of total variance between counters and pattern compared to total pattern size
   static double _patternMatchVariance(List<int> counters, List<int> pattern) {
     int numCounters = counters.length;
     int total = 0;

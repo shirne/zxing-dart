@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * Represents the type of data encoded by a barcode -- from plain text, to a
- * URI, to an e-mail address, etc.
- *
- * @author Sean Owen
- */
+/// Represents the type of data encoded by a barcode -- from plain text, to a
+/// URI, to an e-mail address, etc.
+///
+/// @author Sean Owen
 enum ParsedResultType {
   ADDRESSBOOK,
   EMAIL_ADDRESS,

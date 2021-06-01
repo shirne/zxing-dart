@@ -88,12 +88,10 @@ class C40Encoder implements Encoder {
     buffer.delete(0, 3);
   }
 
-  /**
-   * Handle "end of data" situations
-   *
-   * @param context the encoder context
-   * @param buffer  the buffer with the remaining encoded characters
-   */
+  /// Handle "end of data" situations
+  ///
+  /// @param context the encoder context
+  /// @param buffer  the buffer with the remaining encoded characters
   void handleEOD(EncoderContext context, StringBuilder buffer) {
     int unwritten = (buffer.length ~/ 3) * 2;
     int rest = buffer.length % 3;

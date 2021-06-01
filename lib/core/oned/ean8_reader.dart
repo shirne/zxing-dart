@@ -19,11 +19,9 @@ import '../common/bit_array.dart';
 import '../barcode_format.dart';
 import 'upceanreader.dart';
 
-/**
- * <p>Implements decoding of the EAN-8 format.</p>
- *
- * @author Sean Owen
- */
+/// <p>Implements decoding of the EAN-8 format.</p>
+///
+/// @author Sean Owen
 class EAN8Reader extends UPCEANReader {
   final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
 

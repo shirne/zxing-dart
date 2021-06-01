@@ -16,11 +16,9 @@
 
 import '../../common/bit_matrix.dart';
 
-/**
- * Aztec 2D code representation
- *
- * @author Rustam Abdullaev
- */
+/// Aztec 2D code representation
+///
+/// @author Rustam Abdullaev
 class AztecCode {
   bool _compact = false;
   int _size = 0;
@@ -28,9 +26,7 @@ class AztecCode {
   int _codeWords = 0;
   BitMatrix? _matrix;
 
-  /**
-   * @return {@code true} if compact instead of full mode
-   */
+  /// @return {@code true} if compact instead of full mode
   bool isCompact() {
     return _compact;
   }
@@ -39,9 +35,7 @@ class AztecCode {
     this._compact = compact;
   }
 
-  /**
-   * @return size in pixels (width and height)
-   */
+  /// @return size in pixels (width and height)
   int getSize() {
     return _size;
   }
@@ -50,9 +44,7 @@ class AztecCode {
     this._size = size;
   }
 
-  /**
-   * @return number of levels
-   */
+  /// @return number of levels
   int getLayers() {
     return _layers;
   }
@@ -61,9 +53,7 @@ class AztecCode {
     this._layers = layers;
   }
 
-  /**
-   * @return number of data codewords
-   */
+  /// @return number of data codewords
   int getCodeWords() {
     return _codeWords;
   }
@@ -72,9 +62,7 @@ class AztecCode {
     this._codeWords = codeWords;
   }
 
-  /**
-   * @return the symbol image
-   */
+  /// @return the symbol image
   BitMatrix? getMatrix() {
     return _matrix;
   }

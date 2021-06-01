@@ -20,13 +20,11 @@ import 'abstract_do_co_mo_result_parser.dart';
 import 'email_address_parsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Implements the "MATMSG" email message entry format.
- *
- * Supported keys: TO, SUB, BODY
- *
- * @author Sean Owen
- */
+/// Implements the "MATMSG" email message entry format.
+///
+/// Supported keys: TO, SUB, BODY
+///
+/// @author Sean Owen
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
   static final RegExp _ATEXT_ALPHANUMERIC =
   RegExp(r"[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+");
@@ -51,12 +49,10 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     return EmailAddressParsedResult(tos, null, null, subject, body);
   }
 
-  /**
-   * This implements only the most basic checking for an email address's validity -- that it contains
-   * an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
-   * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
-   * in a barcode, not "judge" it.
-   */
+  /// This implements only the most basic checking for an email address's validity -- that it contains
+  /// an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
+  /// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
+  /// in a barcode, not "judge" it.
   static bool isBasicallyValidEmailAddress(String? email) {
     return email != null &&
         _ATEXT_ALPHANUMERIC.hasMatch(email) &&

@@ -17,9 +17,7 @@
 import 'parsed_result_type.dart';
 import 'parsed_result.dart';
 
-/**
- * Represents a parsed result that encodes a Vehicle Identification Number (VIN).
- */
+/// Represents a parsed result that encodes a Vehicle Identification Number (VIN).
 class VINParsedResult extends ParsedResult {
   final String _vin;
   final String _worldManufacturerID;

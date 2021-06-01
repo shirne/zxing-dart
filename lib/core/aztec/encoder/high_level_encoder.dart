@@ -22,18 +22,16 @@ import '../../common/character_set_eci.dart';
 
 import 'state.dart';
 
-/**
- * This produces nearly optimal encodings of text into the first-level of
- * encoding used by Aztec code.
- *
- * It uses a dynamic algorithm.  For each prefix of the string, it determines
- * a set of encodings that could lead to this prefix.  We repeatedly add a
- * character and generate a new set of optimal encodings until we have read
- * through the entire input.
- *
- * @author Frank Yellin
- * @author Rustam Abdullaev
- */
+/// This produces nearly optimal encodings of text into the first-level of
+/// encoding used by Aztec code.
+///
+/// It uses a dynamic algorithm.  For each prefix of the string, it determines
+/// a set of encodings that could lead to this prefix.  We repeatedly add a
+/// character and generate a new set of optimal encodings until we have read
+/// through the entire input.
+///
+/// @author Frank Yellin
+/// @author Rustam Abdullaev
 class HighLevelEncoder {
   static const List<String> MODE_NAMES = [
     "UPPER",
@@ -161,9 +159,7 @@ class HighLevelEncoder {
 
   HighLevelEncoder(this._text, [this._charset]);
 
-  /**
-   * @return text represented by this encoder encoded as a {@link BitArray}
-   */
+  /// @return text represented by this encoder encoded as a {@link BitArray}
   BitArray encode() {
     State initialState = State.INITIAL_STATE;
     if (_charset != null) {

@@ -16,9 +16,7 @@
 
 import '../../result_point.dart';
 
-/**
- * Encapsulates an RSS barcode finder pattern, including its start/end position and row.
- */
+/// Encapsulates an RSS barcode finder pattern, including its start/end position and row.
 class FinderPattern {
   final int _value;
   final List<int> _startEnd;

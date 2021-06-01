@@ -28,10 +28,8 @@ import 'dart:math' as Math;
 
 import '../../../../not_found_exception.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class FieldParser {
   static final Object _VARIABLE_LENGTH = Object();
 

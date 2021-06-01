@@ -21,12 +21,10 @@ import 'package:intl/intl.dart';
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes a calendar event at a certain time, optionally
- * with attendees and a location.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes a calendar event at a certain time, optionally
+/// with attendees and a location.
+///
+/// @author Sean Owen
 class CalendarParsedResult extends ParsedResult {
 
   static final RegExp _RFC2445_DURATION =
@@ -90,50 +88,38 @@ class CalendarParsedResult extends ParsedResult {
     return _summary;
   }
 
-  /**
-   * @return start time
-   * @deprecated use {@link #getStartTimestamp()}
-   */
+  /// @return start time
+  /// @deprecated use {@link #getStartTimestamp()}
   @deprecated
   DateTime getStart() {
     return DateTime.fromMillisecondsSinceEpoch(_start);
   }
 
-  /**
-   * @return start time
-   * @see #getEndTimestamp()
-   */
+  /// @return start time
+  /// @see #getEndTimestamp()
   int getStartTimestamp() {
     return _start;
   }
 
-  /**
-   * @return true if start time was specified as a whole day
-   */
+  /// @return true if start time was specified as a whole day
   bool isStartAllDay() {
     return _startAllDay;
   }
 
-  /**
-   * @return event end {@link Date}, or {@code null} if event has no duration
-   * @deprecated use {@link #getEndTimestamp()}
-   */
+  /// @return event end {@link Date}, or {@code null} if event has no duration
+  /// @deprecated use {@link #getEndTimestamp()}
   @deprecated
   DateTime? getEnd() {
     return _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
   }
 
-  /**
-   * @return event end {@link Date}, or -1 if event has no duration
-   * @see #getStartTimestamp()
-   */
+  /// @return event end {@link Date}, or -1 if event has no duration
+  /// @see #getStartTimestamp()
   int getEndTimestamp() {
     return _end;
   }
 
-  /**
-   * @return true if end time was specified as a whole day
-   */
+  /// @return true if end time was specified as a whole day
   bool isEndAllDay() {
     return _endAllDay;
   }
@@ -175,13 +161,11 @@ class CalendarParsedResult extends ParsedResult {
     return result.toString();
   }
 
-  /**
-   * Parses a string as a date. RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021)
-   * or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
-   *
-   * @param when The string to parse
-   * @throws ParseException if not able to parse as a date
-   */
+  /// Parses a string as a date. RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021)
+  /// or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
+  ///
+  /// @param when The string to parse
+  /// @throws ParseException if not able to parse as a date
   static int _parseDate(String? when){
     if (when == null || !_DATE_TIME.hasMatch(when)) {
       throw Exception('Date Parse error $when');

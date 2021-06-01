@@ -17,9 +17,7 @@
 import 'bounding_box.dart';
 import 'codeword.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class DetectionResultColumn {
   static const int _MAX_NEARBY_DISTANCE = 5;
 

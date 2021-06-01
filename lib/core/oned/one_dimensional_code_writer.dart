@@ -22,21 +22,17 @@ import '../barcode_format.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 
-/**
- * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
- *
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
- */
+/// <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
+///
+/// @author dsbnatut@gmail.com (Kazuki Nishiura)
 abstract class OneDimensionalCodeWriter implements Writer {
   static final RegExp _NUMERIC = RegExp(r"[0-9]+");
 
-  /**
-   * Encode the contents following specified format.
-   * {@code width} and {@code height} are required size. This method may return bigger size
-   * {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
-   * {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
-   * or {@code height}, {@code IllegalArgumentException} is thrown.
-   */
+  /// Encode the contents following specified format.
+  /// {@code width} and {@code height} are required size. This method may return bigger size
+  /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+  /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+  /// or {@code height}, {@code IllegalArgumentException} is thrown.
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
@@ -67,9 +63,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     return null;
   }
 
-  /**
-   * @return a byte array of horizontal pixels (0 = white, 1 = black)
-   */
+  /// @return a byte array of horizontal pixels (0 = white, 1 = black)
   static BitMatrix _renderResult(
       List<bool> code, int width, int height, int sidesMargin) {
     int inputWidth = code.length;
@@ -92,23 +86,19 @@ abstract class OneDimensionalCodeWriter implements Writer {
     return output;
   }
 
-  /**
-   * @param contents string to check for numeric characters
-   * @throws IllegalArgumentException if input contains characters other than digits 0-9.
-   */
+  /// @param contents string to check for numeric characters
+  /// @throws IllegalArgumentException if input contains characters other than digits 0-9.
   static void checkNumeric(String contents) {
     if (!_NUMERIC.hasMatch(contents)) {
       throw Exception("Input should only contain digits 0-9");
     }
   }
 
-  /**
-   * @param target encode black/white pattern into this array
-   * @param pos position to start encoding at in {@code target}
-   * @param pattern lengths of black/white runs to encode
-   * @param startColor starting color - false for white, true for black
-   * @return the number of elements added to target.
-   */
+  /// @param target encode black/white pattern into this array
+  /// @param pos position to start encoding at in {@code target}
+  /// @param pattern lengths of black/white runs to encode
+  /// @param startColor starting color - false for white, true for black
+  /// @return the number of elements added to target.
   static int appendPattern(
       List<bool> target, int pos, List<int> pattern, bool startColor) {
     bool color = startColor;
@@ -129,12 +119,10 @@ abstract class OneDimensionalCodeWriter implements Writer {
     return 10;
   }
 
-  /**
-   * Encode the contents to bool array expression of one-dimensional barcode.
-   * Start code and end code should be included in result, and side margins should not be included.
-   *
-   * @param contents barcode contents to encode
-   * @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
-   */
+  /// Encode the contents to bool array expression of one-dimensional barcode.
+  /// Start code and end code should be included in result, and side margins should not be included.
+  ///
+  /// @param contents barcode contents to encode
+  /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
   List<bool> encodeContent(String contents);
 }

@@ -26,12 +26,10 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
-/**
- * <p>Decodes Codabar barcodes.</p>
- *
- * @author Bas Vijfwinkel
- * @author David Walker
- */
+/// <p>Decodes Codabar barcodes.</p>
+///
+/// @author Bas Vijfwinkel
+/// @author David Walker
 class CodaBarReader extends OneDReader {
   // These values are critical for determining how permissive the decoding
   // will be. All stripe sizes must be within the window these define, as
@@ -42,10 +40,8 @@ class CodaBarReader extends OneDReader {
   static const String _ALPHABET_STRING = r"0123456789-$:/.+ABCD";
   static final List<int> ALPHABET = _ALPHABET_STRING.codeUnits;
 
-  /**
-   * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
-   * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow.
-   */
+  /// These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
+  /// each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow.
   static const List<int> CHARACTER_ENCODINGS = [
     0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
     0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B,
@@ -227,12 +223,10 @@ class CodaBarReader extends OneDReader {
     }
   }
 
-  /**
-   * Records the size of all runs of white and black pixels, starting with white.
-   * This is just like recordPattern, except it records all the counters, and
-   * uses our builtin "counters" member for storage.
-   * @param row row to count from
-   */
+  /// Records the size of all runs of white and black pixels, starting with white.
+  /// This is just like recordPattern, except it records all the counters, and
+  /// uses our builtin "counters" member for storage.
+  /// @param row row to count from
   void _setCounters(BitArray row) {
     _counterLength = 0;
     // Start from the first white bit.

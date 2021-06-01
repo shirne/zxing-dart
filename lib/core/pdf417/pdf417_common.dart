@@ -16,10 +16,8 @@
 
 import '../common/detector/math_utils.dart';
 
-/**
- * @author SITA Lab (kevin.osullivan@sita.aero)
- * @author Guenther Grau
- */
+/// @author SITA Lab (kevin.osullivan@sita.aero)
+/// @author Guenther Grau
 class PDF417Common {
   static const int NUMBER_OF_CODEWORDS = 929;
   // Maximum Codewords (Data + Error).
@@ -36,11 +34,9 @@ class PDF417Common {
 
   PDF417Common._();
 
-  /**
-   * @param moduleBitCount values to sum
-   * @return sum of values
-   * @deprecated call {@link MathUtils#sum(List<int>)}
-   */
+  /// @param moduleBitCount values to sum
+  /// @return sum of values
+  /// @deprecated call {@link MathUtils#sum(List<int>)}
   @deprecated
   static int getBitCountSum(List<int> moduleBitCount) {
     return MathUtils.sum(moduleBitCount);
@@ -56,10 +52,8 @@ class PDF417Common {
     return result;
   }
 
-  /**
-   * @param symbol encoded symbol to translate to a codeword
-   * @return the codeword corresponding to the symbol.
-   */
+  /// @param symbol encoded symbol to translate to a codeword
+  /// @return the codeword corresponding to the symbol.
   static int getCodeword(int symbol) {
     //int i = SYMBOL_TABLE.indexOf(symbol);
     int i = MathUtils.binarySearch(SYMBOL_TABLE, symbol & 0x3FFFF);
@@ -69,11 +63,9 @@ class PDF417Common {
     return (_CODEWORD_TABLE[i] - 1) % NUMBER_OF_CODEWORDS;
   }
 
-  /**
-   * The sorted table of all possible symbols. Extracted from the PDF417
-   * specification. The index of a symbol in this table corresponds to the
-   * index into the codeword table.
-   */
+  /// The sorted table of all possible symbols. Extracted from the PDF417
+  /// specification. The index of a symbol in this table corresponds to the
+  /// index into the codeword table.
   static const List<int> SYMBOL_TABLE = [
     0x1025e, 0x1027a, 0x1029e, 0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e,
     0x1035c, 0x10396, 0x103a6, 0x103ac, //
@@ -542,9 +534,7 @@ class PDF417Common {
     0x1fba8, 0x1fbb6, 0x1fbda
   ];
 
-  /**
-   * This table contains to codewords for all symbols.
-   */
+  /// This table contains to codewords for all symbols.
   static const List<int> _CODEWORD_TABLE = [
     2627, 1819, 2622, 2621, 1813, 1812, 2729, 2724, 2723, 2779, 2774, 2773, 902,
     896, 908, 868, 865, 861, 859, 2511, //

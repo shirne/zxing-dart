@@ -19,13 +19,11 @@ import '../../result.dart';
 import 'uriparsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
- * This seems to be used sometimes, but I am not able to find documentation
- * on its origin or official format?
- *
- * @author Sean Owen
- */
+/// Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
+/// This seems to be used sometimes, but I am not able to find documentation
+/// on its origin or official format?
+///
+/// @author Sean Owen
 class URLTOResultParser extends ResultParser {
   @override
   URIParsedResult? parse(Result result) {

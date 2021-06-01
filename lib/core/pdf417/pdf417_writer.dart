@@ -27,19 +27,13 @@ import 'encoder/compaction.dart';
 import 'encoder/dimensions.dart';
 import 'encoder/pdf417.dart';
 
-/**
- * @author Jacob Haynes
- * @author qwandor@google.com (Andrew Walbran)
- */
+/// @author Jacob Haynes
+/// @author qwandor@google.com (Andrew Walbran)
 class PDF417Writer implements Writer {
-  /**
-   * default white space (margin) around the code
-   */
+  /// default white space (margin) around the code
   static const int _WHITE_SPACE = 30;
 
-  /**
-   * default error correction level
-   */
+  /// default error correction level
   static const int _DEFAULT_ERROR_CORRECTION_LEVEL = 2;
 
   @override
@@ -85,9 +79,7 @@ class PDF417Writer implements Writer {
         encoder, contents, errorCorrectionLevel, width, height, margin);
   }
 
-  /**
-   * Takes encoder, accounts for width/height, and retrieves bit matrix
-   */
+  /// Takes encoder, accounts for width/height, and retrieves bit matrix
   static BitMatrix _bitMatrixFromEncoder(PDF417 encoder, String contents,
       int errorCorrectionLevel, int width, int height, int margin) {
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
@@ -117,13 +109,11 @@ class PDF417Writer implements Writer {
     return _bitMatrixFromBitArray(originalScale, margin);
   }
 
-  /**
-   * This takes an array holding the values of the PDF 417
-   *
-   * @param input a byte array of information with 0 is black, and 1 is white
-   * @param margin border around the barcode
-   * @return BitMatrix of the input
-   */
+  /// This takes an array holding the values of the PDF 417
+  ///
+  /// @param input a byte array of information with 0 is black, and 1 is white
+  /// @param margin border around the barcode
+  /// @return BitMatrix of the input
   static BitMatrix _bitMatrixFromBitArray(List<Uint8List> input, int margin) {
     // Creates the bit matrix with extra space for whitespace
     BitMatrix output =
@@ -143,9 +133,7 @@ class PDF417Writer implements Writer {
     return output;
   }
 
-  /**
-   * Takes and rotates the it 90 degrees
-   */
+  /// Takes and rotates the it 90 degrees
   static List<Uint8List> _rotateArray(List<Uint8List> bitarray) {
     List<Uint8List> temp = List.generate(
         bitarray[0].length, (index) => Uint8List(bitarray.length));

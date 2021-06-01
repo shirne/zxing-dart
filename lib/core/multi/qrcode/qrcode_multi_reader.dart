@@ -30,12 +30,10 @@ import '../../result_point.dart';
 import '../multiple_barcode_reader.dart';
 import 'detector/multi_detector.dart';
 
-/**
- * This implementation can detect and decode multiple QR Codes in an image.
- *
- * @author Sean Owen
- * @author Hannes Erven
- */
+/// This implementation can detect and decode multiple QR Codes in an image.
+///
+/// @author Sean Owen
+/// @author Hannes Erven
 class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   static final List<Result> _EMPTY_RESULT_ARRAY = [];
   static final List<ResultPoint> _NO_POINTS = [];

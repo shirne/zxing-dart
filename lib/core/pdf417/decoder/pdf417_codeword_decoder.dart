@@ -18,10 +18,8 @@ import '../../common/detector/math_utils.dart';
 
 import '../pdf417_common.dart';
 
-/**
- * @author Guenther Grau
- * @author creatale GmbH (christoph.schulz@creatale.de)
- */
+/// @author Guenther Grau
+/// @author creatale GmbH (christoph.schulz@creatale.de)
 class PDF417CodewordDecoder {
 
   static bool _isInit = false;

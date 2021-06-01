@@ -20,14 +20,12 @@ import '../../not_found_exception.dart';
 import '../../result_point.dart';
 import '../bit_matrix.dart';
 
-/**
- * <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
- * It looks within a mostly white region of an image for a region of black and white, but mostly
- * black. It returns the four corners of the region, as best it can determine.</p>
- *
- * @author Sean Owen
- * @deprecated without replacement since 3.3.0
- */
+/// <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
+/// It looks within a mostly white region of an image for a region of black and white, but mostly
+/// black. It returns the four corners of the region, as best it can determine.</p>
+///
+/// @author Sean Owen
+/// @deprecated without replacement since 3.3.0
 @deprecated
 class MonochromeRectangleDetector {
   static final int _MAX_MODULES = 32;
@@ -36,16 +34,14 @@ class MonochromeRectangleDetector {
 
   MonochromeRectangleDetector(this._image);
 
-  /**
-   * <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
-   * white, in an image.</p>
-   *
-   * @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and
-   *  last points are opposed on the diagonal, as are the second and third. The first point will be
-   *  the topmost point and the last, the bottommost. The second point will be leftmost and the
-   *  third, the rightmost
-   * @throws NotFoundException if no Data Matrix Code can be found
-   */
+  /// <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
+  /// white, in an image.</p>
+  ///
+  /// @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and
+  ///  last points are opposed on the diagonal, as are the second and third. The first point will be
+  ///  the topmost point and the last, the bottommost. The second point will be leftmost and the
+  ///  third, the rightmost
+  /// @throws NotFoundException if no Data Matrix Code can be found
   List<ResultPoint> detect() {
     int height = _image.getHeight();
     int width = _image.getWidth();
@@ -78,24 +74,22 @@ class MonochromeRectangleDetector {
     return [pointA, pointB, pointC, pointD];
   }
 
-  /**
-   * Attempts to locate a corner of the barcode by scanning up, down, left or right from a center
-   * point which should be within the barcode.
-   *
-   * @param centerX center's x component (horizontal)
-   * @param deltaX same as deltaY but change in x per step instead
-   * @param left minimum value of x
-   * @param right maximum value of x
-   * @param centerY center's y component (vertical)
-   * @param deltaY change in y per step. If scanning up this is negative; down, positive;
-   *  left or right, 0
-   * @param top minimum value of y to search through (meaningless when di == 0)
-   * @param bottom maximum value of y
-   * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
-   *  the barcode
-   * @return a {@link ResultPoint} encapsulating the corner that was found
-   * @throws NotFoundException if such a point cannot be found
-   */
+  /// Attempts to locate a corner of the barcode by scanning up, down, left or right from a center
+  /// point which should be within the barcode.
+  ///
+  /// @param centerX center's x component (horizontal)
+  /// @param deltaX same as deltaY but change in x per step instead
+  /// @param left minimum value of x
+  /// @param right maximum value of x
+  /// @param centerY center's y component (vertical)
+  /// @param deltaY change in y per step. If scanning up this is negative; down, positive;
+  ///  left or right, 0
+  /// @param top minimum value of y to search through (meaningless when di == 0)
+  /// @param bottom maximum value of y
+  /// @param maxWhiteRun maximum run of white pixels that can still be considered to be within
+  ///  the barcode
+  /// @return a {@link ResultPoint} encapsulating the corner that was found
+  /// @throws NotFoundException if such a point cannot be found
   ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
       int centerY, int deltaY, int top, int bottom, int maxWhiteRun) {
     List<int>? lastRange;
@@ -145,20 +139,18 @@ class MonochromeRectangleDetector {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * Computes the start and end of a region of pixels, either horizontally or vertically, that could
-   * be part of a Data Matrix barcode.
-   *
-   * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
-   *  where we are scanning. If scanning vertically it's the column, the fixed horizontal location
-   * @param maxWhiteRun largest run of white pixels that can still be considered part of the
-   *  barcode region
-   * @param minDim minimum pixel location, horizontally or vertically, to consider
-   * @param maxDim maximum pixel location, horizontally or vertically, to consider
-   * @param horizontal if true, we're scanning left-right, instead of up-down
-   * @return List<int> with start and end of found range, or null if no such range is found
-   *  (e.g. only white was found)
-   */
+  /// Computes the start and end of a region of pixels, either horizontally or vertically, that could
+  /// be part of a Data Matrix barcode.
+  ///
+  /// @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
+  ///  where we are scanning. If scanning vertically it's the column, the fixed horizontal location
+  /// @param maxWhiteRun largest run of white pixels that can still be considered part of the
+  ///  barcode region
+  /// @param minDim minimum pixel location, horizontally or vertically, to consider
+  /// @param maxDim maximum pixel location, horizontally or vertically, to consider
+  /// @param horizontal if true, we're scanning left-right, instead of up-down
+  /// @return List<int> with start and end of found range, or null if no such range is found
+  ///  (e.g. only white was found)
   List<int>? blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim,
       int maxDim, bool horizontal) {
     int center = (minDim + maxDim) ~/ 2;

@@ -34,12 +34,10 @@ class CorrectedBitsResult {
   CorrectedBitsResult(this.correctBits, this.ecLevel);
 }
 
-/**
- * <p>The main class which implements Aztec Code decoding -- as opposed to locating and extracting
- * the Aztec Code from an image.</p>
- *
- * @author David Olivier
- */
+/// <p>The main class which implements Aztec Code decoding -- as opposed to locating and extracting
+/// the Aztec Code from an image.</p>
+///
+/// @author David Olivier
 class Decoder {
   static const List<String> _UPPER_TABLE = [
     "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", //
@@ -94,11 +92,9 @@ class Decoder {
     return _getEncodedData(correctedBits);
   }
 
-  /**
-   * Gets the string encoded in the aztec code bits
-   *
-   * @return the decoded string
-   */
+  /// Gets the string encoded in the aztec code bits
+  ///
+  /// @return the decoded string
   static String _getEncodedData(List<bool> correctedBits) {
     int endIndex = correctedBits.length;
     _Table latchTable = _Table.UPPER; // table most recently latched to
@@ -219,9 +215,7 @@ class Decoder {
     return result.toString();
   }
 
-  /**
-   * gets the table corresponding to the char passed
-   */
+  /// gets the table corresponding to the char passed
   static _Table _getTable(String t) {
     switch (t) {
       case 'L':
@@ -240,12 +234,10 @@ class Decoder {
     }
   }
 
-  /**
-   * Gets the character (or string) corresponding to the passed code in the given table
-   *
-   * @param table the table used
-   * @param code the code of the character
-   */
+  /// Gets the character (or string) corresponding to the passed code in the given table
+  ///
+  /// @param table the table used
+  /// @param code the code of the character
   static String _getCharacter(_Table table, int code) {
     switch (table) {
       case _Table.UPPER:
@@ -264,12 +256,10 @@ class Decoder {
     }
   }
 
-  /**
-   * <p>Performs RS error correction on an array of bits.</p>
-   *
-   * @return the corrected array
-   * @throws FormatException if the input contains too many errors
-   */
+  /// <p>Performs RS error correction on an array of bits.</p>
+  ///
+  /// @return the corrected array
+  /// @throws FormatException if the input contains too many errors
   CorrectedBitsResult _correctBits(List<bool> rawbits) {
     GenericGF gf;
     int codewordSize;
@@ -342,11 +332,9 @@ class Decoder {
         correctedBits, 100 * (numCodewords - numDataCodewords) ~/ numCodewords);
   }
 
-  /**
-   * Gets the array of bits from an Aztec Code matrix
-   *
-   * @return the array of bits
-   */
+  /// Gets the array of bits from an Aztec Code matrix
+  ///
+  /// @return the array of bits
   List<bool> _extractBits(BitMatrix matrix) {
     bool compact = _ddata.isCompact();
     int layers = _ddata.getNbLayers();
@@ -399,9 +387,7 @@ class Decoder {
     return rawbits;
   }
 
-  /**
-   * Reads a code of given length and at given index in an array of bits
-   */
+  /// Reads a code of given length and at given index in an array of bits
   static int _readCode(List<bool> rawbits, int startIndex, int length) {
     int res = 0;
     for (int i = startIndex; i < startIndex + length; i++) {
@@ -413,9 +399,7 @@ class Decoder {
     return res;
   }
 
-  /**
-   * Reads a code of length 8 in an array of bits, padding with zeros
-   */
+  /// Reads a code of length 8 in an array of bits, padding with zeros
   static int _readByte(List<bool> rawbits, int startIndex) {
     int n = rawbits.length - startIndex;
     if (n >= 8) {
@@ -424,9 +408,7 @@ class Decoder {
     return (_readCode(rawbits, startIndex, n) << (8 - n));
   }
 
-  /**
-   * Packs a bit array into bytes, most significant bit first
-   */
+  /// Packs a bit array into bytes, most significant bit first
   static Uint8List convertBoolArrayToByteArray(List<bool> boolArr) {
     Uint8List byteArr = Uint8List((boolArr.length + 7) ~/ 8);
     for (int i = 0; i < byteArr.length; i++) {

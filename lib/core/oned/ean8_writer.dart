@@ -21,11 +21,9 @@ import 'one_dimensional_code_writer.dart';
 import 'upceanreader.dart';
 import 'upceanwriter.dart';
 
-/**
- * This object renders an EAN8 code as a {@link BitMatrix}.
- *
- * @author aripollak@gmail.com (Ari Pollak)
- */
+/// This object renders an EAN8 code as a {@link BitMatrix}.
+///
+/// @author aripollak@gmail.com (Ari Pollak)
 class EAN8Writer extends UPCEANWriter {
   static const int _CODE_WIDTH = 3 + // start guard
       (7 * 4) + // left bars
@@ -39,9 +37,7 @@ class EAN8Writer extends UPCEANWriter {
     return [BarcodeFormat.EAN_8];
   }
 
-  /**
-   * @return a byte array of horizontal pixels (false = white, true = black)
-   */
+  /// @return a byte array of horizontal pixels (false = white, true = black)
   @override
   List<bool> encodeContent(String contents) {
     int length = contents.length;

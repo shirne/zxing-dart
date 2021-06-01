@@ -19,13 +19,11 @@ import 'abstract_do_co_mo_result_parser.dart';
 import 'address_book_parsed_result.dart';
 import 'result_parser.dart';
 
-/**
- * Implements the "BIZCARD" address book entry format, though this has been
- * largely reverse-engineered from examples observed in the wild -- still
- * looking for a definitive reference.
- *
- * @author Sean Owen
- */
+/// Implements the "BIZCARD" address book entry format, though this has been
+/// largely reverse-engineered from examples observed in the wild -- still
+/// looking for a definitive reference.
+///
+/// @author Sean Owen
 class BizcardResultParser extends AbstractDoCoMoResultParser {
 
   // Yes, we extend AbstractDoCoMoResultParser since the format is very much

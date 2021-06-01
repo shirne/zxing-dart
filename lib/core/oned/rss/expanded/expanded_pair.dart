@@ -27,9 +27,7 @@
 import '../data_character.dart';
 import '../finder_pattern.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class ExpandedPair {
   final DataCharacter? _leftChar;
   final DataCharacter? _rightChar;

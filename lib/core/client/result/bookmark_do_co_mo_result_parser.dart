@@ -19,9 +19,7 @@ import 'abstract_do_co_mo_result_parser.dart';
 import 'uriparsed_result.dart';
 import 'uriresult_parser.dart';
 
-/**
- * @author Sean Owen
- */
+/// @author Sean Owen
 class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
   @override
   URIParsedResult? parse(Result result) {

@@ -16,15 +16,11 @@
 
 import '../pdf417_common.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class BarcodeValue {
   final Map<int, int> _values = {};
 
-  /**
-   * Add an occurrence of a value
-   */
+  /// Add an occurrence of a value
   void setValue(int value) {
     int? confidence = _values[value];
     if (confidence == null) {
@@ -34,10 +30,8 @@ class BarcodeValue {
     _values[value] = confidence;
   }
 
-  /**
-   * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
-   * @return an array of int, containing the values with the highest occurrence, or null, if no value was set
-   */
+  /// Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
+  /// @return an array of int, containing the values with the highest occurrence, or null, if no value was set
   List<int> getValue() {
     int maxConfidence = -1;
     List<int> result = [];

@@ -29,84 +29,46 @@ import 'symbol_shape_hint.dart';
 import 'text_encoder.dart';
 import 'x12_encoder.dart';
 
-/**
- * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
- * annex S.
- */
+/// DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
+/// annex S.
 class HighLevelEncoder {
-  /**
-   * Padding character
-   */
+  /// Padding character
   static const int _PAD = 129;
-  /**
-   * mode latch to C40 encodation mode
-   */
+  /// mode latch to C40 encodation mode
   static const int LATCH_TO_C40 = 230;
-  /**
-   * mode latch to Base 256 encodation mode
-   */
+  /// mode latch to Base 256 encodation mode
   static const int LATCH_TO_BASE256 = 231;
-  /**
-   * FNC1 Codeword
-   */
+  /// FNC1 Codeword
   //static const int _FNC1 = 232;
-  /**
-   * Structured Append Codeword
-   */
+  /// Structured Append Codeword
   //static const int _STRUCTURED_APPEND = 233;
-  /**
-   * Reader Programming
-   */
+  /// Reader Programming
   //static const int _READER_PROGRAMMING = 234;
-  /**
-   * Upper Shift
-   */
+  /// Upper Shift
   static const int UPPER_SHIFT = 235;
-  /**
-   * 05 Macro
-   */
+  /// 05 Macro
   static const int _MACRO_05 = 236;
-  /**
-   * 06 Macro
-   */
+  /// 06 Macro
   static const int _MACRO_06 = 237;
-  /**
-   * mode latch to ANSI X.12 encodation mode
-   */
+  /// mode latch to ANSI X.12 encodation mode
   static const int LATCH_TO_ANSIX12 = 238;
-  /**
-   * mode latch to Text encodation mode
-   */
+  /// mode latch to Text encodation mode
   static const int LATCH_TO_TEXT = 239;
-  /**
-   * mode latch to EDIFACT encodation mode
-   */
+  /// mode latch to EDIFACT encodation mode
   static const int LATCH_TO_EDIFACT = 240;
-  /**
-   * ECI character (Extended Channel Interpretation)
-   */
+  /// ECI character (Extended Channel Interpretation)
   //static const int _ECI = 241;
 
-  /**
-   * Unlatch from C40 encodation
-   */
+  /// Unlatch from C40 encodation
   static const int C40_UNLATCH = 254;
-  /**
-   * Unlatch from X12 encodation
-   */
+  /// Unlatch from X12 encodation
   static const int X12_UNLATCH = 254;
 
-  /**
-   * 05 Macro header
-   */
+  /// 05 Macro header
   static const String _MACRO_05_HEADER = "[)>\u001E05\u001D";
-  /**
-   * 06 Macro header
-   */
+  /// 06 Macro header
   static const String _MACRO_06_HEADER = "[)>\u001E06\u001D";
-  /**
-   * Macro trailer
-   */
+  /// Macro trailer
   static const String _MACRO_TRAILER = "\u001E\u0004";
 
   static const int ASCII_ENCODATION = 0;
@@ -125,17 +87,15 @@ class HighLevelEncoder {
         tempVariable <= 254 ? tempVariable : tempVariable - 254);
   }
 
-  /**
-   * Performs message encoding of a DataMatrix message using the algorithm described in annex P
-   * of ISO/IEC 16022:2000(E).
-   *
-   * @param msg     the message
-   * @param shape   requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
-   *                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
-   * @param minSize the minimum symbol size constraint or null for no constraint
-   * @param maxSize the maximum symbol size constraint or null for no constraint
-   * @return the encoded message (the char values range from 0 to 255)
-   */
+  /// Performs message encoding of a DataMatrix message using the algorithm described in annex P
+  /// of ISO/IEC 16022:2000(E).
+  ///
+  /// @param msg     the message
+  /// @param shape   requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
+  ///                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
+  /// @param minSize the minimum symbol size constraint or null for no constraint
+  /// @param maxSize the maximum symbol size constraint or null for no constraint
+  /// @return the encoded message (the char values range from 0 to 255)
   static String encodeHighLevel(String msg,
       [SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
       Dimension? minSize,
@@ -459,13 +419,11 @@ class HighLevelEncoder {
     return false; //TODO NOT IMPLEMENTED YET!!!
   }
 
-  /**
-   * Determines the number of consecutive characters that are encodable using numeric compaction.
-   *
-   * @param msg      the message
-   * @param startpos the start position within the message
-   * @return the requested character count
-   */
+  /// Determines the number of consecutive characters that are encodable using numeric compaction.
+  ///
+  /// @param msg      the message
+  /// @param startpos the start position within the message
+  /// @return the requested character count
   static int determineConsecutiveDigitCount(String msg, int startpos) {
     int count = 0;
     int len = msg.length;

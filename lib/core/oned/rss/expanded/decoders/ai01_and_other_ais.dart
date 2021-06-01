@@ -29,10 +29,8 @@ import '../../../../common/string_builder.dart';
 
 import 'ai01decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class AI01AndOtherAIs extends AI01decoder {
   static const int _HEADER_SIZE =
       1 + 1 + 2; //first bit encodes the linkage flag,

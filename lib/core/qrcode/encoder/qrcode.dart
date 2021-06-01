@@ -20,10 +20,8 @@ import '../../qrcode/decoder/version.dart';
 
 import 'byte_matrix.dart';
 
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
+/// @author satorux@google.com (Satoru Takabayashi) - creator
+/// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class QRCode {
   static const int NUM_MASK_PATTERNS = 8;
 

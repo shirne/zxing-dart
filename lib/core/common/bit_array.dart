@@ -21,11 +21,9 @@ import 'dart:typed_data';
 import 'detector/math_utils.dart';
 import 'utils.dart';
 
-/**
- * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
- *
- * @author Sean Owen
- */
+/// <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
+///
+/// @author Sean Owen
 class BitArray {
   late Int32List _bits;
   int _size;
@@ -60,38 +58,30 @@ class BitArray {
     return get(i);
   }
 
-  /**
-   * @param i bit to get
-   * @return true iff bit i is set
-   */
+  /// @param i bit to get
+  /// @return true iff bit i is set
   bool get(int i) {
     return (_bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
   }
 
-  /**
-   * Sets bit i.
-   *
-   * @param i bit to set
-   */
+  /// Sets bit i.
+  ///
+  /// @param i bit to set
   void set(int i) {
     _bits[i ~/ 32] |= 1 << (i & 0x1F);
   }
 
-  /**
-   * Flips bit i.
-   *
-   * @param i bit to set
-   */
+  /// Flips bit i.
+  ///
+  /// @param i bit to set
   void flip(int i) {
     _bits[i ~/ 32] ^= 1 << (i & 0x1F);
   }
 
-  /**
-   * @param from first bit to check
-   * @return index of first bit that is set, starting from the given index, or size if none are set
-   *  at or beyond this given index
-   * @see #getNextUnset(int)
-   */
+  /// @param from first bit to check
+  /// @return index of first bit that is set, starting from the given index, or size if none are set
+  ///  at or beyond this given index
+  /// @see #getNextUnset(int)
   int getNextSet(int from) {
     if (from >= _size) {
       return _size;
@@ -111,11 +101,9 @@ class BitArray {
     return math.min(result, _size);
   }
 
-  /**
-   * @param from index to start looking for unset bit
-   * @return index of next unset bit, or {@code size} if none are unset until the end
-   * @see #getNextSet(int)
-   */
+  /// @param from index to start looking for unset bit
+  /// @return index of next unset bit, or {@code size} if none are unset until the end
+  /// @see #getNextSet(int)
   int getNextUnset(int from) {
     if (from >= _size) {
       return _size;
@@ -135,23 +123,19 @@ class BitArray {
     return math.min(result, _size);
   }
 
-  /**
-   * Sets a block of 32 bits, starting at bit i.
-   *
-   * @param i first bit to set
-   * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-   * corresponds to bit i, the next-least-significant to i+1, and so on.
-   */
+  /// Sets a block of 32 bits, starting at bit i.
+  ///
+  /// @param i first bit to set
+  /// @param newBits the new value of the next 32 bits. Note again that the least-significant bit
+  /// corresponds to bit i, the next-least-significant to i+1, and so on.
   void setBulk(int i, int newBits) {
     _bits[i ~/ 32] = newBits;
   }
 
-  /**
-   * Sets a range of bits.
-   *
-   * @param start start of range, inclusive.
-   * @param end end of range, exclusive
-   */
+  /// Sets a range of bits.
+  ///
+  /// @param start start of range, inclusive.
+  /// @param end end of range, exclusive
   void setRange(int start, int end) {
     if (end < start || start < 0 || end > _size) {
       throw Exception(r'Illegal Argument');
@@ -171,9 +155,7 @@ class BitArray {
     }
   }
 
-  /**
-   * Clears all bits (sets to false).
-   */
+  /// Clears all bits (sets to false).
   void clear() {
     int max = _bits.length;
     for (int i = 0; i < max; i++) {
@@ -181,15 +163,13 @@ class BitArray {
     }
   }
 
-  /**
-   * Efficient method to check if a range of bits is set, or not set.
-   *
-   * @param start start of range, inclusive.
-   * @param end end of range, exclusive
-   * @param value if true, checks that bits in range are set, otherwise checks that they are not set
-   * @return true iff all bits are set or not set in range, according to value argument
-   * @throws IllegalArgumentException if end is less than start or the range is not contained in the array
-   */
+  /// Efficient method to check if a range of bits is set, or not set.
+  ///
+  /// @param start start of range, inclusive.
+  /// @param end end of range, exclusive
+  /// @param value if true, checks that bits in range are set, otherwise checks that they are not set
+  /// @return true iff all bits are set or not set in range, according to value argument
+  /// @throws IllegalArgumentException if end is less than start or the range is not contained in the array
   bool isRange(int start, int end, bool value) {
     if (end < start || start < 0 || end > _size) {
       throw Exception(r'Illegal Argument');
@@ -223,14 +203,12 @@ class BitArray {
     _size++;
   }
 
-  /**
-   * Appends the least-significant bits, from value, in order from most-significant to
-   * least-significant. For example, appending 6 bits from 0x000001E will append the bits
-   * 0, 1, 1, 1, 1, 0 in that order.
-   *
-   * @param value {@code int} containing bits to append
-   * @param numBits bits from value to append
-   */
+  /// Appends the least-significant bits, from value, in order from most-significant to
+  /// least-significant. For example, appending 6 bits from 0x000001E will append the bits
+  /// 0, 1, 1, 1, 1, 0 in that order.
+  ///
+  /// @param value {@code int} containing bits to append
+  /// @param numBits bits from value to append
   void appendBits(int value, int numBits) {
     assert(numBits >= 0 && numBits <= 32, r'Num bits must be between 0 and 32');
 
@@ -258,14 +236,12 @@ class BitArray {
     }
   }
 
-  /**
-   *
-   * @param bitOffset first bit to start writing
-   * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
-   *  of the internal representation, which is exposed by {@link #getBitArray()}
-   * @param offset position in array to start writing
-   * @param numBytes how many bytes to write
-   */
+  ///
+  /// @param bitOffset first bit to start writing
+  /// @param array array to write into. Bytes are written most-significant byte first. This is the opposite
+  ///  of the internal representation, which is exposed by {@link #getBitArray()}
+  /// @param offset position in array to start writing
+  /// @param numBytes how many bytes to write
   void toBytes(int bitOffset, Uint8List array, int offset, int numBytes) {
     for (int i = 0; i < numBytes; i++) {
       int theByte = 0;
@@ -279,17 +255,13 @@ class BitArray {
     }
   }
 
-  /**
-   * @return underlying array of ints. The first element holds the first 32 bits, and the least
-   *         significant bit is bit 0.
-   */
+  /// @return underlying array of ints. The first element holds the first 32 bits, and the least
+  ///         significant bit is bit 0.
   List<int> getBitArray() {
     return _bits;
   }
 
-  /**
-   * Reverses all bits in the array.
-   */
+  /// Reverses all bits in the array.
   void reverse() {
     Int32List newBits = Int32List(_bits.length);
     // reverse all int's first

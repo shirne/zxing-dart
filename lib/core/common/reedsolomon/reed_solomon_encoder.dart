@@ -17,12 +17,10 @@
 import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
 
-/**
- * <p>Implements Reed-Solomon encoding, as the name implies.</p>
- *
- * @author Sean Owen
- * @author William Rucklidge
- */
+/// <p>Implements Reed-Solomon encoding, as the name implies.</p>
+///
+/// @author Sean Owen
+/// @author William Rucklidge
 class ReedSolomonEncoder {
   final GenericGF _field;
   final List<GenericGFPoly> _cachedGenerators;

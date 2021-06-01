@@ -20,11 +20,9 @@ import 'barcode_format.dart';
 import 'result_metadata_type.dart';
 import 'result_point.dart';
 
-/**
- * <p>Encapsulates the result of decoding a barcode within an image.</p>
- *
- * @author Sean Owen
- */
+/// <p>Encapsulates the result of decoding a barcode within an image.</p>
+///
+/// @author Sean Owen
 class Result {
   final String _text;
   final Uint8List? _rawBytes;
@@ -42,49 +40,37 @@ class Result {
   Result.full(this._text, this._rawBytes, this._numBits, this._resultPoints,
       this._format, this._timestamp);
 
-  /**
-   * @return raw text encoded by the barcode
-   */
+  /// @return raw text encoded by the barcode
   String getText() {
     return _text;
   }
 
-  /**
-   * @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
-   */
+  /// @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
   Uint8List? getRawBytes() {
     return _rawBytes;
   }
 
-  /**
-   * @return how many bits of {@link #getRawBytes()} are valid; typically 8 times its length
-   * @since 3.3.0
-   */
+  /// @return how many bits of {@link #getRawBytes()} are valid; typically 8 times its length
+  /// @since 3.3.0
   int getNumBits() {
     return _numBits;
   }
 
-  /**
-   * @return points related to the barcode in the image. These are typically points
-   *         identifying finder patterns or the corners of the barcode. The exact meaning is
-   *         specific to the type of barcode that was decoded.
-   */
+  /// @return points related to the barcode in the image. These are typically points
+  ///         identifying finder patterns or the corners of the barcode. The exact meaning is
+  ///         specific to the type of barcode that was decoded.
   List<ResultPoint?>? getResultPoints() {
     return _resultPoints;
   }
 
-  /**
-   * @return {@link BarcodeFormat} representing the format of the barcode that was decoded
-   */
+  /// @return {@link BarcodeFormat} representing the format of the barcode that was decoded
   BarcodeFormat getBarcodeFormat() {
     return _format;
   }
 
-  /**
-   * @return {@link Map} mapping {@link ResultMetadataType} keys to values. May be
-   *   {@code null}. This contains optional metadata about what was detected about the barcode,
-   *   like orientation.
-   */
+  /// @return {@link Map} mapping {@link ResultMetadataType} keys to values. May be
+  ///   {@code null}. This contains optional metadata about what was detected about the barcode,
+  ///   like orientation.
   Map<ResultMetadataType, Object>? getResultMetadata() {
     return _resultMetadata;
   }

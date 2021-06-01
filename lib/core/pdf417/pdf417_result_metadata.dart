@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class PDF417ResultMetadata {
   int _segmentIndex = 0;
   String? _fileId = '';
@@ -30,11 +28,9 @@ class PDF417ResultMetadata {
   int _checksum = -1;
   List<int>? _optionalData;
 
-  /**
-   * The Segment ID represents the segment of the whole file distributed over different symbols.
-   *
-   * @return File segment index
-   */
+  /// The Segment ID represents the segment of the whole file distributed over different symbols.
+  ///
+  /// @return File segment index
   int getSegmentIndex() {
     return _segmentIndex;
   }
@@ -43,11 +39,9 @@ class PDF417ResultMetadata {
     this._segmentIndex = segmentIndex;
   }
 
-  /**
-   * Is the same for each related PDF417 symbol
-   *
-   * @return File ID
-   */
+  /// Is the same for each related PDF417 symbol
+  ///
+  /// @return File ID
   String? getFileId() {
     return _fileId;
   }
@@ -56,27 +50,21 @@ class PDF417ResultMetadata {
     this._fileId = fileId;
   }
 
-  /**
-   * @return always null
-   * @deprecated use dedicated already parsed fields
-   */
+  /// @return always null
+  /// @deprecated use dedicated already parsed fields
   @deprecated
   List<int>? getOptionalData() {
     return _optionalData;
   }
 
-  /**
-   * @param optionalData old optional data format as int array
-   * @deprecated parse and use new fields
-   */
+  /// @param optionalData old optional data format as int array
+  /// @deprecated parse and use new fields
   @deprecated
   void setOptionalData(List<int> optionalData) {
     this._optionalData = optionalData;
   }
 
-  /**
-   * @return true if it is the last segment
-   */
+  /// @return true if it is the last segment
   bool isLastSegment() {
     return _lastSegment;
   }
@@ -85,9 +73,7 @@ class PDF417ResultMetadata {
     this._lastSegment = lastSegment;
   }
 
-  /**
-   * @return count of segments, -1 if not set
-   */
+  /// @return count of segments, -1 if not set
   int getSegmentCount() {
     return _segmentCount;
   }
@@ -112,11 +98,9 @@ class PDF417ResultMetadata {
     this._addressee = addressee;
   }
 
-  /**
-   * Filename of the encoded file
-   *
-   * @return filename
-   */
+  /// Filename of the encoded file
+  ///
+  /// @return filename
   String getFileName() {
     return _fileName;
   }
@@ -125,11 +109,9 @@ class PDF417ResultMetadata {
     this._fileName = fileName;
   }
 
-  /**
-   * filesize in bytes of the encoded file
-   *
-   * @return filesize in bytes, -1 if not set
-   */
+  /// filesize in bytes of the encoded file
+  ///
+  /// @return filesize in bytes, -1 if not set
   int getFileSize() {
     return _fileSize;
   }
@@ -138,11 +120,9 @@ class PDF417ResultMetadata {
     this._fileSize = fileSize;
   }
 
-  /**
-   * 16-bit CRC checksum using CCITT-16
-   *
-   * @return crc checksum, -1 if not set
-   */
+  /// 16-bit CRC checksum using CCITT-16
+  ///
+  /// @return crc checksum, -1 if not set
   int getChecksum() {
     return _checksum;
   }
@@ -151,11 +131,9 @@ class PDF417ResultMetadata {
     this._checksum = checksum;
   }
 
-  /**
-   * unix epock timestamp, elapsed seconds since 1970-01-01
-   *
-   * @return elapsed seconds, -1 if not set
-   */
+  /// unix epock timestamp, elapsed seconds since 1970-01-01
+  ///
+  /// @return elapsed seconds, -1 if not set
   int getTimestamp() {
     return _timestamp;
   }

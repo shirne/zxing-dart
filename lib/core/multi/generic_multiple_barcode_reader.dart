@@ -23,20 +23,18 @@ import '../result.dart';
 import '../result_point.dart';
 import 'multiple_barcode_reader.dart';
 
-/**
- * <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
- * After one barcode is found, the areas left, above, right and below the barcode's
- * {@link ResultPoint}s are scanned, recursively.</p>
- *
- * <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
- * 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might prevent
- * detecting any one of them.</p>
- *
- * <p>That is, instead of passing a {@link Reader} a caller might pass
- * {@code new ByQuadrantReader(reader)}.</p>
- *
- * @author Sean Owen
- */
+/// <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
+/// After one barcode is found, the areas left, above, right and below the barcode's
+/// {@link ResultPoint}s are scanned, recursively.</p>
+///
+/// <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
+/// 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might prevent
+/// detecting any one of them.</p>
+///
+/// <p>That is, instead of passing a {@link Reader} a caller might pass
+/// {@code new ByQuadrantReader(reader)}.</p>
+///
+/// @author Sean Owen
 class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   static const int _MIN_DIMENSION_TO_RECUR = 100;
   static const int _MAX_DEPTH = 4;

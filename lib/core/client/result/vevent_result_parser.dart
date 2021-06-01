@@ -20,12 +20,10 @@ import 'calendar_parsed_result.dart';
 import 'result_parser.dart';
 import 'vcard_result_parser.dart';
 
-/**
- * Partially implements the iCalendar format's "VEVENT" format for specifying a
- * calendar event. See RFC 2445. This supports SUMMARY, LOCATION, GEO, DTSTART and DTEND fields.
- *
- * @author Sean Owen
- */
+/// Partially implements the iCalendar format's "VEVENT" format for specifying a
+/// calendar event. See RFC 2445. This supports SUMMARY, LOCATION, GEO, DTSTART and DTEND fields.
+///
+/// @author Sean Owen
 class VEventResultParser extends ResultParser {
 
   @override

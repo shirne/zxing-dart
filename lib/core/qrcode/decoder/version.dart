@@ -73,16 +73,12 @@ class ECB {
   }
 }
 
-/**
- * See ISO 18004:2006 Annex D
- *
- * @author Sean Owen
- */
+/// See ISO 18004:2006 Annex D
+///
+/// @author Sean Owen
 class Version {
-  /**
-   * See ISO 18004:2006 Annex D.
-   * Element i represents the raw version bits that specify version i + 7
-   */
+  /// See ISO 18004:2006 Annex D.
+  /// Element i represents the raw version bits that specify version i + 7
   static const List<int> _VERSION_DECODE_INFO = [
     0x07C94, 0x085BC, 0x09A99, 0x0A4D3, 0x0BBF6, //
     0x0C762, 0x0D847, 0x0E60D, 0x0F928, 0x10B78, //
@@ -130,13 +126,11 @@ class Version {
     return _ecBlocks[ecLevel.index];
   }
 
-  /**
-   * <p>Deduces version information purely from QR Code dimensions.</p>
-   *
-   * @param dimension dimension in modules
-   * @return Version for a QR Code of that dimension
-   * @throws FormatException if dimension is not 1 mod 4
-   */
+  /// <p>Deduces version information purely from QR Code dimensions.</p>
+  ///
+  /// @param dimension dimension in modules
+  /// @return Version for a QR Code of that dimension
+  /// @throws FormatException if dimension is not 1 mod 4
   static Version getProvisionalVersionForDimension(int dimension) {
     if (dimension % 4 != 1) {
       throw FormatException();
@@ -183,9 +177,7 @@ class Version {
     return null;
   }
 
-  /**
-   * See ISO 18004:2006 Annex E
-   */
+  /// See ISO 18004:2006 Annex E
   BitMatrix buildFunctionPattern() {
     int dimension = getDimensionForVersion();
     BitMatrix bitMatrix = BitMatrix(dimension);
@@ -229,9 +221,7 @@ class Version {
     return _versionNumber.toString();
   }
 
-  /**
-   * See ISO 18004:2006 6.5.1 Table 9
-   */
+  /// See ISO 18004:2006 6.5.1 Table 9
   static List<Version> _buildVersions() {
     return [
       Version._(1, [ ], [

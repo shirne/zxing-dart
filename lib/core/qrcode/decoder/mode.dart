@@ -16,12 +16,10 @@
 
 import 'version.dart';
 
-/**
- * <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
- * data can be encoded to bits in the QR code standard.</p>
- *
- * @author Sean Owen
- */
+/// <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
+/// data can be encoded to bits in the QR code standard.</p>
+///
+/// @author Sean Owen
 class Mode {
   static const TERMINATOR = const Mode([0, 0, 0], 0x00); // Not really a mode...
   static const NUMERIC = const Mode([10, 12, 14], 0x01);
@@ -60,11 +58,9 @@ class Mode {
 
   const Mode(this._characterCountBitsForVersions, this._bits);
 
-  /**
-   * @param bits four bits encoding a QR Code data mode
-   * @return Mode encoded by these bits
-   * @throws IllegalArgumentException if bits do not correspond to a known mode
-   */
+  /// @param bits four bits encoding a QR Code data mode
+  /// @return Mode encoded by these bits
+  /// @throws IllegalArgumentException if bits do not correspond to a known mode
   static Mode forBits(int bits) {
     switch (bits) {
       case 0x0:
@@ -93,11 +89,9 @@ class Mode {
     }
   }
 
-  /**
-   * @param version version in question
-   * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
-   *         count of characters that will follow encoded in this Mode
-   */
+  /// @param version version in question
+  /// @return number of bits used, in this QR Code symbol {@link Version}, to encode the
+  ///         count of characters that will follow encoded in this Mode
   int getCharacterCountBits(Version version) {
     int number = version.getVersionNumber();
     int offset;

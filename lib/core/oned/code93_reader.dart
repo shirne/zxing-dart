@@ -26,22 +26,18 @@ import '../result_point.dart';
 import '../result.dart';
 import 'one_dreader.dart';
 
-/**
- * <p>Decodes Code 93 barcodes.</p>
- *
- * @author Sean Owen
- * @see Code39Reader
- */
+/// <p>Decodes Code 93 barcodes.</p>
+///
+/// @author Sean Owen
+/// @see Code39Reader
 class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
   static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
   static final List<int> _ALPHABET = ALPHABET_STRING.codeUnits;
 
-  /**
-   * These represent the encodings of characters, as patterns of wide and narrow bars.
-   * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
-   */
+  /// These represent the encodings of characters, as patterns of wide and narrow bars.
+  /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
   static const List<int> CHARACTER_ENCODINGS = [
     0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
     0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J

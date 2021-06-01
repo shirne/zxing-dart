@@ -23,24 +23,20 @@ import '../../common/grid_sampler.dart';
 
 import '../../result_point.dart';
 
-/**
- * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
- * is rotated or skewed, or partially obscured.</p>
- *
- * @author Sean Owen
- */
+/// <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
+/// is rotated or skewed, or partially obscured.</p>
+///
+/// @author Sean Owen
 class Detector {
   final BitMatrix _image;
   final WhiteRectangleDetector _rectangleDetector;
 
   Detector(this._image) : this._rectangleDetector = WhiteRectangleDetector(_image);
 
-  /**
-   * <p>Detects a Data Matrix Code in an image.</p>
-   *
-   * @return {@link DetectorResult} encapsulating results of detecting a Data Matrix Code
-   * @throws NotFoundException if no Data Matrix Code can be found
-   */
+  /// <p>Detects a Data Matrix Code in an image.</p>
+  ///
+  /// @return {@link DetectorResult} encapsulating results of detecting a Data Matrix Code
+  /// @throws NotFoundException if no Data Matrix Code can be found
   DetectorResult detect() {
     List<ResultPoint> cornerPoints = _rectangleDetector.detect();
 
@@ -104,9 +100,7 @@ class Detector {
     return ResultPoint(x, y);
   }
 
-  /**
-   * Detect a solid side which has minimum transition.
-   */
+  /// Detect a solid side which has minimum transition.
   List<ResultPoint> _detectSolid1(List<ResultPoint> cornerPoints) {
     // 0  2
     // 1  3
@@ -149,9 +143,7 @@ class Detector {
     return points;
   }
 
-  /**
-   * Detect a second solid side next to first solid side.
-   */
+  /// Detect a second solid side next to first solid side.
   List<ResultPoint> _detectSolid2(List<ResultPoint> points) {
     // A..D
     // :  :
@@ -189,9 +181,7 @@ class Detector {
     return points;
   }
 
-  /**
-   * Calculates the corner position of the white top right module.
-   */
+  /// Calculates the corner position of the white top right module.
   ResultPoint? _correctTopRight(List<ResultPoint> points) {
     // A..D
     // |  :
@@ -239,9 +229,7 @@ class Detector {
     }
   }
 
-  /**
-   * Shift the edge points to the module center.
-   */
+  /// Shift the edge points to the module center.
   List<ResultPoint> _shiftToModuleCenter(List<ResultPoint> points) {
     // A..D
     // |  :
@@ -335,9 +323,7 @@ class Detector {
         bottomLeft.getY());
   }
 
-  /**
-   * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
-   */
+  /// Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
   int _transitionsBetween(ResultPoint from, ResultPoint to) {
     // See QR Code Detector, sizeOfBlackWhiteBlackRun()
     int fromX = from.getX().toInt();

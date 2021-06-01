@@ -28,98 +28,62 @@ import '../../common/string_builder.dart';
 import '../../writer_exception.dart';
 import 'compaction.dart';
 
-/**
- * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
- * annex P.
- */
+/// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
+/// annex P.
 class PDF417HighLevelEncoder {
   static final int _blankCode = ' '.codeUnitAt(0);
-  /**
-   * code for Text compaction
-   */
+  /// code for Text compaction
   static const int _TEXT_COMPACTION = 0;
 
-  /**
-   * code for Byte compaction
-   */
+  /// code for Byte compaction
   static const int _BYTE_COMPACTION = 1;
 
-  /**
-   * code for Numeric compaction
-   */
+  /// code for Numeric compaction
   static const int _NUMERIC_COMPACTION = 2;
 
-  /**
-   * Text compaction submode Alpha
-   */
+  /// Text compaction submode Alpha
   static const int _SUBMODE_ALPHA = 0;
 
-  /**
-   * Text compaction submode Lower
-   */
+  /// Text compaction submode Lower
   static const int _SUBMODE_LOWER = 1;
 
-  /**
-   * Text compaction submode Mixed
-   */
+  /// Text compaction submode Mixed
   static const int _SUBMODE_MIXED = 2;
 
-  /**
-   * Text compaction submode Punctuation
-   */
+  /// Text compaction submode Punctuation
   static const int _SUBMODE_PUNCTUATION = 3;
 
-  /**
-   * mode latch to Text Compaction mode
-   */
+  /// mode latch to Text Compaction mode
   static const int _LATCH_TO_TEXT = 900;
 
-  /**
-   * mode latch to Byte Compaction mode (number of characters NOT a multiple of 6)
-   */
+  /// mode latch to Byte Compaction mode (number of characters NOT a multiple of 6)
   static const int _LATCH_TO_BYTE_PADDED = 901;
 
-  /**
-   * mode latch to Numeric Compaction mode
-   */
+  /// mode latch to Numeric Compaction mode
   static const int _LATCH_TO_NUMERIC = 902;
 
-  /**
-   * mode shift to Byte Compaction mode
-   */
+  /// mode shift to Byte Compaction mode
   static const int _SHIFT_TO_BYTE = 913;
 
-  /**
-   * mode latch to Byte Compaction mode (number of characters a multiple of 6)
-   */
+  /// mode latch to Byte Compaction mode (number of characters a multiple of 6)
   static const int _LATCH_TO_BYTE = 924;
 
-  /**
-   * identifier for a user defined Extended Channel Interpretation (ECI)
-   */
+  /// identifier for a user defined Extended Channel Interpretation (ECI)
   static const int _ECI_USER_DEFINED = 925;
 
-  /**
-   * identifier for a general purpose ECO format
-   */
+  /// identifier for a general purpose ECO format
   static const int _ECI_GENERAL_PURPOSE = 926;
 
-  /**
-   * identifier for an ECI of a character set of code page
-   */
+  /// identifier for an ECI of a character set of code page
   static const int _ECI_CHARSET = 927;
 
-  /**
-   * Raw code table for text compaction Mixed sub-mode
-   */
+  /// Raw code table for text compaction Mixed sub-mode
   static const List<int> _TEXT_MIXED_RAW = [
     48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58, //
     35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
   ];
 
-  /**
-   * Raw code table for text compaction: Punctuation sub-mode
-   */
+  /// Raw code table for text compaction: Punctuation sub-mode
   static final List<int> _TEXT_PUNCTUATION_RAW = [
     59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58, //
     10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
@@ -134,17 +98,15 @@ class PDF417HighLevelEncoder {
 
   PDF417HighLevelEncoder._();
 
-  /**
-   * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
-   * of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
-   * is used.
-   *
-   * @param msg the message
-   * @param compaction compaction mode to use
-   * @param encoding character encoding used to encode in default or byte compaction
-   *  or {@code null} for default / not applicable
-   * @return the encoded message (the char values range from 0 to 928)
-   */
+  /// Performs high-level encoding of a PDF417 message using the algorithm described in annex P
+  /// of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
+  /// is used.
+  ///
+  /// @param msg the message
+  /// @param compaction compaction mode to use
+  /// @param encoding character encoding used to encode in default or byte compaction
+  ///  or {@code null} for default / not applicable
+  /// @return the encoded message (the char values range from 0 to 928)
   static String encodeHighLevel(
       String msg, Compaction compaction, Encoding? encoding) {
     //the codewords 0..928 are encoded as Unicode characters
@@ -223,17 +185,15 @@ class PDF417HighLevelEncoder {
     return sb.toString();
   }
 
-  /**
-   * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
-   * chapter 4.4.2.
-   *
-   * @param msg            the message
-   * @param startpos       the start position within the message
-   * @param count          the number of characters to encode
-   * @param sb             receives the encoded codewords
-   * @param initialSubmode should normally be SUBMODE_ALPHA
-   * @return the text submode in which this method ends
-   */
+  /// Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
+  /// chapter 4.4.2.
+  ///
+  /// @param msg            the message
+  /// @param startpos       the start position within the message
+  /// @param count          the number of characters to encode
+  /// @param sb             receives the encoded codewords
+  /// @param initialSubmode should normally be SUBMODE_ALPHA
+  /// @return the text submode in which this method ends
   static int _encodeText(String msg, int startpos, int count, StringBuffer sb,
       int initialSubmode) {
     StringBuilder tmp = StringBuilder();
@@ -346,17 +306,15 @@ class PDF417HighLevelEncoder {
     return submode;
   }
 
-  /**
-   * Encode parts of the message using Byte Compaction as described in ISO/IEC 15438:2001(E),
-   * chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
-   * codepage.
-   *
-   * @param bytes     the message converted to a byte array
-   * @param startpos  the start position within the message
-   * @param count     the number of bytes to encode
-   * @param startmode the mode from which this method starts
-   * @param sb        receives the encoded codewords
-   */
+  /// Encode parts of the message using Byte Compaction as described in ISO/IEC 15438:2001(E),
+  /// chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
+  /// codepage.
+  ///
+  /// @param bytes     the message converted to a byte array
+  /// @param startpos  the start position within the message
+  /// @param count     the number of bytes to encode
+  /// @param startmode the mode from which this method starts
+  /// @param sb        receives the encoded codewords
   static void _encodeBinary(Uint8List bytes, int startpos, int count,
       int startmode, StringBuffer sb) {
     if (count == 1 && startmode == _TEXT_COMPACTION) {
@@ -447,13 +405,11 @@ class PDF417HighLevelEncoder {
     return chr == '\t' || chr == '\n' || chr == '\r' || (ch >= 32 && ch <= 126);
   }
 
-  /**
-   * Determines the number of consecutive characters that are encodable using numeric compaction.
-   *
-   * @param msg      the message
-   * @param startpos the start position within the message
-   * @return the requested character count
-   */
+  /// Determines the number of consecutive characters that are encodable using numeric compaction.
+  ///
+  /// @param msg      the message
+  /// @param startpos the start position within the message
+  /// @return the requested character count
   static int _determineConsecutiveDigitCount(String msg, int startpos) {
     int count = 0;
     int len = msg.length;
@@ -471,13 +427,11 @@ class PDF417HighLevelEncoder {
     return count;
   }
 
-  /**
-   * Determines the number of consecutive characters that are encodable using text compaction.
-   *
-   * @param msg      the message
-   * @param startpos the start position within the message
-   * @return the requested character count
-   */
+  /// Determines the number of consecutive characters that are encodable using text compaction.
+  ///
+  /// @param msg      the message
+  /// @param startpos the start position within the message
+  /// @return the requested character count
   static int _determineConsecutiveTextCount(String msg, int startpos) {
     int len = msg.length;
     int idx = startpos;
@@ -509,14 +463,12 @@ class PDF417HighLevelEncoder {
     return idx - startpos;
   }
 
-  /**
-   * Determines the number of consecutive characters that are encodable using binary compaction.
-   *
-   * @param msg      the message
-   * @param startpos the start position within the message
-   * @param encoding the charset used to convert the message to a byte array
-   * @return the requested character count
-   */
+  /// Determines the number of consecutive characters that are encodable using binary compaction.
+  ///
+  /// @param msg      the message
+  /// @param startpos the start position within the message
+  /// @param encoding the charset used to convert the message to a byte array
+  /// @return the requested character count
   static int _determineConsecutiveBinaryCount(
       String msg, int startpos, Encoding encoding) {
 

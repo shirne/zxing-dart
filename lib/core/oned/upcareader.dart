@@ -24,12 +24,10 @@ import '../result.dart';
 import 'ean13_reader.dart';
 import 'upceanreader.dart';
 
-/**
- * <p>Implements decoding of the UPC-A format.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- */
+/// <p>Implements decoding of the UPC-A format.</p>
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Sean Owen
 class UPCAReader extends UPCEANReader {
   final UPCEANReader _ean13Reader = EAN13Reader();
 

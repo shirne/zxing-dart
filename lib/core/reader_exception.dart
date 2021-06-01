@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-/**
- * The general exception class throw when something goes wrong during decoding of a barcode.
- * This includes, but is not limited to, failing checksums / error correction algorithms, being
- * unable to locate finder timing patterns, and so on.
- *
- * @author Sean Owen
- */
+/// The general exception class throw when something goes wrong during decoding of a barcode.
+/// This includes, but is not limited to, failing checksums / error correction algorithms, being
+/// unable to locate finder timing patterns, and so on.
+///
+/// @author Sean Owen
 abstract class ReaderException implements Exception {
   // disable stack traces when not running inside test units
   final dynamic message;

@@ -16,29 +16,23 @@
 
 import '../../result_point.dart';
 
-/**
- * Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the
- * decoding caller. Callers are expected to process this.
- *
- * @see com.google.zxing.common.DecoderResult#getOther()
- */
+/// Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the
+/// decoding caller. Callers are expected to process this.
+///
+/// @see com.google.zxing.common.DecoderResult#getOther()
 class QRCodeDecoderMetaData {
   final bool _mirrored;
 
   QRCodeDecoderMetaData(this._mirrored);
 
-  /**
-   * @return true if the QR Code was mirrored.
-   */
+  /// @return true if the QR Code was mirrored.
   bool isMirrored() {
     return _mirrored;
   }
 
-  /**
-   * Apply the result points' order correction due to mirroring.
-   *
-   * @param points Array of points to apply mirror correction to.
-   */
+  /// Apply the result points' order correction due to mirroring.
+  ///
+  /// @param points Array of points to apply mirror correction to.
   void applyMirroredCorrection(List<ResultPoint>? points) {
     if (!_mirrored || points == null || points.length < 3) {
       return;

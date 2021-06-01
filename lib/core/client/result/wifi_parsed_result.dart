@@ -17,11 +17,9 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes wifi network information, like SSID and password.
- *
- * @author Vikram Aggarwal
- */
+/// Represents a parsed result that encodes wifi network information, like SSID and password.
+///
+/// @author Vikram Aggarwal
 class WifiParsedResult extends ParsedResult {
   final String _ssid;
   final String _networkEncryption;

@@ -16,12 +16,10 @@
 
 import 'dart:convert';
 
-/**
- * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
- * of ISO 18004.
- *
- * @author Sean Owen
- */
+/// Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
+/// of ISO 18004.
+///
+/// @author Sean Owen
 class CharacterSetECI {
   // Enum name is a Java encoding valid for java.lang and java.io
   static final Cp437 = CharacterSetECI('Cp437', [0, 2]);
@@ -116,11 +114,9 @@ class CharacterSetECI {
     return Encoding.getByName(name);
   }
 
-  /**
-   * @param charset Java character set object
-   * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
-   *   but unsupported
-   */
+  /// @param charset Java character set object
+  /// @return CharacterSetECI representing ECI for character encoding, or null if it is legal
+  ///   but unsupported
   static CharacterSetECI? getCharacterSetECI(Encoding charset) {
     if (_nameToEci.isEmpty) {
       init();
@@ -128,12 +124,10 @@ class CharacterSetECI {
     return _nameToEci[charset.name];
   }
 
-  /**
-   * @param value character set ECI value
-   * @return {@code CharacterSetECI} representing ECI of given value, or null if it is legal but
-   *   unsupported
-   * @throws FormatException if ECI value is invalid
-   */
+  /// @param value character set ECI value
+  /// @return {@code CharacterSetECI} representing ECI of given value, or null if it is legal but
+  ///   unsupported
+  /// @throws FormatException if ECI value is invalid
   static CharacterSetECI? getCharacterSetECIByValue(int value) {
     if (value < 0 || value >= 900) {
       throw FormatException();
@@ -144,11 +138,9 @@ class CharacterSetECI {
     return _valueToEci[value];
   }
 
-  /**
-   * @param name character set ECI encoding name
-   * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
-   *   but unsupported
-   */
+  /// @param name character set ECI encoding name
+  /// @return CharacterSetECI representing ECI for character encoding, or null if it is legal
+  ///   but unsupported
   static CharacterSetECI? getCharacterSetECIByName(String name) {
     if (_nameToEci.isEmpty) {
       init();

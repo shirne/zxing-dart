@@ -25,9 +25,7 @@ import '../result_point.dart';
 import '../result.dart';
 import 'upceanreader.dart';
 
-/**
- * @see UPCEANExtension2Support
- */
+/// @see UPCEANExtension2Support
 class UPCEANExtension5Support {
 
   static const List<int> _CHECK_DIGIT_ENCODINGS = [
@@ -123,11 +121,9 @@ class UPCEANExtension5Support {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * @param raw raw content of extension
-   * @return formatted interpretation of raw content as a {@link Map} mapping
-   *  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
-   */
+  /// @param raw raw content of extension
+  /// @return formatted interpretation of raw content as a {@link Map} mapping
+  ///  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
   static Map<ResultMetadataType,Object>? _parseExtensionString(String raw) {
     if (raw.length != 5) {
       return null;

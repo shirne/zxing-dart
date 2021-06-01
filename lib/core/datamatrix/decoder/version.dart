@@ -56,12 +56,10 @@ class ECB {
   }
 }
 
-/**
- * The Version object encapsulates attributes about a particular
- * size Data Matrix Code.
- *
- * @author bbrown@google.com (Brian Brown)
- */
+/// The Version object encapsulates attributes about a particular
+/// size Data Matrix Code.
+///
+/// @author bbrown@google.com (Brian Brown)
 class Version {
   static final List<Version> _VERSIONS = _buildVersions();
 
@@ -113,14 +111,12 @@ class Version {
     return _ecBlocks;
   }
 
-  /**
-   * <p>Deduces version information from Data Matrix dimensions.</p>
-   *
-   * @param numRows Number of rows in modules
-   * @param numColumns Number of columns in modules
-   * @return Version for a Data Matrix Code of those dimensions
-   * @throws FormatException if dimensions do correspond to a valid Data Matrix size
-   */
+  /// <p>Deduces version information from Data Matrix dimensions.</p>
+  ///
+  /// @param numRows Number of rows in modules
+  /// @param numColumns Number of columns in modules
+  /// @return Version for a Data Matrix Code of those dimensions
+  /// @throws FormatException if dimensions do correspond to a valid Data Matrix size
   static Version getVersionForDimensions(int numRows, int numColumns) {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
       throw FormatException();
@@ -141,9 +137,7 @@ class Version {
     return _versionNumber.toString();
   }
 
-  /**
-   * See ISO 16022:2006 5.5.1 Table 7
-   */
+  /// See ISO 16022:2006 5.5.1 Table 7
   static List<Version> _buildVersions() {
     return [
       Version._(1, 10, 10, 8, 8, ECBlocks(5, ECB(1, 3))),

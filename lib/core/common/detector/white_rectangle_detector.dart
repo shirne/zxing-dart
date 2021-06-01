@@ -19,16 +19,14 @@ import '../../result_point.dart';
 import '../bit_matrix.dart';
 import 'math_utils.dart';
 
-/**
- * <p>
- * Detects a candidate barcode-like rectangular region within an image. It
- * starts around the center of the image, increases the size of the candidate
- * region until it finds a white rectangular region. By keeping track of the
- * last black points it encountered, it determines the corners of the barcode.
- * </p>
- *
- * @author David Olivier
- */
+/// <p>
+/// Detects a candidate barcode-like rectangular region within an image. It
+/// starts around the center of the image, increases the size of the candidate
+/// region until it finds a white rectangular region. By keeping track of the
+/// last black points it encountered, it determines the corners of the barcode.
+/// </p>
+///
+/// @author David Olivier
 class WhiteRectangleDetector {
   static const int _INIT_SIZE = 10;
   static const int _CORR = 1;
@@ -41,13 +39,11 @@ class WhiteRectangleDetector {
   final int _downInit;
   final int _upInit;
 
-  /**
-   * @param image barcode image to find a rectangle in
-   * @param initSize initial size of search area around center
-   * @param x x position of search center
-   * @param y y position of search center
-   * @throws NotFoundException if image is too small to accommodate {@code initSize}
-   */
+  /// @param image barcode image to find a rectangle in
+  /// @param initSize initial size of search area around center
+  /// @param x x position of search center
+  /// @param y y position of search center
+  /// @throws NotFoundException if image is too small to accommodate {@code initSize}
   WhiteRectangleDetector(this._image, [int initSize = _INIT_SIZE, int? x, int? y])
       : _height = _image.getHeight(),
         _width = _image.getWidth(),
@@ -63,20 +59,18 @@ class WhiteRectangleDetector {
     }
   }
 
-  /**
-   * <p>
-   * Detects a candidate barcode-like rectangular region within an image. It
-   * starts around the center of the image, increases the size of the candidate
-   * region until it finds a white rectangular region.
-   * </p>
-   *
-   * @return {@link ResultPoint}[] describing the corners of the rectangular
-   *         region. The first and last points are opposed on the diagonal, as
-   *         are the second and third. The first point will be the topmost
-   *         point and the last, the bottommost. The second point will be
-   *         leftmost and the third, the rightmost
-   * @throws NotFoundException if no Data Matrix Code can be found
-   */
+  /// <p>
+  /// Detects a candidate barcode-like rectangular region within an image. It
+  /// starts around the center of the image, increases the size of the candidate
+  /// region until it finds a white rectangular region.
+  /// </p>
+  ///
+  /// @return {@link ResultPoint}[] describing the corners of the rectangular
+  ///         region. The first and last points are opposed on the diagonal, as
+  ///         are the second and third. The first point will be the topmost
+  ///         point and the last, the bottommost. The second point will be
+  ///         leftmost and the third, the rightmost
+  /// @throws NotFoundException if no Data Matrix Code can be found
   List<ResultPoint> detect() {
     int left = _leftInit;
     int right = _rightInit;
@@ -246,19 +240,17 @@ class WhiteRectangleDetector {
     return null;
   }
 
-  /**
-   * recenters the points of a constant distance towards the center
-   *
-   * @param y bottom most point
-   * @param z left most point
-   * @param x right most point
-   * @param t top most point
-   * @return {@link ResultPoint}[] describing the corners of the rectangular
-   *         region. The first and last points are opposed on the diagonal, as
-   *         are the second and third. The first point will be the topmost
-   *         point and the last, the bottommost. The second point will be
-   *         leftmost and the third, the rightmost
-   */
+  /// recenters the points of a constant distance towards the center
+  ///
+  /// @param y bottom most point
+  /// @param z left most point
+  /// @param x right most point
+  /// @param t top most point
+  /// @return {@link ResultPoint}[] describing the corners of the rectangular
+  ///         region. The first and last points are opposed on the diagonal, as
+  ///         are the second and third. The first point will be the topmost
+  ///         point and the last, the bottommost. The second point will be
+  ///         leftmost and the third, the rightmost
   List<ResultPoint> centerEdges(
       ResultPoint y, ResultPoint z, ResultPoint x, ResultPoint t) {
     //
@@ -294,15 +286,13 @@ class WhiteRectangleDetector {
     }
   }
 
-  /**
-   * Determines whether a segment contains a black point
-   *
-   * @param a          min value of the scanned coordinate
-   * @param b          max value of the scanned coordinate
-   * @param fixed      value of fixed coordinate
-   * @param horizontal set to true if scan must be horizontal, false if vertical
-   * @return true if a black point has been found, else false.
-   */
+  /// Determines whether a segment contains a black point
+  ///
+  /// @param a          min value of the scanned coordinate
+  /// @param b          max value of the scanned coordinate
+  /// @param fixed      value of fixed coordinate
+  /// @param horizontal set to true if scan must be horizontal, false if vertical
+  /// @return true if a black point has been found, else false.
   bool containsBlackPoint(int a, int b, int fixed, bool horizontal) {
     if (horizontal) {
       for (int x = a; x <= b; x++) {

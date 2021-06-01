@@ -26,9 +26,7 @@ import '../result_point.dart';
 
 import 'upceanreader.dart';
 
-/**
- * @see UPCEANExtension5Support
- */
+/// @see UPCEANExtension5Support
 class UPCEANExtension2Support {
 
   final List<int> _decodeMiddleCounters = [0,0,0,0];
@@ -94,11 +92,9 @@ class UPCEANExtension2Support {
     return rowOffset;
   }
 
-  /**
-   * @param raw raw content of extension
-   * @return formatted interpretation of raw content as a {@link Map} mapping
-   *  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
-   */
+  /// @param raw raw content of extension
+  /// @return formatted interpretation of raw content as a {@link Map} mapping
+  ///  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
   static Map<ResultMetadataType,Object>? _parseExtensionString(String raw) {
     if (raw.length != 2) {
       return null;

@@ -35,10 +35,8 @@ import 'ai01_and_other_ais.dart';
 import 'any_aidecoder.dart';
 import 'general_app_id_decoder.dart';
 
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
+/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 abstract class AbstractExpandedDecoder {
   final BitArray _information;
   final GeneralAppIdDecoder _generalDecoder;

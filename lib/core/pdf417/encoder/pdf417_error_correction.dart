@@ -20,15 +20,11 @@
 
 import '../../writer_exception.dart';
 
-/**
- * PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
- * chapter 4.10.
- */
+/// PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
+/// chapter 4.10.
 class PDF417ErrorCorrection {
-  /**
-   * Tables of coefficients for calculating error correction words
-   * (see annex F, ISO/IEC 15438:2001(E))
-   */
+  /// Tables of coefficients for calculating error correction words
+  /// (see annex F, ISO/IEC 15438:2001(E))
   static const List<List<int>> _EC_COEFFICIENTS = [
     [27, 917], //
     [522, 568, 723, 809], //
@@ -137,13 +133,11 @@ class PDF417ErrorCorrection {
 
   PDF417ErrorCorrection._();
 
-  /**
-   * Determines the number of error correction codewords for a specified error correction
-   * level.
-   *
-   * @param errorCorrectionLevel the error correction level (0-8)
-   * @return the number of codewords generated for error correction
-   */
+  /// Determines the number of error correction codewords for a specified error correction
+  /// level.
+  ///
+  /// @param errorCorrectionLevel the error correction level (0-8)
+  /// @return the number of codewords generated for error correction
   static int getErrorCorrectionCodewordCount(int errorCorrectionLevel) {
     if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8) {
       throw Exception("Error correction level must be between 0 and 8!");
@@ -151,13 +145,11 @@ class PDF417ErrorCorrection {
     return 1 << (errorCorrectionLevel + 1);
   }
 
-  /**
-   * Returns the recommended minimum error correction level as described in annex E of
-   * ISO/IEC 15438:2001(E).
-   *
-   * @param n the number of data codewords
-   * @return the recommended minimum error correction level
-   */
+  /// Returns the recommended minimum error correction level as described in annex E of
+  /// ISO/IEC 15438:2001(E).
+  ///
+  /// @param n the number of data codewords
+  /// @return the recommended minimum error correction level
   static int getRecommendedMinimumErrorCorrectionLevel(int n) {
     if (n <= 0) {
       throw Exception("n must be > 0");
@@ -177,13 +169,11 @@ class PDF417ErrorCorrection {
     throw WriterException("No recommendation possible");
   }
 
-  /**
-   * Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
-   *
-   * @param dataCodewords        the data codewords
-   * @param errorCorrectionLevel the error correction level (0-8)
-   * @return the String representing the error correction codewords
-   */
+  /// Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
+  ///
+  /// @param dataCodewords        the data codewords
+  /// @param errorCorrectionLevel the error correction level (0-8)
+  /// @return the String representing the error correction codewords
   static String generateErrorCorrection(
       String dataCodewords, int errorCorrectionLevel) {
     int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);

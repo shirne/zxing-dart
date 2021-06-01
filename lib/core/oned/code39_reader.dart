@@ -29,21 +29,17 @@ import '../result_point.dart';
 import '../result.dart';
 import 'one_dreader.dart';
 
-/**
- * <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
- *
- * @author Sean Owen
- * @see Code93Reader
- */
+/// <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
+///
+/// @author Sean Owen
+/// @see Code93Reader
 class Code39Reader extends OneDReader {
   static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
-  /**
-   * These represent the encodings of characters, as patterns of wide and narrow bars.
-   * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
-   * with 1s representing "wide" and 0s representing narrow.
-   */
+  /// These represent the encodings of characters, as patterns of wide and narrow bars.
+  /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
+  /// with 1s representing "wide" and 0s representing narrow.
   static const List<int> CHARACTER_ENCODINGS = [
     0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
     0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
@@ -59,16 +55,14 @@ class Code39Reader extends OneDReader {
   final StringBuilder _decodeRowResult;
   final List<int> _counters;
 
-  /**
-   * Creates a reader that can be configured to check the last character as a check digit,
-   * or optionally attempt to decode "extended Code 39" sequences that are used to encode
-   * the full ASCII character set.
-   *
-   * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   * data, and verify that the checksum passes.
-   * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
-   * text.
-   */
+  /// Creates a reader that can be configured to check the last character as a check digit,
+  /// or optionally attempt to decode "extended Code 39" sequences that are used to encode
+  /// the full ASCII character set.
+  ///
+  /// @param usingCheckDigit if true, treat the last data character as a check digit, not
+  /// data, and verify that the checksum passes.
+  /// @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
+  /// text.
   Code39Reader([this._usingCheckDigit = false, this._extendedMode = false])
       : _decodeRowResult = StringBuilder(),
         _counters = List.filled(9, 0);

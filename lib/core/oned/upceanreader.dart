@@ -29,14 +29,12 @@ import 'eanmanufacturer_org_support.dart';
 import 'one_dreader.dart';
 import 'upceanextension_support.dart';
 
-/**
- * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
- * of one-dimensional barcodes.</p>
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- * @author alasdair@google.com (Alasdair Mackintosh)
- */
+/// <p>Encapsulates functionality and implementation that is common to UPC and EAN families
+/// of one-dimensional barcodes.</p>
+///
+/// @author dswitkin@google.com (Daniel Switkin)
+/// @author Sean Owen
+/// @author alasdair@google.com (Alasdair Mackintosh)
 abstract class UPCEANReader extends OneDReader {
   // These two values are critical for determining how permissive the decoding will be.
   // We've arrived at these values through a lot of trial and error. Setting them any higher
@@ -44,22 +42,14 @@ abstract class UPCEANReader extends OneDReader {
   static const double _MAX_AVG_VARIANCE = 0.48;
   static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
 
-  /**
-   * Start/end guard pattern.
-   */
+  /// Start/end guard pattern.
   static const List<int> START_END_PATTERN = [ 1, 1, 1,];
 
-  /**
-   * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
-   */
+  /// Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
   static const List<int> MIDDLE_PATTERN = [1, 1, 1, 1, 1];
-  /**
-   * end guard pattern.
-   */
+  /// end guard pattern.
   static const List<int> END_PATTERN = [1, 1, 1, 1, 1, 1];
-  /**
-   * "Odd", or "L" patterns used to encode UPC/EAN digits.
-   */
+  /// "Odd", or "L" patterns used to encode UPC/EAN digits.
   static const List<List<int>> L_PATTERNS = [
     [3, 2, 1, 1], // 0
     [2, 2, 2, 1], // 1
@@ -73,9 +63,7 @@ abstract class UPCEANReader extends OneDReader {
     [3, 1, 1, 2] // 9
   ];
 
-  /**
-   * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
-   */
+  /// As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
   static final List<List<int>> L_AND_G_PATTERNS = List.generate(
       20,
       (index) => index < 10
@@ -127,20 +115,18 @@ abstract class UPCEANReader extends OneDReader {
     return startRange;
   }
 
-  /**
-   * <p>Like {@link #decodeRow(int, BitArray, Map)}, but
-   * allows caller to inform method about where the UPC/EAN start pattern is
-   * found. This allows this to be computed once and reused across many implementations.</p>
-   *
-   * @param rowNumber row index into the image
-   * @param row encoding of the row of the barcode image
-   * @param startGuardRange start/end column where the opening start pattern was found
-   * @param hints optional hints that influence decoding
-   * @return {@link Result} encapsulating the result of decoding a barcode in the row
-   * @throws NotFoundException if no potential barcode is found
-   * @throws ChecksumException if a potential barcode is found but does not pass its checksum
-   * @throws FormatException if a potential barcode is found but format is invalid
-   */
+  /// <p>Like {@link #decodeRow(int, BitArray, Map)}, but
+  /// allows caller to inform method about where the UPC/EAN start pattern is
+  /// found. This allows this to be computed once and reused across many implementations.</p>
+  ///
+  /// @param rowNumber row index into the image
+  /// @param row encoding of the row of the barcode image
+  /// @param startGuardRange start/end column where the opening start pattern was found
+  /// @param hints optional hints that influence decoding
+  /// @return {@link Result} encapsulating the result of decoding a barcode in the row
+  /// @throws NotFoundException if no potential barcode is found
+  /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
+  /// @throws FormatException if a potential barcode is found but format is invalid
   Result decodeRow(
     int rowNumber,
     BitArray row,
@@ -255,23 +241,19 @@ abstract class UPCEANReader extends OneDReader {
     return decodeResult;
   }
 
-  /**
-   * @param s string of digits to check
-   * @return {@link #checkStandardUPCEANChecksum(CharSequence)}
-   * @throws FormatException if the string does not contain only digits
-   */
+  /// @param s string of digits to check
+  /// @return {@link #checkStandardUPCEANChecksum(CharSequence)}
+  /// @throws FormatException if the string does not contain only digits
   bool checkChecksum(String s) {
     return checkStandardUPCEANChecksum(s);
   }
 
-  /**
-   * Computes the UPC/EAN checksum on a string of digits, and reports
-   * whether the checksum is correct or not.
-   *
-   * @param s string of digits to check
-   * @return true iff string of digits passes the UPC/EAN checksum algorithm
-   * @throws FormatException if the string does not contain only digits
-   */
+  /// Computes the UPC/EAN checksum on a string of digits, and reports
+  /// whether the checksum is correct or not.
+  ///
+  /// @param s string of digits to check
+  /// @return true iff string of digits passes the UPC/EAN checksum algorithm
+  /// @throws FormatException if the string does not contain only digits
   static bool checkStandardUPCEANChecksum(String s) {
     int length = s.length;
     if (length == 0) {
@@ -313,17 +295,15 @@ abstract class UPCEANReader extends OneDReader {
     return _findGuardPattern(row, rowOffset, whiteFirst, pattern, List.filled(pattern.length, 0));
   }
 
-  /**
-   * @param row row of black/white values to search
-   * @param rowOffset position to start search
-   * @param whiteFirst if true, indicates that the pattern specifies white/black/white/...
-   * pixel counts, otherwise, it is interpreted as black/white/black/...
-   * @param pattern pattern of counts of number of black and white pixels that are being
-   * searched for as a pattern
-   * @param counters array of counters, as long as pattern, to re-use
-   * @return start/end horizontal offset of guard pattern, as an array of two ints
-   * @throws NotFoundException if pattern is not found
-   */
+  /// @param row row of black/white values to search
+  /// @param rowOffset position to start search
+  /// @param whiteFirst if true, indicates that the pattern specifies white/black/white/...
+  /// pixel counts, otherwise, it is interpreted as black/white/black/...
+  /// @param pattern pattern of counts of number of black and white pixels that are being
+  /// searched for as a pattern
+  /// @param counters array of counters, as long as pattern, to re-use
+  /// @return start/end horizontal offset of guard pattern, as an array of two ints
+  /// @throws NotFoundException if pattern is not found
   static List<int> _findGuardPattern(
       BitArray row, int rowOffset, bool whiteFirst, List<int> pattern,
       [List<int>? counters]) {
@@ -362,18 +342,16 @@ abstract class UPCEANReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  /**
-   * Attempts to decode a single UPC/EAN-encoded digit.
-   *
-   * @param row row of black/white values to decode
-   * @param counters the counts of runs of observed black/white/black/... values
-   * @param rowOffset horizontal offset to start decoding from
-   * @param patterns the set of patterns to use to decode -- sometimes different encodings
-   * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
-   * be used
-   * @return horizontal offset of first pixel beyond the decoded digit
-   * @throws NotFoundException if digit cannot be decoded
-   */
+  /// Attempts to decode a single UPC/EAN-encoded digit.
+  ///
+  /// @param row row of black/white values to decode
+  /// @param counters the counts of runs of observed black/white/black/... values
+  /// @param rowOffset horizontal offset to start decoding from
+  /// @param patterns the set of patterns to use to decode -- sometimes different encodings
+  /// for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
+  /// be used
+  /// @return horizontal offset of first pixel beyond the decoded digit
+  /// @throws NotFoundException if digit cannot be decoded
   static int decodeDigit(BitArray row, List<int> counters, int rowOffset,
       List<List<int>> patterns) {
     OneDReader.recordPattern(row, rowOffset, counters);
@@ -396,23 +374,19 @@ abstract class UPCEANReader extends OneDReader {
     }
   }
 
-  /**
-   * Get the format of this decoder.
-   *
-   * @return The 1D format.
-   */
+  /// Get the format of this decoder.
+  ///
+  /// @return The 1D format.
   BarcodeFormat getBarcodeFormat();
 
-  /**
-   * Subclasses override this to decode the portion of a barcode between the start
-   * and end guard patterns.
-   *
-   * @param row row of black/white values to search
-   * @param startRange start/end offset of start guard pattern
-   * @param resultString {@link StringBuffer} to append decoded chars to
-   * @return horizontal offset of first pixel after the "middle" that was decoded
-   * @throws NotFoundException if decoding could not complete successfully
-   */
+  /// Subclasses override this to decode the portion of a barcode between the start
+  /// and end guard patterns.
+  ///
+  /// @param row row of black/white values to search
+  /// @param startRange start/end offset of start guard pattern
+  /// @param resultString {@link StringBuffer} to append decoded chars to
+  /// @return horizontal offset of first pixel after the "middle" that was decoded
+  /// @throws NotFoundException if decoding could not complete successfully
   int decodeMiddle(
       BitArray row, List<int> startRange, StringBuilder resultString);
 }

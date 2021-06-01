@@ -17,12 +17,10 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
-/**
- * Represents a parsed result that encodes a geographic coordinate, with latitude,
- * longitude and altitude.
- *
- * @author Sean Owen
- */
+/// Represents a parsed result that encodes a geographic coordinate, with latitude,
+/// longitude and altitude.
+///
+/// @author Sean Owen
 class GeoParsedResult extends ParsedResult {
   final double _latitude;
   final double _longitude;
@@ -49,30 +47,22 @@ class GeoParsedResult extends ParsedResult {
     return result.toString();
   }
 
-  /**
-   * @return latitude in degrees
-   */
+  /// @return latitude in degrees
   double getLatitude() {
     return _latitude;
   }
 
-  /**
-   * @return longitude in degrees
-   */
+  /// @return longitude in degrees
   double getLongitude() {
     return _longitude;
   }
 
-  /**
-   * @return altitude in meters. If not specified, in the geo URI, returns 0.0
-   */
+  /// @return altitude in meters. If not specified, in the geo URI, returns 0.0
   double getAltitude() {
     return _altitude;
   }
 
-  /**
-   * @return query string associated with geo URI or null if none exists
-   */
+  /// @return query string associated with geo URI or null if none exists
   String? getQuery() {
     return _query;
   }

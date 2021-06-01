@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class Codeword {
   static const int _BARCODE_ROW_UNKNOWN = -1;
 

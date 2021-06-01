@@ -16,12 +16,10 @@
 
 import 'common/detector/math_utils.dart';
 
-/**
- * <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
- * would be the location of a finder pattern or the corner of the barcode, for example.</p>
- *
- * @author Sean Owen
- */
+/// <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
+/// would be the location of a finder pattern or the corner of the barcode, for example.</p>
+///
+/// @author Sean Owen
 class ResultPoint {
   final double x;
   final double y;
@@ -55,12 +53,10 @@ class ResultPoint {
     return "($x,$y)";
   }
 
-  /**
-   * Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
-   * and BC is less than AC, and the angle between BC and BA is less than 180 degrees.
-   *
-   * @param patterns array of three {@code ResultPoint} to order
-   */
+  /// Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
+  /// and BC is less than AC, and the angle between BC and BA is less than 180 degrees.
+  ///
+  /// @param patterns array of three {@code ResultPoint} to order
   static void orderBestPatterns(List<ResultPoint> patterns) {
 
     // Find distances between pattern centers
@@ -103,18 +99,14 @@ class ResultPoint {
     patterns[2] = pointC;
   }
 
-  /**
-   * @param pattern1 first pattern
-   * @param pattern2 second pattern
-   * @return distance between two points
-   */
+  /// @param pattern1 first pattern
+  /// @param pattern2 second pattern
+  /// @return distance between two points
   static double distance(ResultPoint pattern1, ResultPoint pattern2) {
     return MathUtils.distance(pattern1.x, pattern1.y, pattern2.x, pattern2.y);
   }
 
-  /**
-   * Returns the z component of the cross product between vectors BC and BA.
-   */
+  /// Returns the z component of the cross product between vectors BC and BA.
   static double crossProductZ(
       ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
     double bX = pointB.x;

@@ -25,11 +25,9 @@ import '../../common/reedsolomon/reed_solomon_encoder.dart';
 import 'aztec_code.dart';
 import 'high_level_encoder.dart';
 
-/**
- * Generates Aztec 2D barcodes.
- *
- * @author Rustam Abdullaev
- */
+/// Generates Aztec 2D barcodes.
+///
+/// @author Rustam Abdullaev
 class Encoder {
   static const int DEFAULT_EC_PERCENT =
       33; // default minimal percentage of error check words
@@ -44,18 +42,16 @@ class Encoder {
 
   Encoder();
 
-  /**
-   * Encodes the given string content as an Aztec symbol
-   *
-   * @param data input data string
-   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
-   *                      a minimum of 23% + 3 words is recommended)
-   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
-   * @param charset character set in which to encode string using ECI; if null, no ECI code
-   *                will be inserted, and the string must be encodable as ISO/IEC 8859-1
-   *                (Latin-1), the default encoding of the symbol.
-   * @return Aztec symbol matrix with metadata
-   */
+  /// Encodes the given string content as an Aztec symbol
+  ///
+  /// @param data input data string
+  /// @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+  ///                      a minimum of 23% + 3 words is recommended)
+  /// @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+  /// @param charset character set in which to encode string using ECI; if null, no ECI code
+  ///                will be inserted, and the string must be encodable as ISO/IEC 8859-1
+  ///                (Latin-1), the default encoding of the symbol.
+  /// @return Aztec symbol matrix with metadata
   static AztecCode encode(String data,
       [int minECCPercent = DEFAULT_AZTEC_LAYERS,
       int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
@@ -65,17 +61,15 @@ class Encoder {
         Uint8List.fromList(bytes), minECCPercent, userSpecifiedLayers, charset);
   }
 
-  /**
-   * Encodes the given binary content as an Aztec symbol
-   *
-   * @param data input data string
-   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
-   *                      a minimum of 23% + 3 words is recommended)
-   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
-   * @param charset character set to mark using ECI; if null, no ECI code will be inserted, and the
-   *                default encoding of ISO/IEC 8859-1 will be assuming by readers.
-   * @return Aztec symbol matrix with metadata
-   */
+  /// Encodes the given binary content as an Aztec symbol
+  ///
+  /// @param data input data string
+  /// @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+  ///                      a minimum of 23% + 3 words is recommended)
+  /// @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+  /// @param charset character set to mark using ECI; if null, no ECI code will be inserted, and the
+  ///                default encoding of ISO/IEC 8859-1 will be assuming by readers.
+  /// @return Aztec symbol matrix with metadata
   static AztecCode encodeData(Uint8List data,
       [int minECCPercent = DEFAULT_AZTEC_LAYERS,
       int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,

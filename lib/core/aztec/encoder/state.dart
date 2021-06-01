@@ -23,10 +23,8 @@ import '../../common/bit_array.dart';
 import 'high_level_encoder.dart';
 import 'token.dart';
 
-/**
- * State represents all information about a sequence necessary to generate the current output.
- * Note that a state is immutable.
- */
+/// State represents all information about a sequence necessary to generate the current output.
+/// Note that a state is immutable.
 class State {
   static final State INITIAL_STATE =
       State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);

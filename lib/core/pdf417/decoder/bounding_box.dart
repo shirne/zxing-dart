@@ -21,9 +21,7 @@ import '../../common/bit_matrix.dart';
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 
-/**
- * @author Guenther Grau
- */
+/// @author Guenther Grau
 class BoundingBox {
   final BitMatrix _image;
   late ResultPoint _topLeft;

@@ -28,18 +28,14 @@ import 'error_correction_level.dart';
 import 'mode.dart';
 import 'version.dart';
 
-/**
- * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
- * in one QR Code. This class decodes the bits back into text.</p>
- *
- * <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
- *
- * @author Sean Owen
- */
+/// <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
+/// in one QR Code. This class decodes the bits back into text.</p>
+///
+/// <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
+///
+/// @author Sean Owen
 class DecodedBitStreamParser {
-  /**
-   * See ISO 18004:2006, 6.4.4 Table 5
-   */
+  /// See ISO 18004:2006, 6.4.4 Table 5
   static final List<String> _ALPHANUMERIC_CHARS =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".split('');
   static final int _GB2312_SUBSET = 1;
@@ -167,9 +163,7 @@ class DecodedBitStreamParser {
         symbologyModifier);
   }
 
-  /**
-   * See specification GBT 18284-2000
-   */
+  /// See specification GBT 18284-2000
   static void _decodeHanziSegment(
       BitSource bits, StringBuffer result, int count) {
     // Don't crash trying to read more bits than we have available.
