@@ -29,15 +29,14 @@ import '../common/abstract_black_box.dart';
  * @author David Olivier
  */
 void main(){
-  AbstractBlackBoxTestCase testCase =
-  AbstractBlackBoxTestCase("src/test/resources/blackbox/aztec-1", new AztecReader(), BarcodeFormat.AZTEC);
 
   test('AztecBlackBox1TestCase', () {
-
-    testCase.addTest(14, 14, 0.0);
-    testCase.addTest(14, 14, 90.0);
-    testCase.addTest(14, 14, 180.0);
-    testCase.addTest(14, 14, 270.0);
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/aztec-1", new AztecReader(), BarcodeFormat.AZTEC)
+    ..addTest(14, 14, 0.0)
+    ..addTest(14, 14, 90.0)
+    ..addTest(14, 14, 180.0)
+    ..addTest(14, 14, 270.0)
+        ..testBlackBox();
   });
 
 }

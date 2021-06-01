@@ -45,14 +45,7 @@ void main() {
     return result;
   }
   
-  String matrixToString(BitMatrix result) {
-    expect(1, result.getHeight());
-    StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < result.getWidth(); i++) {
-      builder.write(result.get(i, 0) ? '1' : '0');
-    }
-    return builder.toString();
-  }
+
 
   void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {
     BitMatrix matrix = dataMatrix.clone();

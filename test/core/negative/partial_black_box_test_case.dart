@@ -18,28 +18,24 @@
 
 
 
-
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
 
-import '../common/abstract_black_box.dart';
-import '../common/abstract_black_box_test_case.dart';
+import '../common/abstract_negative_black_box.dart';
 
 /**
- * Tests of various QR Codes from t-shirts, which are notoriously not flat.
+ * This test ensures that partial barcodes do not decode.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 void main(){
 
-  test('QRCodeBlackBox4TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE)
-    ..addTest(36, 36, 0.0)
-    ..addTest(35, 35, 90.0)
-    ..addTest(35, 35, 180.0)
-    ..addTest(35, 35, 270.0)
-        ..testBlackBox();
+  test('PartialBlackBoxTestCase', () {
+    AbstractNegativeBlackBoxTestCase("src/test/resources/blackbox/partial")
+    ..addNegativeTest(1, 0.0)
+    ..addNegativeTest(1, 90.0)
+    ..addNegativeTest(1, 180.0)
+    ..addNegativeTest(1, 270.0)
+    ..testBlackBox();
   });
 
 }

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zxing/common.dart';
 
 void assertListEquals(List<int> expected, int expectedFrom,
     Uint8List actual, int actualFrom, int length) {
@@ -34,4 +35,13 @@ void assertEqualOrNaN(double expected, double actual, [int eps = 1000]) {
   } else {
     expect((expected * pow(10, eps)).round(), (actual * pow(10, eps)).round());
   }
+}
+
+String matrixToString(BitMatrix result) {
+  expect(1, result.getHeight());
+  StringBuilder builder = new StringBuilder();
+  for (int i = 0; i < result.getWidth(); i++) {
+    builder.write(result.get(i, 0) ? '1' : '0');
+  }
+  return builder.toString();
 }

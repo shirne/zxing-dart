@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,23 @@
 
 
 
-
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
 
-import '../common/abstract_black_box.dart';
-import '../common/abstract_black_box_test_case.dart';
+import '../common/abstract_negative_black_box.dart';
 
 /**
- * Some very difficult exposure conditions including self-shadowing, which happens a lot when
- * pointing down at a barcode (i.e. the phone's shadow falls across part of the image).
- * The global histogram gets about 5/15, where the local one gets 15/15.
+ * Additional random images with high contrast patterns which should not find any barcodes.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 void main(){
 
-
-  test('QRCodeBlackBox5TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-5", new MultiFormatReader(), BarcodeFormat.QR_CODE)
-    ..addTest(19, 19, 0.0)
-    ..addTest(19, 19, 90.0)
-    ..addTest(19, 19, 180.0)
-    ..addTest(19, 19, 270.0)
+  test('FalsePositives2BlackBoxTestCase', () {
+    AbstractNegativeBlackBoxTestCase("src/test/resources/blackbox/falsepositives-2")
+    ..addNegativeTest(4, 0.0)
+    ..addNegativeTest(4, 90.0)
+    ..addNegativeTest(4, 180.0)
+    ..addNegativeTest(4, 270.0)
         ..testBlackBox();
   });
 

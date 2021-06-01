@@ -29,14 +29,14 @@ import '../common/abstract_black_box.dart';
  * @author dswitkin@google.com (Daniel Switkin)
  */
 void main(){
-  AbstractBlackBoxTestCase testCase = AbstractBlackBoxTestCase("src/test/resources/blackbox/datamatrix-2", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX);
 
   test('DataMatrixBlackBox2TestCase', () {
-
-    testCase.addTest(13, 13, 0.0, 0, 1, );
-    testCase.addTest(15, 15, 90.0, 0, 1, );
-    testCase.addTest(17, 16, 180.0, 0, 1);
-    testCase.addTest(15, 15, 270.0, 0, 1);
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/datamatrix-2", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+    ..addTest(13, 13, 0.0, 0, 1, )
+    ..addTest(15, 15, 90.0, 0, 1, )
+    ..addTest(17, 16, 180.0, 0, 1)
+    ..addTest(15, 15, 270.0, 0, 1)
+        ..testBlackBox();
   });
 
 }

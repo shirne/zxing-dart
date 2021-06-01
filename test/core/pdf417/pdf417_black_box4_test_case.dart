@@ -32,8 +32,9 @@ import '../common/test_result.dart';
 
 void main(){
   test('testBlackBox', (){
-    PDF417BlackBox4TestCase testCase = PDF417BlackBox4TestCase();
-    testCase.testBlackBox();
+    PDF417BlackBox4TestCase()
+    ..testBlackBox()
+        ..testBlackBox();
   });
 }
 

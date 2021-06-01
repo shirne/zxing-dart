@@ -29,12 +29,14 @@ import '../common/abstract_black_box_test_case.dart';
  */
 void main(){
 
-  AbstractBlackBoxTestCase testCase = AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-6", new MultiFormatReader(), BarcodeFormat.QR_CODE);
+
   test('QRCodeBlackBox6TestCase', (){
-    testCase.addTest(15, 15, 0.0);
-    testCase.addTest(14, 14, 90.0);
-    testCase.addTest(13, 13, 180.0);
-    testCase.addTest(14, 14, 270.0);
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-6", new MultiFormatReader(), BarcodeFormat.QR_CODE)
+    ..addTest(15, 15, 0.0)
+    ..addTest(14, 14, 90.0)
+    ..addTest(13, 13, 180.0)
+    ..addTest(14, 14, 270.0)
+        ..testBlackBox();
   });
 
 }

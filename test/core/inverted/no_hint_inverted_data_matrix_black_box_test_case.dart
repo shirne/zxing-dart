@@ -18,27 +18,21 @@
 
 
 
-
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
 
-import '../common/abstract_black_box.dart';
-import '../common/abstract_black_box_test_case.dart';
+import '../common/abstract_negative_black_box.dart';
 
 /**
- * Tests of various QR Codes from t-shirts, which are notoriously not flat.
- *
- * @author dswitkin@google.com (Daniel Switkin)
+ * Without hint inverted barcodes should not be found.
  */
 void main(){
 
-  test('QRCodeBlackBox4TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE)
-    ..addTest(36, 36, 0.0)
-    ..addTest(35, 35, 90.0)
-    ..addTest(35, 35, 180.0)
-    ..addTest(35, 35, 270.0)
+  test('NoHintInvertedDataMatrixBlackBoxTestCase', () {
+    AbstractNegativeBlackBoxTestCase("src/test/resources/blackbox/inverted")
+    ..addNegativeTest(0, 0.0)
+    ..addNegativeTest(0, 90.0)
+    ..addNegativeTest(0, 180.0)
+    ..addNegativeTest(0, 270.0)
         ..testBlackBox();
   });
 
