@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,24 @@
 
 
 
+
+
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
 /**
- * This test contains 480x240 images captured from an Android device at preview resolution.
- *
+ * A set of blurry images taken with a fixed-focus device.
  * @author dswitkin@google.com (Daniel Switkin)
  */
 void main(){
 
-  test('PDF417BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-2", new MultiFormatReader(), BarcodeFormat.PDF_417)
-    ..addTest(25, 25, 0.0, 0, 0)
-    ..addTest(25, 25, 180.0, 0, 0)
+  test('UPCABlackBox6BlurryTestCase', () {
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/upca-6", new MultiFormatReader(), BarcodeFormat.UPC_A)
+    ..addTest(0, 0, 0.0)
+    ..addTest(0, 0, 180.0)
         ..testBlackBox();
   });
 

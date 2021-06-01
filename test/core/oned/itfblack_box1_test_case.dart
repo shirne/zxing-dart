@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,23 @@
 
 
 
+
+
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
 /**
- * This test contains 480x240 images captured from an Android device at preview resolution.
- *
- * @author dswitkin@google.com (Daniel Switkin)
+ * @author kevin.osullivan@sita.aero
  */
 void main(){
 
-  test('PDF417BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-2", new MultiFormatReader(), BarcodeFormat.PDF_417)
-    ..addTest(25, 25, 0.0, 0, 0)
-    ..addTest(25, 25, 180.0, 0, 0)
+  test('ITFBlackBox1TestCase', () {
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/itf-1", new MultiFormatReader(), BarcodeFormat.ITF)
+    ..addTest(14, 14, 0.0)
+    ..addTest(14, 14, 180.0)
         ..testBlackBox();
   });
 

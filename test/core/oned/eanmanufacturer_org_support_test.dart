@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright (C) 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,25 @@
 
 
 
+
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
-
-import '../common/abstract_black_box.dart';
-
+import 'package:zxing/oned.dart';
 
 /**
- * This test contains 480x240 images captured from an Android device at preview resolution.
- *
- * @author dswitkin@google.com (Daniel Switkin)
+ * Tests {@link EANManufacturerOrgSupport}.
+ * 
+ * @author Sean Owen
  */
 void main(){
 
-  test('PDF417BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-2", new MultiFormatReader(), BarcodeFormat.PDF_417)
-    ..addTest(25, 25, 0.0, 0, 0)
-    ..addTest(25, 25, 180.0, 0, 0)
-        ..testBlackBox();
+  test('testLookup', () {
+    EANManufacturerOrgSupport support = new EANManufacturerOrgSupport();
+    assert(support.lookupCountryIdentifier("472000") == null);
+    expect("US/CA", support.lookupCountryIdentifier("000000"));
+    expect("MO", support.lookupCountryIdentifier("958000"));
+    expect("GB", support.lookupCountryIdentifier("500000"));
+    expect("GB", support.lookupCountryIdentifier("509000"));
   });
 
 }

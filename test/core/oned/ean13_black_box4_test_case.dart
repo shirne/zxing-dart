@@ -17,23 +17,24 @@
 
 
 
+
+
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
 /**
- * This test contains 480x240 images captured from an Android device at preview resolution.
- *
+ * A very difficult set of images taken with extreme shadows and highlights.
  * @author dswitkin@google.com (Daniel Switkin)
  */
 void main(){
 
-  test('PDF417BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-2", new MultiFormatReader(), BarcodeFormat.PDF_417)
-    ..addTest(25, 25, 0.0, 0, 0)
-    ..addTest(25, 25, 180.0, 0, 0)
+  test('EAN13BlackBox4TestCase', () {
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/ean13-4", new MultiFormatReader(), BarcodeFormat.EAN_13)
+    ..addTest(6, 13, 0.0, 1, 1)
+    ..addTest(7, 13, 180.0, 1, 1)
         ..testBlackBox();
   });
 

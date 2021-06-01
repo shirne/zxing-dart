@@ -27,10 +27,10 @@ import '../common/abstract_black_box_test_case.dart';
 void main(){
 
   test('PDF417BlackBox3TestCase', () {
-    AbstractBlackBoxTestCase testCase =
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417);
-    testCase.addTest(19, 19, 0.0, 0, 0);
-    testCase.addTest(19, 19, 180.0, 0, 0);
+    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417)
+    ..addTest(19, 19, 0.0, 0, 0)
+    ..addTest(19, 19, 180.0, 0, 0)
+        ..testBlackBox();
   });
 
 }
