@@ -35,8 +35,8 @@ void main() {
       COLS * ROWS, (index) => index < YUV.length ? YUV[index] : 0);
 
   test('testNoCrop', () {
-    PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
-        Uint8List.fromList(YUV), COLS, ROWS, 0, 0, COLS, ROWS, false);
+    PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(
+        Int8List.fromList(YUV), COLS, ROWS, 0, 0, COLS, ROWS, false);
     assertListEquals(Y, 0, source.getMatrix(), 0, Y.length);
     for (int r = 0; r < ROWS; r++) {
       assertListEquals(Y, r * COLS, source.getRow(r, null), 0, COLS);
@@ -45,9 +45,9 @@ void main() {
 
   test('testCrop', () {
     PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
-        Uint8List.fromList(YUV), COLS, ROWS, 1, 1, COLS - 2, ROWS - 2, false);
+        Int8List.fromList(YUV), COLS, ROWS, 1, 1, COLS - 2, ROWS - 2, false);
     expect(source.isCropSupported(), true);
-    Uint8List cropMatrix = source.getMatrix();
+    Int8List cropMatrix = source.getMatrix();
     for (int r = 0; r < ROWS - 2; r++) {
       assertListEquals(Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
     }
@@ -58,7 +58,7 @@ void main() {
 
   test('testThumbnail', () {
     PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
-        Uint8List.fromList(YUV), COLS, ROWS, 0, 0, COLS, ROWS, false);
+        Int8List.fromList(YUV), COLS, ROWS, 0, 0, COLS, ROWS, false);
     expect(source.renderThumbnail(), [
       0xFF000000,
       0xFF010101,
@@ -73,7 +73,7 @@ void main() {
 }
 
 void assertListEquals(List<int> expected, int expectedFrom,
-    Uint8List actual, int actualFrom, int length) {
+    Int8List actual, int actualFrom, int length) {
   for (int i = 0; i < length; i++) {
     expect(actual[actualFrom + i], expected[expectedFrom + i]);
   }

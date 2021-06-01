@@ -37,7 +37,7 @@ void main() {
   });
 
   test('testMatrix', () {
-    expect(SOURCE.getMatrix(), [0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
+    expect(SOURCE.getMatrix(), [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
     LuminanceSource croppedFullWidth = SOURCE.crop(0, 1, 3, 2);
     expect(croppedFullWidth.getMatrix(),
         [0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
@@ -46,7 +46,7 @@ void main() {
   });
 
   test('testGetRow', () {
-    expect(SOURCE.getRow(2, Uint8List(3)), [0x3F, 0x7F, 0x3F]);
+    expect(SOURCE.getRow(2, Int8List(3)), [0x3F, 0x7F, 0x3F]);
   });
 
   test('testToString', () {

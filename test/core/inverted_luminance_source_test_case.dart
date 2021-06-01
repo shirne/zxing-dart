@@ -40,9 +40,9 @@ void main() {
 
     LuminanceSource source = new BufferedImageLuminanceSource(image);
 
-    expect(source.getRow(0, null), [0xFF, 0]);
+    expect(source.getRow(0, null), [0xFF.toSigned(8), 0]);
     LuminanceSource inverted = new InvertedLuminanceSource(source);
-    expect(inverted.getRow(0, null), [0, 0xFF]);
+    expect(inverted.getRow(0, null), [0, 0xFF.toSigned(8)]);
   });
 
 }
