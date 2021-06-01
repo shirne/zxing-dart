@@ -62,7 +62,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     int width = source.getWidth();
     int height = source.getHeight();
     if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-      Uint8List luminances = source.getMatrix();
+      Int8List luminances = source.getMatrix();
       int subWidth = width >> BLOCK_SIZE_POWER;
       if ((width & BLOCK_SIZE_MASK) != 0) {
         subWidth++;
@@ -94,7 +94,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// of the blocks around it. Also handles the corner cases (fractional blocks are computed based
   /// on the last pixels in the row/column which are also used in the previous block).
   static void _calculateThresholdForBlock(
-      Uint8List luminances,
+      Int8List luminances,
       int subWidth,
       int subHeight,
       int width,
@@ -135,7 +135,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   /// Applies a single threshold to a block of pixels.
-  static void _thresholdBlock(Uint8List luminances, int xoffset, int yoffset,
+  static void _thresholdBlock(Int8List luminances, int xoffset, int yoffset,
       int threshold, int stride, BitMatrix matrix) {
     for (int y = 0, offset = yoffset * stride + xoffset;
         y < BLOCK_SIZE;
@@ -152,7 +152,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// Calculates a single black point for each block of pixels and saves it away.
   /// See the following thread for a discussion of this algorithm:
   ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-  static List<List<int>> _calculateBlackPoints(Uint8List luminances,
+  static List<List<int>> _calculateBlackPoints(Int8List luminances,
       int subWidth, int subHeight, int width, int height) {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;

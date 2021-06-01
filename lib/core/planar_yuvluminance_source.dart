@@ -29,7 +29,7 @@ import 'luminance_source.dart';
 class PlanarYUVLuminanceSource extends LuminanceSource {
   static const int _THUMBNAIL_SCALE_FACTOR = 2;
 
-  final Uint8List _yuvData;
+  final Int8List _yuvData;
   final int _dataWidth;
   final int _dataHeight;
   final int _left;
@@ -48,13 +48,13 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Uint8List getRow(int y, Uint8List? row) {
+  Int8List getRow(int y, Int8List? row) {
     if (y < 0 || y >= getHeight()) {
       throw Exception("Requested row is outside the image: $y");
     }
     int width = getWidth();
     if (row == null || row.length < width) {
-      row = Uint8List(width);
+      row = Int8List(width);
     }
     int offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _yuvData, offset, offset + width);
@@ -62,7 +62,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Uint8List getMatrix() {
+  Int8List getMatrix() {
     int width = getWidth();
     int height = getHeight();
 
@@ -73,7 +73,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     }
 
     int area = width * height;
-    Uint8List matrix = Uint8List(area);
+    Int8List matrix = Int8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
@@ -106,7 +106,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     int width = getWidth() ~/ _THUMBNAIL_SCALE_FACTOR;
     int height = getHeight() ~/ _THUMBNAIL_SCALE_FACTOR;
     List<int> pixels = List.generate(width * height, (index) => 0);
-    Uint8List yuv = _yuvData;
+    Int8List yuv = _yuvData;
     int inputOffset = _top * _dataWidth + _left;
 
     for (int y = 0; y < height; y++) {
@@ -131,7 +131,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   void _reverseHorizontal(int width, int height) {
-    Uint8List yuvData = this._yuvData;
+    Int8List yuvData = this._yuvData;
     for (int y = 0, rowStart = _top * _dataWidth + _left;
         y < height;
         y++, rowStart += _dataWidth) {

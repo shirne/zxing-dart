@@ -24,15 +24,15 @@ import 'luminance_source.dart';
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Betaminos
 class RGBLuminanceSource extends LuminanceSource {
-  final Uint8List _luminances;
+  final Int8List _luminances;
   final int _dataWidth;
   final int _dataHeight;
   final int _left;
   final int _top;
 
-  static Uint8List intList2Int8List(List<int> pixels) {
+  static Int8List intList2Int8List(List<int> pixels) {
     int size = pixels.length;
-    Uint8List luminances = Uint8List(size);
+    Int8List luminances = Int8List(size);
     for (int offset = 0; offset < size; offset++) {
       int pixel = pixels[offset];
       int r = (pixel >> 16) & 0xff; // red
@@ -62,12 +62,12 @@ class RGBLuminanceSource extends LuminanceSource {
         super(width ?? _dataWidth, height ?? _dataHeight);
 
   @override
-  Uint8List getRow(int y, Uint8List? row) {
+  Int8List getRow(int y, Int8List? row) {
     assert(y >= 0 && y < getHeight(), "Requested row is outside the image: $y");
 
     int width = getWidth();
     if (row == null || row.length < width) {
-      row = Uint8List(width);
+      row = Int8List(width);
     }
     int offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _luminances, offset, offset + width);
@@ -75,7 +75,7 @@ class RGBLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Uint8List getMatrix() {
+  Int8List getMatrix() {
     int width = getWidth();
     int height = getHeight();
 
@@ -86,7 +86,7 @@ class RGBLuminanceSource extends LuminanceSource {
     }
 
     int area = width * height;
-    Uint8List matrix = Uint8List(area);
+    Int8List matrix = Int8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.

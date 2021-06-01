@@ -35,9 +35,9 @@ class GlobalHistogramBinarizer extends Binarizer {
   static const int _luminanceBits = 5;
   static const int _luminanceShift = 8 - _luminanceBits;
   static const int _luminanceBuckets = 1 << _luminanceBits;
-  static final Uint8List EMPTY = Uint8List(0);
+  static final Int8List EMPTY = Int8List(0);
 
-  Uint8List _luminances;
+  Int8List _luminances;
   final List<int> _buckets;
 
   GlobalHistogramBinarizer(LuminanceSource source)
@@ -57,7 +57,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     }
 
     _initArrays(width);
-    Uint8List localLuminances = source.getRow(y, _luminances);
+    Int8List localLuminances = source.getRow(y, _luminances);
     List<int> localBuckets = _buckets;
     for (int x = 0; x < width; x++) {
       localBuckets[(localLuminances[x] & 0xff) >> _luminanceShift]++;
@@ -101,7 +101,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     List<int> localBuckets = _buckets;
     for (int y = 1; y < 5; y++) {
       int row = height * y ~/ 5;
-      Uint8List localLuminances = source.getRow(row, _luminances);
+      Int8List localLuminances = source.getRow(row, _luminances);
       int right = (width * 4) ~/ 5;
       for (int x = width ~/ 5; x < right; x++) {
         int pixel = localLuminances[x] & 0xff;
@@ -113,7 +113,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     // We delay reading the entire image luminance until the black point estimation succeeds.
     // Although we end up reading four rows twice, it is consistent with our motto of
     // "fail quickly" which is necessary for continuous scanning.
-    Uint8List localLuminances = source.getMatrix();
+    Int8List localLuminances = source.getMatrix();
     for (int y = 0; y < height; y++) {
       int offset = y * width;
       for (int x = 0; x < width; x++) {
@@ -134,7 +134,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   void _initArrays(int luminanceSize) {
     if (_luminances.length < luminanceSize) {
-      _luminances = Uint8List(luminanceSize);
+      _luminances = Int8List(luminanceSize);
     }
     for (int x = 0; x < _luminanceBuckets; x++) {
       _buckets[x] = 0;
