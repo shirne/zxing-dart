@@ -16,6 +16,8 @@
 
 import 'dart:math' as Math;
 
+import 'package:fixnum/fixnum.dart';
+
 /**
  * General math-related and numeric utility functions.
  */
@@ -131,35 +133,6 @@ class MathUtils {
   }
 
   static int numberOfTrailingZeros(int i) {
-    int x, y;
-    if (i == 0) return 64;
-    int n = 63;
-    y = i;
-    if (y != 0) {
-      n = n - 32;
-      x = y;
-    } else
-      x = (i >> 32);
-    y = x << 16;
-    if (y != 0) {
-      n = n - 16;
-      x = y;
-    }
-    y = x << 8;
-    if (y != 0) {
-      n = n - 8;
-      x = y;
-    }
-    y = x << 4;
-    if (y != 0) {
-      n = n - 4;
-      x = y;
-    }
-    y = x << 2;
-    if (y != 0) {
-      n = n - 2;
-      x = y;
-    }
-    return n - ((x << 1) >> 31);
+    return Int32(i).numberOfTrailingZeros();
   }
 }

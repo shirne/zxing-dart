@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import '../../../common/utils.dart';
+
 import 'expanded_pair.dart';
 
 /**
@@ -53,7 +55,7 @@ class ExpandedRow {
       return false;
     }
     ExpandedRow that = o;
-    return this._pairs == that._pairs && _wasReversed == that._wasReversed;
+    return Utils.arrayEquals(this._pairs, that._pairs) && _wasReversed == that._wasReversed;
   }
 
   @override

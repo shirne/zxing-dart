@@ -81,6 +81,7 @@ class ExpandedProductParsedResult extends ParsedResult {
 
     ExpandedProductParsedResult other = o;
 
+    // todo equal
     return _productID == other._productID &&
         (_sscc == other._sscc) &&
         (_lotNumber == other._lotNumber) &&

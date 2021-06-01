@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import 'dart:typed_data';
+
 import 'bit_array.dart';
+import 'utils.dart';
 
 /**
  * <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
@@ -35,7 +38,7 @@ class BitMatrix {
   int _width;
   int _height;
   int _rowSize;
-  List<int> _bits;
+  Int32List _bits;
 
   /**
    * Creates an empty {@code BitMatrix}.
@@ -46,11 +49,14 @@ class BitMatrix {
   BitMatrix(this._width, [int? height])
       : this._height = height ?? _width,
         _rowSize = (_width + 31) ~/ 32,
-        _bits = List.filled(((_width + 31) ~/ 32) * (height ?? _width),
-                0),
+        _bits = Int32List(((_width + 31) ~/ 32) * (height ?? _width)),
         assert(_width > 0, "Both dimensions must be greater than 0");
 
   BitMatrix._(this._width, this._height, this._rowSize, this._bits);
+
+  Int32List get data{
+    return _bits;
+  }
 
   /**
    * Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
@@ -58,7 +64,11 @@ class BitMatrix {
    * @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
    * @return {@code BitMatrix} representation of image
    */
-  static BitMatrix parse(List<List<bool>> image) {
+  static BitMatrix parse(Object image, [String a = '', String b = '']) {
+    if(image is String){
+      return _parseString(image, a, b);
+    }
+    image = image as List<List<bool>>;
     int height = image.length;
     int width = image[0].length;
     BitMatrix bits = BitMatrix(width, height);
@@ -73,7 +83,7 @@ class BitMatrix {
     return bits;
   }
 
-  static BitMatrix parseString(
+  static BitMatrix _parseString(
       String? stringRepresentation, String setString, String unsetString) {
     if (stringRepresentation == null) {
       throw Exception('IllegalArgument');
@@ -152,12 +162,12 @@ class BitMatrix {
    */
   void set(int x, int y) {
     int offset = y * _rowSize + (x ~/ 32);
-    _bits[offset] |= 1 << (x & 0x1f);
+    _bits[offset] |= (1 << (x & 0x1f) & 0xFFFFFFFF);
   }
 
   void unset(int x, int y) {
     int offset = y * _rowSize + (x ~/ 32);
-    _bits[offset] &= ~(1 << (x & 0x1f));
+    _bits[offset] &= ~(1 << (x & 0x1f) & 0xFFFFFFFF);
   }
 
   /**
@@ -166,18 +176,26 @@ class BitMatrix {
    * @param x The horizontal component (i.e. which column)
    * @param y The vertical component (i.e. which row)
    */
-  void flipPoint(int x, int y) {
+  void _flipPoint(int x, int y) {
     int offset = y * _rowSize + (x ~/ 32);
-    _bits[offset] ^= 1 << (x & 0x1f);
+    _bits[offset] ^= (1 << (x & 0x1f) & 0xFFFFFFFF);
+  }
+
+  void _flipAll() {
+    int max = _bits.length;
+    for (int i = 0; i < max; i++) {
+      _bits[i] = ~_bits[i];
+    }
   }
 
   /**
    * <p>Flips every bit in the matrix.</p>
    */
-  void flip() {
-    int max = _bits.length;
-    for (int i = 0; i < max; i++) {
-      _bits[i] = ~_bits[i];
+  void flip([int? x, int? y]) {
+    if(x == null || y == null){
+      _flipAll();
+    }else {
+      _flipPoint(x, y);
     }
   }
 
@@ -236,7 +254,7 @@ class BitMatrix {
     for (int y = top; y < bottom; y++) {
       int offset = y * _rowSize;
       for (int x = left; x < right; x++) {
-        _bits[offset + (x ~/ 32)] |= 1 << (x & 0x1f);
+        _bits[offset + (x ~/ 32)] |= (1 << (x & 0x1f) & 0xFFFFFFFF);
       }
     }
   }
@@ -295,7 +313,7 @@ class BitMatrix {
     int newWidth = _height;
     int newHeight = _width;
     int newRowSize = (newWidth + 31) ~/ 32;
-    List<int> newBits = List.generate(newRowSize * newHeight, (index) => 0);
+    Int32List newBits = Int32List(newRowSize * newHeight);
 
     for (int y = 0; y < _height; y++) {
       for (int x = 0; x < _width; x++) {
@@ -335,7 +353,7 @@ class BitMatrix {
           }
           if (x32 * 32 < left) {
             int bit = 0;
-            while ((theBits << (31 - bit)) == 0) {
+            while ((theBits << (31 - bit) & 0xFFFFFFFF) == 0) {
               bit++;
             }
             if ((x32 * 32 + bit) < left) {
@@ -380,7 +398,7 @@ class BitMatrix {
 
     int theBits = _bits[bitsOffset];
     int bit = 0;
-    while ((theBits << (31 - bit)) == 0) {
+    while ((theBits << (31 - bit) & 0xFFFFFFFF) == 0) {
       bit++;
     }
     x += bit;
@@ -439,7 +457,7 @@ class BitMatrix {
     return _width == other._width &&
         _height == other._height &&
         _rowSize == other._rowSize &&
-        _bits == other._bits;
+        Utils.arrayEquals(_bits,  other._bits);
   }
 
   @override
@@ -448,7 +466,7 @@ class BitMatrix {
     hash = 31 * hash + _width;
     hash = 31 * hash + _height;
     hash = 31 * hash + _rowSize;
-    hash = 31 * hash + _bits.hashCode;
+    hash = 31 * hash + Utils.arrayHashCode(_bits);
     return hash;
   }
 
@@ -480,6 +498,6 @@ class BitMatrix {
   // @override
   BitMatrix clone() {
     return BitMatrix._(
-        _width, _height, _rowSize, _bits.getRange(0, _bits.length).toList());
+        _width, _height, _rowSize, Int32List.fromList(_bits.getRange(0, _bits.length).toList()));
   }
 }

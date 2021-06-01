@@ -184,7 +184,7 @@ class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = ((twoBytes ~/ 0x060) << 8) | (twoBytes % 0x060);
+      int assembledTwoBytes = (((twoBytes ~/ 0x060) << 8) & 0xFFFFFFFF) | (twoBytes % 0x060);
       if (assembledTwoBytes < 0x00A00) {
         // In the 0xA1A1 to 0xAAFE range
         assembledTwoBytes += 0x0A1A1;
@@ -215,7 +215,7 @@ class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = ((twoBytes ~/ 0x0C0) << 8) | (twoBytes % 0x0C0);
+      int assembledTwoBytes = (((twoBytes ~/ 0x0C0) << 8) & 0xFFFFFFFF) | (twoBytes % 0x0C0);
       if (assembledTwoBytes < 0x01F00) {
         // In the 0x8140 to 0x9FFC range
         assembledTwoBytes += 0x08140;
@@ -353,12 +353,12 @@ class DecodedBitStreamParser {
     if ((firstByte & 0xC0) == 0x80) {
       // two bytes
       int secondByte = bits.readBits(8);
-      return ((firstByte & 0x3F) << 8) | secondByte;
+      return (((firstByte & 0x3F) << 8) & 0xFFFFFFFF) | secondByte;
     }
     if ((firstByte & 0xE0) == 0xC0) {
       // three bytes
       int secondThirdBytes = bits.readBits(16);
-      return ((firstByte & 0x1F) << 16) | secondThirdBytes;
+      return (((firstByte & 0x1F) << 16) & 0xFFFFFFFF) | secondThirdBytes;
     }
     throw FormatException();
   }

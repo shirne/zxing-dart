@@ -19,6 +19,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'detector/math_utils.dart';
+import 'utils.dart';
 
 /**
  * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
@@ -26,12 +27,12 @@ import 'detector/math_utils.dart';
  * @author Sean Owen
  */
 class BitArray {
-  late List<int> _bits;
+  late Int32List _bits;
   int _size;
 
   BitArray([this._size = 0]) {
     if (_size == 0) {
-      this._bits = [0];
+      this._bits = Int32List(1);
     }else{
       this._bits = _makeArray(_size);
     }
@@ -49,10 +50,14 @@ class BitArray {
 
   void _ensureCapacity(int size) {
     if (size > _bits.length * 32) {
-      List<int> newBits = _makeArray(size);
+      Int32List newBits = _makeArray(size);
       List.copyRange(newBits, 0, _bits, 0, _bits.length);
       this._bits = newBits;
     }
+  }
+
+  bool operator [](int i){
+    return get(i);
   }
 
   /**
@@ -94,7 +99,7 @@ class BitArray {
     int bitsOffset = from ~/ 32;
     int currentBits = _bits[bitsOffset];
     // mask off lesser bits first
-    currentBits &= -(1 << (from & 0x1F));
+    currentBits &= ~((1 << (from & 0x1F)) - 1);
     while (currentBits == 0) {
       if (++bitsOffset == _bits.length) {
         return _size;
@@ -118,7 +123,7 @@ class BitArray {
     int bitsOffset = from ~/ 32;
     int currentBits = ~_bits[bitsOffset];
     // mask off lesser bits first
-    currentBits &= -(1 << (from & 0x1F));
+    currentBits &= ~((1 << (from & 0x1F)) - 1);
     while (currentBits == 0) {
       if (++bitsOffset == _bits.length) {
         return _size;
@@ -199,7 +204,7 @@ class BitArray {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
-      int mask = (2 << lastBit) - (1 << firstBit);
+      int mask = (2 << lastBit) - (1 << firstBit) & 0xFFFFFFFF;
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
@@ -286,7 +291,7 @@ class BitArray {
    * Reverses all bits in the array.
    */
   void reverse() {
-    List<int> newBits = List.generate(_bits.length, (index) => 0);
+    Int32List newBits = Int32List(_bits.length);
     // reverse all int's first
     int len = (_size - 1) ~/ 32;
     int oldBitsLen = len + 1;
@@ -314,8 +319,8 @@ class BitArray {
     _bits = newBits;
   }
 
-  static List<int> _makeArray(int size) {
-    return List.generate((size + 31) ~/ 32, (index) => 0);
+  static Int32List _makeArray(int size) {
+    return Int32List((size + 31) ~/ 32);
   }
 
   @override
@@ -324,12 +329,12 @@ class BitArray {
       return false;
     }
     BitArray other = o;
-    return _size == other._size && _bits == other._bits;
+    return _size == other._size && Utils.arrayEquals(_bits,  other._bits);
   }
 
   @override
   int get hashCode {
-    return 31 * _size + _bits.hashCode;
+    return 31 * _size + Utils.arrayHashCode(_bits) ;
   }
 
   @override
@@ -345,6 +350,6 @@ class BitArray {
   }
 
   BitArray clone() {
-    return BitArray.test( _bits.getRange(0, _bits.length).toList(), _size);
+    return BitArray.test( Int32List.fromList(_bits.getRange(0, _bits.length).toList()), _size);
   }
 }

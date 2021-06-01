@@ -49,7 +49,7 @@ class StringUtils {
    *  of these can possibly be correct
    */
   static String guessEncoding(
-      Uint8List bytes, Map<DecodeHintType, Object> hints) {
+      Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     Encoding? c = guessCharset(bytes, hints);
     if (c == SHIFT_JIS_CHARSET) {
       return "SJIS";

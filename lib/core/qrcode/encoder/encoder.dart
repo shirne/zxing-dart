@@ -211,6 +211,10 @@ class Encoder {
     return -1;
   }
 
+  static Mode chooseMode(String content) {
+    return _chooseMode(content, null);
+  }
+
   /**
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
@@ -584,7 +588,7 @@ class Encoder {
     for (int i = 0; i < maxI; i += 2) {
       int byte1 = bytes[i] & 0xFF;
       int byte2 = bytes[i + 1] & 0xFF;
-      int code = (byte1 << 8) | byte2;
+      int code = ((byte1 << 8) & 0xFFFFFFFF) | byte2;
       int subtracted = -1;
       if (code >= 0x8140 && code <= 0x9ffc) {
         subtracted = code - 0x8140;

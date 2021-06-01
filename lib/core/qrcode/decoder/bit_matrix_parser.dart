@@ -236,8 +236,8 @@ class BitMatrixParser {
     for (int x = 0; x < _bitMatrix.getWidth(); x++) {
       for (int y = x + 1; y < _bitMatrix.getHeight(); y++) {
         if (_bitMatrix.get(x, y) != _bitMatrix.get(y, x)) {
-          _bitMatrix.flipPoint(y, x);
-          _bitMatrix.flipPoint(x, y);
+          _bitMatrix.flip(y, x);
+          _bitMatrix.flip(x, y);
         }
       }
     }
