@@ -109,7 +109,7 @@ abstract class LuminanceSource {
 
   @override
   String toString() {
-    late Int8List row;
+    late Int8List row = Int8List(_width);
     StringBuffer result = StringBuffer();
     for (int y = 0; y < _height; y++) {
       row = getRow(y, row);
