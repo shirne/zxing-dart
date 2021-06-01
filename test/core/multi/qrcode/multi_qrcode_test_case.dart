@@ -34,7 +34,7 @@ void main(){
 
   test('testMultiQRCodes', () async{
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("src/test/resources/blackbox/multi-qrcode-1");
+    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-qrcode-1");
 
     File testImage = File(testBase.path + "/1.png");
     BufferImage image = (await BufferImage.fromFile(testImage))!;

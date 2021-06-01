@@ -25,7 +25,7 @@ import 'package:zxing/zxing.dart';
 void main() {
 
 
-  bool bitSet(List<int> bits, int i) {
+  bool bitSet(Int32List bits, int i) {
     return (bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
   }
 
@@ -38,11 +38,11 @@ void main() {
     return true;
   }
 
-  Int32List reverseOriginal(List<int> oldBits, int size) {
+  Int32List reverseOriginal(Int32List oldBits, int size) {
     Int32List newBits = Int32List(oldBits.length);
     for (int i = 0; i < size; i++) {
       if (bitSet(oldBits, size - i - 1)) {
-        newBits[i ~/ 32] |= 1 << (i & 0x1F);
+        newBits[i ~/ 32] = (newBits[i ~/ 32] | 1 << (i & 0x1F)).toSigned(32);
       }
     }
     return newBits;
@@ -210,12 +210,12 @@ void main() {
   });
 
   test('reverseAlgorithmTest', () {
-    List<int> oldBits = [128, 256, 512, 6453324, 50934953];
+    Int32List oldBits = Int32List.fromList([128, 256, 512, 6453324, 50934953]);
     for (int size = 1; size < 160; size++) {
-      Int32List newBitsOriginal = reverseOriginal(oldBits.toList(), size);
+      Int32List newBitsOriginal = reverseOriginal(oldBits, size);
       BitArray newBitArray = BitArray.test(Int32List.fromList(oldBits), size);
       newBitArray.reverse();
-      List<int> newBitsNew = newBitArray.getBitArray();
+      Int32List newBitsNew = newBitArray.getBitArray();
       assert(arraysAreEqual(newBitsOriginal, newBitsNew, size ~/ 32 + 1));
     }
   });

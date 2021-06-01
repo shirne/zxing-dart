@@ -30,7 +30,7 @@ import '../common/abstract_black_box.dart';
 void main(){
 
   test('UPCABlackBox6BlurryTestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/upca-6", new MultiFormatReader(), BarcodeFormat.UPC_A)
+    AbstractBlackBoxTestCase("test/resources/blackbox/upca-6", new MultiFormatReader(), BarcodeFormat.UPC_A)
     ..addTest(0, 0, 0.0)
     ..addTest(0, 0, 180.0)
         ..testBlackBox();

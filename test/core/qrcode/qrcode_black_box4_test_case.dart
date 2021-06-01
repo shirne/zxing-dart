@@ -32,7 +32,7 @@ import '../common/abstract_black_box_test_case.dart';
 void main(){
 
   test('QRCodeBlackBox4TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE)
+    AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE)
     ..addTest(36, 36, 0.0)
     ..addTest(35, 35, 90.0)
     ..addTest(35, 35, 180.0)

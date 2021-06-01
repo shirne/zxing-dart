@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:zxing/common.dart';
 
@@ -41,8 +42,8 @@ void corrupt(List<int> received, int howMany, Random random, int max) {
 
 void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
   ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
-  List<int> messageExpected = List.filled(dataWords.length + ecWords.length, 0);
-  List<int> message = List.filled(dataWords.length + ecWords.length, 0);
+  Int32List messageExpected = Int32List(dataWords.length + ecWords.length);
+  Int32List message = Int32List(dataWords.length + ecWords.length);
   List.copyRange(messageExpected, 0, dataWords, 0, dataWords.length);
   //System.arraycopy(dataWords, 0, messageExpected, 0, dataWords.length);
   List.copyRange(messageExpected, dataWords.length, ecWords, 0, ecWords.length);
@@ -52,14 +53,14 @@ void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
 }
 
 void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
-  ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
-  List<int> message = List.filled(dataWords.length + ecWords.length, 0);
+  ReedSolomonDecoder decoder = ReedSolomonDecoder(field);
+  Int32List message = Int32List(dataWords.length + ecWords.length);
   int maxErrors = ecWords.length ~/ 2;
   Random random = getPseudoRandom();
   int iterations = field.getSize() > 256 ? 1 : DECODER_TEST_ITERATIONS;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWords.length; i++) {
-      if (i > 10 && i < ecWords.length / 2 - 10) {
+      if (i > 10 && i < ecWords.length ~/ 2 - 10) {
         // performance improvement - skip intermediate cases in long-running tests
         i += ecWords.length ~/ 10;
       }
@@ -92,9 +93,9 @@ void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
   assert(dataSize > 0 && dataSize <= field.getSize() - 3, "Invalid data size for $field" );
   assert(ecSize > 0 && ecSize + dataSize <= field.getSize(), "Invalid ECC size for $field" );
   ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
-  List<int> message = List.filled(dataSize + ecSize, 0);
-  List<int> dataWords = List.filled(dataSize, 0);
-  List<int> ecWords = List.filled(ecSize, 0);
+  Int32List message = Int32List(dataSize + ecSize);
+  Int32List dataWords = Int32List(dataSize);
+  Int32List ecWords = Int32List(ecSize);
   Random random = getPseudoRandom();
   int iterations = field.getSize() > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
   for (int i = 0; i < iterations; i++) {

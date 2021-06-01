@@ -28,7 +28,7 @@ import '../common/abstract_negative_black_box.dart';
 void main(){
 
   test('PartialBlackBoxTestCase', () {
-    AbstractNegativeBlackBoxTestCase("src/test/resources/blackbox/partial")
+    AbstractNegativeBlackBoxTestCase("test/resources/blackbox/partial")
     ..addNegativeTest(1, 0.0)
     ..addNegativeTest(1, 90.0)
     ..addNegativeTest(1, 180.0)

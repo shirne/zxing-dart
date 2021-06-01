@@ -24,8 +24,8 @@ class Logger{
     print("[$type] $prefix $message");
   }
 
-  static Logger getLogger([prefix = '']){
-    return Logger(prefix);
+  static Logger getLogger(Type prefix){
+    return Logger(prefix.toString());
   }
 }
 

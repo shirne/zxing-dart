@@ -39,7 +39,7 @@ import '../../../common/abstract_black_box.dart';
 void main(){
 
   test('RSSExpandedBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/rssexpanded-1", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
+    AbstractBlackBoxTestCase("test/resources/blackbox/rssexpanded-1", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
     ..addTest(32, 32, 0.0)
     ..addTest(32, 32, 180.0)
         ..testBlackBox();

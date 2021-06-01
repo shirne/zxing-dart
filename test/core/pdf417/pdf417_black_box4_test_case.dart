@@ -49,7 +49,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
   final List<TestResult> testResults = [];
 
-  PDF417BlackBox4TestCase():super("src/test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417) {
+  PDF417BlackBox4TestCase():super("test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417) {
     testResults.add(TestResult(3, 3, 0, 0, 0.0));
   }
 

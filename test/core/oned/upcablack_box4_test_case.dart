@@ -29,7 +29,7 @@ import '../common/abstract_black_box.dart';
 void main(){
 
   test('UPCABlackBox4TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/upca-4", new MultiFormatReader(), BarcodeFormat.UPC_A)
+    AbstractBlackBoxTestCase("test/resources/blackbox/upca-4", new MultiFormatReader(), BarcodeFormat.UPC_A)
     ..addTest(9, 11, 0.0, 0, 1)
     ..addTest(9, 11, 180.0, 0, 1)
         ..testBlackBox();

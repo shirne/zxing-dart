@@ -25,7 +25,7 @@ import '../common/abstract_black_box_test_case.dart';
 void main(){
 
   test('PDF417BlackBox3TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417)
+    AbstractBlackBoxTestCase("test/resources/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417)
     ..addTest(19, 19, 0.0, 0, 0)
     ..addTest(19, 19, 180.0, 0, 0)
         ..testBlackBox();

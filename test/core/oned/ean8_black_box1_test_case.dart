@@ -29,7 +29,7 @@ import '../common/abstract_black_box.dart';
 void main(){
 
   test('EAN8BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/ean8-1", new MultiFormatReader(), BarcodeFormat.EAN_8)
+    AbstractBlackBoxTestCase("test/resources/blackbox/ean8-1", new MultiFormatReader(), BarcodeFormat.EAN_8)
     ..addTest(8, 8, 0.0)
     ..addTest(8, 8, 180.0)
         ..testBlackBox();

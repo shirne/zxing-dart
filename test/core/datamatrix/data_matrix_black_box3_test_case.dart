@@ -30,7 +30,7 @@ void main(){
 
 
   test('DataMatrixBlackBox3TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/datamatrix-3", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+    AbstractBlackBoxTestCase("test/resources/blackbox/datamatrix-3", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
     ..addTest(18, 18, 0.0)
     ..addTest(17, 17, 90.0)
     ..addTest(18, 18, 180.0)

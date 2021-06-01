@@ -19,6 +19,7 @@ import 'dart:io';
 import 'dart:math' as Math;
 
 import 'package:buffer_image/buffer_image.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
 import 'package:zxing/zxing.dart';
 
@@ -32,6 +33,7 @@ import 'test_result.dart';
 class AbstractBlackBoxTestCase {
   static final Logger _log = Logger.getLogger(AbstractBlackBoxTestCase);
 
+  final RegExp imageSuffix = RegExp(r'\.(jpe?g|gif|png)$');
   final Directory _testBase;
   final Reader? _barcodeReader;
   final BarcodeFormat? _expectedFormat;
@@ -47,7 +49,9 @@ class AbstractBlackBoxTestCase {
 
   AbstractBlackBoxTestCase(
       String testBasePathSuffix, this._barcodeReader, this._expectedFormat)
-      : _testBase = buildTestBase(testBasePathSuffix);
+      : _testBase = buildTestBase(testBasePathSuffix){
+    TestWidgetsFlutterBinding.ensureInitialized();
+  }
 
   Directory getTestBase() {
     return _testBase;
@@ -205,9 +209,8 @@ class AbstractBlackBoxTestCase {
     List<File> paths = [];
     var files = _testBase.listSync();
     files.forEach((element) {
-      if (element is File) {
+      if (element is File && imageSuffix.hasMatch(element.path)) {
         // "*.{jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG}"
-        print(element.uri.data?.mimeType);
         paths.add(element);
       }
     });

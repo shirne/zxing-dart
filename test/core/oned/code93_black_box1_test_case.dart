@@ -29,7 +29,7 @@ import '../common/abstract_black_box.dart';
 void main(){
 
   test('Code93BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("src/test/resources/blackbox/code93-1", new MultiFormatReader(), BarcodeFormat.CODE_93)
+    AbstractBlackBoxTestCase("test/resources/blackbox/code93-1", new MultiFormatReader(), BarcodeFormat.CODE_93)
     ..addTest(3, 3, 0.0)
     ..addTest(3, 3, 180.0)
         ..testBlackBox();

@@ -27,9 +27,6 @@ import 'reed_solomon.dart';
 void main() {
 
 
-
-
-
   test('testDataMatrix', () {
     // real life test cases
     testEncodeDecode(GenericGF.DATA_MATRIX_FIELD_256,

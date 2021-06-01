@@ -111,7 +111,7 @@ void main(){
         " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
         " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
         ">>\n";
-    expect(expected, qrCode.toString());
+    expect(expected, qrCode.toString()); // todo test error
   });
 
   test('testIsValidMaskPattern', () {

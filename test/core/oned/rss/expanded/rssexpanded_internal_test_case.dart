@@ -44,7 +44,7 @@ void main(){
 
 
   Future<BufferImage> readImage(String fileName) async{
-    File path = File( AbstractBlackBoxTestCase.buildTestBase("src/test/resources/blackbox/rssexpanded-1/").path +'/'+ fileName);
+    File path = File( AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path +'/'+ fileName);
     return (await BufferImage.fromFile(path))!;
   }
 

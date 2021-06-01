@@ -25,7 +25,7 @@ import 'package:zxing/zxing.dart';
 /// @author satorux@google.com (Satoru Takabayashi) - creator
 /// @author mysen@google.com (Chris Mysen) - ported from C++
 void main(){
-
+  // todo test error
   test('testGetAlphanumericCode', () {
     // The first ten code points are numbers.
     for (int i = 0; i < 10; ++i) {

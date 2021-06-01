@@ -42,7 +42,7 @@ void main(){
   test('testDecodingRowByRow', () async{
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("src/test/resources/blackbox/rssexpandedstacked-2/1000.png");
+    BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     int firstRowNumber = binaryMap.getHeight() ~/ 3;
     BitArray firstRow = binaryMap.getBlackRow(firstRowNumber, null);
@@ -74,7 +74,7 @@ void main(){
   test('testCompleteDecode', () async{
     OneDReader rssExpandedReader = new RSSExpandedReader();
 
-    BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("src/test/resources/blackbox/rssexpandedstacked-2/1000.png");
+    BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     Result result = rssExpandedReader.decode(binaryMap);
     expect("(01)98898765432106(3202)012345(15)991231", result.getText());
