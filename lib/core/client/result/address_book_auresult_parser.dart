@@ -51,9 +51,9 @@ class AddressBookAUResultParser extends ResultParser {
         ResultParser.maybeWrap(name),
         null,
         pronunciation,
-        phoneNumbers!,
+        phoneNumbers,
         null,
-        emails!,
+        emails,
         null,
         null,
         note,
@@ -74,7 +74,7 @@ class AddressBookAUResultParser extends ResultParser {
           prefix + i.toString() + ':', rawText, '\r', true);
       if(value == null)continue;
       if (values == null) {
-        values = List.generate(3, (index) => ''); // lazy init
+        values = []; // lazy init
       }
       values.add(value);
     }

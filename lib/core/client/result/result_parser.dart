@@ -243,7 +243,7 @@ abstract class ResultParser {
         } else {
           // found a match
           if (matches == null) {
-            matches = ['','','']; // lazy init
+            matches = []; // lazy init
           }
           String element = unescapeBackslash(rawText.substring(start, i));
           if (trim) {

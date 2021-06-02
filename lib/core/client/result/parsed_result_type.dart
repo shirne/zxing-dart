@@ -19,7 +19,7 @@
 ///
 /// @author Sean Owen
 enum ParsedResultType {
-  ADDRESSBOOK,
+  ADDRESS_BOOK,
   EMAIL_ADDRESS,
   PRODUCT,
   URI,

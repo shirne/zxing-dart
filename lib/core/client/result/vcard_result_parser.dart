@@ -16,6 +16,7 @@
 
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import '../../result.dart';
@@ -29,13 +30,13 @@ import 'result_parser.dart';
 class VCardResultParser extends ResultParser {
 
   static final RegExp _beginVcard = RegExp("BEGIN:VCARD", caseSensitive: false);
-  static final RegExp _vcardLikeDate = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
+  static final RegExp _vcardLikeDate = RegExp(r"\d{4}-?\d{2}-?\d{2}");
   static final RegExp _crLfSpaceTab = RegExp("\r\n[ \t]");
-  static final RegExp _newlineEscape = RegExp("\\\\[nN]");
-  static final RegExp _vcardEscapes = RegExp("\\\\([,;\\\\])");
+  static final RegExp _newlineEscape = RegExp(r"\\[nN]");
+  static final RegExp _vcardEscapes = RegExp(r"\\([,;\\])");
   static final Pattern _equal = "=";
   static final Pattern _semicolon = ";";
-  static final RegExp _unescapedSemicolons = RegExp("(?<!\\\\);+");
+  static final RegExp _unescapedSemicolons = RegExp(r"(?<!\\);+");
   static final Pattern _comma = ",";
   static final RegExp _semicolonOrComma = RegExp("[;,]");
 
@@ -45,8 +46,7 @@ class VCardResultParser extends ResultParser {
     // to throw out everything else we parsed just because this was omitted. In fact, Eclair
     // is doing just that, and we can't parse its contacts without this leniency.
     String rawText = ResultParser.getMassagedText(result);
-    var m = _beginVcard.allMatches(rawText);
-    if (m.length < 1) {
+    if (!_beginVcard.hasMatch(rawText)) {
       return null;
     }
     List<List<String>>? names = matchVCardPrefixedField("FN", rawText, true, false);
@@ -101,19 +101,17 @@ class VCardResultParser extends ResultParser {
     int max = rawText.length;
     var reg = RegExp("(?:^|\n)" + prefix + "(?:;([^:]*))?:",
         caseSensitive: false);
-
     while (i < max) {
-
       // At start or after newline, match prefix, followed by optional metadata 
       // (led by ;) ultimately ending in colon
       var regMatches = reg.allMatches(rawText, i);
+
       if(regMatches.length < 1)break;
       var matcher = regMatches.first;
-
       i = matcher.end; // group 0 = whole pattern; end(0) is past final colon
 
       if (i > 0) {
-        i--; // Find from i-1 not i since looking at the preceding character
+      //  i--; // Find from i-1 not i since looking at the preceding character
       }
 
       String? metadataString = matcher.group(1); // group 1 = metadata substring
@@ -184,14 +182,14 @@ class VCardResultParser extends ResultParser {
           }
           element = element.replaceAll(_crLfSpaceTab, "");
           element = element.replaceAll(_newlineEscape, "\n");
-          element = element.replaceAll(_vcardEscapes, r"$1");
+          element = element.replaceAllMapped(_vcardEscapes,(m) => "${m[1]}");
         }
         // Only handle VALUE=uri specially
         if ("uri" == valueType) {
           // Don't actually support dereferencing URIs, but use scheme-specific part not URI
           // as value, to support tel: and mailto:
           try {
-            element = Uri.parse(element).scheme;
+            element = Uri.parse(element).path;
           } catch ( iae) { // IllegalArgumentException
             // ignore
           }
@@ -293,11 +291,11 @@ class VCardResultParser extends ResultParser {
     return result.toList();
   }
   
-  static List<String>? _toTypes(List<List<String>>? lists) {
+  static List<String?>? _toTypes(List<List<String>>? lists) {
     if (lists == null || lists.isEmpty) {
       return null;
     }
-    List<String> result = [];
+    List<String?> result = [];
     for (List<String> list in lists) {
       String? value = list.length > 0 ? list[0] : null;
       if (value != null && value.isNotEmpty) {
@@ -315,7 +313,7 @@ class VCardResultParser extends ResultParser {
             break;
           }
         }
-        result.add(type!);
+        result.add(type);
       }
     }
     return result.toList();
@@ -355,7 +353,7 @@ class VCardResultParser extends ResultParser {
   }
 
   static void _maybeAppendComponent(List<String> components, int i, StringBuffer newName) {
-    if (components.length > i && !components[i].isNotEmpty) {
+    if (components.length > i && components[i].isNotEmpty) {
       if (newName.length > 0) {
         newName.write(' ');
       }

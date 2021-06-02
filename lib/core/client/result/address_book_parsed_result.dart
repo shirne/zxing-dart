@@ -26,13 +26,13 @@ class AddressBookParsedResult extends ParsedResult {
   final List<String>? _nicknames;
   final String? _pronunciation;
   final List<String>? _phoneNumbers;
-  final List<String>? _phoneTypes;
+  final List<String?>? _phoneTypes;
   final List<String>? _emails;
-  final List<String>? _emailTypes;
+  final List<String?>? _emailTypes;
   final String? _instantMessenger;
   final String? _note;
   final List<String>? _addresses;
-  final List<String>? _addressTypes;
+  final List<String?>? _addressTypes;
   final String? _org;
   final String? _birthday;
   final String? _title;
@@ -42,9 +42,9 @@ class AddressBookParsedResult extends ParsedResult {
   AddressBookParsedResult.quick(
       List<String>? names,
       List<String>? phoneNumbers,
-      List<String>? phoneTypes,
+      List<String?>? phoneTypes,
       List<String>? emails,
-      List<String>? emailTypes,
+      List<String?>? emailTypes,
       List<String>? addresses,
       List<String>? addressTypes)
       : this(names, null, null, phoneNumbers, phoneTypes, emails, emailTypes,
@@ -67,7 +67,7 @@ class AddressBookParsedResult extends ParsedResult {
       this._title,
       this._urls,
       this._geo)
-      : super(ParsedResultType.ADDRESSBOOK) {
+      : super(ParsedResultType.ADDRESS_BOOK) {
     if (_phoneNumbers != null &&
         _phoneTypes != null &&
         _phoneNumbers!.length != _phoneTypes!.length) {
@@ -107,7 +107,7 @@ class AddressBookParsedResult extends ParsedResult {
 
   /// @return optional descriptions of the type of each phone number. It could be like "HOME", but,
   ///  there is no guaranteed or standard format.
-  List<String>? getPhoneTypes() {
+  List<String?>? getPhoneTypes() {
     return _phoneTypes;
   }
 
@@ -117,7 +117,7 @@ class AddressBookParsedResult extends ParsedResult {
 
   /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
   ///  there is no guaranteed or standard format.
-  List<String>? getEmailTypes() {
+  List<String?>? getEmailTypes() {
     return _emailTypes;
   }
 
@@ -135,7 +135,7 @@ class AddressBookParsedResult extends ParsedResult {
 
   /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
   ///  there is no guaranteed or standard format.
-  List<String>? getAddressTypes() {
+  List<String?>? getAddressTypes() {
     return _addressTypes;
   }
 
