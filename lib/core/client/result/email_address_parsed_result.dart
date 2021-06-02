@@ -30,7 +30,7 @@ class EmailAddressParsedResult extends ParsedResult {
 
   EmailAddressParsedResult(
       dynamic tos, [this._ccs, this._bccs, this._subject, this._body])
-      : this._tos = tos is String ? [tos] : tos as List<String>,
+      : this._tos = tos is String ? [tos] : tos as List<String>?,
         super(ParsedResultType.EMAIL_ADDRESS);
 
   /// @return first elements of {@link #getTos()} or {@code null} if none

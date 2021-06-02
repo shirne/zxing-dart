@@ -17,6 +17,8 @@
 
 
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 
 import 'product_result_parser.dart';
@@ -213,7 +215,8 @@ abstract class ResultParser {
 
   static String urlDecode(String encoded) {
     try {
-      return urlDecode(encoded);
+      //todo decodeFull or decodeComponent or decodeQueryComponent ?
+      return Uri.decodeQueryComponent(encoded, encoding: utf8);
     } catch ( uee) { // UnsupportedEncodingException
       throw Exception(uee); // can't happen
     }

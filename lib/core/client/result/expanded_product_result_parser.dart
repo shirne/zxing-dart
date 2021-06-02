@@ -185,7 +185,7 @@ class ExpandedProductResultParser extends ResultParser {
       if (currentChar < '0'.codeUnitAt(0) || currentChar > '9'.codeUnitAt(0)) {
         return null;
       }
-      buf.write(currentChar);
+      buf.writeCharCode(currentChar);
     }
     return buf.toString();
   }

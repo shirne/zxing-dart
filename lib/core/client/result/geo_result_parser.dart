@@ -37,7 +37,7 @@ class GeoResultParser extends ResultParser {
       return null;
     }
 
-    String query = matcher.group(4)!;
+    String? query = matcher.group(4);
 
     double latitude;
     double longitude;
@@ -59,7 +59,7 @@ class GeoResultParser extends ResultParser {
           return null;
         }
       }
-    } catch (ignored) {
+    } catch (_) {
       //on NumberFormatException
       return null;
     }
