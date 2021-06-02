@@ -18,6 +18,7 @@ import 'dart:typed_data';
 
 import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
+import 'reed_solomon_exception.dart';
 
 /// <p>Implements Reed-Solomon decoding, as the name implies.</p>
 ///
@@ -153,7 +154,7 @@ class ReedSolomonDecoder {
       }
     }
     if (e != numErrors) {
-      throw Exception("Error locator degree does not match number of roots");
+      throw ReedSolomonException("Error locator degree does not match number of roots ($e != $numErrors)");
     }
     return result;
   }

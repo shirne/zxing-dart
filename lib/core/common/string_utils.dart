@@ -20,6 +20,7 @@ import 'dart:typed_data';
 import 'package:euc/euc.dart';
 import 'package:euc/jis.dart';
 import 'package:fast_gbk/fast_gbk.dart';
+import 'package:unicode/unicode.dart';
 
 import '../decode_hint_type.dart';
 
@@ -77,7 +78,7 @@ class StringUtils {
     if (bytes.length > 2 &&
         ((bytes[0] == 0xFE && bytes[1] == 0xFF) ||
             (bytes[0] == 0xFF && bytes[1] == 0xFE))) {
-      return Encoding.getByName('utf-16');//StandardCharsets.UTF_16;
+      return utf16;//StandardCharsets.UTF_16;
     }
 
     // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,

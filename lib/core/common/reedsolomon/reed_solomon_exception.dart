@@ -19,6 +19,9 @@
 ///
 /// @author Sean Owen
 class ReedSolomonException implements Exception {
-  String message;
-  ReedSolomonException(this.message);
+  String _message;
+  ReedSolomonException(this._message);
+
+  @override
+  String toString() => 'ReedSolomonException($_message)';
 }
