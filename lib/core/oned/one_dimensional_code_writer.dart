@@ -26,7 +26,7 @@ import '../writer.dart';
 ///
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)
 abstract class OneDimensionalCodeWriter implements Writer {
-  static final RegExp _numeric = RegExp(r"[0-9]+");
+  static final RegExp _numeric = RegExp(r"^[0-9]+$");
 
   /// Encode the contents following specified format.
   /// {@code width} and {@code height} are required size. This method may return bigger size

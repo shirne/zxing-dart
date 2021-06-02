@@ -28,7 +28,7 @@ import 'parsed_result_type.dart';
 class CalendarParsedResult extends ParsedResult {
 
   static final RegExp _rfc2445Duration =
-  RegExp("P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?");
+  RegExp(r"^P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$");
   static final List<int> _rfc2445DurationFieldUnits = [
       7 * 24 * 60 * 60 * 1000, // 1 week
       24 * 60 * 60 * 1000, // 1 day
@@ -37,7 +37,7 @@ class CalendarParsedResult extends ParsedResult {
       1000, // 1 second
   ];
 
-  static final RegExp _dateTime = RegExp("[0-9]{8}(T[0-9]{6}Z?)?");
+  static final RegExp _dateTime = RegExp(r"^[0-9]{8}(T[0-9]{6}Z?)?$");
 
   final String? _summary;
   late int _start;

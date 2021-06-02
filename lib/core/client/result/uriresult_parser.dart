@@ -27,11 +27,11 @@ import 'uriparsed_result.dart';
 /// @author Sean Owen
 class URIResultParser extends ResultParser {
 
-  static final RegExp _allowUrlCharsPattern =
-      RegExp(r"[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+");
+  static final RegExp _allowedUrlCharsPattern =
+      RegExp(r"^[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+$");
   static final RegExp _userInHost = RegExp(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
-  static final RegExp _urlWithProtocolPattern = RegExp("[a-zA-Z][a-zA-Z0-9+-.]+:");
+  static final RegExp _urlWithProtocolPattern = RegExp(r"[a-zA-Z][a-zA-Z0-9+-.]+:");
   static final RegExp _urlWithoutProtocolPattern = RegExp(
       "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
       "(:\\d{1,5})?" + // maybe port
@@ -59,7 +59,7 @@ class URIResultParser extends ResultParser {
   ///  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
   ///  to connect to yourbank.com at first glance.
   static bool isPossiblyMaliciousURI(String uri) {
-    return !_allowUrlCharsPattern.hasMatch(uri) || _userInHost.hasMatch(uri);
+    return !_allowedUrlCharsPattern.hasMatch(uri) || _userInHost.hasMatch(uri);
   }
 
   static bool isBasicallyValidURI(String uri) {
@@ -68,12 +68,13 @@ class URIResultParser extends ResultParser {
       return false;
     }
     RegExpMatch? m = _urlWithProtocolPattern.firstMatch(uri);
-    if(m == null){
-      return false;
+    if (m != null && m.start == 0) {
+      return true;
     }
 
     // match at start only
-    return m.start == 0;
+    m = _urlWithoutProtocolPattern.firstMatch(uri);
+    return m != null && m.start == 0;
   }
 
 }

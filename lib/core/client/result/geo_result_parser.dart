@@ -26,7 +26,7 @@ import 'result_parser.dart';
 /// @author Sean Owen
 class GeoResultParser extends ResultParser {
   static final RegExp _geoUrlPattern = RegExp(
-      "geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?",
+      r"^geo:([\-0-9.]+),([\-0-9.]+)(?:,([\-0-9.]+))?(?:\?(.*))?$",
       caseSensitive: false);
 
   @override

@@ -27,7 +27,7 @@ import 'vinparsed_result.dart';
 class VINResultParser extends ResultParser {
 
   static final RegExp _ioq = RegExp("[IOQ]");
-  static final RegExp _az09 = RegExp("[A-Z0-9]{17}");
+  static final RegExp _az09 = RegExp(r"^[A-Z0-9]{17}$");
 
   @override
   VINParsedResult? parse(Result result) {

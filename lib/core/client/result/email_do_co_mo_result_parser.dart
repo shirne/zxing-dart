@@ -26,8 +26,8 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
-  static final RegExp _atextAlphaNumeric =
-  RegExp(r"[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+");
+  static final RegExp _aTextAlphaNumeric =
+  RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
 
   @override
   EmailAddressParsedResult? parse(Result result) {
@@ -55,7 +55,7 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
   /// in a barcode, not "judge" it.
   static bool isBasicallyValidEmailAddress(String? email) {
     return email != null &&
-        _atextAlphaNumeric.hasMatch(email) &&
+        _aTextAlphaNumeric.hasMatch(email) &&
         email.indexOf('@') >= 0;
   }
 }

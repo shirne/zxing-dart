@@ -78,7 +78,7 @@ abstract class ResultParser {
       VINResultParser(),
   ];
 
-  static final RegExp _digits = RegExp("\\d+");
+  static final RegExp _digits = RegExp(r"^\d+$");
   static final Pattern _ampersand = "&";
   static final Pattern _equals = "=";
   static final String _byteOrderMark = "\ufeff";

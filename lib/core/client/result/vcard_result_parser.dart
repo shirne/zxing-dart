@@ -30,7 +30,7 @@ import 'result_parser.dart';
 class VCardResultParser extends ResultParser {
 
   static final RegExp _beginVcard = RegExp("BEGIN:VCARD", caseSensitive: false);
-  static final RegExp _vcardLikeDate = RegExp(r"\d{4}-?\d{2}-?\d{2}");
+  static final RegExp _vcardLikeDate = RegExp(r"^\d{4}-?\d{2}-?\d{2}$");
   static final RegExp _crLfSpaceTab = RegExp("\r\n[ \t]");
   static final RegExp _newlineEscape = RegExp(r"\\[nN]");
   static final RegExp _vcardEscapes = RegExp(r"\\([,;\\])");
