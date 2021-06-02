@@ -29,9 +29,9 @@ class EncoderContext {
   late StringBuffer _codewords;
   late int _newEncoding;
   SymbolInfo? _symbolInfo;
-  late int _skipAtEnd;
+  late int _skipAtEnd = 0;
 
-  late int pos;
+  late int pos = 0;
 
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!

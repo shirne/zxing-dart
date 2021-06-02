@@ -344,7 +344,7 @@ class HighLevelEncoder {
 
   static bool isDigit(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -353,7 +353,7 @@ class HighLevelEncoder {
 
   static bool isExtendedASCII(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -362,7 +362,7 @@ class HighLevelEncoder {
 
   static bool _isNativeC40(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -373,7 +373,7 @@ class HighLevelEncoder {
 
   static bool _isNativeText(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -384,7 +384,7 @@ class HighLevelEncoder {
 
   static bool _isNativeX12(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -396,7 +396,7 @@ class HighLevelEncoder {
 
   static bool _isX12TermSep(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
@@ -408,7 +408,7 @@ class HighLevelEncoder {
 
   static bool _isNativeEDIFACT(dynamic chr) {
     int ch = 0;
-    if (ch is String)
+    if (chr is String)
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;

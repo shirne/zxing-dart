@@ -157,7 +157,7 @@ class MultiFormatReader implements Reader {
         for (Reader reader in _readers!) {
           try {
             return reader.decode(image, _hints);
-          } catch (re) {
+          } catch (_) {
             // continue
           }
         }

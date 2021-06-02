@@ -28,7 +28,7 @@ import 'package:zxing/zxing.dart';
 void main(){
 
   test('testSymbolInfo', () {
-    SymbolInfo info = SymbolInfo.lookup(3)!;
+    SymbolInfo? info = SymbolInfo.lookup(3)!;
     expect(5, info.getErrorCodewords());
     expect(8, info.matrixWidth);
     expect(8, info.matrixHeight);
@@ -80,7 +80,7 @@ void main(){
     expect(26, info.getSymbolHeight());
 
     info = SymbolInfo.lookupDm(45,
-                             SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false)!;
+                             SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
     //assertNull(info);
 
     Dimension minSize = fixedSize;

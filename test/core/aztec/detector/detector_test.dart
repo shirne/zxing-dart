@@ -23,7 +23,8 @@ import 'package:zxing/common.dart';
 /// Tests for the Detector
 ///
 /// @author Frank Yellin
-void mian() {
+void main() {
+
   // Rotates a square BitMatrix to the right by 90 degrees
   BitMatrix rotateRight(BitMatrix input) {
     int width = input.getWidth();

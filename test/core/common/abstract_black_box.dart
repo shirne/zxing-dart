@@ -41,6 +41,7 @@ class AbstractBlackBoxTestCase {
   final Map<DecodeHintType, Object> _hints = {};
 
   static Directory buildTestBase(String testBasePathSuffix) {
+    TestWidgetsFlutterBinding.ensureInitialized();
     // A little workaround to prevent aggravation in my IDE
     Directory testBase = Directory(testBasePathSuffix);
 
