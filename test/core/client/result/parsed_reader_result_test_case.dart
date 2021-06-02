@@ -15,18 +15,6 @@
  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:zxing/client.dart';
@@ -45,15 +33,26 @@ void main(){
   //}
 
 
-  String formatDate(int year, int month, int day) {
+  String formatDate(int year, int month, int day, [bool isLocal = false]) {
     DateFormat format = DateFormat.yMMMEd();
-    return format.format(DateTime(year, month - 1, day));
+    late DateTime date;
+    if(isLocal){
+      date = DateTime(year, month, day);
+    }else {
+      date = DateTime.utc(year, month, day);
+    }
+    return format.format(date.toLocal());
   }
 
-  String formatTime(int year, int month, int day, int hour, int min, int sec) {
-    DateFormat format = DateFormat.yMMMEd()..add_jmz();
-
-    return format.format(DateTime(year, month - 1, day, hour, min, sec));
+  String formatTime(int year, int month, int day, int hour, int min, int sec,  [bool isLocal = false]) {
+    DateFormat format = DateFormat.yMMMEd()..add_jms();
+    late DateTime date;
+    if(isLocal){
+      date = DateTime(year, month , day, hour, min, sec);
+    }else {
+      date = DateTime.utc(year, month , day, hour, min, sec);
+    }
+    return format.format(date.toLocal());
   }
 
 
@@ -123,34 +122,34 @@ void main(){
   });
 
   test('testAddressBookType', () {
-    doTestResult("MECARD:N:Sean Owen;;", "Sean Owen", ParsedResultType.ADDRESSBOOK);
+    doTestResult("MECARD:N:Sean Owen;;", "Sean Owen", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;;", "Sean Owen\n+12125551212",
-        ParsedResultType.ADDRESSBOOK);
+        ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;",
-        "Sean Owen\n+12125551212\ngoogle.com", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\n+12125551212\ngoogle.com", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;",
-        "Sean Owen\n+12125551212\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\n+12125551212\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:ADR:76 9th Ave;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;",
-        "Sean Owen\n76 9th Ave\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\n76 9th Ave\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:BDAY:19760520;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;",
-        "Sean Owen\nsrowen@example.org\ngoogle.com\n19760520", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\nsrowen@example.org\ngoogle.com\n19760520", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:ORG:Google;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;",
-        "Sean Owen\nGoogle\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\nGoogle\nsrowen@example.org\ngoogle.com", ParsedResultType.ADDRESS_BOOK);
     doTestResult("MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;",
-        "Sean Owen\nsrowen@example.org\ngoogle.com\nZXing Team", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\nsrowen@example.org\ngoogle.com\nZXing Team", ParsedResultType.ADDRESS_BOOK);
     doTestResult("N:Sean Owen;TEL:+12125551212;;", "N:Sean Owen;TEL:+12125551212;;",
         ParsedResultType.TEXT);
   });
 
   test('testAddressBookAUType', () {
-    doTestResult("MEMORY:\r\n", "", ParsedResultType.ADDRESSBOOK);
-    doTestResult("MEMORY:foo\r\nNAME1:Sean\r\n", "Sean\nfoo", ParsedResultType.ADDRESSBOOK);
-    doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", "+12125551212", ParsedResultType.ADDRESSBOOK);
+    doTestResult("MEMORY:\r\n", "", ParsedResultType.ADDRESS_BOOK);
+    doTestResult("MEMORY:foo\r\nNAME1:Sean\r\n", "Sean\nfoo", ParsedResultType.ADDRESS_BOOK);
+    doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", "+12125551212", ParsedResultType.ADDRESS_BOOK);
   });
 
   test('testBizcard', () {
     doTestResult("BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12225551212;E:srowen@example.org;",
-        "Sean Owen\nGoogle\n123 Main St\n+12225551212\nsrowen@example.org", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\nGoogle\n123 Main St\n+12225551212\nsrowen@example.org", ParsedResultType.ADDRESS_BOOK);
   });
 
   test('testUPCA', () {
@@ -213,14 +212,14 @@ void main(){
   });
 
   test('testVCard', () {
-    doTestResult("BEGIN:VCARD\r\nEND:VCARD", "", ParsedResultType.ADDRESSBOOK);
+    doTestResult("BEGIN:VCARD\r\nEND:VCARD", "", ParsedResultType.ADDRESS_BOOK);
     doTestResult("BEGIN:VCARD\r\nN:Owen;Sean\r\nEND:VCARD", "Sean Owen",
-        ParsedResultType.ADDRESSBOOK);
+        ParsedResultType.ADDRESS_BOOK);
     doTestResult("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", "Sean Owen",
-        ParsedResultType.ADDRESSBOOK);
+        ParsedResultType.ADDRESS_BOOK);
     doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
-        "Sean Owen\n123 Main St", ParsedResultType.ADDRESSBOOK);
-    doTestResult("BEGIN:VCARD", "", ParsedResultType.ADDRESSBOOK);
+        "Sean Owen\n123 Main St", ParsedResultType.ADDRESS_BOOK);
+    doTestResult("BEGIN:VCARD", "", ParsedResultType.ADDRESS_BOOK);
   });
 
   test('testVEvent', () {
@@ -235,21 +234,21 @@ void main(){
         ParsedResultType.CALENDAR);
     // Local times
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
-        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
-        formatTime(2008, 5, 5, 23, 45, 55),
+        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56, true) + "\n" +
+        formatTime(2008, 5, 5, 23, 45, 55, true),
         ParsedResultType.CALENDAR);
     // Date only (all day event)
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
-        "DTEND:20080505\r\nEND:VEVENT", "foo\n" + formatDate(2008, 5, 4) + "\n" +
-        formatDate(2008, 5, 5),
+        "DTEND:20080505\r\nEND:VEVENT", "foo\n" + formatDate(2008, 5, 4, true) + "\n" +
+        formatDate(2008, 5, 5, true),
         ParsedResultType.CALENDAR);
     // Start time only
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
         "foo\n" + formatTime(2008, 5, 4, 12, 34, 56), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56), ParsedResultType.CALENDAR);
+        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56, true), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-        "foo\n" + formatDate(2008, 5, 4), ParsedResultType.CALENDAR);
+        "foo\n" + formatDate(2008, 5, 4, true), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
         "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR

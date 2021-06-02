@@ -26,7 +26,7 @@ class URIParsedResult extends ParsedResult {
   final String _uri;
   final String? _title;
 
-  URIParsedResult(this._uri, this._title) : super(ParsedResultType.URI);
+  URIParsedResult(String uri, this._title) : _uri = _massageURI(uri),super(ParsedResultType.URI);
 
   String getURI() {
     return _uri;
@@ -54,7 +54,7 @@ class URIParsedResult extends ParsedResult {
 
   /// Transforms a string that represents a URI into something more proper, by adding or canonicalizing
   /// the protocol.
-  static String massageURI(String uri) {
+  static String _massageURI(String uri) {
     uri = uri.trim();
     int protocolEnd = uri.indexOf(':');
     if (protocolEnd < 0 || _isColonFollowedByPortNumber(uri, protocolEnd)) {

@@ -16,6 +16,7 @@
 
 
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
@@ -26,12 +27,11 @@ import 'reed_solomon.dart';
 /// @author Rustam Abdullaev
 void main() {
 
-
   test('testDataMatrix', () {
     // real life test cases
-    testEncodeDecode(GenericGF.DATA_MATRIX_FIELD_256,
+    testEncodeDecode(GenericGF.dataMatrixField256,
         [ 142, 164, 186 ], [ 114, 25, 5, 88, 102 ]);
-    testEncodeDecode(GenericGF.DATA_MATRIX_FIELD_256, [
+    testEncodeDecode(GenericGF.dataMatrixField256, [
         0x69, 0x75, 0x75, 0x71, 0x3B, 0x30, 0x30, 0x64, //
         0x70, 0x65, 0x66, 0x2F, 0x68, 0x70, 0x70, 0x68, //
         0x6D, 0x66, 0x2F, 0x64, 0x70, 0x6E, 0x30, 0x71, //
@@ -41,19 +41,19 @@ void main() {
         0xF0, 0x1C, 0xF1, 0xD0, 0x6D, 0x00, 0x98, 0xDA, //
         0x80, 0x88, 0xBE, 0xFF, 0xB7, 0xFA, 0xA9, 0x95 ]);
     // synthetic test cases
-    testEncodeDecodeRandom(GenericGF.DATA_MATRIX_FIELD_256, 10, 240);
-    testEncodeDecodeRandom(GenericGF.DATA_MATRIX_FIELD_256, 128, 127);
-    testEncodeDecodeRandom(GenericGF.DATA_MATRIX_FIELD_256, 220, 35);
+    testEncodeDecodeRandom(GenericGF.dataMatrixField256, 10, 240);
+    testEncodeDecodeRandom(GenericGF.dataMatrixField256, 128, 127);
+    testEncodeDecodeRandom(GenericGF.dataMatrixField256, 220, 35);
   });
 
   test('testQRCode', () {
     // Test case from example given in ISO 18004, Annex I
-    testEncodeDecode(GenericGF.QR_CODE_FIELD_256, [
+    testEncodeDecode(GenericGF.qrCodeField256, [
         0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11,
         0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11 ],
         [0xA5, 0x24, 0xD4, 0xC1, 0xED, 0x36, 0xC7, 0x87,
         0x2C, 0x55 ]);
-    testEncodeDecode(GenericGF.QR_CODE_FIELD_256, [
+    testEncodeDecode(GenericGF.qrCodeField256, [
         0x72, 0x67, 0x2F, 0x77, 0x69, 0x6B, 0x69, 0x2F,
         0x4D, 0x61, 0x69, 0x6E, 0x5F, 0x50, 0x61, 0x67,
         0x65, 0x3B, 0x3B, 0x00, 0xEC, 0x11, 0xEC, 0x11,
@@ -63,23 +63,23 @@ void main() {
         0x08, 0x62 ]);
     // real life test cases
     // synthetic test cases
-    testEncodeDecodeRandom(GenericGF.QR_CODE_FIELD_256, 10, 240);
-    testEncodeDecodeRandom(GenericGF.QR_CODE_FIELD_256, 128, 127);
-    testEncodeDecodeRandom(GenericGF.QR_CODE_FIELD_256, 220, 35);
+    testEncodeDecodeRandom(GenericGF.qrCodeField256, 10, 240);
+    testEncodeDecodeRandom(GenericGF.qrCodeField256, 128, 127);
+    testEncodeDecodeRandom(GenericGF.qrCodeField256, 220, 35);
   });
 
   test('testAztec', () {
     // real life test cases
-    testEncodeDecode(GenericGF.AZTEC_PARAM,
+    testEncodeDecode(GenericGF.aztecParam,
         [0x5, 0x6] , [ 0x3, 0x2, 0xB, 0xB, 0x7] );
-    testEncodeDecode(GenericGF.AZTEC_PARAM,
+    testEncodeDecode(GenericGF.aztecParam,
         [ 0x0, 0x0, 0x0, 0x9 ], [0xA, 0xD, 0x8, 0x6, 0x5, 0x6 ]);
-    testEncodeDecode(GenericGF.AZTEC_PARAM,
+    testEncodeDecode(GenericGF.aztecParam,
         [0x2, 0x8, 0x8, 0x7 ], [ 0xE, 0xC, 0xA, 0x9, 0x6, 0x8 ]);
-    testEncodeDecode(GenericGF.AZTEC_DATA_6, [
+    testEncodeDecode(GenericGF.aztecData6, [
         0x9, 0x32, 0x1, 0x29, 0x2F, 0x2, 0x27, 0x25, 0x1, 0x1B] ,
         [0x2C, 0x2, 0xD, 0xD, 0xA, 0x16, 0x28, 0x9, 0x22, 0xA, 0x14 ]);
-    testEncodeDecode(GenericGF.AZTEC_DATA_8, [
+    testEncodeDecode(GenericGF.aztecData8, [
         0xE0, 0x86, 0x42, 0x98, 0xE8, 0x4A, 0x96, 0xC6,
         0xB9, 0xF0, 0x8C, 0xA7, 0x4A, 0xDA, 0xF8, 0xCE,
         0xB7, 0xDE, 0x88, 0x64, 0x29, 0x8E, 0x84, 0xA9,
@@ -96,7 +96,7 @@ void main() {
         0xED, 0xA1, 0xF8, 0x47, 0x2A, 0x50, 0xA6, 0xBC,
         0x53, 0x7D, 0x29, 0xFE, 0x06, 0x49, 0xF3, 0x73,
         0x9F, 0xC1, 0x75 ]);
-    testEncodeDecode(GenericGF.AZTEC_DATA_10, [
+    testEncodeDecode(GenericGF.aztecData10, [
         0x15C, 0x1E1, 0x2D5, 0x02E, 0x048, 0x1E2, 0x037, 0x0CD,
         0x02E, 0x056, 0x26A, 0x281, 0x1C2, 0x1A6, 0x296, 0x045,
         0x041, 0x0AA, 0x095, 0x2CE, 0x003, 0x38F, 0x2CD, 0x1A2,
@@ -157,7 +157,7 @@ void main() {
         0x306, 0x3A5, 0x352, 0x351, 0x275, 0x0ED, 0x045, 0x229,
         0x0BF, 0x05D, 0x253, 0x1BE, 0x02E, 0x35A, 0x0E4, 0x2E9,
         0x17A, 0x166, 0x03C, 0x007 ]);
-    testEncodeDecode(GenericGF.AZTEC_DATA_12, [
+    testEncodeDecode(GenericGF.aztecData12, [
         0x571, 0xE1B, 0x542, 0xE12, 0x1E2, 0x0DC, 0xCD0, 0xB85,
         0x69A, 0xA81, 0x709, 0xA6A, 0x584, 0x510, 0x4AA, 0x256,
         0xCE0, 0x0F8, 0xFB3, 0x5A2, 0x0D9, 0xAD1, 0x389, 0x09C,
@@ -368,15 +368,15 @@ void main() {
         0x03C, 0x1DE, 0x7DF, 0x2B1, 0x09D, 0xC81, 0xDA4, 0x8F7,
         0x6B9, 0x947, 0x9B0 ]);
     // synthetic test cases
-    testEncodeDecodeRandom(GenericGF.AZTEC_PARAM, 2, 5); // compact mode message
-    testEncodeDecodeRandom(GenericGF.AZTEC_PARAM, 4, 6); // full mode message
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_6, 10, 7);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_6, 20, 12);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_8, 20, 11);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_8, 128, 127);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_10, 128, 128);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_10, 768, 255);
-    testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
+    testEncodeDecodeRandom(GenericGF.aztecParam, 2, 5); // compact mode message
+    testEncodeDecodeRandom(GenericGF.aztecParam, 4, 6); // full mode message
+    testEncodeDecodeRandom(GenericGF.aztecData6, 10, 7);
+    testEncodeDecodeRandom(GenericGF.aztecData6, 20, 12);
+    testEncodeDecodeRandom(GenericGF.aztecData8, 20, 11);
+    testEncodeDecodeRandom(GenericGF.aztecData8, 128, 127);
+    testEncodeDecodeRandom(GenericGF.aztecData10, 128, 128);
+    testEncodeDecodeRandom(GenericGF.aztecData10, 768, 255);
+    testEncodeDecodeRandom(GenericGF.aztecData12, 3072, 1023);
   });
 
 

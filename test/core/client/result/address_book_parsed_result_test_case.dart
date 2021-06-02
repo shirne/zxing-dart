@@ -21,6 +21,8 @@
 
 
 
+import 'dart:developer';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/client.dart';
 import 'package:zxing/zxing.dart';
@@ -44,9 +46,9 @@ void main(){
       List<String?>? urls,
       String? birthday,
       String? note) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.ADDRESSBOOK, result.getType());
+    expect(ParsedResultType.ADDRESS_BOOK, result.getType());
     AddressBookParsedResult addressResult = result as AddressBookParsedResult;
     expect(title, addressResult.getTitle());
     assertArrayEquals(names, addressResult.getNames());

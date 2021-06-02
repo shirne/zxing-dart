@@ -29,12 +29,13 @@ import '../../utils.dart';
 /// @author Sean Owen
 void main(){
 
-  final double EPSILON = 1.0E-10;
-
-  DateFormat makeGMTFormat() {
-    DateFormat format = DateFormat.yMMMEd();//new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
-    //format.setTimeZone(TimeZone.getTimeZone("GMT"));
-    return format;
+  dateEqual(String? date, int? timestamp){
+    if(date != null && timestamp != null) {
+      DateTime date1 = DateTime.parse(date);
+      expect(date1.millisecondsSinceEpoch, timestamp, reason: "日期解析错误 $date");
+    }else{
+      assert(date == null && timestamp == null);
+    }
   }
 
   //@Before
@@ -62,9 +63,8 @@ void main(){
     expect(description, calResult.getDescription());
     expect(summary, calResult.getSummary());
     expect(location, calResult.getLocation());
-    DateFormat dateFormat = makeGMTFormat();
-    expect(startString, dateFormat.format(DateTime.fromMillisecondsSinceEpoch(calResult.getStartTimestamp())));
-    expect(endString, calResult.getEndTimestamp() < 0 ? null : dateFormat.format(DateTime.fromMillisecondsSinceEpoch(calResult.getEndTimestamp())));
+    dateEqual(startString, calResult.getStartTimestamp());
+    dateEqual(endString, calResult.getEndTimestamp() < 0 ? null : calResult.getEndTimestamp());
     expect(organizer, calResult.getOrganizer());
     assertArrayEquals(attendees, calResult.getAttendees());
     assertEqualOrNaN(latitude, calResult.getLatitude()!);

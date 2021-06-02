@@ -146,7 +146,7 @@ class UPCEReader extends UPCEANReader {
       case '1':
       case '2':
         result.write(String.fromCharCodes(upceChars.getRange(0, 2))); // 0, 2
-        result.write(lastChar);
+        result.writeCharCode(lastChar);
         result.write("0000");
         result.write(String.fromCharCodes(upceChars.getRange(2, 5))); // 2, 3
         break;
@@ -163,7 +163,7 @@ class UPCEReader extends UPCEANReader {
       default:
         result.write(String.fromCharCodes(upceChars.getRange(0, 5))); // 0, 5
         result.write("0000");
-        result.write(lastChar);
+        result.writeCharCode(lastChar);
         break;
     }
     // Only append check digit in conversion if supplied

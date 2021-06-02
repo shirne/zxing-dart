@@ -66,6 +66,7 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
       }
       List.copyRange(message, 0, dataWords, 0, dataWords.length);
       List.copyRange(message, dataWords.length, ecWords, 0, ecWords.length);
+
       corrupt(message, i, random, field.getSize());
       try {
         decoder.decode(message, ecWords.length);
@@ -106,7 +107,7 @@ void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
     // generate ECC words
     List.copyRange(message, 0, dataWords, 0, dataWords.length);
     encoder.encode(message, ecWords.length);
-    List.copyRange(ecWords, 0, message, dataSize, ecSize);
+    List.copyRange(ecWords, 0, message, dataSize, dataSize + ecSize);
     // check to see if Decoder can fix up to ecWords/2 random errors
     testDecoder(field, dataWords, ecWords);
   }

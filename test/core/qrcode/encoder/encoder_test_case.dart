@@ -340,31 +340,31 @@ void main(){
     // Should use appendNumericBytes.
     // 1 = 01 = 0001 in 4 bits.
     BitArray bits = new BitArray();
-    Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.defaultByteModeEncoding);
     expect(" ...X" , bits.toString());
     // Should use appendAlphanumericBytes.
     // A = 10 = 0xa = 001010 in 6 bits
     bits = new BitArray();
-    Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
     expect(" ..X.X." , bits.toString());
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
     try {
-      Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+      Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
     } catch ( we) { //
       // good
     }
     // Should use append8BitBytes.
     // 0x61, 0x62, 0x63
     bits = new BitArray();
-    Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
     expect(" .XX....X .XX...X. .XX...XX", bits.toString());
     // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-    Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = new BitArray();
     Encoder.appendBytes(shiftJISString(bytes([0x93, 0x5])), Mode.KANJI, bits,
-        Encoder.DEFAULT_BYTE_MODE_ENCODING);
+        Encoder.defaultByteModeEncoding);
     expect(" .XX.XX.. XXXXX", bits.toString());
   });
 
@@ -544,11 +544,11 @@ void main(){
   test('testAppend8BitBytes', () {
     // 0x61, 0x62, 0x63
     BitArray bits = new BitArray();
-    Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.append8BitBytes("abc", bits, Encoder.defaultByteModeEncoding);
     expect(" .XX....X .XX...X. .XX...XX", bits.toString());
     // Empty.
     bits = new BitArray();
-    Encoder.append8BitBytes("", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.append8BitBytes("", bits, Encoder.defaultByteModeEncoding);
     expect("", bits.toString());
   });
 
@@ -704,5 +704,5 @@ void verifyNotGS1EncodedData(QRCode qrCode) {
 }
 
 String shiftJISString(Uint8List bytes) {
-  return StringUtils.SHIFT_JIS_CHARSET!.decode(bytes );
+  return StringUtils.shiftJisCharset!.decode(bytes );
 }

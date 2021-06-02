@@ -26,7 +26,7 @@ import 'package:zxing/zxing.dart';
 /// Tests {@link GenericGFPoly}.
 void main() {
 
-  final GenericGF FIELD = GenericGF.QR_CODE_FIELD_256;
+  final GenericGF FIELD = GenericGF.qrCodeField256;
 
   test('testPolynomialString', () {
     expect("0", FIELD.getZero().toString());

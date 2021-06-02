@@ -65,8 +65,8 @@ class SMSMMSResultParser extends ResultParser {
 
     int lastComma = -1;
     int comma;
-    List<String> numbers = [''];
-    List<String> vias = [''];
+    List<String> numbers = [];
+    List<String> vias = [];
     while (
         (comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
       String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
@@ -83,17 +83,18 @@ class SMSMMSResultParser extends ResultParser {
     int numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
       numbers.add(numberPart);
-      vias.add(''); //todo null
+      //vias.add(''); //todo null
     } else {
       numbers.add(numberPart.substring(0, numberEnd));
       String maybeVia = numberPart.substring(numberEnd + 1);
       String via;
       if (maybeVia.startsWith("via=")) {
         via = maybeVia.substring(4);
-      } else {
-        via = ''; //todo null
-      }
-      vias.add(via);
+        vias.add(via);
+      } //else {
+      //  via = ''; //todo null
+      //}
+      //vias.add(via);
     }
   }
 }

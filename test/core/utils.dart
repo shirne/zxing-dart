@@ -16,15 +16,16 @@ void assertListEquals(List<int> expected, int expectedFrom,
 void assertArrayEquals(List<dynamic>? a, List<dynamic>? b){
   if(a == null || b == null){
     assert(a == null && b == null);
+    return;
   }
-  assert(a.runtimeType == b.runtimeType);
-  assert(a!.length == b!.length);
+  expect(a.runtimeType.toString().replaceAll('?', ''), b.runtimeType.toString().replaceAll('?', ''), reason:'runtime not match');
+  expect(a.length, b.length, reason:'length not match \n $a \n $b');
 
-  for(int i = 0; i < a!.length; i++){
+  for(int i = 0; i < a.length; i++){
     if(a[i] is List){
-      assertArrayEquals(a[i], b![i]);
+      assertArrayEquals(a[i], b[i]);
     }else{
-      assert(a[i] == b![i]);
+      expect(a[i], b[i], reason: "at $i");
     }
   }
 }

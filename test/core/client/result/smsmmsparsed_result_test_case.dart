@@ -42,10 +42,10 @@ void main(){
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.SMS, result.getType());
     SMSParsedResult smsResult = result as SMSParsedResult;
-    assertArrayEquals([number], smsResult.getNumbers());
+    assertArrayEquals(<String>[number], smsResult.getNumbers());
     expect(subject, smsResult.getSubject());
     expect(body, smsResult.getBody());
-    assertArrayEquals([via], smsResult.getVias());
+    assertArrayEquals(via == null ? <String>[] : <String>[via], smsResult.getVias());
     expect(parsedURI, smsResult.getSMSURI());
   }
 

@@ -43,12 +43,12 @@ void main(){
     ExpandedProductParsedResult o = new ExpandedProductResultParser().parse(result)!;
     //assertNotNull(o);
     expect("66546", o.getProductID());
-    assert(o.getSscc()!=null);
-    assert(o.getLotNumber()!=null);
-    assert(o.getProductionDate()!=null);
+    assert(o.getSscc()==null);
+    assert(o.getLotNumber()==null);
+    assert(o.getProductionDate()==null);
     expect("001205", o.getPackagingDate());
-    assert(o.getBestBeforeDate()!=null);
-    assert(o.getExpirationDate()!=null);
+    assert(o.getBestBeforeDate()==null);
+    assert(o.getExpirationDate()==null);
     expect("6544", o.getWeight());
     expect("KG", o.getWeightType());
     expect("2", o.getWeightIncrement());
