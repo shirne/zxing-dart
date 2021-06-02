@@ -6,8 +6,8 @@ zxing-dart is a Dart interface of [zxing](https://github.com/zxing/zxing).
 ## 进度
 
 - [x] 核心库翻译
-- [ ] 核心库测试翻译
-- [ ] 核心库单元测试
+- [x] 核心库测试翻译
+- [ ] 核心库单元测试(进行中...)
 
 ## Getting Started
 

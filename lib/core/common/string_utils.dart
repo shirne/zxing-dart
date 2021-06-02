@@ -18,6 +18,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:euc/euc.dart';
+import 'package:euc/jis.dart';
+import 'package:fast_gbk/fast_gbk.dart';
+
 import '../decode_hint_type.dart';
 
 /// Common string-related functions.
@@ -26,9 +30,9 @@ import '../decode_hint_type.dart';
 /// @author Alex Dupre
 class StringUtils {
   static final Encoding _PLATFORM_DEFAULT_ENCODING = SystemEncoding();
-  static final Encoding? SHIFT_JIS_CHARSET = Encoding.getByName("SJIS");
-  static final Encoding? GB2312_CHARSET = Encoding.getByName("GB2312");
-  static final Encoding? _EUC_JP = Encoding.getByName("EUC_JP");
+  static final Encoding? SHIFT_JIS_CHARSET = ShiftJIS();
+  static final Encoding? GB2312_CHARSET = gbk;
+  static final Encoding? _EUC_JP = EucJP();
   static final bool _ASSUME_SHIFT_JIS =
       SHIFT_JIS_CHARSET == _PLATFORM_DEFAULT_ENCODING ||
           _EUC_JP == _PLATFORM_DEFAULT_ENCODING;
@@ -37,7 +41,7 @@ class StringUtils {
   static final String SHIFT_JIS = "SJIS";
   static final String GB2312 = "GB2312";
 
-  StringUtils();
+  StringUtils._();
 
   /// @param bytes bytes encoding a string, whose encoding should be guessed
   /// @param hints decode hints if applicable

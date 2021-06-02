@@ -5,17 +5,26 @@ author: Shirne
 homepage: https://www.shirne.com
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
   flutter: ">=2.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
+  fixnum: ^1.0.0
+  fast_gbk: ^0.1.2+1
+  euc: ^1.0.6+8
+  unicode:
+    git: https://github.com/shirne/unicode-dart
+    # path: ../../flutter/codec/unicode/
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  buffer_image:
+    git: https://github.com/shirne/buffer-image
+    # path: ../buffer_image/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
