@@ -51,7 +51,7 @@ class Encoder {
     25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, // 0x50-0x5f
   ];
 
-  static final Encoding DEFAULT_BYTE_MODE_ENCODING = latin1;
+  static final Encoding defaultByteModeEncoding = latin1;
 
   Encoder._();
 
@@ -67,7 +67,7 @@ class Encoder {
   static QRCode encode(String content,
       [ErrorCorrectionLevel? ecLevel, Map<EncodeHintType, Object>? hints]) {
     // Determine what character encoding has been specified by the caller, if any
-    Encoding? encoding = DEFAULT_BYTE_MODE_ENCODING;
+    Encoding? encoding = defaultByteModeEncoding;
     bool hasEncodingHint =
         hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
@@ -212,7 +212,7 @@ class Encoder {
   /// Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
   /// if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
   static Mode _chooseMode(String content, [Encoding? encoding]) {
-    if (StringUtils.SHIFT_JIS_CHARSET == encoding &&
+    if (StringUtils.shiftJisCharset == encoding &&
         _isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
@@ -239,7 +239,7 @@ class Encoder {
   }
 
   static bool _isOnlyDoubleByteKanji(String content) {
-    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET!.encode(content);
+    List<int> bytes = StringUtils.shiftJisCharset!.encode(content);
     int length = bytes.length;
     if (length % 2 != 0) {
       return false;
@@ -454,7 +454,7 @@ class Encoder {
       toEncode.add(dataBytes[i] & 0xFF);
     }
     toEncode.addAll(List.filled(numEcBytesInBlock, 0));
-    ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256)
+    ReedSolomonEncoder(GenericGF.qrCodeField256)
         .encode(toEncode, numEcBytesInBlock);
 
     Uint8List ecBytes = Uint8List(numEcBytesInBlock);
@@ -558,7 +558,7 @@ class Encoder {
   }
 
   static void appendKanjiBytes(String content, BitArray bits) {
-    List<int> bytes = StringUtils.SHIFT_JIS_CHARSET!.encode(content);
+    List<int> bytes = StringUtils.shiftJisCharset!.encode(content);
     if (bytes.length % 2 != 0) {
       throw WriterException("Kanji byte size not even");
     }

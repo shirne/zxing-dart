@@ -17,15 +17,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 import 'package:flutter/cupertino.dart';
 
 import 'product_result_parser.dart';
@@ -87,12 +78,12 @@ abstract class ResultParser {
       VINResultParser(),
   ];
 
-  static final RegExp _DIGITS = RegExp("\\d+");
-  static final RegExp _AMPERSAND = RegExp("&");
-  static final RegExp _EQUALS = RegExp("=");
-  static final String _BYTE_ORDER_MARK = "\ufeff";
+  static final RegExp _digits = RegExp("\\d+");
+  static final Pattern _ampersand = "&";
+  static final Pattern _equals = "=";
+  static final String _byteOrderMark = "\ufeff";
 
-  static final List<String> EMPTY_STR_ARRAY = [];
+  static final List<String> emptyStrArray = [];
 
   /// Attempts to parse the raw {@link Result}'s contents as a particular type
   /// of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
@@ -104,7 +95,7 @@ abstract class ResultParser {
 
   static String getMassagedText(Result result) {
     String text = result.getText();
-    if (text.startsWith(_BYTE_ORDER_MARK)) {
+    if (text.startsWith(_byteOrderMark)) {
       text = text.substring(1);
     }
     return text;
@@ -182,7 +173,7 @@ abstract class ResultParser {
 
   @protected
   static bool isStringOfDigits(String? value, int length) {
-    return value != null && length > 0 && length == value.length && _DIGITS.hasMatch(value);
+    return value != null && length > 0 && length == value.length && _digits.hasMatch(value);
   }
 
   @protected
@@ -191,7 +182,7 @@ abstract class ResultParser {
       return false;
     }
     int max = offset + length;
-    return value.length >= max && _DIGITS.hasMatch(value.substring(offset, max));
+    return value.length >= max && _digits.hasMatch(value.substring(offset, max));
   }
 
   static Map<String,String>? parseNameValuePairs(String uri) {
@@ -200,14 +191,14 @@ abstract class ResultParser {
       return null;
     }
     Map<String,String> result = {};
-    for (String keyValue in uri.substring(paramStart + 1).split(_AMPERSAND)) {
+    for (String keyValue in uri.substring(paramStart + 1).split(_ampersand)) {
       _appendKeyValue(keyValue, result);
     }
     return result;
   }
 
   static void _appendKeyValue(String keyValue, Map<String,String> result) {
-    List<String> keyValueTokens = keyValue.split(_EQUALS); // todo 2
+    List<String> keyValueTokens = keyValue.split(_equals); // todo 2
     if (keyValueTokens.length == 2) {
       String key = keyValueTokens[0];
       String value = keyValueTokens[1];

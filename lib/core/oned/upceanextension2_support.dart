@@ -66,7 +66,7 @@ class UPCEANExtension2Support {
     int checkParity = 0;
 
     for (int x = 0; x < 2 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.L_AND_G_PATTERNS);
+      int bestMatch = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       resultString.writeCharCode('0'.codeUnitAt(0) + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;

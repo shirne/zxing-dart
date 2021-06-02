@@ -82,7 +82,7 @@ class UPCEWriter extends UPCEANWriter {
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.L_AND_G_PATTERNS[digit], false);
+      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.lAndGPatterns[digit], false);
     }
 
     OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.END_PATTERN, false);

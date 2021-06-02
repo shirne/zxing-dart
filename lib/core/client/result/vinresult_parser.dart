@@ -26,8 +26,8 @@ import 'vinparsed_result.dart';
 /// @author Sean Owen
 class VINResultParser extends ResultParser {
 
-  static final RegExp _IOQ = RegExp("[IOQ]");
-  static final RegExp _AZ09 = RegExp("[A-Z0-9]{17}");
+  static final RegExp _ioq = RegExp("[IOQ]");
+  static final RegExp _az09 = RegExp("[A-Z0-9]{17}");
 
   @override
   VINParsedResult? parse(Result result) {
@@ -35,8 +35,8 @@ class VINResultParser extends ResultParser {
       return null;
     }
     String rawText = result.getText();
-    rawText = rawText.replaceAll(_IOQ, "").trim();
-    if (!_AZ09.hasMatch(rawText)) {
+    rawText = rawText.replaceAll(_ioq, "").trim();
+    if (!_az09.hasMatch(rawText)) {
       return null;
     }
     try {

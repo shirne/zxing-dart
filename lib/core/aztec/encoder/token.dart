@@ -22,7 +22,7 @@ import 'binary_shift_token.dart';
 import 'simple_token.dart';
 
 abstract class Token {
-  static final Token EMPTY = SimpleToken(null, 0, 0);
+  static final Token empty = SimpleToken(null, 0, 0);
 
   final Token? _previous;
 

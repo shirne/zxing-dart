@@ -21,10 +21,10 @@ import 'reader_exception.dart';
 ///
 /// @author Sean Owen
 class NotFoundException extends ReaderException {
-  static final NotFoundException _INSTANCE = NotFoundException();
+  static final NotFoundException _instance = NotFoundException();
 
   static NotFoundException getNotFoundInstance() {
-    return _INSTANCE;
+    return _instance;
   }
 
   NotFoundException([dynamic message]) : super(message);

@@ -39,9 +39,9 @@ import '../../../result_point_callback.dart';
 /// @author Sean Owen
 /// @author Hannes Erven
 class MultiFinderPatternFinder extends FinderPatternFinder {
-  static final List<FinderPatternInfo> _EMPTY_RESULT_ARRAY = [];
-  static final List<FinderPattern> _EMPTY_FP_ARRAY = [];
-  static final List<List<FinderPattern>> _EMPTY_FP_2D_ARRAY = [];
+  static final List<FinderPatternInfo> _emptyResultArray = [];
+  static final List<FinderPattern> _emptyFpArray = [];
+  static final List<List<FinderPattern>> _emptyFp2dArray = [];
 
   // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
   // since it limits the number of regions to decode
@@ -283,7 +283,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     }
 
     if (result.isEmpty) {
-      return _EMPTY_RESULT_ARRAY;
+      return _emptyResultArray;
     } else {
       return result.toList();
     }

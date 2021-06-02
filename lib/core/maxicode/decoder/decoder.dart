@@ -38,7 +38,7 @@ class Decoder {
 
   final ReedSolomonDecoder _rsDecoder;
 
-  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.MAXICODE_FIELD_64);
+  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.maxicodeField64);
 
   DecoderResult decode(BitMatrix bits, [Map<DecodeHintType, Object>? hints]) {
     BitMatrixParser parser = BitMatrixParser(bits);

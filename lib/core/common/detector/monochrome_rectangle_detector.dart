@@ -28,7 +28,7 @@ import '../bit_matrix.dart';
 /// @deprecated without replacement since 3.3.0
 @deprecated
 class MonochromeRectangleDetector {
-  static final int _MAX_MODULES = 32;
+  static const int _MAX_MODULES = 32;
 
   final BitMatrix _image;
 

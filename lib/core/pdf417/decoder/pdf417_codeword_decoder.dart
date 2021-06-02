@@ -23,7 +23,7 @@ import '../pdf417_common.dart';
 class PDF417CodewordDecoder {
 
   static bool _isInit = false;
-  static final List<List<double>> _RATIOS_TABLE = List.generate(
+  static final List<List<double>> _ratiosTable = List.generate(
       PDF417Common.SYMBOL_TABLE.length,
       (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0));
 
@@ -41,7 +41,7 @@ class PDF417CodewordDecoder {
           currentSymbol >>= 1;
         }
         currentBit = currentSymbol & 0x1;
-        _RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] =
+        _ratiosTable[i][PDF417Common.BARS_IN_MODULE - j - 1] =
             size / PDF417Common.MODULES_IN_CODEWORD;
       }
     }
@@ -101,9 +101,9 @@ class PDF417CodewordDecoder {
     }
     double bestMatchError = double.maxFinite;
     int bestMatch = -1;
-    for (int j = 0; j < _RATIOS_TABLE.length; j++) {
+    for (int j = 0; j < _ratiosTable.length; j++) {
       double error = 0.0;
-      List<double> ratioTableRow = _RATIOS_TABLE[j];
+      List<double> ratioTableRow = _ratiosTable[j];
       for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
         double diff = ratioTableRow[k] - bitCountRatios[k];
         error += diff * diff;

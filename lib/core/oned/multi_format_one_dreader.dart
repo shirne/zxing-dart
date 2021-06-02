@@ -34,7 +34,7 @@ import 'rss/rss14_reader.dart';
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Sean Owen
 class MultiFormatOneDReader extends OneDReader {
-  static const List<OneDReader> _EMPTY_ONED_ARRAY = [];
+  static const List<OneDReader> _emptyOnedArray = [];
 
   late List<OneDReader> _readers;
 

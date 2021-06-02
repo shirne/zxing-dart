@@ -57,7 +57,7 @@ class ECB {
 ///
 /// @author bbrown@google.com (Brian Brown)
 class Version {
-  static final List<Version> _VERSIONS = _buildVersions();
+  static final List<Version> _versions = _buildVersions();
 
   final int _versionNumber;
   final int _symbolSizeRows;
@@ -118,7 +118,7 @@ class Version {
       throw FormatException();
     }
 
-    for (Version version in _VERSIONS) {
+    for (Version version in _versions) {
       if (version._symbolSizeRows == numRows &&
           version._symbolSizeColumns == numColumns) {
         return version;

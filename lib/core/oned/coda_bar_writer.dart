@@ -114,9 +114,9 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
         }
       }
       int code = 0;
-      for (int i = 0; i < CodaBarReader.ALPHABET.length; i++) {
+      for (int i = 0; i < CodaBarReader.alphaBet.length; i++) {
         // Found any, because I checked above.
-        if (c.codeUnitAt(0) == CodaBarReader.ALPHABET[i]) {
+        if (c.codeUnitAt(0) == CodaBarReader.alphaBet[i]) {
           code = CodaBarReader.CHARACTER_ENCODINGS[i];
           break;
         }

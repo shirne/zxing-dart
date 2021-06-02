@@ -82,7 +82,7 @@ class EAN13Writer extends UPCEANWriter {
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.L_AND_G_PATTERNS[digit], false);
+      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.lAndGPatterns[digit], false);
     }
 
     pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);

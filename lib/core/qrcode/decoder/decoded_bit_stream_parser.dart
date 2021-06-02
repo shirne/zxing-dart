@@ -36,9 +36,9 @@ import 'version.dart';
 /// @author Sean Owen
 class DecodedBitStreamParser {
   /// See ISO 18004:2006, 6.4.4 Table 5
-  static final List<String> _ALPHANUMERIC_CHARS =
+  static final List<String> _alphaNumericChars =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".split('');
-  static final int _GB2312_SUBSET = 1;
+  static final int _gbkSubset = 1;
 
   DecodedBitStreamParser._();
 
@@ -101,7 +101,7 @@ class DecodedBitStreamParser {
             // Chinese mode contains a sub set indicator right after mode indicator
             int subset = bits.readBits(4);
             int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-            if (subset == _GB2312_SUBSET) {
+            if (subset == _gbkSubset) {
               _decodeHanziSegment(bits, result, countHanzi);
             }
             break;
@@ -192,7 +192,7 @@ class DecodedBitStreamParser {
       count--;
     }
 
-    result.write(StringUtils.GB2312_CHARSET!.decode(buffer));
+    result.write(StringUtils.gbkCharset!.decode(buffer));
   }
 
   static void _decodeKanjiSegment(
@@ -222,7 +222,7 @@ class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-    result.write(StringUtils.SHIFT_JIS_CHARSET!.decode(buffer));
+    result.write(StringUtils.shiftJisCharset!.decode(buffer));
   }
 
   static void _decodeByteSegment(BitSource bits, StringBuffer result, int count,
@@ -254,10 +254,10 @@ class DecodedBitStreamParser {
   }
 
   static String _toAlphaNumericChar(int value) {
-    if (value >= _ALPHANUMERIC_CHARS.length) {
+    if (value >= _alphaNumericChars.length) {
       throw FormatException();
     }
-    return _ALPHANUMERIC_CHARS[value];
+    return _alphaNumericChars[value];
   }
 
   static void _decodeAlphanumericSegment(

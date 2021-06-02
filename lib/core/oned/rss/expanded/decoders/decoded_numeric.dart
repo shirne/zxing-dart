@@ -32,7 +32,7 @@ class DecodedNumeric extends DecodedObject {
   final int _firstDigit;
   final int _secondDigit;
 
-  static final int FNC1 = 10;
+  static final int fnc1 = 10;
 
   DecodedNumeric(int newPosition, this._firstDigit, this._secondDigit)
       : super(newPosition) {
@@ -57,10 +57,10 @@ class DecodedNumeric extends DecodedObject {
   }
 
   bool isFirstDigitFNC1() {
-    return this._firstDigit == FNC1;
+    return this._firstDigit == fnc1;
   }
 
   bool isSecondDigitFNC1() {
-    return this._secondDigit == FNC1;
+    return this._secondDigit == fnc1;
   }
 }

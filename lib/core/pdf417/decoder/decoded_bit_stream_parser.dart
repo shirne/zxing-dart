@@ -57,10 +57,10 @@ class DecodedBitStreamParser {
   static const int _PS = 29;
   static const int _PAL = 29;
 
-  static final List<int> _PUNCT_CHARS =
+  static final List<int> _punctChars =
       ";<>@[\\]_`~!\r\t,:\n-.\$/\"|*()?{}'".codeUnits;
 
-  static final List<int> _MIXED_CHARS = "0123456789&\r\t,:#-.\$/+%*=^".codeUnits;
+  static final List<int> _mixedChars = "0123456789&\r\t,:#-.\$/+%*=^".codeUnits;
 
   /// Table containing values for the exponent of 900.
   /// This is used in the numeric compaction decode algorithm.
@@ -398,7 +398,7 @@ class DecodedBitStreamParser {
         case _Mode.MIXED:
           // Mixed (numeric and some punctuation)
           if (subModeCh < _PL) {
-            ch = _MIXED_CHARS[subModeCh];
+            ch = _mixedChars[subModeCh];
           } else {
             switch (subModeCh) {
               case _PL:
@@ -429,7 +429,7 @@ class DecodedBitStreamParser {
         case _Mode.PUNCT:
           // Punctuation
           if (subModeCh < _PAL) {
-            ch = _PUNCT_CHARS[subModeCh];
+            ch = _punctChars[subModeCh];
           } else {
             switch (subModeCh) {
               case _PAL:
@@ -464,7 +464,7 @@ class DecodedBitStreamParser {
           // Restore sub-mode
           subMode = priorToShiftMode;
           if (subModeCh < _PAL) {
-            ch = _PUNCT_CHARS[subModeCh];
+            ch = _punctChars[subModeCh];
           } else {
             switch (subModeCh) {
               case _PAL:

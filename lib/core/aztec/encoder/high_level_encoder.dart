@@ -93,7 +93,7 @@ class HighLevelEncoder {
 
   // A reverse mapping from [mode][char] to the encoding for that character
   // in that mode.  An entry of 0 indicates no mapping exists.
-  static final List<List<int>> _CHAR_MAP = List.generate(
+  static final List<List<int>> _charMap = List.generate(
       5,
       (idx) => List.generate(256, (index) {
             if (idx == MODE_UPPER) {
@@ -136,7 +136,7 @@ class HighLevelEncoder {
 
   // A map showing the available shift codes.  (The shifts to BINARY are not
   // shown
-  static final List<List<int>> SHIFT_TABLE = List.generate(
+  static final List<List<int>> shiftTable = List.generate(
       6,
       (idx) => List.generate(6, (index) {
             if (idx == MODE_UPPER) {
@@ -161,7 +161,7 @@ class HighLevelEncoder {
 
   /// @return text represented by this encoder encoded as a {@link BitArray}
   BitArray encode() {
-    State initialState = State.INITIAL_STATE;
+    State initialState = State.initialState;
     if (_charset != null) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(_charset!);
       if (null == eci) {
@@ -230,10 +230,10 @@ class HighLevelEncoder {
   // the "result" list.
   void _updateStateForChar(State state, int index, List<State> result) {
     int ch = _text[index] & 0xFF;
-    bool charInCurrentTable = _CHAR_MAP[state.getMode()][ch] > 0;
+    bool charInCurrentTable = _charMap[state.getMode()][ch] > 0;
     State? stateNoBinary;
     for (int mode = 0; mode <= MODE_PUNCT; mode++) {
-      int charInMode = _CHAR_MAP[mode][ch];
+      int charInMode = _charMap[mode][ch];
       if (charInMode > 0) {
         if (stateNoBinary == null) {
           // Only create stateNoBinary the first time it's required.
@@ -251,7 +251,7 @@ class HighLevelEncoder {
           result.add(latchState);
         }
         // Try generating the character by switching to its mode.
-        if (!charInCurrentTable && SHIFT_TABLE[state.getMode()][mode] >= 0) {
+        if (!charInCurrentTable && shiftTable[state.getMode()][mode] >= 0) {
           // It never makes sense to temporarily shift to another mode if the
           // character exists in the current mode.  That can never save bits.
           State shiftState = stateNoBinary.shiftAndAppend(mode, charInMode);
@@ -260,7 +260,7 @@ class HighLevelEncoder {
       }
     }
     if (state.getBinaryShiftByteCount() > 0 ||
-        _CHAR_MAP[state.getMode()][ch] == 0) {
+        _charMap[state.getMode()][ch] == 0) {
       // It's never worthwhile to go into binary shift mode if you're not already
       // in binary shift mode, and the character exists in your current mode.
       // That can never save bits over just outputting the char in the current mode.

@@ -64,7 +64,7 @@ abstract class UPCEANReader extends OneDReader {
   ];
 
   /// As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
-  static final List<List<int>> L_AND_G_PATTERNS = List.generate(
+  static final List<List<int>> lAndGPatterns = List.generate(
       20,
       (index) => index < 10
           ? L_PATTERNS[index].toList()

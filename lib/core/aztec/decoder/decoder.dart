@@ -266,16 +266,16 @@ class Decoder {
 
     if (_ddata.getNbLayers() <= 2) {
       codewordSize = 6;
-      gf = GenericGF.AZTEC_DATA_6;
+      gf = GenericGF.aztecData6;
     } else if (_ddata.getNbLayers() <= 8) {
       codewordSize = 8;
-      gf = GenericGF.AZTEC_DATA_8;
+      gf = GenericGF.aztecData8;
     } else if (_ddata.getNbLayers() <= 22) {
       codewordSize = 10;
-      gf = GenericGF.AZTEC_DATA_10;
+      gf = GenericGF.aztecData10;
     } else {
       codewordSize = 12;
-      gf = GenericGF.AZTEC_DATA_12;
+      gf = GenericGF.aztecData12;
     }
 
     int numDataCodewords = _ddata.getNbDatablocks();

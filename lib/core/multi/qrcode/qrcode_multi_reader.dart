@@ -35,8 +35,8 @@ import 'detector/multi_detector.dart';
 /// @author Sean Owen
 /// @author Hannes Erven
 class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
-  static final List<Result> _EMPTY_RESULT_ARRAY = [];
-  static final List<ResultPoint> _NO_POINTS = [];
+  static final List<Result> _emptyResultArray = [];
+  static final List<ResultPoint> _noPoints = [];
 
   @override
   List<Result> decodeMultiple(BinaryBitmap image,
@@ -77,7 +77,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       }
     }
     if (results.isEmpty) {
-      return _EMPTY_RESULT_ARRAY;
+      return _emptyResultArray;
     } else {
       results = processStructuredAppend(results);
       return results.toList();
@@ -125,7 +125,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     Result newResult = Result(
         newText.toString(),
         Uint8List.fromList(newRawBytes.takeBytes()),
-        _NO_POINTS,
+        _noPoints,
         BarcodeFormat.QR_CODE);
     if (newByteSegment.length > 0) {
       newResult.putMetadata(

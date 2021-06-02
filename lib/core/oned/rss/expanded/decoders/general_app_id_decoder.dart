@@ -91,10 +91,10 @@ class GeneralAppIdDecoder {
       int numeric = extractNumericValueFromBitArray(pos, 4);
       if (numeric == 0) {
         return DecodedNumeric(this._information.getSize(),
-            DecodedNumeric.FNC1, DecodedNumeric.FNC1);
+            DecodedNumeric.fnc1, DecodedNumeric.fnc1);
       }
       return DecodedNumeric(
-          this._information.getSize(), numeric - 1, DecodedNumeric.FNC1);
+          this._information.getSize(), numeric - 1, DecodedNumeric.fnc1);
     }
     int numeric = extractNumericValueFromBitArray(pos, 7);
 
@@ -285,7 +285,7 @@ class GeneralAppIdDecoder {
   DecodedChar _decodeIsoIec646(int pos) {
     int fiveBitValue = extractNumericValueFromBitArray(pos, 5);
     if (fiveBitValue == 15) {
-      return DecodedChar(pos + 5, DecodedChar.FNC1);
+      return DecodedChar(pos + 5, DecodedChar.fnc1);
     }
 
     if (fiveBitValue >= 5 && fiveBitValue < 15) {
@@ -396,7 +396,7 @@ class GeneralAppIdDecoder {
   DecodedChar _decodeAlphanumeric(int pos) {
     int fiveBitValue = extractNumericValueFromBitArray(pos, 5);
     if (fiveBitValue == 15) {
-      return DecodedChar(pos + 5, DecodedChar.FNC1);
+      return DecodedChar(pos + 5, DecodedChar.fnc1);
     }
 
     if (fiveBitValue >= 5 && fiveBitValue < 15) {

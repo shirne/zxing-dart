@@ -25,14 +25,14 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class GeoResultParser extends ResultParser {
-  static final RegExp _GEO_URL_PATTERN = RegExp(
+  static final RegExp _geoUrlPattern = RegExp(
       "geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?",
       caseSensitive: false);
 
   @override
   GeoParsedResult? parse(Result result) {
     String rawText = ResultParser.getMassagedText(result);
-    RegExpMatch? matcher = _GEO_URL_PATTERN.firstMatch(rawText);
+    RegExpMatch? matcher = _geoUrlPattern.firstMatch(rawText);
     if (matcher == null) {
       return null;
     }

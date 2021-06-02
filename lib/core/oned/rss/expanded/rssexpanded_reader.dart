@@ -92,7 +92,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   static const int _FINDER_PAT_E = 4;
   static const int _FINDER_PAT_F = 5;
 
-  static final List<List<int>> _FINDER_PATTERN_SEQUENCES = [
+  static final List<List<int>> _finderPatternSequences = [
     [_FINDER_PAT_A, _FINDER_PAT_A],
     [_FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B],
     [_FINDER_PAT_A, _FINDER_PAT_C, _FINDER_PAT_B, _FINDER_PAT_D],
@@ -299,7 +299,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   // Whether the pairs form a valid find pattern sequence,
   // either complete or a prefix
   static bool _isValidSequence(List<ExpandedPair> pairs) {
-    for (List<int> sequence in _FINDER_PATTERN_SEQUENCES) {
+    for (List<int> sequence in _finderPatternSequences) {
       if (pairs.length <= sequence.length) {
         bool stop = true;
         for (int j = 0; j < pairs.length; j++) {

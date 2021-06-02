@@ -22,7 +22,7 @@ import 'modulus_poly.dart';
 /// @author Sean Owen
 /// @see com.google.zxing.common.reedsolomon.GenericGF
 class ModulusGF {
-  static final ModulusGF PDF417_GF =
+  static final ModulusGF pdf417Gf =
       ModulusGF._(PDF417Common.NUMBER_OF_CODEWORDS, 3);
 
   late List<int> _expTable;

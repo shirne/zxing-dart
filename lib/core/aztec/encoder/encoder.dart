@@ -324,15 +324,15 @@ class Encoder {
   static GenericGF _getGF(int wordSize) {
     switch (wordSize) {
       case 4:
-        return GenericGF.AZTEC_PARAM;
+        return GenericGF.aztecParam;
       case 6:
-        return GenericGF.AZTEC_DATA_6;
+        return GenericGF.aztecData6;
       case 8:
-        return GenericGF.AZTEC_DATA_8;
+        return GenericGF.aztecData8;
       case 10:
-        return GenericGF.AZTEC_DATA_10;
+        return GenericGF.aztecData10;
       case 12:
-        return GenericGF.AZTEC_DATA_12;
+        return GenericGF.aztecData12;
       default:
         throw Exception("Unsupported word size $wordSize");
     }

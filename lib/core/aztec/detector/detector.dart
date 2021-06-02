@@ -223,7 +223,7 @@ class Detector {
     }
     try {
       ReedSolomonDecoder rsDecoder =
-          ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
+          ReedSolomonDecoder(GenericGF.aztecParam);
       rsDecoder.decode(parameterWords, numECCodewords);
     } catch (ignored) {
       // ReedSolomonException

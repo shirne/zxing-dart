@@ -38,7 +38,7 @@ class CodaBarReader extends OneDReader {
   static const double _PADDING = 1.5;
 
   static const String _ALPHABET_STRING = r"0123456789-$:/.+ABCD";
-  static final List<int> ALPHABET = _ALPHABET_STRING.codeUnits;
+  static final List<int> alphaBet = _ALPHABET_STRING.codeUnits;
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
   /// each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow.
@@ -93,7 +93,7 @@ class CodaBarReader extends OneDReader {
       // Stop as soon as we see the end character.
       if (_decodeRowResult.length > 1 &&
           _STARTEND_ENCODING
-              .contains(String.fromCharCode(ALPHABET[charOffset]))) {
+              .contains(String.fromCharCode(alphaBet[charOffset]))) {
         break;
       }
     } while (nextStart <
@@ -117,7 +117,7 @@ class CodaBarReader extends OneDReader {
 
     // Translate character table offsets to actual characters.
     for (int i = 0; i < _decodeRowResult.length; i++) {
-      _decodeRowResult.setCharAt(i, ALPHABET[_decodeRowResult.codePointAt(i)]);
+      _decodeRowResult.setCharAt(i, alphaBet[_decodeRowResult.codePointAt(i)]);
     }
     // Ensure a valid start and end character
     String startchar = _decodeRowResult.charAt(0);
@@ -265,7 +265,7 @@ class CodaBarReader extends OneDReader {
       int charOffset = _toNarrowWidePattern(i);
       if (charOffset != -1 &&
           _STARTEND_ENCODING
-              .contains(String.fromCharCode(ALPHABET[charOffset]))) {
+              .contains(String.fromCharCode(alphaBet[charOffset]))) {
         // Look for whitespace before start pattern, >= 50% of width of start pattern
         // We make an exception if the whitespace is the first element.
         int patternSize = 0;

@@ -28,16 +28,16 @@ import 'result_parser.dart';
 /// @author Sean Owen
 class VCardResultParser extends ResultParser {
 
-  static final RegExp _BEGIN_VCARD = RegExp("BEGIN:VCARD", caseSensitive: false);
-  static final RegExp _VCARD_LIKE_DATE = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
-  static final RegExp _CR_LF_SPACE_TAB = RegExp("\r\n[ \t]");
-  static final RegExp _NEWLINE_ESCAPE = RegExp("\\\\[nN]");
-  static final RegExp _VCARD_ESCAPES = RegExp("\\\\([,;\\\\])");
-  static final Pattern _EQUALS = "=";
-  static final Pattern _SEMICOLON = ";";
-  static final RegExp _UNESCAPED_SEMICOLONS = RegExp("(?<!\\\\);+");
-  static final Pattern _COMMA = ",";
-  static final RegExp _SEMICOLON_OR_COMMA = RegExp("[;,]");
+  static final RegExp _beginVcard = RegExp("BEGIN:VCARD", caseSensitive: false);
+  static final RegExp _vcardLikeDate = RegExp("\\d{4}-?\\d{2}-?\\d{2}");
+  static final RegExp _crLfSpaceTab = RegExp("\r\n[ \t]");
+  static final RegExp _newlineEscape = RegExp("\\\\[nN]");
+  static final RegExp _vcardEscapes = RegExp("\\\\([,;\\\\])");
+  static final Pattern _equal = "=";
+  static final Pattern _semicolon = ";";
+  static final RegExp _unescapedSemicolons = RegExp("(?<!\\\\);+");
+  static final Pattern _comma = ",";
+  static final RegExp _semicolonOrComma = RegExp("[;,]");
 
   @override
   AddressBookParsedResult? parse(Result result) {
@@ -45,7 +45,7 @@ class VCardResultParser extends ResultParser {
     // to throw out everything else we parsed just because this was omitted. In fact, Eclair
     // is doing just that, and we can't parse its contacts without this leniency.
     String rawText = ResultParser.getMassagedText(result);
-    var m = _BEGIN_VCARD.allMatches(rawText);
+    var m = _beginVcard.allMatches(rawText);
     if (m.length < 1) {
       return null;
     }
@@ -56,7 +56,7 @@ class VCardResultParser extends ResultParser {
       _formatNames(names);
     }
     List<String>? nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
-    List<String>? nicknames = nicknameString == null ? null : nicknameString[0].split(_COMMA);
+    List<String>? nicknames = nicknameString == null ? null : nicknameString[0].split(_comma);
     List<List<String>>? phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
     List<List<String>>? emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
     List<String>? note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
@@ -70,7 +70,7 @@ class VCardResultParser extends ResultParser {
     List<List<String>>? urls = matchVCardPrefixedField("URL", rawText, true, false);
     List<String>? instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
     List<String>? geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
-    List<String>? geo = geoString == null ? null : geoString[0].split(_SEMICOLON_OR_COMMA);
+    List<String>? geo = geoString == null ? null : geoString[0].split(_semicolonOrComma);
     if (geo != null && geo.length != 2) {
       geo = null;
     }
@@ -122,12 +122,12 @@ class VCardResultParser extends ResultParser {
       String? quotedPrintableCharset;
       String? valueType;
       if (metadataString != null) {
-        for (String metadatum in metadataString.split(_SEMICOLON)) {
+        for (String metadatum in metadataString.split(_semicolon)) {
           if (metadata == null) {
             metadata = [];
           }
           metadata.add(metadatum);
-          List<String> metadatumTokens = metadatum.split(_EQUALS); // todo , 2
+          List<String> metadatumTokens = metadatum.split(_equal); // todo , 2
           if (metadatumTokens.length > 1) {
             String key = metadatumTokens[0];
             String value = metadatumTokens[1];
@@ -176,15 +176,15 @@ class VCardResultParser extends ResultParser {
         if (quotedPrintable) {
           element = _decodeQuotedPrintable(element, quotedPrintableCharset);
           if (parseFieldDivider) {
-            element = element.replaceAll(_UNESCAPED_SEMICOLONS, "\n").trim();
+            element = element.replaceAll(_unescapedSemicolons, "\n").trim();
           }
         } else {
           if (parseFieldDivider) {
-            element = element.replaceAll(_UNESCAPED_SEMICOLONS, "\n").trim();
+            element = element.replaceAll(_unescapedSemicolons, "\n").trim();
           }
-          element = element.replaceAll(_CR_LF_SPACE_TAB, "");
-          element = element.replaceAll(_NEWLINE_ESCAPE, "\n");
-          element = element.replaceAll(_VCARD_ESCAPES, r"$1");
+          element = element.replaceAll(_crLfSpaceTab, "");
+          element = element.replaceAll(_newlineEscape, "\n");
+          element = element.replaceAll(_vcardEscapes, r"$1");
         }
         // Only handle VALUE=uri specially
         if ("uri" == valueType) {
@@ -322,7 +322,7 @@ class VCardResultParser extends ResultParser {
   }
 
   static bool _isLikeVCardDate(String? value) {
-    return value == null || _VCARD_LIKE_DATE.hasMatch(value);
+    return value == null || _vcardLikeDate.hasMatch(value);
   }
 
   /// Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like

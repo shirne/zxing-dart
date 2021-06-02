@@ -15,7 +15,6 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:euc/euc.dart';
@@ -29,17 +28,17 @@ import '../decode_hint_type.dart';
 /// @author Sean Owen
 /// @author Alex Dupre
 class StringUtils {
-  static final Encoding _PLATFORM_DEFAULT_ENCODING = SystemEncoding();
-  static final Encoding? SHIFT_JIS_CHARSET = ShiftJIS();
-  static final Encoding? GB2312_CHARSET = gbk;
-  static final Encoding? _EUC_JP = EucJP();
-  static final bool _ASSUME_SHIFT_JIS =
-      SHIFT_JIS_CHARSET == _PLATFORM_DEFAULT_ENCODING ||
-          _EUC_JP == _PLATFORM_DEFAULT_ENCODING;
+  static final Encoding _platformDefaultEncoding = utf8;
+  static final Encoding? shiftJisCharset = ShiftJIS();
+  static final Encoding? gbkCharset = gbk;
+  static final Encoding? _eucJp = EucJP();
+  static final bool _assumeShiftJis =
+      shiftJisCharset == _platformDefaultEncoding ||
+          _eucJp == _platformDefaultEncoding;
 
   // Retained for ABI compatibility with earlier versions
-  static final String SHIFT_JIS = "SJIS";
-  static final String GB2312 = "GB2312";
+  static final String shiftJis = "SJIS";
+  static final String gbkName = "GB2312";
 
   StringUtils._();
 
@@ -51,7 +50,7 @@ class StringUtils {
   static String guessEncoding(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     Encoding? c = guessCharset(bytes, hints);
-    if (c == SHIFT_JIS_CHARSET) {
+    if (c == shiftJisCharset) {
       return "SJIS";
     } else if (c == utf8) {
       return "UTF8";
@@ -198,10 +197,10 @@ class StringUtils {
     }
     // Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done
     if (canBeShiftJIS &&
-        (_ASSUME_SHIFT_JIS ||
+        (_assumeShiftJis ||
             sjisMaxKatakanaWordLength >= 3 ||
             sjisMaxDoubleBytesWordLength >= 3)) {
-      return SHIFT_JIS_CHARSET;
+      return shiftJisCharset;
     }
     // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
     // - If we saw
@@ -211,7 +210,7 @@ class StringUtils {
     if (canBeISO88591 && canBeShiftJIS) {
       return (sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) ||
               isoHighOther * 10 >= length
-          ? SHIFT_JIS_CHARSET
+          ? shiftJisCharset
           : latin1;
     }
 
@@ -220,12 +219,12 @@ class StringUtils {
       return latin1;
     }
     if (canBeShiftJIS) {
-      return SHIFT_JIS_CHARSET;
+      return shiftJisCharset;
     }
     if (canBeUTF8) {
       return utf8;
     }
     // Otherwise, we take a wild guess with platform encoding
-    return _PLATFORM_DEFAULT_ENCODING;
+    return _platformDefaultEncoding;
   }
 }

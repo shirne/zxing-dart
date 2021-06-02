@@ -28,7 +28,7 @@ import 'modulus_poly.dart';
 class ErrorCorrection {
   final ModulusGF _field;
 
-  ErrorCorrection() : this._field = ModulusGF.PDF417_GF;
+  ErrorCorrection() : this._field = ModulusGF.pdf417Gf;
 
   /// @param received received codewords
   /// @param numECCodewords number of those codewords used for EC

@@ -27,9 +27,9 @@ import 'parsed_result_type.dart';
 /// @author Sean Owen
 class CalendarParsedResult extends ParsedResult {
 
-  static final RegExp _RFC2445_DURATION =
+  static final RegExp _rfc2445Duration =
   RegExp("P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?");
-  static final List<int> _RFC2445_DURATION_FIELD_UNITS = [
+  static final List<int> _rfc2445DurationFieldUnits = [
       7 * 24 * 60 * 60 * 1000, // 1 week
       24 * 60 * 60 * 1000, // 1 day
       60 * 60 * 1000, // 1 hour
@@ -37,7 +37,7 @@ class CalendarParsedResult extends ParsedResult {
       1000, // 1 second
   ];
 
-  static final RegExp _DATE_TIME = RegExp("[0-9]{8}(T[0-9]{6}Z?)?");
+  static final RegExp _dateTime = RegExp("[0-9]{8}(T[0-9]{6}Z?)?");
 
   final String? _summary;
   late int _start;
@@ -167,7 +167,7 @@ class CalendarParsedResult extends ParsedResult {
   /// @param when The string to parse
   /// @throws ParseException if not able to parse as a date
   static int _parseDate(String? when){
-    if (when == null || !_DATE_TIME.hasMatch(when)) {
+    if (when == null || !_dateTime.hasMatch(when)) {
       throw Exception('Date Parse error $when');
     }
     DateTime date = DateTime.parse(when);
@@ -190,15 +190,15 @@ class CalendarParsedResult extends ParsedResult {
     if (durationString == null) {
       return -1;
     }
-    var m = _RFC2445_DURATION.firstMatch(durationString);
+    var m = _rfc2445Duration.firstMatch(durationString);
     if (m == null) {
       return -1;
     }
     int durationMS = 0;
-    for (int i = 0; i < _RFC2445_DURATION_FIELD_UNITS.length; i++) {
+    for (int i = 0; i < _rfc2445DurationFieldUnits.length; i++) {
       String? fieldValue = m.group(i + 1);
       if (fieldValue != null) {
-        durationMS += _RFC2445_DURATION_FIELD_UNITS[i] * int.parse(fieldValue);
+        durationMS += _rfc2445DurationFieldUnits[i] * int.parse(fieldValue);
       }
     }
     return durationMS;

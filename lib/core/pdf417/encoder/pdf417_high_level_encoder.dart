@@ -84,17 +84,17 @@ class PDF417HighLevelEncoder {
   ];
 
   /// Raw code table for text compaction: Punctuation sub-mode
-  static final List<int> _TEXT_PUNCTUATION_RAW = [
+  static final List<int> _textPunctuationRaw = [
     59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58, //
     10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
   ];
 
-  static final Uint8List _MIXED = Uint8List.fromList(
+  static final Uint8List _mixed = Uint8List.fromList(
       List.generate(128, (index) => _TEXT_MIXED_RAW.indexOf(index)));
-  static final Uint8List _PUNCTUATION = Uint8List.fromList(
-      List.generate(128, (index) => _TEXT_PUNCTUATION_RAW.indexOf(index)));
+  static final Uint8List _punctuatuin = Uint8List.fromList(
+      List.generate(128, (index) => _textPunctuationRaw.indexOf(index)));
 
-  static final Encoding _DEFAULT_ENCODING = latin1;
+  static final Encoding _defaultEncoding = latin1;
 
   PDF417HighLevelEncoder._();
 
@@ -113,8 +113,8 @@ class PDF417HighLevelEncoder {
     StringBuffer sb = StringBuffer();
 
     if (encoding == null) {
-      encoding = _DEFAULT_ENCODING;
-    } else if (_DEFAULT_ENCODING != encoding) {
+      encoding = _defaultEncoding;
+    } else if (_defaultEncoding != encoding) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
         _encodingECI(eci.getValue(), sb);
@@ -220,7 +220,7 @@ class PDF417HighLevelEncoder {
               continue;
             } else {
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_PUNCTUATION[ch]);
+              tmp.writeCharCode(_punctuatuin[ch]);
               break;
             }
           }
@@ -244,14 +244,14 @@ class PDF417HighLevelEncoder {
               continue;
             } else {
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_PUNCTUATION[ch]);
+              tmp.writeCharCode(_punctuatuin[ch]);
               break;
             }
           }
           break;
         case _SUBMODE_MIXED:
           if (_isMixed(ch)) {
-            tmp.writeCharCode(_MIXED[ch]);
+            tmp.writeCharCode(_mixed[ch]);
           } else {
             if (_isAlphaUpper(ch)) {
               submode = _SUBMODE_ALPHA;
@@ -271,13 +271,13 @@ class PDF417HighLevelEncoder {
                 }
               }
               tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_PUNCTUATION[ch]);
+              tmp.writeCharCode(_punctuatuin[ch]);
             }
           }
           break;
         default: //SUBMODE_PUNCTUATION
           if (_isPunctuation(ch)) {
-            tmp.writeCharCode(_PUNCTUATION[ch]);
+            tmp.writeCharCode(_punctuatuin[ch]);
           } else {
             submode = _SUBMODE_ALPHA;
             tmp.writeCharCode(29); //al
@@ -393,11 +393,11 @@ class PDF417HighLevelEncoder {
   }
 
   static bool _isMixed(int ch) {
-    return _MIXED[ch] != -1;
+    return _mixed[ch] != -1;
   }
 
   static bool _isPunctuation(int ch) {
-    return _PUNCTUATION[ch] != -1;
+    return _punctuatuin[ch] != -1;
   }
 
   static bool _isText(String chr) {

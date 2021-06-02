@@ -31,7 +31,7 @@ import 'decoded_object.dart';
 class DecodedChar extends DecodedObject {
   final int _value;
 
-  static final int FNC1 = r'$'
+  static final int fnc1 = r'$'
       .codeUnitAt(0); // It's not in Alphanumeric neither in ISO/IEC 646 charset
 
   DecodedChar(int newPosition, this._value) : super(newPosition);
@@ -41,6 +41,6 @@ class DecodedChar extends DecodedObject {
   }
 
   bool isFNC1() {
-    return this._value == FNC1;
+    return this._value == fnc1;
   }
 }

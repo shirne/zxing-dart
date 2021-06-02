@@ -26,99 +26,99 @@ import '../../common/string_builder.dart';
 /// @author mike32767
 /// @author Manuel Kasten
 class DecodedBitStreamParser {
-  static const String _SHIFTA = '\uFFF0';
-  static const String _SHIFTB = '\uFFF1';
-  static const String _SHIFTC = '\uFFF2';
-  static const String _SHIFTD = '\uFFF3';
-  static const String _SHIFTE = '\uFFF4';
-  static const String _TWOSHIFTA = '\uFFF5';
-  static const String _THREESHIFTA = '\uFFF6';
-  static const String _LATCHA = '\uFFF7';
-  static const String _LATCHB = '\uFFF8';
-  static const String _LOCK = '\uFFF9';
-  static const String _ECI = '\uFFFA';
-  static const String _NS = '\uFFFB';
-  static const String _PAD = '\uFFFC';
-  static const String _FS = '\u001C';
-  static const String _GS = '\u001D';
-  static const String _RS = '\u001E';
+  static const String _shiftA = '\uFFF0';
+  static const String _shiftB = '\uFFF1';
+  static const String _shiftC = '\uFFF2';
+  static const String _shiftD = '\uFFF3';
+  static const String _shiftE = '\uFFF4';
+  static const String _twoShiftA = '\uFFF5';
+  static const String _threeShiftA = '\uFFF6';
+  static const String _latchA = '\uFFF7';
+  static const String _latchB = '\uFFF8';
+  static const String _lock = '\uFFF9';
+  static const String _eci = '\uFFFA';
+  static const String _ns = '\uFFFB';
+  static const String _pad = '\uFFFC';
+  static const String _fs = '\u001C';
+  static const String _gs = '\u001D';
+  static const String _rs = '\u001E';
 
-  static final List<String> _SETS = [
+  static final List<String> _sets = [
     "\nABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-        _ECI +
-        _FS +
-        _GS +
-        _RS +
-        _NS +
+        _eci +
+        _fs +
+        _gs +
+        _rs +
+        _ns +
         ' ' +
-        _PAD + //
+        _pad + //
         '"' +
         r"#$%&'()*+,-./0123456789:" +
-        _SHIFTB +
-        _SHIFTC +
-        _SHIFTD +
-        _SHIFTE +
-        _LATCHB,
+        _shiftB +
+        _shiftC +
+        _shiftD +
+        _shiftE +
+        _latchB,
     "`abcdefghijklmnopqrstuvwxyz" +
-        _ECI +
-        _FS +
-        _GS +
-        _RS +
-        _NS +
+        _eci +
+        _fs +
+        _gs +
+        _rs +
+        _ns +
         '{' +
-        _PAD +
+        _pad +
         "}~\u007F;<=>?[\\]^_ ,./:@!|" +
-        _PAD +
-        _TWOSHIFTA +
-        _THREESHIFTA +
-        _PAD +
-        _SHIFTA +
-        _SHIFTC +
-        _SHIFTD +
-        _SHIFTE +
-        _LATCHA,
+        _pad +
+        _twoShiftA +
+        _threeShiftA +
+        _pad +
+        _shiftA +
+        _shiftC +
+        _shiftD +
+        _shiftE +
+        _latchA,
     "\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u00D0\u00D1\u00D2\u00D3\u00D4\u00D5\u00D6\u00D7\u00D8\u00D9\u00DA" +
-        _ECI +
-        _FS +
-        _GS +
-        _RS +
-        _NS +
+        _eci +
+        _fs +
+        _gs +
+        _rs +
+        _ns +
         "\u00DB\u00DC\u00DD\u00DE\u00DF\u00AA\u00AC\u00B1\u00B2\u00B3\u00B5\u00B9\u00BA\u00BC\u00BD\u00BE\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089" +
-        _LATCHA +
+        _latchA +
         ' ' +
-        _LOCK +
-        _SHIFTD +
-        _SHIFTE +
-        _LATCHB,
+        _lock +
+        _shiftD +
+        _shiftE +
+        _latchB,
     "\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5\u00E6\u00E7\u00E8\u00E9\u00EA\u00EB\u00EC\u00ED\u00EE\u00EF\u00F0\u00F1\u00F2\u00F3\u00F4\u00F5\u00F6\u00F7\u00F8\u00F9\u00FA" +
-        _ECI +
-        _FS +
-        _GS +
-        _RS +
-        _NS +
+        _eci +
+        _fs +
+        _gs +
+        _rs +
+        _ns +
         "\u00FB\u00FC\u00FD\u00FE\u00FF\u00A1\u00A8\u00AB\u00AF\u00B0\u00B4\u00B7\u00B8\u00BB\u00BF\u008A\u008B\u008C\u008D\u008E\u008F\u0090\u0091\u0092\u0093\u0094" +
-        _LATCHA +
+        _latchA +
         ' ' +
-        _SHIFTC +
-        _LOCK +
-        _SHIFTE +
-        _LATCHB,
+        _shiftC +
+        _lock +
+        _shiftE +
+        _latchB,
     "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A" +
-        _ECI +
-        _PAD +
-        _PAD +
+        _eci +
+        _pad +
+        _pad +
         '\u001B' +
-        _NS +
-        _FS +
-        _GS +
-        _RS +
+        _ns +
+        _fs +
+        _gs +
+        _rs +
         "\u001F\u009F\u00A0\u00A2\u00A3\u00A4\u00A5\u00A6\u00A7\u00A9\u00AD\u00AE\u00B6\u0095\u0096\u0097\u0098\u0099\u009A\u009B\u009C\u009D\u009E" +
-        _LATCHA +
+        _latchA +
         ' ' +
-        _SHIFTC +
-        _SHIFTD +
-        _LOCK +
-        _LATCHB,
+        _shiftC +
+        _shiftD +
+        _lock +
+        _latchB,
   ];
 
   DecodedBitStreamParser._() ;
@@ -144,10 +144,10 @@ class DecodedBitStreamParser {
         String country = _getCountry(bytes).toString().padLeft(3, '0');
         String service = _getServiceClass(bytes).toString().padLeft(3, '0');
         result.write(_getMessage(bytes, 10, 84));
-        if (result.toString().startsWith("[)>" + _RS + "01" + _GS)) {
-          result.insert(9, postcode + _GS + country + _GS + service + _GS);
+        if (result.toString().startsWith("[)>" + _rs + "01" + _gs)) {
+          result.insert(9, postcode + _gs + country + _gs + service + _gs);
         } else {
-          result.insert(0, postcode + _GS + country + _GS + service + _GS);
+          result.insert(0, postcode + _gs + country + _gs + service + _gs);
         }
         break;
       case 4:
@@ -202,17 +202,17 @@ class DecodedBitStreamParser {
 
   static String _getPostCode3(Uint8List bytes) {
     return String.fromCharCodes([
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([39, 40, 41, 42, 31, 32]))), //
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([33, 34, 35, 36, 25, 26]))), //
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([27, 28, 29, 30, 19, 20]))), //
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([21, 22, 23, 24, 13, 14]))), //
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([15, 16, 17, 18, 7, 8]))), //
-      _SETS[0].codeUnitAt(
+      _sets[0].codeUnitAt(
           _getInt(bytes, Uint8List.fromList([9, 10, 11, 12, 1, 2]))), //
     ]);
   }
@@ -223,36 +223,36 @@ class DecodedBitStreamParser {
     int set = 0;
     int lastset = 0;
     for (int i = start; i < start + len; i++) {
-      String c = _SETS[set][bytes[i]];
+      String c = _sets[set][bytes[i]];
       switch (c) {
-        case _LATCHA:
+        case _latchA:
           set = 0;
           shift = -1;
           break;
-        case _LATCHB:
+        case _latchB:
           set = 1;
           shift = -1;
           break;
-        case _SHIFTA:
-        case _SHIFTB:
-        case _SHIFTC:
-        case _SHIFTD:
-        case _SHIFTE:
+        case _shiftA:
+        case _shiftB:
+        case _shiftC:
+        case _shiftD:
+        case _shiftE:
           lastset = set;
-          set = c.codeUnitAt(0) - _SHIFTA.codeUnitAt(0);
+          set = c.codeUnitAt(0) - _shiftA.codeUnitAt(0);
           shift = 1;
           break;
-        case _TWOSHIFTA:
+        case _twoShiftA:
           lastset = set;
           set = 0;
           shift = 2;
           break;
-        case _THREESHIFTA:
+        case _threeShiftA:
           lastset = set;
           set = 0;
           shift = 3;
           break;
-        case _NS:
+        case _ns:
           int nsval = (bytes[++i] << 24) +
               (bytes[++i] << 18) +
               (bytes[++i] << 12) +
@@ -260,7 +260,7 @@ class DecodedBitStreamParser {
               bytes[++i];
           sb.write(nsval.toString().padLeft(9, '0'));
           break;
-        case _LOCK:
+        case _lock:
           shift = -1;
           break;
         default:
@@ -270,7 +270,7 @@ class DecodedBitStreamParser {
         set = lastset;
       }
     }
-    while (sb.length > 0 && sb.charAt(sb.length - 1) == _PAD) {
+    while (sb.length > 0 && sb.charAt(sb.length - 1) == _pad) {
       sb.setLength(sb.length - 1);
     }
     return sb.toString();

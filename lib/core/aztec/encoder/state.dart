@@ -26,8 +26,8 @@ import 'token.dart';
 /// State represents all information about a sequence necessary to generate the current output.
 /// Note that a state is immutable.
 class State {
-  static final State INITIAL_STATE =
-      State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
+  static final State initialState =
+      State(Token.empty, HighLevelEncoder.MODE_UPPER, 0, 0);
 
   // The current mode of the encoding (or the mode to which we'll return if
   // we're in Binary Shift mode.
@@ -102,7 +102,7 @@ class State {
     int thisModeBitCount = this._mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
     token = token.add(
-        HighLevelEncoder.SHIFT_TABLE[this._mode][mode], thisModeBitCount);
+        HighLevelEncoder.shiftTable[this._mode][mode], thisModeBitCount);
     token = token.add(value, 5);
     return State(token, this._mode, 0, this._bitCount + thisModeBitCount + 5);
   }

@@ -22,11 +22,11 @@ import 'reader_exception.dart';
 ///
 /// @author Sean Owen
 class FormatException extends ReaderException {
-  static final FormatException _INSTANCE = FormatException();
+  static final FormatException _instance = FormatException();
 
   FormatException([cause]) : super(cause);
 
   static FormatException getFormatInstance([cause]) {
-    return _INSTANCE;
+    return _instance;
   }
 }

@@ -85,7 +85,7 @@ class Version {
     0x2542E, 0x26A64, 0x27541, 0x28C69
   ];
 
-  static final List<Version> _VERSIONS = _buildVersions();
+  static final List<Version> _versions = _buildVersions();
 
   final int _versionNumber;
   final List<int> _alignmentPatternCenters;
@@ -143,7 +143,7 @@ class Version {
     if (versionNumber < 1 || versionNumber > 40) {
       throw Exception();
     }
-    return _VERSIONS[versionNumber - 1];
+    return _versions[versionNumber - 1];
   }
 
   static Version? decodeVersionInformation(int versionBits) {

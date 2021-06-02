@@ -39,7 +39,7 @@ import 'version.dart';
 class Decoder {
   final ReedSolomonDecoder _rsDecoder;
 
-  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.qrCodeField256);
 
   /// <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
   /// "true" is taken to mean a black module.</p>
