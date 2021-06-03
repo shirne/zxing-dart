@@ -307,7 +307,7 @@ class Encoder {
 
   static List<int> _bitsToWords(
       BitArray stuffedBits, int wordSize, int totalWords) {
-    List<int> message = [];
+    List<int> message = List.filled(totalWords, 0);
     int i = 0;
     int n = stuffedBits.getSize() ~/ wordSize;
     for (; i < n; i++) {
@@ -316,7 +316,7 @@ class Encoder {
         value |=
             stuffedBits.get(i * wordSize + j) ? (1 << wordSize - j - 1) : 0;
       }
-      message.add(value);
+      message[i] = value;
     }
     return message;
   }

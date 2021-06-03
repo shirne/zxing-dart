@@ -249,7 +249,7 @@ class Code39Reader extends OneDReader {
       String c = encoded[i];
       if (c == '+' || c == r'$' || c == '%' || c == '/') {
         int next = encoded.codeUnitAt(i + 1);
-        String decodedChar = '\0';
+        String decodedChar = '\x00';
         switch (c) {
           case '+':
             // +A to +Z map to a to z

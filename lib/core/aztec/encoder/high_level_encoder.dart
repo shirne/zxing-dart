@@ -93,46 +93,33 @@ class HighLevelEncoder {
 
   // A reverse mapping from [mode][char] to the encoding for that character
   // in that mode.  An entry of 0 indicates no mapping exists.
-  static final List<List<int>> _charMap = List.generate(
-      5,
-      (idx) => List.generate(256, (index) {
-            if (idx == MODE_UPPER) {
-              if (index == ' '.codeUnitAt(0)) return 1;
-              if (index >= 'A'.codeUnitAt(0) && index <= 'Z'.codeUnitAt(0)) {
-                return index - 'A'.codeUnitAt(0) + 2;
-              }
-            } else if (idx == MODE_LOWER) {
-              if (index == ' '.codeUnitAt(0)) return 1;
-              if (index >= 'a'.codeUnitAt(0) && index <= 'z'.codeUnitAt(0)) {
-                return index - 'a'.codeUnitAt(0) + 2;
-              }
-            } else if (idx == MODE_DIGIT) {
-              if (index == ' '.codeUnitAt(0)) return 1;
-              if (index >= '0'.codeUnitAt(0) && index <= '9'.codeUnitAt(0)) {
-                return index - '0'.codeUnitAt(0) + 2;
-              }
-              if (index == ','.codeUnitAt(0)) return 12;
-              if (index == '.'.codeUnitAt(0)) return 13;
-            } else if (idx == MODE_MIXED) {
-              return [
-                '\0', ' ', '\1', '\2', '\3', '\4', '\5', '\6', '\7', '\b', '\t',
-                '\n', //
-                '\13', '\f', '\r', '\33', '\34', '\35', '\36', '\37', '@', '\\',
-                '^',
-                '_', '`', '|', '~', '\177'
-              ].indexOf(String.fromCharCode(index));
-            } else if (idx == MODE_PUNCT) {
-              return [
-                '\0', '\r', '\0', '\0', '\0', '\0', '!', '\'', '#', r'$', '%',
-                '&', '\'', //
-                '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>',
-                '?',
-                '[', ']', '{', '}'
-              ].indexOf(String.fromCharCode(index));
-            }
-
-            return 0;
-          }));
+  static final List<Map<int, int>> _charMap = [
+    {
+      32: 1, 65: 2, 66: 3, 67: 4, 68: 5, 69: 6, 70: 7, 71: 8, 72: 9, 73: 10, // A-Z
+      74: 11, 75: 12, 76: 13, 77: 14, 78: 15, 79: 16, 80: 17, 81: 18, 82: 19,
+      83: 20, 84: 21, 85: 22, 86: 23, 87: 24, 88: 25, 89: 26, 90: 27
+    },
+    {
+      32: 1, 97: 2, 98: 3, 99: 4, 100: 5, 101: 6, 102: 7, 103: 8, 104: 9,  // a-z
+      105: 10, 106: 11, 107: 12, 108: 13, 109: 14, 110: 15, 111: 16, 112: 17,
+      113: 18, 114: 19, 115: 20, 116: 21, 117: 22, 118: 23, 119: 24, 120: 25,
+      121: 26, 122: 27
+    },
+    {
+      32: 1, 44: 12, 46: 13, 48: 2, 49: 3, 50: 4, 51: 5, 52: 6, 53: 7, 54: 8,  // BLANK 0-9,.
+      55: 9, 56: 10, 57: 11
+    },
+    {
+      1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12, // \0 \1\2\3\4\5\6\7\b\t\n\13\f\r\33\34\35\36\37@\\^_`|~\177
+      12: 13, 13: 14, 27: 15, 28: 16, 29: 17, 30: 18, 31: 19, 32: 1, 64: 20,
+      92: 21, 94: 22, 95: 23, 96: 24, 124: 25, 126: 26, 127: 27
+    },
+    {
+      13: 1, 33: 6, 35: 8, 36: 9, 37: 10, 38: 11, 39: 12, 40: 13, 41: 14, // \0\r\0\0\0\0!\'#$%&'()*+,-./:;<=>?[]{}
+      42: 15, 43: 16, 44: 17, 45: 18, 46: 19, 47: 20, 58: 21, 59: 22,
+      60: 23, 61: 24, 62: 25, 63: 26, 91: 27, 93: 28, 123: 29, 125: 30
+    },
+  ];
 
   // A map showing the available shift codes.  (The shifts to BINARY are not
   // shown
@@ -165,7 +152,7 @@ class HighLevelEncoder {
     if (_charset != null) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(_charset!);
       if (null == eci) {
-        throw Exception("No ECI code for character set $_charset");
+        throw Exception("No ECI code for character set ${_charset!.name}");
       }
       initialState = initialState.appendFLGn(eci.getValue());
     }
@@ -230,10 +217,10 @@ class HighLevelEncoder {
   // the "result" list.
   void _updateStateForChar(State state, int index, List<State> result) {
     int ch = _text[index] & 0xFF;
-    bool charInCurrentTable = _charMap[state.getMode()][ch] > 0;
+    bool charInCurrentTable = _charMap[state.getMode()].containsKey(ch);
     State? stateNoBinary;
     for (int mode = 0; mode <= MODE_PUNCT; mode++) {
-      int charInMode = _charMap[mode][ch];
+      int charInMode = _charMap[mode][ch] ?? 0;
       if (charInMode > 0) {
         if (stateNoBinary == null) {
           // Only create stateNoBinary the first time it's required.
@@ -260,7 +247,7 @@ class HighLevelEncoder {
       }
     }
     if (state.getBinaryShiftByteCount() > 0 ||
-        _charMap[state.getMode()][ch] == 0) {
+        !_charMap[state.getMode()].containsKey(ch)) {
       // It's never worthwhile to go into binary shift mode if you're not already
       // in binary shift mode, and the character exists in your current mode.
       // That can never save bits over just outputting the char in the current mode.
@@ -305,27 +292,28 @@ class HighLevelEncoder {
   }
 
   static List<State> _simplifyStates(Iterable<State> states) {
-    return states
-        .where((newEle) =>
-            states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))
-        .toList();
-    /* List<State> result = [];
+    //return states
+    //    .where((newEle) =>
+    //        states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))
+    //    .toList();
+    List<State> result = [];
     for (State newState in states) {
       bool add = true;
-      for (Iterator<State> iterator = result.iterator(); iterator.hasNext();) {
-        State oldState = iterator.next();
+      for (Iterator<State> iterator = result.iterator; iterator.moveNext();) {
+        State oldState = iterator.current;
         if (oldState.isBetterThanOrEqualTo(newState)) {
           add = false;
           break;
         }
-        if (newState.isBetterThanOrEqualTo(oldState)) {
-          iterator.remove();
-        }
+        //if (newState.isBetterThanOrEqualTo(oldState)) {
+        //  result.remove(oldState);
+        //}
       }
+      result.removeWhere((element) => newState.isBetterThanOrEqualTo(element));
       if (add) {
         result.add(newState);
       }
     }
-    return result; */
+    return result;
   }
 }

@@ -247,10 +247,10 @@ class DecodedBitStreamParser {
             } else if (cValue < _C40_BASIC_SET_CHARS.length) {
               int c40char = _C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
-                result.write(String.fromCharCode(c40char + 128));
+                result.writeCharCode(c40char + 128);
                 upperShift = false;
               } else {
-                result.write(c40char);
+                result.writeCharCode(c40char);
               }
             } else {
               throw FormatException();
@@ -258,7 +258,7 @@ class DecodedBitStreamParser {
             break;
           case 1:
             if (upperShift) {
-              result.write(String.fromCharCode(cValue + 128));
+              result.writeCharCode(cValue + 128);
               upperShift = false;
             } else {
               result.writeCharCode(cValue);
@@ -269,7 +269,7 @@ class DecodedBitStreamParser {
             if (cValue < _C40_SHIFT2_SET_CHARS.length) {
               int c40char = _C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
-                result.write(String.fromCharCode(c40char + 128));
+                result.writeCharCode(c40char + 128);
                 upperShift = false;
               } else {
                 result.write(c40char);
@@ -291,10 +291,10 @@ class DecodedBitStreamParser {
             break;
           case 3:
             if (upperShift) {
-              result.write(String.fromCharCode(cValue + 224));
+              result.writeCharCode(cValue + 224);
               upperShift = false;
             } else {
-              result.write(String.fromCharCode(cValue + 96));
+              result.writeCharCode(cValue + 96);
             }
             shift = 0;
             break;
@@ -337,10 +337,10 @@ class DecodedBitStreamParser {
             } else if (cValue < _TEXT_BASIC_SET_CHARS.length) {
               int textChar = _TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
-                result.write(String.fromCharCode(textChar + 128));
+                result.writeCharCode(textChar + 128);
                 upperShift = false;
               } else {
-                result.write(textChar);
+                result.writeCharCode(textChar);
               }
             } else {
               throw FormatException();
@@ -348,7 +348,7 @@ class DecodedBitStreamParser {
             break;
           case 1:
             if (upperShift) {
-              result.write(String.fromCharCode(cValue + 128));
+              result.writeCharCode(cValue + 128);
               upperShift = false;
             } else {
               result.writeCharCode(cValue);
@@ -360,7 +360,7 @@ class DecodedBitStreamParser {
             if (cValue < _TEXT_SHIFT2_SET_CHARS.length) {
               int textChar = _TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
-                result.write(String.fromCharCode(textChar + 128));
+                result.writeCharCode(textChar + 128);
                 upperShift = false;
               } else {
                 result.write(textChar);
@@ -384,10 +384,10 @@ class DecodedBitStreamParser {
             if (cValue < _TEXT_SHIFT3_SET_CHARS.length) {
               int textChar = _TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
-                result.write(String.fromCharCode(textChar + 128));
+                result.writeCharCode(textChar + 128);
                 upperShift = false;
               } else {
-                result.write(textChar);
+                result.writeCharCode(textChar);
               }
               shift = 0;
             } else {
@@ -438,10 +438,10 @@ class DecodedBitStreamParser {
           default:
             if (cValue < 14) {
               // 0 - 9
-              result.write(String.fromCharCode(cValue + 44));
+              result.writeCharCode(cValue + 44);
             } else if (cValue < 40) {
               // A - Z
-              result.write(String.fromCharCode(cValue + 51));
+              result.writeCharCode(cValue + 51);
             } else {
               throw FormatException();
             }

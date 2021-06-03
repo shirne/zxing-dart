@@ -29,7 +29,7 @@ class Base256Encoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     StringBuilder buffer = StringBuilder();
-    buffer.write('\0'); //Initialize length field
+    buffer.write('\x00'); //Initialize length field
     while (context.hasMoreCharacters()) {
       String c = context.getCurrentChar();
       buffer.write(c);

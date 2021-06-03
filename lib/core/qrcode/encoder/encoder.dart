@@ -72,7 +72,7 @@ class Encoder {
         hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
       encoding =
-          Encoding.getByName(hints[EncodeHintType.CHARACTER_SET].toString());
+          CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.getCharset();
     }
 
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use

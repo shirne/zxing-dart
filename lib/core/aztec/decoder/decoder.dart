@@ -52,10 +52,10 @@ class Decoder {
   ];
 
   static const List<String> _MIXED_TABLE = [
-    "CTRL_PS", " ", "\1", "\2", "\3", "\4", "\5", "\6", "\7", "\b", "\t",
+    "CTRL_PS", " ", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\b", "\t",
     "\n", //
-    "\13", "\f", "\r", "\33", "\34", "\35", "\36", "\37", "@", "\\", "^", "_",
-    "`", "|", "~", "\177", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
+    "\x0e", "\f", "\r", "\x1b", "\x1c", "\x1d", "\x1e", "\x1f", "@", "\\", "^", "_",
+    "`", "|", "~", "\x7f", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
   ];
 
   static const List<String> _PUNCT_TABLE = [
@@ -72,13 +72,13 @@ class Decoder {
 
   static const Encoding _DEFAULT_ENCODING = latin1;
 
-  late AztecDetectorResult _ddata;
+  late AztecDetectorResult _dData;
 
   DecoderResult decode(AztecDetectorResult detectorResult) {
-    _ddata = detectorResult;
+    _dData = detectorResult;
     BitMatrix matrix = detectorResult.getBits();
-    List<bool> rawbits = _extractBits(matrix);
-    CorrectedBitsResult correctedBits = _correctBits(rawbits);
+    List<bool> rawBits = _extractBits(matrix);
+    CorrectedBitsResult correctedBits = _correctBits(rawBits);
     Uint8List rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
     String result = _getEncodedData(correctedBits.correctBits);
     DecoderResult decoderResult =
@@ -158,7 +158,7 @@ class Decoder {
             default:
               // flush bytes before changing character set
               try {
-                result.write(decodedBytes.toString());
+                result.write(encoding.decode(decodedBytes.takeBytes()));
               } catch (uee) {
                 // UnsupportedEncodingException
                 // can't happen
@@ -264,13 +264,13 @@ class Decoder {
     GenericGF gf;
     int codewordSize;
 
-    if (_ddata.getNbLayers() <= 2) {
+    if (_dData.getNbLayers() <= 2) {
       codewordSize = 6;
       gf = GenericGF.aztecData6;
-    } else if (_ddata.getNbLayers() <= 8) {
+    } else if (_dData.getNbLayers() <= 8) {
       codewordSize = 8;
       gf = GenericGF.aztecData8;
-    } else if (_ddata.getNbLayers() <= 22) {
+    } else if (_dData.getNbLayers() <= 22) {
       codewordSize = 10;
       gf = GenericGF.aztecData10;
     } else {
@@ -278,7 +278,7 @@ class Decoder {
       gf = GenericGF.aztecData12;
     }
 
-    int numDataCodewords = _ddata.getNbDatablocks();
+    int numDataCodewords = _dData.getNbDatablocks();
     int numCodewords = rawbits.length ~/ codewordSize;
     if (numCodewords < numDataCodewords) {
       throw FormatException();
@@ -336,8 +336,8 @@ class Decoder {
   ///
   /// @return the array of bits
   List<bool> _extractBits(BitMatrix matrix) {
-    bool compact = _ddata.isCompact();
-    int layers = _ddata.getNbLayers();
+    bool compact = _dData.isCompact();
+    int layers = _dData.getNbLayers();
     int baseMatrixSize =
         (compact ? 11 : 14) + layers * 4; // not including alignment lines
     List<int> alignmentMap = List.filled(baseMatrixSize, 0);
@@ -388,11 +388,11 @@ class Decoder {
   }
 
   /// Reads a code of given length and at given index in an array of bits
-  static int _readCode(List<bool> rawbits, int startIndex, int length) {
+  static int _readCode(List<bool> rawBits, int startIndex, int length) {
     int res = 0;
     for (int i = startIndex; i < startIndex + length; i++) {
       res <<= 1;
-      if (rawbits[i]) {
+      if (rawBits[i]) {
         res |= 0x01;
       }
     }
@@ -400,12 +400,12 @@ class Decoder {
   }
 
   /// Reads a code of length 8 in an array of bits, padding with zeros
-  static int _readByte(List<bool> rawbits, int startIndex) {
-    int n = rawbits.length - startIndex;
+  static int _readByte(List<bool> rawBits, int startIndex) {
+    int n = rawBits.length - startIndex;
     if (n >= 8) {
-      return _readCode(rawbits, startIndex, 8);
+      return _readCode(rawBits, startIndex, 8);
     }
-    return (_readCode(rawbits, startIndex, n) << (8 - n));
+    return (_readCode(rawBits, startIndex, n) << (8 - n));
   }
 
   /// Packs a bit array into bytes, most significant bit first

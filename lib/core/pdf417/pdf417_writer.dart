@@ -18,6 +18,7 @@ import 'dart:convert';
 import 'dart:math' as Math;
 import 'dart:typed_data';
 
+import '../../common.dart';
 import '../common/bit_matrix.dart';
 
 import '../barcode_format.dart';
@@ -69,9 +70,9 @@ class PDF417Writer implements Writer {
             int.parse(hints[EncodeHintType.ERROR_CORRECTION].toString());
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-        Encoding encoding =
-            Encoding.getByName(hints[EncodeHintType.CHARACTER_SET].toString())!;
-        encoder.setEncoding(encoding);
+        Encoding? encoding =
+        CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.getCharset();
+        if(encoding != null)encoder.setEncoding(encoding);
       }
     }
 

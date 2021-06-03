@@ -23,6 +23,7 @@ import 'package:fast_gbk/fast_gbk.dart';
 import 'package:unicode/unicode.dart';
 
 import '../decode_hint_type.dart';
+import 'character_set_eci.dart';
 
 /// Common string-related functions.
 ///
@@ -71,7 +72,7 @@ class StringUtils {
   static Encoding? guessCharset(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
-      return Encoding.getByName(hints[DecodeHintType.CHARACTER_SET].toString());
+      return CharacterSetECI.getCharacterSetECIByName(hints[DecodeHintType.CHARACTER_SET].toString())?.getCharset();
     }
 
     // First try UTF-16, assuming anything with its BOM is UTF-16

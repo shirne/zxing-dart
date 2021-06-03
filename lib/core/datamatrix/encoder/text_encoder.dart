@@ -26,7 +26,7 @@ class TextEncoder extends C40Encoder {
   @override
   int encodeChar(String chr, StringBuffer sb) {
     if (chr == ' ') {
-      sb.write('\3');
+      sb.write('\x03');
       return 1;
     }
     int c = chr.codeUnitAt(0);
@@ -39,41 +39,41 @@ class TextEncoder extends C40Encoder {
       return 1;
     }
     if (c < ' '.codeUnitAt(0)) {
-      sb.write('\0'); //Shift 1 Set
+      sb.write('\x00'); //Shift 1 Set
       sb.write(c);
       return 2;
     }
     if (c <= '/'.codeUnitAt(0)) {
-      sb.write('\1'); //Shift 2 Set
+      sb.write('\x01'); //Shift 2 Set
       sb.write(String.fromCharCode(c - 33));
       return 2;
     }
     if (c <= '@'.codeUnitAt(0)) {
-      sb.write('\1'); //Shift 2 Set
+      sb.write('\x01'); //Shift 2 Set
       sb.write(String.fromCharCode(c - 58 + 15));
       return 2;
     }
     if (c >= '['.codeUnitAt(0) && c <= '_'.codeUnitAt(0)) {
-      sb.write('\1'); //Shift 2 Set
+      sb.write('\x01'); //Shift 2 Set
       sb.write(String.fromCharCode(c - 91 + 22));
       return 2;
     }
     if (c == '`'.codeUnitAt(0)) {
-      sb.write('\2'); //Shift 3 Set
+      sb.write('\x02'); //Shift 3 Set
       sb.write(String.fromCharCode(0)); // '`' - 96 == 0
       return 2;
     }
     if (c <= 'Z'.codeUnitAt(0)) {
-      sb.write('\2'); //Shift 3 Set
+      sb.write('\x02'); //Shift 3 Set
       sb.write(String.fromCharCode(c - 65 + 1));
       return 2;
     }
     if (c <= 127) {
-      sb.write('\2'); //Shift 3 Set
+      sb.write('\x02'); //Shift 3 Set
       sb.write(String.fromCharCode(c - 123 + 27));
       return 2;
     }
-    sb.write("\1\u001e"); //Shift 2, Upper Shift
+    sb.write("\x01\u001e"); //Shift 2, Upper Shift
     int len = 2;
     len += encodeChar(String.fromCharCode(c - 128), sb);
     return len;

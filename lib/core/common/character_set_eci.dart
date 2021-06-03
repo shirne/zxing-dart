@@ -28,34 +28,34 @@ import 'package:unicode/unicode.dart';
 class CharacterSetECI {
   // Enum name is a Java encoding valid for java.lang and java.io
   static final Cp437 = CharacterSetECI('Cp437', [0, 2], ascii);
-  static final ISO8859_1 = CharacterSetECI('ISO8859_1', [1, 3], latin1, "ISO-8859-1");
-  static final ISO8859_2 = CharacterSetECI('ISO8859_2', 4, latin1, "ISO-8859-2");
-  static final ISO8859_3 = CharacterSetECI('ISO8859_3', 5, latin1, "ISO-8859-3");
-  static final ISO8859_4 = CharacterSetECI('ISO8859_4', 6, latin1, "ISO-8859-4");
-  static final ISO8859_5 = CharacterSetECI('ISO8859_5', 7, latin1, "ISO-8859-5");
-  static final ISO8859_6 = CharacterSetECI('ISO8859_6', 8, latin1, "ISO-8859-6");
-  static final ISO8859_7 = CharacterSetECI('ISO8859_7', 9, latin1, "ISO-8859-7");
-  static final ISO8859_8 = CharacterSetECI('ISO8859_8', 10, latin1, "ISO-8859-8");
-  static final ISO8859_9 = CharacterSetECI('ISO8859_9', 11, latin1, "ISO-8859-9");
-  static final ISO8859_10 = CharacterSetECI('ISO8859_10', 12, latin1, "ISO-8859-10");
-  static final ISO8859_11 = CharacterSetECI('ISO8859_11', 13, latin1, "ISO-8859-11");
-  static final ISO8859_13 = CharacterSetECI('ISO8859_13', 15, latin1, "ISO-8859-13");
-  static final ISO8859_14 = CharacterSetECI('ISO8859_14', 16, latin1, "ISO-8859-14");
-  static final ISO8859_15 = CharacterSetECI('ISO8859_15', 17, latin1, "ISO-8859-15");
-  static final ISO8859_16 = CharacterSetECI('ISO8859_16', 18, latin1, "ISO-8859-16");
-  static final SJIS = CharacterSetECI('SJIS', 20, ShiftJIS(), "Shift_JIS");
-  static final Cp1250 = CharacterSetECI('Cp1250', 21, latin1, "windows-1250");
-  static final Cp1251 = CharacterSetECI('Cp1251', 22, latin1, "windows-1251");
-  static final Cp1252 = CharacterSetECI('Cp1252', 23, latin1, "windows-1252");
-  static final Cp1256 = CharacterSetECI('Cp1256', 24, latin1, "windows-1256");
+  static final ISO8859_1 = CharacterSetECI('ISO8859_1', [1, 3], latin1, ['ISO-8859-1', 'iso-8859-1']);
+  static final ISO8859_2 = CharacterSetECI('ISO8859_2', 4, latin1, ['ISO-8859-2', 'iso-8859-2']);
+  static final ISO8859_3 = CharacterSetECI('ISO8859_3', 5, latin1, ['ISO-8859-3', 'iso-8859-3']);
+  static final ISO8859_4 = CharacterSetECI('ISO8859_4', 6, latin1, ['ISO-8859-4', 'iso-8859-4']);
+  static final ISO8859_5 = CharacterSetECI('ISO8859_5', 7, latin1, ['ISO-8859-5', 'iso-8859-5']);
+  static final ISO8859_6 = CharacterSetECI('ISO8859_6', 8, latin1, ['ISO-8859-6', 'iso-8859-6']);
+  static final ISO8859_7 = CharacterSetECI('ISO8859_7', 9, latin1, ['ISO-8859-7', 'iso-8859-7']);
+  static final ISO8859_8 = CharacterSetECI('ISO8859_8', 10, latin1, ['ISO-8859-8', 'iso-8859-8']);
+  static final ISO8859_9 = CharacterSetECI('ISO8859_9', 11, latin1, ['ISO-8859-9', 'iso-8859-9']);
+  static final ISO8859_10 = CharacterSetECI('ISO8859_10', 12, latin1, ['ISO-8859-10', 'iso-8859-10']);
+  static final ISO8859_11 = CharacterSetECI('ISO8859_11', 13, latin1, ['ISO-8859-11', 'iso-8859-11']);
+  static final ISO8859_13 = CharacterSetECI('ISO8859_13', 15, latin1, ['ISO-8859-13', 'iso-8859-13']);
+  static final ISO8859_14 = CharacterSetECI('ISO8859_14', 16, latin1, ['ISO-8859-14', 'iso-8859-14']);
+  static final ISO8859_15 = CharacterSetECI('ISO8859_15', 17, latin1, ['ISO-8859-15', 'iso-8859-15']);
+  static final ISO8859_16 = CharacterSetECI('ISO8859_16', 18, latin1, ['ISO-8859-16', 'iso-8859-16']);
+  static final SJIS = CharacterSetECI('SJIS', 20, ShiftJIS(), ['Shift_JIS','shift-jis']);
+  static final Cp1250 = CharacterSetECI('Cp1250', 21, latin1, 'windows-1250');
+  static final Cp1251 = CharacterSetECI('Cp1251', 22, latin1, 'windows-1251');
+  static final Cp1252 = CharacterSetECI('Cp1252', 23, latin1, 'windows-1252');
+  static final Cp1256 = CharacterSetECI('Cp1256', 24, latin1, 'windows-1256');
   static final UnicodeBigUnmarked =
-      CharacterSetECI('UnicodeBigUnmarked', 25, utf16, ["UTF-16BE", "UnicodeBig"]);
-  static final UTF8 = CharacterSetECI('UTF8', 26, utf8, "UTF-8");
-  static final ASCII = CharacterSetECI('ASCII', [27, 170], ascii, "US-ASCII");
+      CharacterSetECI('UnicodeBigUnmarked', 25, utf16, ['UTF-16BE', 'utf-16', 'utf-16be', 'UnicodeBig']);
+  static final UTF8 = CharacterSetECI('UTF8', 26, utf8, ['UTF-8', 'utf-8']);
+  static final ASCII = CharacterSetECI('ASCII', [27, 170], ascii, ['US-ASCII', 'us-ascii', 'ascii']);
   static final Big5 = CharacterSetECI('Big5', 28, gbk);
   static final GB18030 =
-      CharacterSetECI('GB18030', 29, gbk, ["GB2312", "EUC_CN", "GBK"]);
-  static final EUC_KR = CharacterSetECI('EUC_KR', 30, EucJP(), "EUC-KR");
+      CharacterSetECI('GB18030', 29, gbk, ['GB2312', 'gb2312', 'EUC_CN', 'GBK', 'gbk']);
+  static final EUC_KR = CharacterSetECI('EUC_KR', 30, EucJP(), ['EUC-KR', 'EUC-JP', 'euc-jp']);
 
   static final values = [
     Cp437,

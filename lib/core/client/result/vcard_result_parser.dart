@@ -19,6 +19,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:zxing/common.dart';
+
 import '../../result.dart';
 import 'address_book_parsed_result.dart';
 import 'result_parser.dart';
@@ -255,7 +257,7 @@ class VCardResultParser extends ResultParser {
         fragment = utf8.decode(fragmentBytes);
       } else {
         try {
-          fragment = Encoding.getByName(charset)!.decode(fragmentBytes);
+          fragment = CharacterSetECI.getCharacterSetECIByName(charset)!.getCharset()!.decode(fragmentBytes);
         } catch ( e) { // UnsupportedEncodingException
           fragment = utf8.decode(fragmentBytes);
         }

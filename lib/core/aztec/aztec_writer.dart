@@ -17,6 +17,8 @@
 import 'dart:math' as Math;
 import 'dart:convert';
 
+import 'package:zxing/common.dart';
+
 import '../common/bit_matrix.dart';
 
 import '../barcode_format.dart';
@@ -36,7 +38,7 @@ class AztecWriter implements Writer {
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         charset =
-            Encoding.getByName(hints[EncodeHintType.CHARACTER_SET].toString());
+            CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.getCharset();
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
         eccPercent =

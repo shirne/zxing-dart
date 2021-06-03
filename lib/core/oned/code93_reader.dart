@@ -199,7 +199,7 @@ class Code93Reader extends OneDReader {
           throw FormatException();
         }
         int next = encoded.codeUnitAt(i + 1);
-        String decodedChar = '\0';
+        String decodedChar = '\x00';
         switch (String.fromCharCode(c)) {
           case 'd':
             // +A to +Z map to a to z
@@ -232,7 +232,7 @@ class Code93Reader extends OneDReader {
               decodedChar = String.fromCharCode(next + 43);
             } else if (next == 'U'.codeUnitAt(0)) {
               // %U map to NUL
-              decodedChar = '\0';
+              decodedChar = '\x00';
             } else if (next == 'V'.codeUnitAt(0)) {
               // %V map to @
               decodedChar = '@';

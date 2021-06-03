@@ -56,16 +56,16 @@ class X12Encoder extends C40Encoder {
   int encodeChar(String c, StringBuffer sb) {
     switch (c) {
       case '\r':
-        sb.write('\0');
+        sb.write('\x00');
         break;
       case '*':
-        sb.write('\1');
+        sb.write('\x01');
         break;
       case '>':
-        sb.write('\2');
+        sb.write('\x02');
         break;
       case ' ':
-        sb.write('\3');
+        sb.write('\x03');
         break;
       default:
         int code = c.codeUnitAt(0);

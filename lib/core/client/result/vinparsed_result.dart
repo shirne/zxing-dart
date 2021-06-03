@@ -85,7 +85,7 @@ class VINParsedResult extends ParsedResult {
     if (_countryCode != null) {
       result.write(_countryCode); result.write(' ');
     }
-    result.writeCharCode(_modelYear); result.write(' ');
+    result.write(_modelYear); result.write(' ');
     result.writeCharCode(_plantCode); result.write(' ');
     result.write(_sequentialNumber); result.write('\n');
     return result.toString();
