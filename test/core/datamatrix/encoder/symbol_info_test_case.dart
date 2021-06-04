@@ -74,39 +74,39 @@ void main(){
     expect(24, info.getSymbolHeight());
 
     Dimension fixedSize = new Dimension(26, 26);
-    info = SymbolInfo.lookupDm(35,
+    info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false)!;
     expect(26, info.getSymbolWidth());
     expect(26, info.getSymbolHeight());
 
-    info = SymbolInfo.lookupDm(45,
+    info = SymbolInfo.lookup(45,
                              SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
-    //assertNull(info);
+    assert(info == null);
 
     Dimension minSize = fixedSize;
     Dimension maxSize = new Dimension(32, 32);
 
-    info = SymbolInfo.lookupDm(35,
+    info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
     expect(26, info.getSymbolWidth());
     expect(26, info.getSymbolHeight());
 
-    info = SymbolInfo.lookupDm(40,
+    info = SymbolInfo.lookup(40,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
     expect(26, info.getSymbolWidth());
     expect(26, info.getSymbolHeight());
 
-    info = SymbolInfo.lookupDm(45,
+    info = SymbolInfo.lookup(45,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
     expect(32, info.getSymbolWidth());
     expect(32, info.getSymbolHeight());
 
-    info = SymbolInfo.lookupDm(63,
-                             SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
-    //assertNull(info);
+    info = SymbolInfo.lookup(63,
+                             SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
+    assert(info == null);
   });
 
 }

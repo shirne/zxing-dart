@@ -96,7 +96,7 @@ class SymbolInfo {
     }else{
       minSize = minSizeOrFail as Dimension?;
     }
-    _lookup(dataCodewords, shape, minSize, maxSize, fail);
+    return _lookup(dataCodewords, shape, minSize, maxSize, fail);
   }
 
   static SymbolInfo? _lookup(int dataCodewords, SymbolShapeHint? shape,
