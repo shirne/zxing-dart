@@ -399,7 +399,7 @@ class HighLevelEncoder {
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return (ch == '\r'.codeUnitAt(0)) //CR
+    return (ch == 13) //CR
         ||
         (ch == 42 /* * */) ||
         (ch == 62 /* > */);

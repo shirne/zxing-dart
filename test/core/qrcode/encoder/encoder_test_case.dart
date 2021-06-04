@@ -51,7 +51,7 @@ void main(){
     // Should return -1 for other letters;
     expect(-1, Encoder.getAlphanumericCode(97 /* a */));
     expect(-1, Encoder.getAlphanumericCode(35 /* # */));
-    expect(-1, Encoder.getAlphanumericCode('\x00'.codeUnitAt(0)));
+    expect(-1, Encoder.getAlphanumericCode(0));
   });
 
   test('testChooseMode', () {
