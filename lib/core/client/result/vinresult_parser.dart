@@ -72,7 +72,7 @@ class VINResultParser extends ResultParser {
     if (c >= 65 /*'A'*/ && c <= 73 /*'I'*/) {
       return (c - 65) + 1;
     }
-    if (c >= 74 /*'J'*/ && c <= 72 /*'R'*/) {
+    if (c >= 74 /*'J'*/ && c <= 82 /*'R'*/) {
       return (c - 74) + 1;
     }
     if (c >= 83 /*'S'*/ && c <= 90 /*'Z'*/) {

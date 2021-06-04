@@ -179,7 +179,7 @@ class CalendarParsedResult extends ParsedResult {
     if (timestamp < 0) {
       return null;
     }
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp).toLocal();
     // DateFormat.MEDIUM Jan 17, 2015, 7:16:02 PM
     DateFormat format = DateFormat.yMMMEd();
     if(!allDay) format.add_jms() ;
