@@ -64,19 +64,19 @@ class ASCIIEncoder implements Encoder {
         }
       } else if (HighLevelEncoder.isExtendedASCII(c)) {
         context.writeCodeword(HighLevelEncoder.UPPER_SHIFT);
-        context.writeCodeword(String.fromCharCode(c.codeUnitAt(0) - 128 + 1));
+        context.writeCodeword(c.codeUnitAt(0) - 128 + 1);
         context.pos++;
       } else {
-        context.writeCodeword(String.fromCharCode(c.codeUnitAt(0) + 1));
+        context.writeCodeword(c.codeUnitAt(0) + 1);
         context.pos++;
       }
     }
   }
 
-  static String _encodeASCIIDigits(String digit1, String digit2) {
+  static int _encodeASCIIDigits(String digit1, String digit2) {
     if (HighLevelEncoder.isDigit(digit1) && HighLevelEncoder.isDigit(digit2)) {
       int num = (digit1.codeUnitAt(0) - 48) * 10 + (digit2.codeUnitAt(0) - 48);
-      return String.fromCharCode(num + 130);
+      return num + 130;
     }
     throw Exception("not digits: " + digit1 + digit2);
   }

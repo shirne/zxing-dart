@@ -154,7 +154,7 @@ class DecodedBitStreamParser {
           oneByte += 128;
           //upperShift = false;
         }
-        result.write(String.fromCharCode(oneByte - 1));
+        result.writeCharCode(oneByte - 1);
         return _Mode.ASCII_ENCODE;
       } else if (oneByte == 129) {
         // Pad

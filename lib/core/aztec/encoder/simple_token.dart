@@ -28,7 +28,7 @@ class SimpleToken extends Token {
   SimpleToken(Token? previous, this._value, this._bitCount) : super(previous);
 
   @override
-  void appendTo(BitArray bitArray, Uint8List text) {
+  void appendTo(BitArray bitArray, List<int> text) {
     bitArray.appendBits(_value, _bitCount);
   }
 

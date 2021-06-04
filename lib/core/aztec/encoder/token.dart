@@ -41,5 +41,5 @@ abstract class Token {
     return BinaryShiftToken(this, start, byteCount);
   }
 
-  void appendTo(BitArray bitArray, Uint8List text);
+  void appendTo(BitArray bitArray, List<int> text);
 }

@@ -167,7 +167,7 @@ class State {
     return newModeBitCount <= other._bitCount;
   }
 
-  BitArray toBitArray(Uint8List text) {
+  BitArray toBitArray(List<int> text) {
     // Reverse the tokens, so that they are in the order that they should
     // be output
     List<Token> symbols = [];

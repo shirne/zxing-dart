@@ -50,7 +50,7 @@ class EdifactEncoder implements Encoder {
         }
       }
     }
-    buffer.write(String.fromCharCode(31)); //Unlatch
+    buffer.writeCharCode(31); //Unlatch
     _handleEOD(context, buffer);
   }
 
@@ -116,7 +116,7 @@ class EdifactEncoder implements Encoder {
     if (c >= ' '.codeUnitAt(0) && c <= '?'.codeUnitAt(0)) {
       sb.write(c);
     } else if (c >= '@'.codeUnitAt(0) && c <= '^'.codeUnitAt(0)) {
-      sb.write(String.fromCharCode(c - 64));
+      sb.writeCharCode(c - 64);
     } else {
       HighLevelEncoder.illegalCharacter(c);
     }
@@ -133,16 +133,16 @@ class EdifactEncoder implements Encoder {
     int c4 = len >= 4 ? sb.codePointAt(3) : 0;
 
     int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
-    String cw1 = String.fromCharCode((v >> 16) & 255);
-    String cw2 = String.fromCharCode((v >> 8) & 255);
-    String cw3 = String.fromCharCode(v & 255);
+    int cw1 = (v >> 16) & 255;
+    int cw2 = (v >> 8) & 255;
+    int cw3 = v & 255;
     StringBuffer res = StringBuffer();
-    res.write(cw1);
+    res.writeCharCode(cw1);
     if (len >= 2) {
-      res.write(cw2);
+      res.writeCharCode(cw2);
     }
     if (len >= 3) {
-      res.write(cw3);
+      res.writeCharCode(cw3);
     }
     return res.toString();
   }

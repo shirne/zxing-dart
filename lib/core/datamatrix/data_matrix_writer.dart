@@ -78,7 +78,7 @@ class DataMatrixWriter implements Writer {
         HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
 
     SymbolInfo? symbolInfo =
-        SymbolInfo.lookupDm(encoded.length, shape, minSize, maxSize, true);
+        SymbolInfo.lookup(encoded.length, shape, minSize, maxSize, true);
 
     //2. step: ECC generation
     String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);

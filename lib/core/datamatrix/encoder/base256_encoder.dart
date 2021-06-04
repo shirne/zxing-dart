@@ -52,10 +52,10 @@ class Base256Encoder implements Encoder {
         (context.getSymbolInfo()!.getDataCapacity() - currentSize) > 0;
     if (context.hasMoreCharacters() || mustPad) {
       if (dataCount <= 249) {
-        buffer.setCharAt(0, String.fromCharCode(dataCount));
+        buffer.setCharAt(0, dataCount);
       } else if (dataCount <= 1555) {
-        buffer.setCharAt(0, String.fromCharCode((dataCount ~/ 250) + 249));
-        buffer.insert(1, String.fromCharCode(dataCount % 250));
+        buffer.setCharAt(0, (dataCount ~/ 250) + 249);
+        buffer.insert(1, dataCount % 250);
       } else {
         throw Exception("Message length not in valid ranges: $dataCount");
       }
@@ -66,13 +66,13 @@ class Base256Encoder implements Encoder {
     }
   }
 
-  static String _randomize255State(String ch, int codewordPosition) {
+  static int _randomize255State(String ch, int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 255) + 1;
     int tempVariable = ch.codeUnitAt(0) + pseudoRandom;
     if (tempVariable <= 255) {
-      return String.fromCharCode(tempVariable);
+      return tempVariable;
     } else {
-      return String.fromCharCode(tempVariable - 256);
+      return tempVariable - 256;
     }
   }
 }

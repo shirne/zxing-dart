@@ -30,7 +30,7 @@ class BinaryShiftToken extends Token {
       : super(previous);
 
   @override
-  void appendTo(BitArray bitArray, Uint8List text) {
+  void appendTo(BitArray bitArray, List<int> text) {
     for (int i = 0; i < _binaryShiftByteCount; i++) {
       if (i == 0 || (i == 31 && _binaryShiftByteCount <= 62)) {
         // We need a header before the first character, and before

@@ -44,7 +44,7 @@ class HighLevelEncoder {
   //static const int _STRUCTURED_APPEND = 233;
   /// Reader Programming
   //static const int _READER_PROGRAMMING = 234;
-  /// Upper Shift
+  /// Upper Shift chr
   static const int UPPER_SHIFT = 235;
   /// 05 Macro
   static const int _MACRO_05 = 236;
@@ -80,11 +80,10 @@ class HighLevelEncoder {
 
   HighLevelEncoder._();
 
-  static String _randomize253State(int codewordPosition) {
+  static int _randomize253State(int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
     int tempVariable = _PAD + pseudoRandom;
-    return String.fromCharCode(
-        tempVariable <= 254 ? tempVariable : tempVariable - 254);
+    return tempVariable <= 254 ? tempVariable : tempVariable - 254;
   }
 
   /// Performs message encoding of a DataMatrix message using the algorithm described in annex P
@@ -144,17 +143,17 @@ class HighLevelEncoder {
     //Padding
     StringBuffer codewords = context.getCodewords();
     if (codewords.length < capacity) {
-      codewords.write(_PAD);
+      codewords.writeCharCode(_PAD);
     }
     while (codewords.length < capacity) {
-      codewords.write(_randomize253State(codewords.length + 1));
+      codewords.writeCharCode(_randomize253State(codewords.length + 1));
     }
 
     return context.getCodewords().toString();
   }
 
-  static int lookAheadTest(String msg, int startpos, int currentMode) {
-    if (startpos >= msg.length) {
+  static int lookAheadTest(String msg, int startPos, int currentMode) {
+    if (startPos >= msg.length) {
       return currentMode;
     }
     List<double> charCounts;
@@ -169,10 +168,10 @@ class HighLevelEncoder {
     int charsProcessed = 0;
     while (true) {
       //step K
-      if ((startpos + charsProcessed) == msg.length) {
+      if ((startPos + charsProcessed) == msg.length) {
         int min = MathUtils.MAX_VALUE;
-        Uint8List mins = Uint8List(6);
-        List<int> intCharCounts = Uint8List(6);
+        Int8List mins = Int8List(6);
+        List<int> intCharCounts = Int32List(6);
         min = _findMinimums(charCounts, intCharCounts, min, mins);
         int minCount = _getMinimumCount(mins);
 
@@ -194,7 +193,7 @@ class HighLevelEncoder {
         return C40_ENCODATION;
       }
 
-      int c = msg.codeUnitAt(startpos + charsProcessed);
+      int c = msg.codeUnitAt(startPos + charsProcessed);
       charsProcessed++;
 
       //step L
@@ -255,8 +254,8 @@ class HighLevelEncoder {
 
       //step R
       if (charsProcessed >= 4) {
-        List<int> intCharCounts = Uint8List(6);
-        Uint8List mins = Uint8List(6);
+        List<int> intCharCounts = Int32List(6);
+        Int8List mins = Int8List(6);
         _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
         int minCount = _getMinimumCount(mins);
 
@@ -299,7 +298,7 @@ class HighLevelEncoder {
             return C40_ENCODATION;
           }
           if (intCharCounts[C40_ENCODATION] == intCharCounts[X12_ENCODATION]) {
-            int p = startpos + charsProcessed + 1;
+            int p = startPos + charsProcessed + 1;
             while (p < msg.length) {
               int tc = msg.codeUnitAt(p);
               if (_isX12TermSep(tc)) {
@@ -318,7 +317,7 @@ class HighLevelEncoder {
   }
 
   static int _findMinimums(List<double> charCounts, List<int> intCharCounts,
-      int min, Uint8List mins) {
+      int min, Int8List mins) {
     mins.fillRange(0, mins.length, 0);
     for (int i = 0; i < 6; i++) {
       intCharCounts[i] = (charCounts[i]).ceil();
@@ -334,7 +333,7 @@ class HighLevelEncoder {
     return min;
   }
 
-  static int _getMinimumCount(Uint8List mins) {
+  static int _getMinimumCount(Int8List mins) {
     int minCount = 0;
     for (int i = 0; i < 6; i++) {
       minCount += mins[i];
@@ -445,6 +444,6 @@ class HighLevelEncoder {
     String hex = (c).toRadixString(16);
     hex = "0000".substring(0, 4 - hex.length) + hex;
     throw Exception(
-        "Illegal character: " + String.fromCharCode(c) + " (0x" + hex + ')');
+        "Illegal character: chr($c) (0x$hex)");
   }
 }

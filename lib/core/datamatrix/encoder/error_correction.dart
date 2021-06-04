@@ -68,15 +68,15 @@ class ErrorCorrection {
   static const int _MODULO_VALUE = 0x12D;
 
   static bool _isInit = false;
-  static final List<int> _log = List.filled(255, 0);
-  static final List<int> _alog = List.filled(255, 0);
+  static final List<int> _log = List.filled(256, 0);
+  static final List<int> _aLog = List.filled(255, 0);
 
   static init(){
     if(_isInit)return;
     _isInit = true;
     int p = 1;
     for (int i = 0; i < 255; i++) {
-      _alog[i] = p;
+      _aLog[i] = p;
       _log[p] = i;
       p *= 2;
       if (p >= 256) {
@@ -143,13 +143,13 @@ class ErrorCorrection {
       int m = ecc[numECWords - 1] ^ codewords.codeUnitAt(i);
       for (int k = numECWords - 1; k > 0; k--) {
         if (m != 0 && poly[k] != 0) {
-          ecc[k] = (ecc[k - 1] ^ _alog[(_log[m] + _log[poly[k]]) % 255]);
+          ecc[k] = (ecc[k - 1] ^ _aLog[(_log[m] + _log[poly[k]]) % 255]);
         } else {
           ecc[k] = ecc[k - 1];
         }
       }
       if (m != 0 && poly[0] != 0) {
-        ecc[0] = _alog[(_log[m] + _log[poly[0]]) % 255];
+        ecc[0] = _aLog[(_log[m] + _log[poly[0]]) % 255];
       } else {
         ecc[0] = 0;
       }

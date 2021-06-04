@@ -207,7 +207,7 @@ class PDF417HighLevelEncoder {
             if (ch == _blankCode) {
               tmp.writeCharCode(26); //space
             } else {
-              tmp.write(String.fromCharCode(ch - 65));
+              tmp.writeCharCode(ch - 65);
             }
           } else {
             if (_isAlphaLower(ch)) {
@@ -400,9 +400,8 @@ class PDF417HighLevelEncoder {
     return _punctuatuin[ch] != -1;
   }
 
-  static bool _isText(String chr) {
-    int ch = chr.codeUnitAt(0);
-    return chr == '\t' || chr == '\n' || chr == '\r' || (ch >= 32 && ch <= 126);
+  static bool _isText(int chr) {
+    return chr == 9 /*'\t'*/ || chr == 10 /*'\n'*/ || chr == 13 /*'\r'*/ || (chr >= 32 && chr <= 126);
   }
 
   /// Determines the number of consecutive characters that are encodable using numeric compaction.
@@ -455,7 +454,7 @@ class PDF417HighLevelEncoder {
       ch = msg.codeUnitAt(idx);
 
       //Check if character is encodable
-      if (!_isText(String.fromCharCode(ch))) {
+      if (!_isText(ch)) {
         break;
       }
       idx++;

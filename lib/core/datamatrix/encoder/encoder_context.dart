@@ -38,12 +38,12 @@ class EncoderContext {
     Uint8List msgBinary = latin1.encode(msg);
     StringBuffer sb = StringBuffer();
     for (int i = 0, c = msgBinary.length; i < c; i++) {
-      String ch = String.fromCharCode(msgBinary[i] & 0xff);
-      if (ch == '?' && msg[i] != '?') {
+      int ch = msgBinary[i] & 0xff;
+      if (ch == 63/*'?'*/ && msg[i] != '?') {
         throw Exception(
             "Message contains characters outside ISO-8859-1 encoding.");
       }
-      sb.write(ch);
+      sb.writeCharCode(ch);
     }
     this._msg = sb.toString(); //Not Unicode here!
     _shape = SymbolShapeHint.FORCE_NONE;
@@ -85,8 +85,11 @@ class EncoderContext {
   }
 
   void writeCodeword(dynamic codeword) {
-    this._codewords.write(
-        codeword is int ? String.fromCharCode(codeword) : codeword.toString());
+    if(codeword is int){
+      this._codewords.writeCharCode(codeword);
+    }else{
+      this._codewords.write(codeword);
+    }
   }
 
   int getCodewordCount() {
@@ -124,7 +127,7 @@ class EncoderContext {
   void updateSymbolInfo([int? len]) {
     if (len == null) len = getCodewordCount();
     if (this._symbolInfo == null || len > this._symbolInfo!.getDataCapacity()) {
-      this._symbolInfo = SymbolInfo.lookupDm(len, _shape, _minSize, _maxSize, true);
+      this._symbolInfo = SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
     }
   }
 

@@ -85,8 +85,7 @@ class BitMatrix {
       throw Exception('IllegalArgument');
     }
 
-    List<bool> bits =
-        List.generate(stringRepresentation.length, (index) => false);
+    List<bool> bits = List.filled(stringRepresentation.length, false);
     int bitsPos = 0;
     int rowStartPos = 0;
     int rowLength = -1;

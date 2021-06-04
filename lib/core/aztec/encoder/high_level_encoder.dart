@@ -141,7 +141,7 @@ class HighLevelEncoder {
             return -1;
           })); // mode shift codes, per table
 
-  final Uint8List _text;
+  final List<int> _text;
   final Encoding? _charset;
 
   HighLevelEncoder(this._text, [this._charset]);
@@ -159,20 +159,19 @@ class HighLevelEncoder {
     List<State> states = [initialState];
     for (int index = 0; index < _text.length; index++) {
       int pairCode;
-      String nextChar =
-          String.fromCharCode(index + 1 < _text.length ? _text[index + 1] : 0);
-      switch (String.fromCharCode(_text[index])) {
-        case '\r':
-          pairCode = nextChar == '\n' ? 2 : 0;
+      int nextChar = index + 1 < _text.length ? _text[index + 1] : 0;
+      switch (_text[index]) {
+        case 13: //'\r':
+          pairCode = nextChar == 10 /*'\n'*/ ? 2 : 0;
           break;
-        case '.':
-          pairCode = nextChar == ' ' ? 3 : 0;
+        case 46: //'.':
+          pairCode = nextChar == 32 /*' '*/ ? 3 : 0;
           break;
-        case ',':
-          pairCode = nextChar == ' ' ? 4 : 0;
+        case 44: //',':
+          pairCode = nextChar == 32 ? 4 : 0;
           break;
-        case ':':
-          pairCode = nextChar == ' ' ? 5 : 0;
+        case 58: //':':
+          pairCode = nextChar == 32 ? 5 : 0;
           break;
         default:
           pairCode = 0;
@@ -297,6 +296,7 @@ class HighLevelEncoder {
     //        states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))
     //    .toList();
     List<State> result = [];
+    List<State> removedState=[];
     for (State newState in states) {
       bool add = true;
       for (Iterator<State> iterator = result.iterator; iterator.moveNext();) {
@@ -305,11 +305,15 @@ class HighLevelEncoder {
           add = false;
           break;
         }
-        //if (newState.isBetterThanOrEqualTo(oldState)) {
-        //  result.remove(oldState);
-        //}
+        if (newState.isBetterThanOrEqualTo(oldState)) {
+          removedState.add(oldState);
+        }
       }
-      result.removeWhere((element) => newState.isBetterThanOrEqualTo(element));
+      //result.removeWhere((element) => newState.isBetterThanOrEqualTo(element));
+      removedState.forEach((rState) {
+        result.remove(rState);
+      });
+      removedState.clear();
       if (add) {
         result.add(newState);
       }

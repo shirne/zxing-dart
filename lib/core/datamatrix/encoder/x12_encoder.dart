@@ -34,7 +34,7 @@ class X12Encoder extends C40Encoder {
       String c = context.getCurrentChar();
       context.pos++;
 
-      encodeChar(c, buffer);
+      encodeChar(c.codeUnitAt(0), buffer);
 
       int count = buffer.length;
       if ((count % 3) == 0) {
@@ -53,28 +53,28 @@ class X12Encoder extends C40Encoder {
   }
 
   @override
-  int encodeChar(String c, StringBuffer sb) {
-    switch (c) {
-      case '\r':
+  int encodeChar(int chr, StringBuffer sb) {
+    switch (chr) {
+      case 13: // '\r':
         sb.write('\x00');
         break;
-      case '*':
+      case 42: // '*':
         sb.write('\x01');
         break;
-      case '>':
+      case 62: // '>':
         sb.write('\x02');
         break;
-      case ' ':
+      case 32: // ' ':
         sb.write('\x03');
         break;
       default:
-        int code = c.codeUnitAt(0);
-        if (code >= '0'.codeUnitAt(0) && code <= '9'.codeUnitAt(0)) {
-          sb.write(String.fromCharCode(code - 48 + 4));
-        } else if (code >= 'A'.codeUnitAt(0) && code <= 'Z'.codeUnitAt(0)) {
-          sb.write(String.fromCharCode(code - 65 + 14));
+
+        if (chr >= '0'.codeUnitAt(0) && chr <= '9'.codeUnitAt(0)) {
+          sb.writeCharCode(chr - 48 + 4);
+        } else if (chr >= 'A'.codeUnitAt(0) && chr <= 'Z'.codeUnitAt(0)) {
+          sb.writeCharCode(chr - 65 + 14);
         } else {
-          HighLevelEncoder.illegalCharacter(code);
+          HighLevelEncoder.illegalCharacter(chr);
         }
         break;
     }
@@ -91,7 +91,7 @@ class X12Encoder extends C40Encoder {
     if (context.getRemainingCharacters() > 1 ||
         available > 1 ||
         context.getRemainingCharacters() != available) {
-      context.writeCodeword(String.fromCharCode(HighLevelEncoder.X12_UNLATCH));
+      context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
     }
     if (context.getNewEncoding() < 0) {
       context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);

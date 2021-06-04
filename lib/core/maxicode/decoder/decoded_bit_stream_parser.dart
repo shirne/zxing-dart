@@ -221,7 +221,7 @@ class DecodedBitStreamParser {
     StringBuilder sb = StringBuilder();
     int shift = -1;
     int set = 0;
-    int lastset = 0;
+    int lastSet = 0;
     for (int i = start; i < start + len; i++) {
       String c = _sets[set][bytes[i]];
       switch (c) {
@@ -238,17 +238,17 @@ class DecodedBitStreamParser {
         case _shiftC:
         case _shiftD:
         case _shiftE:
-          lastset = set;
+          lastSet = set;
           set = c.codeUnitAt(0) - _shiftA.codeUnitAt(0);
           shift = 1;
           break;
         case _twoShiftA:
-          lastset = set;
+          lastSet = set;
           set = 0;
           shift = 2;
           break;
         case _threeShiftA:
-          lastset = set;
+          lastSet = set;
           set = 0;
           shift = 3;
           break;
@@ -267,7 +267,7 @@ class DecodedBitStreamParser {
           sb.write(c);
       }
       if (shift-- == 0) {
-        set = lastset;
+        set = lastSet;
       }
     }
     while (sb.length > 0 && sb.charAt(sb.length - 1) == _pad) {

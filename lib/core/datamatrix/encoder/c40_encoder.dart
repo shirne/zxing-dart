@@ -34,7 +34,7 @@ class C40Encoder implements Encoder {
       String c = context.getCurrentChar();
       context.pos++;
 
-      int lastCharSize = encodeChar(c, buffer);
+      int lastCharSize = encodeChar(c.codeUnitAt(0), buffer);
 
       int unwritten = (buffer.length ~/ 3) * 2;
 
@@ -78,7 +78,7 @@ class C40Encoder implements Encoder {
     buffer.delete(count - lastCharSize, count);
     context.pos--;
     String c = context.getCurrentChar();
-    lastCharSize = encodeChar(c, removed);
+    lastCharSize = encodeChar(c.codeUnitAt(0), removed);
     context.resetSymbolInfo(); //Deal with possible reduction in symbol size
     return lastCharSize;
   }
@@ -131,48 +131,48 @@ class C40Encoder implements Encoder {
     context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
   }
 
-  int encodeChar(String chr, StringBuffer sb) {
-    if (chr == ' ') {
+  int encodeChar(int chr, StringBuffer sb) {
+    if (chr == 32) { // ' '
       sb.write('\x03');
       return 1;
     }
-    int c = chr.codeUnitAt(0);
-    if (c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
-      sb.write(String.fromCharCode(c - 48 + 4));
+    
+    if (chr >= '0'.codeUnitAt(0) && chr <= '9'.codeUnitAt(0)) {
+      sb.writeCharCode(chr - 48 + 4);
       return 1;
     }
-    if (c >= 'A'.codeUnitAt(0) && c <= 'Z'.codeUnitAt(0)) {
-      sb.write(String.fromCharCode(c - 65 + 14));
+    if (chr >= 'A'.codeUnitAt(0) && chr <= 'Z'.codeUnitAt(0)) {
+      sb.writeCharCode(chr - 65 + 14);
       return 1;
     }
-    if (c < ' '.codeUnitAt(0)) {
+    if (chr < ' '.codeUnitAt(0)) {
       sb.write('\x00'); //Shift 1 Set
-      sb.write(c);
+      sb.writeCharCode(chr);
       return 2;
     }
-    if (c <= '/'.codeUnitAt(0)) {
+    if (chr <= '/'.codeUnitAt(0)) {
       sb.write('\x01'); //Shift 2 Set
-      sb.write(String.fromCharCode(c - 33));
+      sb.writeCharCode(chr - 33);
       return 2;
     }
-    if (c <= '@'.codeUnitAt(0)) {
+    if (chr <= '@'.codeUnitAt(0)) {
       sb.write('\x01'); //Shift 2 Set
-      sb.write(String.fromCharCode(c - 58 + 15));
+      sb.writeCharCode(chr - 58 + 15);
       return 2;
     }
-    if (c <= '_'.codeUnitAt(0)) {
+    if (chr <= '_'.codeUnitAt(0)) {
       sb.write('\x01'); //Shift 2 Set
-      sb.write(String.fromCharCode(c - 91 + 22));
+      sb.writeCharCode(chr - 91 + 22);
       return 2;
     }
-    if (c <= 127) {
+    if (chr <= 127) {
       sb.write('\x02'); //Shift 3 Set
-      sb.write(String.fromCharCode(c - 96));
+      sb.writeCharCode(chr - 96);
       return 2;
     }
     sb.write("\x01\u001e"); //Shift 2, Upper Shift
     int len = 2;
-    len += encodeChar(String.fromCharCode(c - 128), sb);
+    len += encodeChar(chr - 128, sb);
     return len;
   }
 
