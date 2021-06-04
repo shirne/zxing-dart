@@ -17,22 +17,16 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../utils.dart';
 import 'debug_placement.dart';
 
 /// Tests the DataMatrix placement algorithm.
 void main(){
 
-  final Pattern SPACE = " ";
-  String unvisualize(String visualized) {
-    StringBuffer sb = new StringBuffer();
-    for (String token in visualized.split(SPACE)) {
-      sb.writeCharCode(int.parse(token));
-    }
-    return sb.toString();
-  }
+
 
   test('testPlacement', () {
-    String codewords = unvisualize("66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"); //"AIMAIM" encoded
+    String codewords = unVisualize("66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"); //"AIMAIM" encoded
     DebugPlacement placement = new DebugPlacement(codewords, 12, 12);
     placement.place();
     List<String> expected =

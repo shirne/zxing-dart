@@ -23,18 +23,18 @@ class DebugPlacement extends DefaultPlacement {
   DebugPlacement(String codewords, int numcols, int numrows):super(codewords, numcols, numrows);
 
   List<String> toBitFieldStringArray() {
-    Uint8List bits = getBits();      
-    int numrows = getNumrows();
-    int numcols = getNumcols();
-    List<String> array = List.filled(numrows, '');
-    int startpos = 0;
-    for (int row = 0; row < numrows; row++) {
-      StringBuffer sb = new StringBuffer(bits.length);
-      for (int i = 0; i < numcols; i++) {
-        sb.write(bits[startpos + i] == 1 ? '1' : '0');
+    Int8List bits = getBits();
+    int numRows = getNumrows();
+    int numCols = getNumcols();
+    List<String> array = List.filled(numRows, '');
+    int startPos = 0;
+    for (int row = 0; row < numRows; row++) {
+      StringBuffer sb = new StringBuffer();
+      for (int i = 0; i < numCols; i++) {
+        sb.write(bits[startPos + i] == 1 ? '1' : '0');
       }
       array[row] = sb.toString();
-      startpos += numcols;
+      startPos += numCols;
     }
     return array;
   }

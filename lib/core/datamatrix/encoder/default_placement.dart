@@ -21,7 +21,7 @@ class DefaultPlacement {
   final String _codewords;
   final int _numrows;
   final int _numcols;
-  final Uint8List _bits;
+  final Int8List _bits;
 
   /// Main constructor
   ///
@@ -30,7 +30,7 @@ class DefaultPlacement {
   /// @param numrows   the number of rows
   DefaultPlacement(this._codewords, this._numcols, this._numrows)
       : this._bits =
-            Uint8List.fromList(List.generate(_numcols * _numrows, (index) => -1));
+  Int8List.fromList(List.filled(_numcols * _numrows, -1));
 
   int getNumrows() {
     return _numrows;
@@ -40,7 +40,7 @@ class DefaultPlacement {
     return _numcols;
   }
 
-  Uint8List getBits() {
+  Int8List getBits() {
     return _bits;
   }
 
