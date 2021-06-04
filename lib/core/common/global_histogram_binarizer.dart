@@ -35,13 +35,13 @@ class GlobalHistogramBinarizer extends Binarizer {
   static const int _luminanceBits = 5;
   static const int _luminanceShift = 8 - _luminanceBits;
   static const int _luminanceBuckets = 1 << _luminanceBits;
-  static final Int8List empty = Int8List(0);
+  static final Int8List _empty = Int8List(0);
 
   Int8List _luminances;
   final List<int> _buckets;
 
   GlobalHistogramBinarizer(LuminanceSource source)
-      : _luminances = empty,
+      : _luminances = _empty,
         _buckets = List.filled(_luminanceBuckets, 0),
         super(source);
 

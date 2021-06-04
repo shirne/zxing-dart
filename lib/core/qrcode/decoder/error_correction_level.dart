@@ -28,3 +28,18 @@ enum ErrorCorrectionLevel {
   /// Q = ~25% correction
   Q, //(0x03),
 }
+
+int ecOrdinal(ErrorCorrectionLevel ecLevel){
+  switch(ecLevel){
+    case ErrorCorrectionLevel.L:
+      return 0;
+    case ErrorCorrectionLevel.M:
+      return 1;
+    case ErrorCorrectionLevel.Q:
+      return 2;
+    case ErrorCorrectionLevel.H:
+      return 3;
+    default:
+      return 0;
+  }
+}

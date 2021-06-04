@@ -46,7 +46,7 @@ class DecodedBitStreamParser {
       ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
     BitSource bits = BitSource(bytes);
     StringBuilder result = StringBuilder();
-    List<Uint8List> byteSegments = [Uint8List(0)]; //new ArrayList<>(1);
+    List<Uint8List> byteSegments = []; //new ArrayList<>(1);
     int symbolSequence = -1;
     int parityData = -1;
     int symbologyModifier;

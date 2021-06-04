@@ -161,9 +161,9 @@ class Decoder {
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
-    Int32List codewordsInts = Int32List(0);
+    Int32List codewordsInts = Int32List(numCodewords);
     for (int i = 0; i < numCodewords; i++) {
-      codewordsInts.add(codewordBytes[i] & 0xFF);
+      codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
     try {
       _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);

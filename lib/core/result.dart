@@ -25,7 +25,7 @@ import 'result_point.dart';
 /// @author Sean Owen
 class Result {
   final String _text;
-  final Uint8List? _rawBytes;
+  final List<int>? _rawBytes;
   final int _numBits;
   List<ResultPoint?>? _resultPoints;
   final BarcodeFormat _format;
@@ -46,7 +46,7 @@ class Result {
   }
 
   /// @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
-  Uint8List? getRawBytes() {
+  List<int>? getRawBytes() {
     return _rawBytes;
   }
 
@@ -77,9 +77,7 @@ class Result {
 
   void putMetadata(ResultMetadataType type, Object value) {
     if (_resultMetadata == null) {
-      _resultMetadata = ResultMetadataType.values
-          .asMap()
-          .map<ResultMetadataType, Object>((idx, item) => MapEntry(item, item));
+      _resultMetadata = {};
     }
     _resultMetadata![type] = value;
   }

@@ -40,7 +40,7 @@ class AlignmentPatternFinder {
   final int _width;
   final int _height;
   final double _moduleSize;
-  late List<int> _crossCheckStateCount = [];
+  late List<int> _crossCheckStateCount = List.filled(3, 0);
   final ResultPointCallback? _resultPointCallback;
 
   /// <p>Creates a finder that will look in a portion of the whole image.</p>

@@ -119,7 +119,7 @@ class Version {
   }
 
   ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
-    return _ecBlocks[ecLevel.index];
+    return _ecBlocks[ecOrdinal(ecLevel)];
   }
 
   /// <p>Deduces version information purely from QR Code dimensions.</p>

@@ -77,7 +77,7 @@ class DecodedBitStreamParser {
     BitSource bits = BitSource(bytes);
     StringBuffer result = StringBuffer();
     StringBuilder resultTrailer = StringBuilder();
-    List<Uint8List> byteSegments = [Uint8List(0)];
+    List<Uint8List> byteSegments = [];
     _Mode mode = _Mode.ASCII_ENCODE;
     Set<int> fnc1Positions =
         {}; // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.

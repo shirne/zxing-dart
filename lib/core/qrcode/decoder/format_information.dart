@@ -140,7 +140,7 @@ class FormatInformation {
 
   @override
   int get hashCode {
-    return (_errorCorrectionLevel.index << 3) | _dataMask;
+    return (ecOrdinal(_errorCorrectionLevel) << 3) | _dataMask;
   }
 
   @override

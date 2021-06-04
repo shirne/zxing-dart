@@ -88,8 +88,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     List<Result> newResults = [];
     List<Result> saResults = [];
     for (Result result in results) {
-      if (result
-          .getResultMetadata()!
+      if (result.getResultMetadata()!
           .containsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE)) {
         saResults.add(result);
       } else {
@@ -109,7 +108,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     //ByteArrayOutputStream newByteSegment = new ByteArrayOutputStream();
     for (Result saResult in saResults) {
       newText.write(saResult.getText());
-      Uint8List? saBytes = saResult.getRawBytes();
+      List<int>? saBytes = saResult.getRawBytes();
       if (saBytes != null) newRawBytes.add(saBytes);
       // @SuppressWarnings("unchecked")
       Iterable<Uint8List>? byteSegments =
@@ -137,11 +136,11 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
 
   static int _compareResult(Result a, Result b) {
     int aNumber =
-        a.getResultMetadata()![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
-            as int;
+    (a.getResultMetadata()![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
+            as int?) ?? 0;
     int bNumber =
-        b.getResultMetadata()![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
-            as int;
+        (b.getResultMetadata()![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
+            as int?) ?? 0;
     return aNumber.compareTo(bNumber);
   }
 }

@@ -62,7 +62,7 @@ class QRCode {
     result.write(" mode: ");
     result.write(_mode);
     result.write("\n ecLevel: ");
-    result.write(_ecLevel);
+    result.write(_ecLevel.toString().replaceFirst('ErrorCorrectionLevel.', ''));
     result.write("\n version: ");
     result.write(_version);
     result.write("\n maskPattern: ");

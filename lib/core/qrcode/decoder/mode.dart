@@ -21,20 +21,20 @@ import 'version.dart';
 ///
 /// @author Sean Owen
 class Mode {
-  static const TERMINATOR = const Mode([0, 0, 0], 0x00); // Not really a mode...
-  static const NUMERIC = const Mode([10, 12, 14], 0x01);
-  static const ALPHANUMERIC = const Mode([9, 11, 13], 0x02);
-  static const STRUCTURED_APPEND = const Mode([0, 0, 0], 0x03); // Not supported
-  static const BYTE = const Mode([8, 16, 16], 0x04);
-  static const FNC1_FIRST_POSITION = const Mode([0, 0, 0], 0x05);
+  static const TERMINATOR = const Mode([0, 0, 0], 0x00, 'TERMINATOR'); // Not really a mode...
+  static const NUMERIC = const Mode([10, 12, 14], 0x01, 'NUMERIC');
+  static const ALPHANUMERIC = const Mode([9, 11, 13], 0x02, 'ALPHANUMERIC');
+  static const STRUCTURED_APPEND = const Mode([0, 0, 0], 0x03, 'STRUCTURED_APPEND'); // Not supported
+  static const BYTE = const Mode([8, 16, 16], 0x04, 'BYTE');
+  static const FNC1_FIRST_POSITION = const Mode([0, 0, 0], 0x05, 'FNC1_FIRST_POSITION');
 
   static const ECI =
-      const Mode([0, 0, 0], 0x07); // character counts don't apply
-  static const KANJI = const Mode([8, 10, 12], 0x08);
-  static const FNC1_SECOND_POSITION = const Mode([0, 0, 0], 0x09);
+      const Mode([0, 0, 0], 0x07, 'ECI'); // character counts don't apply
+  static const KANJI = const Mode([8, 10, 12], 0x08, 'KANJI');
+  static const FNC1_SECOND_POSITION = const Mode([0, 0, 0], 0x09, 'FNC1_SECOND_POSITION');
 
   /// See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
-  static const HANZI = const Mode([8, 10, 12], 0x0D);
+  static const HANZI = const Mode([8, 10, 12], 0x0D, 'HANZI');
 
   static const values = [
     TERMINATOR,
@@ -55,8 +55,12 @@ class Mode {
 
   final List<int> _characterCountBitsForVersions;
   final int _bits;
+  final String _modeString;
 
-  const Mode(this._characterCountBitsForVersions, this._bits);
+  const Mode(this._characterCountBitsForVersions, this._bits, this._modeString);
+
+  @override
+  String toString() => _modeString;
 
   /// @param bits four bits encoding a QR Code data mode
   /// @return Mode encoded by these bits
