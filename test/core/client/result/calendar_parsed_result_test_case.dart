@@ -31,7 +31,7 @@ void main(){
 
   dateEqual(String? date, int? timestamp){
     if(date != null && timestamp != null) {
-      DateTime date1 = DateTime.parse(date);
+      DateTime date1 = DateTime.parse(date).toLocal();
       expect(date1.millisecondsSinceEpoch, timestamp, reason: "日期解析错误 $date");
     }else{
       assert(date == null && timestamp == null);
@@ -202,8 +202,8 @@ void main(){
            "Meeting with a friend\nlook at homepage first\n\n\n  \n",
            "Summary line",
            "Location, with, escaped, commas",
-           "20111110T110000Z",
-           "20111110T120000Z");
+           "20111110T110000",
+           "20111110T120000");
   });
 
   test('testAllDayValueDate', () {
@@ -211,7 +211,7 @@ void main(){
            "DTSTART;VALUE=DATE:20111110\n" +
            "DTEND;VALUE=DATE:20111110\n" +
            "END:VEVENT",
-           null, null, null, "20111110T000000Z", "20111110T000000Z");
+           null, null, null, "20111110T000000", "20111110T000000");
   });
 
 
