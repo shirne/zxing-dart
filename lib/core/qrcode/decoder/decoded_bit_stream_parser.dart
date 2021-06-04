@@ -80,7 +80,7 @@ class DecodedBitStreamParser {
             break;
           case Mode.STRUCTURED_APPEND:
             if (bits.available() < 16) {
-              throw FormatException();
+              throw FormatException("bits.available < 16");
             }
             // sequence number and parity is added later to the result metadata
             // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
@@ -93,7 +93,7 @@ class DecodedBitStreamParser {
             currentCharacterSetECI =
                 CharacterSetECI.getCharacterSetECIByValue(value);
             if (currentCharacterSetECI == null) {
-              throw FormatException();
+              throw FormatException("CharacterSet is null");
             }
             break;
           case Mode.HANZI:
@@ -117,14 +117,14 @@ class DecodedBitStreamParser {
                 _decodeAlphanumericSegment(bits, result, count, fc1InEffect);
                 break;
               case Mode.BYTE:
-                _decodeByteSegment(bits, result, count, currentCharacterSetECI!,
+                _decodeByteSegment(bits, result, count, currentCharacterSetECI,
                     byteSegments, hints);
                 break;
               case Mode.KANJI:
                 _decodeKanjiSegment(bits, result, count);
                 break;
               default:
-                throw FormatException();
+                throw FormatException("mode");
             }
             break;
         }
@@ -150,7 +150,7 @@ class DecodedBitStreamParser {
     } catch (iae) {
       // on IllegalArgumentException
       // from readBits() calls
-      throw FormatException();
+      throw FormatException(iae.toString());
     }
 
     return DecoderResult(

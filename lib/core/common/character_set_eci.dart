@@ -21,13 +21,15 @@ import 'package:euc/jis.dart';
 import 'package:fast_gbk/fast_gbk.dart';
 import 'package:unicode/unicode.dart';
 
+import 'cp437.dart';
+
 /// Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
 /// of ISO 18004.
 ///
 /// @author Sean Owen
 class CharacterSetECI {
   // Enum name is a Java encoding valid for java.lang and java.io
-  static final Cp437 = CharacterSetECI('Cp437', [0, 2], ascii);
+  static final Cp437 = CharacterSetECI('Cp437', [0, 2], cp437);
   static final ISO8859_1 = CharacterSetECI('ISO8859_1', [1, 3], latin1, ['ISO-8859-1', 'iso-8859-1']);
   static final ISO8859_2 = CharacterSetECI('ISO8859_2', 4, latin1, ['ISO-8859-2', 'iso-8859-2']);
   static final ISO8859_3 = CharacterSetECI('ISO8859_3', 5, latin1, ['ISO-8859-3', 'iso-8859-3']);
