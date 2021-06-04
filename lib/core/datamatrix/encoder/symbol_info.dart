@@ -80,20 +80,26 @@ class SymbolInfo {
       : _rsBlockData = rsBlockData ?? _dataCapacity,
         _rsBlockError = rsBlockError ?? _errorCodewords;
 
-  static SymbolInfo? lookupRect(
-      int dataCodewords, bool allowRectangular, bool fail) {
-    SymbolShapeHint shape = allowRectangular
-        ? SymbolShapeHint.FORCE_NONE
-        : SymbolShapeHint.FORCE_SQUARE;
-    return lookup(dataCodewords, shape, fail);
+  static SymbolInfo? lookup(int dataCodewords, [Object? shapeOrIsRect, Object? minSizeOrFail, Dimension? maxSize, bool fail = true]){
+    late SymbolShapeHint shape;
+    Dimension? minSize;
+    if(shapeOrIsRect is bool){
+      shape = shapeOrIsRect
+          ? SymbolShapeHint.FORCE_NONE
+          : SymbolShapeHint.FORCE_SQUARE;
+    }else{
+      shape = shapeOrIsRect == null ? SymbolShapeHint.FORCE_NONE : (shapeOrIsRect as SymbolShapeHint);
+    }
+
+    if(minSizeOrFail is bool){
+      fail = minSizeOrFail;
+    }else{
+      minSize = minSizeOrFail as Dimension?;
+    }
+    _lookup(dataCodewords, shape, minSize, maxSize, fail);
   }
 
-  static SymbolInfo? lookup(int dataCodewords,
-      [SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE, bool fail = true]) {
-    return lookupDm(dataCodewords, shape, null, null, fail);
-  }
-
-  static SymbolInfo? lookupDm(int dataCodewords, SymbolShapeHint? shape,
+  static SymbolInfo? _lookup(int dataCodewords, SymbolShapeHint? shape,
       Dimension? minSize, Dimension? maxSize, bool fail) {
     for (SymbolInfo symbol in _symbols) {
       if (shape == SymbolShapeHint.FORCE_SQUARE && symbol._rectangular) {
