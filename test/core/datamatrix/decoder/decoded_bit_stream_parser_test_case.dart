@@ -27,8 +27,8 @@ void main(){
 
   test('testAsciiStandardDecode', (){
     // ASCII characters 0-127 are encoded as the value + 1
-    Uint8List bytes = Uint8List.fromList([('a'.codeUnitAt(0) + 1), ('b'.codeUnitAt(0) + 1), ('c'.codeUnitAt(0) + 1),
-                    ('A'.codeUnitAt(0) + 1), ('B'.codeUnitAt(0) + 1), ('C'.codeUnitAt(0) + 1)]);
+    Uint8List bytes = Uint8List.fromList([(97 /* a */ + 1), (98 /* b */ + 1), (99 /* c */ + 1),
+                    (65 /* A */ + 1), (66 /* B */ + 1), (67 /* C */ + 1)]);
     String decodedString = DecodedBitStreamParser.decode(bytes).getText();
     expect("abcABC", decodedString);
   });

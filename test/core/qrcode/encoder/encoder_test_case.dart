@@ -29,28 +29,28 @@ void main(){
   test('testGetAlphanumericCode', () {
     // The first ten code points are numbers.
     for (int i = 0; i < 10; ++i) {
-      expect(i, Encoder.getAlphanumericCode('0'.codeUnitAt(0) + i));
+      expect(i, Encoder.getAlphanumericCode(48 /* 0 */ + i));
     }
 
     // The next 26 code points are capital alphabet letters.
     for (int i = 10; i < 36; ++i) {
-      expect(i, Encoder.getAlphanumericCode('A'.codeUnitAt(0) + i - 10));
+      expect(i, Encoder.getAlphanumericCode(65 /* A */ + i - 10));
     }
 
     // Others are symbol letters
-    expect(36, Encoder.getAlphanumericCode(' '.codeUnitAt(0)));
-    expect(37, Encoder.getAlphanumericCode(r'$'.codeUnitAt(0)));
-    expect(38, Encoder.getAlphanumericCode('%'.codeUnitAt(0)));
-    expect(39, Encoder.getAlphanumericCode('*'.codeUnitAt(0)));
-    expect(40, Encoder.getAlphanumericCode('+'.codeUnitAt(0)));
-    expect(41, Encoder.getAlphanumericCode('-'.codeUnitAt(0)));
-    expect(42, Encoder.getAlphanumericCode('.'.codeUnitAt(0)));
-    expect(43, Encoder.getAlphanumericCode('/'.codeUnitAt(0)));
-    expect(44, Encoder.getAlphanumericCode(':'.codeUnitAt(0)));
+    expect(36, Encoder.getAlphanumericCode(32 /*   */));
+    expect(37, Encoder.getAlphanumericCode(36 /* $ */));
+    expect(38, Encoder.getAlphanumericCode(37 /* % */));
+    expect(39, Encoder.getAlphanumericCode(42 /* * */));
+    expect(40, Encoder.getAlphanumericCode(43 /* + */));
+    expect(41, Encoder.getAlphanumericCode(45 /* - */));
+    expect(42, Encoder.getAlphanumericCode(46 /* . */));
+    expect(43, Encoder.getAlphanumericCode(47 /* / */));
+    expect(44, Encoder.getAlphanumericCode(58 /* : */));
 
     // Should return -1 for other letters;
-    expect(-1, Encoder.getAlphanumericCode('a'.codeUnitAt(0)));
-    expect(-1, Encoder.getAlphanumericCode('#'.codeUnitAt(0)));
+    expect(-1, Encoder.getAlphanumericCode(97 /* a */));
+    expect(-1, Encoder.getAlphanumericCode(35 /* # */));
     expect(-1, Encoder.getAlphanumericCode('\x00'.codeUnitAt(0)));
   });
 

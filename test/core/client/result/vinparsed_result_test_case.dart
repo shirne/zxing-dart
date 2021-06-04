@@ -56,9 +56,9 @@ void main(){
   });
 
   test('testVIN', () {
-    doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 'P'.codeUnitAt(0), "042788");
-    doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 'P'.codeUnitAt(0), "042788");
-    doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC", 2001, '1'.codeUnitAt(0), "000237");
+    doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 80 /* P */, "042788");
+    doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 80 /* P */, "042788");
+    doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC", 2001, 49 /* 1 */, "000237");
   });
 
 

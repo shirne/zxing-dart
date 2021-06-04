@@ -14,7 +14,7 @@ void main(){
   test('sb write', (){
     sbTest((sb){
       sb.write('A');
-      sb.writeCharCode('B'.codeUnitAt(0));
+      sb.writeCharCode(66 /* B */);
       sb.write('C');
       sb.write('D');
       sb.write('E');
@@ -26,7 +26,7 @@ void main(){
   test('sb replace', (){
     sbTest((sb){
       sb.write('A');
-      sb.writeCharCode('B'.codeUnitAt(0));
+      sb.writeCharCode(66 /* B */);
       sb.write('CDEFG');
 
       sb.replace(1, 3, 'H');
@@ -36,7 +36,7 @@ void main(){
   test('sb insert', (){
     sbTest((sb){
       sb.write('A');
-      sb.writeCharCode('B'.codeUnitAt(0));
+      sb.writeCharCode(66 /* B */);
       sb.write('CDEFG');
 
       sb.insert(0, 'H');
@@ -51,7 +51,7 @@ void main(){
   test('sb delete', (){
     sbTest((sb){
       sb.write('A');
-      sb.writeCharCode('B'.codeUnitAt(0));
+      sb.writeCharCode(66 /* B */);
       sb.write('CDEFG');
 
       // start at 0 include start exclude end
