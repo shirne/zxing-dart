@@ -32,7 +32,7 @@ class EdifactEncoder implements Encoder {
     //step F
     StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
-      String c = context.getCurrentChar();
+      int c = context.getCurrentChar();
       _encodeChar(c, buffer);
       context.pos++;
 
@@ -111,14 +111,14 @@ class EdifactEncoder implements Encoder {
     }
   }
 
-  static void _encodeChar(String chr, StringBuffer sb) {
-    int c = chr.codeUnitAt(0);
-    if (c >= ' '.codeUnitAt(0) && c <= '?'.codeUnitAt(0)) {
-      sb.write(c);
-    } else if (c >= '@'.codeUnitAt(0) && c <= '^'.codeUnitAt(0)) {
-      sb.writeCharCode(c - 64);
+  static void _encodeChar(int chr, StringBuffer sb) {
+
+    if (chr >= ' '.codeUnitAt(0) && chr <= '?'.codeUnitAt(0)) {
+      sb.writeCharCode(chr);
+    } else if (chr >= '@'.codeUnitAt(0) && chr <= '^'.codeUnitAt(0)) {
+      sb.writeCharCode(chr - 64);
     } else {
-      HighLevelEncoder.illegalCharacter(c);
+      HighLevelEncoder.illegalCharacter(chr);
     }
   }
 

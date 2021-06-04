@@ -171,7 +171,7 @@ class HighLevelEncoder {
       if ((startPos + charsProcessed) == msg.length) {
         int min = MathUtils.MAX_VALUE;
         Int8List mins = Int8List(6);
-        List<int> intCharCounts = Int32List(6);
+        Int32List intCharCounts = Int32List(6);
         min = _findMinimums(charCounts, intCharCounts, min, mins);
         int minCount = _getMinimumCount(mins);
 
@@ -324,7 +324,7 @@ class HighLevelEncoder {
       int current = intCharCounts[i];
       if (min > current) {
         min = current;
-        //Arrays.fill(mins, (byte) 0);
+        mins.fillRange(0, mins.length, 0);
       }
       if (min == current) {
         mins[i]++;
@@ -421,12 +421,12 @@ class HighLevelEncoder {
   /// Determines the number of consecutive characters that are encodable using numeric compaction.
   ///
   /// @param msg      the message
-  /// @param startpos the start position within the message
+  /// @param startPos the start position within the message
   /// @return the requested character count
-  static int determineConsecutiveDigitCount(String msg, int startpos) {
+  static int determineConsecutiveDigitCount(String msg, int startPos) {
     int count = 0;
     int len = msg.length;
-    int idx = startpos;
+    int idx = startPos;
     if (idx < len) {
       int ch = msg.codeUnitAt(idx);
       while (isDigit(ch) && idx < len) {

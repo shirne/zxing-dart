@@ -40,7 +40,7 @@ class TextEncoder extends C40Encoder {
     }
     if (chr < ' '.codeUnitAt(0)) {
       sb.write('\x00'); //Shift 1 Set
-      sb.write(chr);
+      sb.writeCharCode(chr);
       return 2;
     }
     if (chr <= '/'.codeUnitAt(0)) {

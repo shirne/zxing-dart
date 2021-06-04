@@ -30,11 +30,11 @@ class ASCIIEncoder implements Encoder {
     int n = HighLevelEncoder.determineConsecutiveDigitCount(
         context.getMessage(), context.pos);
     if (n >= 2) {
-      context.writeCodeword(_encodeASCIIDigits(context.getMessage()[context.pos],
-          context.getMessage()[context.pos + 1]));
+      context.writeCodeword(_encodeASCIIDigits(context.getMessage().codeUnitAt(context.pos),
+          context.getMessage().codeUnitAt(context.pos + 1)));
       context.pos += 2;
     } else {
-      String c = context.getCurrentChar();
+      int c = context.getCurrentChar();
       int newMode = HighLevelEncoder.lookAheadTest(
           context.getMessage(), context.pos, getEncodingMode());
       if (newMode != getEncodingMode()) {
@@ -64,20 +64,20 @@ class ASCIIEncoder implements Encoder {
         }
       } else if (HighLevelEncoder.isExtendedASCII(c)) {
         context.writeCodeword(HighLevelEncoder.UPPER_SHIFT);
-        context.writeCodeword(c.codeUnitAt(0) - 128 + 1);
+        context.writeCodeword(c - 128 + 1);
         context.pos++;
       } else {
-        context.writeCodeword(c.codeUnitAt(0) + 1);
+        context.writeCodeword(c + 1);
         context.pos++;
       }
     }
   }
 
-  static int _encodeASCIIDigits(String digit1, String digit2) {
+  static int _encodeASCIIDigits(int digit1, int digit2) {
     if (HighLevelEncoder.isDigit(digit1) && HighLevelEncoder.isDigit(digit2)) {
-      int num = (digit1.codeUnitAt(0) - 48) * 10 + (digit2.codeUnitAt(0) - 48);
+      int num = (digit1 - 48) * 10 + (digit2 - 48);
       return num + 130;
     }
-    throw Exception("not digits: " + digit1 + digit2);
+    throw Exception("not digits: $digit1 $digit2");
   }
 }

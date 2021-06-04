@@ -31,10 +31,10 @@ class C40Encoder implements Encoder {
     //step C
     StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
-      String c = context.getCurrentChar();
+      int c = context.getCurrentChar();
       context.pos++;
 
-      int lastCharSize = encodeChar(c.codeUnitAt(0), buffer);
+      int lastCharSize = encodeChar(c, buffer);
 
       int unwritten = (buffer.length ~/ 3) * 2;
 
@@ -77,8 +77,8 @@ class C40Encoder implements Encoder {
     int count = buffer.length;
     buffer.delete(count - lastCharSize, count);
     context.pos--;
-    String c = context.getCurrentChar();
-    lastCharSize = encodeChar(c.codeUnitAt(0), removed);
+    int c = context.getCurrentChar();
+    lastCharSize = encodeChar(c, removed);
     context.resetSymbolInfo(); //Deal with possible reduction in symbol size
     return lastCharSize;
   }

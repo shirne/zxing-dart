@@ -68,8 +68,8 @@ class EncoderContext {
     this._skipAtEnd = count;
   }
 
-  String getCurrentChar() {
-    return _msg[pos];
+  int getCurrentChar() {
+    return _msg.codeUnitAt(pos);
   }
 
   String getCurrent() {

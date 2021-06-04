@@ -31,8 +31,8 @@ class Base256Encoder implements Encoder {
     StringBuilder buffer = StringBuilder();
     buffer.write('\x00'); //Initialize length field
     while (context.hasMoreCharacters()) {
-      String c = context.getCurrentChar();
-      buffer.write(c);
+      int c = context.getCurrentChar();
+      buffer.writeCharCode(c);
 
       context.pos++;
 
@@ -60,7 +60,7 @@ class Base256Encoder implements Encoder {
         throw Exception("Message length not in valid ranges: $dataCount");
       }
     }
-    for (int i = 0, c = buffer.length; i < c; i++) {
+    for (int i = 0, l = buffer.length; i < l; i++) {
       context.writeCodeword(
           _randomize255State(buffer.charAt(i), context.getCodewordCount() + 1));
     }

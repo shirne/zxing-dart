@@ -31,10 +31,10 @@ class X12Encoder extends C40Encoder {
     //step C
     StringBuilder buffer = StringBuilder();
     while (context.hasMoreCharacters()) {
-      String c = context.getCurrentChar();
+      int c = context.getCurrentChar();
       context.pos++;
 
-      encodeChar(c.codeUnitAt(0), buffer);
+      encodeChar(c, buffer);
 
       int count = buffer.length;
       if ((count % 3) == 0) {
