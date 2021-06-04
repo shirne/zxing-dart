@@ -34,7 +34,7 @@ void main(){
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
         .getText();
-    expect("\u00f1\u00f2\u00f3", result);
+    expect(result, "\u00f1\u00f2\u00f3");
   });
 
   test('testSimpleSJIS', () {
@@ -63,7 +63,7 @@ void main(){
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
         .getText();
-    expect("\u00ed\u00f3\u00fa", result);
+    expect(result, "\u00ed\u00f3\u00fa");
   });
 
   test('testHanzi', () {

@@ -39,7 +39,7 @@ void assertEqualOrNaN(double expected, double actual, [int eps = 1000]) {
 }
 
 String matrixToString(BitMatrix result) {
-  expect(1, result.getHeight());
+  expect(result.getHeight(), 1);
   StringBuilder builder = new StringBuilder();
   for (int i = 0; i < result.getWidth(); i++) {
     builder.write(result.get(i, 0) ? '1' : '0');

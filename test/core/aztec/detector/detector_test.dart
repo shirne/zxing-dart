@@ -135,7 +135,7 @@ void main() {
             expect(r.getNbLayers(), layers);
             expect(r.isCompact(), compact);
             DecoderResult res = new Decoder().decode(r);
-            expect(data, res.getText());
+            expect(res.getText(), data);
           }
         }
         // Try a few random three-bit errors;

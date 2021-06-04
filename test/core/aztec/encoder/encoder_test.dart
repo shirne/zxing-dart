@@ -54,21 +54,21 @@ void main(){
 
   void testEncode(String data, bool compact, int layers, String expected) {
     AztecCode aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect( compact, aztec.isCompact(), reason: "Unexpected symbol format (compact)");
-    expect( layers, aztec.getLayers(), reason: "Unexpected nr. of layers");
+    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
     BitMatrix matrix = aztec.getMatrix()!;
-    expect(expected, matrix.toString(), reason: "encode() failed");
+    expect(matrix.toString(), expected, reason: "encode() failed");
   }
 
   void testEncodeDecode(String data, bool compact, int layers){
     AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect(compact, aztec.isCompact(), reason: "Unexpected symbol format (compact)");
-    expect(layers, aztec.getLayers(), reason: "Unexpected nr. of layers");
+    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
     BitMatrix matrix = aztec.getMatrix()!;
     AztecDetectorResult r =
     new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
-    expect(data, res.getText());
+    expect(res.getText(), data, );
     // Check error correction by introducing a few minor errors
     Random random = getPseudoRandom();
     matrix.flip(random.nextInt(matrix.getWidth()), random.nextInt(2));
@@ -77,7 +77,7 @@ void main(){
     matrix.flip(matrix.getWidth() - 2 + random.nextInt(2), random.nextInt(matrix.getHeight()));
     r = AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     res = Decoder().decode(r);
-    expect(data, res.getText());
+    expect(res.getText(), data);
   }
 
   void testWriter(String data,
@@ -95,14 +95,14 @@ void main(){
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
     AztecCode aztec = Encoder.encode(data, eccPercent,
         Encoder.DEFAULT_AZTEC_LAYERS, charset);
-    expect( compact, aztec.isCompact(), reason: "Unexpected symbol format (compact)");
-    expect( layers, aztec.getLayers(), reason: "Unexpected nr. of layers");
+    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
     BitMatrix matrix2 = aztec.getMatrix()!;
     expect(matrix, matrix2);
     AztecDetectorResult r =
     new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
-    expect(data, res.getText());
+    expect(res.getText(), data,);
     // Check error correction by introducing up to eccPercent/2 errors
     int ecWords = aztec.getCodeWords() * eccPercent ~/ 100 ~/ 2;
     Random random = getPseudoRandom();
@@ -118,7 +118,7 @@ void main(){
     }
     r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     res = new Decoder().decode(r);
-    expect(data, res.getText());
+    expect(res.getText(), data);
   }
 
 
@@ -154,15 +154,15 @@ void main(){
   void testHighLevelEncodeStringString(String s, String expectedBits){
     BitArray bits = new HighLevelEncoder(latin1.encode(s) ).encode();
     String receivedBits = stripSpace(bits.toString());
-    expect(s, Decoder.highLevelDecode(toBooleanArray(bits)));
-    expect( stripSpace(expectedBits), receivedBits, reason: "highLevelEncode() failed for input string: $s");
+    expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
+    expect(stripSpace(expectedBits), receivedBits, reason: "highLevelEncode() failed for input string: $s");
   }
 
   // todo 加密串长度和预期不一致，但是能解密 ?
   void testHighLevelEncodeStringInt(String s, int expectedReceivedBits){
     BitArray bits = new HighLevelEncoder(latin1.encode(s)).encode();
     int receivedBitCount = stripSpace(bits.toString()).length;
-    expect(s, Decoder.highLevelDecode(toBooleanArray(bits)));
+    expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
     if(expectedReceivedBits != receivedBitCount){
       print("highLevelEncode() result length($receivedBitCount) unexpected(expected $expectedReceivedBits) for input string: $s");
     }
@@ -535,11 +535,11 @@ void main(){
   test('testUserSpecifiedLayers', () {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
-    expect(2, aztec.getLayers());
+    expect(aztec.getLayers(), 2);
     assert(aztec.isCompact());
 
     aztec = Encoder.encode(alphabet, 25, 32);
-    expect(32, aztec.getLayers());
+    expect(aztec.getLayers(), 32);
     assert(!aztec.isCompact());
 
     try {
@@ -573,13 +573,13 @@ void main(){
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode = Encoder.encode(alphabet4, 0, Encoder.DEFAULT_AZTEC_LAYERS);
     assert(!aztecCode.isCompact());
-    expect(4, aztecCode.getLayers());
+    expect(aztecCode.getLayers(), 4);
 
     // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
     // include more error checking.
     aztecCode = Encoder.encode(alphabet4.substring(0, 100), 10, Encoder.DEFAULT_AZTEC_LAYERS);
     assert(aztecCode.isCompact());
-    expect(4, aztecCode.getLayers());
+    expect(aztecCode.getLayers(), 4);
   });
 
   

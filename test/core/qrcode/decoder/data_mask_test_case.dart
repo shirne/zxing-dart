@@ -38,7 +38,7 @@ void main() {
   });
 
   test('testMask4', () {
-    testMaskAcrossDimensions(4, (i, j) => (i / 2 + j / 3) % 2 == 0);
+    testMaskAcrossDimensions(4, (i, j) => (i ~/ 2 + j ~/ 3) % 2 == 0);
   });
 
   test('testMask5', () {
@@ -68,7 +68,7 @@ void testMask(DataMask mask, int dimension, bool Function(int, int) condition) {
   mask.unmaskBitMatrix(bits, dimension);
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
-      expect(condition(i, j), bits.get(j, i), reason: "($i,$j)");
+      expect(condition(i, j), bits.get(j, i), reason: "$dimension($i,$j)");
     }
   }
 }

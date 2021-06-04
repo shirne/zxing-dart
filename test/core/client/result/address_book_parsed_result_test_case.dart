@@ -50,17 +50,17 @@ void main(){
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.ADDRESS_BOOK, result.getType());
     AddressBookParsedResult addressResult = result as AddressBookParsedResult;
-    expect(title, addressResult.getTitle());
+    expect(addressResult.getTitle(), title);
     assertArrayEquals(names, addressResult.getNames());
     expect(pronunciation, addressResult.getPronunciation());
     assertArrayEquals(addresses, addressResult.getAddresses());
     assertArrayEquals(emails, addressResult.getEmails());
     assertArrayEquals(phoneNumbers, addressResult.getPhoneNumbers());
     assertArrayEquals(phoneTypes, addressResult.getPhoneTypes());
-    expect(org, addressResult.getOrg());
+    expect(addressResult.getOrg(), org);
     assertArrayEquals(urls, addressResult.getURLs());
-    expect(birthday, addressResult.getBirthday());
-    expect(note, addressResult.getNote());
+    expect(addressResult.getBirthday(), birthday);
+    expect(addressResult.getNote(), note);
   }
 
   test('testAddressBookDocomo', () {

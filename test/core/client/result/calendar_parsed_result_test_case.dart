@@ -60,12 +60,12 @@ void main(){
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.CALENDAR, result.getType());
     CalendarParsedResult calResult = result as CalendarParsedResult;
-    expect(description, calResult.getDescription());
-    expect(summary, calResult.getSummary());
-    expect(location, calResult.getLocation());
+    expect(calResult.getDescription(), description);
+    expect(calResult.getSummary(), summary);
+    expect(calResult.getLocation(), location);
     dateEqual(startString, calResult.getStartTimestamp());
     dateEqual(endString, calResult.getEndTimestamp() < 0 ? null : calResult.getEndTimestamp());
-    expect(organizer, calResult.getOrganizer());
+    expect(calResult.getOrganizer(), organizer);
     assertArrayEquals(attendees, calResult.getAttendees());
     assertEqualOrNaN(latitude, calResult.getLatitude()!);
     assertEqualOrNaN(longitude, calResult.getLongitude()!);
@@ -160,7 +160,7 @@ void main(){
         "GEO:-12.345\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.getType());
+    expect(result.getType(), ParsedResultType.TEXT);
   });
 
   test('testOrganizer', () {
