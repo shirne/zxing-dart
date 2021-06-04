@@ -318,16 +318,16 @@ class Code128Reader extends OneDReader {
         case _CODE_CODE_A:
           if (code < 64) {
             if (shiftUpperMode == upperMode) {
-              result.write(String.fromCharCode(' '.codeUnitAt(0) + code));
+              result.writeCharCode(' '.codeUnitAt(0) + code);
             } else {
-              result.write(String.fromCharCode(' '.codeUnitAt(0) + code + 128));
+              result.writeCharCode(' '.codeUnitAt(0) + code + 128);
             }
             shiftUpperMode = false;
           } else if (code < 96) {
             if (shiftUpperMode == upperMode) {
-              result.write(String.fromCharCode(code - 64));
+              result.writeCharCode(code - 64);
             } else {
-              result.write(String.fromCharCode(code + 64));
+              result.writeCharCode(code + 64);
             }
             shiftUpperMode = false;
           } else {
