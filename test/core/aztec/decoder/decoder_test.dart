@@ -175,7 +175,12 @@ void main(){
         + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
-    new Decoder().decode(r);
+    try {
+      new Decoder().decode(r);
+      fail('here should be FormatException');
+    }catch(_){
+      // passed
+    }
   });
 
   //@Test(expected = FormatException.class)
@@ -210,7 +215,12 @@ void main(){
         + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
-    new Decoder().decode(r);
+    try {
+      new Decoder().decode(r);
+      fail('here should be FormatException');
+    }catch(_){
+      // passed
+    }
   });
 
   test('testRawBytes', () {
