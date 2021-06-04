@@ -40,7 +40,7 @@ class EAN8Reader extends UPCEANReader {
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
-      result.writeCharCode('0'.codeUnitAt(0) + bestMatch);
+      result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -53,7 +53,7 @@ class EAN8Reader extends UPCEANReader {
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
-      result.writeCharCode('0'.codeUnitAt(0) + bestMatch);
+      result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
       }

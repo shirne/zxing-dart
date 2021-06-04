@@ -98,7 +98,7 @@ class MathUtils {
   }
 
   static bool isDigit(int ch) {
-    return ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0);
+    return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
   }
 
   static int numberOfLeadingZeros(int i) {

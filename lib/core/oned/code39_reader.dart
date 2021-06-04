@@ -253,7 +253,7 @@ class Code39Reader extends OneDReader {
         switch (c) {
           case '+':
             // +A to +Z map to a to z
-            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+            if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = String.fromCharCode(next + 32);
             } else {
               throw FormatException();
@@ -261,7 +261,7 @@ class Code39Reader extends OneDReader {
             break;
           case r'$':
             // $A to $Z map to control codes SH to SB
-            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+            if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = String.fromCharCode(next - 64);
             } else {
               throw FormatException();
@@ -269,23 +269,23 @@ class Code39Reader extends OneDReader {
             break;
           case '%':
             // %A to %E map to control codes ESC to US
-            if (next >= 'A'.codeUnitAt(0) && next <= 'E'.codeUnitAt(0)) {
+            if (next >= 65 /* A */ && next <= 69 /* E */) {
               decodedChar = String.fromCharCode(next - 38);
-            } else if (next >= 'F'.codeUnitAt(0) && next <= 'J'.codeUnitAt(0)) {
+            } else if (next >= 70 /* F */ && next <= 74 /* J */) {
               decodedChar = String.fromCharCode(next - 11);
-            } else if (next >= 'K'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
+            } else if (next >= 75 /* K */ && next <= 79 /* O */) {
               decodedChar = String.fromCharCode(next + 16);
-            } else if (next >= 'P'.codeUnitAt(0) && next <= 'T'.codeUnitAt(0)) {
+            } else if (next >= 80 /* P */ && next <= 84 /* T */) {
               decodedChar = String.fromCharCode(next + 43);
-            } else if (next == 'U'.codeUnitAt(0)) {
+            } else if (next == 85 /* U */) {
               decodedChar = String.fromCharCode(0);
-            } else if (next == 'V'.codeUnitAt(0)) {
+            } else if (next == 86 /* V */) {
               decodedChar = '@';
-            } else if (next == 'W'.codeUnitAt(0)) {
+            } else if (next == 87 /* W */) {
               decodedChar = '`';
-            } else if (next == 'X'.codeUnitAt(0) ||
-                next == 'Y'.codeUnitAt(0) ||
-                next == 'Z'.codeUnitAt(0)) {
+            } else if (next == 88 /* X */ ||
+                next == 89 /* Y */ ||
+                next == 90 /* Z */) {
               decodedChar = String.fromCharCode(127);
             } else {
               throw FormatException();
@@ -293,9 +293,9 @@ class Code39Reader extends OneDReader {
             break;
           case '/':
             // /A to /O map to ! to , and /Z maps to :
-            if (next >= 'A'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
+            if (next >= 65 /* A */ && next <= 79 /* O */) {
               decodedChar = String.fromCharCode(next - 32);
-            } else if (next == 'Z'.codeUnitAt(0)) {
+            } else if (next == 90 /* Z */) {
               decodedChar = ':';
             } else {
               throw FormatException();

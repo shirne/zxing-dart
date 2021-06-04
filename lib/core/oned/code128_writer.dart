@@ -116,15 +116,15 @@ class Code128Writer extends OneDimensionalCodeWriter {
             switch (codeSet) {
               case _CODE_CODE_A:
                 patternIndex =
-                    contents.codeUnitAt(position) - ' '.codeUnitAt(0);
+                    contents.codeUnitAt(position) - 32 /*   */;
                 if (patternIndex < 0) {
                   // everything below a space character comes behind the underscore in the code patterns table
-                  patternIndex += '`'.codeUnitAt(0);
+                  patternIndex += 96 /* ` */;
                 }
                 break;
               case _CODE_CODE_B:
                 patternIndex =
-                    contents.codeUnitAt(position) - ' '.codeUnitAt(0);
+                    contents.codeUnitAt(position) - 32 /*   */;
                 break;
               default:
                 // CODE_CODE_C
@@ -202,14 +202,14 @@ class Code128Writer extends OneDimensionalCodeWriter {
       return _CType.FNC_1;
     }
     int c = value.codeUnitAt(start);
-    if (c < '0'.codeUnitAt(0) || c > '9'.codeUnitAt(0)) {
+    if (c < 48 /* 0 */ || c > 57 /* 9 */) {
       return _CType.UNCODABLE;
     }
     if (start + 1 >= last) {
       return _CType.ONE_DIGIT;
     }
     c = value.codeUnitAt(start + 1);
-    if (c < '0'.codeUnitAt(0) || c > '9'.codeUnitAt(0)) {
+    if (c < 48 /* 0 */ || c > 57 /* 9 */) {
       return _CType.ONE_DIGIT;
     }
     return _CType.TWO_DIGITS;
@@ -226,9 +226,9 @@ class Code128Writer extends OneDimensionalCodeWriter {
     if (lookahead == _CType.UNCODABLE) {
       if (start < value.length) {
         int c = value.codeUnitAt(start);
-        if (c < ' '.codeUnitAt(0) ||
+        if (c < 32 /*   */ ||
             (oldCode == _CODE_CODE_A &&
-                (c < '`'.codeUnitAt(0) ||
+                (c < 96 /* ` */ ||
                     (c >= _ESCAPE_FNC_1.codeUnitAt(0) &&
                         c <= _ESCAPE_FNC_4.codeUnitAt(0))))) {
           // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4

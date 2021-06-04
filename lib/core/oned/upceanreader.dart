@@ -267,7 +267,7 @@ abstract class UPCEANReader extends OneDReader {
     int length = s.length;
     int sum = 0;
     for (int i = length - 1; i >= 0; i -= 2) {
-      int digit = s.codeUnitAt(i) - '0'.codeUnitAt(0);
+      int digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
         throw FormatException();
       }
@@ -275,7 +275,7 @@ abstract class UPCEANReader extends OneDReader {
     }
     sum *= 3;
     for (int i = length - 2; i >= 0; i -= 2) {
-      int digit = s.codeUnitAt(i) - '0'.codeUnitAt(0);
+      int digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
         throw FormatException();
       }

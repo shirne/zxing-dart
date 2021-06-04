@@ -221,7 +221,7 @@ class Encoder {
     bool hasAlphanumeric = false;
     for (int i = 0; i < content.length; ++i) {
       int c = content.codeUnitAt(i);
-      if (c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
+      if (c >= 48 /* 0 */ && c <= 57 /* 9 */) {
         hasNumeric = true;
       } else if (getAlphanumericCode(c) != -1) {
         hasAlphanumeric = true;
@@ -505,16 +505,16 @@ class Encoder {
     int length = content.length;
     int i = 0;
     while (i < length) {
-      int num1 = content.codeUnitAt(i) - '0'.codeUnitAt(0);
+      int num1 = content.codeUnitAt(i) - 48 /* 0 */;
       if (i + 2 < length) {
         // Encode three numeric letters in ten bits.
-        int num2 = content.codeUnitAt(i + 1) - '0'.codeUnitAt(0);
-        int num3 = content.codeUnitAt(i + 2) - '0'.codeUnitAt(0);
+        int num2 = content.codeUnitAt(i + 1) - 48 /* 0 */;
+        int num3 = content.codeUnitAt(i + 2) - 48 /* 0 */;
         bits.appendBits(num1 * 100 + num2 * 10 + num3, 10);
         i += 3;
       } else if (i + 1 < length) {
         // Encode two numeric letters in seven bits.
-        int num2 = content.codeUnitAt(i + 1) - '0'.codeUnitAt(0);
+        int num2 = content.codeUnitAt(i + 1) - 48 /* 0 */;
         bits.appendBits(num1 * 10 + num2, 7);
         i += 2;
       } else {

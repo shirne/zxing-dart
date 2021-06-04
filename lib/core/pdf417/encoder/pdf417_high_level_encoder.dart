@@ -31,7 +31,7 @@ import 'compaction.dart';
 /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
 /// annex P.
 class PDF417HighLevelEncoder {
-  static final int _blankCode = ' '.codeUnitAt(0);
+  static final int _blankCode = 32 /*   */;
   /// code for Text compaction
   static const int _TEXT_COMPACTION = 0;
 
@@ -379,17 +379,17 @@ class PDF417HighLevelEncoder {
   }
 
   static bool _isDigit(int ch) {
-    return ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0);
+    return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
   }
 
   static bool _isAlphaUpper(int ch) {
     return ch == _blankCode ||
-        (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
+        (ch >= 65 /* A */ && ch <= 90 /* Z */);
   }
 
   static bool _isAlphaLower(int ch) {
     return ch == _blankCode ||
-        (ch >= 'a'.codeUnitAt(0) && ch <= 'z'.codeUnitAt(0));
+        (ch >= 97 /* a */ && ch <= 122 /* z */);
   }
 
   static bool _isMixed(int ch) {

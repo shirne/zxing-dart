@@ -170,9 +170,9 @@ class ITFReader extends OneDReader {
       }
 
       int bestMatch = _decodeDigit(counterBlack);
-      resultString.writeCharCode('0'.codeUnitAt(0) + bestMatch);
+      resultString.writeCharCode(48 /* 0 */ + bestMatch);
       bestMatch = _decodeDigit(counterWhite);
-      resultString.write('0'.codeUnitAt(0) + bestMatch);
+      resultString.write(48 /* 0 */ + bestMatch);
 
       for (int counterDigit in counterDigitPair) {
         payloadStart += counterDigit;

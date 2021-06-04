@@ -85,7 +85,7 @@ class UPCEReader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
-      result.write(String.fromCharCode('0'.codeUnitAt(0) + bestMatch % 10));
+      result.write(String.fromCharCode(48 /* 0 */ + bestMatch % 10));
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -117,8 +117,8 @@ class UPCEReader extends UPCEANReader {
       for (int d = 0; d < 10; d++) {
         if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
           resultString.insert(
-              0, String.fromCharCode('0'.codeUnitAt(0) + numSys));
-          resultString.write(String.fromCharCode('0'.codeUnitAt(0) + d));
+              0, String.fromCharCode(48 /* 0 */ + numSys));
+          resultString.write(String.fromCharCode(48 /* 0 */ + d));
           return;
         }
       }

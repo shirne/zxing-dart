@@ -113,9 +113,9 @@ class EdifactEncoder implements Encoder {
 
   static void _encodeChar(int chr, StringBuffer sb) {
 
-    if (chr >= ' '.codeUnitAt(0) && chr <= '?'.codeUnitAt(0)) {
+    if (chr >= 32 /*   */ && chr <= 63 /* ? */) {
       sb.writeCharCode(chr);
-    } else if (chr >= '@'.codeUnitAt(0) && chr <= '^'.codeUnitAt(0)) {
+    } else if (chr >= 64 /* @ */ && chr <= 94 /* ^ */) {
       sb.writeCharCode(chr - 64);
     } else {
       HighLevelEncoder.illegalCharacter(chr);

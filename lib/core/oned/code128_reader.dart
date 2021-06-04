@@ -318,9 +318,9 @@ class Code128Reader extends OneDReader {
         case _CODE_CODE_A:
           if (code < 64) {
             if (shiftUpperMode == upperMode) {
-              result.writeCharCode(' '.codeUnitAt(0) + code);
+              result.writeCharCode(32 /*   */ + code);
             } else {
-              result.writeCharCode(' '.codeUnitAt(0) + code + 128);
+              result.writeCharCode(32 /*   */ + code + 128);
             }
             shiftUpperMode = false;
           } else if (code < 96) {
@@ -391,9 +391,9 @@ class Code128Reader extends OneDReader {
         case _CODE_CODE_B:
           if (code < 96) {
             if (shiftUpperMode == upperMode) {
-              result.writeCharCode(' '.codeUnitAt(0) + code);
+              result.writeCharCode(32 /*   */ + code);
             } else {
-              result.writeCharCode(' '.codeUnitAt(0) + code + 128);
+              result.writeCharCode(32 /*   */ + code + 128);
             }
             shiftUpperMode = false;
           } else {

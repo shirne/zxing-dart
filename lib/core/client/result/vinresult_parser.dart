@@ -69,17 +69,17 @@ class VINResultParser extends ResultParser {
   }
   
   static int _vinCharValue(int c) {
-    if (c >= 'A'.codeUnitAt(0) && c <= 'I'.codeUnitAt(0)) {
-      return (c - 'A'.codeUnitAt(0)) + 1;
+    if (c >= 65 /*'A'*/ && c <= 73 /*'I'*/) {
+      return (c - 65) + 1;
     }
-    if (c >= 'J'.codeUnitAt(0) && c <= 'R'.codeUnitAt(0)) {
-      return (c - 'J'.codeUnitAt(0)) + 1;
+    if (c >= 74 /*'J'*/ && c <= 72 /*'R'*/) {
+      return (c - 74) + 1;
     }
-    if (c >= 'S'.codeUnitAt(0) && c <= 'Z'.codeUnitAt(0)) {
-      return (c - 'S'.codeUnitAt(0)) + 2;
+    if (c >= 83 /*'S'*/ && c <= 90 /*'Z'*/) {
+      return (c - 83) + 2;
     }
-    if (c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
-      return c - '0'.codeUnitAt(0);
+    if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
+      return c - 48;
     }
     throw Exception();
   }
@@ -102,7 +102,7 @@ class VINResultParser extends ResultParser {
 
   static String _checkChar(int remainder) {
     if (remainder < 10) {
-      return String.fromCharCode('0'.codeUnitAt(0) + remainder);
+      return String.fromCharCode(48 /*'0'*/ + remainder);
     }
     if (remainder == 10) {
       return 'X';
@@ -111,26 +111,26 @@ class VINResultParser extends ResultParser {
   }
   
   static int _modelYear(int c) {
-    if (c >= 'E'.codeUnitAt(0) && c <= 'H'.codeUnitAt(0)) {
-      return (c - 'E'.codeUnitAt(0)) + 1984;
+    if (c >= 69 /*'E'*/ && c <= 72 /*'H'*/) {
+      return (c - 69) + 1984;
     }
-    if (c >= 'J'.codeUnitAt(0) && c <= 'N'.codeUnitAt(0)) {
-      return (c - 'J'.codeUnitAt(0)) + 1988;
+    if (c >= 74 /*'J'*/ && c <= 78 /*'N'*/) {
+      return (c - 74) + 1988;
     }
-    if (c == 'P'.codeUnitAt(0)) {
+    if (c == 80 /*'P'*/) {
       return 1993;
     }
-    if (c >= 'R'.codeUnitAt(0) && c <= 'T'.codeUnitAt(0)) {
-      return (c - 'R'.codeUnitAt(0)) + 1994;
+    if (c >= 82 /*'R'*/ && c <= 84 /*'T'*/) {
+      return (c - 82) + 1994;
     }
-    if (c >= 'V'.codeUnitAt(0) && c <= 'Y'.codeUnitAt(0)) {
-      return (c - 'V'.codeUnitAt(0)) + 1997;
+    if (c >= 86 /*'V'*/ && c <= 89 /*'Y'*/) {
+      return (c - 86) + 1997;
     }
-    if (c >= '1'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
-      return (c - '1'.codeUnitAt(0)) + 2001;
+    if (c >= 49 /*'1'*/ && c <= 57 /*'9'*/) {
+      return (c - 49) + 2001;
     }
-    if (c >= 'A'.codeUnitAt(0) && c <= 'D'.codeUnitAt(0)) {
-      return (c - 'A'.codeUnitAt(0)) + 2010;
+    if (c >= 65 /*'A'*/ && c <= 68 /*'D'*/) {
+      return (c - 65) + 2010;
     }
     throw Exception();
   }
@@ -146,57 +146,57 @@ class VINResultParser extends ResultParser {
       case '2':
         return "CA";
       case '3':
-        if (c2 >= 'A'.codeUnitAt(0) && c2 <= 'W'.codeUnitAt(0)) {
+        if (c2 >= 65 /*'A'*/ && c2 <= 8 /*'W'*/) {
           return "MX";
         }
         break;
       case '9':
-        if ((c2 >= 'A'.codeUnitAt(0) && c2 <= 'E'.codeUnitAt(0)) || (c2 >= '3'.codeUnitAt(0) && c2 <= '9'.codeUnitAt(0))) {
+        if ((c2 >= 65 /* A */ && c2 <= 69 /* E */) || (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
           return "BR";
         }
         break;
       case 'J':
-        if (c2 >= 'A'.codeUnitAt(0) && c2 <= 'T'.codeUnitAt(0)) {
+        if (c2 >= 65 /* A */ && c2 <= 84 /* T */) {
           return "JP";
         }
         break;
       case 'K':
-        if (c2 >= 'L'.codeUnitAt(0) && c2 <= 'R'.codeUnitAt(0)) {
+        if (c2 >= 76 /* L */ && c2 <= 82 /* R */) {
           return "KO";
         }
         break;
       case 'L':
         return "CN";
       case 'M':
-        if (c2 >= 'A'.codeUnitAt(0) && c2 <= 'E'.codeUnitAt(0)) {
+        if (c2 >= 65 /* A */ && c2 <= 69 /* E */) {
           return "IN";
         }
         break;
       case 'S':
-        if (c2 >= 'A'.codeUnitAt(0) && c2 <= 'M'.codeUnitAt(0)) {
+        if (c2 >= 65 /* A */ && c2 <= 77 /* M */) {
           return "UK";
         }
-        if (c2 >= 'N'.codeUnitAt(0) && c2 <= 'T'.codeUnitAt(0)) {
+        if (c2 >= 78 /* N */ && c2 <= 84 /* T */) {
           return "DE";
         }
         break;
       case 'V':
-        if (c2 >= 'F'.codeUnitAt(0) && c2 <= 'R'.codeUnitAt(0)) {
+        if (c2 >= 70 /* F */ && c2 <= 82 /* R */) {
           return "FR";
         }
-        if (c2 >= 'S'.codeUnitAt(0) && c2 <= 'W'.codeUnitAt(0)) {
+        if (c2 >= 83 /* S */ && c2 <= 87 /* W */) {
           return "ES";
         }
         break;
       case 'W':
         return "DE";
       case 'X':
-        if (c2 == '0'.codeUnitAt(0) || (c2 >= '3'.codeUnitAt(0) && c2 <= '9'.codeUnitAt(0))) {
+        if (c2 == 48 /* 0 */ || (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
           return "RU";
         }
         break;
       case 'Z':
-        if (c2 >= 'A'.codeUnitAt(0) && c2 <= 'R'.codeUnitAt(0)) {
+        if (c2 >= 65 /* A */ && c2 <= 82 /* R */) {
           return "IT";
         }
         break;

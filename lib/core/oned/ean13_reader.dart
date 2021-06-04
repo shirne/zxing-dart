@@ -76,7 +76,7 @@ class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
-      resultString.writeCharCode('0'.codeUnitAt(0) + bestMatch % 10);
+      resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -94,7 +94,7 @@ class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
-      resultString.writeCharCode('0'.codeUnitAt(0) + bestMatch);
+      resultString.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -120,7 +120,7 @@ class EAN13Reader extends UPCEANReader {
       StringBuilder resultString, int lgPatternFound) {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
-        resultString.insert(0, String.fromCharCode('0'.codeUnitAt(0) + d));
+        resultString.insert(0, String.fromCharCode(48 /* 0 */ + d));
         return;
       }
     }

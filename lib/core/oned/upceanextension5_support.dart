@@ -71,7 +71,7 @@ class UPCEANExtension5Support {
 
     for (int x = 0; x < 5 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.lAndGPatterns);
-      resultString.writeCharCode('0'.codeUnitAt(0) + bestMatch % 10);
+      resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -101,11 +101,11 @@ class UPCEANExtension5Support {
     int length = s.length;
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
-      sum += s.codeUnitAt(i) - '0'.codeUnitAt(0);
+      sum += s.codeUnitAt(i) - 48 /* 0 */;
     }
     sum *= 3;
     for (int i = length - 1; i >= 0; i -= 2) {
-      sum += s.codeUnitAt(i) - '0'.codeUnitAt(0);
+      sum += s.codeUnitAt(i) - 48 /* 0 */;
     }
     sum *= 3;
     return sum % 10;

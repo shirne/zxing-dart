@@ -347,7 +347,7 @@ class HighLevelEncoder {
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0);
+    return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
   }
 
   static bool isExtendedASCII(dynamic chr) {
@@ -365,9 +365,9 @@ class HighLevelEncoder {
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return (ch == ' '.codeUnitAt(0)) ||
-        (ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0)) ||
-        (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
+    return (ch == 32 /*   */) ||
+        (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
+        (ch >= 65 /* A */ && ch <= 90 /* Z */);
   }
 
   static bool _isNativeText(dynamic chr) {
@@ -376,9 +376,9 @@ class HighLevelEncoder {
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return (ch == ' '.codeUnitAt(0)) ||
-        (ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0)) ||
-        (ch >= 'a'.codeUnitAt(0) && ch <= 'z'.codeUnitAt(0));
+    return (ch == 32 /*   */) ||
+        (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
+        (ch >= 97 /* a */ && ch <= 122 /* z */);
   }
 
   static bool _isNativeX12(dynamic chr) {
@@ -388,9 +388,9 @@ class HighLevelEncoder {
     else
       ch = chr as int;
     return _isX12TermSep(ch) ||
-        (ch == ' '.codeUnitAt(0)) ||
-        (ch >= '0'.codeUnitAt(0) && ch <= '9'.codeUnitAt(0)) ||
-        (ch >= 'A'.codeUnitAt(0) && ch <= 'Z'.codeUnitAt(0));
+        (ch == 32 /*   */) ||
+        (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
+        (ch >= 65 /* A */ && ch <= 90 /* Z */);
   }
 
   static bool _isX12TermSep(dynamic chr) {
@@ -401,8 +401,8 @@ class HighLevelEncoder {
       ch = chr as int;
     return (ch == '\r'.codeUnitAt(0)) //CR
         ||
-        (ch == '*'.codeUnitAt(0)) ||
-        (ch == '>'.codeUnitAt(0));
+        (ch == 42 /* * */) ||
+        (ch == 62 /* > */);
   }
 
   static bool _isNativeEDIFACT(dynamic chr) {
@@ -411,7 +411,7 @@ class HighLevelEncoder {
       ch = chr.codeUnitAt(0);
     else
       ch = chr as int;
-    return ch >= ' '.codeUnitAt(0) && ch <= '^'.codeUnitAt(0);
+    return ch >= 32 /*   */ && ch <= 94 /* ^ */;
   }
 
   static bool _isSpecialB256(dynamic chr) {

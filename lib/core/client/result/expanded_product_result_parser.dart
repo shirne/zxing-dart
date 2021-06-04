@@ -179,10 +179,10 @@ class ExpandedProductResultParser extends ResultParser {
     StringBuffer buf = StringBuffer();
     for (int index = 0; index < rawTextAux.length; index++) {
       int currentChar = rawTextAux.codeUnitAt(index);
-      if (currentChar == ')'.codeUnitAt(0)) {
+      if (currentChar == 41 /*')'*/) {
         return buf.toString();
       }
-      if (currentChar < '0'.codeUnitAt(0) || currentChar > '9'.codeUnitAt(0)) {
+      if (currentChar < 48 /*'0'*/ || currentChar > 57 /*'9'*/) {
         return null;
       }
       buf.writeCharCode(currentChar);

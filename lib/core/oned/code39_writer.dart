@@ -100,31 +100,31 @@ class Code39Writer extends OneDimensionalCodeWriter {
           int c = character.codeUnitAt(0);
           if (c <= 26) {
             extendedContent.write(r'$');
-            extendedContent.writeCharCode(('A'.codeUnitAt(0) + (c - 1)));
-          } else if (c < ' '.codeUnitAt(0)) {
+            extendedContent.writeCharCode((65 /* A */ + (c - 1)));
+          } else if (c < 32 /*   */) {
             extendedContent.write('%');
-            extendedContent.writeCharCode(('A'.codeUnitAt(0) + (c - 27)));
-          } else if (c <= ','.codeUnitAt(0) ||
+            extendedContent.writeCharCode((65 /* A */ + (c - 27)));
+          } else if (c <= 44 /* , */ ||
               character == '/' ||
               character == ':') {
             extendedContent.write('/');
-            extendedContent.writeCharCode(('A'.codeUnitAt(0) + (c - 33)));
-          } else if (c <= '9'.codeUnitAt(0)) {
-            extendedContent.writeCharCode(('0'.codeUnitAt(0) + (c - 48)));
-          } else if (c <= '?'.codeUnitAt(0)) {
+            extendedContent.writeCharCode((65 /* A */ + (c - 33)));
+          } else if (c <= 57 /* 9 */) {
+            extendedContent.writeCharCode((48 /* 0 */ + (c - 48)));
+          } else if (c <= 63 /* ? */) {
             extendedContent.write('%');
-            extendedContent.writeCharCode(('F'.codeUnitAt(0) + (c - 59)));
-          } else if (c <= 'Z'.codeUnitAt(0)) {
-            extendedContent.writeCharCode(('A'.codeUnitAt(0) + (c - 65)));
-          } else if (c <= '_'.codeUnitAt(0)) {
+            extendedContent.writeCharCode((70 /* F */ + (c - 59)));
+          } else if (c <= 90 /* Z */) {
+            extendedContent.writeCharCode((65 /* A */ + (c - 65)));
+          } else if (c <= 95 /* _ */) {
             extendedContent.write('%');
-            extendedContent.writeCharCode(('K'.codeUnitAt(0) + (c - 91)));
-          } else if (c <= 'z'.codeUnitAt(0)) {
+            extendedContent.writeCharCode((75 /* K */ + (c - 91)));
+          } else if (c <= 122 /* z */) {
             extendedContent.write('+');
-            extendedContent.writeCharCode(('A'.codeUnitAt(0) + (c - 97)));
+            extendedContent.writeCharCode((65 /* A */ + (c - 97)));
           } else if (c <= 127) {
             extendedContent.write('%');
-            extendedContent.writeCharCode(('P'.codeUnitAt(0) + (c - 123)));
+            extendedContent.writeCharCode((80 /* P */ + (c - 123)));
           } else {
             throw Exception(
                 "Requested content contains a non-encodable character: '" +

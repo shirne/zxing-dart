@@ -289,7 +289,7 @@ class GeneralAppIdDecoder {
     }
 
     if (fiveBitValue >= 5 && fiveBitValue < 15) {
-      return DecodedChar(pos + 5, ('0'.codeUnitAt(0) + fiveBitValue - 5));
+      return DecodedChar(pos + 5, (48 /* 0 */ + fiveBitValue - 5));
     }
 
     int sevenBitValue = extractNumericValueFromBitArray(pos, 7);
@@ -400,7 +400,7 @@ class GeneralAppIdDecoder {
     }
 
     if (fiveBitValue >= 5 && fiveBitValue < 15) {
-      return DecodedChar(pos + 5, ('0'.codeUnitAt(0) + fiveBitValue - 5));
+      return DecodedChar(pos + 5, (48 /* 0 */ + fiveBitValue - 5));
     }
 
     int sixBitValue = extractNumericValueFromBitArray(pos, 6);

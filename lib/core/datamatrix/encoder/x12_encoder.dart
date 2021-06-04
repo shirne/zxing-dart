@@ -69,9 +69,9 @@ class X12Encoder extends C40Encoder {
         break;
       default:
 
-        if (chr >= '0'.codeUnitAt(0) && chr <= '9'.codeUnitAt(0)) {
+        if (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) {
           sb.writeCharCode(chr - 48 + 4);
-        } else if (chr >= 'A'.codeUnitAt(0) && chr <= 'Z'.codeUnitAt(0)) {
+        } else if (chr >= 65 /* A */ && chr <= 90 /* Z */) {
           sb.writeCharCode(chr - 65 + 14);
         } else {
           HighLevelEncoder.illegalCharacter(chr);

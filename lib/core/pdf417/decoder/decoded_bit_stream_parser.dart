@@ -335,11 +335,11 @@ class DecodedBitStreamParser {
           // Alpha (uppercase alphabetic)
           if (subModeCh < 26) {
             // Upper case Alpha Character
-            ch = 'A'.codeUnitAt(0) + subModeCh;
+            ch = 65 /* A */ + subModeCh;
           } else {
             switch (subModeCh) {
               case 26:
-                ch = ' '.codeUnitAt(0);
+                ch = 32 /*   */;
                 break;
               case _LL:
                 subMode = _Mode.LOWER;
@@ -365,11 +365,11 @@ class DecodedBitStreamParser {
         case _Mode.LOWER:
           // Lower (lowercase alphabetic)
           if (subModeCh < 26) {
-            ch = 'a'.codeUnitAt(0) + subModeCh;
+            ch = 97 /* a */ + subModeCh;
           } else {
             switch (subModeCh) {
               case 26:
-                ch = ' '.codeUnitAt(0);
+                ch = 32 /*   */;
                 break;
               case _AS:
                 // Shift to alpha
@@ -405,7 +405,7 @@ class DecodedBitStreamParser {
                 subMode = _Mode.PUNCT;
                 break;
               case 26:
-                ch = ' '.codeUnitAt(0);
+                ch = 32 /*   */;
                 break;
               case _LL:
                 subMode = _Mode.LOWER;
@@ -447,11 +447,11 @@ class DecodedBitStreamParser {
           // Restore sub-mode
           subMode = priorToShiftMode;
           if (subModeCh < 26) {
-            ch = 'A'.codeUnitAt(0) + subModeCh;
+            ch = 65 /* A */ + subModeCh;
           } else {
             switch (subModeCh) {
               case 26:
-                ch = ' '.codeUnitAt(0);
+                ch = 32 /*   */;
                 break;
               case _TEXT_COMPACTION_MODE_LATCH:
                 subMode = _Mode.ALPHA;

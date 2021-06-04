@@ -161,14 +161,14 @@ abstract class ResultParser {
   @protected
   static int parseHexDigit(String chr) {
     int c = chr.codeUnitAt(0);
-    if (c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0)) {
-      return c - '0'.codeUnitAt(0);
+    if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
+      return c - 48;
     }
-    if (c >= 'a'.codeUnitAt(0) && c <= 'f'.codeUnitAt(0)) {
-      return 10 + (c - 'a'.codeUnitAt(0));
+    if (c >= 97 /*'a'*/ && c <= 102 /*'f'*/) {
+      return 10 + (c - 97);
     }
-    if (c >= 'A'.codeUnitAt(0) && c <= 'F'.codeUnitAt(0)) {
-      return 10 + (c - 'A'.codeUnitAt(0));
+    if (c >= 65 /*'A'*/ && c <= 70 /*'F'*/) {
+      return 10 + (c - 65);
     }
     return -1;
   }

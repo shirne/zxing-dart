@@ -65,7 +65,7 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
   static void _appendCheckDigit(StringBuilder buf, int currentPos) {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
-      int digit = buf.codePointAt(i + currentPos) - '0'.codeUnitAt(0);
+      int digit = buf.codePointAt(i + currentPos) - 48 /* 0 */;
       checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
     }
 

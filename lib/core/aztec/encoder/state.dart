@@ -71,7 +71,7 @@ class State {
       Uint8List eciDigits = latin1.encode(eci.toString());
       token = token.add(eciDigits.length, 3); // 1-6: number of ECI digits
       for (int eciDigit in eciDigits) {
-        token = token.add(eciDigit - '0'.codeUnitAt(0) + 2, 4);
+        token = token.add(eciDigit - 48 /*'0'*/ + 2, 4);
       }
       bitsAdded += eciDigits.length * 4;
     }

@@ -137,30 +137,30 @@ class C40Encoder implements Encoder {
       return 1;
     }
     
-    if (chr >= '0'.codeUnitAt(0) && chr <= '9'.codeUnitAt(0)) {
+    if (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) {
       sb.writeCharCode(chr - 48 + 4);
       return 1;
     }
-    if (chr >= 'A'.codeUnitAt(0) && chr <= 'Z'.codeUnitAt(0)) {
+    if (chr >= 65 /* A */ && chr <= 90 /* Z */) {
       sb.writeCharCode(chr - 65 + 14);
       return 1;
     }
-    if (chr < ' '.codeUnitAt(0)) {
+    if (chr < 32 /*   */) {
       sb.write('\x00'); //Shift 1 Set
       sb.writeCharCode(chr);
       return 2;
     }
-    if (chr <= '/'.codeUnitAt(0)) {
+    if (chr <= 47 /* / */) {
       sb.write('\x01'); //Shift 2 Set
       sb.writeCharCode(chr - 33);
       return 2;
     }
-    if (chr <= '@'.codeUnitAt(0)) {
+    if (chr <= 64 /* @ */) {
       sb.write('\x01'); //Shift 2 Set
       sb.writeCharCode(chr - 58 + 15);
       return 2;
     }
-    if (chr <= '_'.codeUnitAt(0)) {
+    if (chr <= 95 /* _ */) {
       sb.write('\x01'); //Shift 2 Set
       sb.writeCharCode(chr - 91 + 22);
       return 2;

@@ -194,70 +194,70 @@ class Code93Reader extends OneDReader {
     StringBuffer decoded = StringBuffer();
     for (int i = 0; i < length; i++) {
       int c = encoded.codeUnitAt(i);
-      if (c >= 'a'.codeUnitAt(0) && c <= 'd'.codeUnitAt(0)) {
+      if (c >= 97 /* a */ && c <= 100 /* d */) {
         if (i >= length - 1) {
           throw FormatException();
         }
         int next = encoded.codeUnitAt(i + 1);
-        String decodedChar = '\x00';
+        int decodedChar = 0;
         switch (String.fromCharCode(c)) {
           case 'd':
             // +A to +Z map to a to z
-            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
-              decodedChar = String.fromCharCode(next + 32);
+            if (next >= 65 /* A */ && next <= 90 /* Z */) {
+              decodedChar = next + 32;
             } else {
               throw FormatException();
             }
             break;
           case 'a':
             // $A to $Z map to control codes SH to SB
-            if (next >= 'A'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
-              decodedChar = String.fromCharCode(next - 64);
+            if (next >= 65 /* A */ && next <= 90 /* Z */) {
+              decodedChar = next - 64;
             } else {
               throw FormatException();
             }
             break;
           case 'b':
-            if (next >= 'A'.codeUnitAt(0) && next <= 'E'.codeUnitAt(0)) {
+            if (next >= 65 /* A */ && next <= 69 /* E */) {
               // %A to %E map to control codes ESC to USep
-              decodedChar = String.fromCharCode(next - 38);
-            } else if (next >= 'F'.codeUnitAt(0) && next <= 'J'.codeUnitAt(0)) {
+              decodedChar = next - 38;
+            } else if (next >= 70 /* F */ && next <= 74 /* J */) {
               // %F to %J map to ; < = > ?
-              decodedChar = String.fromCharCode(next - 11);
-            } else if (next >= 'K'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
+              decodedChar = next - 11;
+            } else if (next >= 75 /* K */ && next <= 79 /* O */) {
               // %K to %O map to [ \ ] ^ _
-              decodedChar = String.fromCharCode(next + 16);
-            } else if (next >= 'P'.codeUnitAt(0) && next <= 'T'.codeUnitAt(0)) {
+              decodedChar = next + 16;
+            } else if (next >= 80 /* P */ && next <= 84 /* T */) {
               // %P to %T map to { | } ~ DEL
-              decodedChar = String.fromCharCode(next + 43);
-            } else if (next == 'U'.codeUnitAt(0)) {
+              decodedChar = next + 43;
+            } else if (next == 85 /* U */) {
               // %U map to NUL
-              decodedChar = '\x00';
-            } else if (next == 'V'.codeUnitAt(0)) {
+              decodedChar = 0;
+            } else if (next == 86 /* V */) {
               // %V map to @
-              decodedChar = '@';
-            } else if (next == 'W'.codeUnitAt(0)) {
+              decodedChar = 64;
+            } else if (next == 87 /* W */) {
               // %W map to `
-              decodedChar = '`';
-            } else if (next >= 'X'.codeUnitAt(0) && next <= 'Z'.codeUnitAt(0)) {
+              decodedChar = 96;
+            } else if (next >= 88 /* X */ && next <= 90 /* Z */) {
               // %X to %Z all map to DEL (127)
-              decodedChar = String.fromCharCode(127);
+              decodedChar = 127;
             } else {
               throw FormatException();
             }
             break;
           case 'c':
             // /A to /O map to ! to , and /Z maps to :
-            if (next >= 'A'.codeUnitAt(0) && next <= 'O'.codeUnitAt(0)) {
-              decodedChar = String.fromCharCode(next - 32);
-            } else if (next == 'Z'.codeUnitAt(0)) {
-              decodedChar = ':';
+            if (next >= 65 /* A */ && next <= 79 /* O */) {
+              decodedChar = next - 32;
+            } else if (next == 90 /* Z */) {
+              decodedChar = 58;
             } else {
               throw FormatException();
             }
             break;
         }
-        decoded.write(decodedChar);
+        decoded.writeCharCode(decodedChar);
         // bump up i again since we read two characters
         i++;
       } else {

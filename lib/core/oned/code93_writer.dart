@@ -122,57 +122,57 @@ class Code93Writer extends OneDimensionalCodeWriter {
         // SOH - SUB: ($)A - ($)Z
         extendedContent.write('a');
         extendedContent
-            .write(String.fromCharCode('A'.codeUnitAt(0) + character - 1));
+            .write(String.fromCharCode(65 /* A */ + character - 1));
       } else if (character <= 31) {
         // ESC - US: (%)A - (%)E
         extendedContent.write('b');
         extendedContent
-            .write(String.fromCharCode('A'.codeUnitAt(0) + character - 27));
-      } else if (character == ' '.codeUnitAt(0) ||
-          character == r'$'.codeUnitAt(0) ||
-          character == '%'.codeUnitAt(0) ||
-          character == '+'.codeUnitAt(0)) {
+            .write(String.fromCharCode(65 /* A */ + character - 27));
+      } else if (character == 32 /*   */ ||
+          character == 36 /* $ */ ||
+          character == 37 /* % */ ||
+          character == 43 /* + */) {
         // space $ % +
         extendedContent.write(character);
-      } else if (character <= ','.codeUnitAt(0)) {
+      } else if (character <= 44 /* , */) {
         // ! " # & ' ( ) * ,: (/)A - (/)L
         extendedContent.write('c');
         extendedContent.write(String.fromCharCode(
-            'A'.codeUnitAt(0) + character - '!'.codeUnitAt(0)));
-      } else if (character <= '9'.codeUnitAt(0)) {
+            65 /* A */ + character - 33 /* ! */));
+      } else if (character <= 57 /* 9 */) {
         extendedContent.write(character);
-      } else if (character == ':'.codeUnitAt(0)) {
+      } else if (character == 58 /* : */) {
         // :: (/)Z
         extendedContent.write("cZ");
-      } else if (character <= '?'.codeUnitAt(0)) {
+      } else if (character <= 63 /* ? */) {
         // ; - ?: (%)F - (%)J
         extendedContent.write('b');
         extendedContent.write(String.fromCharCode(
-            'F'.codeUnitAt(0) + character - ';'.codeUnitAt(0)));
-      } else if (character == '@'.codeUnitAt(0)) {
+            70 /* F */ + character - 59 /* ; */));
+      } else if (character == 64 /* @ */) {
         // @: (%)V
         extendedContent.write("bV");
-      } else if (character <= 'Z'.codeUnitAt(0)) {
+      } else if (character <= 90 /* Z */) {
         // A - Z
         extendedContent.write(character);
-      } else if (character <= '_'.codeUnitAt(0)) {
+      } else if (character <= 95 /* _ */) {
         // [ - _: (%)K - (%)O
         extendedContent.write('b');
         extendedContent.write(String.fromCharCode(
-            'K'.codeUnitAt(0) + character - '['.codeUnitAt(0)));
-      } else if (character == '`'.codeUnitAt(0)) {
+            75 /* K */ + character - 91 /* [ */));
+      } else if (character == 96 /* ` */) {
         // `: (%)W
         extendedContent.write("bW");
-      } else if (character <= 'z'.codeUnitAt(0)) {
+      } else if (character <= 122 /* z */) {
         // a - z: (*)A - (*)Z
-        extendedContent.write('d'.codeUnitAt(0));
+        extendedContent.write(100 /* d */);
         extendedContent.write(String.fromCharCode(
-            'A'.codeUnitAt(0) + character - 'a'.codeUnitAt(0)));
+            65 /* A */ + character - 97 /* a */));
       } else if (character <= 127) {
         // { - DEL: (%)P - (%)T
         extendedContent.write('b');
         extendedContent.write(String.fromCharCode(
-            'P'.codeUnitAt(0) + character - '{'.codeUnitAt(0)));
+            80 /* P */ + character - 123 /* { */));
       } else {
         throw Exception(
             "Requested content contains a non-encodable character: '" +
