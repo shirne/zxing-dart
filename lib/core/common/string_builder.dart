@@ -35,10 +35,10 @@ class StringBuilder extends StringBuffer {
   void replace(int start, int end, dynamic obj) {
     _initBuffer();
     super.clear();
-    super.write(_buffer!.substring(0, start));
+    if(start > 0)super.write(_buffer!.substring(0, start));
     _writeAuto(obj);
     if (end < _buffer!.length - 1)
-      super.write(_buffer!.substring(end + 1));
+      super.write(_buffer!.substring(end));
     _buffer = null;
   }
 
@@ -57,10 +57,10 @@ class StringBuilder extends StringBuffer {
   insert(int offset, Object? obj) {
     _initBuffer();
     super.clear();
-    super.write(_buffer!.substring(0, offset));
+    if(offset > 0)super.write(_buffer!.substring(0, offset));
     _writeAuto(obj);
     if (offset < _buffer!.length - 1)
-      super.write(_buffer!.substring(offset + 1));
+      super.write(_buffer!.substring(offset));
     _buffer = null;
   }
 
@@ -85,8 +85,8 @@ class StringBuilder extends StringBuffer {
   delete(int start, int end) {
     _initBuffer();
     super.clear();
-    super.write(_buffer!.substring(0, start));
-    if (end < _buffer!.length - 1) super.write(_buffer!.substring(end + 1));
+    if(start > 0)super.write(_buffer!.substring(0, start));
+    if (end < _buffer!.length - 1) super.write(_buffer!.substring(end));
     _buffer = null;
   }
 
