@@ -24,7 +24,7 @@ class StringBuilder extends StringBuffer {
   }
 
   void setCharAt(int index, dynamic char) {
-    replace(index, index+1, (char is int) ? String.fromCharCode(char) : char);
+    replace(index, index+1, char);
   }
 
   int codePointAt(int index){
@@ -32,11 +32,11 @@ class StringBuilder extends StringBuffer {
     return _buffer!.codeUnitAt(index);
   }
 
-  void replace(int start, int end, String str) {
+  void replace(int start, int end, dynamic obj) {
     _initBuffer();
     super.clear();
     super.write(_buffer!.substring(0, start));
-    super.write(str);
+    _writeAuto(obj);
     if (end < _buffer!.length - 1)
       super.write(_buffer!.substring(end + 1));
     _buffer = null;
@@ -50,7 +50,7 @@ class StringBuilder extends StringBuffer {
   reverse() {
     _initBuffer();
     super.clear();
-    super.write(_buffer!.split('').reversed.join(''));
+    super.writeAll(_buffer!.split('').reversed);
     _buffer = null;
   }
 
@@ -58,10 +58,28 @@ class StringBuilder extends StringBuffer {
     _initBuffer();
     super.clear();
     super.write(_buffer!.substring(0, offset));
-    super.write(obj);
+    _writeAuto(obj);
     if (offset < _buffer!.length - 1)
       super.write(_buffer!.substring(offset + 1));
     _buffer = null;
+  }
+
+  _writeAuto(Object? obj){
+    if(obj is int) {
+      super.writeCharCode(obj);
+    }else if(obj is List){
+      if(obj.isNotEmpty){
+        if(obj[0] is int){
+          obj.forEach((element) {
+            super.writeCharCode(element);
+          });
+        }else{
+          super.writeAll(obj);
+        }
+      }
+    }else if(obj != null) {
+      super.write(obj);
+    }
   }
 
   delete(int start, int end) {
