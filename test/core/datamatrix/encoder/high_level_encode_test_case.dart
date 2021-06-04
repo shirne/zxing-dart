@@ -19,6 +19,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/datamatrix.dart';
 
+import '../../utils.dart';
+
 /// Tests for {@link HighLevelEncoder}.
 void main(){
 
@@ -64,22 +66,6 @@ void main(){
   }
 
 
-  /// Convert a string of char codewords into a different string which lists each character
-  /// using its decimal value.
-  ///
-  /// @param codewords the codewords
-  /// @return the visualized codewords
-  String visualize(String codewords) {
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < codewords.length; i++) {
-      if (i > 0) {
-        sb.write(' ');
-      }
-      sb.write(codewords[i]);
-    }
-    return sb.toString();
-  }
-
   String encodeHighLevel(String msg) {
     String encoded = HighLevelEncoder.encodeHighLevel(msg);
     //DecodeHighLevel.decode(encoded);
@@ -102,6 +88,7 @@ void main(){
   test('testC40EncodationBasic1', () {
 
     String visualized = encodeHighLevel("AIMAIMAIM");
+
     expect("230 91 11 91 11 91 11 254", visualized);
     //230 shifts to C40 encodation, 254 unlatches, "else" case
   });
@@ -195,7 +182,7 @@ void main(){
     visualized = encodeHighLevel("aimaimaimB");
     expect("239 91 11 91 11 91 11 254 67 129", visualized);
 
-    visualized = encodeHighLevel("aimaimaim{txt}\u0004");
+    visualized = encodeHighLevel(r"aimaimaim{txt}""\u0004");
     expect("239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
   });
 

@@ -46,3 +46,21 @@ String matrixToString(BitMatrix result) {
   }
   return builder.toString();
 }
+
+/// Convert a string of char codewords into a different string which lists each character
+/// using its decimal value.
+///
+/// @param codewords the codewords
+/// @return the visualized codewords
+String visualize(String codewords) {
+  return codewords.codeUnits.join(' ');
+}
+
+final Pattern _space = " ";
+String unVisualize(String visualized) {
+  StringBuffer sb = new StringBuffer();
+  for (String token in visualized.split(_space)) {
+    sb.writeCharCode(int.parse(token));
+  }
+  return sb.toString();
+}

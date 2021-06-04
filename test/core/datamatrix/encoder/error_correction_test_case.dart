@@ -18,19 +18,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/datamatrix.dart';
 
+import '../../utils.dart';
+
 /// Tests for the ECC200 error correction.
 void main(){
 
-  String visualize(String codewords) {
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < codewords.length; i++) {
-      if (i > 0) {
-        sb.write(' ');
-      }
-      sb.write(codewords[i]);
-    }
-    return sb.toString();
-  }
+
 
   test('testRS', () {
     //Sample from Annexe R in ISO/IEC 16022:2000(E)

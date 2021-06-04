@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
 import 'package:zxing/oned.dart';
@@ -143,12 +129,12 @@ void main(){
 
   test('testEncodeSwitchBetweenCodesetsAAndB', (){
     // start with A switch to B and back to A
-    //                                                      "\0"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
-    testEncode("\0ABab\u0010", QUIET_SPACE + START_CODE_A + "10100001100" + "10100011000" + "10001011000" + SWITCH_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
+    //                                                      "\x00"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
+    testEncode("\x00ABab\u0010", QUIET_SPACE + START_CODE_A + "10100001100" + "10100011000" + "10001011000" + SWITCH_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
 
     // start with B switch to A and back to B
-    //                                                "a"             "b"             Switch to A     "\0             "Switch to B"   "a"             "b"             check digit
-    testEncode("ab\0ab", QUIET_SPACE + START_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B + "10010110000" + "10010000110" + "11010001110" + STOP + QUIET_SPACE);
+    //                                                "a"             "b"             Switch to A     "\x00             "Switch to B"   "a"             "b"             check digit
+    testEncode("ab\x00ab", QUIET_SPACE + START_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B + "10010110000" + "10010000110" + "11010001110" + STOP + QUIET_SPACE);
   });
 
 }

@@ -51,7 +51,7 @@ void main(){
     // Should return -1 for other letters;
     expect(-1, Encoder.getAlphanumericCode('a'.codeUnitAt(0)));
     expect(-1, Encoder.getAlphanumericCode('#'.codeUnitAt(0)));
-    expect(-1, Encoder.getAlphanumericCode('\0'.codeUnitAt(0)));
+    expect(-1, Encoder.getAlphanumericCode('\x00'.codeUnitAt(0)));
   });
 
   test('testChooseMode', () {
@@ -359,7 +359,7 @@ void main(){
     Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
     expect(" .XX....X .XX...X. .XX...XX", bits.toString());
     // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-    Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
+    Encoder.appendBytes("\x00", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = new BitArray();
