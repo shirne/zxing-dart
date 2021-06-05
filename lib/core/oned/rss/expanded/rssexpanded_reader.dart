@@ -167,7 +167,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   final List<ExpandedPair> _pairs = [];
   final List<ExpandedRow> _rows = [];
   final List<int> _startEnd = [0, 0];
-  late bool _startFromEven;
+  bool _startFromEven = false;
 
   @override
   Result decodeRow(
@@ -344,7 +344,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       return;
     }
 
-    this._rows[insertPos] = ExpandedRow(this._pairs, rowNumber, false);
+    this._rows.add(ExpandedRow(this._pairs, rowNumber, false));
     // this.rows.add(insertPos, ExpandedRow(this.pairs, rowNumber, false));
 
     _removePartialRows(this._pairs, this._rows);
@@ -635,7 +635,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   DataCharacter decodeDataCharacter(
       BitArray row, FinderPattern pattern, bool isOddPattern, bool leftChar) {
     List<int> counters = this.getDataCharacterCounters();
-    // Arrays.fill(counters, 0);
+    counters.fillRange(0, counters.length, 0);
 
     if (leftChar) {
       OneDReader.recordPatternInReverse(
