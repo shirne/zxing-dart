@@ -16,12 +16,12 @@
 
 import 'dart:convert';
 
-import 'package:euc/euc.dart';
-import 'package:euc/jis.dart';
 import 'package:fast_gbk/fast_gbk.dart';
 import 'package:unicode/unicode.dart';
 
-import 'cp437.dart';
+import '../encoding/euc_kr.dart';
+import '../encoding/cp437.dart';
+import 'string_utils.dart';
 
 /// Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
 /// of ISO 18004.
@@ -45,7 +45,7 @@ class CharacterSetECI {
   static final ISO8859_14 = CharacterSetECI('ISO8859_14', 16, latin1, ['ISO-8859-14', 'iso-8859-14']);
   static final ISO8859_15 = CharacterSetECI('ISO8859_15', 17, latin1, ['ISO-8859-15', 'iso-8859-15']);
   static final ISO8859_16 = CharacterSetECI('ISO8859_16', 18, latin1, ['ISO-8859-16', 'iso-8859-16']);
-  static final SJIS = CharacterSetECI('SJIS', 20, ShiftJIS(), ['Shift_JIS','shift-jis']);
+  static final SJIS = CharacterSetECI('SJIS', 20, StringUtils.shiftJisCharset, ['Shift_JIS', 'shift-jis', 'ms932', 'ISO-2022-JP', 'JIS']);
   static final Cp1250 = CharacterSetECI('Cp1250', 21, latin1, 'windows-1250');
   static final Cp1251 = CharacterSetECI('Cp1251', 22, latin1, 'windows-1251');
   static final Cp1252 = CharacterSetECI('Cp1252', 23, latin1, 'windows-1252');
@@ -57,7 +57,7 @@ class CharacterSetECI {
   static final Big5 = CharacterSetECI('Big5', 28, gbk);
   static final GB18030 =
       CharacterSetECI('GB18030', 29, gbk, ['GB2312', 'gb2312', 'EUC_CN', 'GBK', 'gbk']);
-  static final EUC_KR = CharacterSetECI('EUC_KR', 30, EucJP(), ['EUC-KR', 'EUC-JP', 'euc-jp']);
+  static final EUC_KR = CharacterSetECI('EUC_KR', 30, eucKr, ['EUC-KR', 'euc-kr']); // EUC-KR, KS_C_5601 and KS X 1001
 
   static final values = [
     Cp437,
@@ -105,7 +105,7 @@ class CharacterSetECI {
   final List<int> _indexs;
   final String name;
   final List<String> _otherEncodingNames;
-  final Encoding _charset;
+  final Encoding? _charset;
 
   CharacterSetECI(this.name, dynamic value, this._charset, [dynamic otherEncodingNames])
       : _indexs = (value is int) ? [value] : value as List<int>,

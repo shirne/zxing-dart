@@ -65,23 +65,23 @@ class MathUtils {
     return count;
   }
 
-  static int bitCount(int num) {
+  /*static int bitCount(int num) {
     int count = 0;
     while (num > 0) {
       num = num & (num - 1);
       count++;
     }
     return count;
-  }
+  }*/
 
-  /* static int bitCount(int i){
-    i = i - ((i >>> 1) & 0x55555555);
-    i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
-    i = (i + (i >>> 4)) & 0x0f0f0f0f;
-    i = i + (i >>> 8);
-    i = i + (i >>> 16);
+   static int bitCount(int i){
+    i = i - ((i >> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+    i = (i + (i >> 4)) & 0x0f0f0f0f;
+    i = i + (i >> 8);
+    i = i + (i >> 16);
     return i & 0x3f;
-  } */
+  }
 
   static int binarySearch(List<int> arr, int value, [int start = 0, int? end]) {
     late int mid;

@@ -94,7 +94,7 @@ class Encoder {
     // Append the FNC1 mode header for GS1 formatted data if applicable
     bool hasGS1FormatHint =
         hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT);
-    if (hasGS1FormatHint && hints.containsKey(EncodeHintType.GS1_FORMAT)) {
+    if (hasGS1FormatHint && hints[EncodeHintType.GS1_FORMAT].toString() == 'true') {
       // GS1 formatted codes are prefixed with a FNC1 in first position mode header
       appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
     }

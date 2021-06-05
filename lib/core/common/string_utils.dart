@@ -33,10 +33,10 @@ class StringUtils {
   static final Encoding _platformDefaultEncoding = utf8;
   static final Encoding? shiftJisCharset = ShiftJIS();
   static final Encoding? gbkCharset = gbk;
-  static final Encoding? _eucJp = EucJP();
+  static final Encoding? eucJp = EucJP();
   static final bool _assumeShiftJis =
       shiftJisCharset == _platformDefaultEncoding ||
-          _eucJp == _platformDefaultEncoding;
+          eucJp == _platformDefaultEncoding;
 
   // Retained for ABI compatibility with earlier versions
   static final String shiftJis = "SJIS";
