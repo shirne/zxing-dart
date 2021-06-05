@@ -628,7 +628,7 @@ class PDF417 {
         PDF417ErrorCorrection.getErrorCorrectionCodewordCount(
             errorCorrectionLevel);
     String highLevel =
-        PDF417HighLevelEncoder.encodeHighLevel(msg, _compaction, _encoding!);
+        PDF417HighLevelEncoder.encodeHighLevel(msg, _compaction, _encoding);
     int sourceCodeWords = highLevel.length;
 
     List<int> dimension =

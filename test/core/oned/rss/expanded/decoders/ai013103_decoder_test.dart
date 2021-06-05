@@ -30,6 +30,7 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zxing/zxing.dart';
 
 import 'abstract_decoder_test.dart';
 
@@ -53,6 +54,11 @@ void main(){
   //@Test(expected = NotFoundException.class)
   test('test013103invalid', (){
     String data = header + AbstractDecoderTest.compressedGtin900123456798908 + AbstractDecoderTest.compressed15bitWeight1750 + "..";
-    assertCorrectBinaryString(data, "");
+    try {
+      assertCorrectBinaryString(data, "");
+      fail('accepted NotFoundException');
+    } on NotFoundException catch(_){
+      // passed
+    }
   });
 }

@@ -82,15 +82,15 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
     numericDate = numericDate ~/ 12;
     int year = numericDate;
 
-    if (year / 10 == 0) {
+    if (year ~/ 10 == 0) {
       buf.write('0');
     }
     buf.write(year);
-    if (month / 10 == 0) {
+    if (month ~/ 10 == 0) {
       buf.write('0');
     }
     buf.write(month);
-    if (day / 10 == 0) {
+    if (day ~/ 10 == 0) {
       buf.write('0');
     }
     buf.write(day);
@@ -101,7 +101,7 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   void addWeightCode(StringBuffer buf, int weight) {
     buf.write('(');
     buf.write(this._firstAIdigits);
-    buf.write(weight / 100000);
+    buf.write(weight ~/ 100000);
     buf.write(')');
   }
 

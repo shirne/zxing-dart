@@ -48,7 +48,7 @@ class GeneralAppIdDecoder {
     String? remaining;
     do {
       DecodedInformation info =
-          this.decodeGeneralPurposeField(currentPosition, remaining!);
+          this.decodeGeneralPurposeField(currentPosition, remaining);
       String? parsedFields =
           FieldParser.parseFieldsInGeneralPurpose(info.getNewString());
       if (parsedFields != null) {
@@ -121,7 +121,7 @@ class GeneralAppIdDecoder {
   }
 
   DecodedInformation decodeGeneralPurposeField(int pos, String? remaining) {
-    this._buffer.setLength(0);
+    this._buffer.clear();
 
     if (remaining != null) {
       this._buffer.write(remaining);
@@ -237,7 +237,7 @@ class GeneralAppIdDecoder {
         return BlockParsedResult(information, true); //end of the char block
       }
 
-      _buffer.write(alpha.getValue());
+      _buffer.writeCharCode(alpha.getValue());
     }
 
     if (_isAlphaOr646ToNumericLatch(_current.getPosition())) {

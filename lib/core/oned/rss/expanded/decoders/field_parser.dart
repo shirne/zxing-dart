@@ -264,7 +264,7 @@ class FieldParser {
 
     String field = rawInformation.substring(aiSize, aiSize + fieldSize);
     String remaining = rawInformation.substring(aiSize + fieldSize);
-    String result = '(' + ai + ')' + field;
+    String result = '($ai)$field';
     String? parsedAI = parseFieldsInGeneralPurpose(remaining);
     return parsedAI == null ? result : result + parsedAI;
   }
@@ -275,8 +275,8 @@ class FieldParser {
     int maxSize = Math.min(rawInformation.length, aiSize + variableFieldSize);
     String field = rawInformation.substring(aiSize, maxSize);
     String remaining = rawInformation.substring(maxSize);
-    String result = '(' + ai + ')' + field;
+    String result = '($ai)$field';
     String? parsedAI = parseFieldsInGeneralPurpose(remaining);
-    return parsedAI == null ? result : result + parsedAI;
+    return parsedAI == null ? result : (result + parsedAI);
   }
 }

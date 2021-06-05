@@ -61,10 +61,10 @@ class AI01393xDecoder extends AI01decoder {
         .extractNumericValueFromBitArray(
             _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE,
             _FIRST_THREE_DIGITS_SIZE);
-    if (firstThreeDigits / 100 == 0) {
+    if (firstThreeDigits ~/ 100 == 0) {
       buf.write('0');
     }
-    if (firstThreeDigits / 10 == 0) {
+    if (firstThreeDigits ~/ 10 == 0) {
       buf.write('0');
     }
     buf.write(firstThreeDigits);

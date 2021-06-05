@@ -50,10 +50,10 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
       int currentBlock = this
           .getGeneralDecoder()
           .extractNumericValueFromBitArray(currentPos + 10 * i, 10);
-      if (currentBlock / 100 == 0) {
+      if (currentBlock ~/ 100 == 0) {
         buf.write('0');
       }
-      if (currentBlock / 10 == 0) {
+      if (currentBlock ~/ 10 == 0) {
         buf.write('0');
       }
       buf.write(currentBlock);
