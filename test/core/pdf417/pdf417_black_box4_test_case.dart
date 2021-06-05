@@ -15,6 +15,7 @@
  */
 
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:buffer_image/buffer_image.dart';
@@ -57,6 +58,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     assert(testResults.isNotEmpty);
 
     Map<String,List<File>> imageFiles = getImageFileLists();
+    assert(imageFiles.isNotEmpty);
     int testCount = testResults.length;
 
     List<int> passedCounts = List.filled(testCount, 0);
@@ -75,7 +77,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       } else {
         expectedTextFile = File(testBase.path +'/'+fileBaseName + ".bin");
         assert(expectedTextFile.existsSync());
-        expectedText = expectedTextFile.readAsStringSync();
+        expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
 
       for (int x = 0; x < testCount; x++) {
@@ -161,7 +163,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     for (File file in getImageFiles()) {
       String testImageFileName = file.uri.pathSegments.last;
       String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('-'));
-      List<File> files = result[fileBaseName] ?? [];
+      if(result[fileBaseName] == null){
+        result[fileBaseName] = [];
+      }
+      List<File> files = result[fileBaseName]!;
       files.add(file);
     }
     return result;
