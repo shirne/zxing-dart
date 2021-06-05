@@ -33,8 +33,7 @@ import '../common/test_result.dart';
 void main(){
   test('testBlackBox', (){
     PDF417BlackBox4TestCase()
-    ..testBlackBox()
-        ..testBlackBox();
+    ..testBlackBox();
   });
 }
 
@@ -145,7 +144,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
   static PDF417ResultMetadata? getMeta(Result result) {
     return result.getResultMetadata() == null ? null :
-      result.getResultMetadata()![ResultMetadataType.PDF417_EXTRA_METADATA] as PDF417ResultMetadata;
+      result.getResultMetadata()![ResultMetadataType.PDF417_EXTRA_METADATA] as PDF417ResultMetadata?;
   }
 
   List<Result> decode(BinaryBitmap source, bool tryHarder){

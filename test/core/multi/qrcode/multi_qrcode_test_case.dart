@@ -57,13 +57,13 @@ void main(){
     expectedContents.add("You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!");
     expectedContents.add("You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)");
     expectedContents.add("You get to CREATE OUR JOURNAL PROMPT FOR THE DAY!  Yay!  Way to go!  ");
-    expect(expectedContents, barcodeContents);
+    expect(barcodeContents, expectedContents);
   });
 
   test('testProcessStructuredAppend', () {
-    Result sa1 = new Result("SA1", Uint8List(0), <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa2 = new Result("SA2", Uint8List(0), <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa3 = new Result("SA3", Uint8List(0), <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa1 = new Result("SA1", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa2 = new Result("SA2", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa3 = new Result("SA3", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
     sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
@@ -71,7 +71,7 @@ void main(){
     sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
-    Result nsa = new Result("NotSA", Uint8List(0), <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result nsa = new Result("NotSA", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
     List<Result> inputs = [sa3, sa1, nsa, sa2];

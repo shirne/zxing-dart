@@ -61,7 +61,7 @@ void main(){
         FormatInformation.decodeFormatInformation(
             MASKED_TEST_FORMAT_INFO ^ 0x07, MASKED_TEST_FORMAT_INFO ^ 0x07));
     assert(FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F) != null);
+        MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F) == null);
   });
 
   test('testDecodeWithMisread', () {

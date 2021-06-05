@@ -25,7 +25,6 @@ import 'package:zxing/zxing.dart';
 /// @author satorux@google.com (Satoru Takabayashi) - creator
 /// @author mysen@google.com (Chris Mysen) - ported from C++
 void main(){
-  // todo test error
   test('testGetAlphanumericCode', () {
     // The first ten code points are numbers.
     for (int i = 0; i < 10; ++i) {
@@ -81,7 +80,7 @@ void main(){
     expect(Mode.BYTE, Encoder.chooseMode(shiftJISString(bytes([0xe, 0x4, 0x9, 0x5, 0x9, 0x61]))));
   });
 
-  test('testEncode', (){
+  test('testEncodeDefault', (){
     QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
     String expected =
       "<<\n" +
@@ -126,7 +125,14 @@ void main(){
   test('testEncodeWithVersionTooSmall', (){
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.QR_VERSION] = 3;
-    Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints);
+    try {
+      Encoder.encode(
+          "THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H,
+          hints);
+      fail('Data too big for requested version');
+    } on WriterException catch(_){
+      // passed
+    }
   });
 
   test('testSimpleUTF8ECI', (){
@@ -350,7 +356,7 @@ void main(){
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
     try {
       Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
-    } catch ( we) { //
+    } on WriterException catch ( we) { //
       // good
     }
     // Should use append8BitBytes.
@@ -363,7 +369,7 @@ void main(){
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = new BitArray();
-    Encoder.appendBytes(shiftJISString(bytes([0x93, 0x5])), Mode.KANJI, bits,
+    Encoder.appendBytes(shiftJISString(bytes([0x93, 0x5f])), Mode.KANJI, bits,
         Encoder.defaultByteModeEncoding);
     expect(" .XX.XX.. XXXXX", bits.toString());
   });
@@ -433,19 +439,19 @@ void main(){
   });
 
   test('testInterleaveWithECBytes', (){
-    Uint8List dataBytes = [32, 65, 205, 69, 41, 220, 46, 128, 236] as Uint8List;
+    Uint8List dataBytes = Uint8List.fromList([32, 65, 205, 69, 41, 220, 46, 128, 236]);
     BitArray inArr = new BitArray();
     for (int dataByte in dataBytes) {
       inArr.appendBits(dataByte, 8);
     }
     BitArray out = Encoder.interleaveWithECBytes(inArr, 26, 9, 1);
-    Uint8List expected = [
+    Uint8List expected = Uint8List.fromList([
         // Data bytes.
         32, 65, 205, 69, 41, 220, 46, 128, 236,
         // Error correction bytes.
         42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
         237, 85, 224, 96, 74, 219, 61
-    ] as Uint8List;
+    ]);
     expect(expected.length, out.getSizeInBytes());
     Uint8List outArray = Uint8List(expected.length);
     out.toBytes(0, outArray, 0, expected.length);
@@ -454,14 +460,14 @@ void main(){
       expect(expected[x], outArray[x]);
     }
     // Numbers are from http://www.swetake.com/qr/qr8.html
-    dataBytes = [
+    dataBytes = Uint8List.fromList([
         67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
         198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
         151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
         182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
         135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
         17
-    ] as Uint8List;
+    ]);
     inArr = new BitArray();
     for (int dataByte in dataBytes) {
       inArr.appendBits(dataByte, 8);

@@ -30,7 +30,7 @@ void main(){
   test('testBadVersion', () {
     try {
       Version.getVersionForNumber(0);
-      assert(false);
+      fail('expected');
     }catch(_){
       //passed
     }
