@@ -17,12 +17,12 @@
 /// @author Guenther Grau
 class PDF417ResultMetadata {
   int _segmentIndex = 0;
-  String? _fileId = '';
+  String? _fileId;
   bool _lastSegment = false;
   int _segmentCount = -1;
-  String _sender = '';
-  String _addressee = '';
-  String _fileName = '';
+  String? _sender;
+  String? _addressee;
+  String? _fileName;
   int _fileSize = -1;
   int _timestamp = -1;
   int _checksum = -1;
@@ -82,7 +82,7 @@ class PDF417ResultMetadata {
     this._segmentCount = segmentCount;
   }
 
-  String getSender() {
+  String? getSender() {
     return _sender;
   }
 
@@ -90,7 +90,7 @@ class PDF417ResultMetadata {
     this._sender = sender;
   }
 
-  String getAddressee() {
+  String? getAddressee() {
     return _addressee;
   }
 
@@ -101,7 +101,7 @@ class PDF417ResultMetadata {
   /// Filename of the encoded file
   ///
   /// @return filename
-  String getFileName() {
+  String? getFileName() {
     return _fileName;
   }
 

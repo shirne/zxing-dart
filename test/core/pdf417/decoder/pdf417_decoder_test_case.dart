@@ -33,17 +33,17 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
-    expect(0, resultMetadata.getSegmentIndex());
-    expect("017053", resultMetadata.getFileId());
+    expect(resultMetadata.getSegmentIndex(), 0);
+    expect(resultMetadata.getFileId(), "017053");
     assert(!resultMetadata.isLastSegment());
-    expect(4, resultMetadata.getSegmentCount());
-    expect("CEN BE", resultMetadata.getSender());
-    expect("ISO CH", resultMetadata.getAddressee());
+    expect(resultMetadata.getSegmentCount(), 4);
+    expect(resultMetadata.getSender(), "CEN BE");
+    expect(resultMetadata.getAddressee(), "ISO CH");
 
     //@SuppressWarnings("deprecation")
     List<int> optionalData = resultMetadata.getOptionalData()!;
-    expect( 1, optionalData[0], reason:"first element of optional array should be the first field identifier");
-    expect(67, optionalData[optionalData.length - 1],
+    expect(optionalData[0], 1, reason:"first element of optional array should be the first field identifier");
+    expect(optionalData[optionalData.length - 1], 67,
         reason: "last element of optional array should be the last codeword of the last field");
   });
 
