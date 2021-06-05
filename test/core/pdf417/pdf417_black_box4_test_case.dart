@@ -163,10 +163,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     for (File file in getImageFiles()) {
       String testImageFileName = file.uri.pathSegments.last;
       String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('-'));
-      if(result[fileBaseName] == null){
-        result[fileBaseName] = [];
-      }
-      List<File> files = result[fileBaseName]!;
+      List<File> files = result.putIfAbsent(fileBaseName, ()=>[]);
       files.add(file);
     }
     return result;
