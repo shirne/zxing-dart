@@ -71,6 +71,7 @@ class Code39Reader extends OneDReader {
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     List<int> theCounters = _counters;
+    theCounters.fillRange(0, theCounters.length, 0);
 
     StringBuilder result = _decodeRowResult;
     result.clear();

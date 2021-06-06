@@ -180,7 +180,7 @@ abstract class OneDReader implements Reader {
   ///  of pixels
   static void recordPattern(BitArray row, int start, List<int> counters) {
     int numCounters = counters.length;
-    // Arrays.fill(counters, 0, numCounters, 0);
+    counters.fillRange(0, numCounters, 0);
     int end = row.getSize();
     if (start >= end) {
       throw NotFoundException.getNotFoundInstance();
