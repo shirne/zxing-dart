@@ -41,10 +41,10 @@ void main(){
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader = new QRCodeMultiReader();
+    MultipleBarcodeReader reader = QRCodeMultiReader();
     List<Result> results = reader.decodeMultiple(bitmap);
-    //assertNotNull(results);
-    expect(4, results.length);
+
+    expect(results.length, 4);
 
     Set<String> barcodeContents = {};
     for (Result result in results) {
@@ -61,9 +61,9 @@ void main(){
   });
 
   test('testProcessStructuredAppend', () {
-    Result sa1 = new Result("SA1", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa2 = new Result("SA2", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa3 = new Result("SA3", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa1 = Result("SA1", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa2 = Result("SA2", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result sa3 = Result("SA3", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
     sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
@@ -71,7 +71,7 @@ void main(){
     sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
-    Result nsa = new Result("NotSA", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    Result nsa = Result("NotSA", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
     List<Result> inputs = [sa3, sa1, nsa, sa2];

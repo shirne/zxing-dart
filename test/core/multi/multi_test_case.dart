@@ -23,6 +23,7 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing/common.dart';
 import 'package:zxing/multi.dart';
+import 'package:zxing/oned.dart';
 import 'package:zxing/zxing.dart';
 
 import '../buffered_image_luminance_source.dart';
@@ -35,15 +36,15 @@ void main(){
     // Very basic test for now
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-1");
 
-    File testImage = File(testBase.path + '/' +"1.png");
+    File testImage = File(testBase.path + '/1.png');
     BufferImage image = (await BufferImage.fromFile(testImage))!;
-    LuminanceSource source = new BufferedImageLuminanceSource(image);
+    LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader = new GenericMultipleBarcodeReader(new MultiFormatReader());
+    MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     List<Result> results = reader.decodeMultiple(bitmap);
     //assertNotNull(results);
-    expect(2, results.length);
+    expect(results.length, 2);
 
     expect("031415926531", results[0].getText());
     expect(BarcodeFormat.UPC_A, results[0].getBarcodeFormat());

@@ -25,13 +25,13 @@ import '../../utils.dart';
 void main(){
 
   final List<SymbolInfo> TEST_SYMBOLS = [
-    new SymbolInfo(false, 3, 5, 8, 8, 1),
-    new SymbolInfo(false, 5, 7, 10, 10, 1),
-      /*rect*/new SymbolInfo(true, 5, 7, 16, 6, 1),
-    new SymbolInfo(false, 8, 10, 12, 12, 1),
-      /*rect*/new SymbolInfo(true, 10, 11, 14, 6, 2),
-    new SymbolInfo(false, 13, 0, 0, 0, 1),
-    new SymbolInfo(false, 77, 0, 0, 0, 1)
+    SymbolInfo(false, 3, 5, 8, 8, 1),
+    SymbolInfo(false, 5, 7, 10, 10, 1),
+      /*rect*/SymbolInfo(true, 5, 7, 16, 6, 1),
+    SymbolInfo(false, 8, 10, 12, 12, 1),
+      /*rect*/SymbolInfo(true, 10, 11, 14, 6, 2),
+    SymbolInfo(false, 13, 0, 0, 0, 1),
+    SymbolInfo(false, 77, 0, 0, 0, 1)
     //The last entries are fake entries to test special conditions with C40 encoding
   ];
 
