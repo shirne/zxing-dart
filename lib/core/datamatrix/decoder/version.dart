@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import '../../formats_exception.dart';
+
 /// <p>Encapsulates a set of error-correction blocks in one symbol version. Most versions will
 /// use blocks of differing sizes within one version, so, this encapsulates the parameters for
 /// each set of blocks. It also holds the number of error-correction codewords per block since it
@@ -115,7 +117,7 @@ class Version {
   /// @throws FormatException if dimensions do correspond to a valid Data Matrix size
   static Version getVersionForDimensions(int numRows, int numColumns) {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
 
     for (Version version in _versions) {
@@ -125,7 +127,7 @@ class Version {
       }
     }
 
-    throw FormatException();
+    throw FormatsException.instance;
   }
 
   @override

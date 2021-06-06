@@ -17,6 +17,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../barcode_format.dart';
+import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';
 import 'upceanreader.dart';
 import 'upceanwriter.dart';
@@ -48,22 +49,22 @@ class EAN8Writer extends UPCEANWriter {
         try {
           check = UPCEANReader.getStandardUPCEANChecksum(contents);
         } catch (fe) {
-          // FormatException
-          throw Exception(fe);
+          throw ArgumentError(fe);
         }
         contents += check.toString();
         break;
       case 8:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
-            throw Exception("Contents do not pass checksum");
+            throw ArgumentError("Contents do not pass checksum");
           }
-        } on FormatException catch (_) {
+        } on FormatsException catch (_) {
           throw ArgumentError("Illegal contents");
         }
         break;
       default:
-        throw Exception(
+        // IllegalArgumentException
+        throw ArgumentError(
             "Requested contents should be 7 or 8 digits long, but got $length");
     }
 

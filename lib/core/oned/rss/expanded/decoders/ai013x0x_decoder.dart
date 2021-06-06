@@ -42,7 +42,7 @@ abstract class AI013x0xDecoder extends AI01weightDecoder {
   String parseInformation() {
     if (this.getInformation().getSize() !=
         _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     StringBuilder buf = StringBuilder();

@@ -22,6 +22,7 @@ import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
@@ -207,7 +208,7 @@ class Code128Reader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static int _decodeCode(BitArray row, List<int> counters, int rowOffset) {
@@ -227,7 +228,7 @@ class Code128Reader extends OneDReader {
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 
@@ -257,7 +258,7 @@ class Code128Reader extends OneDReader {
         codeSet = _CODE_CODE_C;
         break;
       default:
-        throw FormatException();
+        throw FormatsException.instance;
     }
 
     bool done = false;
@@ -311,7 +312,7 @@ class Code128Reader extends OneDReader {
         case _CODE_START_A:
         case _CODE_START_B:
         case _CODE_START_C:
-          throw FormatException();
+          throw FormatsException.instance;
       }
 
       switch (codeSet) {
@@ -514,7 +515,7 @@ class Code128Reader extends OneDReader {
         nextStart,
         Math.min(row.getSize(), nextStart + (nextStart - lastStart) ~/ 2),
         false)) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     // Pull out from sum the value of the penultimate check code
@@ -528,7 +529,7 @@ class Code128Reader extends OneDReader {
     int resultLength = result.length;
     if (resultLength == 0) {
       // false positive
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     // Only bother if the result had at least one character, and if the checksum digit happened to

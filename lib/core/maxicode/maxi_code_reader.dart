@@ -65,7 +65,7 @@ class MaxiCodeReader implements Reader {
   static BitMatrix _extractPureBits(BitMatrix image) {
     List<int>? enclosingRectangle = image.getEnclosingRectangle();
     if (enclosingRectangle == null) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     int left = enclosingRectangle[0];

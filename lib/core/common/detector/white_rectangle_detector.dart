@@ -55,7 +55,7 @@ class WhiteRectangleDetector {
         _leftInit < 0 ||
         _downInit >= _height ||
         _rightInit >= _width) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 
@@ -182,7 +182,7 @@ class WhiteRectangleDetector {
       }
 
       if (z == null) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
 
       ResultPoint? t;
@@ -193,7 +193,7 @@ class WhiteRectangleDetector {
       }
 
       if (t == null) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
 
       ResultPoint? x;
@@ -204,7 +204,7 @@ class WhiteRectangleDetector {
       }
 
       if (x == null) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
 
       ResultPoint? y;
@@ -215,12 +215,12 @@ class WhiteRectangleDetector {
       }
 
       if (y == null) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
 
       return centerEdges(y, z, x, t);
     } else {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 

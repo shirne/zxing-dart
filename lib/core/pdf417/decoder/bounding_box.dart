@@ -38,7 +38,7 @@ class BoundingBox {
     bool leftUnspecified = topLeft == null || bottomLeft == null;
     bool rightUnspecified = topRight == null || bottomRight == null;
     if (leftUnspecified && rightUnspecified) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     if (leftUnspecified) {
       topLeft = ResultPoint(0, topRight!.getY());

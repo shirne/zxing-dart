@@ -24,6 +24,7 @@ import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../checksum_exception.dart';
 import '../../decode_hint_type.dart';
+import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'decoded_bit_stream_parser.dart';
 
@@ -61,7 +62,7 @@ class Decoder {
         datawords = Uint8List(78);
         break;
       default:
-        throw FormatException();
+        throw FormatsException.instance;
     }
 
     List.copyRange(datawords, 0, codewords, 0, 10);

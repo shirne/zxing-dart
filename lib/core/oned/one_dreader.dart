@@ -164,7 +164,7 @@ abstract class OneDReader implements Reader {
       }
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Records the size of successive runs of white and black pixels in a row, starting at a given point.
@@ -183,7 +183,7 @@ abstract class OneDReader implements Reader {
     counters.fillRange(0, numCounters, 0);
     int end = row.getSize();
     if (start >= end) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     bool isWhite = !row.get(start);
     int counterPosition = 0;
@@ -205,7 +205,7 @@ abstract class OneDReader implements Reader {
     // the last counter but ran off the side of the image, OK. Otherwise, a problem.
     if (!(counterPosition == numCounters ||
         (counterPosition == numCounters - 1 && i == end))) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 
@@ -221,7 +221,7 @@ abstract class OneDReader implements Reader {
       }
     }
     if (numTransitionsLeft >= 0) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     recordPattern(row, start + 1, counters);
   }

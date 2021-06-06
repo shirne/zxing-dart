@@ -86,7 +86,7 @@ abstract class AbstractRSSReader extends OneDReader {
         return value;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// @param array values to sum

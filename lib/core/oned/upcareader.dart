@@ -20,6 +20,7 @@ import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../result.dart';
 import 'ean13_reader.dart';
 import 'upceanreader.dart';
@@ -65,7 +66,7 @@ class UPCAReader extends UPCEANReader {
       }
       return upcaResult;
     } else {
-      throw FormatException();
+      throw FormatsException.instance;
     }
   }
 }

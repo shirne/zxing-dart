@@ -25,6 +25,7 @@ import '../../common/reedsolomon/generic_gf.dart';
 
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../decode_hint_type.dart';
+import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'data_block.dart';
 import 'decoded_bit_stream_parser.dart';
@@ -65,11 +66,11 @@ class Decoder {
       [Map<DecodeHintType, Object>? hints]) {
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = BitMatrixParser(bits);
-    FormatException? fe;
+    FormatsException? fe;
     ChecksumException? ce;
     try {
       return _decodeParser(parser, hints);
-    } on FormatException catch (e) {
+    } on FormatsException catch (e) {
       fe = e;
     } on ChecksumException catch (e) {
       ce = e;
@@ -109,7 +110,7 @@ class Decoder {
         throw fe;
       }
       throw ce!; // If fe is null, this can't be
-    } on FormatException catch (_) {
+    } on FormatsException catch (_) {
       // Throw the exception from the original reading
       if (fe != null) {
         throw fe;

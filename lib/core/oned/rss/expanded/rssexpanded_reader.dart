@@ -230,7 +230,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       }
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   List<ExpandedPair>? _checkRows(bool reverse) {
@@ -292,7 +292,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       }
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   // Whether the pairs form a valid find pattern sequence,
@@ -495,7 +495,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     if (previousPairs.isNotEmpty &&
         previousPairs[previousPairs.length - 1].mustBeLast()) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     DataCharacter? rightChar;
@@ -572,7 +572,7 @@ class RSSExpandedReader extends AbstractRSSReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static void _reverseCounters(List<int> counters) {
@@ -655,7 +655,7 @@ class RSSExpandedReader extends AbstractRSSReader {
         (pattern.getStartEnd()[1] - pattern.getStartEnd()[0]) / 15.0;
     if ((elementWidth - expectedElementWidth).abs() / expectedElementWidth >
         0.3) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     List<int> oddCounts = this.getOddCounts();
@@ -668,12 +668,12 @@ class RSSExpandedReader extends AbstractRSSReader {
       int count = (value + 0.5).toInt(); // Round
       if (count < 1) {
         if (value < 0.3) {
-          throw NotFoundException.getNotFoundInstance();
+          throw NotFoundException.instance;
         }
         count = 1;
       } else if (count > 8) {
         if (value > 8.7) {
-          throw NotFoundException.getNotFoundInstance();
+          throw NotFoundException.instance;
         }
         count = 8;
       }
@@ -713,7 +713,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     int checksumPortion = oddChecksumPortion + evenChecksumPortion;
 
     if ((oddSum & 0x01) != 0 || oddSum > 13 || oddSum < 4) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     int group = (13 - oddSum) ~/ 2;
@@ -761,12 +761,12 @@ class RSSExpandedReader extends AbstractRSSReader {
       case 1:
         if (oddParityBad) {
           if (evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           decrementOdd = true;
         } else {
           if (!evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           decrementEven = true;
         }
@@ -774,12 +774,12 @@ class RSSExpandedReader extends AbstractRSSReader {
       case -1:
         if (oddParityBad) {
           if (evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           incrementOdd = true;
         } else {
           if (!evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           incrementEven = true;
         }
@@ -787,7 +787,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       case 0:
         if (oddParityBad) {
           if (!evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           // Both bad
           if (oddSum < evenSum) {
@@ -799,18 +799,18 @@ class RSSExpandedReader extends AbstractRSSReader {
           }
         } else {
           if (evenParityBad) {
-            throw NotFoundException.getNotFoundInstance();
+            throw NotFoundException.instance;
           }
           // Nothing to do!
         }
         break;
       default:
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
     }
 
     if (incrementOdd) {
       if (decrementOdd) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       AbstractRSSReader.increment(
           this.getOddCounts(), this.getOddRoundingErrors());
@@ -821,7 +821,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     }
     if (incrementEven) {
       if (decrementEven) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       AbstractRSSReader.increment(
           this.getEvenCounts(), this.getOddRoundingErrors());

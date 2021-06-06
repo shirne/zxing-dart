@@ -120,7 +120,7 @@ class Detector {
         !_isValidPoint(bullsEyeCorners[1]) ||
         !_isValidPoint(bullsEyeCorners[2]) ||
         !_isValidPoint(bullsEyeCorners[3])) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     int length = 2 * _nbCenterLayers;
     // Get the bits around the bull's eye
@@ -195,7 +195,7 @@ class Detector {
         return shift;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Corrects the parameter bits using Reed-Solomon algorithm.
@@ -227,7 +227,7 @@ class Detector {
       rsDecoder.decode(parameterWords, numECCodewords);
     } catch (ignored) {
       // ReedSolomonException
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     // Toss the error correction.  Just return the data as an integer
     int result = 0;
@@ -282,7 +282,7 @@ class Detector {
     }
 
     if (_nbCenterLayers != 5 && _nbCenterLayers != 7) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     _compact = _nbCenterLayers == 5;

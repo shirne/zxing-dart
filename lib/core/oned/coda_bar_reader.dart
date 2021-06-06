@@ -83,7 +83,7 @@ class CodaBarReader extends OneDReader {
     do {
       int charOffset = _toNarrowWidePattern(nextStart);
       if (charOffset == -1) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       // Hack: We store the position in the alphabet table into a
       // StringBuffer, so that we can access the decoded patterns in
@@ -110,7 +110,7 @@ class CodaBarReader extends OneDReader {
     // otherwise this is probably a false positive. The exception is if we are
     // at the end of the row. (I.e. the barcode barely fits.)
     if (nextStart < _counterLength && trailingWhitespace < lastPatternSize / 2) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     _validatePattern(startOffset);
@@ -122,17 +122,17 @@ class CodaBarReader extends OneDReader {
     // Ensure a valid start and end character
     String startchar = _decodeRowResult.charAt(0);
     if (!_STARTEND_ENCODING.contains(startchar)) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     String endchar = _decodeRowResult.charAt(_decodeRowResult.length - 1);
     if (!_STARTEND_ENCODING.contains(endchar)) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     // remove stop/start characters character and check if a long enough string is contained
     if (_decodeRowResult.length <= _MIN_CHARACTER_LENGTH) {
       // Almost surely a false positive ( start + stop + at least 1 character)
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     if (hints == null ||
@@ -212,7 +212,7 @@ class CodaBarReader extends OneDReader {
         int category = (j & 1) + (pattern & 1) * 2;
         int size = _counters[pos + j];
         if (size < mins[category] || size > maxes[category]) {
-          throw NotFoundException.getNotFoundInstance();
+          throw NotFoundException.instance;
         }
         pattern >>= 1;
       }
@@ -233,7 +233,7 @@ class CodaBarReader extends OneDReader {
     int i = row.getNextUnset(0);
     int end = row.getSize();
     if (i >= end) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     bool isWhite = true;
     int count = 0;
@@ -277,7 +277,7 @@ class CodaBarReader extends OneDReader {
         }
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static bool arrayContains(List<int>? array, int key) {

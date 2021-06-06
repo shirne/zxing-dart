@@ -23,6 +23,7 @@ import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
@@ -87,7 +88,7 @@ class Code39Reader extends OneDReader {
       OneDReader.recordPattern(row, nextStart, theCounters);
       int pattern = _toNarrowWidePattern(theCounters);
       if (pattern < 0) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       decodedChar = _patternToChar(pattern);
       result.write(decodedChar);
@@ -109,7 +110,7 @@ class Code39Reader extends OneDReader {
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
     if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     if (_usingCheckDigit) {
@@ -126,7 +127,7 @@ class Code39Reader extends OneDReader {
 
     if (result.length == 0) {
       // false positive
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     String resultString;
@@ -183,7 +184,7 @@ class Code39Reader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
@@ -240,7 +241,7 @@ class Code39Reader extends OneDReader {
     if (pattern == ASTERISK_ENCODING) {
       return '*';
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static String _decodeExtended(String encoded) {
@@ -257,7 +258,7 @@ class Code39Reader extends OneDReader {
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = String.fromCharCode(next + 32);
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case r'$':
@@ -265,7 +266,7 @@ class Code39Reader extends OneDReader {
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = String.fromCharCode(next - 64);
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case '%':
@@ -289,7 +290,7 @@ class Code39Reader extends OneDReader {
                 next == 90 /* Z */) {
               decodedChar = String.fromCharCode(127);
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case '/':
@@ -299,7 +300,7 @@ class Code39Reader extends OneDReader {
             } else if (next == 90 /* Z */) {
               decodedChar = ':';
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
         }

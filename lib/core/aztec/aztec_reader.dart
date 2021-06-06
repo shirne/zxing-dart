@@ -21,6 +21,7 @@ import '../common/decoder_result.dart';
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../result.dart';
@@ -38,7 +39,7 @@ class AztecReader implements Reader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     NotFoundException? notFoundException;
-    FormatException? formatException;
+    FormatsException? formatException;
     Detector detector = Detector(image.getBlackMatrix());
     List<ResultPoint>? points;
     DecoderResult? decoderResult;
@@ -48,7 +49,7 @@ class AztecReader implements Reader {
       decoderResult = Decoder().decode(detectorResult);
     } on NotFoundException catch (e) {
       notFoundException = e;
-    } on FormatException catch (e) {
+    } on FormatsException catch (e) {
       formatException = e;
     }
     if (decoderResult == null) {
@@ -57,7 +58,7 @@ class AztecReader implements Reader {
         points = detectorResult.getPoints();
         decoderResult = Decoder().decode(detectorResult);
       } catch (e) {
-        //NotFoundException | FormatException
+        //NotFoundException | FormatsException
         if (notFoundException != null) {
           throw notFoundException;
         }

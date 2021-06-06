@@ -42,7 +42,7 @@ class FinderPatternFinder {
 
   final BitMatrix _image;
   final List<FinderPattern> _possibleCenters;
-  late bool _hasSkipped;
+  bool _hasSkipped = false;
   final List<int> _crossCheckStateCount;
   final ResultPointCallback? _resultPointCallback;
 
@@ -618,7 +618,7 @@ class FinderPatternFinder {
     int startSize = _possibleCenters.length;
     if (startSize < 3) {
       // Couldn't find enough finder patterns
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     _possibleCenters.sort(_centerCompare);
@@ -697,7 +697,7 @@ class FinderPatternFinder {
     }
 
     if (distortion == double.maxFinite) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     return bestPatterns;

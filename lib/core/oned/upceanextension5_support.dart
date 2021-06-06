@@ -83,12 +83,12 @@ class UPCEANExtension5Support {
     }
 
     if (resultString.length != 5) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     int checkDigit = _determineCheckDigit(lgPatternFound);
     if (_extensionChecksum(resultString.toString()) != checkDigit) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     return rowOffset;
@@ -115,7 +115,7 @@ class UPCEANExtension5Support {
         return d;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// @param raw raw content of extension

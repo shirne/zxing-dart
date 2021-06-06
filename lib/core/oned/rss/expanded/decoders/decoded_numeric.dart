@@ -24,6 +24,7 @@
  *   http://www.piramidepse.com/
  */
 
+import '../../../../formats_exception.dart';
 import 'decoded_object.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -40,7 +41,7 @@ class DecodedNumeric extends DecodedObject {
         _firstDigit > 10 ||
         _secondDigit < 0 ||
         _secondDigit > 10) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
   }
 

@@ -18,6 +18,7 @@ import 'dart:typed_data';
 
 import '../../common/bit_matrix.dart';
 
+import '../../formats_exception.dart';
 import 'data_mask.dart';
 import 'format_information.dart';
 import 'version.dart';
@@ -34,7 +35,7 @@ class BitMatrixParser {
   BitMatrixParser(this._bitMatrix) {
     int dimension = _bitMatrix.getHeight();
     if (dimension < 21 || (dimension & 0x03) != 1) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
   }
 
@@ -78,7 +79,7 @@ class BitMatrixParser {
     if (_parsedFormatInfo != null) {
       return _parsedFormatInfo!;
     }
-    throw FormatException();
+    throw FormatsException.instance;
   }
 
   /// <p>Reads version information from one of its two locations within the QR Code.</p>
@@ -128,7 +129,7 @@ class BitMatrixParser {
       _parsedVersion = theParsedVersion;
       return theParsedVersion;
     }
-    throw FormatException();
+    throw FormatsException.instance;
   }
 
   int _copyBit(int i, int j, int versionBits) {
@@ -190,7 +191,7 @@ class BitMatrixParser {
       readingUp ^= true; // readingUp = !readingUp; // switch directions
     }
     if (resultOffset != version.getTotalCodewords()) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     return result;
   }

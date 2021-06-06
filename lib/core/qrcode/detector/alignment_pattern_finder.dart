@@ -133,7 +133,7 @@ class AlignmentPatternFinder {
       return _possibleCenters[0];
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Given a count of black/white/black pixels just seen and an end position,

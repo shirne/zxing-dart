@@ -20,10 +20,12 @@ import 'binary_bitmap.dart';
 import 'datamatrix/data_matrix_reader.dart';
 import 'decode_hint_type.dart';
 import 'maxicode/maxi_code_reader.dart';
+import 'not_found_exception.dart';
 import 'oned/multi_format_one_dreader.dart';
 import 'pdf417/pdf417_reader.dart';
 import 'qrcode/qrcode_reader.dart';
 import 'reader.dart';
+import 'reader_exception.dart';
 import 'result.dart';
 
 /// MultiFormatReader is a convenience class and the main entry point into the library for most uses.
@@ -77,7 +79,7 @@ class MultiFormatReader implements Reader {
     // @SuppressWarnings("unchecked")
     List<BarcodeFormat>? formats = hints == null
         ? null
-        : hints[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>;
+        : hints[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
     List<Reader> readers = [];
     if (formats != null) {
       bool addOneDReader = formats.contains(BarcodeFormat.UPC_A) ||
@@ -147,7 +149,7 @@ class MultiFormatReader implements Reader {
       for (Reader reader in _readers!) {
         try {
           return reader.decode(image, _hints);
-        } catch (re) {
+        } on ReaderException catch (_) {
           // continue
         }
       }
@@ -157,12 +159,12 @@ class MultiFormatReader implements Reader {
         for (Reader reader in _readers!) {
           try {
             return reader.decode(image, _hints);
-          } catch (_) {
+          } on ReaderException catch (_) {
             // continue
           }
         }
       }
     }
-    throw Exception('Not Found ');
+    throw NotFoundException.instance;
   }
 }

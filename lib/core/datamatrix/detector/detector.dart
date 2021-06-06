@@ -44,7 +44,7 @@ class Detector {
     points = _detectSolid2(points);
     points[3] = _correctTopRight(points)!;
     //if (points[3] == null) {
-    //  throw NotFoundException.getNotFoundInstance();
+    //  throw NotFoundException.instance;
     //}
     points = _shiftToModuleCenter(points);
 

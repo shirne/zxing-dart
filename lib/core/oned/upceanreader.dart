@@ -20,6 +20,7 @@ import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
@@ -169,13 +170,13 @@ abstract class UPCEANReader extends OneDReader {
     int end = endRange[1];
     int quietEnd = end + (end - endRange[0]);
     if (quietEnd >= row.getSize() || !row.isRange(end, quietEnd, false)) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     String resultString = result.toString();
     // UPC/EAN should never be less than 8 chars anyway
     if (resultString.length < 8) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     if (!checkChecksum(resultString)) {
       throw ChecksumException.getChecksumInstance();
@@ -220,7 +221,7 @@ abstract class UPCEANReader extends OneDReader {
         }
       }
       if (!valid) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
     }
 
@@ -269,7 +270,7 @@ abstract class UPCEANReader extends OneDReader {
     for (int i = length - 1; i >= 0; i -= 2) {
       int digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
-        throw FormatException();
+        throw FormatsException.instance;
       }
       sum += digit;
     }
@@ -277,7 +278,7 @@ abstract class UPCEANReader extends OneDReader {
     for (int i = length - 2; i >= 0; i -= 2) {
       int digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
-        throw FormatException();
+        throw FormatsException.instance;
       }
       sum += digit;
     }
@@ -339,7 +340,7 @@ abstract class UPCEANReader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Attempts to decode a single UPC/EAN-encoded digit.
@@ -370,7 +371,7 @@ abstract class UPCEANReader extends OneDReader {
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 

@@ -27,6 +27,7 @@
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
+import '../../../../formats_exception.dart';
 import 'block_parsed_result.dart';
 import 'current_parsing_state.dart';
 import 'decoded_char.dart';
@@ -369,7 +370,7 @@ class GeneralAppIdDecoder {
         c = ' ';
         break;
       default:
-        throw FormatException();
+        throw FormatsException.instance;
     }
     return DecodedChar(pos + 8, c.codeUnitAt(0));
   }

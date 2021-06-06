@@ -21,6 +21,7 @@ import 'package:unicode/unicode.dart';
 
 import '../encoding/euc_kr.dart';
 import '../encoding/cp437.dart';
+import '../formats_exception.dart';
 import 'string_utils.dart';
 
 /// Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
@@ -138,7 +139,7 @@ class CharacterSetECI {
   /// @throws FormatException if ECI value is invalid
   static CharacterSetECI? getCharacterSetECIByValue(int value) {
     if (value < 0 || value >= 900) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     if (_valueToEci.isEmpty) {
       init();

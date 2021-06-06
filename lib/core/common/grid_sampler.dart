@@ -126,7 +126,7 @@ abstract class GridSampler {
       int x = points[offset].toInt();
       int y = points[offset + 1].toInt();
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       nudged = false;
       if (x == -1) {
@@ -150,7 +150,7 @@ abstract class GridSampler {
       int x = points[offset].toInt();
       int y = points[offset + 1].toInt();
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       nudged = false;
       if (x == -1) {

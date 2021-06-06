@@ -21,6 +21,7 @@ import '../../common/decoder_result.dart';
 import '../../common/detector/math_utils.dart';
 
 import '../../checksum_exception.dart';
+import '../../formats_exception.dart';
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 import '../pdf417_common.dart';
@@ -73,7 +74,7 @@ class PDF417ScanningDecoder {
       }
       detectionResult = _merge(leftRowIndicatorColumn, rightRowIndicatorColumn);
       if (detectionResult == null) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       BoundingBox? resultBox = detectionResult.getBoundingBox();
       if (firstPass &&
@@ -284,7 +285,7 @@ class PDF417ScanningDecoder {
     if (numberOfCodewords.length == 0) {
       if (calculatedNumberOfCodewords < 1 ||
           calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     } else if (numberOfCodewords[0] != calculatedNumberOfCodewords) {
@@ -595,7 +596,7 @@ class PDF417ScanningDecoder {
   static DecoderResult _decodeCodewords(
       List<int> codewords, int ecLevel, List<int> erasures) {
     if (codewords.length == 0) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
 
     int numECCodewords = 1 << (ecLevel + 1);
@@ -634,21 +635,21 @@ class PDF417ScanningDecoder {
     if (codewords.length < 4) {
       // Codeword array size should be at least 4 allowing for
       // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
-      throw FormatException();
+      throw FormatsException.instance;
     }
     // The first codeword, the Symbol Length Descriptor, shall always encode the total number of data
     // codewords in the symbol, including the Symbol Length Descriptor itself, data codewords and pad
     // codewords, but excluding the number of error correction codewords.
     int numberOfCodewords = codewords[0];
     if (numberOfCodewords > codewords.length) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     if (numberOfCodewords == 0) {
       // Reset to the length of the array - 8 (Allow for at least level 3 Error Correction (8 Error Codewords)
       if (numECCodewords < codewords.length) {
         codewords[0] = codewords.length - numECCodewords;
       } else {
-        throw FormatException();
+        throw FormatsException.instance;
       }
     }
   }

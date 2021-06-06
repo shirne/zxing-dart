@@ -82,11 +82,11 @@ class UPCEANExtension2Support {
     }
 
     if (resultString.length != 2) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     if (int.parse(resultString.toString()) % 4 != checkParity) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     return rowOffset;

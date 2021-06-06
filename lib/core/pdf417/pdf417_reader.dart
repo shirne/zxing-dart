@@ -49,7 +49,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     List<Result> result = _decodeStatic(image, hints, false);
     if (result.length == 0 ) { // || result[0] == null
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     return result[0];
   }
@@ -60,7 +60,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
     try {
       return _decodeStatic(image, hints, true);
     } catch (_) { //FormatException | ChecksumException
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 

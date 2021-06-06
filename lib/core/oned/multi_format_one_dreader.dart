@@ -99,7 +99,7 @@ class MultiFormatOneDReader extends OneDReader {
       }
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   @override

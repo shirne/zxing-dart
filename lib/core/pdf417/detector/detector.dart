@@ -148,40 +148,42 @@ class Detector {
   ///           vertices[5] x, y bottom left codeword area
   ///           vertices[6] x, y top right codeword area
   ///           vertices[7] x, y bottom right codeword area
-  static List<ResultPoint> _findVertices(
+  static List<ResultPoint?> _findVertices(
       BitMatrix matrix, int startRow, int startColumn) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
-    List<ResultPoint> result = List.generate(8, (index) => ResultPoint(0, 0));
+    List<ResultPoint?> result = List.filled(8, null);
     _copyToResult(
         result,
         _findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, _START_PATTERN)!,
+            matrix, height, width, startRow, startColumn, _START_PATTERN),
         _INDEXES_START_PATTERN);
-
-    startColumn = result[4].getX().toInt();
-    startRow = result[4].getY().toInt();
+    if(result[4] == null){
+      return result;
+    }
+    startColumn = result[4]!.getX().toInt();
+    startRow = result[4]!.getY().toInt();
 
     _copyToResult(
         result,
         _findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, _STOP_PATTERN)!,
+            matrix, height, width, startRow, startColumn, _STOP_PATTERN),
         _INDEXES_STOP_PATTERN);
 
     return result;
   }
 
   static void _copyToResult(List<ResultPoint?> result,
-      List<ResultPoint> tmpResult, List<int> destinationIndexes) {
+      List<ResultPoint?> tmpResult, List<int> destinationIndexes) {
     for (int i = 0; i < destinationIndexes.length; i++) {
       result[destinationIndexes[i]] = tmpResult[i];
     }
   }
 
-  static List<ResultPoint>? _findRowsWithPattern(BitMatrix matrix, int height,
+  static List<ResultPoint?> _findRowsWithPattern(BitMatrix matrix, int height,
       int width, int startRow, int startColumn, List<int> pattern) {
-    List<ResultPoint> result = List.generate(4, (index) => ResultPoint(0, 0));
+    List<ResultPoint?> result = List.filled(4, null);
     bool found = false;
     List<int> counters = List.filled(pattern.length, 0);
     for (; startRow < height; startRow += _ROW_STEP) {
@@ -204,13 +206,17 @@ class Detector {
         break;
       }
     }
+    if(result[0] == null || result[1] == null){
+      result.fillRange(0, result.length, null);
+      return result;
+    }
     int stopRow = startRow + 1;
     // Last row of the current symbol that contains pattern
     if (found) {
       int skippedRowCount = 0;
       List<int> previousRowLoc = [
-        result[0].getX().toInt(),
-        result[1].getX().toInt()
+        result[0]!.getX().toInt(),
+        result[1]!.getX().toInt()
       ];
       for (; stopRow < height; stopRow++) {
         List<int>? loc = _findGuardPattern(
@@ -239,8 +245,7 @@ class Detector {
           ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
     if (stopRow - startRow < _BARCODE_MIN_HEIGHT) {
-      // Arrays.fill(result, null);
-      return null;
+      result.fillRange(0, result.length, null);
     }
     return result;
   }

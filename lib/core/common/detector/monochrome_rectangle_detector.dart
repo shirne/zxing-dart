@@ -106,7 +106,7 @@ class MonochromeRectangleDetector {
       }
       if (range == null) {
         if (lastRange == null) {
-          throw NotFoundException.getNotFoundInstance();
+          throw NotFoundException.instance;
         }
         // lastRange was found
         if (deltaX == 0) {
@@ -136,7 +136,7 @@ class MonochromeRectangleDetector {
       }
       lastRange = range;
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Computes the start and end of a region of pixels, either horizontally or vertically, that could

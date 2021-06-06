@@ -112,7 +112,7 @@ class MultiFormatUPCEANReader extends OneDReader {
       }
     }
 
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   @override

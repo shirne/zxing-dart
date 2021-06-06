@@ -20,6 +20,7 @@ import 'dart:typed_data';
 import '../../common/bit_source.dart';
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
+import '../../formats_exception.dart';
 
 enum _Mode {
   PAD_ENCODE, // Not really a mode
@@ -108,7 +109,7 @@ class DecodedBitStreamParser {
                 true; // ECI detection only, atm continue decoding as ASCII
             break;
           default:
-            throw FormatException();
+            throw FormatsException.instance;
         }
         mode = _Mode.ASCII_ENCODE;
       }
@@ -147,7 +148,7 @@ class DecodedBitStreamParser {
     do {
       int oneByte = bits.readBits(8);
       if (oneByte == 0) {
-        throw FormatException();
+        throw FormatsException.instance;
       } else if (oneByte <= 128) {
         // ASCII data (ASCII value + 1)
         if (upperShift) {
@@ -205,7 +206,7 @@ class DecodedBitStreamParser {
             // Not to be used in ASCII encodation
             // but work around encoders that end with 254, latch back to ASCII
             if (oneByte != 254 || bits.available() != 0) {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
         }
@@ -253,7 +254,7 @@ class DecodedBitStreamParser {
                 result.writeCharCode(c40char);
               }
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case 1:
@@ -284,7 +285,7 @@ class DecodedBitStreamParser {
                   upperShift = true;
                   break;
                 default:
-                  throw FormatException();
+                  throw FormatsException.instance;
               }
             }
             shift = 0;
@@ -299,7 +300,7 @@ class DecodedBitStreamParser {
             shift = 0;
             break;
           default:
-            throw FormatException();
+            throw FormatsException.instance;
         }
       }
     } while (bits.available() > 0);
@@ -343,7 +344,7 @@ class DecodedBitStreamParser {
                 result.writeCharCode(textChar);
               }
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case 1:
@@ -375,7 +376,7 @@ class DecodedBitStreamParser {
                   upperShift = true;
                   break;
                 default:
-                  throw FormatException();
+                  throw FormatsException.instance;
               }
             }
             shift = 0;
@@ -391,11 +392,11 @@ class DecodedBitStreamParser {
               }
               shift = 0;
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           default:
-            throw FormatException();
+            throw FormatsException.instance;
         }
       }
     } while (bits.available() > 0);
@@ -443,7 +444,7 @@ class DecodedBitStreamParser {
               // A - Z
               result.writeCharCode(cValue + 51);
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
         }
@@ -511,7 +512,7 @@ class DecodedBitStreamParser {
 
     // We're seeing NegativeArraySizeException errors from users.
     if (count < 0) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
 
     Uint8List bytes = Uint8List(count);
@@ -519,7 +520,7 @@ class DecodedBitStreamParser {
       // Have seen this particular error in the wild, such as at
       // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
       if (bits.available() < 8) {
-        throw FormatException();
+        throw FormatsException.instance;
       }
       bytes[i] = _unrandomize255State(bits.readBits(8), codewordPosition++);
     }

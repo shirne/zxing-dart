@@ -123,7 +123,7 @@ class UPCEReader extends UPCEANReader {
         }
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   @override

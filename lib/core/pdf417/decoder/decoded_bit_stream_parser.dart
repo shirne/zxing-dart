@@ -19,6 +19,7 @@ import 'dart:convert';
 import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
 
+import '../../formats_exception.dart';
 import '../pdf417_result_metadata.dart';
 
 enum _Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
@@ -115,7 +116,7 @@ class DecodedBitStreamParser {
         case _BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
         case _MACRO_PDF417_TERMINATOR:
           // Should not see these outside a macro block
-          throw FormatException();
+          throw FormatsException.instance;
         default:
           // Default to text compaction. During testing numerous barcodes
           // appeared to be missing the starting mode. In these cases defaulting
@@ -127,11 +128,11 @@ class DecodedBitStreamParser {
       if (codeIndex < codewords.length) {
         code = codewords[codeIndex++];
       } else {
-        throw FormatException();
+        throw FormatsException.instance;
       }
     }
     if (result.length == 0 && resultMetadata.getFileId() == null) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     DecoderResult decoderResult =
         DecoderResult(null, result.toString(), null, ecLevel);
@@ -144,7 +145,7 @@ class DecodedBitStreamParser {
       List<int> codewords, int codeIndex, PDF417ResultMetadata resultMetadata) {
     if (codeIndex + _NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
-      throw FormatException();
+      throw FormatsException.instance;
     }
     List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
     for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
@@ -165,7 +166,7 @@ class DecodedBitStreamParser {
     }
     if (fileId.length == 0) {
       // at least one fileId codeword is required (Annex H.2)
-      throw FormatException();
+      throw FormatsException.instance;
     }
     resultMetadata.setFileId(fileId);
 
@@ -218,7 +219,7 @@ class DecodedBitStreamParser {
               resultMetadata.setFileSize(int.parse(fileSize.toString()));
               break;
             default:
-              throw FormatException();
+              throw FormatsException.instance;
           }
           break;
         case _MACRO_PDF417_TERMINATOR:
@@ -226,7 +227,7 @@ class DecodedBitStreamParser {
           resultMetadata.setLastSegment(true);
           break;
         default:
-          throw FormatException();
+          throw FormatsException.instance;
       }
     }
 
@@ -699,7 +700,7 @@ class DecodedBitStreamParser {
     }
     String resultString = result.toString();
     if (resultString[0] != '1') {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     return resultString.substring(1);
   }

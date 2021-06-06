@@ -17,6 +17,7 @@
 
 
 import '../barcode_format.dart';
+import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';
 import 'upceanreader.dart';
 import 'upceanwriter.dart';
@@ -45,22 +46,22 @@ class UPCEWriter extends UPCEANWriter {
         int check;
         try {
           check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents));
-        } catch ( fe) { // FormatException
-          throw Exception(fe);
+        } on FormatsException catch ( fe) { //
+          throw ArgumentError(fe);
         }
         contents += check.toString();
         break;
       case 8:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents))) {
-            throw Exception("Contents do not pass checksum");
+            throw ArgumentError("Contents do not pass checksum");
           }
-        } catch ( ignored) { // FormatException
-          throw Exception("Illegal contents");
+        } on FormatsException catch ( _) { //
+          throw ArgumentError("Illegal contents");
         }
         break;
       default:
-        throw Exception(
+        throw ArgumentError(
             "Requested contents should be 7 or 8 digits long, but got $length" );
     }
 
@@ -68,7 +69,7 @@ class UPCEWriter extends UPCEANWriter {
 
     int firstDigit = int.parse(contents[0]);
     if (firstDigit != 0 && firstDigit != 1) {
-      throw Exception("Number system must be 0 or 1");
+      throw ArgumentError("Number system must be 0 or 1");
     }
 
     int checkDigit = int.parse(contents[7]);

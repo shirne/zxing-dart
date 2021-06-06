@@ -42,7 +42,7 @@ class AI01393xDecoder extends AI01decoder {
   @override
   String parseInformation() {
     if (this.getInformation().getSize() < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     StringBuilder buf = StringBuilder();

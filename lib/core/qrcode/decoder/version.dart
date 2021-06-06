@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
+import 'package:zxing/core/arguments_exception.dart';
+
 import '../../common/detector/math_utils.dart';
 import '../../common/bit_matrix.dart';
 
+import '../../formats_exception.dart';
 import 'error_correction_level.dart';
 import 'format_information.dart';
 
@@ -129,13 +132,13 @@ class Version {
   /// @throws FormatException if dimension is not 1 mod 4
   static Version getProvisionalVersionForDimension(int dimension) {
     if (dimension % 4 != 1) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     try {
       return getVersionForNumber((dimension - 17) ~/ 4);
-    } catch (ignored) {
+    } catch (_) {
       //IllegalArgumentException
-      throw FormatException();
+      throw ArgumentsException.instance;
     }
   }
 

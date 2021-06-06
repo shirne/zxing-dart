@@ -66,7 +66,7 @@ class VEventResultParser extends ResultParser {
       try {
         latitude = double.parse(geoString.substring(0, semicolon));
         longitude = double.parse(geoString.substring(semicolon + 1));
-      } catch ( ignored) { // NumberFormatException
+      } catch ( _) { // NumberFormatException
         return null;
       }
     }

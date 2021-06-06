@@ -68,7 +68,7 @@ class DefaultGridSampler extends GridSampler {
   BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY,
       PerspectiveTransform transform) {
     if (dimensionX <= 0 || dimensionY <= 0) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     BitMatrix bits = BitMatrix(dimensionX, dimensionY);
     List<double> points = List.filled(2 * dimensionX, 0);
@@ -99,7 +99,7 @@ class DefaultGridSampler extends GridSampler {
         // This results in an ugly runtime exception despite our clever checks above -- can't have
         // that. We could check each point's coordinates but that feels duplicative. We settle for
         // catching and wrapping ArrayIndexOutOfBoundsException.
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
     }
     return bits;

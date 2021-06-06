@@ -20,6 +20,7 @@ import '../common/bit_array.dart';
 
 import '../barcode_format.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
 import '../result_point.dart';
@@ -129,7 +130,7 @@ class ITFReader extends OneDReader {
       lengthOK = true;
     }
     if (!lengthOK) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
 
     return Result(
@@ -227,7 +228,7 @@ class ITFReader extends OneDReader {
     }
     if (quietCount != 0) {
       // Unable to find the necessary number of quiet zone pixels.
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 
@@ -240,7 +241,7 @@ class ITFReader extends OneDReader {
     int width = row.getSize();
     int endStart = row.getNextSet(0);
     if (endStart == width) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     return endStart;
@@ -321,7 +322,7 @@ class ITFReader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   /// Attempts to decode a sequence of ITF black/white lines into single
@@ -348,7 +349,7 @@ class ITFReader extends OneDReader {
     if (bestMatch >= 0) {
       return bestMatch % 10;
     } else {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
   }
 

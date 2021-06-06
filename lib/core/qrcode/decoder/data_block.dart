@@ -58,7 +58,6 @@ class DataBlock {
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
     List<DataBlock> result = [];
-    int numResultBlocks = 0;
     for (ECB ecBlock in ecBlockArray) {
       for (int i = 0; i < ecBlock.getCount(); i++) {
         int numDataCodewords = ecBlock.getDataCodewords();
@@ -67,6 +66,7 @@ class DataBlock {
         result.add(DataBlock._(numDataCodewords, Uint8List(numBlockCodewords)));
       }
     }
+    int numResultBlocks = result.length;
 
     // All blocks have the same amount of data, except that the last n
     // (where n may be 0) have 1 more byte. Figure out where these start.

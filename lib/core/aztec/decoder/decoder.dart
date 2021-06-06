@@ -22,7 +22,9 @@ import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
+import '../../common/reedsolomon/reed_solomon_exception.dart';
 
+import '../../formats_exception.dart';
 import '../aztec_detector_result.dart';
 
 enum _Table { UPPER, LOWER, MIXED, DIGIT, PUNCT, BINARY }
@@ -154,7 +156,7 @@ class Decoder {
               result.writeCharCode(29); // translate FNC1 as ASCII 29
               break;
             case 7:
-              throw FormatException(); // FLG(7) is reserved and illegal
+              throw FormatsException.instance; // FLG(7) is reserved and illegal
             default:
               // flush bytes before changing character set
               try {
@@ -175,7 +177,7 @@ class Decoder {
                 int nextDigit = _readCode(correctedBits, index, 4);
                 index += 4;
                 if (nextDigit < 2 || nextDigit > 11) {
-                  throw FormatException(); // Not a decimal digit
+                  throw FormatsException.instance; // Not a decimal digit
                 }
                 eci = eci * 10 + (nextDigit - 2);
               }
@@ -281,7 +283,7 @@ class Decoder {
     int numDataCodewords = _dData.getNbDatablocks();
     int numCodewords = rawbits.length ~/ codewordSize;
     if (numCodewords < numDataCodewords) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     int offset = rawbits.length % codewordSize;
 
@@ -293,9 +295,8 @@ class Decoder {
     try {
       ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
-    } catch (ex) {
-      // ReedSolomonException
-      throw FormatException(ex.toString());
+    } on ReedSolomonException catch (ex) {
+      throw ReedSolomonException(ex.toString());
     }
 
     // Now perform the unstuffing operation.
@@ -305,7 +306,7 @@ class Decoder {
     for (int i = 0; i < numDataCodewords; i++) {
       int dataWord = dataWords[i];
       if (dataWord == 0 || dataWord == mask) {
-        throw FormatException();
+        throw FormatsException.instance;
       } else if (dataWord == 1 || dataWord == mask - 1) {
         stuffedBits++;
       }

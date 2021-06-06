@@ -16,7 +16,11 @@
 
 import 'dart:typed_data';
 
+import 'package:zxing/core/arguments_exception.dart';
+
 import '../../common/bit_matrix.dart';
+import '../../formats_exception.dart';
+import '../../reader_exception.dart';
 import 'version.dart';
 
 /// @author bbrown@google.com (Brian Brown)
@@ -30,7 +34,7 @@ class BitMatrixParser {
   BitMatrixParser(BitMatrix bitMatrix) {
     int dimension = bitMatrix.getHeight();
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-      throw FormatException('BitMatrixParser arguments error');
+      throw ArgumentsException.instance;
     }
 
     this._version = _readVersion(bitMatrix);
@@ -141,7 +145,7 @@ class BitMatrixParser {
     } while ((row < numRows) || (column < numColumns));
 
     if (resultOffset != _version.getTotalCodewords()) {
-      throw FormatException();
+      throw FormatsException.instance;
     }
     return result;
   }

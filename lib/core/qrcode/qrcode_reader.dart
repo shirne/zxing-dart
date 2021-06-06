@@ -54,7 +54,7 @@ class QRCodeReader implements Reader {
       points = _NO_POINTS;
     } else {
       DetectorResult detectorResult =
-          Detector(image.getBlackMatrix()).detect(hints!);
+          Detector(image.getBlackMatrix()).detect(hints);
       decoderResult = _decoder.decodeMatrix(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
     }
@@ -99,7 +99,7 @@ class QRCodeReader implements Reader {
     List<int>? leftTopBlack = image.getTopLeftOnBit();
     List<int>? rightBottomBlack = image.getBottomRightOnBit();
     if (leftTopBlack == null || rightBottomBlack == null) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     double calModuleSize = _moduleSize(leftTopBlack, image);
@@ -111,7 +111,7 @@ class QRCodeReader implements Reader {
 
     // Sanity check!
     if (left >= right || top >= bottom) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     if (bottom - top != right - left) {
@@ -120,18 +120,18 @@ class QRCodeReader implements Reader {
       right = left + (bottom - top);
       if (right >= image.getWidth()) {
         // Abort if that would not make sense -- off image
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
     }
 
     int matrixWidth = ((right - left + 1) / calModuleSize).round();
     int matrixHeight = ((bottom - top + 1) / calModuleSize).round();
     if (matrixWidth <= 0 || matrixHeight <= 0) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     if (matrixHeight != matrixWidth) {
       // Only possibly decode square regions
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     // Push in the "border" by half the module width so that we start
@@ -149,7 +149,7 @@ class QRCodeReader implements Reader {
     if (nudgedTooFarRight > 0) {
       if (nudgedTooFarRight > nudge) {
         // Neither way fits; abort
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       left -= nudgedTooFarRight;
     }
@@ -159,7 +159,7 @@ class QRCodeReader implements Reader {
     if (nudgedTooFarDown > 0) {
       if (nudgedTooFarDown > nudge) {
         // Neither way fits; abort
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       top -= nudgedTooFarDown;
     }
@@ -195,7 +195,7 @@ class QRCodeReader implements Reader {
       y++;
     }
     if (x == width || y == height) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
     return (x - leftTopBlack[0]) / 7.0;
   }

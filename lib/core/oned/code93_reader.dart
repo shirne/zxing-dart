@@ -20,6 +20,7 @@ import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
@@ -74,7 +75,7 @@ class Code93Reader extends OneDReader {
       OneDReader.recordPattern(row, nextStart, theCounters);
       int pattern = _toPattern(theCounters);
       if (pattern < 0) {
-        throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.instance;
       }
       decodedChar = _patternToChar(pattern);
       result.write(decodedChar);
@@ -94,12 +95,12 @@ class Code93Reader extends OneDReader {
 
     // Should be at least one more black module
     if (nextStart == end || !row.get(nextStart)) {
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     if (result.length < 2) {
       // false positive -- need at least 2 checksum digits
-      throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.instance;
     }
 
     _checkChecksums(result.toString());
@@ -154,7 +155,7 @@ class Code93Reader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static int _toPattern(List<int> counters) {
@@ -186,7 +187,7 @@ class Code93Reader extends OneDReader {
         return String.fromCharCode(_ALPHABET[i]);
       }
     }
-    throw NotFoundException.getNotFoundInstance();
+    throw NotFoundException.instance;
   }
 
   static String _decodeExtended(String encoded) {
@@ -196,7 +197,7 @@ class Code93Reader extends OneDReader {
       int c = encoded.codeUnitAt(i);
       if (c >= 97 /* a */ && c <= 100 /* d */) {
         if (i >= length - 1) {
-          throw FormatException();
+          throw FormatsException.instance;
         }
         int next = encoded.codeUnitAt(i + 1);
         int decodedChar = 0;
@@ -206,7 +207,7 @@ class Code93Reader extends OneDReader {
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = next + 32;
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case 97: //'a'
@@ -214,7 +215,7 @@ class Code93Reader extends OneDReader {
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = next - 64;
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case 98: // 'b'
@@ -243,7 +244,7 @@ class Code93Reader extends OneDReader {
               // %X to %Z all map to DEL (127)
               decodedChar = 127;
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
           case 99: // 'c'
@@ -253,7 +254,7 @@ class Code93Reader extends OneDReader {
             } else if (next == 90 /* Z */) {
               decodedChar = 58;
             } else {
-              throw FormatException();
+              throw FormatsException.instance;
             }
             break;
         }
