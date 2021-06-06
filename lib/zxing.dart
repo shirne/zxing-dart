@@ -7,7 +7,7 @@ export 'core/checksum_exception.dart';
 export 'core/decode_hint_type.dart';
 export 'core/dimension.dart';
 export 'core/encode_hint_type.dart';
-export 'core/format_exception.dart';
+export 'core/formats_exception.dart';
 export 'core/inverted_luminance_source.dart';
 export 'core/luminance_source.dart';
 export 'core/multi_format_reader.dart';

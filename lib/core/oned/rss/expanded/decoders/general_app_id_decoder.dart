@@ -209,7 +209,7 @@ class GeneralAppIdDecoder {
             DecodedInformation(_current.getPosition(), _buffer.toString());
         return BlockParsedResult(information, true);
       }
-      _buffer.write(iso.getValue());
+      _buffer.writeCharCode(iso.getValue());
     }
 
     if (_isAlphaOr646ToNumericLatch(_current.getPosition())) {
