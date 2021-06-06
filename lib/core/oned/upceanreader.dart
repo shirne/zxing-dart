@@ -260,8 +260,12 @@ abstract class UPCEANReader extends OneDReader {
     if (length == 0) {
       return false;
     }
-    int check = int.parse(s[length - 1]);
-    return getStandardUPCEANChecksum(s.substring(0, length - 1)) == check;
+    try {
+      int check = int.parse(s[length - 1]);
+      return getStandardUPCEANChecksum(s.substring(0, length - 1)) == check;
+    }catch(_){
+      throw FormatsException.instance;
+    }
   }
 
   static int getStandardUPCEANChecksum(String s) {
