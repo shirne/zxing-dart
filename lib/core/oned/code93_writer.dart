@@ -111,75 +111,72 @@ class Code93Writer extends OneDimensionalCodeWriter {
 
   static String convertToExtended(String contents) {
     int length = contents.length;
-    StringBuffer extendedContent = StringBuffer();
+    StringBuffer extCont = StringBuffer();
     for (int i = 0; i < length; i++) {
       int character = contents.codeUnitAt(i);
       // ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING
       if (character == 0) {
         // NUL: (%)U
-        extendedContent.write("bU");
+        extCont.write("bU");
       } else if (character <= 26) {
         // SOH - SUB: ($)A - ($)Z
-        extendedContent.write('a');
-        extendedContent
-            .write(String.fromCharCode(65 /* A */ + character - 1));
+        extCont.write('a');
+        extCont.writeCharCode(65 /* A */ + character - 1);
       } else if (character <= 31) {
         // ESC - US: (%)A - (%)E
-        extendedContent.write('b');
-        extendedContent
-            .write(String.fromCharCode(65 /* A */ + character - 27));
+        extCont.write('b');
+        extCont
+            .writeCharCode(65 /* A */ + character - 27);
       } else if (character == 32 /*   */ ||
           character == 36 /* $ */ ||
           character == 37 /* % */ ||
           character == 43 /* + */) {
         // space $ % +
-        extendedContent.write(character);
+        extCont.writeCharCode(character);
       } else if (character <= 44 /* , */) {
         // ! " # & ' ( ) * ,: (/)A - (/)L
-        extendedContent.write('c');
-        extendedContent.write(String.fromCharCode(
-            65 /* A */ + character - 33 /* ! */));
+        extCont.write('c');
+        extCont.writeCharCode(
+            65 /* A */ + character - 33 /* ! */);
       } else if (character <= 57 /* 9 */) {
-        extendedContent.write(character);
+        extCont.writeCharCode(character);
       } else if (character == 58 /* : */) {
         // :: (/)Z
-        extendedContent.write("cZ");
+        extCont.write("cZ");
       } else if (character <= 63 /* ? */) {
         // ; - ?: (%)F - (%)J
-        extendedContent.write('b');
-        extendedContent.write(String.fromCharCode(
-            70 /* F */ + character - 59 /* ; */));
+        extCont.write('b');
+        extCont.writeCharCode(
+            70 /* F */ + character - 59 /* ; */);
       } else if (character == 64 /* @ */) {
         // @: (%)V
-        extendedContent.write("bV");
+        extCont.write("bV");
       } else if (character <= 90 /* Z */) {
         // A - Z
-        extendedContent.write(character);
+        extCont.writeCharCode(character);
       } else if (character <= 95 /* _ */) {
         // [ - _: (%)K - (%)O
-        extendedContent.write('b');
-        extendedContent.write(String.fromCharCode(
-            75 /* K */ + character - 91 /* [ */));
+        extCont.write('b');
+        extCont.writeCharCode(
+            75 /* K */ + character - 91 /* [ */);
       } else if (character == 96 /* ` */) {
         // `: (%)W
-        extendedContent.write("bW");
+        extCont.write("bW");
       } else if (character <= 122 /* z */) {
         // a - z: (*)A - (*)Z
-        extendedContent.write(100 /* d */);
-        extendedContent.write(String.fromCharCode(
-            65 /* A */ + character - 97 /* a */));
+        extCont.writeCharCode(100 /* d */);
+        extCont.writeCharCode(
+            65 /* A */ + character - 97 /* a */);
       } else if (character <= 127) {
         // { - DEL: (%)P - (%)T
-        extendedContent.write('b');
-        extendedContent.write(String.fromCharCode(
-            80 /* P */ + character - 123 /* { */));
+        extCont.write('b');
+        extCont.writeCharCode(
+            80 /* P */ + character - 123 /* { */);
       } else {
         throw Exception(
-            "Requested content contains a non-encodable character: '" +
-                String.fromCharCode(character) +
-                "'");
+            "Requested content contains a non-encodable character: 'chr($character)'");
       }
     }
-    return extendedContent.toString();
+    return extCont.toString();
   }
 }

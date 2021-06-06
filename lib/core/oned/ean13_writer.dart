@@ -51,7 +51,7 @@ class EAN13Writer extends UPCEANWriter {
         } catch ( fe) { // FormatException
           throw Exception(fe);
         }
-        contents += String.fromCharCode(check);
+        contents += check.toString();
         break;
       case 13:
         try {

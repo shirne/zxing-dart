@@ -48,7 +48,7 @@ class UPCEWriter extends UPCEANWriter {
         } catch ( fe) { // FormatException
           throw Exception(fe);
         }
-        contents += String.fromCharCode(check);
+        contents += check.toString();
         break;
       case 8:
         try {

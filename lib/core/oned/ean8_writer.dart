@@ -51,16 +51,15 @@ class EAN8Writer extends UPCEANWriter {
           // FormatException
           throw Exception(fe);
         }
-        contents += String.fromCharCode(check);
+        contents += check.toString();
         break;
       case 8:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
             throw Exception("Contents do not pass checksum");
           }
-        } catch (ignored) {
-          // FormatException
-          throw Exception("Illegal contents");
+        } on FormatException catch (_) {
+          throw ArgumentError("Illegal contents");
         }
         break;
       default:

@@ -46,7 +46,12 @@ void main(){
 
   //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
-    new ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
+    try {
+      ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
+      fail('should thrown ArgumentError');
+    }catch(_){
+      // passed
+    }
   });
 
 }

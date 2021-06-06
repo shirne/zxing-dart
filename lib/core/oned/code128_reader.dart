@@ -242,7 +242,7 @@ class Code128Reader extends OneDReader {
     List<int> startPatternInfo = _findStartPattern(row);
     int startCode = startPatternInfo[2];
 
-    List<int> rawCodes = List.filled(20, 0);
+    List<int> rawCodes = [];
     rawCodes.add(startCode);
 
     int codeSet;

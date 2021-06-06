@@ -47,7 +47,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     List<BarcodeFormat>? supportedFormats = getSupportedWriteFormats();
     if (supportedFormats != null && !supportedFormats.contains(format)) {
       throw Exception(
-          "Can only encode $supportedFormats" + ", but got $format");
+          "Can only encode $supportedFormats, but got $format");
     }
 
     int sidesMargin = getDefaultMargin();
@@ -90,7 +90,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @throws IllegalArgumentException if input contains characters other than digits 0-9.
   static void checkNumeric(String contents) {
     if (!_numeric.hasMatch(contents)) {
-      throw Exception("Input should only contain digits 0-9");
+      throw Exception("Input should only contain digits 0-9 ($contents)");
     }
   }
 
