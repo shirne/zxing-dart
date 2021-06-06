@@ -1,6 +1,12 @@
 
 class Logger{
   final String prefix;
+  static const _logTypes = {
+    LoggerType.fine: 'FINE',
+    LoggerType.info: 'INFO',
+    LoggerType.warning: 'WARNING',
+    LoggerType.error: 'ERROR',
+  };
 
   Logger([this.prefix = '']);
 
@@ -21,7 +27,7 @@ class Logger{
   }
 
   void record(Object message, [LoggerType type = LoggerType.info]){
-    print("[$type] $prefix $message");
+    print("[${_logTypes[type]}] $prefix $message");
   }
 
   static Logger getLogger(Type prefix){
