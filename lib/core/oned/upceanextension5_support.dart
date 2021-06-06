@@ -60,10 +60,7 @@ class UPCEANExtension5Support {
 
   int _decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
     List<int> counters = _decodeMiddleCounters;
-    counters[0] = 0;
-    counters[1] = 0;
-    counters[2] = 0;
-    counters[3] = 0;
+    counters.fillRange(0, 4, 0);
     int end = row.getSize();
     int rowOffset = startRange[1];
 

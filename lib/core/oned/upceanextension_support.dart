@@ -15,6 +15,7 @@
  */
 
 import '../common/bit_array.dart';
+import '../reader_exception.dart';
 import '../result.dart';
 import 'upceanextension2_support.dart';
 import 'upceanextension5_support.dart';
@@ -31,8 +32,7 @@ class UPCEANExtensionSupport {
         row, rowOffset, false, _EXTENSION_START_PATTERN);
     try {
       return _fiveSupport.decodeRow(rowNumber, row, extensionStartRange);
-    } catch (ignored) {
-      // ReaderException
+    } on ReaderException catch (_) {
       return _twoSupport.decodeRow(rowNumber, row, extensionStartRange);
     }
   }

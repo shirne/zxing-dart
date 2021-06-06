@@ -93,7 +93,13 @@ class Result {
   }
 
   void addResultPoints(List<ResultPoint?>? newPoints) {
-    if(newPoints != null)_resultPoints!.addAll(newPoints);
+    if(newPoints != null){
+      if(_resultPoints == null){
+        _resultPoints = newPoints;
+      }else {
+        _resultPoints!.addAll(newPoints);
+      }
+    }
   }
 
   int getTimestamp() {

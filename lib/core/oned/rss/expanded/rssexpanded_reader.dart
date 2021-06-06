@@ -238,15 +238,14 @@ class RSSExpandedReader extends AbstractRSSReader {
     // We use recursive algorithm with pure complexity and don't want it to take forever
     // Stacked barcode can have up to 11 rows, so 25 seems reasonable enough
     if (this._rows.length > 25) {
-      this
-          ._rows
-          .clear(); // We will never have a chance to get result, so clear it
+      // We will never have a chance to get result, so clear it
+      this._rows.clear();
       return null;
     }
 
     this._pairs.clear();
     if (reverse) {
-      this._rows.setAll(0, this._rows.reversed);
+      this._rows.setAll(0, this._rows.reversed.toList());
     }
 
     List<ExpandedPair>? ps;
@@ -258,7 +257,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     }
 
     if (reverse) {
-      this._rows.setAll(0, this._rows.reversed);
+      this._rows.setAll(0, this._rows.reversed.toList());
     }
 
     return ps;
@@ -512,10 +511,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   void _findNextPair(
       BitArray row, List<ExpandedPair> previousPairs, int forcedOffset) {
     List<int> counters = this.getDecodeFinderCounters();
-    counters[0] = 0;
-    counters[1] = 0;
-    counters[2] = 0;
-    counters[3] = 0;
+    counters.fillRange(0, 4, 0);
 
     int width = row.getSize();
 

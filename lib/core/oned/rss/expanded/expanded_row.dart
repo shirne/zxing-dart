@@ -26,7 +26,7 @@ class ExpandedRow {
   /// Did this row of the image have to be reversed (mirrored) to recognize the pairs?
   final bool _wasReversed;
 
-  ExpandedRow(this._pairs, this._rowNumber, this._wasReversed);
+  ExpandedRow(List<ExpandedPair> pairs, this._rowNumber, this._wasReversed):this._pairs = pairs.toList();
 
   List<ExpandedPair> getPairs() {
     return this._pairs;

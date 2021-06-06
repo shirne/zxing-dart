@@ -22,6 +22,7 @@ import '../binary_bitmap.dart';
 import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
+import '../reader_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
@@ -37,8 +38,7 @@ abstract class OneDReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     try {
       return _doDecode(image, hints);
-    } catch (nfe) {
-      // NotFoundException
+    } on NotFoundException catch (nfe) {
       bool tryHarder =
           hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported()) {
@@ -100,8 +100,8 @@ abstract class OneDReader implements Reader {
     if (tryHarder) {
       maxLines = height; // Look at the whole image, not just the center
     } else {
-      maxLines =
-          15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
+      // 15 rows spaced 1/32 apart is roughly the middle half of the image
+      maxLines = 15;
     }
 
     int middle = height ~/ 2;
@@ -119,8 +119,7 @@ abstract class OneDReader implements Reader {
       // Estimate black point for this row and load it:
       try {
         row = image.getBlackRow(rowNumber, row);
-      } catch (ignored) {
-        // NotFoundException
+      } on NotFoundException catch (_) {
         continue;
       }
 
@@ -136,10 +135,8 @@ abstract class OneDReader implements Reader {
           // that start on the center line.
           if (hints != null &&
               hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-            Map<DecodeHintType, Object> newHints =
-                {}; //new EnumMap<>(DecodeHintType.class);
-            newHints.addAll(hints.map<DecodeHintType, Object>(
-                (key, value) => MapEntry(key, value)));
+            Map<DecodeHintType, Object> newHints = {};
+            newHints.addAll(hints);
             newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             hints = newHints;
           }
@@ -161,8 +158,7 @@ abstract class OneDReader implements Reader {
             }
           }
           return result;
-        } catch (re) {
-          // ReaderException
+        } on ReaderException catch (_) {
           // continue -- just couldn't decode this row
         }
       }

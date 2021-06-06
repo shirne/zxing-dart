@@ -38,6 +38,7 @@ import 'test_case_util.dart';
 
 /// Tests {@link RSSExpandedReader} handling of stacked RSS barcodes.
 void main(){
+  TestWidgetsFlutterBinding.ensureInitialized();
 
   test('testDecodingRowByRow', () async{
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
