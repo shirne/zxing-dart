@@ -200,8 +200,8 @@ class Code93Reader extends OneDReader {
         }
         int next = encoded.codeUnitAt(i + 1);
         int decodedChar = 0;
-        switch (String.fromCharCode(c)) {
-          case 'd':
+        switch (c) {
+          case 100: // 'd'
             // +A to +Z map to a to z
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = next + 32;
@@ -209,7 +209,7 @@ class Code93Reader extends OneDReader {
               throw FormatException();
             }
             break;
-          case 'a':
+          case 97: //'a'
             // $A to $Z map to control codes SH to SB
             if (next >= 65 /* A */ && next <= 90 /* Z */) {
               decodedChar = next - 64;
@@ -217,7 +217,7 @@ class Code93Reader extends OneDReader {
               throw FormatException();
             }
             break;
-          case 'b':
+          case 98: // 'b'
             if (next >= 65 /* A */ && next <= 69 /* E */) {
               // %A to %E map to control codes ESC to USep
               decodedChar = next - 38;
@@ -246,7 +246,7 @@ class Code93Reader extends OneDReader {
               throw FormatException();
             }
             break;
-          case 'c':
+          case 99: // 'c'
             // /A to /O map to ! to , and /Z maps to :
             if (next >= 65 /* A */ && next <= 79 /* O */) {
               decodedChar = next - 32;
@@ -261,7 +261,7 @@ class Code93Reader extends OneDReader {
         // bump up i again since we read two characters
         i++;
       } else {
-        decoded.write(c);
+        decoded.writeCharCode(c);
       }
     }
     return decoded.toString();
