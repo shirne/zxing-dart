@@ -28,7 +28,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  zxing:
+  permission_handler: ^6.1.0
+  webview_flutter: ^2.0.8
+  camera: ^0.8.1+2
+  file_picker: ^3.0.1
+  file_selector: ^0.8.2
+  file_selector_windows: ^0.0.2
+  file_selector_macos: ^0.0.4
+  file_selector_linux: ^0.0.2
+  zxing_lib:
     path: ../
 
 dev_dependencies:

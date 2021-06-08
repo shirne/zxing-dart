@@ -14,10 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-        primaryColor: Colors.red
-      ),
+      title: 'ZXing Demo',
+      theme: CupertinoThemeData(primaryColor: Colors.red),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -32,28 +30,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.house),activeIcon: Icon(CupertinoIcons.house_fill),label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.qrcode),activeIcon: Icon(CupertinoIcons.qrcode_viewfinder),label: 'Scanner'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.app_badge),activeIcon: Icon(CupertinoIcons.app_badge_fill),label: 'Generator'),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.house),
+              activeIcon: Icon(CupertinoIcons.house_fill),
+              label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.qrcode),
+              activeIcon: Icon(CupertinoIcons.qrcode_viewfinder),
+              label: 'Scanner'),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.app_badge),
+              activeIcon: Icon(CupertinoIcons.app_badge_fill),
+              label: 'Generator'),
         ],
       ),
-      tabBuilder: (BuildContext context, int index){
+      tabBuilder: (BuildContext context, int index) {
         return CupertinoTabView(
           builder: (BuildContext context) {
-            switch(index) {
+            switch (index) {
               case 1:
                 return scanner.IndexPage();
               case 2:
