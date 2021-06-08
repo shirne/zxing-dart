@@ -1,6 +1,6 @@
 # zxing-dart
 
-zxing-dart is a Dart interface of [zxing](https://github.com/zxing/zxing).
+zxing-dart is a Dart port of [zxing](https://github.com/zxing/zxing).
 
 
 ## Progress
