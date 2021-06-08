@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:zxing/common.dart';
+import 'package:zxing_lib/common.dart';
 
 
 final int DECODER_RANDOM_TEST_ITERATIONS = 3;

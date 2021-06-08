@@ -1,4 +1,4 @@
-library common;
+library zxing_lib.common;
 
 export 'core/common/bit_array.dart';
 export 'core/common/bit_matrix.dart';

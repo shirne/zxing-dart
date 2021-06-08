@@ -1,4 +1,4 @@
-library multi;
+library zxing_lib.multi;
 
 export 'core/multi/by_quadrant_reader.dart';
 export 'core/multi/generic_multiple_barcode_reader.dart';

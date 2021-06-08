@@ -1,4 +1,4 @@
-library maxicode;
+library zxing_lib.maxicode;
 
 export 'core/maxicode/maxi_code_reader.dart';
 export 'core/maxicode/decoder/bit_matrix_parser.dart';

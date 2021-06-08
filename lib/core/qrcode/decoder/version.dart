@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:zxing/core/arguments_exception.dart';
+import '../../arguments_exception.dart';
 
 import '../../common/detector/math_utils.dart';
 import '../../common/bit_matrix.dart';

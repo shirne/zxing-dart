@@ -31,7 +31,7 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/oned.dart';
+import 'package:zxing_lib/oned.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)

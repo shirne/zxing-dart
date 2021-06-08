@@ -17,7 +17,7 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/datamatrix.dart';
+import 'package:zxing_lib/datamatrix.dart';
 
 import '../../utils.dart';
 

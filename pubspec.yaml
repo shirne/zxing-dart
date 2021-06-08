@@ -1,8 +1,9 @@
-name: zxing
-description: A Dart interface of zxing.
+name: zxing_lib
+description: A Dart port of zxing.
 version: 0.1.0
 author: Shirne
 homepage: https://www.shirne.com
+repository: https://github.com/shirne/zxing-dart
 
 environment:
   sdk: ">=2.13.0 <3.0.0"

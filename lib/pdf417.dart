@@ -1,4 +1,4 @@
-library pdf417;
+library zxing_lib.pdf417;
 
 export 'core/pdf417/pdf417_common.dart';
 export 'core/pdf417/pdf417_reader.dart';

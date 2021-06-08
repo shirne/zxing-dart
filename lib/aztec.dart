@@ -1,4 +1,4 @@
-library aztec;
+library zxing_lib.aztec;
 
 export 'core/aztec/aztec_detector_result.dart';
 export 'core/aztec/aztec_reader.dart';

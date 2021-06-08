@@ -24,9 +24,9 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/common.dart';
-import 'package:zxing/oned.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/oned.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import '../utils.dart';
 

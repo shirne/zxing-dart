@@ -1,4 +1,4 @@
-library oned;
+library zxing_lib.oned;
 
 export 'core/oned/coda_bar_reader.dart';
 export 'core/oned/coda_bar_writer.dart';

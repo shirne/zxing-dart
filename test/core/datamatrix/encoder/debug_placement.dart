@@ -16,7 +16,7 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/datamatrix.dart';
+import 'package:zxing_lib/datamatrix.dart';
 
 class DebugPlacement extends DefaultPlacement {
 

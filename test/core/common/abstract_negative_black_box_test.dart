@@ -15,7 +15,7 @@
  */
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import 'abstract_negative_black_box.dart';
 import 'test_result.dart';

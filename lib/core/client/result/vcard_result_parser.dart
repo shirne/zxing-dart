@@ -16,10 +16,10 @@
 
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
-import 'package:zxing/common.dart';
+
+import '../../common/character_set_eci.dart';
 
 import '../../result.dart';
 import 'address_book_parsed_result.dart';

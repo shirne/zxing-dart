@@ -17,7 +17,7 @@
 import 'dart:math' as Math;
 import 'dart:convert';
 
-import 'package:zxing/common.dart';
+import '../common/character_set_eci.dart';
 
 import '../common/bit_matrix.dart';
 

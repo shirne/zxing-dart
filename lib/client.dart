@@ -1,4 +1,4 @@
-library client;
+library zxing_lib.client;
 
 export 'core/client/result/abstract_do_co_mo_result_parser.dart';
 export 'core/client/result/address_book_auresult_parser.dart';

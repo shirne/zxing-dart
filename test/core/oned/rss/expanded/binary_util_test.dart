@@ -28,7 +28,7 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/common.dart';
+import 'package:zxing_lib/common.dart';
 
 import 'binary_util.dart';
 

@@ -21,9 +21,9 @@ import 'dart:io';
 import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/common.dart';
-import 'package:zxing/qrcode.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/qrcode.dart';
+import 'package:zxing_lib/zxing.dart';
 
 /// @author satorux@google.com (Satoru Takabayashi) - creator
 /// @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++

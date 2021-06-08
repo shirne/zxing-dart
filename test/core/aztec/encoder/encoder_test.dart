@@ -21,9 +21,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/aztec.dart';
-import 'package:zxing/common.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/aztec.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/zxing.dart';
 
 /// Aztec 2D generator unit tests.
 ///

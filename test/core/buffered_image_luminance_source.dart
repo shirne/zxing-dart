@@ -19,7 +19,7 @@ import 'dart:math' as Math;
 import 'dart:ui';
 
 import 'package:buffer_image/buffer_image.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/zxing.dart';
 
 
 /// This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.

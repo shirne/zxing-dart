@@ -17,8 +17,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/pdf417.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/pdf417.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import 'abstract_error_correction.dart';
 

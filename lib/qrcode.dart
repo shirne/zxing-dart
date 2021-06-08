@@ -1,4 +1,4 @@
-library qrcode;
+library zxing_lib.qrcode;
 
 export 'core/qrcode/qrcode_reader.dart';
 export 'core/qrcode/qrcode_writer.dart';

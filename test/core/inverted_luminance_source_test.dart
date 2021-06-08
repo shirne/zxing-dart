@@ -19,7 +19,7 @@ import 'dart:ui';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import 'buffered_image_luminance_source.dart';
 

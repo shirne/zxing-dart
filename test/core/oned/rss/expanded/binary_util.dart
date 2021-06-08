@@ -30,7 +30,7 @@
 
 
 
-import 'package:zxing/common.dart';
+import 'package:zxing_lib/common.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class BinaryUtil {

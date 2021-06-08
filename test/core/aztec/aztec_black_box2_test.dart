@@ -20,8 +20,8 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/aztec.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/aztec.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 

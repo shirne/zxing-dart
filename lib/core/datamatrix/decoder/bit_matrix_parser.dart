@@ -16,7 +16,7 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing/core/arguments_exception.dart';
+import '../../arguments_exception.dart';
 
 import '../../common/bit_matrix.dart';
 import '../../formats_exception.dart';

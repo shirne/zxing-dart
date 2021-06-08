@@ -31,9 +31,9 @@ import 'dart:io';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zxing/common.dart';
-import 'package:zxing/oned.dart';
-import 'package:zxing/zxing.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/oned.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import '../../../buffered_image_luminance_source.dart';
 import '../../../common/abstract_black_box.dart';
