@@ -16,11 +16,8 @@
 
 import 'dart:convert';
 
-import 'package:fast_gbk/fast_gbk.dart';
-import 'package:unicode/unicode.dart';
+import 'package:charset/charset.dart';
 
-import '../encoding/euc_kr.dart';
-import '../encoding/cp437.dart';
 import '../formats_exception.dart';
 import 'string_utils.dart';
 

@@ -17,10 +17,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:euc/euc.dart';
-import 'package:euc/jis.dart';
-import 'package:fast_gbk/fast_gbk.dart';
-import 'package:unicode/unicode.dart';
+import 'package:charset/charset.dart';
 
 import '../decode_hint_type.dart';
 import 'character_set_eci.dart';
@@ -31,15 +28,15 @@ import 'character_set_eci.dart';
 /// @author Alex Dupre
 class StringUtils {
   static final Encoding _platformDefaultEncoding = utf8;
-  static final Encoding? shiftJisCharset = ShiftJIS();
+  static final Encoding? shiftJisCharset = shiftJis;
   static final Encoding? gbkCharset = gbk;
-  static final Encoding? eucJp = EucJP();
+  static final Encoding? eucJpEncoding = eucJp;
   static final bool _assumeShiftJis =
       shiftJisCharset == _platformDefaultEncoding ||
-          eucJp == _platformDefaultEncoding;
+          eucJpEncoding == _platformDefaultEncoding;
 
   // Retained for ABI compatibility with earlier versions
-  static final String shiftJis = "SJIS";
+  static final String shiftJisEncoding = "SJIS";
   static final String gbkName = "GB2312";
 
   StringUtils._();
