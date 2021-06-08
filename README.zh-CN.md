@@ -3,12 +3,12 @@
 zxing-dart is a Dart interface of [zxing](https://github.com/zxing/zxing).
 
 
-## Progress
+## 进度
 
-- [x] Core package translate
-- [x] Core test translate
-- [x] Core unit test(all passed)
-- [ ] Demo APP(Developing...)
+- [x] 核心库翻译
+- [x] 核心库测试翻译
+- [x] 核心库单元测试
+- [ ] 演示APP(进行中...)
 
 ## Getting Started
 
