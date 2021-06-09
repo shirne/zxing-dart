@@ -35,7 +35,7 @@ abstract class LuminanceSource {
   /// 0 (black) to 255 (white). Because Java does not have an unsigned byte type, callers will have
   /// to bitwise and with 0xff for each value. It is preferable for implementations of this method
   /// to only fetch this row rather than the whole image, since no 2D Readers may be installed and
-  /// getMatrix() may never be called.
+  /// [matrix] may never be called.
   ///
   /// @param y The row to fetch, which must be in [0,getHeight())
   /// @param row An optional preallocated array. If null or too small, it will be ignored.

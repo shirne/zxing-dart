@@ -15,12 +15,6 @@
  */
 
 
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -40,12 +34,12 @@ void main(){
     ParsedResult result = ResultParser.parseResult(fakeResult);
 
     // Ensure it is a wifi code
-    expect(ParsedResultType.WIFI, result.getType());
+    expect(ParsedResultType.WIFI, result.type);
     WifiParsedResult wifiResult = result as WifiParsedResult;
 
-    expect(ssid, wifiResult.getSsid());
-    expect(password, wifiResult.getPassword());
-    expect(type, wifiResult.getNetworkEncryption());
+    expect(ssid, wifiResult.ssid);
+    expect(password, wifiResult.password);
+    expect(type, wifiResult.networkEncryption);
   }
 
   test('testNoPassword', () {

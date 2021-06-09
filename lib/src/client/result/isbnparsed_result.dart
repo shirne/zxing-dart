@@ -25,12 +25,10 @@ class ISBNParsedResult extends ParsedResult {
 
   ISBNParsedResult(this._isbn) : super(ParsedResultType.ISBN);
 
-  String getISBN() {
-    return _isbn;
-  }
+  String get isbn => _isbn;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     return _isbn;
   }
 }

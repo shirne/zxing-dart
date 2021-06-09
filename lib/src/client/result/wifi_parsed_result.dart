@@ -38,40 +38,24 @@ class WifiParsedResult extends ParsedResult {
       this._phase2Method])
       : super(ParsedResultType.WIFI);
 
-  String getSsid() {
-    return _ssid;
-  }
+  String get ssid => _ssid;
 
-  String getNetworkEncryption() {
-    return _networkEncryption;
-  }
+  String get networkEncryption => _networkEncryption;
 
-  String? getPassword() {
-    return _password;
-  }
+  String? get password => _password;
 
-  bool isHidden() {
-    return _hidden;
-  }
+  bool get isHidden => _hidden;
 
-  String? getIdentity() {
-    return _identity;
-  }
+  String? get identity => _identity;
 
-  String? getAnonymousIdentity() {
-    return _anonymousIdentity;
-  }
+  String? get anonymousIdentity => _anonymousIdentity;
 
-  String? getEapMethod() {
-    return _eapMethod;
-  }
+  String? get eapMethod => _eapMethod;
 
-  String? getPhase2Method() {
-    return _phase2Method;
-  }
+  String? get phase2Method => _phase2Method;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(_ssid, result);
     ParsedResult.maybeAppend(_networkEncryption, result);

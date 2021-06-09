@@ -40,13 +40,13 @@ void main(){
       String parsedURI) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.SMS, result.getType());
+    expect(ParsedResultType.SMS, result.type);
     SMSParsedResult smsResult = result as SMSParsedResult;
-    assertArrayEquals(<String>[number], smsResult.getNumbers());
-    expect(subject, smsResult.getSubject());
-    expect(body, smsResult.getBody());
-    assertArrayEquals(via == null ? <String>[] : <String>[via], smsResult.getVias());
-    expect(parsedURI, smsResult.getSMSURI());
+    assertArrayEquals(<String>[number], smsResult.numbers);
+    expect(subject, smsResult.subject);
+    expect(body, smsResult.body);
+    assertArrayEquals(via == null ? <String>[] : <String>[via], smsResult.vias);
+    expect(parsedURI, smsResult.smsURI);
   }
 
   test('testSMS', () {

@@ -28,13 +28,9 @@ class URIParsedResult extends ParsedResult {
 
   URIParsedResult(String uri, this._title) : _uri = _massageURI(uri),super(ParsedResultType.URI);
 
-  String getURI() {
-    return _uri;
-  }
+  String get uri => _uri;
 
-  String? getTitle() {
-    return _title;
-  }
+  String? get title => _title;
 
   /// @return true if the URI contains suspicious patterns that may suggest it intends to
   ///  mislead the user about its true nature
@@ -45,7 +41,7 @@ class URIParsedResult extends ParsedResult {
   }
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(_title, result);
     ParsedResult.maybeAppend(_uri, result);

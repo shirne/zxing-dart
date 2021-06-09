@@ -84,72 +84,46 @@ class CalendarParsedResult extends ParsedResult {
 
   }
 
-  String? getSummary() {
-    return _summary;
-  }
+  String? get summary => _summary;
 
   /// @return start time
   /// @deprecated use {@link #getStartTimestamp()}
   @deprecated
-  DateTime getStart() {
-    return DateTime.fromMillisecondsSinceEpoch(_start);
-  }
+  DateTime get start => DateTime.fromMillisecondsSinceEpoch(_start);
 
   /// @return start time
   /// @see #getEndTimestamp()
-  int getStartTimestamp() {
-    return _start;
-  }
+  int get startTimestamp => _start;
 
   /// @return true if start time was specified as a whole day
-  bool isStartAllDay() {
-    return _startAllDay;
-  }
+  bool get isStartAllDay => _startAllDay;
 
   /// @return event end {@link Date}, or {@code null} if event has no duration
   /// @deprecated use {@link #getEndTimestamp()}
   @deprecated
-  DateTime? getEnd() {
-    return _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
-  }
+  DateTime? get end => _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
 
   /// @return event end {@link Date}, or -1 if event has no duration
   /// @see #getStartTimestamp()
-  int getEndTimestamp() {
-    return _end;
-  }
+  int get endTimestamp => _end;
 
   /// @return true if end time was specified as a whole day
-  bool isEndAllDay() {
-    return _endAllDay;
-  }
+  bool get isEndAllDay => _endAllDay;
 
-  String? getLocation() {
-    return _location;
-  }
+  String? get location => _location;
 
-  String? getOrganizer() {
-    return _organizer;
-  }
+  String? get organizer => _organizer;
 
-  List<String>? getAttendees() {
-    return _attendees;
-  }
+  List<String>? get attendees => _attendees;
 
-  String? getDescription() {
-    return _description;
-  }
+  String? get description => _description;
 
-  double? getLatitude() {
-    return _latitude;
-  }
+  double? get latitude => _latitude;
 
-  double? getLongitude() {
-    return _longitude;
-  }
+  double? get longitude => _longitude;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(_summary, result);
     ParsedResult.maybeAppend(_format(_startAllDay, _start), result);

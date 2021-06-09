@@ -40,44 +40,26 @@ class VINParsedResult extends ParsedResult {
       this._plantCode,
       this._sequentialNumber):super(ParsedResultType.VIN);
 
-  String getVIN() {
-    return _vin;
-  }
+  String get vin => _vin;
 
-  String getWorldManufacturerID() {
-    return _worldManufacturerID;
-  }
+  String get worldManufacturerID => _worldManufacturerID;
 
-  String getVehicleDescriptorSection() {
-    return _vehicleDescriptorSection;
-  }
+  String get vehicleDescriptorSection => _vehicleDescriptorSection;
 
-  String getVehicleIdentifierSection() {
-    return _vehicleIdentifierSection;
-  }
+  String get vehicleIdentifierSection => _vehicleIdentifierSection;
 
-  String? getCountryCode() {
-    return _countryCode;
-  }
+  String? get countryCode => _countryCode;
 
-  String getVehicleAttributes() {
-    return _vehicleAttributes;
-  }
+  String get vehicleAttributes => _vehicleAttributes;
 
-  int getModelYear() {
-    return _modelYear;
-  }
+  int get modelYear => _modelYear;
 
-  int getPlantCode() {
-    return _plantCode;
-  }
+  int get plantCode => _plantCode;
 
-  String getSequentialNumber() {
-    return _sequentialNumber;
-  }
+  String get sequentialNumber => _sequentialNumber;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     result.write(_worldManufacturerID); result.write(' ');
     result.write(_vehicleDescriptorSection); result.write(' ');

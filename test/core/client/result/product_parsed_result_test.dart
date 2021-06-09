@@ -16,11 +16,6 @@
 
 
 
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -33,10 +28,10 @@ void main(){
   void doTest(String contents, String normalized, BarcodeFormat format) {
     Result fakeResult = new Result(contents, null, null, format);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.PRODUCT, result.getType());
+    expect(ParsedResultType.PRODUCT, result.type);
     ProductParsedResult productResult = result as ProductParsedResult;
-    expect(contents, productResult.getProductID());
-    expect(normalized, productResult.getNormalizedProductID());
+    expect(contents, productResult.productID);
+    expect(normalized, productResult.normalizedProductID);
   }
 
 

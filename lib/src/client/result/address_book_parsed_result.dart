@@ -85,84 +85,52 @@ class AddressBookParsedResult extends ParsedResult {
     }
   }
 
-  List<String>? getNames() {
-    return _names;
-  }
+  List<String>? get names => _names;
 
-  List<String>? getNicknames() {
-    return _nicknames;
-  }
+  List<String>? get nicknames => _nicknames;
 
   /// In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
   /// is often provided, called furigana, which spells the name phonetically.
   ///
   /// @return The pronunciation of the getNames() field, often in hiragana or katakana.
-  String? getPronunciation() {
-    return _pronunciation;
-  }
+  String? get pronunciation => _pronunciation;
 
-  List<String>? getPhoneNumbers() {
-    return _phoneNumbers;
-  }
+  List<String>? get phoneNumbers => _phoneNumbers;
 
   /// @return optional descriptions of the type of each phone number. It could be like "HOME", but,
   ///  there is no guaranteed or standard format.
-  List<String?>? getPhoneTypes() {
-    return _phoneTypes;
-  }
+  List<String?>? get phoneTypes => _phoneTypes;
 
-  List<String>? getEmails() {
-    return _emails;
-  }
+  List<String>? get emails => _emails;
 
   /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
   ///  there is no guaranteed or standard format.
-  List<String?>? getEmailTypes() {
-    return _emailTypes;
-  }
+  List<String?>? get emailTypes => _emailTypes;
 
-  String? getInstantMessenger() {
-    return _instantMessenger;
-  }
+  String? get instantMessenger => _instantMessenger;
 
-  String? getNote() {
-    return _note;
-  }
+  String? get note => _note;
 
-  List<String>? getAddresses() {
-    return _addresses;
-  }
+  List<String>? get addresses => _addresses;
 
   /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
   ///  there is no guaranteed or standard format.
-  List<String?>? getAddressTypes() {
-    return _addressTypes;
-  }
+  List<String?>? get addressTypes => _addressTypes;
 
-  String? getTitle() {
-    return _title;
-  }
+  String? get title => _title;
 
-  String? getOrg() {
-    return _org;
-  }
+  String? get org => _org;
 
-  List<String>? getURLs() {
-    return _urls;
-  }
+  List<String>? get urls => _urls;
 
   /// @return birthday formatted as yyyyMMdd (e.g. 19780917)
-  String? getBirthday() {
-    return _birthday;
-  }
+  String? get birthday => _birthday;
 
   /// @return a location as a latitude/longitude pair
-  List<String>? getGeo() {
-    return _geo;
-  }
+  List<String>? get geo => _geo;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(_names, result);
     ParsedResult.maybeAppendList(_nicknames, result);

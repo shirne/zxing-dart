@@ -30,7 +30,7 @@ class GeoParsedResult extends ParsedResult {
   GeoParsedResult(this._latitude, this._longitude, this._altitude, this._query)
       : super(ParsedResultType.GEO);
 
-  String getGeoURI() {
+  String get geoURI {
     StringBuffer result = StringBuffer();
     result.write("geo:");
     result.write(_latitude);
@@ -48,27 +48,19 @@ class GeoParsedResult extends ParsedResult {
   }
 
   /// @return latitude in degrees
-  double getLatitude() {
-    return _latitude;
-  }
+  double get latitude => _latitude;
 
   /// @return longitude in degrees
-  double getLongitude() {
-    return _longitude;
-  }
+  double get longitude => _longitude;
 
   /// @return altitude in meters. If not specified, in the geo URI, returns 0.0
-  double getAltitude() {
-    return _altitude;
-  }
+  double get altitude => _altitude;
 
   /// @return query string associated with geo URI or null if none exists
-  String? getQuery() {
-    return _query;
-  }
+  String? get query => _query;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     result.write(_latitude);
     result.write(", ");

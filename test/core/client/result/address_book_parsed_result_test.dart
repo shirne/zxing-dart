@@ -15,12 +15,6 @@
  */
 
 
-
-
-
-
-
-
 import 'dart:developer';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -48,19 +42,19 @@ void main(){
       String? note) {
     Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.ADDRESS_BOOK, result.getType());
+    expect(ParsedResultType.ADDRESS_BOOK, result.type);
     AddressBookParsedResult addressResult = result as AddressBookParsedResult;
-    expect(addressResult.getTitle(), title);
-    assertArrayEquals(names, addressResult.getNames());
-    expect(pronunciation, addressResult.getPronunciation());
-    assertArrayEquals(addresses, addressResult.getAddresses());
-    assertArrayEquals(emails, addressResult.getEmails());
-    assertArrayEquals(phoneNumbers, addressResult.getPhoneNumbers());
-    assertArrayEquals(phoneTypes, addressResult.getPhoneTypes());
-    expect(addressResult.getOrg(), org);
-    assertArrayEquals(urls, addressResult.getURLs());
-    expect(addressResult.getBirthday(), birthday);
-    expect(addressResult.getNote(), note);
+    expect(addressResult.title, title);
+    assertArrayEquals(names, addressResult.names);
+    expect(pronunciation, addressResult.pronunciation);
+    assertArrayEquals(addresses, addressResult.addresses);
+    assertArrayEquals(emails, addressResult.emails);
+    assertArrayEquals(phoneNumbers, addressResult.phoneNumbers);
+    assertArrayEquals(phoneTypes, addressResult.phoneTypes);
+    expect(addressResult.org, org);
+    assertArrayEquals(urls, addressResult.urls);
+    expect(addressResult.birthday, birthday);
+    expect(addressResult.note, note);
   }
 
   test('testAddressBookDocomo', () {

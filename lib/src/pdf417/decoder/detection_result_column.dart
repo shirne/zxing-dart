@@ -65,13 +65,9 @@ class DetectionResultColumn {
     return _codewords[imageRowToCodewordIndex(imageRow)];
   }
 
-  BoundingBox getBoundingBox() {
-    return _boundingBox;
-  }
+  BoundingBox get boundingBox => _boundingBox;
 
-  List<Codeword?> getCodewords() {
-    return _codewords;
-  }
+  List<Codeword?> get codewords => _codewords;
 
   @override
   String toString() {

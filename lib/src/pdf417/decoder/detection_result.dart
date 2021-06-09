@@ -27,10 +27,10 @@ class DetectionResult {
 
   final BarcodeMetadata _barcodeMetadata;
   final List<DetectionResultColumn?> _detectionResultColumns;
-  BoundingBox? _boundingBox;
+  BoundingBox? boundingBox;
   final int _barcodeColumnCount;
 
-  DetectionResult(this._barcodeMetadata, this._boundingBox)
+  DetectionResult(this._barcodeMetadata, this.boundingBox)
       : this._barcodeColumnCount = _barcodeMetadata.columnCount,
         _detectionResultColumns =
             List.filled(_barcodeMetadata.columnCount + 2, null);
@@ -71,7 +71,7 @@ class DetectionResult {
         barcodeColumn < _barcodeColumnCount + 1;
         barcodeColumn++) {
       List<Codeword?> codewords =
-          _detectionResultColumns[barcodeColumn]!.getCodewords();
+          _detectionResultColumns[barcodeColumn]!.codewords;
       for (int codewordsRow = 0;
           codewordsRow < codewords.length;
           codewordsRow++) {
@@ -101,9 +101,9 @@ class DetectionResult {
         _detectionResultColumns[_barcodeColumnCount + 1] == null) {
       return;
     }
-    List<Codeword?> LRIcodewords = _detectionResultColumns[0]!.getCodewords();
+    List<Codeword?> LRIcodewords = _detectionResultColumns[0]!.codewords;
     List<Codeword?> RRIcodewords =
-        _detectionResultColumns[_barcodeColumnCount + 1]!.getCodewords();
+        _detectionResultColumns[_barcodeColumnCount + 1]!.codewords;
     for (int codewordsRow = 0;
         codewordsRow < LRIcodewords.length;
         codewordsRow++) {
@@ -115,14 +115,14 @@ class DetectionResult {
             barcodeColumn <= _barcodeColumnCount;
             barcodeColumn++) {
           Codeword? codeword = _detectionResultColumns[barcodeColumn]!
-              .getCodewords()[codewordsRow];
+              .codewords[codewordsRow];
           if (codeword == null) {
             continue;
           }
           codeword.rowNumber = LRIcodewords[codewordsRow]!.rowNumber;
           if (!codeword.hasValidRowNumber()) {
             _detectionResultColumns[barcodeColumn]!
-                .getCodewords()[codewordsRow] = null;
+                .codewords[codewordsRow] = null;
           }
         }
       }
@@ -135,7 +135,7 @@ class DetectionResult {
     }
     int unadjustedCount = 0;
     List<Codeword?> codewords =
-        _detectionResultColumns[_barcodeColumnCount + 1]!.getCodewords();
+        _detectionResultColumns[_barcodeColumnCount + 1]!.codewords;
     for (int codewordsRow = 0;
         codewordsRow < codewords.length;
         codewordsRow++) {
@@ -148,7 +148,7 @@ class DetectionResult {
           barcodeColumn > 0 && invalidRowCounts < _ADJUST_ROW_NUMBER_SKIP;
           barcodeColumn--) {
         Codeword? codeword =
-            _detectionResultColumns[barcodeColumn]!.getCodewords()[codewordsRow];
+            _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = _adjustRowNumberIfValid(
               rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -166,7 +166,7 @@ class DetectionResult {
       return 0;
     }
     int unadjustedCount = 0;
-    List<Codeword?> codewords = _detectionResultColumns[0]!.getCodewords();
+    List<Codeword?> codewords = _detectionResultColumns[0]!.codewords;
     for (int codewordsRow = 0;
         codewordsRow < codewords.length;
         codewordsRow++) {
@@ -180,7 +180,7 @@ class DetectionResult {
               invalidRowCounts < _ADJUST_ROW_NUMBER_SKIP;
           barcodeColumn++) {
         Codeword? codeword =
-            _detectionResultColumns[barcodeColumn]!.getCodewords()[codewordsRow];
+            _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = _adjustRowNumberIfValid(
               rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -213,11 +213,11 @@ class DetectionResult {
       int barcodeColumn, int codewordsRow, List<Codeword?> codewords) {
     Codeword? codeword = codewords[codewordsRow];
     List<Codeword?> previousColumnCodewords =
-        _detectionResultColumns[barcodeColumn - 1]!.getCodewords();
+        _detectionResultColumns[barcodeColumn - 1]!.codewords;
     List<Codeword?> nextColumnCodewords = previousColumnCodewords;
     if (_detectionResultColumns[barcodeColumn + 1] != null) {
       nextColumnCodewords =
-          _detectionResultColumns[barcodeColumn + 1]!.getCodewords();
+          _detectionResultColumns[barcodeColumn + 1]!.codewords;
     }
 
     List<Codeword?> otherCodewords = List.filled(14, null);
@@ -265,25 +265,11 @@ class DetectionResult {
     return false;
   }
 
-  int getBarcodeColumnCount() {
-    return _barcodeColumnCount;
-  }
+  int get barcodeColumnCount => _barcodeColumnCount;
 
-  int getBarcodeRowCount() {
-    return _barcodeMetadata.rowCount;
-  }
+  int get barcodeRowCount => _barcodeMetadata.rowCount;
 
-  int getBarcodeECLevel() {
-    return _barcodeMetadata.errorCorrectionLevel;
-  }
-
-  void setBoundingBox(BoundingBox boundingBox) {
-    this._boundingBox = boundingBox;
-  }
-
-  BoundingBox? getBoundingBox() {
-    return _boundingBox;
-  }
+  int get barcodeECLevel => _barcodeMetadata.errorCorrectionLevel;
 
   void setDetectionResultColumn(
       int barcodeColumn, DetectionResultColumn detectionResultColumn) {
@@ -303,7 +289,7 @@ class DetectionResult {
     try {
       StringBuffer formatter = StringBuffer();
       for (int codewordsRow = 0;
-          codewordsRow < rowIndicatorColumn!.getCodewords().length;
+          codewordsRow < rowIndicatorColumn!.codewords.length;
           codewordsRow++) {
         formatter.write("CW $codewordsRow:");
         for (int barcodeColumn = 0;
@@ -314,7 +300,7 @@ class DetectionResult {
             continue;
           }
           Codeword? codeword = _detectionResultColumns[barcodeColumn]!
-              .getCodewords()[codewordsRow];
+              .codewords[codewordsRow];
           if (codeword == null) {
             formatter.write("    |   ");
             continue;

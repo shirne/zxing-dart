@@ -36,13 +36,13 @@ void main(){
       String? body) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.EMAIL_ADDRESS, result.getType());
+    expect(ParsedResultType.EMAIL_ADDRESS, result.type);
     EmailAddressParsedResult emailResult = result as EmailAddressParsedResult;
-    assertArrayEquals(tos, emailResult.getTos());
-    assertArrayEquals(ccs, emailResult.getCCs());
-    assertArrayEquals(bccs, emailResult.getBCCs());
-    expect(subject, emailResult.getSubject());
-    expect(body, emailResult.getBody());
+    assertArrayEquals(tos, emailResult.tos);
+    assertArrayEquals(ccs, emailResult.ccs);
+    assertArrayEquals(bccs, emailResult.bccs);
+    expect(subject, emailResult.subject);
+    expect(body, emailResult.body);
   }
 
 

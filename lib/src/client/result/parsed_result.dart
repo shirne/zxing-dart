@@ -30,15 +30,13 @@ abstract class ParsedResult {
 
   ParsedResult(this._type);
 
-  ParsedResultType getType() {
-    return _type;
-  }
+  ParsedResultType get type => _type;
 
-  String getDisplayResult();
+  String get displayResult;
 
   @override
   String toString() {
-    return getDisplayResult();
+    return displayResult;
   }
 
   static void maybeAppend(String? value, StringBuffer result) {

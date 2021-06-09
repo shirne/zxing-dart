@@ -32,7 +32,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       : super(boundingBox);
 
   void _setRowNumbers() {
-    for (Codeword? codeword in getCodewords()) {
+    for (Codeword? codeword in codewords) {
       if (codeword != null) {
         codeword.setRowNumberAsRowIndicatorColumn();
       }
@@ -45,10 +45,8 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // use row height count to make detection of invalid row numbers more reliable
   void adjustCompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
-    List<Codeword?> codewords = getCodewords();
     _setRowNumbers();
     _removeIncorrectCodewords(codewords, barcodeMetadata);
-    BoundingBox boundingBox = getBoundingBox();
     ResultPoint top =
         isLeft ? boundingBox.topLeft : boundingBox.topRight;
     ResultPoint bottom =
@@ -112,7 +110,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     }
     _adjustIncompleteIndicatorColumnRowNumbers(barcodeMetadata);
     List<int> result = List.filled(barcodeMetadata.rowCount, 0);
-    for (Codeword? codeword in getCodewords()) {
+    for (Codeword? codeword in codewords) {
       if (codeword != null) {
         int rowNumber = codeword.rowNumber;
         if (rowNumber >= result.length) {
@@ -130,15 +128,13 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // use row height count to make detection of invalid row numbers more reliable
   void _adjustIncompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
-    BoundingBox boundingBox = getBoundingBox();
     ResultPoint top =
         isLeft ? boundingBox.topLeft : boundingBox.topRight;
     ResultPoint bottom =
         isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
     int firstRow = imageRowToCodewordIndex(top.y.toInt());
     int lastRow = imageRowToCodewordIndex(bottom.y.toInt());
-    //double averageRowHeight = (lastRow - firstRow) / (double) barcodeMetadata.getRowCount();
-    List<Codeword?> codewords = getCodewords();
+
     int barcodeRow = -1;
     int maxRowHeight = 1;
     int currentRowHeight = 0;
@@ -171,7 +167,6 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   }
 
   BarcodeMetadata? getBarcodeMetadata() {
-    List<Codeword?> codewords = getCodewords();
     BarcodeValue barcodeColumnCount = BarcodeValue();
     BarcodeValue barcodeRowCountUpperPart = BarcodeValue();
     BarcodeValue barcodeRowCountLowerPart = BarcodeValue();

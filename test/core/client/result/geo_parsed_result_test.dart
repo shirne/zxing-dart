@@ -38,13 +38,13 @@ void main(){
       String? uri) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.GEO, result.getType());
+    expect(ParsedResultType.GEO, result.type);
     GeoParsedResult geoResult = result as GeoParsedResult;
-    assertEqualOrNaN(latitude, geoResult.getLatitude(), EPSILON);
-    assertEqualOrNaN(longitude, geoResult.getLongitude(), EPSILON);
-    assertEqualOrNaN(altitude, geoResult.getAltitude(), EPSILON);
-    expect(query, geoResult.getQuery());
-    expect(uri == null ? contents.toLowerCase(/*Locale.ENGLISH*/) : uri, geoResult.getGeoURI());
+    assertEqualOrNaN(latitude, geoResult.latitude, EPSILON);
+    assertEqualOrNaN(longitude, geoResult.longitude, EPSILON);
+    assertEqualOrNaN(altitude, geoResult.altitude, EPSILON);
+    expect(query, geoResult.query);
+    expect(uri == null ? contents.toLowerCase(/*Locale.ENGLISH*/) : uri, geoResult.geoURI);
   }
 
   test('testGeo', () {

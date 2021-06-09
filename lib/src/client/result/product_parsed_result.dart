@@ -28,16 +28,12 @@ class ProductParsedResult extends ParsedResult {
       : this._normalizedProductID = normalizedProductID ?? _productID,
         super(ParsedResultType.PRODUCT);
 
-  String getProductID() {
-    return _productID;
-  }
+  String get productID => _productID;
 
-  String getNormalizedProductID() {
-    return _normalizedProductID;
-  }
+  String get normalizedProductID => _normalizedProductID;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     return _productID;
   }
 }

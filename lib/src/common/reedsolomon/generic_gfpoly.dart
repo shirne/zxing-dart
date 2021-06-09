@@ -45,19 +45,13 @@ class GenericGFPoly {
     }
   }
 
-  Int32List getCoefficients() {
-    return _coefficients;
-  }
+  Int32List get coefficients => _coefficients;
 
   /// @return degree of this polynomial
-  int getDegree() {
-    return _coefficients.length - 1;
-  }
+  int get degree => _coefficients.length - 1;
 
   /// @return true iff this polynomial is the monomial "0"
-  bool isZero() {
-    return _coefficients[0] == 0;
-  }
+  bool get isZero => _coefficients[0] == 0;
 
   /// @return coefficient of x^degree term in this polynomial
   int getCoefficient(int degree) {
@@ -91,10 +85,10 @@ class GenericGFPoly {
     if (_field != other._field) {
       throw Exception("GenericGFPolys do not have same GenericGF field");
     }
-    if (isZero()) {
+    if (isZero) {
       return other;
     }
-    if (other.isZero()) {
+    if (other.isZero) {
       return this;
     }
 
@@ -122,7 +116,7 @@ class GenericGFPoly {
     if (_field != other._field) {
       throw Exception("GenericGFPolys do not have same GenericGF field");
     }
-    if (isZero() || other.isZero()) {
+    if (isZero || other.isZero) {
       return _field.zero;
     }
     Int32List aCoefficients = this._coefficients;
@@ -174,20 +168,20 @@ class GenericGFPoly {
     if (_field != other._field) {
       throw Exception("GenericGFPolys do not have same GenericGF field");
     }
-    if (other.isZero()) {
+    if (other.isZero) {
       throw Exception("Divide by 0");
     }
 
     GenericGFPoly quotient = _field.zero;
     GenericGFPoly remainder = this;
 
-    int denominatorLeadingTerm = other.getCoefficient(other.getDegree());
+    int denominatorLeadingTerm = other.getCoefficient(other.degree);
     int inverseDenominatorLeadingTerm = _field.inverse(denominatorLeadingTerm);
 
-    while (remainder.getDegree() >= other.getDegree() && !remainder.isZero()) {
-      int degreeDifference = remainder.getDegree() - other.getDegree();
+    while (remainder.degree >= other.degree && !remainder.isZero) {
+      int degreeDifference = remainder.degree - other.degree;
       int scale = _field.multiply(
-          remainder.getCoefficient(remainder.getDegree()),
+          remainder.getCoefficient(remainder.degree),
           inverseDenominatorLeadingTerm);
       GenericGFPoly term = other.multiplyByMonomial(degreeDifference, scale);
       GenericGFPoly iterationQuotient =
@@ -201,15 +195,15 @@ class GenericGFPoly {
 
   @override
   String toString() {
-    if (isZero()) {
+    if (isZero) {
       return "0";
     }
     StringBuffer result = StringBuffer();
-    for (int degree = getDegree(); degree >= 0; degree--) {
-      int coefficient = getCoefficient(degree);
+    for (int deg = degree; deg >= 0; deg--) {
+      int coefficient = getCoefficient(deg);
       if (coefficient != 0) {
         if (coefficient < 0) {
-          if (degree == getDegree()) {
+          if (deg == degree) {
             result.write("-");
           } else {
             result.write(" - ");
@@ -220,7 +214,7 @@ class GenericGFPoly {
             result.write(" + ");
           }
         }
-        if (degree == 0 || coefficient != 1) {
+        if (deg == 0 || coefficient != 1) {
           int alphaPower = _field.log(coefficient);
           if (alphaPower == 0) {
             result.write('1');
@@ -231,12 +225,12 @@ class GenericGFPoly {
             result.write(alphaPower);
           }
         }
-        if (degree != 0) {
-          if (degree == 1) {
+        if (deg != 0) {
+          if (deg == 1) {
             result.write('x');
           } else {
             result.write("x^");
-            result.write(degree);
+            result.write(deg);
           }
         }
       }

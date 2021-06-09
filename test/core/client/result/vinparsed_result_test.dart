@@ -34,25 +34,25 @@ void main(){
       String sequential) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.CODE_39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.VIN, result.getType());
+    expect(ParsedResultType.VIN, result.type);
     VINParsedResult vinResult = result as VINParsedResult;
-    expect(wmi, vinResult.getWorldManufacturerID());
-    expect(vds, vinResult.getVehicleDescriptorSection());
-    expect(vis, vinResult.getVehicleIdentifierSection());
-    expect(country, vinResult.getCountryCode());
-    expect(attributes, vinResult.getVehicleAttributes());
-    expect(year, vinResult.getModelYear());
-    expect(plant, vinResult.getPlantCode());
-    expect(sequential, vinResult.getSequentialNumber());
+    expect(wmi, vinResult.worldManufacturerID);
+    expect(vds, vinResult.vehicleDescriptorSection);
+    expect(vis, vinResult.vehicleIdentifierSection);
+    expect(country, vinResult.countryCode);
+    expect(attributes, vinResult.vehicleAttributes);
+    expect(year, vinResult.modelYear);
+    expect(plant, vinResult.plantCode);
+    expect(sequential, vinResult.sequentialNumber);
   }
 
   test('testNotVIN', () {
     Result fakeResult = new Result("1M8GDM9A1KP042788", null, null, BarcodeFormat.CODE_39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.getType());
+    expect(ParsedResultType.TEXT, result.type);
     fakeResult = new Result("1M8GDM9AXKP042788", null, null, BarcodeFormat.CODE_128);
     result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.getType());
+    expect(ParsedResultType.TEXT, result.type);
   });
 
   test('testVIN', () {

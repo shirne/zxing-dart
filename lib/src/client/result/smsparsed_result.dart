@@ -35,7 +35,7 @@ class SMSParsedResult extends ParsedResult {
   SMSParsedResult(this._numbers, this._vias, this._subject, this._body)
       : super(ParsedResultType.SMS);
 
-  String getSMSURI() {
+  String get smsURI {
     StringBuffer result = StringBuffer();
     result.write("sms:");
     bool first = true;
@@ -70,24 +70,16 @@ class SMSParsedResult extends ParsedResult {
     return result.toString();
   }
 
-  List<String> getNumbers() {
-    return _numbers;
-  }
+  List<String> get numbers => _numbers;
 
-  List<String>? getVias() {
-    return _vias;
-  }
+  List<String>? get vias => _vias;
 
-  String? getSubject() {
-    return _subject;
-  }
+  String? get subject => _subject;
 
-  String? getBody() {
-    return _body;
-  }
+  String? get body => _body;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(_numbers, result);
     ParsedResult.maybeAppend(_subject, result);

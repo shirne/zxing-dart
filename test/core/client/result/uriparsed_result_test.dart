@@ -15,12 +15,6 @@
  */
 
 
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -33,23 +27,23 @@ void main(){
   void doTest(String contents, String uri, String? title) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.URI, result.getType());
+    expect(ParsedResultType.URI, result.type);
     URIParsedResult uriResult = result as URIParsedResult;
-    expect(uri, uriResult.getURI());
-    expect(title, uriResult.getTitle());
+    expect(uri, uriResult.uri);
+    expect(title, uriResult.title);
   }
 
   void doTestNotUri(String text) {
     Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.getType());
-    expect(text, result.getDisplayResult());
+    expect(ParsedResultType.TEXT, result.type);
+    expect(text, result.displayResult);
   }
 
   void doTestIsPossiblyMalicious(String uri, bool malicious) {
     Result fakeResult = new Result(uri, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(malicious ? ParsedResultType.TEXT : ParsedResultType.URI, result.getType());
+    expect(malicious ? ParsedResultType.TEXT : ParsedResultType.URI, result.type);
   }
 
   test('testBookmarkDocomo', () {

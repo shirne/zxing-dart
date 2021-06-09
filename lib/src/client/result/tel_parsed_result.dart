@@ -28,20 +28,14 @@ class TelParsedResult extends ParsedResult {
   TelParsedResult(this._number, this._telURI, this._title)
       : super(ParsedResultType.TEL);
 
-  String? getNumber() {
-    return _number;
-  }
+  String? get number => _number;
 
-  String? getTelURI() {
-    return _telURI;
-  }
+  String? get telURI => _telURI;
 
-  String? getTitle() {
-    return _title;
-  }
+  String? get title => _title;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppend(_number, result);
     ParsedResult.maybeAppend(_title, result);

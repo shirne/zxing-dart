@@ -113,68 +113,38 @@ class ExpandedProductParsedResult extends ParsedResult {
     return hash;
   }
 
-  String? getRawText() {
-    return _rawText;
-  }
+  String? get rawText => _rawText;
 
-  String? getProductID() {
-    return _productID;
-  }
+  String? get productID => _productID;
 
-  String? getSscc() {
-    return _sscc;
-  }
+  String? get sscc => _sscc;
 
-  String? getLotNumber() {
-    return _lotNumber;
-  }
+  String? get lotNumber => _lotNumber;
 
-  String? getProductionDate() {
-    return _productionDate;
-  }
+  String? get productionDate => _productionDate;
 
-  String? getPackagingDate() {
-    return _packagingDate;
-  }
+  String? get packagingDate => _packagingDate;
 
-  String? getBestBeforeDate() {
-    return _bestBeforeDate;
-  }
+  String? get bestBeforeDate => _bestBeforeDate;
 
-  String? getExpirationDate() {
-    return _expirationDate;
-  }
+  String? get expirationDate => _expirationDate;
 
-  String? getWeight() {
-    return _weight;
-  }
+  String? get weight => _weight;
 
-  String? getWeightType() {
-    return _weightType;
-  }
+  String? get weightType => _weightType;
 
-  String? getWeightIncrement() {
-    return _weightIncrement;
-  }
+  String? get weightIncrement => _weightIncrement;
 
-  String? getPrice() {
-    return _price;
-  }
+  String? get price => _price;
 
-  String? getPriceIncrement() {
-    return _priceIncrement;
-  }
+  String? get priceIncrement => _priceIncrement;
 
-  String? getPriceCurrency() {
-    return _priceCurrency;
-  }
+  String? get priceCurrency => _priceCurrency;
 
-  Map<String, String> getUncommonAIs() {
-    return _uncommonAIs;
-  }
+  Map<String, String> get uncommonAIs => _uncommonAIs;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     return _rawText.toString();
   }
 }

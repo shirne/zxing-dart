@@ -51,7 +51,7 @@ class BinaryBitmap {
   /// Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive
   /// and do not call it repeatedly. This method is intended for decoding 2D barcodes and may or
   /// may not apply sharpening. Therefore, a row from this matrix may not be identical to one
-  /// fetched using getBlackRow(), so don't mix and match between them.
+  /// fetched using [blackRow], so don't mix and match between them.
   ///
   /// @return The 2D array of bits for the image (true means black).
   /// @throws NotFoundException if image can't be binarized to make a matrix

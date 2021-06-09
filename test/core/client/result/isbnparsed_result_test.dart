@@ -15,12 +15,6 @@
  */
 
 
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -33,9 +27,9 @@ void main(){
   void doTest(String contents) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.EAN_13);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.ISBN, result.getType());
+    expect(ParsedResultType.ISBN, result.type);
     ISBNParsedResult isbnResult = result as ISBNParsedResult;
-    expect(contents, isbnResult.getISBN());
+    expect(contents, isbnResult.isbn);
   }
   test('testISBN', () {
     doTest("9784567890123");

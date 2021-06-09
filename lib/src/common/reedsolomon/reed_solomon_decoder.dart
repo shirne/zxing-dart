@@ -86,7 +86,7 @@ class ReedSolomonDecoder {
   List<GenericGFPoly> _runEuclideanAlgorithm(
       GenericGFPoly a, GenericGFPoly b, int R) {
     // Assume a's degree is >= b's
-    if (a.getDegree() < b.getDegree()) {
+    if (a.degree < b.degree) {
       GenericGFPoly temp = a;
       a = b;
       b = temp;
@@ -98,31 +98,31 @@ class ReedSolomonDecoder {
     GenericGFPoly t = _field.one;
 
     // Run Euclidean algorithm until r's degree is less than R/2
-    while (r.getDegree() >= R / 2) {
+    while (r.degree >= R / 2) {
       GenericGFPoly rLastLast = rLast;
       GenericGFPoly tLastLast = tLast;
       rLast = r;
       tLast = t;
 
       // Divide rLastLast by rLast, with quotient in q and remainder in r
-      if (rLast.isZero()) {
+      if (rLast.isZero) {
         // Oops, Euclidean algorithm already terminated?
         throw Exception("r_{i-1} was zero");
       }
       r = rLastLast;
       GenericGFPoly q = _field.zero;
-      int denominatorLeadingTerm = rLast.getCoefficient(rLast.getDegree());
+      int denominatorLeadingTerm = rLast.getCoefficient(rLast.degree);
       int dltInverse = _field.inverse(denominatorLeadingTerm);
-      while (r.getDegree() >= rLast.getDegree() && !r.isZero()) {
-        int degreeDiff = r.getDegree() - rLast.getDegree();
-        int scale = _field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
+      while (r.degree >= rLast.degree && !r.isZero) {
+        int degreeDiff = r.degree - rLast.degree;
+        int scale = _field.multiply(r.getCoefficient(r.degree), dltInverse);
         q = q.addOrSubtract(_field.buildMonomial(degreeDiff, scale));
         r = r.addOrSubtract(rLast.multiplyByMonomial(degreeDiff, scale));
       }
 
       t = q.multiply(tLast).addOrSubtract(tLastLast);
 
-      if (r.getDegree() >= rLast.getDegree()) {
+      if (r.degree >= rLast.degree) {
         throw Exception("Division algorithm failed to reduce polynomial?");
       }
     }
@@ -140,7 +140,7 @@ class ReedSolomonDecoder {
 
   Int32List _findErrorLocations(GenericGFPoly errorLocator) {
     // This is a direct application of Chien's search
-    int numErrors = errorLocator.getDegree();
+    int numErrors = errorLocator.degree;
     if (numErrors == 1) {
       // shortcut
       return Int32List.fromList([errorLocator.getCoefficient(1)]);

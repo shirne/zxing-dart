@@ -27,16 +27,12 @@ class TextParsedResult extends ParsedResult {
 
   TextParsedResult(this._text, this._language) : super(ParsedResultType.TEXT);
 
-  String getText() {
-    return _text;
-  }
+  String get text => _text;
 
-  String? getLanguage() {
-    return _language;
-  }
+  String? get language => _language;
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     return _text;
   }
 }

@@ -33,11 +33,11 @@ void main(){
   void doTest(String contents, String number, String? title) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEL, result.getType());
+    expect(ParsedResultType.TEL, result.type);
     TelParsedResult telResult = result as TelParsedResult;
-    expect(number, telResult.getNumber());
-    expect(title, telResult.getTitle());
-    expect("tel:" + number, telResult.getTelURI());
+    expect(number, telResult.number);
+    expect(title, telResult.title);
+    expect("tel:" + number, telResult.telURI);
   }
 
   test('testTel', () {

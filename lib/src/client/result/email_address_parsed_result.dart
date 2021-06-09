@@ -36,39 +36,25 @@ class EmailAddressParsedResult extends ParsedResult {
   /// @return first elements of {@link #getTos()} or {@code null} if none
   /// @deprecated use {@link #getTos()}
   @deprecated
-  String? getEmailAddress() {
-    return _tos == null || _tos!.length == 0 ? null : _tos![0];
-  }
+  String? get emailAddress => _tos == null || _tos!.length == 0 ? null : _tos![0];
 
-  List<String>? getTos() {
-    return _tos;
-  }
+  List<String>? get tos => _tos;
 
-  List<String>? getCCs() {
-    return _ccs;
-  }
+  List<String>? get ccs => _ccs;
 
-  List<String>? getBCCs() {
-    return _bccs;
-  }
+  List<String>? get bccs => _bccs;
 
-  String? getSubject() {
-    return _subject;
-  }
+  String? get subject => _subject;
 
-  String? getBody() {
-    return _body;
-  }
+  String? get body => _body;
 
   /// @return "mailto:"
   /// @deprecated without replacement
   @deprecated
-  String getMailtoURI() {
-    return "mailto:";
-  }
+  String get mailtoURI => "mailto:";
 
   @override
-  String getDisplayResult() {
+  String get displayResult {
     StringBuffer result = StringBuffer();
     ParsedResult.maybeAppendList(_tos, result);
     ParsedResult.maybeAppendList(_ccs, result);

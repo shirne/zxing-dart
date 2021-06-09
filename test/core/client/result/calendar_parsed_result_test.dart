@@ -58,17 +58,17 @@ void main(){
         double longitude = double.nan]) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.CALENDAR, result.getType());
+    expect(ParsedResultType.CALENDAR, result.type);
     CalendarParsedResult calResult = result as CalendarParsedResult;
-    expect(calResult.getDescription(), description);
-    expect(calResult.getSummary(), summary);
-    expect(calResult.getLocation(), location);
-    dateEqual(startString, calResult.getStartTimestamp());
-    dateEqual(endString, calResult.getEndTimestamp() < 0 ? null : calResult.getEndTimestamp());
-    expect(calResult.getOrganizer(), organizer);
-    assertArrayEquals(attendees, calResult.getAttendees());
-    assertEqualOrNaN(latitude, calResult.getLatitude()!);
-    assertEqualOrNaN(longitude, calResult.getLongitude()!);
+    expect(calResult.description, description);
+    expect(calResult.summary, summary);
+    expect(calResult.location, location);
+    dateEqual(startString, calResult.startTimestamp);
+    dateEqual(endString, calResult.endTimestamp < 0 ? null : calResult.endTimestamp);
+    expect(calResult.organizer, organizer);
+    assertArrayEquals(attendees, calResult.attendees);
+    assertEqualOrNaN(latitude, calResult.latitude!);
+    assertEqualOrNaN(longitude, calResult.longitude!);
   }
 
   test('testStartEnd', () {
@@ -160,7 +160,7 @@ void main(){
         "GEO:-12.345\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(result.getType(), ParsedResultType.TEXT);
+    expect(result.type, ParsedResultType.TEXT);
   });
 
   test('testOrganizer', () {

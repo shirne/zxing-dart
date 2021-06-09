@@ -59,7 +59,7 @@ class ReedSolomonEncoder {
     GenericGFPoly info = GenericGFPoly(_field, infoCoefficients);
     info = info.multiplyByMonomial(ecBytes, 1);
     GenericGFPoly remainder = info.divide(generator)[1];
-    List<int> coefficients = remainder.getCoefficients();
+    List<int> coefficients = remainder.coefficients;
     int numZeroCoefficients = ecBytes - coefficients.length;
     for (int i = 0; i < numZeroCoefficients; i++) {
       toEncode[dataBytes + i] = 0;

@@ -64,9 +64,9 @@ void main(){
     Result fakeResult = new Result(contents, null, null, format);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     //assertNotNull(result);
-    expect(type, result.getType());
+    expect(type, result.type);
 
-    String displayResult = result.getDisplayResult();
+    String displayResult = result.displayResult;
     expect(goldenResult, displayResult);
   }
 
