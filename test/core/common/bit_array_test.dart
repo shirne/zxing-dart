@@ -60,11 +60,11 @@ void main() {
 
   test('testGetNextSet1', () {
     BitArray array = new BitArray(32);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       expect(32, array.getNextSet(i), reason: i.toString());
     }
     array = new BitArray(33);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       expect(33, array.getNextSet(i), reason: i.toString());
     }
   });
@@ -72,12 +72,12 @@ void main() {
   test('testGetNextSet2', () {
     BitArray array = new BitArray(33);    
     array.set(31);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       expect( i <= 31 ? 31 : 33, array.getNextSet(i), reason: i.toString());
     }
     array = new BitArray(33);
     array.set(32);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       expect( 32, array.getNextSet(i), reason: i.toString());
     }
   });
@@ -86,7 +86,7 @@ void main() {
     BitArray array = new BitArray(63);    
     array.set(31);
     array.set(32);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       int expected;
       if (i <= 31) {
         expected = 31;
@@ -103,7 +103,7 @@ void main() {
     BitArray array = new BitArray(63);
     array.set(33);
     array.set(40);
-    for (int i = 0; i < array.getSize(); i++) {
+    for (int i = 0; i < array.size; i++) {
       int expected;
       if (i <= 33) {
         expected = 33;
@@ -122,13 +122,13 @@ void main() {
       BitArray array = new BitArray(1 + r.nextInt(100));
       int numSet = r.nextInt(20);
       for (int j = 0; j < numSet; j++) {
-        array.set(r.nextInt(array.getSize()));
+        array.set(r.nextInt(array.size));
       }
       int numQueries = r.nextInt(20);
       for (int j = 0; j < numQueries; j++) {
-        int query = r.nextInt(array.getSize());
+        int query = r.nextInt(array.size);
         int expected = query;
-        while (expected < array.getSize() && !array[expected]) {
+        while (expected < array.size && !array[expected]) {
           expected++;
         }
         int actual = array.getNextSet(query);

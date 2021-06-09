@@ -48,7 +48,7 @@ void main(){
 
     BufferImage image = (await BufferImage.fromFile(File(path)))!;
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
-    int rowNumber = binaryMap.getHeight() ~/ 2;
+    int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
     List<ExpandedPair> pairs;

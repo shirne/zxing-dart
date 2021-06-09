@@ -25,10 +25,10 @@ void main(){
   void doTest(String expectedResult, String encodedResult){
     Code93Reader sut = new Code93Reader();
     BitMatrix matrix = BitMatrix.parse(encodedResult, "1", "0");
-    BitArray row = new BitArray(matrix.getWidth());
+    BitArray row = new BitArray(matrix.width);
     matrix.getRow(0, row);
     Result result = sut.decodeRow(0, row, null);
-    expect(result.getText(), expectedResult);
+    expect(result.text, expectedResult);
   }
 
 

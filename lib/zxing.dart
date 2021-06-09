@@ -1,26 +1,28 @@
+
+/// core lib
 library zxing_lib;
 
-export 'core/barcode_format.dart';
-export 'core/binarizer.dart';
-export 'core/binary_bitmap.dart';
-export 'core/checksum_exception.dart';
-export 'core/decode_hint_type.dart';
-export 'core/dimension.dart';
-export 'core/encode_hint_type.dart';
-export 'core/formats_exception.dart';
-export 'core/inverted_luminance_source.dart';
-export 'core/luminance_source.dart';
-export 'core/multi_format_reader.dart';
-export 'core/multi_format_writer.dart';
-export 'core/not_found_exception.dart';
-export 'core/planar_yuvluminance_source.dart';
-export 'core/reader.dart';
-export 'core/reader_exception.dart';
-export 'core/result.dart';
-export 'core/result_metadata_type.dart';
-export 'core/result_point.dart';
-export 'core/result_point_callback.dart';
-export 'core/rgbluminance_source.dart';
-export 'core/writer.dart';
-export 'core/writer_exception.dart';
+export 'src/barcode_format.dart';
+export 'src/binarizer.dart';
+export 'src/binary_bitmap.dart';
+export 'src/checksum_exception.dart';
+export 'src/decode_hint_type.dart';
+export 'src/dimension.dart';
+export 'src/encode_hint_type.dart';
+export 'src/formats_exception.dart';
+export 'src/inverted_luminance_source.dart';
+export 'src/luminance_source.dart';
+export 'src/multi_format_reader.dart';
+export 'src/multi_format_writer.dart';
+export 'src/not_found_exception.dart';
+export 'src/planar_yuvluminance_source.dart';
+export 'src/reader.dart';
+export 'src/reader_exception.dart';
+export 'src/result.dart';
+export 'src/result_metadata_type.dart';
+export 'src/result_point.dart';
+export 'src/result_point_callback.dart';
+export 'src/rgbluminance_source.dart';
+export 'src/writer.dart';
+export 'src/writer_exception.dart';
 

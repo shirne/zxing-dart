@@ -64,7 +64,7 @@ void main() {
 
   test('testGetSet',() {
     BitMatrix matrix = new BitMatrix(33);
-    expect(33, matrix.getHeight());
+    expect(33, matrix.height);
     for (int y = 0; y < 33; y++) {
       for (int x = 0; x < 33; x++) {
         if (y * x % 3 == 0) {
@@ -117,8 +117,8 @@ void main() {
 
   test('testRectangularMatrix',() {
     BitMatrix matrix = new BitMatrix(75, 20);
-    expect(75, matrix.getWidth());
-    expect(20, matrix.getHeight());
+    expect(75, matrix.width);
+    expect(20, matrix.height);
     matrix.set(10, 0);
     matrix.set(11, 1);
     matrix.set(50, 2);
@@ -143,8 +143,8 @@ void main() {
 
   test('testRectangularSetRegion',() {
     BitMatrix matrix = new BitMatrix(320, 240);
-    expect(320, matrix.getWidth());
-    expect(240, matrix.getHeight());
+    expect(320, matrix.width);
+    expect(240, matrix.height);
     matrix.setRegion(105, 22, 80, 12);
 
     // Only bits in the region should be on
@@ -165,17 +165,17 @@ void main() {
 
     // Should allocate
     BitArray array = matrix.getRow(2, null);
-    expect(102, array.getSize());
+    expect(102, array.size);
 
     // Should reallocate
     BitArray array2 = new BitArray(60);
     array2 = matrix.getRow(2, array2);
-    expect(102, array2.getSize());
+    expect(102, array2.size);
 
     // Should use provided object, with original BitArray size
     BitArray array3 = new BitArray(200);
     array3 = matrix.getRow(2, array3);
-    expect(200, array3.getSize());
+    expect(200, array3.size);
 
     for (int x = 0; x < 102; x++) {
       bool on = (x & 0x03) == 0;

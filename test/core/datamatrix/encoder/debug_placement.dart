@@ -23,9 +23,6 @@ class DebugPlacement extends DefaultPlacement {
   DebugPlacement(String codewords, int numcols, int numrows):super(codewords, numcols, numrows);
 
   List<String> toBitFieldStringArray() {
-    Int8List bits = getBits();
-    int numRows = getNumrows();
-    int numCols = getNumcols();
     List<String> array = List.filled(numRows, '');
     int startPos = 0;
     for (int row = 0; row < numRows; row++) {

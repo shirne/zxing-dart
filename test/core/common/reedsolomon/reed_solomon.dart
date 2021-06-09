@@ -57,7 +57,7 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
   Int32List message = Int32List(dataWords.length + ecWords.length);
   int maxErrors = ecWords.length ~/ 2;
   Random random = getPseudoRandom();
-  int iterations = field.getSize() > 256 ? 1 : DECODER_TEST_ITERATIONS;
+  int iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWords.length; i++) {
       if (i > 10 && i < ecWords.length ~/ 2 - 10) {
@@ -67,7 +67,7 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
       List.copyRange(message, 0, dataWords, 0, dataWords.length);
       List.copyRange(message, dataWords.length, ecWords, 0, ecWords.length);
 
-      corrupt(message, i, random, field.getSize());
+      corrupt(message, i, random, field.size);
       try {
         decoder.decode(message, ecWords.length);
       } catch ( e) { // ReedSolomonException
@@ -91,18 +91,18 @@ void testEncodeDecode(GenericGF field, List<int> dataWords, List<int> ecWords) {
 
 
 void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
-  assert(dataSize > 0 && dataSize <= field.getSize() - 3, "Invalid data size for $field" );
-  assert(ecSize > 0 && ecSize + dataSize <= field.getSize(), "Invalid ECC size for $field" );
+  assert(dataSize > 0 && dataSize <= field.size - 3, "Invalid data size for $field" );
+  assert(ecSize > 0 && ecSize + dataSize <= field.size, "Invalid ECC size for $field" );
   ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
   Int32List message = Int32List(dataSize + ecSize);
   Int32List dataWords = Int32List(dataSize);
   Int32List ecWords = Int32List(ecSize);
   Random random = getPseudoRandom();
-  int iterations = field.getSize() > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
+  int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
   for (int i = 0; i < iterations; i++) {
     // generate random data
     for (int k = 0; k < dataSize; k++) {
-      dataWords[k] = random.nextInt(field.getSize());
+      dataWords[k] = random.nextInt(field.size);
     }
     // generate ECC words
     List.copyRange(message, 0, dataWords, 0, dataWords.length);

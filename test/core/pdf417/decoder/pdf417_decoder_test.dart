@@ -33,15 +33,15 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
-    expect(resultMetadata.getSegmentIndex(), 0);
-    expect(resultMetadata.getFileId(), "017053");
-    assert(!resultMetadata.isLastSegment());
-    expect(resultMetadata.getSegmentCount(), 4);
-    expect(resultMetadata.getSender(), "CEN BE");
-    expect(resultMetadata.getAddressee(), "ISO CH");
+    expect(resultMetadata.segmentIndex, 0);
+    expect(resultMetadata.fileId, "017053");
+    assert(!resultMetadata.isLastSegment);
+    expect(resultMetadata.segmentCount, 4);
+    expect(resultMetadata.sender, "CEN BE");
+    expect(resultMetadata.addressee, "ISO CH");
 
     //@SuppressWarnings("deprecation")
-    List<int> optionalData = resultMetadata.getOptionalData()!;
+    List<int> optionalData = resultMetadata.optionalData!;
     expect(optionalData[0], 1, reason:"first element of optional array should be the first field identifier");
     expect(optionalData[optionalData.length - 1], 67,
         reason: "last element of optional array should be the last codeword of the last field");
@@ -57,15 +57,15 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
-    expect(3, resultMetadata.getSegmentIndex());
-    expect("017053", resultMetadata.getFileId());
-    assert(resultMetadata.isLastSegment());
-    expect(4, resultMetadata.getSegmentCount());
-    assert(resultMetadata.getAddressee() == null);
-    assert(resultMetadata.getSender() == null);
+    expect(3, resultMetadata.segmentIndex);
+    expect("017053", resultMetadata.fileId);
+    assert(resultMetadata.isLastSegment);
+    expect(4, resultMetadata.segmentCount);
+    assert(resultMetadata.addressee == null);
+    assert(resultMetadata.sender == null);
 
     //@SuppressWarnings("deprecation")
-    List<int> optionalData = resultMetadata.getOptionalData()!;
+    List<int> optionalData = resultMetadata.optionalData!;
     expect(1, optionalData[0], reason: "first element of optional array should be the first field identifier");
     expect(104, optionalData[optionalData.length - 1], reason: "last element of optional array should be the last codeword of the last field");
   });
@@ -79,18 +79,18 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
-    expect(0, resultMetadata.getSegmentIndex());
-    expect("100200300", resultMetadata.getFileId());
-    assert(!resultMetadata.isLastSegment());
-    expect(-1, resultMetadata.getSegmentCount());
-    assert(resultMetadata.getAddressee() == null);
-    assert(resultMetadata.getSender() == null);
-    assert(resultMetadata.getOptionalData() == null);
+    expect(0, resultMetadata.segmentIndex);
+    expect("100200300", resultMetadata.fileId);
+    assert(!resultMetadata.isLastSegment);
+    expect(-1, resultMetadata.segmentCount);
+    assert(resultMetadata.addressee == null);
+    assert(resultMetadata.sender == null);
+    assert(resultMetadata.optionalData == null);
 
     // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
     DecoderResult decoderResult = DecodedBitStreamParser.decode(sampleCodes, "0");
-    expect("", decoderResult.getText());
-    assert(decoderResult.getOther() != null);
+    expect("", decoderResult.text);
+    assert(decoderResult.other != null);
   });
 
   test('testSampleWithFilename', (){
@@ -101,13 +101,13 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
-    expect(0, resultMetadata.getSegmentIndex());
-    expect("000252021086", resultMetadata.getFileId());
-    assert(!resultMetadata.isLastSegment());
-    expect(2, resultMetadata.getSegmentCount());
-    assert(resultMetadata.getAddressee() == null);
-    assert(resultMetadata.getSender() == null);
-    expect("filename.txt", resultMetadata.getFileName());
+    expect(0, resultMetadata.segmentIndex);
+    expect("000252021086", resultMetadata.fileId);
+    assert(!resultMetadata.isLastSegment);
+    expect(2, resultMetadata.segmentCount);
+    assert(resultMetadata.addressee == null);
+    assert(resultMetadata.sender == null);
+    expect("filename.txt", resultMetadata.fileName);
   });
 
   test('testSampleWithNumericValues', (){
@@ -117,13 +117,13 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
-    expect(0, resultMetadata.getSegmentIndex());
-    expect("000252021086", resultMetadata.getFileId());
-    assert(!resultMetadata.isLastSegment());
+    expect(0, resultMetadata.segmentIndex);
+    expect("000252021086", resultMetadata.fileId);
+    assert(!resultMetadata.isLastSegment);
 
-    expect(180980729000000, resultMetadata.getTimestamp());
-    expect(30, resultMetadata.getFileSize());
-    expect(260013, resultMetadata.getChecksum());
+    expect(180980729000000, resultMetadata.timestamp);
+    expect(30, resultMetadata.fileSize);
+    expect(260013, resultMetadata.checksum);
   });
 
   test('testSampleWithMacroTerminatorOnly', (){
@@ -132,11 +132,11 @@ void main(){
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
-    expect(99998, resultMetadata.getSegmentIndex());
-    expect("000", resultMetadata.getFileId());
-    assert(resultMetadata.isLastSegment());
-    expect(-1, resultMetadata.getSegmentCount());
-    assert(resultMetadata.getOptionalData() == null);
+    expect(99998, resultMetadata.segmentIndex);
+    expect("000", resultMetadata.fileId);
+    assert(resultMetadata.isLastSegment);
+    expect(-1, resultMetadata.segmentCount);
+    assert(resultMetadata.optionalData == null);
   });
 
   test('testSampleWithBadSequenceIndexMacro', (){

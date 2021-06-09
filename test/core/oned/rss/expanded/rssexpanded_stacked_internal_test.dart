@@ -45,7 +45,7 @@ void main(){
 
     BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
-    int firstRowNumber = binaryMap.getHeight() ~/ 3;
+    int firstRowNumber = binaryMap.height ~/ 3;
     BitArray firstRow = binaryMap.getBlackRow(firstRowNumber, null);
     try {
       rssExpandedReader.decodeRow2pairs(firstRowNumber, firstRow);
@@ -54,22 +54,22 @@ void main(){
       // ok
     }
 
-    expect(1, rssExpandedReader.getRows().length);
-    ExpandedRow firstExpandedRow = rssExpandedReader.getRows()[0];
-    expect(firstRowNumber, firstExpandedRow.getRowNumber());
+    expect(1, rssExpandedReader.rows.length);
+    ExpandedRow firstExpandedRow = rssExpandedReader.rows[0];
+    expect(firstRowNumber, firstExpandedRow.rowNumber);
 
-    expect(2, firstExpandedRow.getPairs().length);
+    expect(2, firstExpandedRow.pairs.length);
 
-    firstExpandedRow.getPairs()[1].getFinderPattern()!.getStartEnd()[1] = 0;
+    firstExpandedRow.pairs[1].finderPattern!.startEnd[1] = 0;
 
-    int secondRowNumber = 2 * binaryMap.getHeight() ~/ 3;
+    int secondRowNumber = 2 * binaryMap.height ~/ 3;
     BitArray secondRow = binaryMap.getBlackRow(secondRowNumber, null);
     secondRow.reverse();
 
     List<ExpandedPair> totalPairs = rssExpandedReader.decodeRow2pairs(secondRowNumber, secondRow);
 
     Result result = RSSExpandedReader.constructResult(totalPairs);
-    expect("(01)98898765432106(3202)012345(15)991231", result.getText());
+    expect("(01)98898765432106(3202)012345(15)991231", result.text);
   });
 
   test('testCompleteDecode', () async{
@@ -78,7 +78,7 @@ void main(){
     BinaryBitmap binaryMap = await TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     Result result = rssExpandedReader.decode(binaryMap);
-    expect("(01)98898765432106(3202)012345(15)991231", result.getText());
+    expect("(01)98898765432106(3202)012345(15)991231", result.text);
   });
 
 

@@ -1,15 +1,17 @@
+
+/// aztec lib
 library zxing_lib.aztec;
 
-export 'core/aztec/aztec_detector_result.dart';
-export 'core/aztec/aztec_reader.dart';
-export 'core/aztec/aztec_writer.dart';
+export 'src/aztec/aztec_detector_result.dart';
+export 'src/aztec/aztec_reader.dart';
+export 'src/aztec/aztec_writer.dart';
 
-export 'core/aztec/decoder/decoder.dart';
-export 'core/aztec/detector/detector.dart';
-export 'core/aztec/encoder/aztec_code.dart';
-export 'core/aztec/encoder/binary_shift_token.dart';
-export 'core/aztec/encoder/encoder.dart';
-export 'core/aztec/encoder/high_level_encoder.dart';
-export 'core/aztec/encoder/simple_token.dart';
-export 'core/aztec/encoder/state.dart';
-export 'core/aztec/encoder/token.dart';
+export 'src/aztec/decoder/decoder.dart';
+export 'src/aztec/detector/detector.dart';
+export 'src/aztec/encoder/aztec_code.dart';
+export 'src/aztec/encoder/binary_shift_token.dart';
+export 'src/aztec/encoder/encoder.dart';
+export 'src/aztec/encoder/high_level_encoder.dart';
+export 'src/aztec/encoder/simple_token.dart';
+export 'src/aztec/encoder/state.dart';
+export 'src/aztec/encoder/token.dart';

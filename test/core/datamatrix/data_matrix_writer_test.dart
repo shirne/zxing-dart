@@ -35,8 +35,8 @@ void main(){
     DataMatrixWriter writer = new DataMatrixWriter();
     BitMatrix matrix = writer.encode("Hello Google", BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
     //assert(matrix != null);
-    assert(bigEnough >= matrix.getWidth());
-    assert(bigEnough >= matrix.getHeight());
+    assert(bigEnough >= matrix.width);
+    assert(bigEnough >= matrix.height);
   });
 
   test('testDataMatrixWriter', () {
@@ -48,8 +48,8 @@ void main(){
     DataMatrixWriter writer = new DataMatrixWriter();
     BitMatrix matrix = writer.encode("Hello Me", BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
     //assertNotNull(matrix);
-    expect(bigEnough, matrix.getWidth());
-    expect(bigEnough, matrix.getHeight());
+    expect(bigEnough, matrix.width);
+    expect(bigEnough, matrix.height);
   });
 
   test('testDataMatrixTooSmall', () {
@@ -58,8 +58,8 @@ void main(){
     DataMatrixWriter writer = new DataMatrixWriter();
     BitMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.DATA_MATRIX, tooSmall, tooSmall, null);
     //assertNotNull(matrix);
-    assert(tooSmall < matrix.getWidth());
-    assert(tooSmall < matrix.getHeight());
+    assert(tooSmall < matrix.width);
+    assert(tooSmall < matrix.height);
   });
 
 }

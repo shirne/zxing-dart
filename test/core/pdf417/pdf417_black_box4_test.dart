@@ -95,17 +95,17 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
             // ignore
           }
         }
-        results.sort((Result r, Result o) => getMeta(r)!.getSegmentIndex().compareTo(getMeta(o)!.getSegmentIndex()));
+        results.sort((Result r, Result o) => getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
         StringBuilder resultText = new StringBuilder();
         String? fileId;
         for (Result result in results) {
           PDF417ResultMetadata resultMetadata = getMeta(result)!;
           //assertNotNull("resultMetadata", resultMetadata);
           if (fileId == null) {
-            fileId = resultMetadata.getFileId();
+            fileId = resultMetadata.fileId;
           }
-          expect(fileId, resultMetadata.getFileId(),reason: "FileId");
-          resultText.write(result.getText());
+          expect(fileId, resultMetadata.fileId,reason: "FileId");
+          resultText.write(result.text);
         }
         expect( expectedText, resultText.toString(), reason:"ExpectedText");
         passedCounts[x]++;
@@ -145,8 +145,8 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   static PDF417ResultMetadata? getMeta(Result result) {
-    return result.getResultMetadata() == null ? null :
-      result.getResultMetadata()![ResultMetadataType.PDF417_EXTRA_METADATA] as PDF417ResultMetadata?;
+    return result.resultMetadata == null ? null :
+      result.resultMetadata![ResultMetadataType.PDF417_EXTRA_METADATA] as PDF417ResultMetadata?;
   }
 
   List<Result> decode(BinaryBitmap source, bool tryHarder){

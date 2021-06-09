@@ -109,8 +109,8 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     BinaryBitmap bitmap = new BinaryBitmap(HybridBinarizer(source));
     Result result;
     try {
-      result = getReader()!.decode(bitmap);
-      log.info("Found false positive: '${result.getText()}' with format '${result.getBarcodeFormat()}' (rotation: ${rotationInDegrees.toInt()})");
+      result = reader!.decode(bitmap);
+      log.info("Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
     } catch ( _) { // ReaderException
       // continue
@@ -120,8 +120,8 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     Map<DecodeHintType,Object> hints = {};
     hints[DecodeHintType.TRY_HARDER] = true;
     try {
-      result = getReader()!.decode(bitmap, hints);
-      log.info("Try harder found false positive: '${result.getText()}' with format '${result.getBarcodeFormat()}' (rotation: ${rotationInDegrees.toInt()})");
+      result = reader!.decode(bitmap, hints);
+      log.info("Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
     } catch ( re) { // ReaderException
       // continue

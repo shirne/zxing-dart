@@ -83,10 +83,9 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   Int8List getRow(int y, Int8List? row) {
-    if (y < 0 || y >= getHeight()) {
+    if (y < 0 || y >= height) {
       throw Exception("Requested row is outside the image: $y");
     }
-    int width = getWidth();
     if (row == null || row.length < width) {
       row = Int8List(width);
     }
@@ -102,9 +101,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List getMatrix() {
-    int width = getWidth();
-    int height = getHeight();
+  Int8List get matrix {
     int area = width * height;
     Int8List matrix = Int8List(area);
     // The underlying raster of image consists of area bytes with the luminance values
@@ -121,9 +118,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   }
 
   @override
-  bool isCropSupported() {
-    return true;
-  }
+  bool get isCropSupported => true;
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
@@ -134,9 +129,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   ///
   /// @return true
   @override
-  bool isRotateSupported() {
-    return true;
-  }
+  bool get isRotateSupported => true;
 
   @override
   LuminanceSource rotateCounterClockwise() {
@@ -155,14 +148,11 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     //g.dispose();
 
     // Maintain the cropped region, but rotate it too.
-    int width = getWidth();
-    return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), getHeight(), width);
+    return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), height, width);
   }
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-    int width = getWidth();
-    int height = getHeight();
 
     int oldCenterX = left + width ~/ 2;
     int oldCenterY = top + height ~/ 2;

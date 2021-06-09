@@ -29,19 +29,21 @@ import 'package:zxing_lib/zxing.dart';
 void main(){
 
   test('test', () {
-    QRCode qrCode = new QRCode();
 
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
-    qrCode.setMode(Mode.BYTE);
-    qrCode.setECLevel(ErrorCorrectionLevel.H);
-    qrCode.setVersion(Version.getVersionForNumber(7));
-    qrCode.setMaskPattern(3);
+    QRCode qrCode = new QRCode(
+      mode: Mode.BYTE,
+      ecLevel: ErrorCorrectionLevel.H,
+      version: Version.getVersionForNumber(7),
+      maskPattern: 3
+    );
 
-    expect(Mode.BYTE, qrCode.getMode());
-    expect(ErrorCorrectionLevel.H, qrCode.getECLevel());
-    expect(7, qrCode.getVersion()!.getVersionNumber());
-    expect(3, qrCode.getMaskPattern());
+
+    expect(Mode.BYTE, qrCode.mode);
+    expect(ErrorCorrectionLevel.H, qrCode.ecLevel);
+    expect(7, qrCode.version!.versionNumber);
+    expect(3, qrCode.maskPattern);
 
     // Prepare the matrix.
     ByteMatrix matrix = new ByteMatrix(45, 45);
@@ -53,8 +55,8 @@ void main(){
     }
 
     // Set the matrix.
-    qrCode.setMatrix(matrix);
-    expect(matrix, qrCode.getMatrix());
+    qrCode.matrix = matrix;
+    expect(matrix, qrCode.matrix);
   });
 
   test('testToString1', () {
@@ -71,18 +73,19 @@ void main(){
   });
 
   test('testToString2', () {
-    QRCode qrCode = new QRCode();
-    qrCode.setMode(Mode.BYTE);
-    qrCode.setECLevel(ErrorCorrectionLevel.H);
-    qrCode.setVersion(Version.getVersionForNumber(1));
-    qrCode.setMaskPattern(3);
+    QRCode qrCode = new QRCode(
+      mode: Mode.BYTE,
+      ecLevel: ErrorCorrectionLevel.H,
+      version: Version.getVersionForNumber(1),
+      maskPattern: 3
+    );
     ByteMatrix matrix = new ByteMatrix(21, 21);
     for (int y = 0; y < 21; ++y) {
       for (int x = 0; x < 21; ++x) {
         matrix.set(x, y, (y + x) % 2);
       }
     }
-    qrCode.setMatrix(matrix);
+    qrCode.matrix = matrix;
     String expected = "<<\n" +
         " mode: BYTE\n" +
         " ecLevel: H\n" +

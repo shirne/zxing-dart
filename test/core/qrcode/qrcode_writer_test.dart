@@ -69,16 +69,16 @@ void main() {
     BitMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
         bigEnough, null);
     //assertNotNull(matrix);
-    expect(bigEnough, matrix.getWidth());
-    expect(bigEnough, matrix.getHeight());
+    expect(bigEnough, matrix.width);
+    expect(bigEnough, matrix.height);
 
     // The QR will not fit in this size, so the matrix should come back bigger
     int tooSmall = 20;
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, tooSmall,
         tooSmall, null);
     //assertNotNull(matrix);
-    expect(tooSmall < matrix.getWidth(), true);
-    expect(tooSmall < matrix.getHeight(), true);
+    expect(tooSmall < matrix.width, true);
+    expect(tooSmall < matrix.height, true);
 
     // We should also be able to handle non-square requests by padding them
     int strangeWidth = 500;
@@ -86,8 +86,8 @@ void main() {
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, strangeWidth,
         strangeHeight, null);
     //assertNotNull(matrix);
-    expect(strangeWidth, matrix.getWidth());
-    expect(strangeHeight, matrix.getHeight());
+    expect(strangeWidth, matrix.width);
+    expect(strangeHeight, matrix.height);
   });
 
   void compareToGoldenFile(String contents,
@@ -106,8 +106,8 @@ void main() {
     BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
 
-    expect(resolution, generatedResult.getWidth());
-    expect(resolution, generatedResult.getHeight());
+    expect(resolution, generatedResult.width);
+    expect(resolution, generatedResult.height);
     expect(goldenResult, generatedResult);
   }
 

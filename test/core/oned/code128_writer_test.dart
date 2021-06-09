@@ -56,7 +56,7 @@ void main(){
 
     BitArray row = result.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
-    String actualRoundtripResultText = rtResult.getText();
+    String actualRoundtripResultText = rtResult.text;
     expect(toEncode, actualRoundtripResultText);
   }
 
@@ -100,7 +100,7 @@ void main(){
     BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
     BitArray row = encResult.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
-    String actual = rtResult.getText();
+    String actual = rtResult.text;
     expect(expected, actual);
   });
 

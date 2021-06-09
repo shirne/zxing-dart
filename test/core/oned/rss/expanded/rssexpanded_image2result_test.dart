@@ -55,7 +55,7 @@ void main(){
 
     BufferImage image = (await BufferImage.fromFile(File(path)))!;
     BinaryBitmap binaryMap =  BinaryBitmap( GlobalHistogramBinarizer( BufferedImageLuminanceSource(image)));
-    int rowNumber = binaryMap.getHeight() ~/ 2;
+    int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
     Result theResult;
@@ -67,7 +67,7 @@ void main(){
     return;
     }
 
-    expect(BarcodeFormat.RSS_EXPANDED, theResult.getBarcodeFormat());
+    expect(BarcodeFormat.RSS_EXPANDED, theResult.barcodeFormat);
 
     ParsedResult result = ResultParser.parseResult(theResult);
 

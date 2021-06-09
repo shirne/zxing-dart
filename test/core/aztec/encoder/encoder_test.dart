@@ -54,30 +54,30 @@ void main(){
 
   void testEncode(String data, bool compact, int layers, String expected) {
     AztecCode aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
-    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
-    BitMatrix matrix = aztec.getMatrix()!;
+    expect(aztec.isCompact, compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.layers, layers, reason: "Unexpected nr. of layers");
+    BitMatrix matrix = aztec.matrix!;
     expect(matrix.toString(), expected, reason: "encode() failed");
   }
 
   void testEncodeDecode(String data, bool compact, int layers){
     AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
-    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
-    BitMatrix matrix = aztec.getMatrix()!;
+    expect(aztec.isCompact, compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.layers, layers, reason: "Unexpected nr. of layers");
+    BitMatrix matrix = aztec.matrix!;
     AztecDetectorResult r =
-    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = new Decoder().decode(r);
-    expect(res.getText(), data, );
+    expect(res.text, data, );
     // Check error correction by introducing a few minor errors
     Random random = getPseudoRandom();
-    matrix.flip(random.nextInt(matrix.getWidth()), random.nextInt(2));
-    matrix.flip(random.nextInt(matrix.getWidth()), matrix.getHeight() - 2 + random.nextInt(2));
-    matrix.flip(random.nextInt(2), random.nextInt(matrix.getHeight()));
-    matrix.flip(matrix.getWidth() - 2 + random.nextInt(2), random.nextInt(matrix.getHeight()));
-    r = AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    matrix.flip(random.nextInt(matrix.width), random.nextInt(2));
+    matrix.flip(random.nextInt(matrix.width), matrix.height - 2 + random.nextInt(2));
+    matrix.flip(random.nextInt(2), random.nextInt(matrix.height));
+    matrix.flip(matrix.width - 2 + random.nextInt(2), random.nextInt(matrix.height));
+    r = AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
     res = Decoder().decode(r);
-    expect(res.getText(), data);
+    expect(res.text, data);
   }
 
   void testWriter(String data,
@@ -95,30 +95,30 @@ void main(){
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
     AztecCode aztec = Encoder.encode(data, eccPercent,
         Encoder.DEFAULT_AZTEC_LAYERS, charset);
-    expect(aztec.isCompact(), compact, reason: "Unexpected symbol format (compact)");
-    expect(aztec.getLayers(), layers, reason: "Unexpected nr. of layers");
-    BitMatrix matrix2 = aztec.getMatrix()!;
+    expect(aztec.isCompact, compact, reason: "Unexpected symbol format (compact)");
+    expect(aztec.layers, layers, reason: "Unexpected nr. of layers");
+    BitMatrix matrix2 = aztec.matrix!;
     expect(matrix, matrix2);
     AztecDetectorResult r =
-    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = new Decoder().decode(r);
-    expect(res.getText(), data,);
+    expect(res.text, data,);
     // Check error correction by introducing up to eccPercent/2 errors
-    int ecWords = aztec.getCodeWords() * eccPercent ~/ 100 ~/ 2;
+    int ecWords = aztec.codeWords * eccPercent ~/ 100 ~/ 2;
     Random random = getPseudoRandom();
     for (int i = 0; i < ecWords; i++) {
       // don't touch the core
       int x = random.nextBool() ?
-      random.nextInt(aztec.getLayers() * 2)
-          : matrix.getWidth() - 1 - random.nextInt(aztec.getLayers() * 2);
+      random.nextInt(aztec.layers * 2)
+          : matrix.width - 1 - random.nextInt(aztec.layers * 2);
       int y = random.nextBool() ?
-      random.nextInt(aztec.getLayers() * 2)
-          : matrix.getHeight() - 1 - random.nextInt(aztec.getLayers() * 2);
+      random.nextInt(aztec.layers * 2)
+          : matrix.height - 1 - random.nextInt(aztec.layers * 2);
       matrix.flip(x, y);
     }
-    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
     res = new Decoder().decode(r);
-    expect(res.getText(), data);
+    expect(res.text, data);
   }
 
 
@@ -144,7 +144,7 @@ void main(){
   }
 
   List<bool> toBooleanArray(BitArray bitArray) {
-    List<bool> result = List.filled(bitArray.getSize(), false);
+    List<bool> result = List.filled(bitArray.size, false);
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray[i];
     }
@@ -269,7 +269,7 @@ void main(){
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
     AztecCode aztec = Encoder.encode(data,
         Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
-    BitMatrix expectedMatrix = aztec.getMatrix()!;
+    BitMatrix expectedMatrix = aztec.matrix!;
     expect(matrix, expectedMatrix);
   });
 
@@ -535,12 +535,12 @@ void main(){
   test('testUserSpecifiedLayers', () {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
-    expect(aztec.getLayers(), 2);
-    assert(aztec.isCompact());
+    expect(aztec.layers, 2);
+    assert(aztec.isCompact);
 
     aztec = Encoder.encode(alphabet, 25, 32);
-    expect(aztec.getLayers(), 32);
-    assert(!aztec.isCompact());
+    expect(aztec.layers, 32);
+    assert(!aztec.isCompact);
 
     try {
       Encoder.encode(alphabet, 25, 33);
@@ -572,14 +572,14 @@ void main(){
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode = Encoder.encode(alphabet4, 0, Encoder.DEFAULT_AZTEC_LAYERS);
-    assert(!aztecCode.isCompact());
-    expect(aztecCode.getLayers(), 4);
+    assert(!aztecCode.isCompact);
+    expect(aztecCode.layers, 4);
 
     // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
     // include more error checking.
     aztecCode = Encoder.encode(alphabet4.substring(0, 100), 10, Encoder.DEFAULT_AZTEC_LAYERS);
-    assert(aztecCode.isCompact());
-    expect(aztecCode.getLayers(), 4);
+    assert(aztecCode.isCompact);
+    expect(aztecCode.layers, 4);
   });
 
   

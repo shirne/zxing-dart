@@ -219,9 +219,7 @@ class AbstractBlackBoxTestCase {
     return paths;
   }
 
-  Reader? getReader() {
-    return _barcodeReader;
-  }
+  Reader? get reader => _barcodeReader;
 
   bool _decode(BinaryBitmap source, double rotation, String expectedText,
       Map<Object, Object> expectedMetadata, bool tryHarder) {
@@ -250,13 +248,13 @@ class AbstractBlackBoxTestCase {
       result = _barcodeReader!.decode(source, hints);
     }
 
-    if (_expectedFormat != result.getBarcodeFormat()) {
+    if (_expectedFormat != result.barcodeFormat) {
       _log.info(
-          "Format mismatch: expected '$_expectedFormat' but got '${result.getBarcodeFormat()}'$suffix");
+          "Format mismatch: expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix");
       return false;
     }
 
-    String resultText = result.getText();
+    String resultText = result.text;
     if (expectedText != resultText) {
       _log.info(
           "Content mismatch: expected '$expectedText' but got '$resultText'$suffix");
@@ -264,7 +262,7 @@ class AbstractBlackBoxTestCase {
     }
 
     Map<ResultMetadataType, Object>? resultMetadata =
-        result.getResultMetadata()!;
+        result.resultMetadata!;
     for (MapEntry metadatum in expectedMetadata.entries) {
       ResultMetadataType key = metadatum.key;
       Object expectedValue = metadatum.value;
@@ -303,15 +301,15 @@ class AbstractBlackBoxTestCase {
     original.rotate(radians);
 
     //RectangularShape r = op.getBounds2D(original);
-    //int width = (int) Math.ceil(r.getWidth());
-    //int height = (int) Math.ceil(r.getHeight());
+    //int width = (int) Math.ceil(r.width);
+    //int height = (int) Math.ceil(r.height);
 
     // Real transform, now that we know the size of the new image and how to translate after we rotate
     // to keep it centered
     //at = new AffineTransform();
     //at.rotate(radians, width / 2.0, height / 2.0);
-    //at.translate((width - original.getWidth()) / 2.0,
-    //             (height - original.getHeight()) / 2.0);
+    //at.translate((width - original.width) / 2.0,
+    //             (height - original.height) / 2.0);
     //op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
     //return op.filter(original, new BufferedImage(width, height, original.getType()));

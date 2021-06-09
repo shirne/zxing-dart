@@ -29,32 +29,32 @@ void main(){
 
   test('testSymbolInfo', () {
     SymbolInfo? info = SymbolInfo.lookup(3)!;
-    expect(5, info.getErrorCodewords());
+    expect(5, info.errorCodewords);
     expect(8, info.matrixWidth);
     expect(8, info.matrixHeight);
-    expect(10, info.getSymbolWidth());
-    expect(10, info.getSymbolHeight());
+    expect(10, info.symbolWidth);
+    expect(10, info.symbolHeight);
 
     info = SymbolInfo.lookup(3, SymbolShapeHint.FORCE_RECTANGLE)!;
-    expect(7, info.getErrorCodewords());
+    expect(7, info.errorCodewords);
     expect(16, info.matrixWidth);
     expect(6, info.matrixHeight);
-    expect(18, info.getSymbolWidth());
-    expect(8, info.getSymbolHeight());
+    expect(18, info.symbolWidth);
+    expect(8, info.symbolHeight);
 
     info = SymbolInfo.lookup(9)!;
-    expect(11, info.getErrorCodewords());
+    expect(11, info.errorCodewords);
     expect(14, info.matrixWidth);
     expect(6, info.matrixHeight);
-    expect(32, info.getSymbolWidth());
-    expect(8, info.getSymbolHeight());
+    expect(32, info.symbolWidth);
+    expect(8, info.symbolHeight);
 
     info = SymbolInfo.lookup(9, SymbolShapeHint.FORCE_SQUARE)!;
-    expect(12, info.getErrorCodewords());
+    expect(12, info.errorCodewords);
     expect(14, info.matrixWidth);
     expect(14, info.matrixHeight);
-    expect(16, info.getSymbolWidth());
-    expect(16, info.getSymbolHeight());
+    expect(16, info.symbolWidth);
+    expect(16, info.symbolHeight);
 
     try {
       SymbolInfo.lookup(1559);
@@ -70,14 +70,14 @@ void main(){
     }
 
     info = SymbolInfo.lookup(35)!;
-    expect(24, info.getSymbolWidth());
-    expect(24, info.getSymbolHeight());
+    expect(24, info.symbolWidth);
+    expect(24, info.symbolHeight);
 
     Dimension fixedSize = new Dimension(26, 26);
     info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false)!;
-    expect(26, info.getSymbolWidth());
-    expect(26, info.getSymbolHeight());
+    expect(26, info.symbolWidth);
+    expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(45,
                              SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
@@ -89,20 +89,20 @@ void main(){
     info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
-    expect(26, info.getSymbolWidth());
-    expect(26, info.getSymbolHeight());
+    expect(26, info.symbolWidth);
+    expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(40,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
-    expect(26, info.getSymbolWidth());
-    expect(26, info.getSymbolHeight());
+    expect(26, info.symbolWidth);
+    expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(45,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
     //assertNotNull(info);
-    expect(32, info.getSymbolWidth());
-    expect(32, info.getSymbolHeight());
+    expect(32, info.symbolWidth);
+    expect(32, info.symbolHeight);
 
     info = SymbolInfo.lookup(63,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);

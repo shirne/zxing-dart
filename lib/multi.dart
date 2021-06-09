@@ -1,9 +1,13 @@
+
+/// multi decode lib
+///
+/// decode multi qrcode in one image
 library zxing_lib.multi;
 
-export 'core/multi/by_quadrant_reader.dart';
-export 'core/multi/generic_multiple_barcode_reader.dart';
-export 'core/multi/multiple_barcode_reader.dart';
+export 'src/multi/by_quadrant_reader.dart';
+export 'src/multi/generic_multiple_barcode_reader.dart';
+export 'src/multi/multiple_barcode_reader.dart';
 
-export 'core/multi/qrcode/qrcode_multi_reader.dart';
-export 'core/multi/qrcode/detector/multi_detector.dart';
-export 'core/multi/qrcode/detector/multi_finder_pattern_finder.dart';
+export 'src/multi/qrcode/qrcode_multi_reader.dart';
+export 'src/multi/qrcode/detector/multi_detector.dart';
+export 'src/multi/qrcode/detector/multi_finder_pattern_finder.dart';

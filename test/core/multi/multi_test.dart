@@ -46,11 +46,11 @@ void main(){
     //assertNotNull(results);
     expect(results.length, 2);
 
-    expect("031415926531", results[0].getText());
-    expect(BarcodeFormat.UPC_A, results[0].getBarcodeFormat());
+    expect("031415926531", results[0].text);
+    expect(BarcodeFormat.UPC_A, results[0].barcodeFormat);
 
-    expect("www.airtable.com/jobs", results[1].getText());
-    expect(BarcodeFormat.QR_CODE, results[1].getBarcodeFormat());
+    expect("www.airtable.com/jobs", results[1].text);
+    expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 
 }

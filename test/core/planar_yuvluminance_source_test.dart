@@ -37,7 +37,7 @@ void main() {
   test('testNoCrop', () {
     PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(
         Int8List.fromList(YUV), COLS, ROWS, 0, 0, COLS, ROWS, false);
-    assertListEquals(Y, 0, source.getMatrix(), 0, Y.length);
+    assertListEquals(Y, 0, source.matrix, 0, Y.length);
     for (int r = 0; r < ROWS; r++) {
       assertListEquals(Y, r * COLS, source.getRow(r, null), 0, COLS);
     }
@@ -46,8 +46,8 @@ void main() {
   test('testCrop', () {
     PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
         Int8List.fromList(YUV), COLS, ROWS, 1, 1, COLS - 2, ROWS - 2, false);
-    expect(source.isCropSupported(), true);
-    Int8List cropMatrix = source.getMatrix();
+    expect(source.isCropSupported, true);
+    Int8List cropMatrix = source.matrix;
     for (int r = 0; r < ROWS - 2; r++) {
       assertListEquals(Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
     }

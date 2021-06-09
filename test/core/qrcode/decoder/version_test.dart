@@ -46,7 +46,7 @@ void main(){
 
   test('testGetProvisionalVersionForDimension', (){
     for (int i = 1; i <= 40; i++) {
-      expect(i, Version.getProvisionalVersionForDimension(4 * i + 17).getVersionNumber());
+      expect(i, Version.getProvisionalVersionForDimension(4 * i + 17).versionNumber);
     }
   });
 
@@ -66,12 +66,12 @@ void main(){
 
 void checkVersion(Version version, int number, int dimension) {
   assert(version != null);
-  expect(number, version.getVersionNumber());
-  assert(version.getAlignmentPatternCenters() != null);
+  expect(number, version.versionNumber);
+  assert(version.alignmentPatternCenters != null);
   if (number > 1) {
-    assert(version.getAlignmentPatternCenters().length > 0);
+    assert(version.alignmentPatternCenters.length > 0);
   }
-  expect(dimension, version.getDimensionForVersion());
+  expect(dimension, version.dimensionForVersion);
   assert(version.getECBlocksForLevel(ErrorCorrectionLevel.H) != null);
   assert(version.getECBlocksForLevel(ErrorCorrectionLevel.L) != null);
   assert(version.getECBlocksForLevel(ErrorCorrectionLevel.M) != null);
@@ -82,5 +82,5 @@ void checkVersion(Version version, int number, int dimension) {
 void doTestVersion(int expectedVersion, int mask) {
   Version? version = Version.decodeVersionInformation(mask);
   assert(version != null);
-  expect(expectedVersion, version!.getVersionNumber());
+  expect(expectedVersion, version!.versionNumber);
 }

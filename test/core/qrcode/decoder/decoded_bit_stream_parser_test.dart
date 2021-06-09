@@ -33,7 +33,7 @@ void main(){
     builder.write(0xF3, 8);
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .getText();
+        .text;
     expect(result, "\u00f1\u00f2\u00f3");
   });
 
@@ -47,7 +47,7 @@ void main(){
     builder.write(0xD0, 8);
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .getText();
+        .text;
     expect("\uff61\uff62\uff63\uff90", result);
   });
 
@@ -62,7 +62,7 @@ void main(){
     builder.write(0xA3, 8);
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .getText();
+        .text;
     expect(result, "\u00ed\u00f3\u00fa");
   });
 
@@ -74,7 +74,7 @@ void main(){
     builder.write(0x03C1, 13);
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .getText();
+        .text;
     expect("\u963f", result);
   });
 
@@ -87,7 +87,7 @@ void main(){
     builder.write(0x0181, 13);
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .getText();
+        .text;
     expect("\u30a2", result);
   });
 

@@ -48,9 +48,9 @@ void main(){
 
     Set<String> barcodeContents = {};
     for (Result result in results) {
-      barcodeContents.add(result.getText());
-      expect(BarcodeFormat.QR_CODE, result.getBarcodeFormat());
-      assert(result.getResultMetadata() != null);
+      barcodeContents.add(result.text);
+      expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
+      assert(result.resultMetadata != null);
     }
     Set<String> expectedContents = {};
     expectedContents.add("You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
@@ -82,7 +82,7 @@ void main(){
 
     Set<String> barcodeContents = {};
     for (Result result in results) {
-      barcodeContents.add(result.getText());
+      barcodeContents.add(result.text);
     }
     Set<String> expectedContents = {};
     expectedContents.add("SA1SA2SA3");

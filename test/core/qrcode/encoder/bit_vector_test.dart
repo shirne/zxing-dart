@@ -33,77 +33,77 @@ void main() {
 
   test('testAppendBit', () {
     BitArray v = new BitArray();
-    expect(0, v.getSizeInBytes());
+    expect(0, v.sizeInBytes);
     // 1
     v.appendBit(true);
-    expect(1, v.getSize());
+    expect(1, v.size);
     expect(0x80000000, getUnsignedInt(v));
     // 10
     v.appendBit(false);
-    expect(2, v.getSize());
+    expect(2, v.size);
     expect(0x80000000, getUnsignedInt(v));
     // 101
     v.appendBit(true);
-    expect(3, v.getSize());
+    expect(3, v.size);
     expect(0xa0000000, getUnsignedInt(v));
     // 1010
     v.appendBit(false);
-    expect(4, v.getSize());
+    expect(4, v.size);
     expect(0xa0000000, getUnsignedInt(v));
     // 10101
     v.appendBit(true);
-    expect(5, v.getSize());
+    expect(5, v.size);
     expect(0xa8000000, getUnsignedInt(v));
     // 101010
     v.appendBit(false);
-    expect(6, v.getSize());
+    expect(6, v.size);
     expect(0xa8000000, getUnsignedInt(v));
     // 1010101
     v.appendBit(true);
-    expect(7, v.getSize());
+    expect(7, v.size);
     expect(0xaa000000, getUnsignedInt(v));
     // 10101010
     v.appendBit(false);
-    expect(8, v.getSize());
+    expect(8, v.size);
     expect(0xaa000000, getUnsignedInt(v));
     // 10101010 1
     v.appendBit(true);
-    expect(9, v.getSize());
+    expect(9, v.size);
     expect(0xaa800000, getUnsignedInt(v));
     // 10101010 10
     v.appendBit(false);
-    expect(10, v.getSize());
+    expect(10, v.size);
     expect(0xaa800000, getUnsignedInt(v));
   });
 
   test('testAppendBits', () {
     BitArray v = new BitArray();
     v.appendBits(0x1, 1);
-    expect(1, v.getSize());
+    expect(1, v.size);
     expect(0x80000000, getUnsignedInt(v));
     v = new BitArray();
     v.appendBits(0xff, 8);
-    expect(8, v.getSize());
+    expect(8, v.size);
     expect(0xff000000, getUnsignedInt(v));
     v = new BitArray();
     v.appendBits(0xff7, 12);
-    expect(12, v.getSize());
+    expect(12, v.size);
     expect(0xff700000, getUnsignedInt(v));
   });
 
   test('testNumBytes', () {
     BitArray v = new BitArray();
-    expect(0, v.getSizeInBytes());
+    expect(0, v.sizeInBytes);
     v.appendBit(false);
     // 1 bit was added in the vector, so 1 byte should be consumed.
-    expect(1, v.getSizeInBytes());
+    expect(1, v.sizeInBytes);
     v.appendBits(0, 7);
-    expect(1, v.getSizeInBytes());
+    expect(1, v.sizeInBytes);
     v.appendBits(0, 8);
-    expect(2, v.getSizeInBytes());
+    expect(2, v.sizeInBytes);
     v.appendBits(0, 1);
     // We now have 17 bits, so 3 bytes should be consumed.
-    expect(3, v.getSizeInBytes());
+    expect(3, v.sizeInBytes);
   });
 
   test('testAppendBitVector', () {

@@ -452,7 +452,7 @@ void main(){
         42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
         237, 85, 224, 96, 74, 219, 61
     ]);
-    expect(expected.length, out.getSizeInBytes());
+    expect(expected.length, out.sizeInBytes);
     Uint8List outArray = Uint8List(expected.length);
     out.toBytes(0, outArray, 0, expected.length);
     // Can't use Arrays.equals(), because outArray may be longer than out.sizeInBytes()
@@ -491,7 +491,7 @@ void main(){
         140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
         187, 49, 156, 214]
     );
-    expect(expected.length, out.getSizeInBytes());
+    expect(expected.length, out.sizeInBytes);
     outArray = Uint8List(expected.length);
     out.toBytes(0, outArray, 0, expected.length);
     for (int x = 0; x < expected.length; x++) {

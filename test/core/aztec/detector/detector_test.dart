@@ -27,7 +27,7 @@ void main() {
 
   // Rotates a square BitMatrix to the right by 90 degrees
   BitMatrix rotateRight(BitMatrix input) {
-    int width = input.getWidth();
+    int width = input.width;
     BitMatrix result = new BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
@@ -42,7 +42,7 @@ void main() {
   // Returns the transpose of a bit matrix, which is equivalent to rotating the
   // matrix to the right, and then flipping it left-to-right
   BitMatrix transpose(BitMatrix input) {
-    int width = input.getWidth();
+    int width = input.width;
     BitMatrix result = new BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
@@ -55,7 +55,7 @@ void main() {
   }
 
   BitMatrix clone(BitMatrix input) {
-    int width = input.getWidth();
+    int width = input.width;
     BitMatrix result = new BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
@@ -68,8 +68,8 @@ void main() {
   }
 
   List<Point> getOrientationPoints(AztecCode code) {
-    int center = code.getMatrix()!.getWidth() ~/ 2;
-    int offset = code.isCompact() ? 5 : 7;
+    int center = code.matrix!.width ~/ 2;
+    int offset = code.isCompact ? 5 : 7;
     List<Point> result = [];
     for (int xSign = -1; xSign <= 1; xSign += 2) {
       for (int ySign = -1; ySign <= 1; ySign += 2) {
@@ -93,7 +93,7 @@ void main() {
 
   // Zooms a bit matrix so that each bit is factor x factor
   BitMatrix makeLarger(BitMatrix input, int factor) {
-    int width = input.getWidth();
+    int width = input.width;
     BitMatrix output = new BitMatrix(width * factor);
     for (int inputY = 0; inputY < width; inputY++) {
       for (int inputX = 0; inputX < width; inputX++) {
@@ -109,33 +109,33 @@ void main() {
   void testErrorInParameterLocator(String data) {
     AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
     Random random = new Random(
-        aztec.getMatrix()!.hashCode); // pseudo-random, but deterministic
-    int layers = aztec.getLayers();
-    bool compact = aztec.isCompact();
+        aztec.matrix!.hashCode); // pseudo-random, but deterministic
+    int layers = aztec.layers;
+    bool compact = aztec.isCompact;
     List<Point> orientationPoints = getOrientationPoints(aztec);
     for (bool isMirror in [false, true]) {
-      for (BitMatrix matrix in getRotations(aztec.getMatrix()!)) {
+      for (BitMatrix matrix in getRotations(aztec.matrix!)) {
         // Systematically try every possible 1- and 2-bit error.
         for (int error1 = 0; error1 < orientationPoints.length; error1++) {
           for (int error2 = error1;
               error2 < orientationPoints.length;
               error2++) {
             BitMatrix copy = isMirror ? transpose(matrix) : clone(matrix);
-            copy.flip(orientationPoints[error1].getX(),
-                orientationPoints[error1].getY());
+            copy.flip(orientationPoints[error1].x,
+                orientationPoints[error1].y);
             if (error2 > error1) {
               // if error2 == error1, we only test a single error
-              copy.flip(orientationPoints[error2].getX(),
-                  orientationPoints[error2].getY());
+              copy.flip(orientationPoints[error2].x,
+                  orientationPoints[error2].y);
             }
             // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
             AztecDetectorResult r =
                 new Detector(makeLarger(copy, 3)).detect(isMirror);
             //assertNotNull(r);
-            expect(r.getNbLayers(), layers);
-            expect(r.isCompact(), compact);
+            expect(r.nbLayers, layers);
+            expect(r.isCompact, compact);
             DecoderResult res = new Decoder().decode(r);
-            expect(res.getText(), data);
+            expect(res.text, data);
           }
         }
         // Try a few random three-bit errors;
@@ -147,8 +147,8 @@ void main() {
             errors.add(random.nextInt(orientationPoints.length));
           }
           for (int error in errors) {
-            copy.flip(orientationPoints[error].getX(),
-                orientationPoints[error].getY());
+            copy.flip(orientationPoints[error].x,
+                orientationPoints[error].y);
           }
           try {
             new Detector(makeLarger(copy, 3)).detect(false);

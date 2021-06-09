@@ -29,7 +29,7 @@ void main() {
   final GenericGF FIELD = GenericGF.qrCodeField256;
 
   test('testPolynomialString', () {
-    expect("0", FIELD.getZero().toString());
+    expect("0", FIELD.zero.toString());
     expect("-1", FIELD.buildMonomial(0, -1).toString());
     GenericGFPoly p = new GenericGFPoly(FIELD, Int32List.fromList([3, 0, -2, 1, 1]));
     expect("a^25x^4 - ax^2 + x + 1", p.toString());
@@ -38,8 +38,8 @@ void main() {
   });
 
   test('testZero',() {
-    expect(FIELD.getZero(),FIELD.buildMonomial(1, 0));
-    expect(FIELD.getZero(), FIELD.buildMonomial(1, 2).multiplyInt(0));
+    expect(FIELD.zero,FIELD.buildMonomial(1, 0));
+    expect(FIELD.zero, FIELD.buildMonomial(1, 2).multiplyInt(0));
   });
 
   test('testEvaluate',() {

@@ -35,8 +35,8 @@ void main(){
     FormatInformation? expected = FormatInformation.decodeFormatInformation(
         MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
     assert(expected != null);
-    expect(0x07, expected!.getDataMask());
-    expect(ErrorCorrectionLevel.Q, expected.getErrorCorrectionLevel());
+    expect(0x07, expected!.dataMask);
+    expect(ErrorCorrectionLevel.Q, expected.errorCorrectionLevel);
     // where the code forgot the mask!
     expect(
         expected,

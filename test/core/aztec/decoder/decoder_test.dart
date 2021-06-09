@@ -49,7 +49,7 @@ void main(){
   }
 
   List<bool> toBooleanArray(BitArray bitArray) {
-    List<bool> result = List.filled(bitArray.getSize(), false);
+    List<bool> result = List.filled(bitArray.size, false);
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray[i];
     }
@@ -107,13 +107,13 @@ void main(){
         "X ", "  ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
     DecoderResult result = new Decoder().decode(r);
-    expect(result.getText(), "88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    expect(result.text, "88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
     assertArrayEquals(
         Uint8List.fromList([-11, 85, 85, 117, 107, 90, -42, -75, -83, 107,
             90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
             90, -42, -80]),
-        result.getRawBytes());
-    expect(result.getNumBits(), 180);
+        result.rawBytes);
+    expect(result.numBits, 180);
   });
 
   test('testAztecResultECI', (){
@@ -140,7 +140,7 @@ void main(){
         "X ", "  ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
     DecoderResult result = new Decoder().decode(r);
-    expect(result.getText(), "Français");
+    expect(result.text, "Français");
   });
 
   //@Test(expected = FormatException.class)
