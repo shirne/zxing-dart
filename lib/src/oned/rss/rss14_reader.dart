@@ -193,8 +193,8 @@ class RSS14Reader extends AbstractRSSReader {
 
   DataCharacter _decodeDataCharacter(
       BitArray row, FinderPattern pattern, bool outsideChar) {
-    List<int> counters = getDataCharacterCounters();
-    // Arrays.fill(counters, 0);
+    List<int> counters = dataCharacterCounters;
+    counters.fillRange(0, counters.length, 0);
 
     if (outsideChar) {
       OneDReader.recordPatternInReverse(
@@ -212,10 +212,10 @@ class RSS14Reader extends AbstractRSSReader {
     int numModules = outsideChar ? 16 : 15;
     double elementWidth = MathUtils.sum(counters) / numModules;
 
-    List<int> oddCounts = this.getOddCounts();
-    List<int> evenCounts = this.getEvenCounts();
-    List<double> oddRoundingErrors = this.getOddRoundingErrors();
-    List<double> evenRoundingErrors = this.getEvenRoundingErrors();
+    List<int> oddCounts = this.oddCounts;
+    List<int> evenCounts = this.evenCounts;
+    List<double> oddRoundingErrors = this.oddRoundingErrors;
+    List<double> evenRoundingErrors = this.evenRoundingErrors;
 
     for (int i = 0; i < counters.length; i++) {
       double value = counters[i] / elementWidth;
@@ -281,11 +281,8 @@ class RSS14Reader extends AbstractRSSReader {
   }
 
   List<int> _findFinderPattern(BitArray row, bool rightFinderPattern) {
-    List<int> counters = getDecodeFinderCounters();
-    counters[0] = 0;
-    counters[1] = 0;
-    counters[2] = 0;
-    counters[3] = 0;
+    List<int> counters = decodeFinderCounters;
+    counters.fillRange(0, counters.length, 0);
 
     int width = row.size;
     bool isWhite = false;
@@ -338,7 +335,7 @@ class RSS14Reader extends AbstractRSSReader {
     firstElementStart++;
     int firstCounter = startEnd[0] - firstElementStart;
     // Make 'counters' hold 1-4
-    List<int> counters = getDecodeFinderCounters();
+    List<int> counters = decodeFinderCounters;
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
 
     counters[0] = firstCounter;
@@ -355,8 +352,8 @@ class RSS14Reader extends AbstractRSSReader {
   }
 
   void _adjustOddEvenCounts(bool outsideChar, int numModules) {
-    int oddSum = MathUtils.sum(getOddCounts());
-    int evenSum = MathUtils.sum(getEvenCounts());
+    int oddSum = MathUtils.sum(oddCounts);
+    int evenSum = MathUtils.sum(evenCounts);
 
     bool incrementOdd = false;
     bool decrementOdd = false;
@@ -390,19 +387,7 @@ class RSS14Reader extends AbstractRSSReader {
     int mismatch = oddSum + evenSum - numModules;
     bool oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
     bool evenParityBad = (evenSum & 0x01) == 1;
-    /*if (mismatch == 2) {
-      if (!(oddParityBad && evenParityBad)) {
-        throw ReaderException.getInstance();
-      }
-      decrementOdd = true;
-      decrementEven = true;
-    } else if (mismatch == -2) {
-      if (!(oddParityBad && evenParityBad)) {
-        throw ReaderException.getInstance();
-      }
-      incrementOdd = true;
-      incrementEven = true;
-    } else */
+
     switch (mismatch) {
       case 1:
         if (oddParityBad) {
@@ -458,19 +443,19 @@ class RSS14Reader extends AbstractRSSReader {
       if (decrementOdd) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(getOddCounts(), getOddRoundingErrors());
+      AbstractRSSReader.increment(oddCounts, oddRoundingErrors);
     }
     if (decrementOdd) {
-      AbstractRSSReader.decrement(getOddCounts(), getOddRoundingErrors());
+      AbstractRSSReader.decrement(oddCounts, oddRoundingErrors);
     }
     if (incrementEven) {
       if (decrementEven) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(getEvenCounts(), getOddRoundingErrors());
+      AbstractRSSReader.increment(evenCounts, oddRoundingErrors);
     }
     if (decrementEven) {
-      AbstractRSSReader.decrement(getEvenCounts(), getEvenRoundingErrors());
+      AbstractRSSReader.decrement(evenCounts, evenRoundingErrors);
     }
   }
 }

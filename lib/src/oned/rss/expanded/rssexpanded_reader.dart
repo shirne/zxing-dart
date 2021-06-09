@@ -508,7 +508,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   void _findNextPair(
       BitArray row, List<ExpandedPair> previousPairs, int forcedOffset) {
-    List<int> counters = this.getDecodeFinderCounters();
+    List<int> counters = this.decodeFinderCounters;
     counters.fillRange(0, 4, 0);
 
     int width = row.size;
@@ -612,7 +612,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     }
 
     // Make 'counters' hold 1-4
-    List<int> counters = this.getDecodeFinderCounters();
+    List<int> counters = this.decodeFinderCounters;
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
 
     counters[0] = firstCounter;
@@ -628,7 +628,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   DataCharacter decodeDataCharacter(
       BitArray row, FinderPattern pattern, bool isOddPattern, bool leftChar) {
-    List<int> counters = this.getDataCharacterCounters();
+    List<int> counters = this.dataCharacterCounters;
     counters.fillRange(0, counters.length, 0);
 
     if (leftChar) {
@@ -656,10 +656,10 @@ class RSSExpandedReader extends AbstractRSSReader {
       throw NotFoundException.instance;
     }
 
-    List<int> oddCounts = this.getOddCounts();
-    List<int> evenCounts = this.getEvenCounts();
-    List<double> oddRoundingErrors = this.getOddRoundingErrors();
-    List<double> evenRoundingErrors = this.getEvenRoundingErrors();
+    List<int> oddCounts = this.oddCounts;
+    List<int> evenCounts = this.evenCounts;
+    List<double> oddRoundingErrors = this.oddRoundingErrors;
+    List<double> evenRoundingErrors = this.evenRoundingErrors;
 
     for (int i = 0; i < counters.length; i++) {
       double value = 1.0 * counters[i] / elementWidth;
@@ -733,8 +733,8 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   void _adjustOddEvenCounts(int numModules) {
-    int oddSum = MathUtils.sum(this.getOddCounts());
-    int evenSum = MathUtils.sum(this.getEvenCounts());
+    int oddSum = MathUtils.sum(this.oddCounts);
+    int evenSum = MathUtils.sum(this.evenCounts);
 
     bool incrementOdd = false;
     bool decrementOdd = false;
@@ -811,22 +811,22 @@ class RSSExpandedReader extends AbstractRSSReader {
         throw NotFoundException.instance;
       }
       AbstractRSSReader.increment(
-          this.getOddCounts(), this.getOddRoundingErrors());
+          this.oddCounts, this.oddRoundingErrors);
     }
     if (decrementOdd) {
       AbstractRSSReader.decrement(
-          this.getOddCounts(), this.getOddRoundingErrors());
+          this.oddCounts, this.oddRoundingErrors);
     }
     if (incrementEven) {
       if (decrementEven) {
         throw NotFoundException.instance;
       }
       AbstractRSSReader.increment(
-          this.getEvenCounts(), this.getOddRoundingErrors());
+          this.evenCounts, this.oddRoundingErrors);
     }
     if (decrementEven) {
       AbstractRSSReader.decrement(
-          this.getEvenCounts(), this.getEvenRoundingErrors());
+          this.evenCounts, this.evenRoundingErrors);
     }
   }
 }

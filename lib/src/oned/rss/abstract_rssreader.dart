@@ -47,34 +47,22 @@ abstract class AbstractRSSReader extends OneDReader {
         _evenCounts = List.filled(4, 0);
 
   @protected
-  List<int> getDecodeFinderCounters() {
-    return _decodeFinderCounters;
-  }
+  List<int> get decodeFinderCounters => _decodeFinderCounters;
 
   @protected
-  List<int> getDataCharacterCounters() {
-    return _dataCharacterCounters;
-  }
+  List<int> get dataCharacterCounters => _dataCharacterCounters;
 
   @protected
-  List<double> getOddRoundingErrors() {
-    return _oddRoundingErrors;
-  }
+  List<double> get oddRoundingErrors => _oddRoundingErrors;
 
   @protected
-  List<double> getEvenRoundingErrors() {
-    return _evenRoundingErrors;
-  }
+  List<double> get evenRoundingErrors => _evenRoundingErrors;
 
   @protected
-  List<int> getOddCounts() {
-    return _oddCounts;
-  }
+  List<int> get oddCounts => _oddCounts;
 
   @protected
-  List<int> getEvenCounts() {
-    return _evenCounts;
-  }
+  List<int> get evenCounts => _evenCounts;
 
   @protected
   static int parseFinderValue(
