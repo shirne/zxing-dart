@@ -22,19 +22,19 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class EmailAddressParsedResult extends ParsedResult {
-  final List<String>? _tos;
-  final List<String>? _ccs;
-  final List<String>? _bccs;
-  final String? _subject;
-  final String? _body;
+  List<String>? _tos;
+  List<String>? _ccs;
+  List<String>? _bccs;
+  String? subject;
+  String? body;
 
   EmailAddressParsedResult(
-      dynamic tos, [this._ccs, this._bccs, this._subject, this._body])
+      dynamic tos, [this._ccs, this._bccs, this.subject, this.body])
       : this._tos = tos is String ? [tos] : tos as List<String>?,
         super(ParsedResultType.EMAIL_ADDRESS);
 
-  /// @return first elements of {@link #getTos()} or `null` if none
-  /// @deprecated use {@link #getTos()}
+  /// @return first elements of [tos] or `null` if none
+  /// @deprecated use [tos]
   @deprecated
   String? get emailAddress => _tos == null || _tos!.length == 0 ? null : _tos![0];
 
@@ -44,9 +44,26 @@ class EmailAddressParsedResult extends ParsedResult {
 
   List<String>? get bccs => _bccs;
 
-  String? get subject => _subject;
+  addTo(String to){
+    if(_tos == null){
+      _tos = [];
+    }
+    _tos!.add(to);
+  }
+  addCC(String to){
+    if(_ccs == null){
+      _ccs = [];
+    }
+    _ccs!.add(to);
+  }
 
-  String? get body => _body;
+  addBCC(String to){
+    if(_bccs == null){
+      _bccs = [];
+    }
+    _bccs!.add(to);
+  }
+
 
   /// @return "mailto:"
   /// @deprecated without replacement
@@ -56,11 +73,11 @@ class EmailAddressParsedResult extends ParsedResult {
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(_tos, result);
-    ParsedResult.maybeAppendList(_ccs, result);
-    ParsedResult.maybeAppendList(_bccs, result);
-    ParsedResult.maybeAppend(_subject, result);
-    ParsedResult.maybeAppend(_body, result);
+    maybeAppendList(_tos, result);
+    maybeAppendList(_ccs, result);
+    maybeAppendList(_bccs, result);
+    maybeAppend(subject, result);
+    maybeAppend(body, result);
     return result.toString();
   }
 }

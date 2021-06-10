@@ -94,14 +94,6 @@ abstract class ResultParser {
   /// @return [ParsedResult] encapsulating the parsing result
   ParsedResult? parse(Result theResult);
 
-  static String getMassagedText(Result result) {
-    String text = result.text;
-    if (text.startsWith(_byteOrderMark)) {
-      text = text.substring(1);
-    }
-    return text;
-  }
-
   static ParsedResult parseResult(Result theResult) {
     for (ResultParser parser in _parsers) {
       ParsedResult? result = parser.parse(theResult);
@@ -112,31 +104,21 @@ abstract class ResultParser {
     return TextParsedResult(theResult.text, null);
   }
 
-  @protected
-  static void maybeAppend(String? value, StringBuffer result) {
-    if (value != null) {
-      result.write('\n');
-      result.write(value);
+  static String getMassagedText(Result result) {
+    String text = result.text;
+    if (text.startsWith(_byteOrderMark)) {
+      text = text.substring(1);
     }
+    return text;
   }
 
   @protected
-  static void maybeAppendList(List<String>? value, StringBuffer result) {
-    if (value != null) {
-      for (String s in value) {
-        result.write('\n');
-        result.write(s);
-      }
-    }
-  }
-
-  @protected
-  static List<String>? maybeWrap(String? value) {
+  List<String>? maybeWrap(String? value) {
     return value == null ? null : [ value ];
   }
 
   @protected
-  static String unescapeBackslash(String escaped) {
+  String unescapeBackslash(String escaped) {
     int backslash = escaped.indexOf('\\');
     if (backslash < 0) {
       return escaped;
@@ -173,7 +155,7 @@ abstract class ResultParser {
   }
 
   @protected
-  static bool isStringOfDigits(String? value, int length) {
+  bool isStringOfDigits(String? value, int length) {
     return value != null && length > 0 && length == value.length && _digits.hasMatch(value);
   }
 
@@ -186,7 +168,7 @@ abstract class ResultParser {
     return value.length >= max && _digits.hasMatch(value.substring(offset, max));
   }
 
-  static Map<String,String>? parseNameValuePairs(String uri) {
+  Map<String,String>? parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;
@@ -198,7 +180,7 @@ abstract class ResultParser {
     return result;
   }
 
-  static void _appendKeyValue(String keyValue, Map<String,String> result) {
+  void _appendKeyValue(String keyValue, Map<String,String> result) {
     List<String> keyValueTokens = keyValue.split(_equals); // todo 2
     if (keyValueTokens.length == 2) {
       String key = keyValueTokens[0];
@@ -212,7 +194,7 @@ abstract class ResultParser {
     }
   }
 
-  static String urlDecode(String encoded) {
+  String urlDecode(String encoded) {
     try {
       //todo decodeFull or decodeComponent or decodeQueryComponent ?
       return Uri.decodeQueryComponent(encoded, encoding: utf8);
@@ -221,7 +203,7 @@ abstract class ResultParser {
     }
   }
 
-  static List<String>? matchPrefixedField(String prefix, String rawText, String endChar, bool trim) {
+  List<String>? matchPrefixedField(String prefix, String rawText, String endChar, bool trim) {
     List<String>? matches;
     int i = 0;
     int max = rawText.length;
@@ -265,7 +247,7 @@ abstract class ResultParser {
     return matches.toList();
   }
 
-  static int _countPrecedingBackslashes(String s, int pos) {
+  int _countPrecedingBackslashes(String s, int pos) {
     int count = 0;
     for (int i = pos - 1; i >= 0; i--) {
       if (s[i] == '\\') {
@@ -277,7 +259,7 @@ abstract class ResultParser {
     return count;
   }
 
-  static String? matchSinglePrefixedField(String prefix, String rawText, String endChar, bool trim) {
+  String? matchSinglePrefixedField(String prefix, String rawText, String endChar, bool trim) {
     List<String>? matches = matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];
   }

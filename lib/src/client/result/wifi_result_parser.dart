@@ -45,12 +45,12 @@ class WifiResultParser extends ResultParser {
       return null;
     }
     rawText = rawText.substring("WIFI:".length);
-    String? ssid = ResultParser.matchSinglePrefixedField("S:", rawText, ';', false);
+    String? ssid = matchSinglePrefixedField("S:", rawText, ';', false);
     if (ssid == null || ssid.isEmpty) {
       return null;
     }
-    String? pass = ResultParser.matchSinglePrefixedField("P:", rawText, ';', false);
-    String? type = ResultParser.matchSinglePrefixedField("T:", rawText, ';', false);
+    String? pass = matchSinglePrefixedField("P:", rawText, ';', false);
+    String? type = matchSinglePrefixedField("T:", rawText, ';', false);
     if (type == null) {
       type = "nopass";
     }
@@ -59,8 +59,8 @@ class WifiResultParser extends ResultParser {
     // To try to retain backwards compatibility, we set one or the other based on whether the string
     // is 'true' or 'false':
     bool hidden = false;
-    String? phase2Method = ResultParser.matchSinglePrefixedField("PH2:", rawText, ';', false);
-    String? hValue = ResultParser.matchSinglePrefixedField("H:", rawText, ';', false);
+    String? phase2Method = matchSinglePrefixedField("PH2:", rawText, ';', false);
+    String? hValue = matchSinglePrefixedField("H:", rawText, ';', false);
     if (hValue != null) {
       // If PH2 was specified separately, or if the value is clearly bool, interpret it as 'hidden'
       if (phase2Method != null ||
@@ -72,10 +72,10 @@ class WifiResultParser extends ResultParser {
       }
     }
 
-    String? identity = ResultParser.matchSinglePrefixedField("I:", rawText, ';', false);
+    String? identity = matchSinglePrefixedField("I:", rawText, ';', false);
     String? anonymousIdentity =
-    ResultParser.matchSinglePrefixedField("A:", rawText, ';', false);
-    String? eapMethod = ResultParser.matchSinglePrefixedField("E:", rawText, ';', false);
+    matchSinglePrefixedField("A:", rawText, ';', false);
+    String? eapMethod = matchSinglePrefixedField("E:", rawText, ';', false);
 
     return WifiParsedResult(type, ssid, pass, hidden, identity,
         anonymousIdentity, eapMethod, phase2Method);

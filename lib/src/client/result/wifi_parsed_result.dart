@@ -21,46 +21,30 @@ import 'parsed_result_type.dart';
 ///
 /// @author Vikram Aggarwal
 class WifiParsedResult extends ParsedResult {
-  final String _ssid;
-  final String _networkEncryption;
-  final String? _password;
-  final bool _hidden;
-  final String? _identity;
-  final String? _anonymousIdentity;
-  final String? _eapMethod;
-  final String? _phase2Method;
+  String ssid;
+  String networkEncryption;
+  String? password;
+  bool hidden;
+  String? identity;
+  String? anonymousIdentity;
+  String? eapMethod;
+  String? phase2Method;
 
-  WifiParsedResult(this._networkEncryption, this._ssid, this._password,
-      [this._hidden = false,
-      this._identity,
-      this._anonymousIdentity,
-      this._eapMethod,
-      this._phase2Method])
+  WifiParsedResult(this.networkEncryption, this.ssid, this.password,
+      [this.hidden = false,
+      this.identity,
+      this.anonymousIdentity,
+      this.eapMethod,
+      this.phase2Method])
       : super(ParsedResultType.WIFI);
-
-  String get ssid => _ssid;
-
-  String get networkEncryption => _networkEncryption;
-
-  String? get password => _password;
-
-  bool get isHidden => _hidden;
-
-  String? get identity => _identity;
-
-  String? get anonymousIdentity => _anonymousIdentity;
-
-  String? get eapMethod => _eapMethod;
-
-  String? get phase2Method => _phase2Method;
 
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(_ssid, result);
-    ParsedResult.maybeAppend(_networkEncryption, result);
-    ParsedResult.maybeAppend(_password, result);
-    ParsedResult.maybeAppend(_hidden.toString(), result);
+    maybeAppend(ssid, result);
+    maybeAppend(networkEncryption, result);
+    maybeAppend(password, result);
+    maybeAppend(hidden.toString(), result);
     return result.toString();
   }
 }

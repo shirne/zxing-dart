@@ -22,22 +22,63 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class AddressBookParsedResult extends ParsedResult {
-  final List<String>? _names;
-  final List<String>? _nicknames;
-  final String? _pronunciation;
-  final List<String>? _phoneNumbers;
-  final List<String?>? _phoneTypes;
-  final List<String>? _emails;
-  final List<String?>? _emailTypes;
-  final String? _instantMessenger;
-  final String? _note;
-  final List<String>? _addresses;
-  final List<String?>? _addressTypes;
-  final String? _org;
-  final String? _birthday;
-  final String? _title;
-  final List<String>? _urls;
-  final List<String>? _geo;
+  List<String>? _names;
+  List<String>? _nicknames;
+
+  /// The pronunciation of the getNames() field, often in hiragana or katakana.
+  ///
+  /// In Japanese, the name is written in kanji, which can have multiple readings.
+  /// Therefore a hint is often provided, called furigana, which spells the name phonetically.
+  String? pronunciation;
+
+  List<String>? _phoneNumbers;
+  List<String?>? _phoneTypes;
+  List<String>? _emails;
+  List<String?>? _emailTypes;
+  List<String>? _addresses;
+  List<String?>? _addressTypes;
+
+  String? instantMessenger;
+  String? note;
+
+  String? org;
+
+  /// birthday formatted as yyyyMMdd (e.g. 19780917)
+  String? birthday;
+
+  String? title;
+  List<String>? _urls;
+
+  /// A location as a latitude/longitude pair
+  List<String>? geo;
+
+  AddressBookParsedResult(
+      {List<String>? names,
+      List<String>? nicknames,
+      this.pronunciation,
+      List<String>? phoneNumbers,
+      List<String?>? phoneTypes,
+      List<String>? emails,
+      List<String?>? emailTypes,
+      this.instantMessenger,
+      this.note,
+      List<String>? addresses,
+      List<String?>? addressTypes,
+      this.org,
+      this.birthday,
+      this.title,
+      List<String>? urls,
+      this.geo})
+      : _names = names,
+        _nicknames = nicknames,
+        _phoneNumbers = phoneNumbers,
+        _phoneTypes = phoneTypes,
+        _emails = emails,
+        _emailTypes = emailTypes,
+        _addresses = addresses,
+        _addressTypes = addressTypes,
+        _urls = urls,
+        super(ParsedResultType.ADDRESS_BOOK);
 
   AddressBookParsedResult.quick(
       List<String>? names,
@@ -47,26 +88,41 @@ class AddressBookParsedResult extends ParsedResult {
       List<String?>? emailTypes,
       List<String>? addresses,
       List<String>? addressTypes)
-      : this(names, null, null, phoneNumbers, phoneTypes, emails, emailTypes,
-            null, null, addresses, addressTypes, null, null, null, null, null);
+      : this.full(
+            names,
+            null,
+            null,
+            phoneNumbers,
+            phoneTypes,
+            emails,
+            emailTypes,
+            null,
+            null,
+            addresses,
+            addressTypes,
+            null,
+            null,
+            null,
+            null,
+            null);
 
-  AddressBookParsedResult(
+  AddressBookParsedResult.full(
       this._names,
       this._nicknames,
-      this._pronunciation,
+      this.pronunciation,
       this._phoneNumbers,
       this._phoneTypes,
       this._emails,
       this._emailTypes,
-      this._instantMessenger,
-      this._note,
+      this.instantMessenger,
+      this.note,
       this._addresses,
       this._addressTypes,
-      this._org,
-      this._birthday,
-      this._title,
+      this.org,
+      this.birthday,
+      this.title,
       this._urls,
-      this._geo)
+      this.geo)
       : super(ParsedResultType.ADDRESS_BOOK) {
     if (_phoneNumbers != null &&
         _phoneTypes != null &&
@@ -89,12 +145,6 @@ class AddressBookParsedResult extends ParsedResult {
 
   List<String>? get nicknames => _nicknames;
 
-  /// In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
-  /// is often provided, called furigana, which spells the name phonetically.
-  ///
-  /// @return The pronunciation of the getNames() field, often in hiragana or katakana.
-  String? get pronunciation => _pronunciation;
-
   List<String>? get phoneNumbers => _phoneNumbers;
 
   /// @return optional descriptions of the type of each phone number. It could be like "HOME", but,
@@ -107,44 +157,76 @@ class AddressBookParsedResult extends ParsedResult {
   ///  there is no guaranteed or standard format.
   List<String?>? get emailTypes => _emailTypes;
 
-  String? get instantMessenger => _instantMessenger;
-
-  String? get note => _note;
-
   List<String>? get addresses => _addresses;
 
   /// @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
   ///  there is no guaranteed or standard format.
   List<String?>? get addressTypes => _addressTypes;
 
-  String? get title => _title;
-
-  String? get org => _org;
-
   List<String>? get urls => _urls;
 
-  /// @return birthday formatted as yyyyMMdd (e.g. 19780917)
-  String? get birthday => _birthday;
+  addName(String name){
+    if(_names == null){
+      _names = [];
+    }
+    _names!.add(name);
+  }
+  addNickname(String name){
+    if(_nicknames == null){
+      _nicknames = [];
+    }
+    _nicknames!.add(name);
+  }
 
-  /// @return a location as a latitude/longitude pair
-  List<String>? get geo => _geo;
+  addPhoneNumber(String phone, [String? type]){
+    if(_phoneNumbers == null){
+      _phoneNumbers = [];
+    }
+    if(_phoneTypes == null){
+      _phoneTypes = [];
+    }
+    _phoneNumbers!.add(phone);
+    _phoneTypes!.add(type);
+  }
+
+  addEmail(String email, [String? type]){
+    if(_emails == null){
+      _emails = [];
+    }
+    if(_emailTypes == null){
+      _emailTypes = [];
+    }
+    _emails!.add(email);
+    _emailTypes!.add(type);
+  }
+
+  addAddress(String address, [String? type]){
+    if(_addresses == null){
+      _addresses = [];
+    }
+    if(_addressTypes == null){
+      _addressTypes = [];
+    }
+    _addresses!.add(address);
+    _addressTypes!.add(type);
+  }
 
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(_names, result);
-    ParsedResult.maybeAppendList(_nicknames, result);
-    ParsedResult.maybeAppend(_pronunciation, result);
-    ParsedResult.maybeAppend(_title, result);
-    ParsedResult.maybeAppend(_org, result);
-    ParsedResult.maybeAppendList(_addresses, result);
-    ParsedResult.maybeAppendList(_phoneNumbers, result);
-    ParsedResult.maybeAppendList(_emails, result);
-    ParsedResult.maybeAppend(_instantMessenger, result);
-    ParsedResult.maybeAppendList(_urls, result);
-    ParsedResult.maybeAppend(_birthday, result);
-    ParsedResult.maybeAppendList(_geo, result);
-    ParsedResult.maybeAppend(_note, result);
+    maybeAppendList(_names, result);
+    maybeAppendList(_nicknames, result);
+    maybeAppend(pronunciation, result);
+    maybeAppend(title, result);
+    maybeAppend(org, result);
+    maybeAppendList(_addresses, result);
+    maybeAppendList(_phoneNumbers, result);
+    maybeAppendList(_emails, result);
+    maybeAppend(instantMessenger, result);
+    maybeAppendList(_urls, result);
+    maybeAppend(birthday, result);
+    maybeAppendList(geo, result);
+    maybeAppend(note, result);
     return result.toString();
   }
 }

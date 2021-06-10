@@ -22,57 +22,53 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class GeoParsedResult extends ParsedResult {
-  final double _latitude;
-  final double _longitude;
-  final double _altitude;
-  final String? _query;
 
-  GeoParsedResult(this._latitude, this._longitude, this._altitude, this._query)
+  /// latitude in degrees
+  double latitude;
+
+  /// longitude in degrees
+  double longitude;
+
+  /// altitude in meters. If not specified, in the geo URI, returns 0.0
+  double altitude;
+
+  /// query string associated with geo URI or null if none exists
+  String? query;
+
+  GeoParsedResult(this.latitude, this.longitude, [this.altitude = 0, this.query])
       : super(ParsedResultType.GEO);
 
   String get geoURI {
     StringBuffer result = StringBuffer();
     result.write("geo:");
-    result.write(_latitude);
+    result.write(latitude);
     result.write(',');
-    result.write(_longitude);
-    if (_altitude > 0) {
+    result.write(longitude);
+    if (altitude > 0) {
       result.write(',');
-      result.write(_altitude);
+      result.write(altitude);
     }
-    if (_query != null) {
+    if (query != null) {
       result.write('?');
-      result.write(_query);
+      result.write(query);
     }
     return result.toString();
   }
 
-  /// @return latitude in degrees
-  double get latitude => _latitude;
-
-  /// @return longitude in degrees
-  double get longitude => _longitude;
-
-  /// @return altitude in meters. If not specified, in the geo URI, returns 0.0
-  double get altitude => _altitude;
-
-  /// @return query string associated with geo URI or null if none exists
-  String? get query => _query;
-
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    result.write(_latitude);
+    result.write(latitude);
     result.write(", ");
-    result.write(_longitude);
-    if (_altitude > 0.0) {
+    result.write(longitude);
+    if (altitude > 0.0) {
       result.write(", ");
-      result.write(_altitude);
+      result.write(altitude);
       result.write('m');
     }
-    if (_query != null) {
+    if (query != null) {
       result.write(" (");
-      result.write(_query);
+      result.write(query);
       result.write(')');
     }
     return result.toString();

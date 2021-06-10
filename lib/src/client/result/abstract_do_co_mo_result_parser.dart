@@ -24,12 +24,24 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 abstract class AbstractDoCoMoResultParser extends ResultParser {
-  static List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) {
-    return ResultParser.matchPrefixedField(prefix, rawText, ';', true);
+  static final RegExp _aTextAlphaNumeric = RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
+
+  List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) {
+    return matchPrefixedField(prefix, rawText, ';', true);
   }
 
-  static String? matchSingleDoCoMoPrefixedField(
+  String? matchSingleDoCoMoPrefixedField(
       String prefix, String rawText, bool trim) {
-    return ResultParser.matchSinglePrefixedField(prefix, rawText, ';', trim);
+    return matchSinglePrefixedField(prefix, rawText, ';', trim);
+  }
+
+  /// This implements only the most basic checking for an email address's validity -- that it contains
+  /// an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
+  /// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
+  /// in a barcode, not "judge" it.
+  bool isBasicallyValidEmailAddress(String? email) {
+    return email != null &&
+        _aTextAlphaNumeric.hasMatch(email) &&
+        email.indexOf('@') >= 0;
   }
 }

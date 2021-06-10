@@ -22,18 +22,30 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class SMSParsedResult extends ParsedResult {
-  final List<String> _numbers;
-  final List<String>? _vias;
-  final String? _subject;
-  final String? _body;
+  List<String> _numbers;
+  List<String>? _vias;
+  String? subject;
+  String? body;
 
-  SMSParsedResult.single(String number, String? via, this._subject, this._body)
+  SMSParsedResult.single(String number, String? via, this.subject, this.body)
       : _numbers = [number],
         _vias = [if(via != null)via],
         super(ParsedResultType.SMS);
 
-  SMSParsedResult(this._numbers, this._vias, this._subject, this._body)
+  SMSParsedResult(this._numbers, this._vias, this.subject, this.body)
       : super(ParsedResultType.SMS);
+
+  addNumber(String num, [String? via]){
+    _numbers.add(num);
+    if(via != null){
+      if(_vias == null){
+        _vias = List.filled(_numbers.length - 1, '');
+      }
+      _vias!.add(via);
+    }else if(_vias != null){
+      _vias!.add('');
+    }
+  }
 
   String get smsURI {
     StringBuffer result = StringBuffer();
@@ -51,20 +63,20 @@ class SMSParsedResult extends ParsedResult {
         result.write(_vias![i]);
       }
     }
-    bool hasBody = _body != null;
-    bool hasSubject = _subject != null;
+    bool hasBody = body != null;
+    bool hasSubject = subject != null;
     if (hasBody || hasSubject) {
       result.write('?');
       if (hasBody) {
         result.write("body=");
-        result.write(_body);
+        result.write(body);
       }
       if (hasSubject) {
         if (hasBody) {
           result.write('&');
         }
         result.write("subject=");
-        result.write(_subject);
+        result.write(subject);
       }
     }
     return result.toString();
@@ -74,16 +86,13 @@ class SMSParsedResult extends ParsedResult {
 
   List<String>? get vias => _vias;
 
-  String? get subject => _subject;
-
-  String? get body => _body;
 
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppendList(_numbers, result);
-    ParsedResult.maybeAppend(_subject, result);
-    ParsedResult.maybeAppend(_body, result);
+    maybeAppendList(_numbers, result);
+    maybeAppend(subject, result);
+    maybeAppend(body, result);
     return result.toString();
   }
 }

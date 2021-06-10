@@ -35,38 +35,24 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     if (!rawText.startsWith("BIZCARD:")) {
       return null;
     }
-    String? firstName =
-        AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-            "N:", rawText, true);
-    String? lastName =
-        AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-            "X:", rawText, true);
+    String? firstName = matchSingleDoCoMoPrefixedField("N:", rawText, true);
+    String? lastName = matchSingleDoCoMoPrefixedField("X:", rawText, true);
     String? fullName = _buildName(firstName, lastName);
-    String? title = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-        "T:", rawText, true);
-    String? org = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-        "C:", rawText, true);
-    List<String>? addresses =
-        AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("A:", rawText);
-    String? phoneNumber1 =
-        AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-            "B:", rawText, true);
-    String? phoneNumber2 =
-        AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-            "M:", rawText, true);
-    String? phoneNumber3 =
-        AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-            "F:", rawText, true);
-    String? email = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField(
-        "E:", rawText, true);
+    String? title = matchSingleDoCoMoPrefixedField("T:", rawText, true);
+    String? org = matchSingleDoCoMoPrefixedField("C:", rawText, true);
+    List<String>? addresses = matchDoCoMoPrefixedField("A:", rawText);
+    String? phoneNumber1 = matchSingleDoCoMoPrefixedField("B:", rawText, true);
+    String? phoneNumber2 = matchSingleDoCoMoPrefixedField("M:", rawText, true);
+    String? phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText, true);
+    String? email = matchSingleDoCoMoPrefixedField("E:", rawText, true);
 
-    return AddressBookParsedResult(
-        ResultParser.maybeWrap(fullName),
+    return AddressBookParsedResult.full(
+        maybeWrap(fullName),
         null,
         null,
         _buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
         null,
-        ResultParser.maybeWrap(email),
+        maybeWrap(email),
         null,
         null,
         null,

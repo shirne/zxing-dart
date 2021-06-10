@@ -36,39 +36,39 @@ class ExpandedProductParsedResult extends ParsedResult {
   static const String KILOGRAM = "KG";
   static const String POUND = "LB";
 
-  final String? _rawText;
-  final String? _productID;
-  final String? _sscc;
-  final String? _lotNumber;
-  final String? _productionDate;
-  final String? _packagingDate;
-  final String? _bestBeforeDate;
-  final String? _expirationDate;
-  final String? _weight;
-  final String? _weightType;
-  final String? _weightIncrement;
-  final String? _price;
-  final String? _priceIncrement;
-  final String? _priceCurrency;
+  String? rawText;
+  String? productID;
+  String? sscc;
+  String? lotNumber;
+  String? productionDate;
+  String? packagingDate;
+  String? bestBeforeDate;
+  String? expirationDate;
+  String? weight;
+  String? weightType;
+  String? weightIncrement;
+  String? price;
+  String? priceIncrement;
+  String? priceCurrency;
   // For AIS that not exist in this object
-  final Map<String, String> _uncommonAIs;
+  Map<String, String> uncommonAIs;
 
   ExpandedProductParsedResult(
-      this._rawText,
-      this._productID,
-      this._sscc,
-      this._lotNumber,
-      this._productionDate,
-      this._packagingDate,
-      this._bestBeforeDate,
-      this._expirationDate,
-      this._weight,
-      this._weightType,
-      this._weightIncrement,
-      this._price,
-      this._priceIncrement,
-      this._priceCurrency,
-      this._uncommonAIs)
+      this.rawText,
+      this.productID,
+      this.sscc,
+      this.lotNumber,
+      this.productionDate,
+      this.packagingDate,
+      this.bestBeforeDate,
+      this.expirationDate,
+      this.weight,
+      this.weightType,
+      this.weightIncrement,
+      this.price,
+      this.priceIncrement,
+      this.priceCurrency,
+      this.uncommonAIs)
       : super(ParsedResultType.PRODUCT);
 
   @override
@@ -80,71 +80,42 @@ class ExpandedProductParsedResult extends ParsedResult {
     ExpandedProductParsedResult other = o;
 
     // todo equal
-    return _productID == other._productID &&
-        (_sscc == other._sscc) &&
-        (_lotNumber == other._lotNumber) &&
-        (_productionDate == other._productionDate) &&
-        (_bestBeforeDate == other._bestBeforeDate) &&
-        (_expirationDate == other._expirationDate) &&
-        (_weight == other._weight) &&
-        (_weightType == other._weightType) &&
-        (_weightIncrement == other._weightIncrement) &&
-        (_price == other._price) &&
-        (_priceIncrement == other._priceIncrement) &&
-        (_priceCurrency == other._priceCurrency) &&
-        (_uncommonAIs == other._uncommonAIs);
+    return productID == other.productID &&
+        (sscc == other.sscc) &&
+        (lotNumber == other.lotNumber) &&
+        (productionDate == other.productionDate) &&
+        (bestBeforeDate == other.bestBeforeDate) &&
+        (expirationDate == other.expirationDate) &&
+        (weight == other.weight) &&
+        (weightType == other.weightType) &&
+        (weightIncrement == other.weightIncrement) &&
+        (price == other.price) &&
+        (priceIncrement == other.priceIncrement) &&
+        (priceCurrency == other.priceCurrency) &&
+        (uncommonAIs == other.uncommonAIs);
   }
 
   @override
   int get hashCode {
-    int hash = _productID.hashCode;
-    hash ^= _sscc.hashCode;
-    hash ^= _lotNumber.hashCode;
-    hash ^= _productionDate.hashCode;
-    hash ^= _bestBeforeDate.hashCode;
-    hash ^= _expirationDate.hashCode;
-    hash ^= _weight.hashCode;
-    hash ^= _weightType.hashCode;
-    hash ^= _weightIncrement.hashCode;
-    hash ^= _price.hashCode;
-    hash ^= _priceIncrement.hashCode;
-    hash ^= _priceCurrency.hashCode;
-    hash ^= _uncommonAIs.hashCode;
+    int hash = productID.hashCode;
+    hash ^= sscc.hashCode;
+    hash ^= lotNumber.hashCode;
+    hash ^= productionDate.hashCode;
+    hash ^= bestBeforeDate.hashCode;
+    hash ^= expirationDate.hashCode;
+    hash ^= weight.hashCode;
+    hash ^= weightType.hashCode;
+    hash ^= weightIncrement.hashCode;
+    hash ^= price.hashCode;
+    hash ^= priceIncrement.hashCode;
+    hash ^= priceCurrency.hashCode;
+    hash ^= uncommonAIs.hashCode;
     return hash;
   }
 
-  String? get rawText => _rawText;
-
-  String? get productID => _productID;
-
-  String? get sscc => _sscc;
-
-  String? get lotNumber => _lotNumber;
-
-  String? get productionDate => _productionDate;
-
-  String? get packagingDate => _packagingDate;
-
-  String? get bestBeforeDate => _bestBeforeDate;
-
-  String? get expirationDate => _expirationDate;
-
-  String? get weight => _weight;
-
-  String? get weightType => _weightType;
-
-  String? get weightIncrement => _weightIncrement;
-
-  String? get price => _price;
-
-  String? get priceIncrement => _priceIncrement;
-
-  String? get priceCurrency => _priceCurrency;
-
-  Map<String, String> get uncommonAIs => _uncommonAIs;
 
   @override
   String get displayResult {
-    return _rawText.toString();
+    return rawText.toString();
   }
 }

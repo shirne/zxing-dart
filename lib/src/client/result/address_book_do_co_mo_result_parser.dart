@@ -38,30 +38,30 @@ class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     if (!rawText.startsWith("MECARD:")) {
       return null;
     }
-    List<String>? rawName = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("N:", rawText);
+    List<String>? rawName = matchDoCoMoPrefixedField("N:", rawText);
     if (rawName == null) {
       return null;
     }
     String name = _parseName(rawName[0]);
     String? pronunciation =
-    AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
-    List<String>? phoneNumbers = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("TEL:", rawText);
-    List<String>? emails = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("EMAIL:", rawText);
-    String? note = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
-    List<String>? addresses = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("ADR:", rawText);
-    String? birthday = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
-    if (!ResultParser.isStringOfDigits(birthday, 8)) {
+        matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
+    List<String>? phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText);
+    List<String>? emails = matchDoCoMoPrefixedField("EMAIL:", rawText);
+    String? note = matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
+    List<String>? addresses = matchDoCoMoPrefixedField("ADR:", rawText);
+    String? birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
+    if (!isStringOfDigits(birthday, 8)) {
       // No reason to throw out the whole card because the birthday is formatted wrong.
       birthday = null;
     }
-    List<String>? urls = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("URL:", rawText);
+    List<String>? urls = matchDoCoMoPrefixedField("URL:", rawText);
 
     // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
     // honor it when found in the wild.
-    String? org = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
+    String? org = matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
 
-    return AddressBookParsedResult(
-        ResultParser.maybeWrap(name),
+    return AddressBookParsedResult.full(
+        maybeWrap(name),
         null,
         pronunciation,
         phoneNumbers,

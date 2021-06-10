@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../result.dart';
 import 'abstract_do_co_mo_result_parser.dart';
 import 'email_address_parsed_result.dart';
@@ -26,8 +25,6 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
-  static final RegExp _aTextAlphaNumeric =
-  RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
 
   @override
   EmailAddressParsedResult? parse(Result result) {
@@ -35,7 +32,7 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     if (!rawText.startsWith("MATMSG:")) {
       return null;
     }
-    List<String>? tos = AbstractDoCoMoResultParser.matchDoCoMoPrefixedField("TO:", rawText);
+    List<String>? tos = matchDoCoMoPrefixedField("TO:", rawText);
     if (tos == null) {
       return null;
     }
@@ -44,18 +41,8 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
         return null;
       }
     }
-    String? subject = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
-    String? body = AbstractDoCoMoResultParser.matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
+    String? subject = matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
+    String? body = matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
     return EmailAddressParsedResult(tos, null, null, subject, body);
-  }
-
-  /// This implements only the most basic checking for an email address's validity -- that it contains
-  /// an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
-  /// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
-  /// in a barcode, not "judge" it.
-  static bool isBasicallyValidEmailAddress(String? email) {
-    return email != null &&
-        _aTextAlphaNumeric.hasMatch(email) &&
-        email.indexOf('@') >= 0;
   }
 }

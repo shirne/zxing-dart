@@ -87,7 +87,7 @@ class VCardResultParser extends ResultParser {
     if (geo != null && geo.length != 2) {
       geo = null;
     }
-    return AddressBookParsedResult(
+    return AddressBookParsedResult.full(
         _toPrimaryValues(names),
         nicknames,
         null,
@@ -348,7 +348,7 @@ class VCardResultParser extends ResultParser {
         String name = list[0];
         List<String> components = List.filled(5, '');
         int start = 0;
-        int end;
+        int end = -1;
         int componentIndex = 0;
         while (componentIndex < components.length - 1 &&
             (end = name.indexOf(';', start)) >= 0) {

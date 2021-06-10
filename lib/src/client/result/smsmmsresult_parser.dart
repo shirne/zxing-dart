@@ -44,7 +44,7 @@ class SMSMMSResultParser extends ResultParser {
     }
 
     // Check up front if this is a URI syntax string with query arguments
-    Map<String, String>? nameValuePairs = ResultParser.parseNameValuePairs(rawText);
+    Map<String, String>? nameValuePairs = parseNameValuePairs(rawText);
     String? subject;
     String? body;
     bool querySyntax = false;

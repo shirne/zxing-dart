@@ -16,8 +16,8 @@
 
 
 import '../../result.dart';
+import 'abstract_do_co_mo_result_parser.dart';
 import 'email_address_parsed_result.dart';
-import 'email_do_co_mo_result_parser.dart';
 import 'result_parser.dart';
 
 /// Represents a result that encodes an e-mail address.
@@ -26,7 +26,7 @@ import 'result_parser.dart';
 /// or a mailto: URL like "mailto:joe@example.org".
 ///
 /// @author Sean Owen
-class EmailAddressResultParser extends ResultParser {
+class EmailAddressResultParser extends AbstractDoCoMoResultParser {
 
   static final Pattern _comma = ",";
 
@@ -41,7 +41,7 @@ class EmailAddressResultParser extends ResultParser {
         hostEmail = hostEmail.substring(0, queryStart);
       }
       try {
-        hostEmail = ResultParser.urlDecode(hostEmail);
+        hostEmail = urlDecode(hostEmail);
       } catch ( iae) { // IllegalArgumentException
         return null;
       }
@@ -49,7 +49,7 @@ class EmailAddressResultParser extends ResultParser {
       if (hostEmail.isNotEmpty) {
         tos = hostEmail.split(_comma);
       }
-      Map<String,String>? nameValues = ResultParser.parseNameValuePairs(rawText);
+      Map<String,String>? nameValues = parseNameValuePairs(rawText);
       List<String>? ccs;
       List<String>? bccs;
       String? subject;
@@ -74,7 +74,7 @@ class EmailAddressResultParser extends ResultParser {
       }
       return EmailAddressParsedResult(tos, ccs, bccs, subject, body);
     } else {
-      if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText)) {
+      if (!isBasicallyValidEmailAddress(rawText)) {
         return null;
       }
       return EmailAddressParsedResult(rawText);

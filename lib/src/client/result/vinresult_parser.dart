@@ -16,6 +16,8 @@
 
 
 
+import 'package:zxing_lib/src/arguments_exception.dart';
+
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'result_parser.dart';
@@ -44,16 +46,16 @@ class VINResultParser extends ResultParser {
         return null;
       }
       String wmi = rawText.substring(0, 3);
-      return VINParsedResult(rawText,
-          wmi,
-          rawText.substring(3, 9),
-          rawText.substring(9, 17),
-          _countryCode(wmi),
-          rawText.substring(3, 8),
-          _modelYear(rawText.codeUnitAt(9)),
-          rawText.codeUnitAt(10),
-          rawText.substring(11));
-    } catch ( _) { // IllegalArgumentException
+      return VINParsedResult(vin:rawText,
+          worldManufacturerID:wmi,
+          vehicleDescriptorSection:rawText.substring(3, 9),
+          vehicleIdentifierSection:rawText.substring(9, 17),
+          countryCode:_countryCode(wmi),
+          vehicleAttributes:rawText.substring(3, 8),
+          modelYear:_modelYear(rawText.codeUnitAt(9)),
+          plantCode:rawText.codeUnitAt(10),
+          sequentialNumber:rawText.substring(11));
+    } on ArgumentsException catch ( _) { // IllegalArgumentException
       return null;
     }
   }
@@ -81,7 +83,7 @@ class VINResultParser extends ResultParser {
     if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
       return c - 48;
     }
-    throw Exception();
+    throw ArgumentsException();
   }
   
   static int _vinPositionWeight(int position) {
@@ -97,7 +99,7 @@ class VINResultParser extends ResultParser {
     if (position >= 10 && position <= 17) {
       return 19 - position;
     }
-    throw Exception();
+    throw ArgumentsException();
   }
 
   static String _checkChar(int remainder) {
@@ -107,7 +109,7 @@ class VINResultParser extends ResultParser {
     if (remainder == 10) {
       return 'X';
     }
-    throw Exception();
+    throw ArgumentsException();
   }
   
   static int _modelYear(int c) {
@@ -132,7 +134,7 @@ class VINResultParser extends ResultParser {
     if (c >= 65 /*'A'*/ && c <= 68 /*'D'*/) {
       return (c - 65) + 2010;
     }
-    throw Exception();
+    throw ArgumentsException();
   }
 
   static String? _countryCode(String wmi) {

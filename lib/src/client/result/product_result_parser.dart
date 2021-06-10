@@ -36,7 +36,7 @@ class ProductResultParser extends ResultParser {
       return null;
     }
     String rawText = ResultParser.getMassagedText(result);
-    if (!ResultParser.isStringOfDigits(rawText, rawText.length)) {
+    if (!isStringOfDigits(rawText, rawText.length)) {
       return null;
     }
     // Not actually checking the checksum again here

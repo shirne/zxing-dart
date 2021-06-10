@@ -21,14 +21,13 @@ import 'parsed_result_type.dart';
 ///
 /// @author jbreiden@google.com (Jeff Breidenbach)
 class ISBNParsedResult extends ParsedResult {
-  final String _isbn;
+  String isbn;
 
-  ISBNParsedResult(this._isbn) : super(ParsedResultType.ISBN);
+  ISBNParsedResult(this.isbn) : super(ParsedResultType.ISBN);
 
-  String get isbn => _isbn;
 
   @override
   String get displayResult {
-    return _isbn;
+    return isbn;
   }
 }

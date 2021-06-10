@@ -21,28 +21,25 @@ import 'uriresult_parser.dart';
 
 /// A simple result type encapsulating a URI that has no further interpretation.
 class URIParsedResult extends ParsedResult {
-  final String _uri;
-  final String? _title;
+  String uri;
+  String? title;
 
-  URIParsedResult(String uri, this._title) : _uri = _massageURI(uri),super(ParsedResultType.URI);
+  URIParsedResult(String uri,[ this.title]) : uri = _massageURI(uri),super(ParsedResultType.URI);
 
-  String get uri => _uri;
-
-  String? get title => _title;
 
   /// @return true if the URI contains suspicious patterns that may suggest it intends to
   ///  mislead the user about its true nature
   /// @deprecated see {@link URIResultParser#isPossiblyMaliciousURI(String)}
   @deprecated
   bool isPossiblyMaliciousURI() {
-    return URIResultParser.isPossiblyMaliciousURI(_uri);
+    return URIResultParser.isPossiblyMaliciousURI(uri);
   }
 
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    ParsedResult.maybeAppend(_title, result);
-    ParsedResult.maybeAppend(_uri, result);
+    maybeAppend(title, result);
+    maybeAppend(uri, result);
     return result.toString();
   }
 
