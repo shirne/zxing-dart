@@ -23,9 +23,8 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../utils.dart';
 
-/// Tests {@link GeoParsedResult}.
+/// Tests [GeoParsedResult].
 ///
-/// @author Sean Owen
 void main(){
 
   final int EPSILON = 10;

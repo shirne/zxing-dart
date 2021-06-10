@@ -29,10 +29,10 @@ import 'error_correction_level.dart';
 import 'mode.dart';
 import 'version.dart';
 
-/// <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
-/// in one QR Code. This class decodes the bits back into text.</p>
+/// QR Codes can encode text as bits in one of several modes, and can use multiple modes
+/// in one QR Code. This class decodes the bits back into text.
 ///
-/// <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
+/// See ISO 18004:2006, 6.4.3 - 6.4.7
 ///
 /// @author Sean Owen
 class DecodedBitStreamParser {

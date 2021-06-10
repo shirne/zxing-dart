@@ -16,12 +16,11 @@
 
 import 'result_parser.dart';
 
-/// <p>See
-/// <a href="http://www.nttdocomo.co.jp/english/service/imode/make/content/barcode/about/s2.html">
-/// DoCoMo's documentation</a> about the result types represented by subclasses of this class.</p>
+/// DoCoMo's parser utils
 ///
-/// <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
-/// on exception-based mechanisms during parsing.</p>
+/// See
+/// <a href="http://www.nttdocomo.co.jp/english/service/imode/make/content/barcode/about/s2.html">
+/// DoCoMo's documentation</a> about the result types represented by subclasses of this class.
 ///
 /// @author Sean Owen
 abstract class AbstractDoCoMoResultParser extends ResultParser {

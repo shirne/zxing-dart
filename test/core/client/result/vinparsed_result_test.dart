@@ -20,7 +20,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link VINParsedResult}.
+/// Tests [VINParsedResult].
 void main(){
 
   void doTest(String contents,

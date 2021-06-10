@@ -15,17 +15,12 @@
  */
 
 
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/// @author Sean Owen
+
 void main(){
 
   test('Code93BlackBox1TestCase', () {

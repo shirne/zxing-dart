@@ -30,10 +30,11 @@ import '../result_point.dart';
 import '../result.dart';
 import 'one_dreader.dart';
 
-/// <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
+/// Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
+///
+/// See [Code93Reader]
 ///
 /// @author Sean Owen
-/// @see Code93Reader
 class Code39Reader extends OneDReader {
   static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";

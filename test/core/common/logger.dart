@@ -1,4 +1,5 @@
 
+/// A simple logger
 class Logger{
   final String prefix;
   static const _logTypes = {

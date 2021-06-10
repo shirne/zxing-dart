@@ -25,7 +25,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/// @author gitlost
+
 void main(){
 
 

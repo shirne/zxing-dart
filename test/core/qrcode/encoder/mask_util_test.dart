@@ -21,8 +21,7 @@ import 'package:zxing_lib/qrcode.dart';
 import 'package:zxing_lib/zxing.dart';
 
 
-/// @author satorux@google.com (Satoru Takabayashi) - creator
-/// @author mysen@google.com (Chris Mysen) - ported from C++
+
 void main(){
 
   test('testApplyMaskPenaltyRule1', () {

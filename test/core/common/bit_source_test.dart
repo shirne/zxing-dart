@@ -21,7 +21,7 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
 
-/// @author Sean Owen
+
 void main() {
 
   test('testSource', () {

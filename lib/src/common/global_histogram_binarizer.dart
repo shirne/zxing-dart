@@ -22,8 +22,9 @@ import '../not_found_exception.dart';
 import 'bit_array.dart';
 import 'bit_matrix.dart';
 
-/// This Binarizer implementation uses the old ZXing global histogram approach. It is suitable
-/// for low-end mobile devices which don't have enough CPU or memory to use a local thresholding
+/// This Binarizer implementation uses the old ZXing global histogram approach.
+///
+/// It is suitable for low-end mobile devices which don't have enough CPU or memory to use a local thresholding
 /// algorithm. However, because it picks a global black point, it cannot handle difficult shadows
 /// and gradients.
 ///

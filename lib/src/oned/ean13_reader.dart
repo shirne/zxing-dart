@@ -21,7 +21,7 @@ import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import 'upceanreader.dart';
 
-/// <p>Implements decoding of the EAN-13 format.</p>
+/// Implements decoding of the EAN-13 format.
 ///
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Sean Owen

@@ -15,13 +15,6 @@
  */
 
 
-
-
-
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
@@ -29,7 +22,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../utils.dart';
 
-/// Tests {@link Code39Writer}.
+/// Tests [Code39Writer].
 void main(){
 
   void doTest(String input, String expected) {

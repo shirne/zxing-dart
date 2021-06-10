@@ -1,5 +1,5 @@
 
-
+/// A simple property reader
 class Properties{
   final Map<String, String> _properties = {};
   Properties? _defaults;

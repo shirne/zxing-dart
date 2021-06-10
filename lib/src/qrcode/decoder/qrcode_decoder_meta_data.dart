@@ -19,7 +19,7 @@ import '../../result_point.dart';
 /// Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the
 /// decoding caller. Callers are expected to process this.
 ///
-/// @see com.google.zxing.common.DecoderResult#getOther()
+/// See [DecoderResult.getOther()]
 class QRCodeDecoderMetaData {
   final bool _mirrored;
 

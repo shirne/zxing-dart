@@ -16,9 +16,10 @@
 
 import 'dart:typed_data';
 
-/// <p>Encapsulates the result of decoding a matrix of bits. This typically
-/// applies to 2D barcode formats. For now it contains the raw bytes obtained,
-/// as well as a String interpretation of those bytes, if applicable.</p>
+/// Encapsulates the result of decoding a matrix of bits.
+///
+/// This typically applies to 2D barcode formats. For now it contains
+/// the raw bytes obtained, as well as a String interpretation of those bytes, if applicable.
 ///
 /// @author Sean Owen
 class DecoderResult {
@@ -52,16 +53,16 @@ class DecoderResult {
       this._symbologyModifier = 0])
       : numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length;
 
-  /// @return raw bytes representing the result, or {@code null} if not applicable
+  /// @return raw bytes representing the result, or `null` if not applicable
   Uint8List get rawBytes => _rawBytes!;
 
   /// @return text representation of the result
   String get text => _text;
 
-  /// @return list of byte segments in the result, or {@code null} if not applicable
+  /// @return list of byte segments in the result, or `null` if not applicable
   List<Uint8List>? get byteSegments => _byteSegments;
 
-  /// @return name of error correction level used, or {@code null} if not applicable
+  /// @return name of error correction level used, or `null` if not applicable
   String? get ecLevel => _ecLevel;
 
 

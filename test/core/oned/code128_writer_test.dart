@@ -21,7 +21,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../utils.dart';
 
-/// Tests {@link Code128Writer}.
+/// Tests [Code128Writer].
 void main(){
 
   final String FNC1 = "11110101110";

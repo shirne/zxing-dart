@@ -41,7 +41,7 @@ class Result {
   /// @return raw text encoded by the barcode
   String get text => _text;
 
-  /// @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
+  /// @return raw bytes encoded by the barcode, if applicable, otherwise `null`
   List<int>? get rawBytes => _rawBytes;
 
   /// @return how many bits of {@link #getRawBytes()} are valid; typically 8 times its length
@@ -56,8 +56,8 @@ class Result {
   /// @return [BarcodeFormat] representing the format of the barcode that was decoded
   BarcodeFormat get barcodeFormat => _format;
 
-  /// @return {@link Map} mapping {@link ResultMetadataType} keys to values. May be
-  ///   {@code null}. This contains optional metadata about what was detected about the barcode,
+  /// @return [Map] mapping [ResultMetadataType] keys to values. May be
+  ///   `null`. This contains optional metadata about what was detected about the barcode,
   ///   like orientation.
   Map<ResultMetadataType, Object>? get resultMetadata => _resultMetadata;
 

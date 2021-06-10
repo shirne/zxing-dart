@@ -22,17 +22,17 @@ import '../barcode_format.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 
-/// <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
+/// Encapsulates functionality and implementation that is common to one-dimensional barcodes.
 ///
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)
 abstract class OneDimensionalCodeWriter implements Writer {
   static final RegExp _numeric = RegExp(r"^[0-9]+$");
 
   /// Encode the contents following specified format.
-  /// {@code width} and {@code height} are required size. This method may return bigger size
-  /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
-  /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
-  /// or {@code height}, {@code IllegalArgumentException} is thrown.
+  /// `width` and `height` are required size. This method may return bigger size
+  /// `BitMatrix` when specified size is too small. The user can set both `width` and
+  /// `height` to zero to get minimum size barcode. If negative value is set to `width`
+  /// or `height`, `IllegalArgumentException` is thrown.
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
@@ -93,7 +93,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   }
 
   /// @param target encode black/white pattern into this array
-  /// @param pos position to start encoding at in {@code target}
+  /// @param pos position to start encoding at in `target`
   /// @param pattern lengths of black/white runs to encode
   /// @param startColor starting color - false for white, true for black
   /// @return the number of elements added to target.

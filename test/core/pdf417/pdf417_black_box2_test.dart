@@ -25,7 +25,7 @@ import '../common/abstract_black_box.dart';
 
 /// This test contains 480x240 images captured from an Android device at preview resolution.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
+
 void main(){
 
   test('PDF417BlackBox2TestCase', () {

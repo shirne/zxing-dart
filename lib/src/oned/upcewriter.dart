@@ -23,7 +23,7 @@ import 'upceanreader.dart';
 import 'upceanwriter.dart';
 import 'upcereader.dart';
 
-/// This object renders an UPC-E code as a {@link BitMatrix}.
+/// This object renders an UPC-E code as a [BitMatrix].
 ///
 /// @author 0979097955s@gmail.com (RX)
 class UPCEWriter extends UPCEANWriter {

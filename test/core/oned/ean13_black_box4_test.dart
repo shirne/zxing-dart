@@ -16,17 +16,12 @@
 
 
 
-
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
 /// A very difficult set of images taken with extreme shadows and highlights.
-/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('EAN13BlackBox4TestCase', () {

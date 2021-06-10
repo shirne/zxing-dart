@@ -30,7 +30,7 @@ class DecodeHintType {
   static const PURE_BARCODE = DecodeHintType(Null);
 
   /// Image is known to be of one of a few possible formats.
-  /// Maps to a {@link List} of {@link BarcodeFormat}s.
+  /// Maps to a [List] of [BarcodeFormat]s.
   static const POSSIBLE_FORMATS = DecodeHintType(List);
 
   /// Spend more time to try to find a barcode; optimize for accuracy, not speed.
@@ -57,8 +57,8 @@ class DecodeHintType {
   /// to not be. Doesn't matter what it maps to; use {@link bool#TRUE}.
   static const RETURN_CODABAR_START_END = DecodeHintType(Null);
 
-  /// The caller needs to be notified via callback when a possible {@link ResultPoint}
-  /// is found. Maps to a {@link ResultPointCallback}.
+  /// The caller needs to be notified via callback when a possible [ResultPoint]
+  /// is found. Maps to a [ResultPointCallback].
   static const NEED_RESULT_POINT_CALLBACK = DecodeHintType(ResultPointCallback);
 
   /// Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
@@ -75,7 +75,7 @@ class DecodeHintType {
   // End of enumeration values.
 
   /// Data type the hint is expecting.
-  /// Among the possible values the {@link Null} stands out as being used for
+  /// Among the possible values the [Null] stands out as being used for
   /// hints that do not expect a value to be supplied (flag hints). Such hints
   /// will possibly have their value ignored, or replaced by a
   /// {@link bool#TRUE}. Hint suppliers should probably use

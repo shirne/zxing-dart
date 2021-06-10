@@ -26,10 +26,10 @@ import '../../result_point_callback.dart';
 import 'finder_pattern.dart';
 import 'finder_pattern_info.dart';
 
-/// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
-/// markers at three corners of a QR Code.</p>
+/// This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+/// markers at three corners of a QR Code.
 ///
-/// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+/// This class is thread-safe but not reentrant. Each thread must allocate its own object.
 ///
 /// @author Sean Owen
 class FinderPatternFinder {
@@ -607,7 +607,7 @@ class FinderPatternFinder {
         .compareTo(center2.estimatedModuleSize);
   }
 
-  /// @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+  /// @return the 3 best [FinderPattern]s from our list of candidates. The "best" are
   ///         those have similar module size and form a shape closer to a isosceles right triangle.
   /// @throws NotFoundException if 3 such finder patterns do not exist
   List<FinderPattern> _selectBestPatterns() {

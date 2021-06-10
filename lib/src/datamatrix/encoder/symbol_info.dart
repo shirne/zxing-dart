@@ -19,8 +19,6 @@ import 'data_matrix_symbol_info144.dart';
 import 'symbol_shape_hint.dart';
 
 /// Symbol info table for DataMatrix.
-///
-/// @version $Id$
 class SymbolInfo {
   static const List<SymbolInfo> PROD_SYMBOLS = [
     SymbolInfo(false, 3, 5, 8, 8, 1),

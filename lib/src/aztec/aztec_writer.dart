@@ -27,7 +27,7 @@ import '../writer.dart';
 import 'encoder/aztec_code.dart';
 import 'encoder/encoder.dart';
 
-/// Renders an Aztec code as a {@link BitMatrix}.
+/// Renders an Aztec code as a [BitMatrix].
 class AztecWriter implements Writer {
   @override
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,

@@ -26,15 +26,15 @@ import '../../../not_found_exception.dart';
 import '../../../result_point.dart';
 import '../../../result_point_callback.dart';
 
-/// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
-/// markers at three corners of a QR Code.</p>
+/// This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+/// markers at three corners of a QR Code.
 ///
-/// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+/// This class is thread-safe but not reentrant. Each thread must allocate its own object.
 ///
-/// <p>In contrast to {@link FinderPatternFinder}, this class will return an array of all possible
-/// QR code locations in the image.</p>
+/// In contrast to [FinderPatternFinder], this class will return an array of all possible
+/// QR code locations in the image.
 ///
-/// <p>Use the TRY_HARDER hint to ask for a more thorough detection.</p>
+/// Use the TRY_HARDER hint to ask for a more thorough detection.
 ///
 /// @author Sean Owen
 /// @author Hannes Erven
@@ -77,7 +77,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
             : 0;
   }
 
-  /// @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+  /// @return the 3 best [FinderPattern]s from our list of candidates. The "best" are
   ///         those that have been detected at least 2 times, and whose module
   ///         size differs from the average among those patterns the least
   /// @throws NotFoundException if 3 such finder patterns do not exist

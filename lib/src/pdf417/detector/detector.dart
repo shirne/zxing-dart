@@ -23,8 +23,8 @@ import '../../decode_hint_type.dart';
 import '../../result_point.dart';
 import 'pdf417_detector_result.dart';
 
-/// <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
-/// PDF417 Code is rotated or skewed, or partially obscured.</p>
+/// Encapsulates logic that can detect a PDF417 Code in an image, even if the
+/// PDF417 Code is rotated or skewed, or partially obscured.
 ///
 /// @author SITA Lab (kevin.osullivan@sita.aero)
 /// @author dswitkin@google.com (Daniel Switkin)
@@ -58,7 +58,7 @@ class Detector {
   /// @param hints optional hints to detector
   /// @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
   /// be found and returned
-  /// @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
+  /// @return [PDF417DetectorResult] encapsulating results of detecting a PDF417 code
   /// @throws NotFoundException if no PDF417 Code can be found
   static PDF417DetectorResult detect(
       BinaryBitmap image, Map<DecodeHintType, Object>? hints, bool multiple) {

@@ -23,12 +23,14 @@ import 'perspective_transform.dart';
 
 /// Implementations of this class can, given locations of finder patterns for a QR code in an
 /// image, sample the right points in the image to reconstruct the QR code, accounting for
-/// perspective distortion. It is abstracted since it is relatively expensive and should be allowed
+/// perspective distortion.
+///
+/// It is abstracted since it is relatively expensive and should be allowed
 /// to take advantage of platform-specific optimized implementations, like Sun's Java Advanced
 /// Imaging library, but which may not be available in other environments such as J2ME, and vice
 /// versa.
 ///
-/// The implementation used can be controlled by calling {@link #setGridSampler(GridSampler)}
+/// The implementation used can be controlled by calling [setGridSampler(GridSampler)]
 /// with an instance of a class which implements this interface.
 ///
 /// @author Sean Owen
@@ -56,8 +58,8 @@ abstract class GridSampler {
   /// image space.
   ///
   /// @param image image to sample
-  /// @param dimensionX width of {@link BitMatrix} to sample from image
-  /// @param dimensionY height of {@link BitMatrix} to sample from image
+  /// @param dimensionX width of [BitMatrix] to sample from image
+  /// @param dimensionY height of [BitMatrix] to sample from image
   /// @param p1ToX point 1 preimage X
   /// @param p1ToY point 1 preimage Y
   /// @param p2ToX point 2 preimage X
@@ -74,7 +76,7 @@ abstract class GridSampler {
   /// @param p3FromY point 3 image Y
   /// @param p4FromX point 4 image X
   /// @param p4FromY point 4 image Y
-  /// @return {@link BitMatrix} representing a grid of points sampled from the image within a region
+  /// @return [BitMatrix] representing a grid of points sampled from the image within a region
   ///   defined by the "from" parameters
   /// @throws NotFoundException if image can't be sampled, for example, if the transformation defined
   ///   by the given points is invalid or results in sampling outside the image boundaries

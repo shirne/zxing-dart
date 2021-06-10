@@ -18,18 +18,18 @@ import 'dart:typed_data';
 
 import 'generic_gf.dart';
 
-/// <p>Represents a polynomial whose coefficients are elements of a GF.
-/// Instances of this class are immutable.</p>
+/// Represents a polynomial whose coefficients are elements of a GF.
+/// Instances of this class are immutable.
 ///
-/// <p>Much credit is due to William Rucklidge since portions of this code are an indirect
-/// port of his C++ Reed-Solomon implementation.</p>
+/// Much credit is due to William Rucklidge since portions of this code are an indirect
+/// port of his C++ Reed-Solomon implementation.
 ///
 /// @author Sean Owen
 class GenericGFPoly {
   final GenericGF _field;
   late Int32List _coefficients;
 
-  /// @param field the {@link GenericGF} instance representing the field to use
+  /// @param field the [GenericGF] instance representing the field to use
   /// to perform computations
   /// @param coefficients coefficients as ints representing elements of GF(size), arranged
   /// from most significant (highest-power term) coefficient to least significant

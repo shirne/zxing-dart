@@ -18,13 +18,14 @@ import '../../../checksum_exception.dart';
 import 'modulus_gf.dart';
 import 'modulus_poly.dart';
 
-/// <p>PDF417 error correction implementation.</p>
+/// PDF417 error correction implementation.
 ///
-/// <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
-/// is quite useful in understanding the algorithm.</p>
+/// This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
+/// is quite useful in understanding the algorithm.
+///
+/// See [ReedSolomonDecoder]
 ///
 /// @author Sean Owen
-/// @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
 class ErrorCorrection {
   final ModulusGF _field;
 

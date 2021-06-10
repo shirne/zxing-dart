@@ -29,7 +29,7 @@ class BitMatrixParser {
   late BitMatrix _readMappingMatrix;
   late Version _version;
 
-  /// @param bitMatrix {@link BitMatrix} to parse
+  /// @param bitMatrix [BitMatrix] to parse
   /// @throws FormatException if dimension is < 8 or > 144 or not 0 mod 2
   BitMatrixParser(BitMatrix bitMatrix) {
     int dimension = bitMatrix.height;
@@ -50,8 +50,8 @@ class BitMatrixParser {
   ///
   /// <p>See ISO 16022:2006 Table 7 - ECC 200 symbol attributes</p>
   ///
-  /// @param bitMatrix Original {@link BitMatrix} including alignment patterns
-  /// @return {@link Version} encapsulating the Data Matrix Code's "version"
+  /// @param bitMatrix Original [BitMatrix] including alignment patterns
+  /// @return [Version] encapsulating the Data Matrix Code's "version"
   /// @throws FormatException if the dimensions of the mapping matrix are not valid
   /// Data Matrix dimensions.
   static Version _readVersion(BitMatrix bitMatrix) {
@@ -60,7 +60,7 @@ class BitMatrixParser {
     return Version.getVersionForDimensions(numRows, numColumns);
   }
 
-  /// <p>Reads the bits in the {@link BitMatrix} representing the mapping matrix (No alignment patterns)
+  /// <p>Reads the bits in the [BitMatrix] representing the mapping matrix (No alignment patterns)
   /// in the correct order in order to reconstitute the codewords bytes contained within the
   /// Data Matrix Code.</p>
   ///
@@ -389,10 +389,10 @@ class BitMatrixParser {
     return currentByte;
   }
 
-  /// <p>Extracts the data region from a {@link BitMatrix} that contains
+  /// <p>Extracts the data region from a [BitMatrix] that contains
   /// alignment patterns.</p>
   ///
-  /// @param bitMatrix Original {@link BitMatrix} with alignment patterns
+  /// @param bitMatrix Original [BitMatrix] with alignment patterns
   /// @return BitMatrix that has the alignment patterns removed
   BitMatrix _extractDataRegion(BitMatrix bitMatrix) {
     int symbolSizeRows = _version.symbolSizeRows;

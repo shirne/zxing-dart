@@ -16,13 +16,12 @@
 
 import 'parsed_result_type.dart';
 
-/// <p>Abstract class representing the result of decoding a barcode, as more than
-/// a String -- as some type of structured data. This might be a subclass which represents
-/// a URL, or an e-mail address. {@link ResultParser#parseResult(com.google.zxing.Result)} will turn a raw
-/// decoded string into the most appropriate type of structured representation.</p>
+/// Abstract class representing the result of decoding a barcode, as more than
+/// a String -- as some type of structured data.
 ///
-/// <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
-/// on exception-based mechanisms during parsing.</p>
+/// This might be a subclass which represents a URL,
+/// or an e-mail address. ResultParser.parseResult([Result]) will turn a raw
+/// decoded string into the most appropriate type of structured representation.
 ///
 /// @author Sean Owen
 abstract class ParsedResult {

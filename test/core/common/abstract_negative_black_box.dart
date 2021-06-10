@@ -42,7 +42,7 @@ class TestResult {
 /// This abstract class looks for negative results, i.e. it only allows a certain number of false
 /// positives in images which should not decode. This helps ensure that we are not too lenient.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
+
 class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
   static final Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase);

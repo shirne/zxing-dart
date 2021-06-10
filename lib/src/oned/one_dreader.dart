@@ -273,7 +273,7 @@ abstract class OneDReader implements Reader {
   /// @param rowNumber row number from top of the row
   /// @param row the black/white pixel data of the row
   /// @param hints decode hints
-  /// @return {@link Result} containing encoded string and start/end of barcode
+  /// @return [Result] containing encoded string and start/end of barcode
   /// @throws NotFoundException if no potential barcode is found
   /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
   /// @throws FormatException if a potential barcode is found but format is invalid

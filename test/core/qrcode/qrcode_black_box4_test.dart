@@ -21,7 +21,6 @@ import '../common/abstract_black_box.dart';
 
 /// Tests of various QR Codes from t-shirts, which are notoriously not flat.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
 void main() {
   test('QRCodeBlackBox4TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-4",

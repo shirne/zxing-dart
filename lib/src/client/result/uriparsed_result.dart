@@ -20,8 +20,6 @@ import 'result_parser.dart';
 import 'uriresult_parser.dart';
 
 /// A simple result type encapsulating a URI that has no further interpretation.
-///
-/// @author Sean Owen
 class URIParsedResult extends ParsedResult {
   final String _uri;
   final String? _title;

@@ -20,6 +20,7 @@ import '../../common/bit_array.dart';
 
 import 'token.dart';
 
+
 class SimpleToken extends Token {
   // For normal words, indicates value and bitCount
   final int _value;

@@ -23,7 +23,6 @@ import '../common/abstract_black_box.dart';
 /// pointing down at a barcode (i.e. the phone's shadow falls across part of the image).
 /// The global histogram gets about 5/15, where the local one gets 15/15.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
 void main() {
   test('QRCodeBlackBox5TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-5",

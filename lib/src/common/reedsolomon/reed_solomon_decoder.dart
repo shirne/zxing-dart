@@ -20,10 +20,10 @@ import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
 import 'reed_solomon_exception.dart';
 
-/// <p>Implements Reed-Solomon decoding, as the name implies.</p>
+/// Implements Reed-Solomon decoding, as the name implies.
 ///
-/// <p>The algorithm will not be explained here, but the following references were helpful
-/// in creating this implementation:</p>
+/// The algorithm will not be explained here, but the following references were helpful
+/// in creating this implementation:
 ///
 /// <ul>
 /// <li>Bruce Maggs.
@@ -34,8 +34,8 @@ import 'reed_solomon_exception.dart';
 /// (see discussion of Euclidean algorithm)</li>
 /// </ul>
 ///
-/// <p>Much credit is due to William Rucklidge since portions of this code are an indirect
-/// port of his C++ Reed-Solomon implementation.</p>
+/// Much credit is due to William Rucklidge since portions of this code are an indirect
+/// port of his C++ Reed-Solomon implementation.
 ///
 /// @author Sean Owen
 /// @author William Rucklidge

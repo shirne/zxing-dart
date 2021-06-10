@@ -24,7 +24,6 @@ import '../common/abstract_negative_black_box.dart';
 
 /// This test ensures that random images with high contrast patterns do not decode as barcodes.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('FalsePositivesBlackBoxTestCase', () {

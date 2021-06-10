@@ -18,9 +18,11 @@ import 'dart:typed_data';
 
 import 'version.dart';
 
-/// <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into
-/// multiple blocks, each of which is a unit of data and error-correction codewords. Each
-/// is represented by an instance of this class.</p>
+/// Encapsulates a block of data within a Data Matrix Code.
+///
+/// Data Matrix Codes may split their data into
+/// multiple blocks, each of which is a unit of data and error-correction codewords.
+/// Each is represented by an instance of this class.
 ///
 /// @author bbrown@google.com (Brian Brown)
 class DataBlock {

@@ -19,7 +19,7 @@ import 'dart:math' as Math;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/common.dart';
 
-/// Tests {@link MathUtils}.
+/// Tests [MathUtils].
 void main() {
 
   final double EPSILON = 1.0E-8;

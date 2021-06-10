@@ -25,8 +25,8 @@ import '../../../reader_exception.dart';
 import '../../../result_point_callback.dart';
 import 'multi_finder_pattern_finder.dart';
 
-/// <p>Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code
-/// is rotated or skewed, or partially obscured.</p>
+/// Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code
+/// is rotated or skewed, or partially obscured.
 ///
 /// @author Sean Owen
 /// @author Hannes Erven

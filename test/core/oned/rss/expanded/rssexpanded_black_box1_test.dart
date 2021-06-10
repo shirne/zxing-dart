@@ -35,7 +35,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../../common/abstract_black_box.dart';
 
-/// A test of {@link RSSExpandedReader} against a fixed test set of images.
+/// A test of [RSSExpandedReader] against a fixed test set of images.
 void main(){
 
   test('RSSExpandedBlackBox1TestCase', () {

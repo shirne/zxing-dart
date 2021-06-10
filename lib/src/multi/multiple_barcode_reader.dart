@@ -20,6 +20,8 @@ import '../result.dart';
 
 /// Implementation of this interface attempt to read several barcodes from one image.
 ///
+/// See [Reader]
+///
 /// @see com.google.zxing.Reader
 /// @author Sean Owen
 abstract class MultipleBarcodeReader {

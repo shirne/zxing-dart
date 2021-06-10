@@ -18,11 +18,11 @@ import 'dart:math' as Math;
 
 import 'dart:typed_data';
 
-/// <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
-/// number of bits read is not often a multiple of 8.</p>
+/// This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
+/// number of bits read is not often a multiple of 8.
 ///
-/// <p>This class is thread-safe but not reentrant -- unless the caller modifies the bytes array
-/// it passed in, in which case all bets are off.</p>
+/// This class is thread-safe but not reentrant -- unless the caller modifies the bytes array
+/// it passed in, in which case all bets are off.
 ///
 /// @author Sean Owen
 class BitSource {

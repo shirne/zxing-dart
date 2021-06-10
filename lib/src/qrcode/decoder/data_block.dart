@@ -19,9 +19,11 @@ import 'dart:typed_data';
 import 'error_correction_level.dart';
 import 'version.dart';
 
-/// <p>Encapsulates a block of data within a QR Code. QR Codes may split their data into
-/// multiple blocks, each of which is a unit of data and error-correction codewords. Each
-/// is represented by an instance of this class.</p>
+/// Encapsulates a block of data within a QR Code.
+///
+/// QR Codes may split their data into multiple blocks,
+/// each of which is a unit of data and error-correction codewords. Each
+/// is represented by an instance of this class.
 ///
 /// @author Sean Owen
 class DataBlock {

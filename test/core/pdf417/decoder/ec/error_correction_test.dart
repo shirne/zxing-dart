@@ -22,7 +22,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import 'abstract_error_correction.dart';
 
-/// @author Sean Owen
+
 void main() {
   final List<int> PDF417_TEST = [
     48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, 895, 913, 154, 845, 778, 387, 89, 869,

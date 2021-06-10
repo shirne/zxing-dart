@@ -36,7 +36,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import 'test_case_util.dart';
 
-/// Tests {@link RSSExpandedReader} handling of stacked RSS barcodes.
+/// Tests [RSSExpandedReader] handling of stacked RSS barcodes.
 void main(){
   TestWidgetsFlutterBinding.ensureInitialized();
 

@@ -32,7 +32,7 @@ import 'package:zxing_lib/common.dart';
 
 import 'binary_util.dart';
 
-/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
+
 void main(){
 
    final Pattern SPACE = " ";

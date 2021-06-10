@@ -33,8 +33,8 @@ import 'error_correction_level.dart';
 import 'qrcode_decoder_meta_data.dart';
 import 'version.dart';
 
-/// <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
-/// the QR Code from an image.</p>
+/// The main class which implements QR Code decoding -- as opposed to locating and extracting
+/// the QR Code from an image.
 ///
 /// @author Sean Owen
 class Decoder {
@@ -55,7 +55,7 @@ class Decoder {
     return decodeMatrix(BitMatrix.parse(image), hints);
   }
 
-  /// <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
+  /// <p>Decodes a QR Code represented as a [BitMatrix]. A 1 or "true" is taken to mean a black module.</p>
   ///
   /// @param bits booleans representing white/black QR Code modules
   /// @param hints decoding hints that should be used to influence decoding

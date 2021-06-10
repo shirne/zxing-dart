@@ -19,7 +19,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link RGBLuminanceSource}.
+/// Tests [RGBLuminanceSource].
 void main() {
   final RGBLuminanceSource SOURCE = new RGBLuminanceSource(3, 3, [
     0x000000, 0x7F7F7F, 0xFFFFFF, //

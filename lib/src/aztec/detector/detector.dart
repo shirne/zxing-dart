@@ -73,7 +73,7 @@ class Detector {
   /// Detects an Aztec Code in an image.
   ///
   /// @param isMirror if true, image is a mirror-image of original
-  /// @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
+  /// @return [AztecDetectorResult] encapsulating results of detecting an Aztec Code
   /// @throws NotFoundException if no Aztec Code can be found
   AztecDetectorResult detect([bool isMirror = false]) {
     // 1. Get the center of the aztec matrix

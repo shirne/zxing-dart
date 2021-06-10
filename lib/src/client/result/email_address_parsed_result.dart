@@ -33,7 +33,7 @@ class EmailAddressParsedResult extends ParsedResult {
       : this._tos = tos is String ? [tos] : tos as List<String>?,
         super(ParsedResultType.EMAIL_ADDRESS);
 
-  /// @return first elements of {@link #getTos()} or {@code null} if none
+  /// @return first elements of {@link #getTos()} or `null` if none
   /// @deprecated use {@link #getTos()}
   @deprecated
   String? get emailAddress => _tos == null || _tos!.length == 0 ? null : _tos![0];

@@ -27,9 +27,8 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../utils.dart';
 
-/// Tests {@link SMSParsedResult}.
+/// Tests [SMSParsedResult].
 ///
-/// @author Sean Owen
 void main(){
 
   void doTest(String contents,

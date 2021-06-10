@@ -21,7 +21,7 @@ import 'package:zxing_lib/pdf417.dart';
 import 'package:zxing_lib/zxing.dart';
 
 
-/// Tests {@link DecodedBitStreamParser}.
+/// Tests [DecodedBitStreamParser].
 void main(){
 
   /// Tests the first sample given in ISO/IEC 15438:2015(E) - Annex H.4

@@ -19,7 +19,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link PlanarYUVLuminanceSource}.
+/// Tests [PlanarYUVLuminanceSource].
 void main() {
   const List<int> YUV = [
     0, 1, 1, 2, 3, 5, //

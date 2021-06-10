@@ -46,8 +46,8 @@ import 'package:zxing_lib/zxing.dart';
 import '../../../buffered_image_luminance_source.dart';
 import '../../../common/abstract_black_box.dart';
 
-/// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
-/// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
+
+
 void main(){
 
   void assertCorrectImage2result(String fileName, ExpandedProductParsedResult expected) async{

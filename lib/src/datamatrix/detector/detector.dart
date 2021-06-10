@@ -23,8 +23,8 @@ import '../../common/grid_sampler.dart';
 
 import '../../result_point.dart';
 
-/// <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
-/// is rotated or skewed, or partially obscured.</p>
+/// Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
+/// is rotated or skewed, or partially obscured.
 ///
 /// @author Sean Owen
 class Detector {
@@ -35,7 +35,7 @@ class Detector {
 
   /// <p>Detects a Data Matrix Code in an image.</p>
   ///
-  /// @return {@link DetectorResult} encapsulating results of detecting a Data Matrix Code
+  /// @return [DetectorResult] encapsulating results of detecting a Data Matrix Code
   /// @throws NotFoundException if no Data Matrix Code can be found
   DetectorResult detect() {
     List<ResultPoint> cornerPoints = _rectangleDetector.detect();

@@ -23,7 +23,7 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
 
-/// Tests {@link GenericGFPoly}.
+/// Tests [GenericGFPoly].
 void main() {
 
   final GenericGF FIELD = GenericGF.qrCodeField256;

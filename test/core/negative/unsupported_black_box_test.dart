@@ -24,7 +24,6 @@ import '../common/abstract_negative_black_box.dart';
 
 /// This test ensures that unsupported barcodes do not decode.
 ///
-/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   test('UnsupportedBlackBoxTestCase', () {

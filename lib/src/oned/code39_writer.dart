@@ -18,7 +18,7 @@ import '../barcode_format.dart';
 import 'code39_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
-/// This object renders a CODE39 code as a {@link BitMatrix}.
+/// This object renders a CODE39 code as a [BitMatrix].
 ///
 /// @author erik.barbara@gmail.com (Erik Barbara)
 class Code39Writer extends OneDimensionalCodeWriter {

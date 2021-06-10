@@ -20,10 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link ParsedResult}.
+/// Tests [ParsedResult].
 ///
-/// @author Sean Owen
-/// @author dswitkin@google.com (Daniel Switkin)
 void main(){
 
   //@Before

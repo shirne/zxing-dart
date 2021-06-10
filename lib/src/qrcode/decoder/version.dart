@@ -23,10 +23,12 @@ import '../../formats_exception.dart';
 import 'error_correction_level.dart';
 import 'format_information.dart';
 
-/// <p>Encapsulates a set of error-correction blocks in one symbol version. Most versions will
-/// use blocks of differing sizes within one version, so, this encapsulates the parameters for
-/// each set of blocks. It also holds the number of error-correction codewords per block since it
-/// will be the same across all blocks within one version.</p>
+/// Encapsulates a set of error-correction blocks in one symbol version.
+///
+/// Most versions will use blocks of differing sizes within one version,
+/// so, this encapsulates the parameters for each set of blocks.
+/// It also holds the number of error-correction codewords per block since it
+/// will be the same across all blocks within one version.
 class ECBlocks {
   final int _ecCodewordsPerBlock;
   final List<ECB> _ecBlocks;
@@ -48,9 +50,9 @@ class ECBlocks {
   List<ECB> get ecBlocks => _ecBlocks;
 }
 
-/// <p>Encapsulates the parameters for one error-correction block in one symbol version.
+/// Encapsulates the parameters for one error-correction block in one symbol version.
 /// This includes the number of data codewords, and the number of times a block with these
-/// parameters is used consecutively in the QR code version's format.</p>
+/// parameters is used consecutively in the QR code version's format.
 class ECB {
   final int _count;
   final int _dataCodewords;

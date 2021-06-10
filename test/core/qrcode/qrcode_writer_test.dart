@@ -25,8 +25,8 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/qrcode.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// @author satorux@google.com (Satoru Takabayashi) - creator
-/// @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++
+
+
 void main() {
 
   final String BASE_IMAGE_PATH =  "${Directory.current.absolute.path}/test/resources/golden/qrcode/";

@@ -19,7 +19,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/// @author Sean Owen
+
 void main() {
   test('QRCodeBlackBox1TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-1",

@@ -35,8 +35,8 @@ import 'finder_pattern.dart';
 import 'finder_pattern_finder.dart';
 import 'finder_pattern_info.dart';
 
-/// <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
-/// is rotated or skewed, or partially obscured.</p>
+/// Encapsulates logic that can detect a QR Code in an image, even if the QR Code
+/// is rotated or skewed, or partially obscured.
 ///
 /// @author Sean Owen
 class Detector {
@@ -52,7 +52,7 @@ class Detector {
   /// <p>Detects a QR Code in an image.</p>
   ///
   /// @param hints optional hints to detector
-  /// @return {@link DetectorResult} encapsulating results of detecting a QR Code
+  /// @return [DetectorResult] encapsulating results of detecting a QR Code
   /// @throws NotFoundException if QR Code cannot be found
   /// @throws FormatException if a QR Code cannot be decoded
   DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
@@ -346,13 +346,13 @@ class Detector {
   }
 
   /// <p>Attempts to locate an alignment pattern in a limited region of the image, which is
-  /// guessed to contain it. This method uses {@link AlignmentPattern}.</p>
+  /// guessed to contain it. This method uses [AlignmentPattern].</p>
   ///
   /// @param overallEstModuleSize estimated module size so far
   /// @param estAlignmentX x coordinate of center of area probably containing alignment pattern
   /// @param estAlignmentY y coordinate of above
   /// @param allowanceFactor number of pixels in all directions to search from the center
-  /// @return {@link AlignmentPattern} if found, or null otherwise
+  /// @return [AlignmentPattern] if found, or null otherwise
   /// @throws NotFoundException if an unexpected error occurs during detection
   @protected
   AlignmentPattern findAlignmentInRegion(double overallEstModuleSize,

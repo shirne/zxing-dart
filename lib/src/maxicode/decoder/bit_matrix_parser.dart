@@ -59,7 +59,7 @@ class BitMatrixParser {
 
   final BitMatrix _bitMatrix;
 
-  /// @param bitMatrix {@link BitMatrix} to parse
+  /// @param bitMatrix [BitMatrix] to parse
   BitMatrixParser(this._bitMatrix);
 
   Uint8List readCodewords() {

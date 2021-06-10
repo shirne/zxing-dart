@@ -24,7 +24,7 @@ import '../pdf417_result_metadata.dart';
 
 enum _Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
 
-/// <p>This class contains the methods for decoding the PDF417 codewords.</p>
+/// This class contains the methods for decoding the PDF417 codewords.
 ///
 /// @author SITA Lab (kevin.osullivan@sita.aero)
 /// @author Guenther Grau

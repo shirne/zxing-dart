@@ -17,15 +17,12 @@
 
 
 
-
-
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-/// @author dswitkin@google.com (Daniel Switkin)
+
 void main(){
 
   test('UPCABlackBox4TestCase', () {

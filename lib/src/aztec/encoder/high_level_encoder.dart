@@ -146,7 +146,7 @@ class HighLevelEncoder {
 
   HighLevelEncoder(this._text, [this._charset]);
 
-  /// @return text represented by this encoder encoded as a {@link BitArray}
+  /// @return text represented by this encoder encoded as a [BitArray]
   BitArray encode() {
     State initialState = State.initialState;
     if (_charset != null) {

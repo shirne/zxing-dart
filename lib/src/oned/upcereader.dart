@@ -23,9 +23,10 @@ import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import 'upceanreader.dart';
 
-/// <p>Implements decoding of the UPC-E format.</p>
-/// <p><a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
-/// UPC-E information.</p>
+/// Implements decoding of the UPC-E format.
+///
+/// <a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
+/// UPC-E information.
 ///
 /// @author Sean Owen
 class UPCEReader extends UPCEANReader {

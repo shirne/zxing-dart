@@ -20,7 +20,7 @@ import 'package:flutter/cupertino.dart';
 import '../barcode_format.dart';
 import 'one_dimensional_code_writer.dart';
 
-/// This object renders a ITF code as a {@link BitMatrix}.
+/// This object renders a ITF code as a [BitMatrix].
 ///
 /// @author erik.barbara@gmail.com (Erik Barbara)
 class ITFWriter extends OneDimensionalCodeWriter {
@@ -31,8 +31,7 @@ class ITFWriter extends OneDimensionalCodeWriter {
   static const int _W = 3; // Pixel width of a 3x wide line
   static const int _N = 1; // Pixed width of a narrow line
 
-  // See ITFReader.PATTERNS
-
+  // See [ITFReader.PATTERNS]
   static const List<List<int>> _PATTERNS = [
       [_N, _N, _W, _W, _N], // 0
       [_W, _N, _N, _N, _W], // 1

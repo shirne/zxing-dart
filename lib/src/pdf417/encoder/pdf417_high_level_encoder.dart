@@ -105,7 +105,7 @@ class PDF417HighLevelEncoder {
   /// @param msg the message
   /// @param compaction compaction mode to use
   /// @param encoding character encoding used to encode in default or byte compaction
-  ///  or {@code null} for default / not applicable
+  ///  or `null` for default / not applicable
   /// @return the encoded message (the char values range from 0 to 928)
   static String encodeHighLevel(
       String msg, Compaction compaction, Encoding? encoding) {

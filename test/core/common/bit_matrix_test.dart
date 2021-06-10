@@ -18,8 +18,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/common.dart';
 
 
-/// @author Sean Owen
-/// @author dswitkin@google.com (Daniel Switkin)
+
+
 void main() {
 
   final List<int> BIT_MATRIX_POINTS = [ 1, 2, 2, 0, 3, 1 ];

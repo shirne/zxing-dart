@@ -30,8 +30,8 @@ import 'eanmanufacturer_org_support.dart';
 import 'one_dreader.dart';
 import 'upceanextension_support.dart';
 
-/// <p>Encapsulates functionality and implementation that is common to UPC and EAN families
-/// of one-dimensional barcodes.</p>
+/// Encapsulates functionality and implementation that is common to UPC and EAN families
+/// of one-dimensional barcodes.
 ///
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Sean Owen
@@ -124,7 +124,7 @@ abstract class UPCEANReader extends OneDReader {
   /// @param row encoding of the row of the barcode image
   /// @param startGuardRange start/end column where the opening start pattern was found
   /// @param hints optional hints that influence decoding
-  /// @return {@link Result} encapsulating the result of decoding a barcode in the row
+  /// @return [Result] encapsulating the result of decoding a barcode in the row
   /// @throws NotFoundException if no potential barcode is found
   /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
   /// @throws FormatException if a potential barcode is found but format is invalid
@@ -389,7 +389,7 @@ abstract class UPCEANReader extends OneDReader {
   ///
   /// @param row row of black/white values to search
   /// @param startRange start/end offset of start guard pattern
-  /// @param resultString {@link StringBuffer} to append decoded chars to
+  /// @param resultString [StringBuffer] to append decoded chars to
   /// @return horizontal offset of first pixel after the "middle" that was decoded
   /// @throws NotFoundException if decoding could not complete successfully
   int decodeMiddle(

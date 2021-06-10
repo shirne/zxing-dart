@@ -25,9 +25,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link TelParsedResult}.
+/// Tests [TelParsedResult].
 ///
-/// @author Sean Owen
 void main(){
 
   void doTest(String contents, String number, String? title) {

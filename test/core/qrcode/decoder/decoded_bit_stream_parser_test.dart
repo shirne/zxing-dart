@@ -20,9 +20,8 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../common/bit_source_builder.dart';
 
-/// Tests {@link DecodedBitStreamParser}.
+/// Tests [DecodedBitStreamParser].
 ///
-/// @author Sean Owen
 void main(){
   test('testSimpleByteMode', () {
     BitSourceBuilder builder = new BitSourceBuilder();

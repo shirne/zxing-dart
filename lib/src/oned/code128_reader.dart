@@ -29,7 +29,7 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
-/// <p>Decodes Code 128 barcodes.</p>
+/// Decodes Code 128 barcodes.
 ///
 /// @author Sean Owen
 class Code128Reader extends OneDReader {

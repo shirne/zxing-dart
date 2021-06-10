@@ -98,12 +98,12 @@ class CalendarParsedResult extends ParsedResult {
   /// @return true if start time was specified as a whole day
   bool get isStartAllDay => _startAllDay;
 
-  /// @return event end {@link Date}, or {@code null} if event has no duration
+  /// @return event end [Date], or `null` if event has no duration
   /// @deprecated use {@link #getEndTimestamp()}
   @deprecated
   DateTime? get end => _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
 
-  /// @return event end {@link Date}, or -1 if event has no duration
+  /// @return event end [Date], or -1 if event has no duration
   /// @see #getStartTimestamp()
   int get endTimestamp => _end;
 

@@ -21,7 +21,7 @@ import 'package:zxing_lib/datamatrix.dart';
 
 import '../../utils.dart';
 
-/// Tests for {@link HighLevelEncoder}.
+/// Tests for [HighLevelEncoder].
 void main(){
 
   final List<SymbolInfo> TEST_SYMBOLS = [

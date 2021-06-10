@@ -20,16 +20,16 @@ import '../../not_found_exception.dart';
 import '../../result_point_callback.dart';
 import 'alignment_pattern.dart';
 
-/// <p>This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
-/// patterns but are smaller and appear at regular intervals throughout the image.</p>
+/// This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
+/// patterns but are smaller and appear at regular intervals throughout the image.
 ///
-/// <p>At the moment this only looks for the bottom-right alignment pattern.</p>
+/// At the moment this only looks for the bottom-right alignment pattern.
 ///
-/// <p>This is mostly a simplified copy of {@link FinderPatternFinder}. It is copied,
+/// This is mostly a simplified copy of [FinderPatternFinder]. It is copied,
 /// pasted and stripped down here for maximum performance but does unfortunately duplicate
-/// some code.</p>
+/// some code.
 ///
-/// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.</p>
+/// This class is thread-safe but not reentrant. Each thread must allocate its own object.
 ///
 /// @author Sean Owen
 class AlignmentPatternFinder {
@@ -58,7 +58,7 @@ class AlignmentPatternFinder {
   /// <p>This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
   /// it's pretty performance-critical and so is written to be fast foremost.</p>
   ///
-  /// @return {@link AlignmentPattern} if found
+  /// @return [AlignmentPattern] if found
   /// @throws NotFoundException if not found
   AlignmentPattern find() {
     int startX = this._startX;
@@ -229,7 +229,7 @@ class AlignmentPatternFinder {
   /// @param stateCount reading state module counts from horizontal scan
   /// @param i row where alignment pattern may be found
   /// @param j end of possible alignment pattern in row
-  /// @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
+  /// @return [AlignmentPattern] if we have found the same pattern twice, or null if not
   AlignmentPattern? _handlePossibleCenter(List<int> stateCount, int i, int j) {
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     double centerJ = _centerFromEnd(stateCount, j);

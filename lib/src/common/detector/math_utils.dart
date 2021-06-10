@@ -31,7 +31,7 @@ class MathUtils {
   /// values. -2.5 rounds to -3, not -2. For purposes here it makes no difference.
   ///
   /// @param d real value to round
-  /// @return nearest {@code int}
+  /// @return nearest `int`
   static int round(double d) {
     if(d.isNaN )return 0;
     if(d.isInfinite){

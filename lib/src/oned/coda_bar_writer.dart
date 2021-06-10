@@ -22,7 +22,7 @@ import '../barcode_format.dart';
 import 'coda_bar_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
-/// This class renders CodaBar as {@code List<bool>}.
+/// This class renders CodaBar as `List<bool>`.
 ///
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)
 class CodaBarWriter extends OneDimensionalCodeWriter {

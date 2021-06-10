@@ -24,7 +24,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import 'reed_solomon.dart';
 
-/// @author Rustam Abdullaev
+
 void main() {
 
   test('testDataMatrix', () {

@@ -1,4 +1,5 @@
 
+/// A StringBuilder extends [StringBuffer]. methods like StringBuilder from Java
 class StringBuilder extends StringBuffer {
   String? _buffer;
 

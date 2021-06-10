@@ -16,8 +16,8 @@
 
 import 'one_dimensional_code_writer.dart';
 
-/// <p>Encapsulates functionality and implementation that is common to UPC and EAN families
-/// of one-dimensional barcodes.</p>
+/// Encapsulates functionality and implementation that is common to UPC and EAN families
+/// of one-dimensional barcodes.
 ///
 /// @author aripollak@gmail.com (Ari Pollak)
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)

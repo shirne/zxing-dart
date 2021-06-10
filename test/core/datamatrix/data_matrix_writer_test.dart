@@ -22,8 +22,8 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/datamatrix.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// @author satorux@google.com (Satoru Takabayashi) - creator
-/// @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++
+
+
 void main(){
 
   test('testDataMatrixImageWriter', () {

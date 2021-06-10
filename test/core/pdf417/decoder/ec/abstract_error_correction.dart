@@ -21,7 +21,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../../common/reedsolomon/reed_solomon.dart' as ReedSolomon;
 
-/// @author Sean Owen
+
 abstract class AbstractErrorCorrectionTestCase  {
 
   static void corrupt(List<int> received, int howMany, Random random) {

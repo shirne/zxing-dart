@@ -19,7 +19,7 @@ import 'dart:typed_data';
 import 'generic_gf.dart';
 import 'generic_gfpoly.dart';
 
-/// <p>Implements Reed-Solomon encoding, as the name implies.</p>
+/// Implements Reed-Solomon encoding, as the name implies.
 ///
 /// @author Sean Owen
 /// @author William Rucklidge

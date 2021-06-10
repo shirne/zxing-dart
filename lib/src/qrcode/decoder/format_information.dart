@@ -18,12 +18,13 @@ import '../../common/detector/math_utils.dart';
 
 import 'error_correction_level.dart';
 
-/// <p>Encapsulates a QR Code's format information, including the data mask used and
-/// error correction level.</p>
+/// Encapsulates a QR Code's format information, including the data mask used and
+/// error correction level.
+///
+/// See [DataMask]
+/// See [ErrorCorrectionLevel]
 ///
 /// @author Sean Owen
-/// @see DataMask
-/// @see ErrorCorrectionLevel
 class FormatInformation {
   static const int _FORMAT_INFO_MASK_QR = 0x5412;
 
@@ -81,7 +82,7 @@ class FormatInformation {
   /// @param maskedFormatInfo1 format info indicator, with mask still applied
   /// @param maskedFormatInfo2 second copy of same info; both are checked at the same time
   ///  to establish best match
-  /// @return information about the format it specifies, or {@code null}
+  /// @return information about the format it specifies, or `null`
   ///  if doesn't seem to match any known pattern
   static FormatInformation? decodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {

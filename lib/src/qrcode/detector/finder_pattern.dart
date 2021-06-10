@@ -17,9 +17,9 @@
 
 import '../../result_point.dart';
 
-/// <p>Encapsulates a finder pattern, which are the three square patterns found in
+/// Encapsulates a finder pattern, which are the three square patterns found in
 /// the corners of QR Codes. It also encapsulates a count of similar finder patterns,
-/// as a convenience to the finder's bookkeeping.</p>
+/// as a convenience to the finder's bookkeeping.
 ///
 /// @author Sean Owen
 class FinderPattern extends ResultPoint {
@@ -45,7 +45,7 @@ class FinderPattern extends ResultPoint {
   }
 
   /// Combines this object's current estimate of a finder pattern position and module size
-  /// with a new estimate. It returns a new {@code FinderPattern} containing a weighted average
+  /// with a new estimate. It returns a new `FinderPattern` containing a weighted average
   /// based on count.
   FinderPattern combineEstimate(double i, double j, double newModuleSize) {
     int combinedCount = _count + 1;

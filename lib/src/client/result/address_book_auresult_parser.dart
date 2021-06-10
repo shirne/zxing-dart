@@ -18,10 +18,11 @@ import '../../result.dart';
 import 'address_book_parsed_result.dart';
 import 'result_parser.dart';
 
-/// Implements KDDI AU's address book format. See
+/// Implements KDDI AU's address book format.
+///
+/// See
 /// <a href="http://www.au.kddi.com/ezfactory/tec/two_dimensions/index.html">
 /// http://www.au.kddi.com/ezfactory/tec/two_dimensions/index.html</a>.
-/// (Thanks to Yuzo for translating!)
 ///
 /// @author Sean Owen
 class AddressBookAUResultParser extends ResultParser {

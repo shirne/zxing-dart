@@ -28,8 +28,8 @@ import 'logger.dart';
 import 'properties.dart';
 import 'test_result.dart';
 
-/// @author Sean Owen
-/// @author dswitkin@google.com (Daniel Switkin)
+
+
 class AbstractBlackBoxTestCase {
   static final Logger _log = Logger.getLogger(AbstractBlackBoxTestCase);
 

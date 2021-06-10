@@ -26,7 +26,7 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
-/// <p>Decodes Codabar barcodes.</p>
+/// Decodes Codabar barcodes.
 ///
 /// @author Bas Vijfwinkel
 /// @author David Walker

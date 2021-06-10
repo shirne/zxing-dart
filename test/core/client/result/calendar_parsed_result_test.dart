@@ -24,9 +24,8 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../utils.dart';
 
-/// Tests {@link CalendarParsedResult}.
+/// Tests [CalendarParsedResult].
 ///
-/// @author Sean Owen
 void main(){
 
   dateEqual(String? date, int? timestamp){

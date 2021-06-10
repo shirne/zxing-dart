@@ -27,7 +27,7 @@ import 'package:zxing_lib/zxing.dart';
 
 
 
-/// Tests {@link StringUtils}.
+/// Tests [StringUtils].
 void main() {
 
   void doTest(List<int> bytes, Encoding charset, String encoding) {

@@ -29,7 +29,7 @@ import 'package:zxing_lib/zxing.dart';
 import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
 
-/// Tests {@link MultipleBarcodeReader}.
+/// Tests [MultipleBarcodeReader].
 void main(){
 
   test('testMulti', () async{

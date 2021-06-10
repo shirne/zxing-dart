@@ -17,10 +17,11 @@
 import '../../pdf417_common.dart';
 import 'modulus_poly.dart';
 
-/// <p>A field based on powers of a generator integer, modulo some modulus.</p>
+/// A field based on powers of a generator integer, modulo some modulus.
+///
+/// See [GenericGF]
 ///
 /// @author Sean Owen
-/// @see com.google.zxing.common.reedsolomon.GenericGF
 class ModulusGF {
   static final ModulusGF pdf417Gf =
       ModulusGF._(PDF417Common.NUMBER_OF_CODEWORDS, 3);

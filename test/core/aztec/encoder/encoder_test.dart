@@ -27,8 +27,6 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Aztec 2D generator unit tests.
 ///
-/// @author Rustam Abdullaev
-/// @author Frank Yellin
 void main(){
 
   final Encoding ISO_8859_1 = latin1;

@@ -19,7 +19,7 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/qrcode.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// @author Sean Owen
+
 void main() {
   test('testMask0', () {
     testMaskAcrossDimensions(0, (i, j) => (i + j) % 2 == 0);

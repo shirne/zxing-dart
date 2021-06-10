@@ -25,10 +25,7 @@ import 'buffered_image_luminance_source.dart';
 
 
 
-
-
-
-/// Tests {@link InvertedLuminanceSource}.
+/// Tests [InvertedLuminanceSource].
 void main() {
 
   test('testInverted', () async {

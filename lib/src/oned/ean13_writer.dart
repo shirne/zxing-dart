@@ -23,7 +23,7 @@ import 'one_dimensional_code_writer.dart';
 import 'upceanreader.dart';
 import 'upceanwriter.dart';
 
-/// This object renders an EAN13 code as a {@link BitMatrix}.
+/// This object renders an EAN13 code as a [BitMatrix].
 ///
 /// @author aripollak@gmail.com (Ari Pollak)
 class EAN13Writer extends UPCEANWriter {

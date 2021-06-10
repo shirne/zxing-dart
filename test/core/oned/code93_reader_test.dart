@@ -20,7 +20,7 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// @author Daisuke Makiuchi
+
 void main(){
   void doTest(String expectedResult, String encodedResult){
     Code93Reader sut = new Code93Reader();

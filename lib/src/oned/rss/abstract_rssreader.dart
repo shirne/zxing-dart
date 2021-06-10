@@ -21,7 +21,7 @@ import '../../common/detector/math_utils.dart';
 import '../../not_found_exception.dart';
 import '../one_dreader.dart';
 
-/// Superclass of {@link OneDReader} implementations that read barcodes in the RSS family
+/// Superclass of [OneDReader] implementations that read barcodes in the RSS family
 /// of formats.
 abstract class AbstractRSSReader extends OneDReader {
   static const double _MAX_AVG_VARIANCE = 0.2;

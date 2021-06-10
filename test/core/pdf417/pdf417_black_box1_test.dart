@@ -21,7 +21,6 @@ import '../common/abstract_black_box.dart';
 
 /// This test consists of perfect, computer-generated images. We should have 100% passing.
 ///
-/// @author SITA Lab (kevin.osullivan@sita.aero)
 void main() {
   test('PDF417BlackBox1TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/pdf417-1",

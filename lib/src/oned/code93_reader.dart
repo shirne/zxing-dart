@@ -27,10 +27,11 @@ import '../result_point.dart';
 import '../result.dart';
 import 'one_dreader.dart';
 
-/// <p>Decodes Code 93 barcodes.</p>
+/// Decodes Code 93 barcodes.
+///
+/// See [Code39Reader]
 ///
 /// @author Sean Owen
-/// @see Code39Reader
 class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
   static const String ALPHABET_STRING =

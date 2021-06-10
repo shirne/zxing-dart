@@ -20,7 +20,6 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Class that lets one easily build an array of bytes by appending bits at a time.
 ///
-/// @author Sean Owen
 class BitSourceBuilder {
 
   final BytesBuilder output = BytesBuilder();

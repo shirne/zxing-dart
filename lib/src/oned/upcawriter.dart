@@ -21,7 +21,7 @@ import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'ean13_writer.dart';
 
-/// This object renders a UPC-A code as a {@link BitMatrix}.
+/// This object renders a UPC-A code as a [BitMatrix].
 ///
 /// @author qwandor@google.com (Andrew Walbran)
 class UPCAWriter implements Writer {

@@ -28,8 +28,8 @@ import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'decoded_bit_stream_parser.dart';
 
-/// <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
-/// the MaxiCode from an image.</p>
+/// The main class which implements MaxiCode decoding -- as opposed to locating and extracting
+/// the MaxiCode from an image.
 ///
 /// @author Manuel Kasten
 class Decoder {

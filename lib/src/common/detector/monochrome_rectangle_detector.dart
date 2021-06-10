@@ -20,9 +20,10 @@ import '../../not_found_exception.dart';
 import '../../result_point.dart';
 import '../bit_matrix.dart';
 
-/// <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
+/// A somewhat generic detector that looks for a barcode-like rectangular region within an image.
+///
 /// It looks within a mostly white region of an image for a region of black and white, but mostly
-/// black. It returns the four corners of the region, as best it can determine.</p>
+/// black. It returns the four corners of the region, as best it can determine.
 ///
 /// @author Sean Owen
 /// @deprecated without replacement since 3.3.0
@@ -37,7 +38,7 @@ class MonochromeRectangleDetector {
   /// <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
   /// white, in an image.</p>
   ///
-  /// @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and
+  /// @return [ResultPoint][] describing the corners of the rectangular region. The first and
   ///  last points are opposed on the diagonal, as are the second and third. The first point will be
   ///  the topmost point and the last, the bottommost. The second point will be leftmost and the
   ///  third, the rightmost
@@ -88,7 +89,7 @@ class MonochromeRectangleDetector {
   /// @param bottom maximum value of y
   /// @param maxWhiteRun maximum run of white pixels that can still be considered to be within
   ///  the barcode
-  /// @return a {@link ResultPoint} encapsulating the corner that was found
+  /// @return a [ResultPoint] encapsulating the corner that was found
   /// @throws NotFoundException if such a point cannot be found
   ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
       int centerY, int deltaY, int top, int bottom, int maxWhiteRun) {

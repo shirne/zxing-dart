@@ -23,7 +23,7 @@ import 'package:fixnum/fixnum.dart';
 import 'detector/math_utils.dart';
 import 'utils.dart';
 
-/// <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
+/// A simple, fast array of bits, represented compactly by an array of ints internally.
 ///
 /// @author Sean Owen
 class BitArray {
@@ -100,7 +100,7 @@ class BitArray {
   }
 
   /// @param from index to start looking for unset bit
-  /// @return index of next unset bit, or {@code size} if none are unset until the end
+  /// @return index of next unset bit, or `size` if none are unset until the end
   /// @see #getNextSet(int)
   int getNextUnset(int from) {
     if (from >= _size) {
@@ -205,7 +205,7 @@ class BitArray {
   /// least-significant. For example, appending 6 bits from 0x000001E will append the bits
   /// 0, 1, 1, 1, 1, 0 in that order.
   ///
-  /// @param value {@code int} containing bits to append
+  /// @param value `int` containing bits to append
   /// @param numBits bits from value to append
   void appendBits(int value, int numBits) {
     assert(numBits >= 0 && numBits <= 32, r'Num bits must be between 0 and 32');

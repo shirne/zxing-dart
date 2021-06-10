@@ -20,8 +20,10 @@ import 'email_address_parsed_result.dart';
 import 'email_do_co_mo_result_parser.dart';
 import 'result_parser.dart';
 
-/// Represents a result that encodes an e-mail address, either as a plain address
-/// like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
+/// Represents a result that encodes an e-mail address.
+///
+/// either as a plain address like "joe@example.org"
+/// or a mailto: URL like "mailto:joe@example.org".
 ///
 /// @author Sean Owen
 class EmailAddressResultParser extends ResultParser {

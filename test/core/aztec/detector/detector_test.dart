@@ -22,7 +22,6 @@ import 'package:zxing_lib/common.dart';
 
 /// Tests for the Detector
 ///
-/// @author Frank Yellin
 void main() {
 
   // Rotates a square BitMatrix to the right by 90 degrees

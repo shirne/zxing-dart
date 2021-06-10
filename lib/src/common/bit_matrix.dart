@@ -21,16 +21,18 @@ import 'package:fixnum/fixnum.dart';
 import 'bit_array.dart';
 import 'utils.dart';
 
-/// <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
+/// Represents a 2D matrix of bits.
+///
+/// In function arguments below, and throughout the common
 /// module, x is the column position, and y is the row position. The ordering is always x, y.
-/// The origin is at the top-left.</p>
+/// The origin is at the top-left.
 ///
-/// <p>Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
+/// Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
 /// with a new int. This is done intentionally so that we can copy out a row into a BitArray very
-/// efficiently.</p>
+/// efficiently.
 ///
-/// <p>The ordering of bits is row-major. Within each int, the least significant bits are used first,
-/// meaning they represent lower x values. This is compatible with BitArray's implementation.</p>
+/// The ordering of bits is row-major. Within each int, the least significant bits are used first,
+/// meaning they represent lower x values. This is compatible with BitArray's implementation.
 ///
 /// @author Sean Owen
 /// @author dswitkin@google.com (Daniel Switkin)
@@ -40,7 +42,7 @@ class BitMatrix {
   int _rowSize;
   Int32List _bits;
 
-  /// Creates an empty {@code BitMatrix}.
+  /// Creates an empty `BitMatrix`.
   ///
   /// @param width bit matrix width
   /// @param height bit matrix height
@@ -56,10 +58,10 @@ class BitMatrix {
     return _bits;
   }
 
-  /// Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
+  /// Interprets a 2D array of booleans as a `BitMatrix`, where "true" means an "on" bit.
   ///
   /// @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
-  /// @return {@code BitMatrix} representation of image
+  /// @return `BitMatrix` representation of image
   static BitMatrix parse(Object image, [String a = '', String b = '']) {
     if(image is String){
       return _parseString(image, a, b);
@@ -187,7 +189,7 @@ class BitMatrix {
     }
   }
 
-  /// Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
+  /// Exclusive-or (XOR): Flip the bit in this `BitMatrix` if the corresponding
   /// mask bit is set.
   ///
   /// @param mask XOR mask
@@ -261,12 +263,12 @@ class BitMatrix {
   }
 
   /// @param y row to set
-  /// @param row {@link BitArray} to copy from
+  /// @param row [BitArray] to copy from
   void setRow(int y, BitArray row) {
     List.copyRange(_bits, y * _rowSize, row.getBitArray(), 0, _rowSize);
   }
 
-  /// Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
+  /// Modifies this `BitMatrix` to represent the same but rotated 180 degrees
   void rotate180() {
     BitArray topRow = BitArray( _width);
     BitArray bottomRow = BitArray(_width);
@@ -282,7 +284,7 @@ class BitMatrix {
     }
   }
 
-  /// Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
+  /// Modifies this `BitMatrix` to represent the same but rotated 90 degrees counterclockwise
   void rotate90() {
     int newWidth = _height;
     int newHeight = _width;

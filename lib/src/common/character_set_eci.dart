@@ -127,7 +127,7 @@ class CharacterSetECI {
   }
 
   /// @param value character set ECI value
-  /// @return {@code CharacterSetECI} representing ECI of given value, or null if it is legal but
+  /// @return `CharacterSetECI` representing ECI of given value, or null if it is legal but
   ///   unsupported
   /// @throws FormatException if ECI value is invalid
   static CharacterSetECI? getCharacterSetECIByValue(int value) {

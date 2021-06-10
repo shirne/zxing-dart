@@ -21,8 +21,6 @@ import 'package:zxing_lib/datamatrix.dart';
 
 
 
-
-/// @author bbrown@google.com (Brian Brown)
 void main(){
 
   test('testAsciiStandardDecode', (){

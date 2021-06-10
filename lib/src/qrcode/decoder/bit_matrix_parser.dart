@@ -30,7 +30,7 @@ class BitMatrixParser {
   FormatInformation? _parsedFormatInfo;
   bool _isMirror = false;
 
-  /// @param bitMatrix {@link BitMatrix} to parse
+  /// @param bitMatrix [BitMatrix] to parse
   /// @throws FormatException if dimension is not >= 21 and 1 mod 4
   BitMatrixParser(this._bitMatrix) {
     int dimension = _bitMatrix.height;
@@ -41,7 +41,7 @@ class BitMatrixParser {
 
   /// <p>Reads format information from one of its two locations within the QR Code.</p>
   ///
-  /// @return {@link FormatInformation} encapsulating the QR Code's format info
+  /// @return [FormatInformation] encapsulating the QR Code's format info
   /// @throws FormatException if both format information locations cannot be parsed as
   /// the valid encoding of format information
   FormatInformation readFormatInformation() {
@@ -84,7 +84,7 @@ class BitMatrixParser {
 
   /// <p>Reads version information from one of its two locations within the QR Code.</p>
   ///
-  /// @return {@link Version} encapsulating the QR Code's version
+  /// @return [Version] encapsulating the QR Code's version
   /// @throws FormatException if both version information locations cannot be parsed as
   /// the valid encoding of version information
   Version readVersion() {
@@ -137,7 +137,7 @@ class BitMatrixParser {
     return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
-  /// <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
+  /// <p>Reads the bits in the [BitMatrix] representing the finder pattern in the
   /// correct order in order to reconstruct the codewords bytes contained within the
   /// QR Code.</p>
   ///

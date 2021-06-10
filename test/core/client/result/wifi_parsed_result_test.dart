@@ -19,9 +19,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// Tests {@link WifiParsedResult}.
+/// Tests [WifiParsedResult].
 ///
-/// @author Vikram Aggarwal
 void main(){
 
 

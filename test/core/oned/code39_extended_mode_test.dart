@@ -20,7 +20,7 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
-/// @author Michael Jahn
+
 void main(){
   void doTest(String expectedResult, String encodedResult){
     Code39Reader sut = new Code39Reader(false, true);
