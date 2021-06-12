@@ -65,7 +65,7 @@ class Encoder {
   }
 
   static QRCode encode(String content,
-      [ErrorCorrectionLevel? ecLevel, Map<EncodeHintType, Object>? hints]) {
+      [ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H, Map<EncodeHintType, Object>? hints]) {
     // Determine what character encoding has been specified by the caller, if any
     Encoding? encoding = defaultByteModeEncoding;
     bool hasEncodingHint =
@@ -113,11 +113,11 @@ class Encoder {
           int.parse(hints[EncodeHintType.QR_VERSION].toString());
       version = Version.getVersionForNumber(versionNumber);
       int bitsNeeded = _calculateBitsNeeded(mode, headerBits, dataBits, version);
-      if (!_willFit(bitsNeeded, version, ecLevel!)) {
+      if (!_willFit(bitsNeeded, version, ecLevel)) {
         throw WriterException("Data too big for requested version");
       }
     } else {
-      version = _recommendVersion(ecLevel!, mode, headerBits, dataBits);
+      version = _recommendVersion(ecLevel, mode, headerBits, dataBits);
     }
 
     BitArray headerAndDataBits = BitArray();
