@@ -45,7 +45,7 @@ void main(){
 
   Future<BufferImage> readImage(String fileName) async{
     File path = File( AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path +'/'+ fileName);
-    return (await BufferImage.fromFile(path))!;
+    return (await BufferImage.fromFile(path.readAsBytesSync()))!;
   }
 
   test('testFindFinderPatterns', () async{

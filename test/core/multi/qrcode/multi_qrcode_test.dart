@@ -37,7 +37,7 @@ void main(){
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-qrcode-1");
 
     File testImage = File(testBase.path + "/1.png");
-    BufferImage image = (await BufferImage.fromFile(testImage))!;
+    BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 

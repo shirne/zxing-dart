@@ -63,7 +63,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     List<int> falsePositives = List.filled(testResults.length, 0);
     for (File testImage in imageFiles) {
       log.info("Starting $testImage");
-      BufferImage image = (await BufferImage.fromFile(testImage))!;
+      BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
       //if (image == null) {
       //  throw new IOException("Could not read image: " + testImage);
       //}

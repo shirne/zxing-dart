@@ -43,7 +43,7 @@ class TestCaseUtil {
 
     File file = File(path);
 
-    return (await BufferImage.fromFile(file))!;
+    return (await BufferImage.fromFile(file.readAsBytesSync()))!;
   }
 
   static Future<BinaryBitmap> getBinaryBitmap(String path) async{

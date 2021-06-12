@@ -45,7 +45,7 @@ void main(){
   void assertCorrectImage2string(String fileName, String expected) async{
     String path = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path + '/' +(fileName);
 
-    BufferImage image = (await BufferImage.fromFile(File(path)))!;
+    BufferImage image = (await BufferImage.fromFile(File(path).readAsBytesSync()))!;
     BinaryBitmap binaryMap =
     new BinaryBitmap( GlobalHistogramBinarizer( BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;

@@ -76,7 +76,7 @@ class AbstractBlackBoxTestCase {
     for (File testImage in imageFiles) {
       _log.info("Starting testImage");
 
-      BufferImage image = (await BufferImage.fromFile(testImage))!;
+      BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
 
       String testImageFileName = testImage.uri.pathSegments.last;
       String fileBaseName =

@@ -82,7 +82,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       for (int x = 0; x < testCount; x++) {
         List<Result> results = [];
         for (File imageFile in testImageGroup.value) {
-          BufferImage image = (await BufferImage.fromFile(imageFile))!;
+          BufferImage image = (await BufferImage.fromFile(imageFile.readAsBytesSync()))!;
           double rotation = testResults[x].getRotation();
           BufferImage rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotation);
           LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
