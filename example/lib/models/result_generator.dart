@@ -73,27 +73,38 @@ class VCardResultGenerator extends ResultGenerator<AddressBookParsedResult>{
     List<String>? cField = data.names;
     if(cField != null && cField.isNotEmpty){
       for(String name in cField){
-        buffer.write("FN;$name\r\n");
+        buffer.write("FN:$name\r\n");
       }
     }
+    if(data.org != null && data.org!.isNotEmpty){
+      buffer.write("ORG:${data.org}\r\n");
+    }
+    if(data.title != null && data.title!.isNotEmpty){
+      buffer.write("TITLE:${data.title}\r\n");
+    }
+
     cField = data.phoneNumbers;
     if(cField != null && cField.isNotEmpty){
       for(int i=0;i<cField.length;i++){
-        buffer.write("TEL;${data.phoneTypes?[i]}:${cField[i]}\r\n");
+        if(data.phoneTypes?[i] == null){
+          buffer.write("TEL;:${cField[i]}\r\n");
+        }else {
+          buffer.write("TEL;${data.phoneTypes![i]}:${cField[i]}\r\n");
+        }
       }
     }
     cField = data.addresses;
     if(cField != null && cField.isNotEmpty){
       for(int i=0;i<cField.length;i++){
         if(data.addressTypes?[i] == null){
-          buffer.write("ADR;${cField[i]}\r\n");
+          buffer.write("ADR;:;;${cField[i]}\r\n");
         }else {
-          buffer.write("ADR;${data.addressTypes![i]}:${cField[i]}\r\n");
+          buffer.write("ADR;${data.addressTypes![i]}:;;${cField[i]}\r\n");
         }
       }
     }
     if(data.note != null && data.note!.isNotEmpty){
-      buffer.write("NOTE:${data.note}\r\n");
+      buffer.write("NOTE;:${data.note}\r\n");
     }
     buffer.write("END:VCARD");
     return buffer.toString();
@@ -102,7 +113,7 @@ class VCardResultGenerator extends ResultGenerator<AddressBookParsedResult>{
   _writeN(String name, StringBuffer buffer){
     List<String> namePart = name.split(RegExp('\s+'));
     if(namePart.length < 2) {
-      buffer.write("N;$name\r\n");
+      buffer.write("N:$name\r\n");
     }else{
       List<String> parts = [];
       if(namePart.length > 3){

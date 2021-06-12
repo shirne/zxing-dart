@@ -22,6 +22,8 @@ class _TextFormState extends State<VCardForm> {
   late TextEditingController _nameController;
   late TextEditingController _telController;
   late TextEditingController _addController;
+  late TextEditingController _orgController;
+  late TextEditingController _titleController;
 
   @override
   void initState() {
@@ -38,6 +40,16 @@ class _TextFormState extends State<VCardForm> {
     _addController.addListener(() {
       widget.result.addresses![0] = _addController.text;
     });
+
+    _orgController = TextEditingController(text: widget.result.org);
+    _orgController.addListener(() {
+      widget.result.org = _orgController.text;
+    });
+
+    _titleController = TextEditingController(text: widget.result.title);
+    _titleController.addListener(() {
+      widget.result.title = _titleController.text;
+    });
     _controller = TextEditingController(text: widget.result.note);
     _controller.addListener(() {
       widget.result.note = _controller.text;
@@ -50,19 +62,27 @@ class _TextFormState extends State<VCardForm> {
     return ListTileGroup(
       children: [
         FormCell(
-            label: Text('name'),
+            label: Text('Name.'),
             field: CupertinoTextField(controller: _nameController)
         ),
         FormCell(
-            label: Text('tel'),
+            label: Text('Tel.'),
             field: CupertinoTextField(controller: _telController)
         ),
         FormCell(
-            label: Text('add'),
+            label: Text('Org.'),
+            field: CupertinoTextField(controller: _orgController)
+        ),
+        FormCell(
+            label: Text('Title'),
+            field: CupertinoTextField(controller: _titleController)
+        ),
+        FormCell(
+            label: Text('Add'),
             field: CupertinoTextField(controller: _addController)
         ),
         CupertinoListTile(
-          title: Text('note'),
+          title: Text('Note'),
         ),
         CupertinoTextField(
           maxLines: 5,

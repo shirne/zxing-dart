@@ -95,7 +95,7 @@ class _IndexPageState extends State<IndexPage> {
       Color bgColor = Colors.white,
       Color color = Colors.black}) async {
     QRCode code = Encoder.encode(content);
-    print(code.toString());
+    print(content);
     ByteMatrix matrix = code.matrix!;
     if(pixelSize < 1){
       pixelSize = 350 ~/ matrix.width;
