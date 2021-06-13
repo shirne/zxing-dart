@@ -119,7 +119,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return new BufferedImageLuminanceSource(image, this.left + left, this.top + top, width, height);
+    return BufferedImageLuminanceSource(image.copy(), this.left + left, this.top + top, width, height);
   }
 
   /// This is always true, since the image is a gray-scale image.
@@ -134,18 +134,11 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     int sourceHeight = image.height;
 
     // Rotate 90 degrees counterclockwise.
-    //AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, sourceWidth);
-
     // Note width/height are flipped since we are rotating 90 degrees.
-    BufferImage rotatedImage = image.rotate(Math.pi/2);
-
-    // Draw the original image into rotated, via transformation
-    //Graphics2D g = rotatedImage.createGraphics();
-    //g.drawImage(image, transform, null);
-    //g.dispose();
+    image.rotate(Math.pi/2);
 
     // Maintain the cropped region, but rotate it too.
-    return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), height, width);
+    return BufferedImageLuminanceSource(image.copy(), top, sourceWidth - (left + width), height, width);
   }
 
   @override
@@ -159,12 +152,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     int sourceDimension = Math.max(image.width, image.height);
     //BufferedImage rotatedImage = new BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
-    BufferImage rotatedImage = image.rotate(Math.pi / 4);
-
-    // Draw the original image into rotated, via transformation
-    //Graphics2D g = rotatedImage.createGraphics();
-    //g.drawImage(image, transform, null);
-    //g.dispose();
+    image.rotate(Math.pi / 4);
 
     int halfDimension = Math.max(width, height) ~/ 2;
     int newLeft = Math.max(0, oldCenterX - halfDimension);
@@ -172,7 +160,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
     int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
-    return new BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
+    return BufferedImageLuminanceSource(image.copy(), newLeft, newTop, newRight - newLeft, newBottom - newTop);
   }
 
 }
