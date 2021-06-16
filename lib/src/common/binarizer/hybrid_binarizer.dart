@@ -17,9 +17,9 @@
 import 'dart:math' as Math;
 import 'dart:typed_data';
 
-import '../binarizer.dart';
-import '../luminance_source.dart';
-import 'bit_matrix.dart';
+import '../../binarizer.dart';
+import '../../luminance_source.dart';
+import '../bit_matrix.dart';
 import 'global_histogram_binarizer.dart';
 
 /// This class implements a local thresholding algorithm, which while slower than the
@@ -73,7 +73,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         subHeight++;
       }
       List<List<int>> blackPoints =
-          _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+      _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
       BitMatrix newMatrix = BitMatrix(width, height);
       _calculateThresholdForBlock(luminances, subWidth, subHeight, width, height,
@@ -105,15 +105,15 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;
     for (int y = 0; y < subHeight; y++) {
-      int yoffset = y << BLOCK_SIZE_POWER;
-      if (yoffset > maxYOffset) {
-        yoffset = maxYOffset;
+      int yOffset = y << BLOCK_SIZE_POWER;
+      if (yOffset > maxYOffset) {
+        yOffset = maxYOffset;
       }
       int top = _cap(y, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
-        int xoffset = x << BLOCK_SIZE_POWER;
-        if (xoffset > maxXOffset) {
-          xoffset = maxXOffset;
+        int xOffset = x << BLOCK_SIZE_POWER;
+        if (xOffset > maxXOffset) {
+          xOffset = maxXOffset;
         }
         int left = _cap(x, subWidth - 3);
         int sum = 0;
@@ -126,7 +126,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
               blackRow[left + 2];
         }
         int average = sum ~/ 25;
-        _thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
+        _thresholdBlock(luminances, xOffset, yOffset, average, width, matrix);
       }
     }
   }
@@ -139,8 +139,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   static void _thresholdBlock(Int8List luminances, int xoffset, int yoffset,
       int threshold, int stride, BitMatrix matrix) {
     for (int y = 0, offset = yoffset * stride + xoffset;
-        y < BLOCK_SIZE;
-        y++, offset += stride) {
+    y < BLOCK_SIZE;
+    y++, offset += stride) {
       for (int x = 0; x < BLOCK_SIZE; x++) {
         // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
         if ((luminances[offset + x] & 0xFF) <= threshold) {
@@ -160,21 +160,21 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     List<List<int>> blackPoints = List.generate(
         subHeight, (index) => List.filled(subWidth, 0));
     for (int y = 0; y < subHeight; y++) {
-      int yoffset = y << BLOCK_SIZE_POWER;
-      if (yoffset > maxYOffset) {
-        yoffset = maxYOffset;
+      int yOffset = y << BLOCK_SIZE_POWER;
+      if (yOffset > maxYOffset) {
+        yOffset = maxYOffset;
       }
       for (int x = 0; x < subWidth; x++) {
-        int xoffset = x << BLOCK_SIZE_POWER;
-        if (xoffset > maxXOffset) {
-          xoffset = maxXOffset;
+        int xOffset = x << BLOCK_SIZE_POWER;
+        if (xOffset > maxXOffset) {
+          xOffset = maxXOffset;
         }
         int sum = 0;
         int min = 0xFF;
         int max = 0;
-        for (int yy = 0, offset = yoffset * width + xoffset;
-            yy < BLOCK_SIZE;
-            yy++, offset += width) {
+        for (int yy = 0, offset = yOffset * width + xOffset;
+        yy < BLOCK_SIZE;
+        yy++, offset += width) {
           for (int xx = 0; xx < BLOCK_SIZE; xx++) {
             int pixel = luminances[offset + xx] & 0xFF;
             sum += pixel;
@@ -219,8 +219,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
 
             // The (min < bp) is arbitrary but works better than other heuristics that were tried.
             int averageNeighborBlackPoint = (blackPoints[y - 1][x] +
-                    (2 * blackPoints[y][x - 1]) +
-                    blackPoints[y - 1][x - 1]) ~/
+                (2 * blackPoints[y][x - 1]) +
+                blackPoints[y - 1][x - 1]) ~/
                 4;
             if (min < averageNeighborBlackPoint) {
               average = averageNeighborBlackPoint;

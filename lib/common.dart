@@ -9,12 +9,13 @@ export 'src/common/character_set_eci.dart';
 export 'src/common/decoder_result.dart';
 export 'src/common/default_grid_sampler.dart';
 export 'src/common/detector_result.dart';
-export 'src/common/global_histogram_binarizer.dart';
 export 'src/common/grid_sampler.dart';
-export 'src/common/hybrid_binarizer.dart';
 export 'src/common/perspective_transform.dart';
 export 'src/common/string_builder.dart';
 export 'src/common/string_utils.dart';
+
+export 'src/common/binarizer/global_histogram_binarizer.dart';
+export 'src/common/binarizer/hybrid_binarizer.dart';
 
 export 'src/common/detector/math_utils.dart';
 export 'src/common/detector/monochrome_rectangle_detector.dart';

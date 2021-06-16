@@ -76,7 +76,7 @@ class ReedSolomonDecoder {
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - _field.log(errorLocations[i]);
       if (position < 0) {
-        throw Exception("Bad error location");
+        throw ReedSolomonException("Bad error location");
       }
       received[position] =
           GenericGF.addOrSubtract(received[position], errorMagnitudes[i]);
@@ -107,7 +107,7 @@ class ReedSolomonDecoder {
       // Divide rLastLast by rLast, with quotient in q and remainder in r
       if (rLast.isZero) {
         // Oops, Euclidean algorithm already terminated?
-        throw Exception("r_{i-1} was zero");
+        throw ReedSolomonException("r_{i-1} was zero");
       }
       r = rLastLast;
       GenericGFPoly q = _field.zero;
@@ -123,13 +123,13 @@ class ReedSolomonDecoder {
       t = q.multiply(tLast).addOrSubtract(tLastLast);
 
       if (r.degree >= rLast.degree) {
-        throw Exception("Division algorithm failed to reduce polynomial?");
+        throw ReedSolomonException("Division algorithm failed to reduce polynomial?");
       }
     }
 
     int sigmaTildeAtZero = t.getCoefficient(0);
     if (sigmaTildeAtZero == 0) {
-      throw Exception("sigmaTilde(0) was zero");
+      throw ReedSolomonException("sigmaTilde(0) was zero");
     }
 
     int inverse = _field.inverse(sigmaTildeAtZero);

@@ -16,11 +16,11 @@
 
 import 'dart:typed_data';
 
-import '../binarizer.dart';
-import '../luminance_source.dart';
-import '../not_found_exception.dart';
-import 'bit_array.dart';
-import 'bit_matrix.dart';
+import '../../binarizer.dart';
+import '../../luminance_source.dart';
+import '../../not_found_exception.dart';
+import '../bit_array.dart';
+import '../bit_matrix.dart';
 
 /// This Binarizer implementation uses the old ZXing global histogram approach.
 ///

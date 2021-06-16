@@ -32,14 +32,10 @@ class ByteMatrix {
 
   int get width => _width;
 
-  int get(int x, int y) {
-    return _bytes[y][x];
-  }
+  int get(int x, int y) => _bytes[y][x];
 
   /// @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
-  List<Int8List> getArray() {
-    return _bytes;
-  }
+  List<Int8List> get bytes => _bytes;
 
   void set(int x, int y, int value) {
     _bytes[y][x] = value;

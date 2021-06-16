@@ -44,9 +44,7 @@ class BinaryBitmap {
   ///            If used, the Binarizer will call BitArray.clear(). Always use the returned object.
   /// @return The array of bits for this row (true means black).
   /// @throws NotFoundException if row can't be binarized
-  BitArray getBlackRow(int y, BitArray? row) {
-    return _binarizer.getBlackRow(y, row);
-  }
+  BitArray getBlackRow(int y, BitArray? row) => _binarizer.getBlackRow(y, row);
 
   /// Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive
   /// and do not call it repeatedly. This method is intended for decoding 2D barcodes and may or
@@ -68,9 +66,7 @@ class BinaryBitmap {
   }
 
   /// @return Whether this bitmap can be cropped.
-  bool isCropSupported() {
-    return _binarizer.luminanceSource.isCropSupported;
-  }
+  bool get isCropSupported => _binarizer.luminanceSource.isCropSupported;
 
   /// Returns a new object with cropped image data. Implementations may keep a reference to the
   /// original data rather than a copy. Only callable if isCropSupported() is true.
@@ -87,9 +83,7 @@ class BinaryBitmap {
   }
 
   /// @return Whether this bitmap supports counter-clockwise rotation.
-  bool isRotateSupported() {
-    return _binarizer.luminanceSource.isRotateSupported;
-  }
+  bool get isRotateSupported => _binarizer.luminanceSource.isRotateSupported;
 
   /// Returns a new object with rotated image data by 90 degrees counterclockwise.
   /// Only callable if {@link #isRotateSupported()} is true.

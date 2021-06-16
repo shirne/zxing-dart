@@ -54,9 +54,7 @@ class BitMatrix {
 
   BitMatrix._(this._width, this._height, this._rowSize, this._bits);
 
-  Int32List get data{
-    return _bits;
-  }
+  Int32List get data => _bits;
 
   /// Interprets a 2D array of booleans as a `BitMatrix`, where "true" means an "on" bit.
   ///

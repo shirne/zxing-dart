@@ -153,7 +153,7 @@ class PDF417ScanningDecoder {
       return null;
     }
     BarcodeMetadata? barcodeMetadata =
-        _getBarcodeMetadata(leftRowIndicatorColumn!, rightRowIndicatorColumn!);
+        _getBarcodeMetadata(leftRowIndicatorColumn, rightRowIndicatorColumn);
     if (barcodeMetadata == null) {
       return null;
     }

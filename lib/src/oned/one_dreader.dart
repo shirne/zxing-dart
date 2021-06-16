@@ -41,7 +41,7 @@ abstract class OneDReader implements Reader {
     } on NotFoundException catch (nfe) {
       bool tryHarder =
           hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-      if (tryHarder && image.isRotateSupported()) {
+      if (tryHarder && image.isRotateSupported) {
         BinaryBitmap rotatedImage = image.rotateCounterClockwise();
         Result result = _doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW

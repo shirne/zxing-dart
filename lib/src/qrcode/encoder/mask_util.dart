@@ -43,7 +43,7 @@ class MaskUtil {
   /// penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
   static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
-    List<Int8List> array = matrix.getArray();
+    List<Int8List> array = matrix.bytes;
     int width = matrix.width;
     int height = matrix.height;
     for (int y = 0; y < height - 1; y++) {
@@ -65,7 +65,7 @@ class MaskUtil {
   /// find patterns like 000010111010000, we give penalty once.
   static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int numPenalties = 0;
-    List<Int8List> array = matrix.getArray();
+    List<Int8List> array = matrix.bytes;
     int width = matrix.width;
     int height = matrix.height;
     for (int y = 0; y < height; y++) {
@@ -127,7 +127,7 @@ class MaskUtil {
   /// penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
   static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;
-    List<Int8List> array = matrix.getArray();
+    List<Int8List> array = matrix.bytes;
     int width = matrix.width;
     int height = matrix.height;
     for (int y = 0; y < height; y++) {
@@ -190,7 +190,7 @@ class MaskUtil {
     int penalty = 0;
     int iLimit = isHorizontal ? matrix.height : matrix.width;
     int jLimit = isHorizontal ? matrix.width : matrix.height;
-    List<Int8List> array = matrix.getArray();
+    List<Int8List> array = matrix.bytes;
     for (int i = 0; i < iLimit; i++) {
       int numSameBitCells = 0;
       int prevBit = -1;
