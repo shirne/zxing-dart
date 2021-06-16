@@ -104,7 +104,7 @@ class ErrorCorrection {
       String ecc = _createECCBlock(codewords, symbolInfo.errorCodewords);
       sb.write(ecc);
     } else {
-      //sb.setLength(sb.capacity());
+      sb.setLength(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
       List<int> dataSizes = List.generate(blockCount, (index) => symbolInfo.getDataLengthForInterleavedBlock(index + 1));
       List<int> errorSizes = List.generate(blockCount, (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1));
       

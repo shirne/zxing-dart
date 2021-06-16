@@ -38,7 +38,7 @@ class StringBuilder extends StringBuffer {
     super.clear();
     if(start > 0)super.write(_buffer!.substring(0, start));
     _writeAuto(obj);
-    if (end < _buffer!.length - 1)
+    if (end < _buffer!.length)
       super.write(_buffer!.substring(end));
     _buffer = null;
   }
@@ -60,7 +60,7 @@ class StringBuilder extends StringBuffer {
     super.clear();
     if(offset > 0)super.write(_buffer!.substring(0, offset));
     _writeAuto(obj);
-    if (offset < _buffer!.length - 1)
+    if (offset < _buffer!.length)
       super.write(_buffer!.substring(offset));
     _buffer = null;
   }
@@ -96,7 +96,11 @@ class StringBuilder extends StringBuffer {
   }
 
   setLength(int length){
-    delete(length, this.length);
+    if(length > this.length){
+      writeAll(List.filled(length - this.length, "\x00"));
+    }else {
+      delete(length, this.length);
+    }
   }
 
   void write(Object? object) {

@@ -113,7 +113,7 @@ class DataMatrixWriter implements Writer {
       if ((y % symbolInfo.matrixHeight) == 0) {
         matrixX = 0;
         for (int x = 0; x < symbolInfo.symbolWidth; x++) {
-          matrix.set(matrixX, matrixY, (x % 2));
+          matrix.set(matrixX, matrixY, (x % 2) == 0 ? 1 : 0);
           matrixX++;
         }
         matrixY++;
@@ -129,7 +129,7 @@ class DataMatrixWriter implements Writer {
         matrixX++;
         // Fill the right edge with alternate 0 / 1
         if ((x % symbolInfo.matrixWidth) == symbolInfo.matrixWidth - 1) {
-          matrix.set(matrixX, matrixY, (y % 2));
+          matrix.set(matrixX, matrixY, (y % 2) == 0 ? 1 : 0);
           matrixX++;
         }
       }
