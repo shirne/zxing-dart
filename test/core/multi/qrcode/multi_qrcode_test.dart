@@ -15,7 +15,6 @@
  */
 
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter_test/flutter_test.dart';

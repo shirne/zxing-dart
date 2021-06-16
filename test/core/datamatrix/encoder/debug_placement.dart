@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:typed_data';
 
 import 'package:zxing_lib/datamatrix.dart';
 

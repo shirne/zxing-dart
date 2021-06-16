@@ -1,4 +1,3 @@
-
 /// core lib
 library zxing_lib;
 
@@ -25,4 +24,3 @@ export 'src/result_point_callback.dart';
 export 'src/rgbluminance_source.dart';
 export 'src/writer.dart';
 export 'src/writer_exception.dart';
-

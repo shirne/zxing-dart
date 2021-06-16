@@ -19,7 +19,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/qrcode.dart';
-import 'package:zxing_lib/zxing.dart';
 
 
 

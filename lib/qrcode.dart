@@ -1,4 +1,3 @@
-
 /// qrcode lib
 library zxing_lib.qrcode;
 

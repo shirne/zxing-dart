@@ -1,4 +1,3 @@
-
 /// common lib
 library zxing_lib.common;
 

@@ -354,7 +354,7 @@ void main(){
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
     try {
       Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
-    } on WriterException catch ( we) { //
+    } on WriterException catch ( _) { //
       // good
     }
     // Should use append8BitBytes.

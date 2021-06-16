@@ -1,4 +1,3 @@
-
 /// data matrix lib
 library zxing_lib.datamatrix;
 

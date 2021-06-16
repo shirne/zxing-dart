@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:zxing_lib/zxing.dart';
 
 void main() {
   test('test zxing', () {

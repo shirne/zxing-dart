@@ -272,7 +272,7 @@ class DetectionResult {
   int get barcodeECLevel => _barcodeMetadata.errorCorrectionLevel;
 
   void setDetectionResultColumn(
-      int barcodeColumn, DetectionResultColumn detectionResultColumn) {
+      int barcodeColumn, DetectionResultColumn? detectionResultColumn) {
     _detectionResultColumns[barcodeColumn] = detectionResultColumn;
   }
 

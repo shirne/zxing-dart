@@ -17,7 +17,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/qrcode.dart';
-import 'package:zxing_lib/zxing.dart';
 
 
 void main(){
@@ -55,24 +54,22 @@ void main(){
     doTestVersion(27, 0x1B08E);
     doTestVersion(32, 0x209D5);
   });
-  
-
 
 }
 
-void checkVersion(Version version, int number, int dimension) {
+void checkVersion(Version? version, int number, int dimension) {
   assert(version != null);
-  expect(number, version.versionNumber);
-  assert(version.alignmentPatternCenters != null);
+  expect(number, version?.versionNumber);
+  assert(version?.alignmentPatternCenters != null);
   if (number > 1) {
-    assert(version.alignmentPatternCenters.length > 0);
+    assert(version!.alignmentPatternCenters.length > 0);
   }
-  expect(dimension, version.dimensionForVersion);
-  assert(version.getECBlocksForLevel(ErrorCorrectionLevel.H) != null);
-  assert(version.getECBlocksForLevel(ErrorCorrectionLevel.L) != null);
-  assert(version.getECBlocksForLevel(ErrorCorrectionLevel.M) != null);
-  assert(version.getECBlocksForLevel(ErrorCorrectionLevel.Q) != null);
-  assert(version.buildFunctionPattern() != null);
+  expect(dimension, version?.dimensionForVersion);
+  assert(version?.getECBlocksForLevel(ErrorCorrectionLevel.H) != null);
+  assert(version?.getECBlocksForLevel(ErrorCorrectionLevel.L) != null);
+  assert(version?.getECBlocksForLevel(ErrorCorrectionLevel.M) != null);
+  assert(version?.getECBlocksForLevel(ErrorCorrectionLevel.Q) != null);
+  assert(version?.buildFunctionPattern() != null);
 }
 
 void doTestVersion(int expectedVersion, int mask) {

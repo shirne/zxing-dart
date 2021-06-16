@@ -19,7 +19,6 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zxing_lib/pdf417.dart';
-import 'package:zxing_lib/zxing.dart';
 
 
 /// Tests [PDF417HighLevelEncoder].

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:typed_data';
 
 import 'barcode_format.dart';
 import 'result_metadata_type.dart';

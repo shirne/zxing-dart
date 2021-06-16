@@ -15,7 +15,6 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -23,8 +22,6 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:charset/charset.dart';
 import 'package:zxing_lib/common.dart';
-import 'package:zxing_lib/zxing.dart';
-
 
 
 /// Tests [StringUtils].

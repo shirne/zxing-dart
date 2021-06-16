@@ -20,7 +20,6 @@ import '../../arguments_exception.dart';
 
 import '../../common/bit_matrix.dart';
 import '../../formats_exception.dart';
-import '../../reader_exception.dart';
 import 'version.dart';
 
 /// @author bbrown@google.com (Brian Brown)

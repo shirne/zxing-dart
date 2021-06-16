@@ -15,7 +15,6 @@
  */
 
 import 'dart:math' as Math;
-import 'dart:typed_data';
 
 import '../../common/bit_array.dart';
 

@@ -15,7 +15,6 @@
  */
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import '../../common/bit_array.dart';
 import '../../common/character_set_eci.dart';

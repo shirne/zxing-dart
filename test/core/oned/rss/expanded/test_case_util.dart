@@ -33,7 +33,6 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../../../buffered_image_luminance_source.dart';
-import '../../../common/abstract_black_box.dart';
 
 class TestCaseUtil {
 

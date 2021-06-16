@@ -1,4 +1,3 @@
-
 /// oned lib
 library zxing_lib.oned;
 

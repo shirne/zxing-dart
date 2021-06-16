@@ -17,7 +17,6 @@
 
 import 'dart:math';
 
-import 'package:zxing_lib/zxing.dart';
 
 import '../../../common/reedsolomon/reed_solomon.dart' as ReedSolomon;
 

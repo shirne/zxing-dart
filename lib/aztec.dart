@@ -1,4 +1,3 @@
-
 /// aztec lib
 library zxing_lib.aztec;
 

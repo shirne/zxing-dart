@@ -1,4 +1,3 @@
-
 /// maxicode lib
 library zxing_lib.maxicode;
 

@@ -88,9 +88,9 @@ class PDF417ScanningDecoder {
     }
     detectionResult.boundingBox = boundingBox;
     int maxBarcodeColumn = detectionResult.barcodeColumnCount + 1;
-    detectionResult.setDetectionResultColumn(0, leftRowIndicatorColumn!);
+    detectionResult.setDetectionResultColumn(0, leftRowIndicatorColumn);
     detectionResult.setDetectionResultColumn(
-        maxBarcodeColumn, rightRowIndicatorColumn!);
+        maxBarcodeColumn, rightRowIndicatorColumn);
 
     bool leftToRight = leftRowIndicatorColumn != null;
     for (int barcodeColumnCount = 1;

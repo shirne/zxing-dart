@@ -1,4 +1,3 @@
-
 /// multi decode lib
 ///
 /// decode multi qrcode in one image

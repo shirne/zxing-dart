@@ -1,4 +1,3 @@
-
 /// decode parsers and results
 library zxing_lib.client;
 

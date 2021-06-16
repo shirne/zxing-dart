@@ -1,4 +1,3 @@
-
 /// pdf417 lib
 library zxing_lib.pdf417;
 

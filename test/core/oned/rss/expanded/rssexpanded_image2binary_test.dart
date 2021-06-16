@@ -47,17 +47,16 @@ void main(){
     String path = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path + '/' + (fileName);
 
     BufferImage image = (await BufferImage.fromFile(File(path).readAsBytesSync()))!;
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
     List<ExpandedPair> pairs;
     try {
-      RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
+      RSSExpandedReader rssExpandedReader = RSSExpandedReader();
       pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
     } on ReaderException catch ( re) { //
       fail(re.toString());
-      return;
     }
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
     expect(expected, binary.toString());
