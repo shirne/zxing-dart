@@ -37,7 +37,8 @@ dependencies:
   file_selector_windows: ^0.0.2
   file_selector_macos: ^0.0.4
   file_selector_linux: ^0.0.2
-  buffer_image: ^0.2.1
+  buffer_image: ^0.3.1
+    # path: ../../buffer_image
   zxing_lib:
     path: ../
 

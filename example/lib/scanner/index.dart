@@ -1,6 +1,20 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:buffer_image/buffer_image.dart';
+import 'package:example/scanner/result.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/multi.dart';
+import 'package:zxing_lib/zxing.dart';
+import '../models/image_source.dart';
+import '../models/utils.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'binarizer.dart';
 import 'camera.dart';
-import 'webview.dart';
 
 class IndexPage extends StatelessWidget {
   @override
@@ -13,8 +27,11 @@ class IndexPage extends StatelessWidget {
           case '/camera':
             builder = (BuildContext context) => const CameraPage();
             break;
-          case '/webview':
-            builder = (BuildContext context) => const WebviewPage();
+          case '/result':
+            builder = (BuildContext context) => ResultPage(settings.arguments as List<Result>);
+            break;
+          case '/binarizer':
+            builder = (BuildContext context) => const BinarizerPage();
             break;
           default:
             builder = (BuildContext context) => const _IndexPage();
@@ -35,9 +52,70 @@ class _IndexPageState extends State<_IndexPage> {
   void openCamera() {
     Navigator.of(context).pushNamed('/camera');
   }
+  void openBinarizer(){
+    Navigator.of(context).pushNamed('/binarizer');
+  }
 
-  void openWebview() {
-    Navigator.of(context).pushNamed('/webview');
+  void openFile() async {
+    Uint8List? fileData;
+    if(kIsWeb || Platform.isAndroid || Platform.isIOS){
+      fileData = await _pickFile();
+    }else{
+      fileData = await _loadFileDesktop();
+    }
+    if(fileData != null){
+      BufferImage? image = await BufferImage.fromFile(fileData);
+      if(image == null){
+        alert(context, 'Can\'t read the image');
+        return;
+      }
+      ImageLuminanceSource imageSource = ImageLuminanceSource(image);
+      if(image.width > 1000){
+        imageSource = imageSource.scaleDown(imageSource.width ~/ 1000);
+      }
+      BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
+      print("${bitmap.width}x${bitmap.height}");
+
+      //print(bitmap);
+
+      MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
+      try {
+        List<Result> results = reader.decodeMultiple(bitmap);
+        Navigator.of(context).pushNamed('/result', arguments:results);
+      }on NotFoundException catch(_){
+        alert(context, 'Can\'t detect barcodes or qrcodes');
+      }
+
+    }else{
+      print('not pick any file');
+    }
+  }
+
+  Future<Uint8List?> _pickFile() async{
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.image);
+
+    if (result != null && result.count > 0) {
+      if (result.files.single.path != null) {
+        return File(result.files.single.path!).readAsBytesSync();
+      }
+      return result.files.single.bytes;
+    } else {
+      // User canceled the picker
+      return null;
+    }
+  }
+  Future<Uint8List?> _loadFileDesktop() async {
+    final typeGroup = XTypeGroup(
+      label: 'Image files',
+      extensions: ['jpg','jpeg','png'],
+    );
+    final files = await FileSelectorPlatform.instance
+        .openFiles(acceptedTypeGroups: [typeGroup]);
+    if ( files.length > 0) {
+      return await files.first.readAsBytes();
+    }
+    return null;
   }
 
   @override
@@ -48,21 +126,33 @@ class _IndexPageState extends State<_IndexPage> {
       ),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CupertinoButton(
+            SizedBox(height: 20,),
+            CupertinoButton.filled(
               child: const Text('Scanner'),
               onPressed: () {
                 openCamera();
               },
             ),
-            CupertinoButton(
-              child: const Text('Webview discern'),
+            SizedBox(height: 20,),
+            CupertinoButton.filled(
+              child: const Text('Binarizer'),
               onPressed: () {
-                openWebview();
+                openBinarizer();
               },
-            )
+            ),
+            SizedBox(height: 20,),
+            CupertinoButton.filled(
+              child: const Text('Image discern'),
+              onPressed: () {
+                openFile();
+              },
+            ),
+            SizedBox(height: 10,),
+            Text('Multi decode mode'),
+            SizedBox(height: 20,),
           ],
         ),
       ),
