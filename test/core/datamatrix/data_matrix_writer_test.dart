@@ -26,6 +26,16 @@ import 'package:zxing_lib/zxing.dart';
 
 void main(){
 
+  test('testSpecial', (){
+    DataMatrixWriter writer = new DataMatrixWriter();
+      var encode = writer.encode(
+          'FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7',
+          BarcodeFormat.DATA_MATRIX,
+          52,
+          52, {EncodeHintType.DATA_MATRIX_SHAPE : SymbolShapeHint.FORCE_SQUARE, EncodeHintType.MIN_SIZE: Dimension(52,52)});
+    print(encode);
+  });
+
   test('testDataMatrixImageWriter', () {
 
     Map<EncodeHintType,Object> hints = {};

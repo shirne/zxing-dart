@@ -28,7 +28,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   static final double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
 
-  late BufferImage image;
+  AbstractImage image;
   final int left;
   final int top;
 
@@ -75,7 +75,43 @@ class BufferedImageLuminanceSource extends LuminanceSource {
         //raster.setPixels(left, y, width, 1, buffer);
       }
 
+  }
 
+  scaleDown(int scale){
+    BufferImage newImage = BufferImage((image.width / scale).ceil(),(image.height / scale).ceil());
+    List<Color?> colors = List.filled(scale * scale, null);
+    for(int y=0; y < newImage.width; y++){
+      for(int x=0; x < newImage.width; x++){
+        int count = 0;
+        colors.fillRange(0, colors.length, null);
+        for(int sy=0; sy < scale; sy++){
+          if(y * scale + sy >= image.height)break;
+          for(int sx=0; sx < scale; sx++){
+            if(x * scale + sx >= image.width)break;
+            count ++;
+            colors[sy*scale + sx] = image.getColor(x * scale + sx, y * scale + sy);
+          }
+        }
+        if(count  < 1) break;
+
+        int alpha = 0;
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+        for(Color? color in colors){
+          if(color != null){
+            count ++;
+            alpha += color.alpha;
+            red += color.red;
+            green += color.green;
+            blue += color.blue;
+          }
+        }
+        newImage.setColor(x, y, Color.fromARGB(alpha ~/ count, red ~/ count , green ~/ count, blue ~/ count));
+      }
+    }
+
+    return BufferedImageLuminanceSource(newImage);
   }
 
   @override
