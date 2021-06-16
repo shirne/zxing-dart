@@ -51,7 +51,7 @@ class Encoder {
     25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, // 0x50-0x5f
   ];
 
-  static final Encoding defaultByteModeEncoding = latin1;
+  static final Encoding defaultByteModeEncoding = utf8;
 
   Encoder._();
 
