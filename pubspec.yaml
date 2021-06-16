@@ -1,12 +1,11 @@
 name: zxing_lib
 description: A Dart port of zxing.
-version: 0.2.0
+version: 0.3.0
 homepage:
 repository: https://github.com/shirne/zxing-dart
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
-  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
@@ -20,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  buffer_image: ^0.2.0
+  buffer_image: ^0.3.1
     # git: https://github.com/shirne/buffer-image
     # path: ../buffer_image/
 

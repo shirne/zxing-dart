@@ -1,3 +1,8 @@
+## [0.3.0] - 2021-06-16
+
+* fix datamatrix encode
+* change some prop as dart style
+
 ## [0.2.0] - 2021-06-10
 
 * arrange comment and package
