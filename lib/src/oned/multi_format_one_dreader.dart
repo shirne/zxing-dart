@@ -41,7 +41,7 @@ class MultiFormatOneDReader extends OneDReader {
   MultiFormatOneDReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
     List<BarcodeFormat>? possibleFormats =
-        hints == null ? null : hints[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>;
+      hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
     bool useCode39CheckDigit = hints != null &&
         hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
     List<OneDReader> readers = [];

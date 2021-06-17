@@ -45,8 +45,8 @@ class MultiFormatUPCEANReader extends OneDReader {
 
   MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
-    List<BarcodeFormat>? possibleFormats = hints == null ? null :
-         hints[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>;
+    List<BarcodeFormat>? possibleFormats =
+      hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
     List<UPCEANReader> readers = [];
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {

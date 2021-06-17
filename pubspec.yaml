@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  buffer_image: ^0.3.1
+  buffer_image: ^0.3.3
     # git: https://github.com/shirne/buffer-image
     # path: ../buffer_image/
 
