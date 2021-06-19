@@ -25,6 +25,7 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
+import '../utils.dart';
 
 /// This is a high difficulty test.
 /// I'm looking for a way to do it
@@ -59,22 +60,36 @@ void main(){
 
     File testImage = File('${testBase.path}/$name');
     BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
-    BufferedImageLuminanceSource source = BufferedImageLuminanceSource(image);
-    //source = source.scaleDown(down);
-    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
-    //print(bitmap);
+    //BufferedImageLuminanceSource source = BufferedImageLuminanceSource(image);
+    var source = PlanarYUVLuminanceSource(getYUV420sp(image, image.width, image.height),
+      image.width, image.height, 0, 0, image.width, image.height, false);
 
-    MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
-    List<Result> results = reader.decodeMultiple(bitmap);
-    //assertNotNull(results);
-    expect(results.length, 1);
 
-    expect(result, results[0].text);
-    expect(BarcodeFormat.QR_CODE, results[0].barcodeFormat);
+    //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    var reader = MultiFormatReader();
+    var hints = {DecodeHintType.TRY_HARDER: true};
+    Result? result;
+    try {
+      result = reader.decode(BinaryBitmap(HybridBinarizer(source)), hints);
+    } on NotFoundException catch(_){
+      try {
+        result = reader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), hints);
+      } on NotFoundException catch(_){
+        image.inverse();
+        source = PlanarYUVLuminanceSource(getYUV420sp(image, image.width, image.height),
+            image.width, image.height, 0, 0, image.width, image.height, false);
+        result = reader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), hints);
+      }
+    }
+
+    expect(result, result.text);
+    expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
     print('$name passed');
+
   }
 
   test('testHardQR', () async{
+    await testQR('inverse.jpg');
     await testQR('qr-clip3.png');
     await testQR('qr-clip2.png');
     await testQR('qr-clip1.png');
