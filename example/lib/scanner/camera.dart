@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
@@ -39,7 +40,7 @@ class _CameraPageState extends State<CameraPage> {
         _cameras![0],
         ResolutionPreset.max,
           enableAudio:false,
-          imageFormatGroup: ImageFormatGroup.jpeg
+          imageFormatGroup: ImageFormatGroup.yuv420
       );
       //_controller!.addListener(onCameraView);
       //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
@@ -62,6 +63,7 @@ class _CameraPageState extends State<CameraPage> {
     if(isDetecting)return;
     isDetecting = true;
     XFile pic = await _controller!.takePicture();
+    //PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(Int8List.fromList(await pic.readAsBytes()));
     BufferImage? image = await BufferImage.fromFile(await pic.readAsBytes());
     if(image != null){
       ImageLuminanceSource imageSource = ImageLuminanceSource(image);
@@ -76,7 +78,20 @@ class _CameraPageState extends State<CameraPage> {
       List<Result>? results;
       try {
         results = reader!.decodeMultiple(bitmap);
-      }on NotFoundException catch(_){}
+      }on NotFoundException catch(_){
+        try {
+          bitmap = BinaryBitmap(GlobalHistogramBinarizer(imageSource));
+          results = reader!.decodeMultiple(bitmap);
+        }on NotFoundException catch(_){
+          try {
+            image.inverse();
+            imageSource = ImageLuminanceSource(image);
+            bitmap = BinaryBitmap(GlobalHistogramBinarizer(imageSource));
+            results = reader!.decodeMultiple(bitmap);
+          }on NotFoundException catch(_){
+          }
+        }
+      }
 
       if(results != null && results.isNotEmpty) {
         if(!mounted)return;

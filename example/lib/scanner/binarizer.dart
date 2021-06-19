@@ -28,7 +28,10 @@ class _BinarizerPageState extends State<BinarizerPage> {
   GrayImage? grayImage;
   GrayImage? deNoiseImage;
   GrayImage? binaryImage;
-  GrayImage? HybridBinaryImage;
+  GrayImage? hybridBinaryImage;
+  GrayImage? inverseImage;
+
+  int imageLoadStatus = 0;
 
   takePicture() async {
     XFile? picture =
@@ -36,6 +39,9 @@ class _BinarizerPageState extends State<BinarizerPage> {
       return TakePhoto();
     }));
     if (picture != null) {
+      setState(() {
+        imageLoadStatus = 1;
+      });
       initImage(await picture.readAsBytes());
     }
   }
@@ -48,6 +54,9 @@ class _BinarizerPageState extends State<BinarizerPage> {
       fileData = await _loadFileDesktop();
     }
     if (fileData != null) {
+      setState(() {
+        imageLoadStatus = 1;
+      });
       initImage(fileData);
     } else {
       print('not pick any file');
@@ -60,19 +69,25 @@ class _BinarizerPageState extends State<BinarizerPage> {
       alert(context, 'Can\'t read the image');
       return;
     }
+    setState(() {});
     grayImage = bufferImage?.toGray();
-
+    setState(() {});
     deNoiseImage = grayImage!.copy()
       ..deNoise()
       ..binaryzation()
       ..deNoise();
-
-    binaryImage =
-        bin2Image(GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy())));
-    HybridBinaryImage =
-        bin2Image(HybridBinarizer(ImageLuminanceSource(bufferImage!.copy())));
-
     setState(() {});
+    binaryImage = bin2Image(
+        GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy())));
+    setState(() {});
+    hybridBinaryImage =
+        bin2Image(HybridBinarizer(ImageLuminanceSource(bufferImage!.copy())));
+    setState(() {});
+    inverseImage = bin2Image(
+        GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy()..inverse())));
+    setState(() {
+      imageLoadStatus = 2;
+    });
   }
 
   GrayImage bin2Image(Binarizer binarizer) {
@@ -148,48 +163,59 @@ class _BinarizerPageState extends State<BinarizerPage> {
                 height: 20,
               ),
               if (bufferImage != null)
-                Image(
-                  image: RgbaImage.fromBufferImage(bufferImage!, scale: 1),
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(bufferImage!, scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
-              SizedBox(
-                height: 20,
-              ),
               if (grayImage != null)
-                Image(
-                  image: RgbaImage.fromBufferImage(
-                      BufferImage.fromGray(grayImage!),
-                      scale: 1),
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(
+                        BufferImage.fromGray(grayImage!),
+                        scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
-              SizedBox(
-                height: 20,
-              ),
               if (deNoiseImage != null)
-                Image(
-                  image: RgbaImage.fromBufferImage(
-                      BufferImage.fromGray(deNoiseImage!),
-                      scale: 1),
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(
+                        BufferImage.fromGray(deNoiseImage!),
+                        scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
-              SizedBox(
-                height: 20,
-              ),
               if (binaryImage != null)
-                Image(
-                  image: RgbaImage.fromBufferImage(
-                      BufferImage.fromGray(binaryImage!),
-                      scale: 1),
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(
+                        BufferImage.fromGray(binaryImage!),
+                        scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
-              SizedBox(
-                height: 20,
-              ),
-              if (HybridBinaryImage != null)
-                Image(
-                  image: RgbaImage.fromBufferImage(
-                      BufferImage.fromGray(HybridBinaryImage!),
-                      scale: 1),
+              if (hybridBinaryImage != null)
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(
+                        BufferImage.fromGray(hybridBinaryImage!),
+                        scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
-              SizedBox(
-                height: 20,
-              ),
+              if (inverseImage != null)
+                Padding(
+                  child: Image(
+                    image: RgbaImage.fromBufferImage(
+                        BufferImage.fromGray(inverseImage!),
+                        scale: 1),
+                  ),
+                  padding: EdgeInsets.only(bottom: 20),
+                ),
+              if(imageLoadStatus == 1)
+                CircularProgressIndicator(),
             ],
           ),
         ),
