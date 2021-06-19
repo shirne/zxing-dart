@@ -19,8 +19,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 import 'product_result_parser.dart';
 import 'smsmmsresult_parser.dart';
 import 'smstommstoresult_parser.dart';
@@ -112,12 +110,12 @@ abstract class ResultParser {
     return text;
   }
 
-  @protected
+  //@protected
   List<String>? maybeWrap(String? value) {
     return value == null ? null : [ value ];
   }
 
-  @protected
+  //@protected
   String unescapeBackslash(String escaped) {
     int backslash = escaped.indexOf('\\');
     if (backslash < 0) {
@@ -139,7 +137,7 @@ abstract class ResultParser {
     return unescaped.toString();
   }
 
-  @protected
+  //@protected
   static int parseHexDigit(String chr) {
     int c = chr.codeUnitAt(0);
     if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
@@ -154,7 +152,7 @@ abstract class ResultParser {
     return -1;
   }
 
-  @protected
+  //@protected
   bool isStringOfDigits(String? value, int length) {
     return value != null && length > 0 && length == value.length && _digits.hasMatch(value);
   }

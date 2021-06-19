@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../barcode_format.dart';
 import 'code128_reader.dart';
@@ -46,10 +45,9 @@ class Code128Writer extends OneDimensionalCodeWriter {
   static const int _CODE_FNC_4_A = 101; // Code A
   static const int _CODE_FNC_4_B = 100; // Code B
 
-  // Results of minimal lookahead for code C
-
+  /// Results of minimal lookahead for code C
+  //@protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_128];
 
   @override

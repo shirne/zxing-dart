@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../../../../common/bit_array.dart';
 
@@ -34,14 +33,14 @@ import 'ai013x0x_decoder.dart';
 class AI013103decoder extends AI013x0xDecoder {
   AI013103decoder(BitArray information) : super(information);
 
+  //@protected
   @override
-  @protected
   void addWeightCode(StringBuffer buf, int weight) {
     buf.write("(3103)");
   }
 
+  //@protected
   @override
-  @protected
   int checkWeight(int weight) {
     return weight;
   }

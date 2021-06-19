@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
-
 import '../barcode_format.dart';
 import 'code93_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
 /// This object renders a CODE93 code as a BitMatrix
 class Code93Writer extends OneDimensionalCodeWriter {
+
+  // @protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_93];
 
   /// @param contents barcode contents to encode. It should not be encoded for extended characters.

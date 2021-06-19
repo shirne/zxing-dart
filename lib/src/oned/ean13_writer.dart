@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../barcode_format.dart';
 import '../formats_exception.dart';
@@ -34,8 +33,8 @@ class EAN13Writer extends UPCEANWriter {
       (7 * 6) + // right bars
       3; // end guard
 
+  // @protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.EAN_13];
 
   @override

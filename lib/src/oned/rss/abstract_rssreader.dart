@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../../common/detector/math_utils.dart';
 
@@ -37,7 +36,7 @@ abstract class AbstractRSSReader extends OneDReader {
   final List<int> _oddCounts;
   final List<int> _evenCounts;
 
-  @protected
+  // @protected
   AbstractRSSReader()
       : _decodeFinderCounters = List.filled(4, 0),
         _dataCharacterCounters = List.filled(8, 0),
@@ -46,25 +45,25 @@ abstract class AbstractRSSReader extends OneDReader {
         _oddCounts = List.filled(4, 0),
         _evenCounts = List.filled(4, 0);
 
-  @protected
+  // @protected
   List<int> get decodeFinderCounters => _decodeFinderCounters;
 
-  @protected
+  // @protected
   List<int> get dataCharacterCounters => _dataCharacterCounters;
 
-  @protected
+  // @protected
   List<double> get oddRoundingErrors => _oddRoundingErrors;
 
-  @protected
+  // @protected
   List<double> get evenRoundingErrors => _evenRoundingErrors;
 
-  @protected
+  // @protected
   List<int> get oddCounts => _oddCounts;
 
-  @protected
+  // @protected
   List<int> get evenCounts => _evenCounts;
 
-  @protected
+  // @protected
   static int parseFinderValue(
       List<int> counters, List<List<int>> finderPatterns) {
     for (int value = 0; value < finderPatterns.length; value++) {
@@ -80,13 +79,13 @@ abstract class AbstractRSSReader extends OneDReader {
   /// @param array values to sum
   /// @return sum of values
   /// @deprecated call {@link MathUtils#sum(List<int>)}
+  // @protected
   @deprecated
-  @protected
   static int count(List<int> array) {
     return MathUtils.sum(array);
   }
 
-  @protected
+  // @protected
   static void increment(List<int> array, List<double> errors) {
     int index = 0;
     double biggestError = errors[0];
@@ -99,7 +98,7 @@ abstract class AbstractRSSReader extends OneDReader {
     array[index]++;
   }
 
-  @protected
+  // @protected
   static void decrement(List<int> array, List<double> errors) {
     int index = 0;
     double biggestError = errors[0];
@@ -112,7 +111,7 @@ abstract class AbstractRSSReader extends OneDReader {
     array[index]--;
   }
 
-  @protected
+  // @protected
   static bool isFinderPattern(List<int> counters) {
     int firstTwoSum = counters[0] + counters[1];
     int sum = firstTwoSum + counters[2] + counters[3];

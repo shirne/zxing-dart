@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../../../../common/bit_array.dart';
 
@@ -53,9 +52,9 @@ abstract class AI01weightDecoder extends AI01decoder {
     buf.write(weightNumeric);
   }
 
-  @protected
+  //@protected
   void addWeightCode(StringBuffer buf, int weight);
 
-  @protected
+  //@protected
   int checkWeight(int weight);
 }

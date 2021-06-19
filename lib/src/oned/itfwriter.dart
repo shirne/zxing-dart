@@ -15,7 +15,6 @@
  */
 
 
-import 'package:flutter/cupertino.dart';
 
 import '../barcode_format.dart';
 import 'one_dimensional_code_writer.dart';
@@ -45,8 +44,8 @@ class ITFWriter extends OneDimensionalCodeWriter {
       [_N, _W, _N, _W, _N]  // 9
   ];
 
+  // @protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.ITF];
 
   @override

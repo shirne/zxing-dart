@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../common/detector/math_utils.dart';
 
@@ -36,8 +35,8 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   ];
   static const String _DEFAULT_GUARD = 'A';//START_END_CHARS[0];
 
+  //@protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODABAR];
 
   @override

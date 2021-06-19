@@ -15,7 +15,6 @@
  */
 
 
-import 'package:flutter/cupertino.dart';
 
 import '../../common/bit_matrix.dart';
 
@@ -35,9 +34,9 @@ import 'finder_pattern_info.dart';
 class FinderPatternFinder {
   static const int _CENTER_QUORUM = 2;
 
-  @protected
+  //@protected
   static const int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
-  @protected
+  //@protected
   static const int MAX_MODULES = 97; // support up to version 20 for mobile clients
 
   final BitMatrix _image;
@@ -51,10 +50,10 @@ class FinderPatternFinder {
       : _possibleCenters = [],
         _crossCheckStateCount = [0, 0, 0, 0, 0];
 
-  @protected
+  //@protected
   BitMatrix get image => _image;
 
-  @protected
+  //@protected
   List<FinderPattern> get possibleCenters => _possibleCenters;
 
   FinderPatternInfo find([Map<DecodeHintType, Object>? hints]) {
@@ -167,7 +166,7 @@ class FinderPatternFinder {
   /// @param stateCount count of black/white/black/white/black pixels just read
   /// @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
   ///         used by finder patterns to be considered a match
-  @protected
+  //@protected
   static bool foundPatternCross(List<int> stateCount) {
     int totalModuleSize = 0;
     for (int i = 0; i < 5; i++) {
@@ -193,7 +192,7 @@ class FinderPatternFinder {
   /// @param stateCount count of black/white/black/white/black pixels just read
   /// @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
   ///         used by finder patterns to be considered a match
-  @protected
+  //@protected
   static bool foundPatternDiagonal(List<int> stateCount) {
     int totalModuleSize = 0;
     for (int i = 0; i < 5; i++) {
@@ -221,24 +220,24 @@ class FinderPatternFinder {
     return _crossCheckStateCount;
   }
 
+  //@protected
   @deprecated
-  @protected
   void clearCounts(List<int> counts) {
     doClearCounts(counts);
   }
 
+  //@protected
   @deprecated
-  @protected
   void shiftCounts2(List<int> stateCount) {
     doShiftCounts2(stateCount);
   }
 
-  @protected
+  //@protected
   static void doClearCounts(List<int> counts) {
     counts.setAll(0, List.filled(counts.length, 0));
   }
 
-  @protected
+  //@protected
   static void doShiftCounts2(List<int> stateCount) {
     stateCount[0] = stateCount[2];
     stateCount[1] = stateCount[3];
@@ -493,7 +492,7 @@ class FinderPatternFinder {
   /// @param i row where finder pattern may be found
   /// @param j end of possible finder pattern in row
   /// @return true if a finder pattern candidate was found this time
-  @protected
+  //@protected
   bool handlePossibleCenter(List<int> stateCount, int i, int j,
       [bool pureBarcode = false]) {
     int stateCountTotal = stateCount[0] +

@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
@@ -96,8 +95,8 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
     buf.write(day);
   }
 
+  //@protected
   @override
-  @protected
   void addWeightCode(StringBuffer buf, int weight) {
     buf.write('(');
     buf.write(this._firstAIdigits);
@@ -105,8 +104,8 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
     buf.write(')');
   }
 
+  //@protected
   @override
-  @protected
   int checkWeight(int weight) {
     return weight % 100000;
   }

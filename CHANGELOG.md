@@ -1,3 +1,8 @@
+## [0.3.1] - 2021-06-19
+
+* remove flutter dependencies
+* add latin2~15 encoding
+
 ## [0.3.0] - 2021-06-16
 
 * fix datamatrix encode

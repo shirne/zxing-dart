@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../not_found_exception.dart';
 import 'bit_matrix.dart';
@@ -117,7 +116,7 @@ abstract class GridSampler {
   /// @param image image into which the points should map
   /// @param points actual points in x1,y1,...,xn,yn form
   /// @throws NotFoundException if an endpoint is lies outside the image boundaries
-  @protected
+  //@protected
   static checkAndNudgePoints(BitMatrix image, List<double> points) {
     int width = image.width;
     int height = image.height;

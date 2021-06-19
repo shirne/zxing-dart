@@ -16,7 +16,6 @@
 
 import 'dart:math' as Math;
 
-import 'package:flutter/cupertino.dart';
 
 import '../../common/bit_matrix.dart';
 import '../../common/detector/math_utils.dart';
@@ -209,7 +208,7 @@ class Detector {
   /// @param topRight detected top-right finder pattern center
   /// @param bottomLeft detected bottom-left finder pattern center
   /// @return estimated module size
-  @protected
+  //@protected
   double calculateModuleSize(
       ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft) {
     // Take the average
@@ -354,7 +353,7 @@ class Detector {
   /// @param allowanceFactor number of pixels in all directions to search from the center
   /// @return [AlignmentPattern] if found, or null otherwise
   /// @throws NotFoundException if an unexpected error occurs during detection
-  @protected
+  //@protected
   AlignmentPattern findAlignmentInRegion(double overallEstModuleSize,
       int estAlignmentX, int estAlignmentY, double allowanceFactor) {
     // Look for an alignment pattern (3 modules in size) around where it

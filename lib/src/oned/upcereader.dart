@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
@@ -70,8 +69,8 @@ class UPCEReader extends UPCEANReader {
 
   UPCEReader();
 
+  //@protected
   @override
-  @protected
   int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
     List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
@@ -100,14 +99,14 @@ class UPCEReader extends UPCEANReader {
     return rowOffset;
   }
 
+  //@protected
   @override
-  @protected
   List<int> decodeEnd(BitArray row, int endStart) {
     return UPCEANReader.findGuardPattern(row, endStart, true, _MIDDLE_END_PATTERN);
   }
 
+  //@protected
   @override
-  @protected
   bool checkChecksum(String s) {
     return super.checkChecksum(convertUPCEtoUPCA(s));
   }

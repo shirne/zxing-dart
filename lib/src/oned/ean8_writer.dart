@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
 
 import '../barcode_format.dart';
 import '../formats_exception.dart';
@@ -32,8 +31,8 @@ class EAN8Writer extends UPCEANWriter {
       (7 * 4) + // right bars
       3; // end guard
 
+  // @protected
   @override
-  @protected
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.EAN_8];
 
   /// @return a byte array of horizontal pixels (false = white, true = black)
