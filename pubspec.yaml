@@ -1,6 +1,6 @@
 name: zxing_lib
 description: A Dart port of zxing.
-version: 0.3.0
+version: 0.3.1
 homepage:
 repository: https://github.com/shirne/zxing-dart
 
@@ -8,10 +8,9 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   intl: ^0.17.0
   fixnum: ^1.0.0
+  convert: ^3.0.0
   charset: ^0.0.1
     # git: https://github.com/shirne/charset-dart
     # path: ../../flutter/codec/charset/

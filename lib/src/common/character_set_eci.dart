@@ -17,6 +17,7 @@
 import 'dart:convert';
 
 import 'package:charset/charset.dart';
+import 'package:convert/convert.dart';
 
 import '../formats_exception.dart';
 import 'string_utils.dart';
@@ -29,20 +30,20 @@ class CharacterSetECI {
   // Enum name is a Java encoding valid for java.lang and java.io
   static final Cp437 = CharacterSetECI('Cp437', [0, 2], cp437);
   static final ISO8859_1 = CharacterSetECI('ISO8859_1', [1, 3], latin1, ['ISO-8859-1', 'iso-8859-1']);
-  static final ISO8859_2 = CharacterSetECI('ISO8859_2', 4, latin1, ['ISO-8859-2', 'iso-8859-2']);
-  static final ISO8859_3 = CharacterSetECI('ISO8859_3', 5, latin1, ['ISO-8859-3', 'iso-8859-3']);
-  static final ISO8859_4 = CharacterSetECI('ISO8859_4', 6, latin1, ['ISO-8859-4', 'iso-8859-4']);
-  static final ISO8859_5 = CharacterSetECI('ISO8859_5', 7, latin1, ['ISO-8859-5', 'iso-8859-5']);
-  static final ISO8859_6 = CharacterSetECI('ISO8859_6', 8, latin1, ['ISO-8859-6', 'iso-8859-6']);
-  static final ISO8859_7 = CharacterSetECI('ISO8859_7', 9, latin1, ['ISO-8859-7', 'iso-8859-7']);
-  static final ISO8859_8 = CharacterSetECI('ISO8859_8', 10, latin1, ['ISO-8859-8', 'iso-8859-8']);
-  static final ISO8859_9 = CharacterSetECI('ISO8859_9', 11, latin1, ['ISO-8859-9', 'iso-8859-9']);
-  static final ISO8859_10 = CharacterSetECI('ISO8859_10', 12, latin1, ['ISO-8859-10', 'iso-8859-10']);
-  static final ISO8859_11 = CharacterSetECI('ISO8859_11', 13, latin1, ['ISO-8859-11', 'iso-8859-11']);
-  static final ISO8859_13 = CharacterSetECI('ISO8859_13', 15, latin1, ['ISO-8859-13', 'iso-8859-13']);
-  static final ISO8859_14 = CharacterSetECI('ISO8859_14', 16, latin1, ['ISO-8859-14', 'iso-8859-14']);
-  static final ISO8859_15 = CharacterSetECI('ISO8859_15', 17, latin1, ['ISO-8859-15', 'iso-8859-15']);
-  static final ISO8859_16 = CharacterSetECI('ISO8859_16', 18, latin1, ['ISO-8859-16', 'iso-8859-16']);
+  static final ISO8859_2 = CharacterSetECI('ISO8859_2', 4, latin2, ['ISO-8859-2', 'iso-8859-2']);
+  static final ISO8859_3 = CharacterSetECI('ISO8859_3', 5, latin3, ['ISO-8859-3', 'iso-8859-3']);
+  static final ISO8859_4 = CharacterSetECI('ISO8859_4', 6, latin4, ['ISO-8859-4', 'iso-8859-4']);
+  static final ISO8859_5 = CharacterSetECI('ISO8859_5', 7, latinCyrillic, ['ISO-8859-5', 'iso-8859-5']);
+  static final ISO8859_6 = CharacterSetECI('ISO8859_6', 8, latinArabic, ['ISO-8859-6', 'iso-8859-6']);
+  static final ISO8859_7 = CharacterSetECI('ISO8859_7', 9, latinGreek, ['ISO-8859-7', 'iso-8859-7']);
+  static final ISO8859_8 = CharacterSetECI('ISO8859_8', 10, latinHebrew, ['ISO-8859-8', 'iso-8859-8']);
+  static final ISO8859_9 = CharacterSetECI('ISO8859_9', 11, latin5, ['ISO-8859-9', 'iso-8859-9']);
+  static final ISO8859_10 = CharacterSetECI('ISO8859_10', 12, latin6, ['ISO-8859-10', 'iso-8859-10']);
+  static final ISO8859_11 = CharacterSetECI('ISO8859_11', 13, latinThai, ['ISO-8859-11', 'iso-8859-11']);
+  static final ISO8859_13 = CharacterSetECI('ISO8859_13', 15, latin7, ['ISO-8859-13', 'iso-8859-13']);
+  static final ISO8859_14 = CharacterSetECI('ISO8859_14', 16, latin8, ['ISO-8859-14', 'iso-8859-14']);
+  static final ISO8859_15 = CharacterSetECI('ISO8859_15', 17, latin9, ['ISO-8859-15', 'iso-8859-15']);
+  static final ISO8859_16 = CharacterSetECI('ISO8859_16', 18, latin10, ['ISO-8859-16', 'iso-8859-16']);
   static final SJIS = CharacterSetECI('SJIS', 20, StringUtils.shiftJisCharset, ['Shift_JIS', 'shift-jis', 'ms932', 'ISO-2022-JP', 'JIS']);
   static final Cp1250 = CharacterSetECI('Cp1250', 21, latin1, 'windows-1250');
   static final Cp1251 = CharacterSetECI('Cp1251', 22, latin1, 'windows-1251');
