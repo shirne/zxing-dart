@@ -80,7 +80,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   scaleDown(int scale){
     BufferImage newImage = BufferImage((image.width / scale).ceil(),(image.height / scale).ceil());
     List<Color?> colors = List.filled(scale * scale, null);
-    for(int y=0; y < newImage.width; y++){
+    for(int y=0; y < newImage.height; y++){
       for(int x=0; x < newImage.width; x++){
         int count = 0;
         colors.fillRange(0, colors.length, null);

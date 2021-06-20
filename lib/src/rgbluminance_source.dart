@@ -62,7 +62,7 @@ class RGBLuminanceSource extends LuminanceSource {
 
   @override
   Int8List getRow(int y, Int8List? row) {
-    assert(y >= 0 && y < this.width, "Requested row is outside the image: $y");
+    assert(y >= 0 && y < this.height, "Requested row is outside the image: $y");
 
     if (row == null || row.length < this.width) {
       row = Int8List(this.width);

@@ -44,8 +44,8 @@ class QRCodeReader implements Reader {
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
-    DecoderResult decoderResult;
-    List<ResultPoint> points;
+    late DecoderResult decoderResult;
+    late List<ResultPoint> points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits, hints);

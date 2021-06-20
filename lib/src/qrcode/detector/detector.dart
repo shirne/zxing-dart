@@ -55,10 +55,8 @@ class Detector {
   /// @throws NotFoundException if QR Code cannot be found
   /// @throws FormatException if a QR Code cannot be decoded
   DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
-    _resultPointCallback = hints == null
-        ? null
-        : hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-            as ResultPointCallback;
+    _resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+            as ResultPointCallback?;
 
     FinderPatternFinder finder =
         FinderPatternFinder(_image, _resultPointCallback);
@@ -119,7 +117,7 @@ class Detector {
 
     BitMatrix bits = _sampleGrid(_image, transform, dimension);
 
-    List<ResultPoint> points;
+    late List<ResultPoint> points;
     if (alignmentPattern == null) {
       points = [bottomLeft, topLeft, topRight];
     } else {

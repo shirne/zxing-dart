@@ -57,8 +57,7 @@ class FinderPatternFinder {
   List<FinderPattern> get possibleCenters => _possibleCenters;
 
   FinderPatternInfo find([Map<DecodeHintType, Object>? hints]) {
-    bool tryHarder =
-        hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+    bool tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
     int maxI = _image.height;
     int maxJ = _image.width;
     // We are looking for black/white/black/white/black modules in
