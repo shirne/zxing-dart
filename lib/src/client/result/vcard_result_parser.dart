@@ -204,7 +204,7 @@ class VCardResultParser extends ResultParser {
           // as value, to support tel: and mailto:
           try {
             element = Uri.parse(element).path;
-          } catch (iae) {
+          } catch (_) {
             // IllegalArgumentException
             // ignore
           }
@@ -271,7 +271,7 @@ class VCardResultParser extends ResultParser {
           fragment = CharacterSetECI.getCharacterSetECIByName(charset)!
               .charset!
               .decode(fragmentBytes);
-        } catch (e) {
+        } catch (_) {
           // UnsupportedEncodingException
           fragment = utf8.decode(fragmentBytes);
         }

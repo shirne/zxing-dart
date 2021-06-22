@@ -22,12 +22,8 @@ class BarcodeValue {
 
   /// Add an occurrence of a value
   void setValue(int value) {
-    int? confidence = _values[value];
-    if (confidence == null) {
-      confidence = 0;
-    }
-    confidence++;
-    _values[value] = confidence;
+    int confidence = _values[value] ?? 0;
+    _values[value] = ++confidence;
   }
 
   /// Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
@@ -44,10 +40,10 @@ class BarcodeValue {
         result.add(entry.key);
       }
     }
-    return PDF417Common.toIntArray(result);
+    return result;
   }
 
   int getConfidence(int value) {
-    return _values[value]!;
+    return _values[value] ?? 0;
   }
 }

@@ -42,7 +42,7 @@ class PDF417Common {
     return MathUtils.sum(moduleBitCount);
   }
 
-
+  @deprecated
   static List<int> toIntArray(List<int>? list) {
     if (list == null || list.isEmpty) {
       return _EMPTY_INT_ARRAY;

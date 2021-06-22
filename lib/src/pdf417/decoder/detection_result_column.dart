@@ -71,19 +71,16 @@ class DetectionResultColumn {
 
   @override
   String toString() {
-    try {
-      StringBuffer formatter = StringBuffer();
-      int row = 0;
-      for (Codeword? codeword in _codewords) {
-        if (codeword == null) {
-          formatter.write("${(row++).toString()}:    |   \n");
-          continue;
-        }
-        formatter.write(
-            "${row++}: ${codeword.rowNumber}|${codeword.value}\n");
+    StringBuffer formatter = StringBuffer();
+    int row = 0;
+    for (Codeword? codeword in _codewords) {
+      if (codeword == null) {
+        formatter.write("${(row++).toString()}:    |   \n");
+        continue;
       }
-      return formatter.toString();
-    } catch (e) {}
-    return '';
+      formatter.write(
+          "${row++}: ${codeword.rowNumber}|${codeword.value}\n");
+    }
+    return formatter.toString();
   }
 }

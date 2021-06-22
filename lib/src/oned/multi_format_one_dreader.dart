@@ -20,6 +20,7 @@ import '../barcode_format.dart';
 import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
+import '../reader_exception.dart';
 import '../result.dart';
 import 'coda_bar_reader.dart';
 import 'code128_reader.dart';
@@ -93,8 +94,7 @@ class MultiFormatOneDReader extends OneDReader {
     for (OneDReader reader in _readers) {
       try {
         return reader.decodeRow(rowNumber, row, hints);
-      } catch (re) {
-        //ReaderException
+      } on ReaderException catch (_) {
         // continue
       }
     }

@@ -16,8 +16,10 @@
 
 import 'dart:math' as Math;
 
+import '../checksum_exception.dart';
 import '../common/decoder_result.dart';
 import '../common/detector/math_utils.dart';
+import '../formats_exception.dart';
 import '../multi/multiple_barcode_reader.dart';
 
 import '../barcode_format.dart';
@@ -59,7 +61,9 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
       [Map<DecodeHintType, Object>? hints]) {
     try {
       return _decodeStatic(image, hints, true);
-    } catch (_) { //FormatException | ChecksumException
+    } on FormatsException catch (_) {
+      throw NotFoundException.instance;
+    } on ChecksumException catch (_){
       throw NotFoundException.instance;
     }
   }
@@ -92,7 +96,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
           "]L${decoderResult.symbologyModifier}");
       results.add(result);
     }
-    return results.toList();
+    return results;
   }
 
   static int _getMaxWidth(ResultPoint? p1, ResultPoint? p2) {

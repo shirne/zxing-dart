@@ -161,10 +161,10 @@ class Decoder {
               // flush bytes before changing character set
               try {
                 result.write(encoding.decode(decodedBytes.takeBytes()));
-              } catch (uee) {
+              } catch (_) {
                 // UnsupportedEncodingException
                 // can't happen
-                throw Exception(uee);
+                rethrow;
               }
               decodedBytes.clear();
 
@@ -209,10 +209,10 @@ class Decoder {
     }
     try {
       result.write(encoding.decode(decodedBytes.takeBytes()));
-    } catch (uee) {
+    } catch (_) {
       // UnsupportedEncodingException
       // can't happen
-      throw Exception(uee);
+      rethrow;
     }
     return result.toString();
   }
@@ -296,7 +296,7 @@ class Decoder {
       ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
     } on ReedSolomonException catch (ex) {
-      throw ReedSolomonException(ex.toString());
+      throw FormatsException(ex.toString());
     }
 
     // Now perform the unstuffing operation.

@@ -121,7 +121,7 @@ class SymbolInfo {
       }
     }
     if (fail) {
-      throw Exception(
+      throw ArgumentError(
           "Can't find a symbol arrangement that matches the message. Data codewords: $dataCodewords");
     }
     return null;

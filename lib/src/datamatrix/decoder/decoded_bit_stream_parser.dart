@@ -80,9 +80,9 @@ class DecodedBitStreamParser {
     StringBuilder resultTrailer = StringBuilder();
     List<Uint8List> byteSegments = [];
     _Mode mode = _Mode.ASCII_ENCODE;
-    Set<int> fnc1Positions =
-        {}; // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
-    int symbologyModifier;
+    // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+    Set<int> fnc1Positions = {};
+    int symbologyModifier = 0;
     bool isECIencoded = false;
     do {
       if (mode == _Mode.ASCII_ENCODE) {
@@ -138,7 +138,7 @@ class DecodedBitStreamParser {
     }
 
     return DecoderResult(bytes, result.toString(),
-        byteSegments.isEmpty ? null : byteSegments, null, symbologyModifier);
+        byteSegments.isEmpty ? null : byteSegments, null, symbologyModifier:symbologyModifier);
   }
 
   /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2

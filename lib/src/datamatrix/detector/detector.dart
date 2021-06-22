@@ -21,6 +21,7 @@ import '../../common/detector/white_rectangle_detector.dart';
 import '../../common/detector_result.dart';
 import '../../common/grid_sampler.dart';
 
+import '../../not_found_exception.dart';
 import '../../result_point.dart';
 
 /// Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
@@ -211,7 +212,7 @@ class Detector {
       if (_isValid(candidate2)) {
         return candidate2;
       }
-      return null;
+      throw NotFoundException.instance;
     }
     if (!_isValid(candidate2)) {
       return candidate1;

@@ -60,29 +60,29 @@ class RSSExpandedReader extends AbstractRSSReader {
   ];
 
   static const List<List<int>> _WEIGHTS = [
-    [1, 3, 9, 27, 81, 32, 96, 77], //
-    [20, 60, 180, 118, 143, 7, 21, 63], //
-    [189, 145, 13, 39, 117, 140, 209, 205], //
-    [193, 157, 49, 147, 19, 57, 171, 91], //
-    [62, 186, 136, 197, 169, 85, 44, 132], //
-    [185, 133, 188, 142, 4, 12, 36, 108], //
-    [113, 128, 173, 97, 80, 29, 87, 50], //
-    [150, 28, 84, 41, 123, 158, 52, 156], //
-    [46, 138, 203, 187, 139, 206, 196, 166], //
-    [76, 17, 51, 153, 37, 111, 122, 155], //
-    [43, 129, 176, 106, 107, 110, 119, 146], //
-    [16, 48, 144, 10, 30, 90, 59, 177], //
+    [  1,   3,   9,  27,  81,  32,  96,  77], //
+    [ 20,  60, 180, 118, 143,   7,  21,  63], //
+    [189, 145,  13,  39, 117, 140, 209, 205], //
+    [193, 157,  49, 147,  19,  57, 171,  91], //
+    [ 62, 186, 136, 197, 169,  85,  44, 132], //
+    [185, 133, 188, 142,   4,  12,  36, 108], //
+    [113, 128, 173,  97,  80,  29,  87,  50], //
+    [150,  28,  84,  41, 123, 158,  52, 156], //
+    [ 46, 138, 203, 187, 139, 206, 196, 166], //
+    [ 76,  17,  51, 153,  37, 111, 122, 155], //
+    [ 43, 129, 176, 106, 107, 110, 119, 146], //
+    [ 16,  48, 144,  10,  30,  90,  59, 177], //
     [109, 116, 137, 200, 178, 112, 125, 164], //
-    [70, 210, 208, 202, 184, 130, 179, 115], //
-    [134, 191, 151, 31, 93, 68, 204, 190], //
-    [148, 22, 66, 198, 172, 94, 71, 2], //
-    [6, 18, 54, 162, 64, 192, 154, 40], //
-    [120, 149, 25, 75, 14, 42, 126, 167], //
-    [79, 26, 78, 23, 69, 207, 199, 175], //
-    [103, 98, 83, 38, 114, 131, 182, 124], //
-    [161, 61, 183, 127, 170, 88, 53, 159], //
-    [55, 165, 73, 8, 24, 72, 5, 15], //
-    [45, 135, 194, 160, 58, 174, 100, 89] //
+    [ 70, 210, 208, 202, 184, 130, 179, 115], //
+    [134, 191, 151,  31,  93,  68, 204, 190], //
+    [148,  22,  66, 198, 172,  94,  71,   2], //
+    [  6,  18,  54, 162,  64, 192, 154,  40], //
+    [120, 149,  25,  75,  14,  42, 126, 167], //
+    [ 79,  26,  78,  23,  69, 207, 199, 175], //
+    [103,  98,  83,  38, 114, 131, 182, 124], //
+    [161,  61, 183, 127, 170,  88,  53, 159], //
+    [ 55, 165,  73,   8,  24,  72,   5,  15], //
+    [ 45, 135, 194, 160,  58, 174, 100,  89] //
   ];
 
   static const int _FINDER_PAT_A = 0;
@@ -97,68 +97,28 @@ class RSSExpandedReader extends AbstractRSSReader {
     [_FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B],
     [_FINDER_PAT_A, _FINDER_PAT_C, _FINDER_PAT_B, _FINDER_PAT_D],
     [_FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, _FINDER_PAT_C],
+    [_FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B,_FINDER_PAT_D, _FINDER_PAT_D, _FINDER_PAT_F ], //
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_E,
-      _FINDER_PAT_B,
-      _FINDER_PAT_D,
-      _FINDER_PAT_D,
-      _FINDER_PAT_F
+      _FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, //
+      _FINDER_PAT_E, _FINDER_PAT_F, _FINDER_PAT_F
     ],
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_E,
-      _FINDER_PAT_B,
-      _FINDER_PAT_D,
-      _FINDER_PAT_E,
-      _FINDER_PAT_F,
-      _FINDER_PAT_F
+      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
+      _FINDER_PAT_C, _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_D
     ],
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_A,
-      _FINDER_PAT_B,
-      _FINDER_PAT_B,
-      _FINDER_PAT_C,
-      _FINDER_PAT_C,
-      _FINDER_PAT_D,
-      _FINDER_PAT_D
+      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, _FINDER_PAT_C, //
+      _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_E, _FINDER_PAT_E
     ],
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_A,
-      _FINDER_PAT_B,
-      _FINDER_PAT_B,
-      _FINDER_PAT_C,
-      _FINDER_PAT_C,
-      _FINDER_PAT_D,
-      _FINDER_PAT_E,
-      _FINDER_PAT_E
+      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
+      _FINDER_PAT_C, _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_E,
+      _FINDER_PAT_F, _FINDER_PAT_F
     ],
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_A,
-      _FINDER_PAT_B,
-      _FINDER_PAT_B,
-      _FINDER_PAT_C,
-      _FINDER_PAT_C,
-      _FINDER_PAT_D,
-      _FINDER_PAT_E,
-      _FINDER_PAT_F,
-      _FINDER_PAT_F
-    ],
-    [
-      _FINDER_PAT_A,
-      _FINDER_PAT_A,
-      _FINDER_PAT_B,
-      _FINDER_PAT_B,
-      _FINDER_PAT_C,
-      _FINDER_PAT_D,
-      _FINDER_PAT_D,
-      _FINDER_PAT_E,
-      _FINDER_PAT_E,
-      _FINDER_PAT_F,
-      _FINDER_PAT_F
+      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
+      _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_D, _FINDER_PAT_E,
+      _FINDER_PAT_E, _FINDER_PAT_F, _FINDER_PAT_F
     ],
   ];
 
@@ -178,8 +138,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     this._startFromEven = false;
     try {
       return constructResult(decodeRow2pairs(rowNumber, row));
-    } catch (e) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
       // OK
     }
 
@@ -200,10 +159,9 @@ class RSSExpandedReader extends AbstractRSSReader {
     while (!done) {
       try {
         this._pairs.add(retrieveNextPair(row, this._pairs, rowNumber)!);
-      } catch (nfe) {
-        // NotFoundException
+      } on NotFoundException catch (_) {
         if (this._pairs.isEmpty) {
-          throw nfe;
+          rethrow;
         }
         // exit this loop when retrieveNextPair() fails and throws
         done = true;
@@ -250,9 +208,8 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     List<ExpandedPair>? ps;
     try {
-      ps = _checkRowsCurrent([], 0);
-    } catch (e) {
-      // NotFoundException
+      ps = _checkRowsCurrent(<ExpandedRow>[], 0);
+    } on NotFoundException catch (_) {
       // OK
     }
 
@@ -285,8 +242,7 @@ class RSSExpandedReader extends AbstractRSSReader {
         try {
           // Recursion: try to add more rows
           return _checkRowsCurrent(rs, i + 1);
-        } catch (e) {
-          // NotFoundException
+        } on NotFoundException catch (_) {
           // We failed, try the next candidate
         }
       }
@@ -302,7 +258,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       if (pairs.length <= sequence.length) {
         bool stop = true;
         for (int j = 0; j < pairs.length; j++) {
-          if (pairs[j].finderPattern!.value != sequence[j]) {
+          if (pairs[j].finderPattern?.value != sequence[j]) {
             stop = false;
             break;
           }
@@ -343,8 +299,7 @@ class RSSExpandedReader extends AbstractRSSReader {
       return;
     }
 
-    this._rows.add(ExpandedRow(this._pairs, rowNumber, false));
-    // this.rows.add(insertPos, ExpandedRow(this.pairs, rowNumber, false));
+    this._rows.insert(insertPos, ExpandedRow(this._pairs, rowNumber, false));
 
     _removePartialRows(this._pairs, this._rows);
   }
@@ -399,7 +354,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   // Only used for unit testing
   List<ExpandedRow> get rows => _rows;
 
-  // Not for unit testing
+  // Not private for unit testing
   static Result constructResult(List<ExpandedPair> pairs) {
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
 
@@ -463,7 +418,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     return currentPos;
   }
 
-  // not for testing
+  // not private for testing
   ExpandedPair? retrieveNextPair(
       BitArray row, List<ExpandedPair> previousPairs, int rowNumber) {
     bool isOddPattern = previousPairs.length % 2 == 0;
@@ -499,8 +454,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     DataCharacter? rightChar;
     try {
       rightChar = this.decodeDataCharacter(row, pattern, isOddPattern, false);
-    } catch (ignored) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
       rightChar = null;
     }
     return ExpandedPair(leftChar, rightChar, pattern);
@@ -619,8 +573,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     int value;
     try {
       value = AbstractRSSReader.parseFinderValue(counters, _FINDER_PATTERNS);
-    } catch (ignored) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
       return null;
     }
     return FinderPattern(value, [start, end], start, end, rowNumber);
@@ -644,8 +597,8 @@ class RSSExpandedReader extends AbstractRSSReader {
       }
     } //List<counters> has the pixels of the module
 
-    int numModules =
-        17; //left and right data characters have all the same length
+    //left and right data characters have all the same length
+    int numModules = 17;
     double elementWidth = MathUtils.sum(counters) / numModules;
 
     // Sanity check: element width for pattern and the character should match

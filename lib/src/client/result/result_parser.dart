@@ -186,7 +186,7 @@ abstract class ResultParser {
       try {
         value = urlDecode(value);
         result[key] = value;
-      } catch ( iae) { // IllegalArgumentException
+      } catch ( _) { // IllegalArgumentException
         // continue; invalid data such as an escape like %0t
       }
     }
@@ -196,8 +196,8 @@ abstract class ResultParser {
     try {
       //todo decodeFull or decodeComponent or decodeQueryComponent ?
       return Uri.decodeQueryComponent(encoded, encoding: utf8);
-    } catch ( uee) { // UnsupportedEncodingException
-      throw Exception(uee); // can't happen
+    } catch ( _) { // UnsupportedEncodingException
+      rethrow; // can't happen
     }
   }
 

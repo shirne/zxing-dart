@@ -22,6 +22,7 @@ import '../../common/detector/white_rectangle_detector.dart';
 import '../../common/grid_sampler.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
+import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
@@ -221,8 +222,7 @@ class Detector {
       ReedSolomonDecoder rsDecoder =
           ReedSolomonDecoder(GenericGF.aztecParam);
       rsDecoder.decode(parameterWords, numECCodewords);
-    } catch (ignored) {
-      // ReedSolomonException
+    } on ReedSolomonException catch (_) {
       throw NotFoundException.instance;
     }
     // Toss the error correction.  Just return the data as an integer
@@ -313,8 +313,8 @@ class Detector {
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
       pointD = cornerPoints[3];
-    } catch (e) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
+      //
 
       // This exception can be in case the initial rectangle is white
       // In that case, surely in the bull's eye, we try to expand the rectangle.
@@ -346,8 +346,7 @@ class Detector {
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
       pointD = cornerPoints[3];
-    } catch (e) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
       // This exception can be in case the initial rectangle is white
       // In that case we try to expand the rectangle.
       pointA = _getFirstDifferent(Point(cx + 7, cy - 7), false, 1, -1)

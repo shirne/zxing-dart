@@ -266,7 +266,7 @@ class FieldParser {
     String remaining = rawInformation.substring(aiSize + fieldSize);
     String result = '($ai)$field';
     String? parsedAI = parseFieldsInGeneralPurpose(remaining);
-    return parsedAI == null ? result : result + parsedAI;
+    return parsedAI == null ? result : (result + parsedAI);
   }
 
   static String _processVariableAI(

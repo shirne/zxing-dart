@@ -22,6 +22,7 @@ import '../barcode_format.dart';
 import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
+import '../reader_exception.dart';
 import '../result.dart';
 import 'ean13_reader.dart';
 import 'ean8_reader.dart';
@@ -95,8 +96,7 @@ class MultiFormatUPCEANReader extends OneDReader {
             result.barcodeFormat == BarcodeFormat.EAN_13 &&
                 result.text[0] == '0';
         // @SuppressWarnings("unchecked")
-        List<BarcodeFormat>? possibleFormats =
-            hints == null ? null : hints[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>;
+        List<BarcodeFormat>? possibleFormats = hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
         bool canReturnUPCA = possibleFormats == null || possibleFormats.contains(BarcodeFormat.UPC_A);
   
         if (ean13MayBeUPCA && canReturnUPCA) {
@@ -109,7 +109,7 @@ class MultiFormatUPCEANReader extends OneDReader {
           return resultUPCA;
         }
         return result;
-      } catch ( ignored) { // ReaderException
+      } on ReaderException catch ( _) { //
         // continue
       }
     }

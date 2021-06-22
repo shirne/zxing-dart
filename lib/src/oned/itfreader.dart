@@ -103,11 +103,8 @@ class ITFReader extends OneDReader {
     _decodeMiddle(row, startRange[1], endRange[0], result);
     String resultString = result.toString();
 
-    List<int>? allowedLengths ;
-    if (hints != null) {
-      allowedLengths = hints[DecodeHintType.ALLOWED_LENGTHS] as List<int>;
+    List<int>? allowedLengths = hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
 
-    }
     if (allowedLengths == null) {
       allowedLengths = _DEFAULT_ALLOWED_LENGTHS;
     }
@@ -173,7 +170,7 @@ class ITFReader extends OneDReader {
       int bestMatch = _decodeDigit(counterBlack);
       resultString.writeCharCode(48 /* 0 */ + bestMatch);
       bestMatch = _decodeDigit(counterWhite);
-      resultString.write(48 /* 0 */ + bestMatch);
+      resultString.writeCharCode(48 /* 0 */ + bestMatch);
 
       for (int counterDigit in counterDigitPair) {
         payloadStart += counterDigit;
@@ -262,7 +259,7 @@ class ITFReader extends OneDReader {
       List<int> endPattern;
       try {
         endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[0]);
-      } catch ( nfe) { // NotFoundException
+      } on NotFoundException catch ( _) {
         endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[1]);
       }
 

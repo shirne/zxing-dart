@@ -163,7 +163,7 @@ class UPCEANExtension5Support {
         break;
     }
     int rawAmount = int.parse(raw.substring(1));
-    String unitsString = (rawAmount / 100).toString();
+    String unitsString = (rawAmount ~/ 100).toString();
     int hundredths = rawAmount % 100;
     String hundredthsString = hundredths.toString().padLeft(2, '0');
     return currency + unitsString + '.' + hundredthsString;

@@ -45,7 +45,7 @@ class EAN8Writer extends UPCEANWriter {
         int check;
         try {
           check = UPCEANReader.getStandardUPCEANChecksum(contents);
-        } catch (fe) {
+        } on FormatsException catch (fe) {
           throw ArgumentError(fe);
         }
         contents += check.toString();

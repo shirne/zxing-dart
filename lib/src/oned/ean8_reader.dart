@@ -30,10 +30,7 @@ class EAN8Reader extends UPCEANReader {
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuffer result) {
     List<int> counters = _decodeMiddleCounters;
-    counters[0] = 0;
-    counters[1] = 0;
-    counters[2] = 0;
-    counters[3] = 0;
+    counters.fillRange(0, counters.length, 0);
     int end = row.size;
     int rowOffset = startRange[1];
 

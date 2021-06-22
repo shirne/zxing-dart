@@ -167,6 +167,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   }
 
   BarcodeMetadata? getBarcodeMetadata() {
+    List<Codeword?> codewords = this.codewords;
     BarcodeValue barcodeColumnCount = BarcodeValue();
     BarcodeValue barcodeRowCountUpperPart = BarcodeValue();
     BarcodeValue barcodeRowCountLowerPart = BarcodeValue();
@@ -217,6 +218,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     return barcodeMetadata;
   }
 
+  /// todo test error
   void _removeIncorrectCodewords(
       List<Codeword?> codewords, BarcodeMetadata barcodeMetadata) {
     // Remove codewords which do not match the metadata
@@ -243,7 +245,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
           }
           break;
         case 1:
-          if (rowIndicatorValue / 3 !=
+          if (rowIndicatorValue ~/ 3 !=
                   barcodeMetadata.errorCorrectionLevel ||
               rowIndicatorValue % 3 != barcodeMetadata.rowCountLowerPart) {
             codewords[codewordRow] = null;

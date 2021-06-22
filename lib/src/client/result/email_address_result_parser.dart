@@ -42,7 +42,7 @@ class EmailAddressResultParser extends AbstractDoCoMoResultParser {
       }
       try {
         hostEmail = urlDecode(hostEmail);
-      } catch ( iae) { // IllegalArgumentException
+      }  catch ( _) { // IllegalArgumentException
         return null;
       }
       List<String>? tos;

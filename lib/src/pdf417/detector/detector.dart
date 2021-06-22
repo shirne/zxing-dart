@@ -159,11 +159,11 @@ class Detector {
         _findRowsWithPattern(
             matrix, height, width, startRow, startColumn, _START_PATTERN),
         _INDEXES_START_PATTERN);
-    if(result[4] == null){
-      return result;
+
+    if(result[4] != null){
+      startColumn = result[4]!.x.toInt();
+      startRow = result[4]!.y.toInt();
     }
-    startColumn = result[4]!.x.toInt();
-    startRow = result[4]!.y.toInt();
 
     _copyToResult(
         result,
@@ -205,10 +205,6 @@ class Detector {
         found = true;
         break;
       }
-    }
-    if(result[0] == null || result[1] == null){
-      result.fillRange(0, result.length, null);
-      return result;
     }
     int stopRow = startRow + 1;
     // Last row of the current symbol that contains pattern
@@ -260,7 +256,7 @@ class Detector {
   /// @return start/end horizontal offset of guard pattern, as an array of two ints.
   static List<int>? _findGuardPattern(BitMatrix matrix, int column, int row,
       int width, List<int> pattern, List<int> counters) {
-    //Arrays.fill(counters, 0, counters.length, 0);
+    counters.fillRange( 0, counters.length, 0);
     int patternStart = column;
     int pixelDrift = 0;
 

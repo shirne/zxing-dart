@@ -120,7 +120,7 @@ class Version {
     }
     try {
       return getVersionForNumber((dimension - 17) ~/ 4);
-    } catch (_) {
+    } on ArgumentError catch (_) {
       //IllegalArgumentException
       throw ArgumentsException.instance;
     }
@@ -128,7 +128,7 @@ class Version {
 
   static Version getVersionForNumber(int versionNumber) {
     if (versionNumber < 1 || versionNumber > 40) {
-      throw Exception();
+      throw ArgumentError("versionNumber($versionNumber) must in 1-40");
     }
     return _versions[versionNumber - 1];
   }

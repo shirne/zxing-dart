@@ -107,10 +107,6 @@ class BinaryBitmap {
 
   @override
   String toString() {
-    try {
-      return blackMatrix.toString();
-    } catch (e) {
-      return "";
-    }
+    return blackMatrix.toString();
   }
 }

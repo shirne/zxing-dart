@@ -92,7 +92,7 @@ class ExpandedProductParsedResult extends ParsedResult {
         (price == other.price) &&
         (priceIncrement == other.priceIncrement) &&
         (priceCurrency == other.priceCurrency) &&
-        (uncommonAIs == other.uncommonAIs);
+        (uncommonAIs.toString() == other.uncommonAIs.toString());
   }
 
   @override

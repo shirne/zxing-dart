@@ -57,11 +57,12 @@ class AztecReader implements Reader {
         AztecDetectorResult detectorResult = detector.detect(true);
         points = detectorResult.points;
         decoderResult = Decoder().decode(detectorResult);
-      } catch (e) {
-        //NotFoundException | FormatsException
+      } on NotFoundException catch (e) {
         if (notFoundException != null) {
           throw notFoundException;
         }
+        throw e;
+      } on FormatsException catch(e){
         if (formatException != null) {
           throw formatException;
         }

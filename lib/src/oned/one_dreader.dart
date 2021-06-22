@@ -96,7 +96,7 @@ abstract class OneDReader implements Reader {
     bool tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     int rowStep = Math.max(1, height >> (tryHarder ? 8 : 5));
-    int maxLines;
+    late int maxLines;
     if (tryHarder) {
       maxLines = height; // Look at the whole image, not just the center
     } else {

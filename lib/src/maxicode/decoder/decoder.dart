@@ -47,7 +47,7 @@ class Decoder {
 
     _correctErrors(codewords, 0, 10, 10, _ALL);
     int mode = codewords[0] & 0x0F;
-    Uint8List datawords;
+    late Uint8List datawords;
     switch (mode) {
       case 2:
       case 3:
@@ -66,7 +66,7 @@ class Decoder {
     }
 
     List.copyRange(datawords, 0, codewords, 0, 10);
-    List.copyRange(datawords, 10, codewords, 20, datawords.length );
+    List.copyRange(datawords, 10, codewords, 20, datawords.length + 10 );
 
     return DecodedBitStreamParser.decode(datawords, mode);
   }

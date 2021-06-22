@@ -163,10 +163,8 @@ class RSS14Reader extends AbstractRSSReader {
       FinderPattern pattern =
           _parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-      ResultPointCallback? resultPointCallback = hints == null
-          ? null
-          : hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-              as ResultPointCallback;
+      ResultPointCallback? resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+              as ResultPointCallback?;
 
       if (resultPointCallback != null) {
         startEnd = pattern.startEnd;
@@ -185,8 +183,7 @@ class RSS14Reader extends AbstractRSSReader {
           1597 * outside.value + inside.value,
           outside.checksumPortion + 4 * inside.checksumPortion,
           pattern);
-    } catch (ignored) {
-      // NotFoundException
+    } on NotFoundException catch (_) {
       return null;
     }
   }

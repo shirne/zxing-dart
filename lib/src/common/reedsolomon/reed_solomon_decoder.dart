@@ -98,7 +98,7 @@ class ReedSolomonDecoder {
     GenericGFPoly t = _field.one;
 
     // Run Euclidean algorithm until r's degree is less than R/2
-    while (r.degree >= R / 2) {
+    while (r.degree >= R ~/ 2) {
       GenericGFPoly rLastLast = rLast;
       GenericGFPoly tLastLast = tLast;
       rLast = r;

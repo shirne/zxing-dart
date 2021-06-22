@@ -23,7 +23,7 @@ class ModulusPoly {
 
   ModulusPoly(this._field, List<int> coefficients) {
     if (coefficients.length == 0) {
-      throw Exception();
+      throw ArgumentError();
     }
     int coefficientsLength = coefficients.length;
     if (coefficientsLength > 1 && coefficients[0] == 0) {

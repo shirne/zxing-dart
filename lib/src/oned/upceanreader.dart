@@ -22,6 +22,7 @@ import '../checksum_exception.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
+import '../reader_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
@@ -99,7 +100,7 @@ abstract class UPCEANReader extends OneDReader {
     int nextStart = 0;
     List<int> counters = List.filled(START_END_PATTERN.length, 0);
     while (!foundStart) {
-      counters.fillRange(0, counters.length, 0);
+      counters.fillRange(0, START_END_PATTERN.length, 0);
       //Arrays.fill(counters, 0, START_END_PATTERN.length, 0);
       startRange =
           _findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
@@ -137,10 +138,8 @@ abstract class UPCEANReader extends OneDReader {
     if (startGuardRange == null) {
       startGuardRange = findStartGuardPattern(row);
     }
-    ResultPointCallback? resultPointCallback = hints == null
-        ? null
-        : hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-            as ResultPointCallback;
+    ResultPointCallback? resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+            as ResultPointCallback?;
     int symbologyIdentifier = 0;
 
     if (resultPointCallback != null) {
@@ -204,14 +203,11 @@ abstract class UPCEANReader extends OneDReader {
       decodeResult.putAllMetadata(extensionResult.resultMetadata);
       decodeResult.addResultPoints(extensionResult.resultPoints);
       extensionLength = extensionResult.text.length;
-    } catch (re) {
-      // ReaderException
+    } on ReaderException catch (_) {
       // continue
     }
 
-    List<int>? allowedExtensions = hints == null
-        ? null
-        : hints[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>;
+    List<int>? allowedExtensions = hints?[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>?;
     if (allowedExtensions != null) {
       bool valid = false;
       for (int length in allowedExtensions) {
@@ -262,9 +258,10 @@ abstract class UPCEANReader extends OneDReader {
     }
     try {
       int check = int.parse(s[length - 1]);
+
       return getStandardUPCEANChecksum(s.substring(0, length - 1)) == check;
-    }catch(_){
-      throw FormatsException.instance;
+    } on FormatException catch(_){
+      throw ArgumentError();
     }
   }
 

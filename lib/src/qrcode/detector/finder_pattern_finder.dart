@@ -233,7 +233,7 @@ class FinderPatternFinder {
 
   //@protected
   static void doClearCounts(List<int> counts) {
-    counts.setAll(0, List.filled(counts.length, 0));
+    counts.fillRange(0, counts.length, 0);
   }
 
   //@protected

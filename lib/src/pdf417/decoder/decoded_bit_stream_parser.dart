@@ -15,6 +15,7 @@
  */
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
@@ -594,11 +595,11 @@ class DecodedBitStreamParser {
         break;
     }
     try {
-      result.write(encoding.decode(decodedBytes));
-    } catch (uee) {
+      result.write(encoding.decode(Uint8List.fromList(decodedBytes)));
+    } on FormatException catch (_) {
       // UnsupportedEncodingException
       // can't happen
-      throw Exception(uee);
+      rethrow;
     }
     return codeIndex;
   }

@@ -74,7 +74,7 @@ class CodaBarReader extends OneDReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    //Arrays.fill(counters, 0);
+    _counters.fillRange(0,_counters.length, 0);
     _setCounters(row);
     int startOffset = _findStartPattern();
     int nextStart = startOffset;

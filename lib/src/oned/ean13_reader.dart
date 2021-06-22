@@ -67,7 +67,8 @@ class EAN13Reader extends UPCEANReader {
   @override
   int decodeMiddle(
       BitArray row, List<int> startRange, StringBuilder resultString) {
-    List<int> counters = _decodeMiddleCounters.toList();
+    List<int> counters = _decodeMiddleCounters;
+    counters.fillRange(0, counters.length, 0);
     int end = row.size;
     int rowOffset = startRange[1];
 

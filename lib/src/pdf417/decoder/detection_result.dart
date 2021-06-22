@@ -286,32 +286,28 @@ class DetectionResult {
     if (rowIndicatorColumn == null) {
       rowIndicatorColumn = _detectionResultColumns[_barcodeColumnCount + 1];
     }
-    try {
-      StringBuffer formatter = StringBuffer();
-      for (int codewordsRow = 0;
-          codewordsRow < rowIndicatorColumn!.codewords.length;
-          codewordsRow++) {
-        formatter.write("CW $codewordsRow:");
-        for (int barcodeColumn = 0;
-            barcodeColumn < _barcodeColumnCount + 2;
-            barcodeColumn++) {
-          if (_detectionResultColumns[barcodeColumn] == null) {
-            formatter.write("    |   ");
-            continue;
-          }
-          Codeword? codeword = _detectionResultColumns[barcodeColumn]!
-              .codewords[codewordsRow];
-          if (codeword == null) {
-            formatter.write("    |   ");
-            continue;
-          }
-          formatter.write(" ${codeword.rowNumber}|${codeword.value}");
+    StringBuffer formatter = StringBuffer();
+    for (int codewordsRow = 0;
+        codewordsRow < rowIndicatorColumn!.codewords.length;
+        codewordsRow++) {
+      formatter.write("CW ${codewordsRow.toString().padLeft(3)}:");
+      for (int barcodeColumn = 0;
+          barcodeColumn < _barcodeColumnCount + 2;
+          barcodeColumn++) {
+        if (_detectionResultColumns[barcodeColumn] == null) {
+          formatter.write("    |   ");
+          continue;
         }
-        formatter.write("\n");
+        Codeword? codeword = _detectionResultColumns[barcodeColumn]!
+            .codewords[codewordsRow];
+        if (codeword == null) {
+          formatter.write("    |   ");
+          continue;
+        }
+        formatter.write(" ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}");
       }
-      return formatter.toString();
-    } catch (e) {}
-
-    return '';
+      formatter.write("\n");
+    }
+    return formatter.toString();
   }
 }

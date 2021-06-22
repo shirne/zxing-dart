@@ -103,7 +103,7 @@ class PDF417ScanningDecoder {
         // This will be the case for the opposite row indicator column, which doesn't need to be decoded again.
         continue;
       }
-      DetectionResultColumn detectionResultColumn;
+      late DetectionResultColumn detectionResultColumn;
       if (barcodeColumn == 0 || barcodeColumn == maxBarcodeColumn) {
         detectionResultColumn = DetectionResultRowIndicatorColumn(
             boundingBox, barcodeColumn == 0);
@@ -212,16 +212,12 @@ class PDF417ScanningDecoder {
       DetectionResultRowIndicatorColumn? leftRowIndicatorColumn,
       DetectionResultRowIndicatorColumn? rightRowIndicatorColumn) {
     BarcodeMetadata? leftBarcodeMetadata;
-    if (leftRowIndicatorColumn == null ||
-        (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()) ==
+    if ((leftBarcodeMetadata = leftRowIndicatorColumn?.getBarcodeMetadata()) ==
             null) {
-      return rightRowIndicatorColumn == null
-          ? null
-          : rightRowIndicatorColumn.getBarcodeMetadata();
+      return rightRowIndicatorColumn?.getBarcodeMetadata();
     }
     BarcodeMetadata? rightBarcodeMetadata;
-    if (rightRowIndicatorColumn == null ||
-        (rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata()) ==
+    if ((rightBarcodeMetadata = rightRowIndicatorColumn?.getBarcodeMetadata()) ==
             null) {
       return leftBarcodeMetadata;
     }
@@ -307,7 +303,7 @@ class PDF417ScanningDecoder {
         detectionResult.barcodeRowCount *
             detectionResult.barcodeColumnCount,
         0);
-    List<List<int>> ambiguousIndexValuesList = [];
+    List<List<int>> ambiguousIndexValues = [];
     List<int> ambiguousIndexesList = [];
     for (int row = 0; row < detectionResult.barcodeRowCount; row++) {
       for (int column = 0;
@@ -322,20 +318,20 @@ class PDF417ScanningDecoder {
           codewords[codewordIndex] = values[0];
         } else {
           ambiguousIndexesList.add(codewordIndex);
-          ambiguousIndexValuesList.add(values);
+          ambiguousIndexValues.add(values);
         }
       }
     }
-    List<List<int>> ambiguousIndexValues =
-        List.generate(ambiguousIndexValuesList.length, (index) => []);
-    for (int i = 0; i < ambiguousIndexValues.length; i++) {
-      ambiguousIndexValues[i] = ambiguousIndexValuesList[i];
-    }
+    //List<List<int>> ambiguousIndexValues =
+    //    List.generate(ambiguousIndexValuesList.length, (index) => []);
+    //for (int i = 0; i < ambiguousIndexValues.length; i++) {
+    //  ambiguousIndexValues[i] = ambiguousIndexValuesList[i];
+    //}
     return _createDecoderResultFromAmbiguousValues(
         detectionResult.barcodeECLevel,
         codewords,
-        PDF417Common.toIntArray(erasures),
-        PDF417Common.toIntArray(ambiguousIndexesList),
+        erasures,
+        ambiguousIndexesList,
         ambiguousIndexValues);
   }
 
@@ -366,8 +362,7 @@ class PDF417ScanningDecoder {
       }
       try {
         return _decodeCodewords(codewords, ecLevel, erasureArray);
-      } catch (ignored) {
-        // ChecksumException
+      } on ChecksumException catch (_) {
         //
       }
       if (ambiguousIndexCount.length == 0) {
@@ -621,7 +616,7 @@ class PDF417ScanningDecoder {
   /// @throws ChecksumException if error correction fails
   static int _correctErrors(
       List<int> codewords, List<int>? erasures, int numECCodewords) {
-    if (erasures != null && erasures.length > numECCodewords / 2 + _MAX_ERRORS ||
+    if (erasures != null && erasures.length > numECCodewords ~/ 2 + _MAX_ERRORS ||
         numECCodewords < 0 ||
         numECCodewords > _MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
@@ -686,25 +681,22 @@ class PDF417ScanningDecoder {
   }
 
   static String barcodeToString(List<List<BarcodeValue>> barcodeMatrix) {
-    try {
-      StringBuffer formatter = StringBuffer();
-      for (int row = 0; row < barcodeMatrix.length; row++) {
-        formatter.write(
-          "Row $row: ",
-        );
-        for (int column = 0; column < barcodeMatrix[row].length; column++) {
-          BarcodeValue barcodeValue = barcodeMatrix[row][column];
-          if (barcodeValue.getValue().length == 0) {
-            formatter.write("        ");
-          } else {
-            formatter.write(
-                "${barcodeValue.getValue()[0]}(${barcodeValue.getConfidence(barcodeValue.getValue()[0])})");
-          }
+    StringBuffer formatter = StringBuffer();
+    for (int row = 0; row < barcodeMatrix.length; row++) {
+      formatter.write(
+        "Row $row: ",
+      );
+      for (int column = 0; column < barcodeMatrix[row].length; column++) {
+        BarcodeValue barcodeValue = barcodeMatrix[row][column];
+        if (barcodeValue.getValue().length == 0) {
+          formatter.write("        ");
+        } else {
+          formatter.write(
+              "${barcodeValue.getValue()[0]}(${barcodeValue.getConfidence(barcodeValue.getValue()[0])})");
         }
-        formatter.write("\n");
       }
-      return formatter.toString();
-    } catch (e) {}
-    return '';
+      formatter.write("\n");
+    }
+    return formatter.toString();
   }
 }

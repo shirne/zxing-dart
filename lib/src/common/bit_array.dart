@@ -39,7 +39,7 @@ class BitArray {
   }
 
   BitArray.test(this._bits, this._size);
-
+  Int32List get bits => _bits;
   int get size => _size;
 
   int get sizeInBytes => (_size + 7) ~/ 8;
@@ -155,10 +155,11 @@ class BitArray {
 
   /// Clears all bits (sets to false).
   void clear() {
-    int max = _bits.length;
+    _bits.fillRange(0, _bits.length, 0);
+    /*int max = _bits.length;
     for (int i = 0; i < max; i++) {
       _bits[i] = 0;
-    }
+    }*/
   }
 
   /// Efficient method to check if a range of bits is set, or not set.
@@ -320,6 +321,6 @@ class BitArray {
   }
 
   BitArray clone() {
-    return BitArray.test( Int32List.fromList(_bits.getRange(0, _bits.length).toList()), _size);
+    return BitArray.test( Int32List.fromList(_bits.toList()), _size);
   }
 }

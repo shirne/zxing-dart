@@ -66,7 +66,7 @@ class Code93Reader extends OneDReader {
     int end = row.size;
 
     List<int> theCounters = _counters;
-    // Arrays.fill(theCounters, 0);
+    theCounters.fillRange(0, theCounters.length, 0);
     StringBuilder result = _decodeRowResult;
     result.clear();
 
@@ -129,7 +129,7 @@ class Code93Reader extends OneDReader {
     int width = row.size;
     int rowOffset = row.getNextSet(0);
 
-    // Arrays.fill(counters, 0);
+    _counters.fillRange(0, _counters.length, 0);
     List<int> theCounters = _counters;
     int patternStart = rowOffset;
     bool isWhite = false;

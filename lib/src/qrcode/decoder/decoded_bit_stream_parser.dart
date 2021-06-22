@@ -148,7 +148,7 @@ class DecodedBitStreamParser {
           symbologyModifier = 1;
         }
       }
-    } catch (iae) {
+    } on ArgumentError catch (iae) {
       // on IllegalArgumentException
       // from readBits() calls
       throw FormatsException(iae.toString());
@@ -159,9 +159,9 @@ class DecodedBitStreamParser {
         result.toString(),
         byteSegments.isEmpty ? null : byteSegments,
         ecLevel == null ? null : ecLevel.toString(),
-        symbolSequence,
-        parityData,
-        symbologyModifier);
+        saSequence:symbolSequence,
+        saParity:parityData,
+        symbologyModifier:symbologyModifier);
   }
 
   /// See specification GBT 18284-2000

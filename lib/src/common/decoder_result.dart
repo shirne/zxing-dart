@@ -46,15 +46,15 @@ class DecoderResult {
   /// arbitrary additional metadata
   Object? other;
 
-
   DecoderResult(this._rawBytes, this._text, this._byteSegments, this._ecLevel,
-      [this._structuredAppendSequenceNumber = -1,
-      this._structuredAppendParity = -1,
-      this._symbologyModifier = 0])
-      : numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length;
+      {saSequence = -1, saParity = -1, symbologyModifier = 0})
+      : _structuredAppendSequenceNumber = saSequence,
+        _structuredAppendParity = saParity,
+        _symbologyModifier = symbologyModifier,
+        numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length;
 
   /// @return raw bytes representing the result, or `null` if not applicable
-  Uint8List get rawBytes => _rawBytes!;
+  Uint8List? get rawBytes => _rawBytes;
 
   /// @return text representation of the result
   String get text => _text;
@@ -65,8 +65,8 @@ class DecoderResult {
   /// @return name of error correction level used, or `null` if not applicable
   String? get ecLevel => _ecLevel;
 
-
-  bool get hasStructuredAppend => _structuredAppendParity >= 0 && _structuredAppendSequenceNumber >= 0;
+  bool get hasStructuredAppend =>
+      _structuredAppendParity >= 0 && _structuredAppendSequenceNumber >= 0;
 
   int get structuredAppendParity => _structuredAppendParity;
 

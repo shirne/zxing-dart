@@ -46,7 +46,7 @@ class BitSource {
   /// @throws IllegalArgumentException if numBits isn't in [1,32] or more than is available
   int readBits(int numBits) {
     if (numBits < 1 || numBits > 32 || numBits > available()) {
-      throw Exception(numBits.toString());
+      throw ArgumentError(numBits.toString());
     }
 
     int result = 0;
