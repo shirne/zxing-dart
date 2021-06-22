@@ -1,3 +1,10 @@
+## [0.3.2] - 2021-06-22
+
+* remove flutter dev-dep.
+* replace buffer_image with image pkg in tests
+* fix some bugs
+* fix exception throws
+
 ## [0.3.1] - 2021-06-19
 
 * remove flutter dependencies
