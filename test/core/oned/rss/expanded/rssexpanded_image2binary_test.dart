@@ -30,8 +30,9 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -46,7 +47,7 @@ void main(){
   Future<void> assertCorrectImage2binary(String fileName, String expected) async{
     String path = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path + '/' + (fileName);
 
-    BufferImage image = (await BufferImage.fromFile(File(path).readAsBytesSync()))!;
+    Image image = decodeImage(File(path).readAsBytesSync())!;
     BinaryBitmap binaryMap = BinaryBitmap(GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);

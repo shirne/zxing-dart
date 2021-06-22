@@ -17,7 +17,8 @@
 
 
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/datamatrix.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -33,7 +34,7 @@ void main(){
           BarcodeFormat.DATA_MATRIX,
           52,
           52, {EncodeHintType.DATA_MATRIX_SHAPE : SymbolShapeHint.FORCE_SQUARE, EncodeHintType.MIN_SIZE: Dimension(52,52)});
-    print(encode);
+    expect(encode.get(0, 0), true);
   });
 
   test('testDataMatrixImageWriter', () {

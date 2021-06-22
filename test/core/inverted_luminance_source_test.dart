@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import 'dart:ui';
-
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import 'buffered_image_luminance_source.dart';
@@ -29,10 +28,11 @@ void main() {
 
   test('testInverted', () async {
 
-    BufferImage image = BufferImage( 2, 1);
+    Image image = Image( 2, 1);
+    image.fill(getColor(0, 0, 0, 255));
     //BufferedImage image = new BufferedImage(2, 1, BufferedImage.TYPE_INT_RGB);
     //image.setRGB(0, 0, 0xFFFFFF);
-    image.setColor(0, 0, Color.fromARGB(255, 255, 255, 255));
+    image.setPixel(0, 0, 0xffffffff);
 
     LuminanceSource source = new BufferedImageLuminanceSource(image);
 

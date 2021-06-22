@@ -13,16 +13,14 @@ class Properties{
         int equalPos = element.indexOf('=');
         if(equalPos > 0){
           String key = element.substring(0, equalPos).trim();
-          String value = element.substring(equalPos).trim();
+          String value = element.substring(equalPos + 1).trim();
           _properties[key] = value;
         }
       }
     });
   }
 
-  Map<String, String> get properties{
-    return _properties;
-  }
+  Map<String, String> get properties => _properties;
 
   String? getProperty(String key, [String? defaultValue]){
     return _properties[key] ?? (_defaults?.getProperty(key) ?? defaultValue);

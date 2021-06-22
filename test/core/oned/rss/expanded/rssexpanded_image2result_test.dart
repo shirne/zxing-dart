@@ -36,8 +36,9 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
@@ -53,7 +54,7 @@ void main(){
   void assertCorrectImage2result(String fileName, ExpandedProductParsedResult expected) async{
     String path = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path + '/' + (fileName);
 
-    BufferImage image = (await BufferImage.fromFile(File(path).readAsBytesSync()))!;
+    Image image = decodeImage(File(path).readAsBytesSync())!;
     BinaryBitmap binaryMap =  BinaryBitmap( GlobalHistogramBinarizer( BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -77,7 +78,7 @@ void main(){
   test('testDecodeRow2result2', (){
     // (01)90012345678908(3103)001750
     ExpandedProductParsedResult expected =
-        new ExpandedProductParsedResult("(01)90012345678908(3103)001750",
+        ExpandedProductParsedResult("(01)90012345678908(3103)001750",
                                         "90012345678908",
                                         null, null, null, null, null, null,
                                         "001750",

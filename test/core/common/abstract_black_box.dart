@@ -16,10 +16,8 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as Math;
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -41,7 +39,6 @@ class AbstractBlackBoxTestCase {
   final Map<DecodeHintType, Object> _hints = {};
 
   static Directory buildTestBase(String testBasePathSuffix) {
-    TestWidgetsFlutterBinding.ensureInitialized();
     // A little workaround to prevent aggravation in my IDE
     Directory testBase = Directory(testBasePathSuffix);
 
@@ -50,9 +47,7 @@ class AbstractBlackBoxTestCase {
 
   AbstractBlackBoxTestCase(
       String testBasePathSuffix, this._barcodeReader, this._expectedFormat)
-      : _testBase = buildTestBase(testBasePathSuffix){
-    TestWidgetsFlutterBinding.ensureInitialized();
-  }
+      : _testBase = buildTestBase(testBasePathSuffix);
 
   Directory getTestBase() {
     return _testBase;
@@ -62,7 +57,7 @@ class AbstractBlackBoxTestCase {
     _hints[hint] = true;
   }
 
-  void testBlackBox() async {
+  void testBlackBox() {
     assert(_testResults.isNotEmpty);
 
     List<File> imageFiles = getImageFiles();
@@ -74,9 +69,9 @@ class AbstractBlackBoxTestCase {
     List<int> tryHarderMisreadCounts = List.filled(testCount, 0);
 
     for (File testImage in imageFiles) {
-      _log.info("Starting testImage");
+      _log.info("Starting ${testImage.path}");
 
-      BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
+      Image image = decodeImage(testImage.readAsBytesSync())!;
 
       String testImageFileName = testImage.uri.pathSegments.last;
       String fileBaseName =
@@ -101,30 +96,28 @@ class AbstractBlackBoxTestCase {
 
       for (int x = 0; x < testCount; x++) {
         double rotation = _testResults[x].getRotation();
-        BufferImage rotatedImage = rotateImage(image, rotation);
-        LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        Image rotatedImage = rotateImage(image, rotation);
+        LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
+        BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
         try {
-          if (_decode(bitmap, rotation, expectedText,
-              expectedMetadata.properties, false)) {
+          if (_decode(bitmap, rotation, expectedText, expectedMetadata.properties,
+              filename: fileBaseName)) {
             passedCounts[x]++;
           } else {
             misreadCounts[x]++;
           }
-        } catch (_) {
-          //ReaderException
-          _log.fine("could not read at rotation $rotation");
+        } on ReaderException catch (_) {
+          _log.fine("could not read $fileBaseName at rotation $rotation");
         }
         try {
-          if (_decode(bitmap, rotation, expectedText,
-              expectedMetadata.properties, true)) {
+          if (_decode(bitmap, rotation, expectedText, expectedMetadata.properties,
+              tryHarder: true,filename: fileBaseName)) {
             tryHarderCounts[x]++;
           } else {
             tryHarderMisreadCounts[x]++;
           }
-        } catch (_) {
-          // ReaderException
-          _log.fine("could not read at rotation $rotation w/TH");
+        } on ReaderException catch (_) {
+          _log.fine("could not read $fileBaseName at rotation $rotation w/TH");
         }
       }
     }
@@ -158,7 +151,7 @@ class AbstractBlackBoxTestCase {
 
     int totalTests = imageFiles.length * testCount * 2;
     _log.info(
-        "Decoded $totalFound images out of $totalTests (${totalFound * 100 / totalTests}%, ${totalMustPass} required)");
+        "Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)");
     if (totalFound > totalMustPass) {
       _log.warning("+++ Test too lax by ${totalFound - totalMustPass} images");
     } else if (totalFound < totalMustPass) {
@@ -200,13 +193,13 @@ class AbstractBlackBoxTestCase {
   /// @param rotation The rotation in degrees clockwise to use for this test.
   void addTest(int mustPassCount, int tryHarderCount, double rotation,
       [int maxMisreads = 0, int maxTryHarderMisreads = 0]) {
-    _testResults.add(new TestResult(mustPassCount, tryHarderCount, maxMisreads,
+    _testResults.add(TestResult(mustPassCount, tryHarderCount, maxMisreads,
         maxTryHarderMisreads, rotation));
   }
 
   List<File> getImageFiles() {
     assert(_testBase.existsSync(),
-        "Please download and install test images, and run from the 'core' directory");
+        "Please download and install test images, and run from the 'test' directory");
     List<File> paths = [];
     var files = _testBase.listSync();
     files.forEach((element) {
@@ -222,11 +215,10 @@ class AbstractBlackBoxTestCase {
   Reader? get reader => _barcodeReader;
 
   bool _decode(BinaryBitmap source, double rotation, String expectedText,
-      Map<Object, Object> expectedMetadata, bool tryHarder) {
+      Map<Object, Object> expectedMetadata,{ bool tryHarder = false, filename = ''}) {
     String suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
 
-    Map<DecodeHintType, Object> hints =
-        this._hints.map((key, value) => MapEntry(key, value));
+    var hints = Map<DecodeHintType, Object>.from(_hints);
     if (tryHarder) {
       hints[DecodeHintType.TRY_HARDER] = true;
     }
@@ -235,12 +227,10 @@ class AbstractBlackBoxTestCase {
     // not expected to pass, generally
     Result? result;
     try {
-      Map<DecodeHintType, Object> pureHints =
-          hints.map((key, value) => MapEntry(key, value));
+      var pureHints = Map<DecodeHintType, Object>.from(hints);
       pureHints[DecodeHintType.PURE_BARCODE] = true;
       result = _barcodeReader!.decode(source, pureHints);
-    } catch (_) {
-      // ReaderException
+    } on ReaderException catch (_) {
       // continue
     }
 
@@ -249,32 +239,41 @@ class AbstractBlackBoxTestCase {
     }
 
     if (_expectedFormat != result.barcodeFormat) {
-      _log.info(
-          "Format mismatch: expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix");
+      _log.warning(
+          "Format mismatch: $filename expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix");
       return false;
     }
 
     String resultText = result.text;
     if (expectedText != resultText) {
-      _log.info(
-          "Content mismatch: expected '$expectedText' but got '$resultText'$suffix");
+      _log.warning(
+          "Content mismatch: $filename expected '$expectedText' but got '$resultText'$suffix");
       return false;
     }
 
     Map<ResultMetadataType, Object>? resultMetadata =
-        result.resultMetadata!;
+        result.resultMetadata;
     for (MapEntry metadatum in expectedMetadata.entries) {
-      ResultMetadataType key = metadatum.key;
+      ResultMetadataType key = string2RMType(metadatum.key)!;
       Object expectedValue = metadatum.value;
-      Object? actualValue = resultMetadata == null ? null : resultMetadata[key];
+      Object? actualValue = resultMetadata?[key];
       if (expectedValue != actualValue) {
-        _log.info(
-            "Metadata mismatch for key '$key': expected '$expectedValue' but got '$actualValue'");
+        _log.warning(
+            "Metadata mismatch $filename for key '${key.toString().replaceFirst('ResultMetadataType.', '')}': expected '$expectedValue' but got '$actualValue'");
         return false;
       }
     }
 
     return true;
+  }
+
+  ResultMetadataType? string2RMType(String type){
+    for(ResultMetadataType rType in ResultMetadataType.values){
+      if(rType.toString().replaceFirst('ResultMetadataType.', '') == type){
+        return rType;
+      }
+    }
+    return null;
   }
 
   static String readFileAsString(File file, Encoding charset) {
@@ -286,19 +285,19 @@ class AbstractBlackBoxTestCase {
     return stringContents;
   }
 
-  static BufferImage rotateImage(BufferImage original, double degrees) {
+  static Image rotateImage(Image original, double degrees) {
     if (degrees == 0.0) {
       return original;
     }
 
-    double radians = Math.pi * 2 * (degrees / 360);
+    //double radians = Math.pi * 2 * (degrees / 360);
 
     // Transform simply to find out the new bounding box (don't actually run the image through it)
     //AffineTransform at = new AffineTransform();
     //at.rotate(radians, original.width / 2.0, original.height / 2.0);
     //BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
-    original.rotate(radians);
+    //original.rotate(radians);
 
     //RectangularShape r = op.getBounds2D(original);
     //int width = (int) Math.ceil(r.width);
@@ -314,6 +313,6 @@ class AbstractBlackBoxTestCase {
 
     //return op.filter(original, new BufferedImage(width, height, original.getType()));
 
-    return original;
+    return copyRotate(original, degrees, interpolation: Interpolation.linear);
   }
 }

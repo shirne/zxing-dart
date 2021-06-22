@@ -15,7 +15,8 @@
  */
 
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 
 import '../../utils.dart';
 import 'debug_placement.dart';

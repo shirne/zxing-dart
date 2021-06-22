@@ -17,10 +17,10 @@
 
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -40,9 +40,9 @@ void main(){
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-2");
 
     File testImage = File(testBase.path + '/multi.jpg');
-    BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
-    BufferedImageLuminanceSource source = BufferedImageLuminanceSource(image.toGray()..deNoise()..deNoise());
-    //source = source.scaleDown(2);
+    Image image = decodeImage(testImage.readAsBytesSync())!;
+    var scaleImage = copyResize(image, width:image.width ~/2, height:image.height~/2, interpolation: Interpolation.average);
+    BufferedImageLuminanceSource source = BufferedImageLuminanceSource(scaleImage);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
     MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
@@ -57,36 +57,25 @@ void main(){
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 
-  Future<ByteData?> source2Data(LuminanceSource source) async{
-    //List<String> data = [];
-    var image = BufferImage(source.width, source.height);
-    for(int y=0;y<image.height;y++){
-      var row = source.getRow(y, null);
-      for(int x=0;x<image.width;x++){
-        int c = row[x] & 0xff;
-        //print("${row[x]} => $c");
-        image.setColor(x, y, Color.fromARGB(255, c, c, c));
-      }
-    }
-    var buffer = await ImmutableBuffer.fromUint8List(image.buffer);
-    var desc = ImageDescriptor.raw(buffer, width: image.width, height: image.height, pixelFormat: PixelFormat.rgba8888);
-    var codec = await desc.instantiateCodec();
-    var frame = await codec.getNextFrame();
-    //var byteData = await frame.image.toByteData(format: ImageByteFormat.png);
-    return await frame.image.toByteData(format: ImageByteFormat.png);
-  }
-
-  Future<void> testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}) async{
+  testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}){
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-2");
     int startTimer = DateTime.now().millisecondsSinceEpoch;
 
     File testImage = File('${testBase.path}/$name');
-    BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
+    Image image = decodeImage(testImage.readAsBytesSync())!;
     if(down > 0){
-      image.scaleDown(down.toDouble());
+      //image.scaleDown(down.toDouble());
+      image = copyResize(image, width:(image.width / down).ceil(), height:(image.height / down).ceil(), interpolation: Interpolation.average);
+    }
+    List<int> pixels = [];
+    for(int y = 0;y < image.height; y++){
+      for(int x = 0;x < image.width; x++){
+        int color = image.getPixel(x, y);
+        pixels.add(((color & 0xff) << 16) + ((color >> 8) & 0xff) + ((color >> 16) & 0xff));
+      }
     }
 
-    LuminanceSource source = RGBLuminanceSource(image.width, image.height, image.pixels);
+    LuminanceSource source = RGBLuminanceSource(image.width, image.height, pixels);
 
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     var reader = MultiFormatReader();
@@ -114,13 +103,13 @@ void main(){
     }
   }
 
-  test('testHardQR', () async{
-    await testQR('inverted.png');
-    await testQR('inverse.jpg', down: 2);
-    await testQR('qr-clip3.png');
-    await testQR('qr-clip2.png');
-    await testQR('qr-clip1.png');
-    await testQR('qr2.jpg', down: 2);
-    await testQR('qr1.jpg', down:3);
+  test('testHardQR', (){
+    testQR('inverted.png');
+    testQR('inverse.jpg', down: 3);
+    testQR('qr-clip3.png', down: 3);
+    testQR('qr-clip2.png', down: 3);
+    testQR('qr-clip1.png', down: 3);
+    testQR('qr2.jpg', down: 2);
+    testQR('qr1.jpg', down: 2);
   });
 }

@@ -18,9 +18,9 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/qrcode.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -31,29 +31,27 @@ void main() {
 
   final String BASE_IMAGE_PATH =  "${Directory.current.absolute.path}/test/resources/golden/qrcode/";
 
-  Future<BufferImage> loadImage(String fileName) async{
+  Future<Image> loadImage(String fileName) async{
     File file = File("$BASE_IMAGE_PATH$fileName");
 
     var exists = await file.exists();
     expect( !exists,"Please download and install test images($fileName), and run from the 'core' directory");
 
-    return BufferImage.fromImage(await decodeImageFromList(file.readAsBytesSync()));
+    return decodeImage(file.readAsBytesSync())!;
   }
 
   // In case the golden images are not monochromatic, convert the RGB values to greyscale.
-  BitMatrix createMatrixFromImage(BufferImage image) {
+  BitMatrix createMatrixFromImage(Image image) {
     int width = image.width;
     int height = image.height;
-    List<int> pixels = List.generate(width * height, (index) => image.getColor(index % width, index ~/ width).value) ;
+    List<int> pixels = List.generate(width * height, (index) => image.getPixel(index % width, index ~/ width)) ;
     //image.getRGB(0, 0, width, height, pixels, 0, width);
 
     BitMatrix matrix = new BitMatrix(width, height);
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         int pixel = pixels[y * width + x];
-        int luminance = (306 * ((pixel >> 16) & 0xFF) +
-            601 * ((pixel >> 8) & 0xFF) +
-            117 * (pixel & 0xFF)) >> 10;
+        int luminance = getLuminance(pixel);
         if (luminance <= 0x7F) {
           matrix.set(x, y);
         }
@@ -95,7 +93,7 @@ void main() {
                                           int resolution,
                                           String fileName) async{
 
-    BufferImage image = await loadImage(fileName);
+    Image image = await loadImage(fileName);
     //assertNotNull(image);
     BitMatrix goldenResult = createMatrixFromImage(image);
     //assertNotNull(goldenResult);

@@ -16,7 +16,8 @@
 
 
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
@@ -25,7 +26,7 @@ import '../common/abstract_black_box.dart';
 void main(){
 
   test('UPCEANExtensionBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/upcean-extension-1", new MultiFormatReader(), BarcodeFormat.EAN_13)
+    AbstractBlackBoxTestCase("test/resources/blackbox/upcean-extension-1", MultiFormatReader(), BarcodeFormat.EAN_13)
     ..addTest(2, 2, 0.0)
         ..testBlackBox();
   });

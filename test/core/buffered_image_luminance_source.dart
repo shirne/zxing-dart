@@ -16,9 +16,8 @@
 
 import 'dart:typed_data';
 import 'dart:math' as Math;
-import 'dart:ui';
 
-import 'package:buffer_image/buffer_image.dart';
+import 'package:image/image.dart';
 import 'package:zxing_lib/zxing.dart';
 
 
@@ -28,7 +27,8 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   static final double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
 
-  AbstractImage image;
+  late Uint8List buffer;
+  Image image;
   final int left;
   final int top;
 
@@ -45,73 +45,30 @@ class BufferedImageLuminanceSource extends LuminanceSource {
       throw Exception("Crop rectangle does not fit within image data.");
     }
 
-      //WritableRaster raster = this.image.getRaster();
-      //List<int> buffer = List.filled(width, 0);
-      for (int y = top; y < top + height; y++) {
-        //image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
-        for (int x = 0; x < width; x++) {
-          Color color = image.getColor(x + left, y);
-          //int pixel = buffer[x];
+    buffer = Uint8List(width * height);
+    for (int y = top; y < top + height; y++) {
+      for (int x = 0; x < width; x++) {
+        int color = image.getPixel(x + left, y);
+        int alpha = getAlpha(color);
 
-          // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
-          // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
-          // barcode image. Force any such pixel to be white:
-          if (color.alpha == 0) {
-            // white, so we know its luminance is 255
-            //buffer[x] = 0xFF;
-            image.setColor(x + left, y, color.withAlpha(255));
-          } else {
-            // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC),
-            // (306*R) >> 10 is approximately equal to R*0.299, and so on.
-            // 0x200 >> 10 is 0.5, it implements rounding.
-
-            int newAlpha = (306 * ((color.value >> 16) & 0xFF) +
-                601 * ((color.value >> 8) & 0xFF) +
-                117 * (color.value & 0xFF) +
-                0x200) >> 10;
-            image.setColor(x + left, y, color.withAlpha(newAlpha));
-          }
+        // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+        // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+        // barcode image. Force any such pixel to be white:
+        if (alpha == 0) {
+          // white, so we know its luminance is 255
+          buffer[(y - top) * width + x] = 0xff;
+        } else {
+          // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC),
+          // (306*R) >> 10 is approximately equal to R*0.299, and so on.
+          // 0x200 >> 10 is 0.5, it implements rounding.
+          buffer[(y - top) * width + x] = (306 * getRed(color) +
+              601 * getGreen(color) +
+              117 * getBlue(color) +
+              0x200) >> 10;
         }
-        //raster.setPixels(left, y, width, 1, buffer);
-      }
-
-  }
-
-  scaleDown(int scale){
-    BufferImage newImage = BufferImage((image.width / scale).ceil(),(image.height / scale).ceil());
-    List<Color?> colors = List.filled(scale * scale, null);
-    for(int y=0; y < newImage.height; y++){
-      for(int x=0; x < newImage.width; x++){
-        int count = 0;
-        colors.fillRange(0, colors.length, null);
-        for(int sy=0; sy < scale; sy++){
-          if(y * scale + sy >= image.height)break;
-          for(int sx=0; sx < scale; sx++){
-            if(x * scale + sx >= image.width)break;
-            count ++;
-            colors[sy*scale + sx] = image.getColor(x * scale + sx, y * scale + sy);
-          }
-        }
-        if(count  < 1) break;
-
-        int alpha = 0;
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-        for(Color? color in colors){
-          if(color != null){
-            count ++;
-            alpha += color.alpha;
-            red += color.red;
-            green += color.green;
-            blue += color.blue;
-          }
-        }
-        newImage.setColor(x, y, Color.fromARGB(alpha ~/ count, red ~/ count , green ~/ count, blue ~/ count));
       }
     }
 
-    return BufferedImageLuminanceSource(newImage);
   }
 
   @override
@@ -122,31 +79,20 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     if (row == null || row.length < width) {
       row = Int8List(width);
     }
+
     // The underlying raster of image consists of bytes with the luminance values
     //image.getDataElements(left, top + y, width, 1, row);
-    for(int x = left; x < left + width; x++){
-        Color pColor = image.getColor(x, top + y);
-        int max = Math.max(pColor.red, Math.max(pColor.green, pColor.blue));
-        int min = Math.min(pColor.red, Math.min(pColor.green, pColor.blue));
-        row[x - left] = (max + min) ~/ 2;
-    }
+    List.copyRange(row, 0, buffer, y * width, (y + 1) * width);
     return row;
   }
 
   @override
   Int8List get matrix {
-    int area = width * height;
-    Int8List matrix = Int8List(area);
+
     // The underlying raster of image consists of area bytes with the luminance values
     //image.getDataElements(left, top, width, height, matrix);
-    for(int x = left; x < left + width; x++){
-      for(int y = top; y < top + height; y++){
-        Color pColor = image.getColor(x, y);
-        int max = Math.max(pColor.red, Math.max(pColor.green, pColor.blue));
-        int min = Math.min(pColor.red, Math.min(pColor.green, pColor.blue));
-        matrix[(y-top)*width + x - left] = (max + min) ~/ 2;
-      }
-    }
+    Int8List matrix = Int8List.fromList(buffer);
+
     return matrix;
   }
 
@@ -155,7 +101,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return BufferedImageLuminanceSource(image.copy(), this.left + left, this.top + top, width, height);
+    return BufferedImageLuminanceSource(image.clone(), this.left + left, this.top + top, width, height);
   }
 
   /// This is always true, since the image is a gray-scale image.
@@ -171,10 +117,10 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.
-    image.rotate(Math.pi/2);
+    var newImage = copyRotate(image, 90);
 
     // Maintain the cropped region, but rotate it too.
-    return BufferedImageLuminanceSource(image.copy(), top, sourceWidth - (left + width), height, width);
+    return BufferedImageLuminanceSource(newImage, top, sourceWidth - (left + width), height, width);
   }
 
   @override
@@ -188,7 +134,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     int sourceDimension = Math.max(image.width, image.height);
     //BufferedImage rotatedImage = new BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
-    image.rotate(Math.pi / 4);
+    var newImage = copyRotate(image, 45);
 
     int halfDimension = Math.max(width, height) ~/ 2;
     int newLeft = Math.max(0, oldCenterX - halfDimension);
@@ -196,7 +142,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
     int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
-    return BufferedImageLuminanceSource(image.copy(), newLeft, newTop, newRight - newLeft, newBottom - newTop);
+    return BufferedImageLuminanceSource(newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
   }
 
 }

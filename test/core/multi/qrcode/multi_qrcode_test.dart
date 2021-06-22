@@ -16,8 +16,9 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -36,7 +37,7 @@ void main(){
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-qrcode-1");
 
     File testImage = File(testBase.path + "/1.png");
-    BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
+    Image image = decodeImage(testImage.readAsBytesSync())!;
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 

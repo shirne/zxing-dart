@@ -18,8 +18,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/pdf417.dart';
@@ -32,7 +33,7 @@ import '../common/logger.dart';
 import '../common/test_result.dart';
 
 void main(){
-  test('testBlackBox', (){
+  test('PDF417BlackBox4TestCase', (){
     PDF417BlackBox4TestCase()
     ..testBlackBox();
   });
@@ -44,7 +45,7 @@ void main(){
 class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase);
 
-  final MultipleBarcodeReader barcodeReader = new PDF417Reader();
+  final MultipleBarcodeReader barcodeReader = PDF417Reader();
 
   final List<TestResult> testResults = [];
 
@@ -53,7 +54,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   @override
-  void testBlackBox() async{
+  void testBlackBox(){
     assert(testResults.isNotEmpty);
 
     Map<String,List<File>> imageFiles = getImageFileLists();
@@ -82,20 +83,20 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       for (int x = 0; x < testCount; x++) {
         List<Result> results = [];
         for (File imageFile in testImageGroup.value) {
-          BufferImage image = (await BufferImage.fromFile(imageFile.readAsBytesSync()))!;
+          Image image = decodeImage(imageFile.readAsBytesSync())!;
           double rotation = testResults[x].getRotation();
-          BufferImage rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotation);
+          Image rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotation);
           LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
           BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
           try {
             results.addAll(decode(bitmap, false));
-          } catch ( _) { // ReaderException
+          } on ReaderException catch ( _) {
             // ignore
           }
         }
         results.sort((Result r, Result o) => getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
-        StringBuilder resultText = new StringBuilder();
+        var resultText = StringBuffer();
         String? fileId;
         for (Result result in results) {
           PDF417ResultMetadata resultMetadata = getMeta(result)!;
@@ -103,10 +104,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
           if (fileId == null) {
             fileId = resultMetadata.fileId;
           }
-          expect(fileId, resultMetadata.fileId,reason: "FileId");
+          expect(fileId, resultMetadata.fileId, reason: "FileId");
           resultText.write(result.text);
         }
-        expect( expectedText, resultText.toString(), reason:"ExpectedText");
+        expect( resultText.toString(), expectedText, reason:"ExpectedText");
         passedCounts[x]++;
         tryHarderCounts[x]++;
       }

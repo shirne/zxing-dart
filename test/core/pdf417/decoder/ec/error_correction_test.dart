@@ -16,7 +16,8 @@
 
 import 'dart:math';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/pdf417.dart';
 
 import 'abstract_error_correction.dart';

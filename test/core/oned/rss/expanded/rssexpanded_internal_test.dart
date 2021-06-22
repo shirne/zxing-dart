@@ -25,12 +25,11 @@
  */
 
 
-
-
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -38,18 +37,16 @@ import 'package:zxing_lib/zxing.dart';
 import '../../../buffered_image_luminance_source.dart';
 import '../../../common/abstract_black_box.dart';
 
-
-
 void main(){
 
 
-  Future<BufferImage> readImage(String fileName) async{
+  Image readImage(String fileName) {
     File path = File( AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path +'/'+ fileName);
-    return (await BufferImage.fromFile(path.readAsBytesSync()))!;
+    return decodeImage(path.readAsBytesSync())!;
   }
 
   test('testFindFinderPatterns', () async{
-    BufferImage image = await readImage("2.png");
+    Image image = readImage("2.png");
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -78,13 +75,13 @@ void main(){
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
       fail( "NotFoundException expected");
-    } catch ( _) { // NotFoundException
+    } on NotFoundException catch ( _) {
       // ok
     }
   });
 
   test('testRetrieveNextPairPatterns', () async{
-    BufferImage image = await readImage("3.png");
+    Image image = readImage("3.png");
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -105,7 +102,7 @@ void main(){
   });
 
   test('testDecodeCheckCharacter', () async{
-    BufferImage image = await readImage("3.png");
+    Image image = readImage("3.png");
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 
@@ -120,7 +117,7 @@ void main(){
   });
 
   test('testDecodeDataCharacter', () async{
-    BufferImage image = await readImage("3.png");
+    Image image = readImage("3.png");
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 

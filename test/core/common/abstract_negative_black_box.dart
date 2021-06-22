@@ -16,7 +16,7 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
+import 'package:image/image.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -56,14 +56,14 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     testResults.add(new TestResult(falsePositivesAllowed, rotation));
   }
 
-  void testBlackBox() async{
+  void testBlackBox(){
     assert(testResults.isNotEmpty);
 
     List<File> imageFiles = getImageFiles();
     List<int> falsePositives = List.filled(testResults.length, 0);
     for (File testImage in imageFiles) {
       log.info("Starting $testImage");
-      BufferImage image = (await BufferImage.fromFile(testImage.readAsBytesSync()))!;
+      Image image = decodeImage(testImage.readAsBytesSync())!;
       //if (image == null) {
       //  throw new IOException("Could not read image: " + testImage);
       //}
@@ -103,8 +103,8 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   /// @param image The image to test
   /// @param rotationInDegrees The amount of rotation to apply
   /// @return true if nothing found, false if a non-existent barcode was detected
-  bool checkForFalsePositives(BufferImage image, double rotationInDegrees) {
-    BufferImage rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
+  bool checkForFalsePositives(Image image, double rotationInDegrees) {
+    Image rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
     LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
     BinaryBitmap bitmap = new BinaryBitmap(HybridBinarizer(source));
     Result result;
@@ -112,7 +112,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
       result = reader!.decode(bitmap);
       log.info("Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
-    } catch ( _) { // ReaderException
+    } on ReaderException catch ( _) {
       // continue
     }
 
@@ -123,7 +123,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
       result = reader!.decode(bitmap, hints);
       log.info("Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
-    } catch ( re) { // ReaderException
+    } on ReaderException catch ( _) {
       // continue
     }
     return true;

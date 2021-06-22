@@ -28,7 +28,7 @@
 
 import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
+import 'package:image/image.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -38,15 +38,15 @@ class TestCaseUtil {
 
   TestCaseUtil();
 
-  static Future<BufferImage> getBufferedImage(String path) async{
+  static Image getImage(String path){
 
     File file = File(path);
 
-    return (await BufferImage.fromFile(file.readAsBytesSync()))!;
+    return decodeImage(file.readAsBytesSync())!;
   }
 
-  static Future<BinaryBitmap> getBinaryBitmap(String path) async{
-    BufferImage bufferedImage = await getBufferedImage(path);
+  static BinaryBitmap getBinaryBitmap(String path){
+    Image bufferedImage = getImage(path);
     BufferedImageLuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
     return BinaryBitmap(GlobalHistogramBinarizer(luminanceSource));
   }

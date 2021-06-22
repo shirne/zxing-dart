@@ -20,7 +20,8 @@
 
 
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/datamatrix.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -59,13 +60,13 @@ void main(){
     try {
       SymbolInfo.lookup(1559);
       fail("There's no rectangular symbol for more than 1558 data codewords");
-    } catch ( _) { // IllegalArgumentException
+    } on ArgumentError catch ( _) { // IllegalArgumentException
       //expected
     }
     try {
       SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE);
       fail("There's no rectangular symbol for 50 data codewords");
-    } catch ( _) { // IllegalArgumentException
+    } on ArgumentError catch ( _) { // IllegalArgumentException
       //expected
     }
 

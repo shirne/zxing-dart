@@ -1,5 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
 
+
+
+import 'package:test/scaffolding.dart';
 
 void main() {
   test('test zxing', () {
