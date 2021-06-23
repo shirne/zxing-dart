@@ -1,7 +1,7 @@
 # zxing-dart
 [![pub package](https://img.shields.io/pub/v/zxing_lib.svg)](https://pub.dartlang.org/packages/zxing_lib)
 
-zxing-dart is a Dart port of [zxing](https://github.com/zxing/zxing).
+[zxing](https://github.com/zxing/zxing) Dart版，用于各种条码、二维码编码和解码.
 
 
 ## 进度
