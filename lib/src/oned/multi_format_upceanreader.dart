@@ -76,7 +76,7 @@ class MultiFormatUPCEANReader extends OneDReader {
                           BitArray row,
                           Map<DecodeHintType, Object>? hints){
     // Compute this location once and reuse it on multiple implementations
-    List<int>? startGuardPattern = UPCEANReader.findStartGuardPattern(row);
+    List<int> startGuardPattern = UPCEANReader.findStartGuardPattern(row);
     for (UPCEANReader reader in _readers) {
       try {
         Result result = reader.decodeRow(rowNumber, row, hints, startGuardPattern);

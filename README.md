@@ -10,7 +10,8 @@ zxing-dart is a Dart port of [zxing](https://github.com/zxing/zxing).
 - [x] Core test translate
 - [x] Core unit test(all passed)
 - [x] Demo Creator
-- [ ] Demo Scaner(Developing...)
+- [x] Demo Scanner
+- [ ] Code optimization
 
 ## Preview
 

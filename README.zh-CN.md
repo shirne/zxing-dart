@@ -10,7 +10,8 @@ zxing-dart is a Dart port of [zxing](https://github.com/zxing/zxing).
 - [x] 核心库测试翻译
 - [x] 核心库单元测试
 - [x] 演示APP生成二维码
-- [ ] 演示APP扫描二维码(进行中...)
+- [x] 演示APP扫描二维码
+- [ ] 针对dart的优化
 
 ## 预览
 

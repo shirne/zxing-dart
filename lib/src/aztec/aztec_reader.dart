@@ -62,7 +62,7 @@ class AztecReader implements Reader {
           throw notFoundException;
         }
         throw e;
-      } on FormatsException catch(e){
+      } on FormatsException catch (e) {
         if (formatException != null) {
           throw formatException;
         }

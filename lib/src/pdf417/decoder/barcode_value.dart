@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../pdf417_common.dart';
+
 
 /// @author Guenther Grau
 class BarcodeValue {

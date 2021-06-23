@@ -105,7 +105,8 @@ class ErrorCorrection {
       sb.write(ecc);
     } else {
       sb.setLength(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
-      List<int> dataSizes = List.generate(blockCount, (index) => symbolInfo.getDataLengthForInterleavedBlock(index + 1));
+      // this is using for temp StringBuffer's init length
+      //List<int> dataSizes = List.generate(blockCount, (index) => symbolInfo.getDataLengthForInterleavedBlock(index + 1));
       List<int> errorSizes = List.generate(blockCount, (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1));
       
       for (int block = 0; block < blockCount; block++) {

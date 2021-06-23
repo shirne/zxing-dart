@@ -1,6 +1,6 @@
 name: zxing_lib
-description: A Dart port of zxing.
-version: 0.3.2
+description: A Dart port of zxing that encode and decode multiple 1D/2D barcodes.
+version: 0.3.3
 homepage:
 repository: https://github.com/shirne/zxing-dart
 

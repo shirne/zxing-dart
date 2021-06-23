@@ -31,8 +31,9 @@ class Logger{
     print("[${_logTypes[type]}] $prefix $message");
   }
 
-  static Logger getLogger(Type prefix){
-    return Logger(prefix.toString());
+  static var _loggers = <Type, Logger>{};
+  static Logger getLogger(Type belong){
+    return _loggers.putIfAbsent(belong, () => Logger());
   }
 }
 

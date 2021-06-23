@@ -16,11 +16,13 @@
 
 import 'reader_exception.dart';
 
-/// Thrown when a barcode was not found in the image.
+/// Thrown when a barcode was successfully detected, but some aspect of
+/// the content did not conform to the barcode's format rules.
 ///
-/// It might have been partially detected but could not be confirmed.
+/// This could have been due to a mis-detection.
 class FormatsException extends ReaderException {
-  static final FormatsException _instance = FormatsException('FormatsException');
+  static final FormatsException _instance =
+      FormatsException('FormatsException');
 
   static FormatsException get instance => _instance;
 

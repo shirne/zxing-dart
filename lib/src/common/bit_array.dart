@@ -39,7 +39,10 @@ class BitArray {
   }
 
   BitArray.test(this._bits, this._size);
+
+  // for tests
   Int32List get bits => _bits;
+
   int get size => _size;
 
   int get sizeInBytes => (_size + 7) ~/ 8;
@@ -136,7 +139,7 @@ class BitArray {
   /// @param end end of range, exclusive
   void setRange(int start, int end) {
     if (end < start || start < 0 || end > _size) {
-      throw Exception(r'Illegal Argument');
+      throw ArgumentError(r'Illegal Argument');
     }
     if (end == start) {
       return;
@@ -171,7 +174,7 @@ class BitArray {
   /// @throws IllegalArgumentException if end is less than start or the range is not contained in the array
   bool isRange(int start, int end, bool value) {
     if (end < start || start < 0 || end > _size) {
-      throw Exception(r'Illegal Argument');
+      throw ArgumentError(r'Illegal Argument');
     }
     if (end == start) {
       return true; // empty range matches

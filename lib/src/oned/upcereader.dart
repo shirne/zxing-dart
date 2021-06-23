@@ -85,7 +85,7 @@ class UPCEReader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
-      result.write(String.fromCharCode(48 /* 0 */ + bestMatch % 10));
+      result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -116,9 +116,8 @@ class UPCEReader extends UPCEANReader {
     for (int numSys = 0; numSys <= 1; numSys++) {
       for (int d = 0; d < 10; d++) {
         if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-          resultString.insert(
-              0, String.fromCharCode(48 /* 0 */ + numSys));
-          resultString.write(String.fromCharCode(48 /* 0 */ + d));
+          resultString.insert( 0, 48 /* 0 */ + numSys);
+          resultString.writeCharCode(48 /* 0 */ + d);
           return;
         }
       }
@@ -139,21 +138,21 @@ class UPCEReader extends UPCEANReader {
     StringBuffer result = StringBuffer();
     result.write(upce[0]);
     int lastChar = upceChars[5];
-    switch (String.fromCharCode(lastChar)) {
-      case '0':
-      case '1':
-      case '2':
+    switch (lastChar) {
+      case 48: //'0'
+      case 49: //'1'
+      case 50: //'2'
         result.write(String.fromCharCodes(upceChars.getRange(0, 2))); // 0, 2
         result.writeCharCode(lastChar);
         result.write("0000");
         result.write(String.fromCharCodes(upceChars.getRange(2, 5))); // 2, 3
         break;
-      case '3':
+      case 51: //'3'
         result.write(String.fromCharCodes(upceChars.getRange(0, 3))); // 0, 3
         result.write("00000");
         result.write(String.fromCharCodes(upceChars.getRange(3, 5))); // 3, 2
         break;
-      case '4':
+      case 52: //'4'
         result.write(String.fromCharCodes(upceChars.getRange(0, 4))); // 0, 4
         result.write("00000");
         result.writeCharCode(upceChars[4]);

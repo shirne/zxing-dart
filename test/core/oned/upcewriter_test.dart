@@ -55,4 +55,10 @@ void main(){
       // passed
     }
   });
+
+  test('testUPCEConvert', (){
+    expect(UPCEReader.convertUPCEtoUPCA("0509689"),"05096800009");
+    expect(UPCEReader.convertUPCEtoUPCA("12345670"),"123456000070");
+    expect(UPCEReader.convertUPCEtoUPCA("05096893"),"050968000093");
+  });
 }

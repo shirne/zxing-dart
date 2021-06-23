@@ -78,7 +78,7 @@ class GlobalHistogramBinarizer extends Binarizer {
       for (int x = 1; x < width - 1; x++) {
         int right = localLuminances[x + 1] & 0xff;
         // A simple -1 4 -1 box filter with a weight of 2.
-        if (((center * 4) - left - right) / 2 < blackPoint) {
+        if (((center * 4) - left - right) ~/ 2 < blackPoint) {
           row.set(x);
         }
         left = center;

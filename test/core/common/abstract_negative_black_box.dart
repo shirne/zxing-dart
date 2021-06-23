@@ -50,10 +50,10 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   final List<TestResult> testResults = [];
 
   // Use the multiformat reader to evaluate all decoders in the system.
-  AbstractNegativeBlackBoxTestCase(String testBasePathSuffix):super(testBasePathSuffix, new MultiFormatReader(), null);
+  AbstractNegativeBlackBoxTestCase(String testBasePathSuffix):super(testBasePathSuffix, MultiFormatReader(), null);
 
   void addNegativeTest(int falsePositivesAllowed, double rotation) {
-    testResults.add(new TestResult(falsePositivesAllowed, rotation));
+    testResults.add(TestResult(falsePositivesAllowed, rotation));
   }
 
   void testBlackBox(){
@@ -105,9 +105,9 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   /// @return true if nothing found, false if a non-existent barcode was detected
   bool checkForFalsePositives(Image image, double rotationInDegrees) {
     Image rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
-    LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-    BinaryBitmap bitmap = new BinaryBitmap(HybridBinarizer(source));
-    Result result;
+    LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
+    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+    Result? result;
     try {
       result = reader!.decode(bitmap);
       log.info("Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");

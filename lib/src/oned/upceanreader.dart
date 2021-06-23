@@ -45,12 +45,14 @@ abstract class UPCEANReader extends OneDReader {
   static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
 
   /// Start/end guard pattern.
-  static const List<int> START_END_PATTERN = [ 1, 1, 1,];
+  static const List<int> START_END_PATTERN = [ 1, 1, 1 ];
 
   /// Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
   static const List<int> MIDDLE_PATTERN = [1, 1, 1, 1, 1];
+
   /// end guard pattern.
   static const List<int> END_PATTERN = [1, 1, 1, 1, 1, 1];
+
   /// "Odd", or "L" patterns used to encode UPC/EAN digits.
   static const List<List<int>> L_PATTERNS = [
     [3, 2, 1, 1], // 0
@@ -94,14 +96,14 @@ abstract class UPCEANReader extends OneDReader {
 
   UPCEANReader();
 
-  static List<int>? findStartGuardPattern(BitArray row) {
+  static List<int> findStartGuardPattern(BitArray row) {
     bool foundStart = false;
-    List<int>? startRange;
+    late List<int> startRange;
     int nextStart = 0;
     List<int> counters = List.filled(START_END_PATTERN.length, 0);
     while (!foundStart) {
       counters.fillRange(0, START_END_PATTERN.length, 0);
-      //Arrays.fill(counters, 0, START_END_PATTERN.length, 0);
+
       startRange =
           _findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
       int start = startRange[0];
@@ -138,19 +140,20 @@ abstract class UPCEANReader extends OneDReader {
     if (startGuardRange == null) {
       startGuardRange = findStartGuardPattern(row);
     }
-    ResultPointCallback? resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+    ResultPointCallback? resultPointCallback =
+        hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback?;
     int symbologyIdentifier = 0;
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(ResultPoint(
-          (startGuardRange![0] + startGuardRange[1]) / 2.0,
+          (startGuardRange[0] + startGuardRange[1]) / 2.0,
           rowNumber.toDouble()));
     }
 
     StringBuilder result = _decodeRowStringBuffer;
     result.clear();
-    int endStart = decodeMiddle(row, startGuardRange!, result);
+    int endStart = decodeMiddle(row, startGuardRange, result);
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(
@@ -160,8 +163,8 @@ abstract class UPCEANReader extends OneDReader {
     List<int> endRange = decodeEnd(row, endStart);
 
     if (resultPointCallback != null) {
-      resultPointCallback.foundPossibleResultPoint(ResultPoint(
-          (endRange[0] + endRange[1]) / 2.0, rowNumber.toDouble()));
+      resultPointCallback.foundPossibleResultPoint(
+          ResultPoint((endRange[0] + endRange[1]) / 2.0, rowNumber.toDouble()));
     }
 
     // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
@@ -207,7 +210,8 @@ abstract class UPCEANReader extends OneDReader {
       // continue
     }
 
-    List<int>? allowedExtensions = hints?[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>?;
+    List<int>? allowedExtensions =
+        hints?[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>?;
     if (allowedExtensions != null) {
       bool valid = false;
       for (int length in allowedExtensions) {
@@ -260,7 +264,7 @@ abstract class UPCEANReader extends OneDReader {
       int check = int.parse(s[length - 1]);
 
       return getStandardUPCEANChecksum(s.substring(0, length - 1)) == check;
-    } on FormatException catch(_){
+    } on FormatException catch (_) {
       throw ArgumentError();
     }
   }
@@ -290,11 +294,10 @@ abstract class UPCEANReader extends OneDReader {
     return _findGuardPattern(row, endStart, false, START_END_PATTERN);
   }
 
-  static List<int> findGuardPattern(BitArray row,
-      int rowOffset,
-    bool whiteFirst,
-      List<int> pattern) {
-    return _findGuardPattern(row, rowOffset, whiteFirst, pattern, List.filled(pattern.length, 0));
+  static List<int> findGuardPattern(
+      BitArray row, int rowOffset, bool whiteFirst, List<int> pattern) {
+    return _findGuardPattern(
+        row, rowOffset, whiteFirst, pattern, List.filled(pattern.length, 0));
   }
 
   /// @param row row of black/white values to search
@@ -364,6 +367,8 @@ abstract class UPCEANReader extends OneDReader {
       List<int> pattern = patterns[i];
       double variance = OneDReader.patternMatchVariance(
           counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
+
+      // todo in zxing java float compare may return true between the same float number
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;

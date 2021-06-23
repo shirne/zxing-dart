@@ -111,6 +111,7 @@ class PDF417CodewordDecoder {
           break;
         }
       }
+      // todo the compare may be different with java
       if (error < bestMatchError) {
         bestMatchError = error;
         bestMatch = PDF417Common.SYMBOL_TABLE[j];

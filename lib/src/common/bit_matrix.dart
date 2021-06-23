@@ -82,7 +82,7 @@ class BitMatrix {
   static BitMatrix _parseString(
       String? stringRepresentation, String setString, String unsetString) {
     if (stringRepresentation == null) {
-      throw Exception('IllegalArgument');
+      throw ArgumentError('IllegalArgument');
     }
 
     List<bool> bits = List.filled(stringRepresentation.length, false);
@@ -113,7 +113,7 @@ class BitMatrix {
         bits[bitsPos] = false;
         bitsPos++;
       } else {
-        throw Exception("illegal character encountered: " +
+        throw ArgumentError("illegal character encountered: " +
             stringRepresentation.substring(pos));
       }
     }
@@ -123,7 +123,7 @@ class BitMatrix {
       if (rowLength == -1) {
         rowLength = bitsPos - rowStartPos;
       } else if (bitsPos - rowStartPos != rowLength) {
-        throw Exception("row lengths do not match");
+        throw ArgumentError("row lengths do not match");
       }
       nRows++;
     }
@@ -195,7 +195,7 @@ class BitMatrix {
     if (_width != mask._width ||
         _height != mask._height ||
         _rowSize != mask._rowSize) {
-      throw Exception("input matrix dimensions do not match");
+      throw ArgumentError("input matrix dimensions do not match");
     }
     BitArray rowArray = BitArray( _width);
     for (int y = 0; y < _height; y++) {
@@ -223,15 +223,15 @@ class BitMatrix {
   /// @param height The height of the region
   void setRegion(int left, int top, int width, int height) {
     if (top < 0 || left < 0) {
-      throw Exception("Left and top must be nonnegative");
+      throw ArgumentError("Left and top must be nonnegative");
     }
     if (height < 1 || width < 1) {
-      throw Exception("Height and width must be at least 1");
+      throw ArgumentError("Height and width must be at least 1");
     }
     int right = left + width;
     int bottom = top + height;
     if (bottom > this._height || right > this._width) {
-      throw Exception("The region must fit inside the matrix");
+      throw ArgumentError("The region must fit inside the matrix");
     }
     for (int y = top; y < bottom; y++) {
       int offset = y * _rowSize;
@@ -454,6 +454,6 @@ class BitMatrix {
   // @override
   BitMatrix clone() {
     return BitMatrix._(
-        _width, _height, _rowSize, Int32List.fromList(_bits.getRange(0, _bits.length).toList()));
+        _width, _height, _rowSize, Int32List.fromList(_bits.toList()));
   }
 }
