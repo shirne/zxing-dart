@@ -28,7 +28,8 @@ class IndexPage extends StatelessWidget {
             builder = (BuildContext context) => const CameraPage();
             break;
           case '/result':
-            builder = (BuildContext context) => ResultPage(settings.arguments as List<Result>);
+            builder = (BuildContext context) =>
+                ResultPage(settings.arguments as List<Result>);
             break;
           case '/binarizer':
             builder = (BuildContext context) => const BinarizerPage();
@@ -49,51 +50,62 @@ class _IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<_IndexPage> {
+  bool isReading = false;
   void openCamera() {
     Navigator.of(context).pushNamed('/camera');
   }
-  void openBinarizer(){
+
+  void openBinarizer() {
     Navigator.of(context).pushNamed('/binarizer');
   }
 
   void openFile() async {
     Uint8List? fileData;
-    if(kIsWeb || Platform.isAndroid || Platform.isIOS){
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       fileData = await _pickFile();
-    }else{
+    } else {
       fileData = await _loadFileDesktop();
     }
-    if(fileData != null){
+    if (fileData != null) {
       BufferImage? image = await BufferImage.fromFile(fileData);
-      if(image == null){
+      if (image == null) {
         alert(context, 'Can\'t read the image');
         return;
       }
+      setState(() {
+        isReading = true;
+      });
       ImageLuminanceSource imageSource = ImageLuminanceSource(image);
-      if(image.width > 1000){
+      if (image.width > 1000) {
         imageSource = imageSource.scaleDown(imageSource.width ~/ 1000);
       }
       BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
-      print("${bitmap.width}x${bitmap.height}");
 
-      //print(bitmap);
-
-      MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
+      MultipleBarcodeReader reader =
+          GenericMultipleBarcodeReader(MultiFormatReader());
       try {
-        List<Result> results = reader.decodeMultiple(bitmap);
-        Navigator.of(context).pushNamed('/result', arguments:results);
-      }on NotFoundException catch(_){
+        List<Result> results = reader.decodeMultiple(bitmap, {
+          DecodeHintType.TRY_HARDER: true,
+          DecodeHintType.ALSO_INVERTED: true
+        });
+        setState(() {
+          isReading = false;
+        });
+        Navigator.of(context).pushNamed('/result', arguments: results);
+      } on NotFoundException catch (_) {
+        setState(() {
+          isReading = false;
+        });
         alert(context, 'Can\'t detect barcodes or qrcodes');
       }
-
-    }else{
+    } else {
       print('not pick any file');
     }
   }
 
-  Future<Uint8List?> _pickFile() async{
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image);
+  Future<Uint8List?> _pickFile() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.count > 0) {
       if (result.files.single.path != null) {
@@ -105,14 +117,15 @@ class _IndexPageState extends State<_IndexPage> {
       return null;
     }
   }
+
   Future<Uint8List?> _loadFileDesktop() async {
     final typeGroup = XTypeGroup(
       label: 'Image files',
-      extensions: ['jpg','jpeg','png'],
+      extensions: ['jpg', 'jpeg', 'png'],
     );
     final files = await FileSelectorPlatform.instance
         .openFiles(acceptedTypeGroups: [typeGroup]);
-    if ( files.length > 0) {
+    if (files.length > 0) {
       return await files.first.readAsBytes();
     }
     return null;
@@ -129,30 +142,49 @@ class _IndexPageState extends State<_IndexPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CupertinoButton.filled(
               child: const Text('Scanner'),
               onPressed: () {
                 openCamera();
               },
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CupertinoButton.filled(
               child: const Text('Binarizer'),
               onPressed: () {
                 openBinarizer();
               },
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CupertinoButton.filled(
-              child: const Text('Image discern'),
+              child: SizedBox(
+                width: 160,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (isReading) CupertinoActivityIndicator(),
+                    const Text('Image discern')
+                  ],
+                ),
+              ),
               onPressed: () {
                 openFile();
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Text('Multi decode mode'),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

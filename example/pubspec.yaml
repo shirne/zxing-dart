@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: ZXing-dart demo App.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -37,8 +37,8 @@ dependencies:
   file_selector_windows: ^0.0.2
   file_selector_macos: ^0.0.4
   file_selector_linux: ^0.0.2
-  buffer_image: ^0.3.3
-    # path: ../../buffer_image
+  buffer_image: ^0.3.5
+    #path: ../../buffer_image
   zxing_lib:
     path: ../
 

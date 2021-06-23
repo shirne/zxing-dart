@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
@@ -68,7 +67,7 @@ class _CameraPageState extends State<CameraPage> {
     if(image != null){
       ImageLuminanceSource imageSource = ImageLuminanceSource(image);
       if(image.width > 1000){
-        imageSource = imageSource.scaleDown(imageSource.width ~/ 1000);
+        imageSource = imageSource.scaleDown(imageSource.width ~/ 500);
       }
       BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
 
@@ -81,19 +80,14 @@ class _CameraPageState extends State<CameraPage> {
       }on NotFoundException catch(_){
         try {
           bitmap = BinaryBitmap(GlobalHistogramBinarizer(imageSource));
-          results = reader!.decodeMultiple(bitmap);
-        }on NotFoundException catch(_){
-          try {
-            image.inverse();
-            imageSource = ImageLuminanceSource(image);
-            bitmap = BinaryBitmap(GlobalHistogramBinarizer(imageSource));
-            results = reader!.decodeMultiple(bitmap);
-          }on NotFoundException catch(_){
-          }
-        }
+          results = reader!.decodeMultiple(bitmap,{
+            DecodeHintType.TRY_HARDER: true,
+            DecodeHintType.ALSO_INVERTED: true
+          });
+        }on NotFoundException catch(_){}
       }
 
-      if(results != null && results.isNotEmpty) {
+      if(results != null ) {
         if(!mounted)return;
         Navigator.of(context).pushNamed('/result', arguments: results);
       }else{
