@@ -1,5 +1,15 @@
 
+import 'dart:async';
+import 'dart:isolate';
+import 'dart:typed_data';
+
+import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/multi.dart';
+import 'package:zxing_lib/zxing.dart';
+
+import 'image_source.dart';
 
 Future<bool?> alert<bool>(BuildContext context, String message, {String? title, List<Widget>? actions}){
   return showCupertinoDialog<bool>(
@@ -25,4 +35,99 @@ Future<bool?> alert<bool>(BuildContext context, String message, {String? title, 
       );
     },
   );
+}
+
+class IsoMessage{
+  final SendPort? sendPort;
+  final Uint8List byteData;
+  final int width;
+  final int height;
+
+  IsoMessage(this.sendPort, this.byteData, this.width, this.height);
+
+}
+
+Future<List<Result>?> decodeImageInIsolate(Uint8List image, int width, int height,{bool isRgb = true}){
+  var complete = Completer<List<Result>?>();
+  var port = ReceivePort();
+  port.listen((message) {
+    print("onData: $message");
+    if(!complete.isCompleted) {
+      complete.complete(message as List<Result>?);
+    }
+  }, onDone: (){
+    print('iso close');
+  }, onError: (error){
+    print('iso error: $error');
+  });
+
+  //TransferableTypedData data = TransferableTypedData.fromList( [image,color2Uint(height),color2Uint(width)]);
+  IsoMessage message = IsoMessage(port.sendPort,image,width,height);
+  if(isRgb) {
+    Isolate.spawn<IsoMessage>(
+        decodeImage, message, onExit: port.sendPort, onError: port.sendPort, debugName: "decodeImage");
+  }else{
+    Isolate.spawn<IsoMessage>(
+        decodeCamera, message, onExit: port.sendPort, onError: port.sendPort, debugName: "decodeCamera");
+  }
+
+  return complete.future;
+}
+
+Uint8List color2Uint(int color){
+  return Uint8List.fromList([color >> 16 & 0xff, color >> 8 & 0xff, color & 0xff, color >> 16 & 0xff]);
+}
+
+int getColor(int r, int g, int b, [int a = 255]){
+  return (r << 16) + (g << 8) + b + (a << 24);
+}
+
+int getColorFromByte(List<int> byte, int index,{bool isLog = false}){
+  return getColor(byte[index], byte[index+1], byte[index+2], byte[index+3]);
+}
+
+List<Result>? decodeImage(IsoMessage message){
+  int length = message.byteData.length;
+
+  var pixels = List<int>.generate(length ~/ 4, (index)=>getColorFromByte(message.byteData, index * 4));
+
+  LuminanceSource imageSource = RGBLuminanceSource(message.width, message.height, pixels);
+
+  BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
+
+  MultipleBarcodeReader reader =
+  GenericMultipleBarcodeReader(MultiFormatReader());
+  try {
+    print('start decode...');
+    var results = reader.decodeMultiple(bitmap, {
+      DecodeHintType.TRY_HARDER: true,
+      DecodeHintType.ALSO_INVERTED: true
+    });
+
+    message.sendPort?.send(results);
+    return results;
+  } on NotFoundException catch (_) {
+    print(_);
+  }
+  return null;
+}
+
+List<Result>? decodeCamera(IsoMessage message){
+  var yuvData = Int8List.fromList(message.byteData);
+
+  LuminanceSource imageSource = PlanarYUVLuminanceSource(yuvData,message.width,message.height);
+
+  BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
+
+  MultipleBarcodeReader reader =
+  GenericMultipleBarcodeReader(MultiFormatReader());
+  try {
+    var results = reader.decodeMultiple(bitmap, {
+      DecodeHintType.TRY_HARDER: true,
+      DecodeHintType.ALSO_INVERTED: true
+    });
+    message.sendPort?.send(results);
+    return results;
+  } on NotFoundException catch (_) {}
+  return null;
 }

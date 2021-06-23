@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
@@ -68,39 +69,29 @@ class _IndexPageState extends State<_IndexPage> {
     }
     if (fileData != null) {
       BufferImage? image = await BufferImage.fromFile(fileData);
-      if (image == null) {
+      if(image == null){
         alert(context, 'Can\'t read the image');
         return;
       }
       setState(() {
         isReading = true;
       });
-      ImageLuminanceSource imageSource = ImageLuminanceSource(image);
-      if (image.width > 1000) {
-        imageSource = imageSource.scaleDown(imageSource.width ~/ 1000);
-      }
-      BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
-
-      MultipleBarcodeReader reader =
-          GenericMultipleBarcodeReader(MultiFormatReader());
-      try {
-        List<Result> results = reader.decodeMultiple(bitmap, {
-          DecodeHintType.TRY_HARDER: true,
-          DecodeHintType.ALSO_INVERTED: true
-        });
-        setState(() {
-          isReading = false;
-        });
+      var results = await decodeImageInIsolate(image.buffer, image.width, image.height);
+      setState(() {
+        isReading = false;
+      });
+      if(results != null){
         Navigator.of(context).pushNamed('/result', arguments: results);
-      } on NotFoundException catch (_) {
-        setState(() {
-          isReading = false;
-        });
+      }else{
         alert(context, 'Can\'t detect barcodes or qrcodes');
       }
     } else {
       print('not pick any file');
     }
+  }
+
+  isoEntry(BufferImage image){
+
   }
 
   Future<Uint8List?> _pickFile() async {

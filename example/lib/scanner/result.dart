@@ -14,7 +14,6 @@ class _ResultPageState extends State<ResultPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.results);
   }
 
   @override

@@ -1,13 +1,12 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zxing_lib/common.dart';
-import 'package:zxing_lib/multi.dart';
-import 'package:zxing_lib/zxing.dart';
 
+import '../models/utils.dart';
 import '../models/image_source.dart';
 import '../widgets/cupertino_icon_button.dart';
 
@@ -20,9 +19,9 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
+  FlashMode _flashMode = FlashMode.off;
   bool detectedCamera = false;
   bool isDetecting = false;
-  MultipleBarcodeReader? reader;
   Timer? _detectTimer;
 
   @override
@@ -47,6 +46,7 @@ class _CameraPageState extends State<CameraPage> {
         if (!mounted) {
           return;
         }
+
         setState(() {
           detectedCamera = true;
         });
@@ -62,30 +62,16 @@ class _CameraPageState extends State<CameraPage> {
     if(isDetecting)return;
     isDetecting = true;
     XFile pic = await _controller!.takePicture();
-    //PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(Int8List.fromList(await pic.readAsBytes()));
-    BufferImage? image = await BufferImage.fromFile(await pic.readAsBytes());
-    if(image != null){
-      ImageLuminanceSource imageSource = ImageLuminanceSource(image);
-      if(image.width > 1000){
-        imageSource = imageSource.scaleDown(imageSource.width ~/ 500);
-      }
-      BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
 
-      if(reader == null) {
-        reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    Uint8List data = await pic.readAsBytes();
+    BufferImage? image = await BufferImage.fromFile(data);
+    if(image != null){
+
+      if(image.width > 1000){
+        image.scaleDown(image.width / 800);
       }
-      List<Result>? results;
-      try {
-        results = reader!.decodeMultiple(bitmap);
-      }on NotFoundException catch(_){
-        try {
-          bitmap = BinaryBitmap(GlobalHistogramBinarizer(imageSource));
-          results = reader!.decodeMultiple(bitmap,{
-            DecodeHintType.TRY_HARDER: true,
-            DecodeHintType.ALSO_INVERTED: true
-          });
-        }on NotFoundException catch(_){}
-      }
+
+      var results = await decodeImageInIsolate(image.buffer, image.width, image.height);
 
       if(results != null ) {
         if(!mounted)return;
@@ -107,6 +93,32 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
+  changeBoltMode(){
+    var cIndex = FlashMode.values.indexOf(_flashMode);
+    cIndex++;
+    if(cIndex >= FlashMode.values.length){
+      cIndex = 0;
+    }
+    setState(() {
+      _flashMode = FlashMode.values[cIndex];
+    });
+    try{
+      _controller?.setFlashMode(_flashMode);
+    }catch(_){}
+  }
+  Icon getBolt(){
+    switch(_flashMode){
+      case FlashMode.off:
+        return Icon(CupertinoIcons.bolt);
+      case FlashMode.always:
+        return Icon(CupertinoIcons.bolt_fill);
+      case FlashMode.auto:
+        return Icon(CupertinoIcons.bolt_badge_a);
+      case FlashMode.torch:
+        return Icon(CupertinoIcons.bolt_circle_fill);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -122,6 +134,13 @@ class _CameraPageState extends State<CameraPage> {
                     Align(
                       alignment: Alignment(0, 0.7),
                       child: CupertinoIconButton(icon: Icon(CupertinoIcons.qrcode_viewfinder),onPressed: onCameraView,),
+                    ),
+                    Align(
+                      alignment: Alignment(1,-1),
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 20, top: 80),
+                        child: CupertinoIconButton(icon: getBolt(),onPressed: changeBoltMode,),
+                      ),
                     )
                   ],),
                 ),

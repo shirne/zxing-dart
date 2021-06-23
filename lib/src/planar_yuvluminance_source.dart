@@ -36,8 +36,12 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   final int _top;
 
   PlanarYUVLuminanceSource(this._yuvData, this._dataWidth, this._dataHeight,
-      this._left, this._top, int width, int height, bool isReverseHorizontal)
-      : super(width, height) {
+  {int left = 0, int top = 0, int? width, int? height, bool isReverseHorizontal = false})
+      :_left = left,
+        _top = top,
+        super(width ?? (_dataWidth - left), height ?? (_dataHeight - top)) {
+    if(width == null) width = _dataWidth - _left;
+    if(height == null) height = _dataHeight - _top;
     if (_left + width > _dataWidth || _top + height > _dataHeight) {
       throw Exception("Crop rectangle does not fit within image data.");
     }
@@ -95,7 +99,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
     return PlanarYUVLuminanceSource(_yuvData, _dataWidth, _dataHeight,
-        this._left + left, this._top + top, width, height, false);
+        left:this._left + left, top:this._top + top, width: width,height: height);
   }
 
   List<int> renderThumbnail() {
