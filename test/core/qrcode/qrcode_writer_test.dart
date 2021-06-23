@@ -29,10 +29,10 @@ import 'package:zxing_lib/zxing.dart';
 
 void main() {
 
-  final String BASE_IMAGE_PATH =  "${Directory.current.absolute.path}/test/resources/golden/qrcode/";
+  final String baseImagePath =  "${Directory.current.absolute.path}/test/resources/golden/qrcode/";
 
   Future<Image> loadImage(String fileName) async{
-    File file = File("$BASE_IMAGE_PATH$fileName");
+    File file = File("$baseImagePath$fileName");
 
     var exists = await file.exists();
     expect( !exists,"Please download and install test images($fileName), and run from the 'core' directory");

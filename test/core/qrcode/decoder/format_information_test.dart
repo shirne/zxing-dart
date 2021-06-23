@@ -20,8 +20,8 @@ import 'package:zxing_lib/qrcode.dart';
 
 
 void main(){
-  final int MASKED_TEST_FORMAT_INFO = 0x2BED;
-  final int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
+  const int MASKED_TEST_FORMAT_INFO = 0x2BED;
+  const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
 
   test('testBitsDiffering', () {
     expect(0, FormatInformation.numBitsDiffering(1, 1));

@@ -122,7 +122,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     ],
   ];
 
-  static const int _MAX_PAIRS = 11;
+  //static const int _MAX_PAIRS = 11;
 
   final List<ExpandedPair> _pairs = [];
   final List<ExpandedRow> _rows = [];

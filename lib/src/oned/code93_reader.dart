@@ -36,7 +36,7 @@ class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
   static const String ALPHABET_STRING =
       r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
-  static final List<int> _ALPHABET = ALPHABET_STRING.codeUnits;
+  static final List<int> _alphaBet = ALPHABET_STRING.codeUnits;
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars.
   /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
@@ -48,7 +48,7 @@ class Code93Reader extends OneDReader {
     0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
     0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
   ];
-  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+  static final int asteriskEncoding = CHARACTER_ENCODINGS[47];
 
   final StringBuilder _decodeRowResult;
   final List<int> _counters;
@@ -141,7 +141,7 @@ class Code93Reader extends OneDReader {
         theCounters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (_toPattern(theCounters) == ASTERISK_ENCODING) {
+          if (_toPattern(theCounters) == asteriskEncoding) {
             return [patternStart, i];
           }
           patternStart += theCounters[0] + theCounters[1];
@@ -185,7 +185,7 @@ class Code93Reader extends OneDReader {
   static String _patternToChar(int pattern) {
     for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
       if (CHARACTER_ENCODINGS[i] == pattern) {
-        return String.fromCharCode(_ALPHABET[i]);
+        return String.fromCharCode(_alphaBet[i]);
       }
     }
     throw NotFoundException.instance;
@@ -285,7 +285,7 @@ class Code93Reader extends OneDReader {
         weight = 1;
       }
     }
-    if (result.codeUnitAt(checkPosition) != _ALPHABET[total % 47]) {
+    if (result.codeUnitAt(checkPosition) != _alphaBet[total % 47]) {
       throw ChecksumException.getChecksumInstance();
     }
   }

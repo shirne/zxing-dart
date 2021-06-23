@@ -22,7 +22,7 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [RGBLuminanceSource].
 void main() {
-  final RGBLuminanceSource SOURCE = new RGBLuminanceSource(3, 3, [
+  final RGBLuminanceSource source = RGBLuminanceSource(3, 3, [
     0x000000, 0x7F7F7F, 0xFFFFFF, //
     0xFF0000, 0x00FF00, 0x0000FF,
     0x0000FF, 0x00FF00, 0xFF0000
@@ -30,27 +30,27 @@ void main() {
 
   test('testCrop', () {
 
-    expect(SOURCE.isCropSupported, true);
-    LuminanceSource cropped = SOURCE.crop(1, 1, 1, 1);
+    expect(source.isCropSupported, true);
+    LuminanceSource cropped = source.crop(1, 1, 1, 1);
     expect(cropped.height, 1);
     expect(cropped.width, 1);
     expect(cropped.getRow(0, null), [0x7F]);
   });
 
   test('testMatrix', () {
-    expect(SOURCE.matrix, [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
-    LuminanceSource croppedFullWidth = SOURCE.crop(0, 1, 3, 2);
+    expect(source.matrix, [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
+    LuminanceSource croppedFullWidth = source.crop(0, 1, 3, 2);
     expect(croppedFullWidth.matrix,
         [0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
-    LuminanceSource croppedCorner = SOURCE.crop(1, 1, 2, 2);
+    LuminanceSource croppedCorner = source.crop(1, 1, 2, 2);
     expect(croppedCorner.matrix, [0x7F, 0x3F, 0x7F, 0x3F]);
   });
 
   test('testGetRow', () {
-    expect(SOURCE.getRow(2, Int8List(3)), [0x3F, 0x7F, 0x3F]);
+    expect(source.getRow(2, Int8List(3)), [0x3F, 0x7F, 0x3F]);
   });
 
   test('testToString', () {
-    expect(SOURCE.toString(), "#+ \n#+#\n#+#\n");
+    expect(source.toString(), "#+ \n#+#\n#+#\n");
   });
 }

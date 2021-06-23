@@ -91,7 +91,7 @@ class CharacterSetECI {
   static final Map<String, CharacterSetECI> _nameToEci = {};
   static init() {
     for (CharacterSetECI eci in values) {
-      for (int value in eci._indexs) {
+      for (int value in eci._indexes) {
         _valueToEci[value] = eci;
       }
       _nameToEci[eci.name] = eci;
@@ -101,19 +101,19 @@ class CharacterSetECI {
     }
   }
 
-  final List<int> _indexs;
+  final List<int> _indexes;
   final String name;
   final List<String> _otherEncodingNames;
   final Encoding? _charset;
 
   CharacterSetECI(this.name, dynamic value, this._charset, [dynamic otherEncodingNames])
-      : _indexs = (value is int) ? [value] : value as List<int>,
+      : _indexes = (value is int) ? [value] : value as List<int>,
         _otherEncodingNames =
             (otherEncodingNames == null || otherEncodingNames is String)
                 ? [if(otherEncodingNames != null)otherEncodingNames]
                 : otherEncodingNames as List<String>;
 
-  int get value => _indexs[0];
+  int get value => _indexes[0];
 
   Encoding? get charset => _charset;
 

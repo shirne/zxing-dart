@@ -25,19 +25,19 @@ import '../utils.dart';
 /// Tests [Code128Writer].
 void main(){
 
-  final String FNC1 = "11110101110";
-  final String FNC2 = "11110101000";
-  final String FNC3 = "10111100010";
-  final String FNC4A = "11101011110";
-  final String FNC4B = "10111101110";
-  final String START_CODE_A = "11010000100";
-  final String START_CODE_B = "11010010000";
-  final String START_CODE_C = "11010011100";
-  final String SWITCH_CODE_A = "11101011110";
-  final String SWITCH_CODE_B = "10111101110";
-  final String QUIET_SPACE = "00000";
-  final String STOP = "1100011101011";
-  final String LF = "10000110010";
+  const String FNC1 = "11110101110";
+  const String FNC2 = "11110101000";
+  const String FNC3 = "10111100010";
+  const String FNC4A = "11101011110";
+  const String FNC4B = "10111101110";
+  const String START_CODE_A = "11010000100";
+  const String START_CODE_B = "11010010000";
+  const String START_CODE_C = "11010011100";
+  const String SWITCH_CODE_A = "11101011110";
+  const String SWITCH_CODE_B = "10111101110";
+  const String QUIET_SPACE = "00000";
+  const String STOP = "1100011101011";
+  const String LF = "10000110010";
 
   Writer writer = Code128Writer();
   Code128Reader reader = Code128Reader();

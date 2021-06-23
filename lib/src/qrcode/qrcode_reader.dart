@@ -36,7 +36,7 @@ import 'detector/detector.dart';
 ///
 /// @author Sean Owen
 class QRCodeReader implements Reader {
-  static final List<ResultPoint> _NO_POINTS = [];
+  static final List<ResultPoint> _noPoints = [];
 
   final Decoder _decoder = Decoder();
 
@@ -49,7 +49,7 @@ class QRCodeReader implements Reader {
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits, hints);
-      points = _NO_POINTS;
+      points = _noPoints;
     } else {
       DetectorResult detectorResult =
           Detector(image.blackMatrix).detect(hints);

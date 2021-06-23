@@ -23,7 +23,6 @@ import 'package:zxing_lib/common.dart';
 /// Tests [MathUtils].
 void main() {
 
-  final double EPSILON = 1.0E-8;
 
   test( 'testRound', () {
     expect(-1, MathUtils.round(-1.0));

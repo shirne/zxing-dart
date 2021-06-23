@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:zxing_lib/common.dart';
 
 
-final int DECODER_RANDOM_TEST_ITERATIONS = 3;
-final int DECODER_TEST_ITERATIONS = 10;
+const int DECODER_RANDOM_TEST_ITERATIONS = 3;
+const int DECODER_TEST_ITERATIONS = 10;
 
 String arrayToString(List<int> data) {
   StringBuilder sb = new StringBuilder("{");

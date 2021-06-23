@@ -63,9 +63,8 @@ void main(){
     try {
       RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
       theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
-    } catch ( re) { // ReaderException
-    fail(re.toString());
-    return;
+    } on ReaderException catch ( re) {
+      fail(re.toString());
     }
 
     expect(BarcodeFormat.RSS_EXPANDED, theResult.barcodeFormat);

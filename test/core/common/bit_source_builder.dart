@@ -16,7 +16,6 @@
 
 import 'dart:typed_data';
 
-import 'package:zxing_lib/zxing.dart';
 
 /// Class that lets one easily build an array of bytes by appending bits at a time.
 ///

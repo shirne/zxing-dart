@@ -29,18 +29,18 @@ import '../../utils.dart';
 /// Tests [Decoder].
 void main(){
 
-  final List<ResultPoint> NO_POINTS = [];
+  final List<ResultPoint> noPoints = [];
 
-  final RegExp DOTX = RegExp("[^.X]");
-  final RegExp SPACES = RegExp("\\s+");
+  final RegExp dotX = RegExp("[^.X]");
+  final RegExp spaces = RegExp("\\s+");
 
   String stripSpace(String s) {
-    return s.replaceAll(SPACES, '');
+    return s.replaceAll(spaces, '');
   }
 
   BitArray toBitArray(String bits) {
     BitArray inBit = new BitArray();
-    List<String> str = bits.replaceAll(DOTX, "").split('');
+    List<String> str = bits.replaceAll(dotX, "").split('');
     for (String aStr in str) {
       inBit.appendBit(aStr == 'X');
     }
@@ -104,7 +104,7 @@ void main(){
         "X X     X X X     X X X X     X X X     X X   \n" +
         "    X X X     X X X       X X X     X X X X   \n",
         "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, false, 30, 2);
     DecoderResult result = new Decoder().decode(r);
     expect(result.text, "88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
     assertArrayEquals(
@@ -137,7 +137,7 @@ void main(){
         "  X   X   X   X X X X X     X X   X   \n" +
         "X     X       X X   X X X       X     \n",
         "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, false, 15, 1);
     DecoderResult result = new Decoder().decode(r);
     expect(result.text, "Français");
   });
@@ -173,7 +173,7 @@ void main(){
         + "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n"
         + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
         "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
       new Decoder().decode(r);
       fail('here should be FormatException');
@@ -213,7 +213,7 @@ void main(){
         + ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n"
         + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
         "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
       new Decoder().decode(r);
       fail('here should be FormatException');

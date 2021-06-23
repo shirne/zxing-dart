@@ -42,7 +42,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     List<bool> result = List.filled(codeWidth, false);
 
     //start character (*)
-    int pos = _appendPattern(result, 0, Code93Reader.ASTERISK_ENCODING);
+    int pos = _appendPattern(result, 0, Code93Reader.asteriskEncoding);
 
     for (int i = 0; i < length; i++) {
       int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
@@ -61,7 +61,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     pos += _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
 
     //end character (*)
-    pos += _appendPattern(result, pos, Code93Reader.ASTERISK_ENCODING);
+    pos += _appendPattern(result, pos, Code93Reader.asteriskEncoding);
 
     //termination bar (single black bar)
     result[pos] = true;

@@ -20,7 +20,6 @@ import 'dart:typed_data';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
-import 'package:zxing_lib/zxing.dart';
 
 
 void main() {

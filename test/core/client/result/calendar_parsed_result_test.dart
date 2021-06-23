@@ -19,7 +19,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:intl/intl.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 

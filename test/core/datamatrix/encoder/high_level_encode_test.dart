@@ -25,7 +25,7 @@ import '../../utils.dart';
 /// Tests for [HighLevelEncoder].
 void main(){
 
-  final List<SymbolInfo> TEST_SYMBOLS = [
+  final List<SymbolInfo> testSymbols = [
     SymbolInfo(false, 3, 5, 8, 8, 1),
     SymbolInfo(false, 5, 7, 10, 10, 1),
       /*rect*/SymbolInfo(true, 5, 7, 16, 6, 1),
@@ -37,7 +37,7 @@ void main(){
   ];
 
   void useTestSymbols() {
-    SymbolInfo.overrideSymbolSet(TEST_SYMBOLS);
+    SymbolInfo.overrideSymbolSet(testSymbols);
   }
 
   void resetSymbols() {

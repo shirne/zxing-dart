@@ -36,7 +36,7 @@ import 'binary_util.dart';
 
 void main(){
 
-   final Pattern SPACE = " ";
+   const Pattern SPACE = " ";
 
    void check(String data) {
      BitArray binary = BinaryUtil.buildBitArrayFromString(data);

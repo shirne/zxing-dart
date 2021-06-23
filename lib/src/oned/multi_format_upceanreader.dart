@@ -40,7 +40,7 @@ import 'upcereader.dart';
 /// @author Sean Owen
 class MultiFormatUPCEANReader extends OneDReader {
 
-  static const List<UPCEANReader> _EMPTY_READER_ARRAY = [];
+  //static const List<UPCEANReader> _EMPTY_READER_ARRAY = [];
 
   late List<UPCEANReader> _readers;
 

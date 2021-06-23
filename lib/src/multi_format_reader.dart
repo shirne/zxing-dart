@@ -35,7 +35,7 @@ import 'result.dart';
 /// @author Sean Owen
 /// @author dswitkin@google.com (Daniel Switkin)
 class MultiFormatReader implements Reader {
-  static final List<Reader> _emptyReaderArray = [];
+  //static final List<Reader> _emptyReaderArray = [];
 
   Map<DecodeHintType, Object>? _hints;
   List<Reader>? _readers;

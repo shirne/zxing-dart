@@ -35,9 +35,9 @@ import 'package:zxing_lib/common.dart';
 
 class BinaryUtil {
 
-  static final Pattern ONE = "1";
-  static final Pattern ZERO = "0";
-  static final Pattern SPACE = " ";
+  static const Pattern ONE = "1";
+  static const Pattern ZERO = "0";
+  static const Pattern SPACE = " ";
 
   BinaryUtil();
 

@@ -25,7 +25,7 @@ import 'package:zxing_lib/zxing.dart';
 ///
 class BufferedImageLuminanceSource extends LuminanceSource {
 
-  static final double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
+  static const double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
 
   late Uint8List buffer;
   Image image;
@@ -35,14 +35,14 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   BufferedImageLuminanceSource(this.image, [this.left = 0, this.top = 0, int? width, int? height])
       :super(width ?? image.width, height ?? image.height) {
 
-    if(width == null) width = image.width;
-    if(height == null) height = image.height;
+    if(width == null) width = image.width - left;
+    if(height == null) height = image.height - top;
 
 
     int sourceWidth = image.width;
     int sourceHeight = image.height;
     if (left + width > sourceWidth || top + height > sourceHeight) {
-      throw Exception("Crop rectangle does not fit within image data.");
+      throw ArgumentError("Crop rectangle does not fit within image data.");
     }
 
     buffer = Uint8List(width * height);
@@ -74,7 +74,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   @override
   Int8List getRow(int y, Int8List? row) {
     if (y < 0 || y >= height) {
-      throw Exception("Requested row is outside the image: $y");
+      throw ArgumentError("Requested row is outside the image: $y");
     }
     if (row == null || row.length < width) {
       row = Int8List(width);

@@ -18,7 +18,6 @@
 
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
@@ -30,21 +29,21 @@ import 'package:zxing_lib/zxing.dart';
 ///
 void main(){
 
-  final Encoding ISO_8859_1 = latin1;
-  final Encoding UTF_8 = utf8;
-  final Encoding? SHIFT_JIS = StringUtils.shiftJisCharset;
-  final Encoding? ISO_8859_15 = latin1;
-  final Encoding? WINDOWS_1252 = latin1;
+  final Encoding iso_8859_1 = latin1;
+  final Encoding utf_8 = utf8;
+  final Encoding? shiftJis = StringUtils.shiftJisCharset;
+  final Encoding? iso_8859_15 = latin1;
+  final Encoding? windows1252 = latin1;
 
-  final RegExp DOTX = RegExp("[^.X]");
-  final RegExp SPACES = RegExp("\\s+");
-  final List<ResultPoint> NO_POINTS = [];
+  final RegExp dotX = RegExp("[^.X]");
+  final RegExp spaces = RegExp("\\s+");
+  final List<ResultPoint> noPoints = [];
 
   // Helper routines
 
 
   String stripSpace(String s) {
-    return s.replaceAll(SPACES, '');
+    return s.replaceAll(spaces, '');
   }
 
   Random getPseudoRandom() {
@@ -65,7 +64,7 @@ void main(){
     expect(aztec.layers, layers, reason: "Unexpected nr. of layers");
     BitMatrix matrix = aztec.matrix!;
     AztecDetectorResult r =
-    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
+    new AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = new Decoder().decode(r);
     expect(res.text, data, );
     // Check error correction by introducing a few minor errors
@@ -74,7 +73,7 @@ void main(){
     matrix.flip(random.nextInt(matrix.width), matrix.height - 2 + random.nextInt(2));
     matrix.flip(random.nextInt(2), random.nextInt(matrix.height));
     matrix.flip(matrix.width - 2 + random.nextInt(2), random.nextInt(matrix.height));
-    r = AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
+    r = AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     res = Decoder().decode(r);
     expect(res.text, data);
   }
@@ -99,7 +98,7 @@ void main(){
     BitMatrix matrix2 = aztec.matrix!;
     expect(matrix, matrix2);
     AztecDetectorResult r =
-    new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
+    new AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = new Decoder().decode(r);
     expect(res.text, data,);
     // Check error correction by introducing up to eccPercent/2 errors
@@ -115,7 +114,7 @@ void main(){
           : matrix.height - 1 - random.nextInt(aztec.layers * 2);
       matrix.flip(x, y);
     }
-    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.codeWords, aztec.layers);
+    r = new AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     res = new Decoder().decode(r);
     expect(res.text, data);
   }
@@ -129,7 +128,7 @@ void main(){
 
   BitArray toBitArray(String bits) {
     BitArray inBit = new BitArray();
-    List<String> str = bits.replaceAll(DOTX, "").split('');
+    List<String> str = bits.replaceAll(dotX, "").split('');
     for (String aStr in str) {
       inBit.appendBit(aStr == 'X');
     }
@@ -254,14 +253,14 @@ void main(){
 
   test('testAztecWriter', (){
     testWriter("Espa\u00F1ol", null, 25, true, 1);                   // Without ECI (implicit ISO-8859-1)
-    testWriter("Espa\u00F1ol", ISO_8859_1, 25, true, 1);             // Explicit ISO-8859-1
+    testWriter("Espa\u00F1ol", iso_8859_1, 25, true, 1);             // Explicit ISO-8859-1
     // testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
     // testWriter("\u20AC 1 sample data.", ISO_8859_15, 25, true, 2);
-    testWriter("\u20AC 1 sample data.", UTF_8, 25, true, 2);
-    testWriter("\u20AC 1 sample data.", UTF_8, 100, true, 3);
-    testWriter("\u20AC 1 sample data.", UTF_8, 300, true, 4);
-    testWriter("\u20AC 1 sample data.", UTF_8, 500, false, 5);
-    testWriter("The capital of Japan is named \u6771\u4EAC.", SHIFT_JIS, 25, true, 3);
+    testWriter("\u20AC 1 sample data.", utf_8, 25, true, 2);
+    testWriter("\u20AC 1 sample data.", utf_8, 100, true, 3);
+    testWriter("\u20AC 1 sample data.", utf_8, 300, true, 4);
+    testWriter("\u20AC 1 sample data.", utf_8, 500, false, 5);
+    testWriter("The capital of Japan is named \u6771\u4EAC.", shiftJis, 25, true, 3);
     // Test AztecWriter defaults
     String data = "In ut magna vel mauris malesuada";
     AztecWriter writer = new AztecWriter();

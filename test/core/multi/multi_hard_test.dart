@@ -16,7 +16,6 @@
 
 
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:image/image.dart';
 import 'package:test/expect.dart';
@@ -27,7 +26,6 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
-import '../utils.dart';
 
 /// This is a high difficulty test.
 /// I'm looking for a way to do it

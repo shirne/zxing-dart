@@ -25,7 +25,6 @@
  */
 
 
-import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 

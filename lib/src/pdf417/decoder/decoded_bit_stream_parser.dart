@@ -67,7 +67,7 @@ class DecodedBitStreamParser {
   /// Table containing values for the exponent of 900.
   /// This is used in the numeric compaction decode algorithm.
   static final BigInt _nineHundred = BigInt.from(900);
-  static final List<BigInt> EXP900 =
+  static final List<BigInt> exp900 =
       List.generate(16, (index) => _nineHundred.pow(index));
 
   static const int _NUMBER_OF_SEQUENCE_CODEWORDS = 2;
@@ -697,7 +697,7 @@ class DecodedBitStreamParser {
   static String _decodeBase900toBase10(List<int> codewords, int count) {
     BigInt result = BigInt.zero;
     for (int i = 0; i < count; i++) {
-      result = result + (EXP900[count - i - 1] * (BigInt.from(codewords[i])));
+      result = result + (exp900[count - i - 1] * (BigInt.from(codewords[i])));
     }
     String resultString = result.toString();
     if (resultString[0] != '1') {

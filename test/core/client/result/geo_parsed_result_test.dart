@@ -28,7 +28,7 @@ import '../../utils.dart';
 ///
 void main(){
 
-  final int EPSILON = 10;
+  const int EPSILON = 10;
 
   void doTest(String contents,
       double latitude,

@@ -101,16 +101,16 @@ class DetectionResult {
         _detectionResultColumns[_barcodeColumnCount + 1] == null) {
       return;
     }
-    List<Codeword?> LRIcodewords = _detectionResultColumns[0]!.codewords;
-    List<Codeword?> RRIcodewords =
+    List<Codeword?> lriCodewords = _detectionResultColumns[0]!.codewords;
+    List<Codeword?> rriCodewords =
         _detectionResultColumns[_barcodeColumnCount + 1]!.codewords;
     for (int codewordsRow = 0;
-        codewordsRow < LRIcodewords.length;
+        codewordsRow < lriCodewords.length;
         codewordsRow++) {
-      if (LRIcodewords[codewordsRow] != null &&
-          RRIcodewords[codewordsRow] != null &&
-          LRIcodewords[codewordsRow]!.rowNumber ==
-              RRIcodewords[codewordsRow]!.rowNumber) {
+      if (lriCodewords[codewordsRow] != null &&
+          rriCodewords[codewordsRow] != null &&
+          lriCodewords[codewordsRow]!.rowNumber ==
+              rriCodewords[codewordsRow]!.rowNumber) {
         for (int barcodeColumn = 1;
             barcodeColumn <= _barcodeColumnCount;
             barcodeColumn++) {
@@ -119,7 +119,7 @@ class DetectionResult {
           if (codeword == null) {
             continue;
           }
-          codeword.rowNumber = LRIcodewords[codewordsRow]!.rowNumber;
+          codeword.rowNumber = lriCodewords[codewordsRow]!.rowNumber;
           if (!codeword.hasValidRowNumber()) {
             _detectionResultColumns[barcodeColumn]!
                 .codewords[codewordsRow] = null;

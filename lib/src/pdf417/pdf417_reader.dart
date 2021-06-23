@@ -40,7 +40,7 @@ import 'pdf417_result_metadata.dart';
 ///
 /// @author Guenther Grau
 class PDF417Reader implements Reader, MultipleBarcodeReader {
-  static const List<Result> _EMPTY_RESULT_ARRAY = [];
+  //static const List<Result> _EMPTY_RESULT_ARRAY = [];
 
   /// Locates and decodes a PDF417 code in an image.
   ///

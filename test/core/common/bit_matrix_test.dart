@@ -23,7 +23,7 @@ import 'package:zxing_lib/common.dart';
 
 void main() {
 
-  final List<int> BIT_MATRIX_POINTS = [ 1, 2, 2, 0, 3, 1 ];
+  const List<int> BIT_MATRIX_POINTS = [ 1, 2, 2, 0, 3, 1 ];
 
   BitMatrix getExpected(int width, int height) {
     BitMatrix result = new BitMatrix(width, height);
