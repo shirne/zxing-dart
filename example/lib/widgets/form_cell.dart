@@ -15,32 +15,33 @@ class FormCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        width: MediaQuery.of(context).size.width,
-        color: CupertinoColors.white,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: label,
-              ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                child: field,
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      width: MediaQuery.of(context).size.width,
+      color: CupertinoColors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: label,
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              child: field,
             ),
-            if (isLink)
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(
-                    CupertinoIcons.right_chevron,
-                    color: CupertinoColors.inactiveGray,
-                  ))
-          ],
-        ),
-      );
+          ),
+          if (isLink)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(
+                CupertinoIcons.right_chevron,
+                color: CupertinoColors.inactiveGray,
+              ),
+            )
+        ],
+      ),
+    );
   }
 }

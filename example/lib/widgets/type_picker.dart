@@ -1,12 +1,13 @@
-
 import 'package:flutter/cupertino.dart';
 
-class TypePicker<T> extends StatefulWidget{
+class TypePicker<T> extends StatefulWidget {
   final T value;
   final List<T> values;
   final void Function(T type)? onChange;
 
-  const TypePicker({Key? key,required this.value, this.onChange, required this.values}) : super(key: key);
+  const TypePicker(
+      {Key? key, required this.value, this.onChange, required this.values})
+      : super(key: key);
 
   @override
   State<TypePicker> createState() => _TypePickerState<T>();
@@ -17,7 +18,8 @@ class _TypePickerState<T> extends State<TypePicker<T>> {
   @override
   void initState() {
     super.initState();
-    _scrollController = FixedExtentScrollController(initialItem: widget.values.indexOf(widget.value));
+    _scrollController = FixedExtentScrollController(
+        initialItem: widget.values.indexOf(widget.value));
   }
 
   @override
@@ -26,7 +28,7 @@ class _TypePickerState<T> extends State<TypePicker<T>> {
       itemExtent: 30,
       scrollController: _scrollController,
       onSelectedItemChanged: (idx) {
-        if(widget.onChange != null) {
+        if (widget.onChange != null) {
           widget.onChange!(widget.values[idx]);
         }
       },
@@ -35,7 +37,7 @@ class _TypePickerState<T> extends State<TypePicker<T>> {
   }
 }
 
-Future<T?>? pickerType<T>(BuildContext context,List<T> values,T value){
+Future<T?>? pickerType<T>(BuildContext context, List<T> values, T value) {
   return showCupertinoDialog<T>(
     context: context,
     barrierDismissible: true,

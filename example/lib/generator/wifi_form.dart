@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
@@ -31,7 +30,7 @@ class _TextFormState extends State<WIFIForm> {
     });
   }
 
-  selectType(){
+  selectType() {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -64,23 +63,23 @@ class _TextFormState extends State<WIFIForm> {
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
-        children: [
-          FormCell(
-            label: Text('SSID'),
-            field: CupertinoTextField(controller: _ssidController)
+      children: [
+        FormCell(
+          label: Text('SSID'),
+          field: CupertinoTextField(controller: _ssidController),
+        ),
+        FormCell(
+          label: Text('Password'),
+          field: CupertinoTextField(controller: _passController),
+        ),
+        FormCell(
+          label: Text('Type'),
+          field: GestureDetector(
+            onTap: selectType,
+            child: Text(widget.result.networkEncryption),
           ),
-          FormCell(
-            label: Text('Password'),
-            field: CupertinoTextField(controller: _passController),
-          ),
-          FormCell(
-            label: Text('Type'),
-            field: GestureDetector(
-              onTap: selectType,
-              child:  Text(widget.result.networkEncryption),
-            ),
-          ),
-        ],
+        ),
+      ],
     );
   }
 }

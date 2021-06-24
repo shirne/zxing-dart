@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/utils.dart';
-import '../models/image_source.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class CameraPage extends StatefulWidget {
@@ -34,12 +33,8 @@ class _CameraPageState extends State<CameraPage> {
     _cameras = await availableCameras();
 
     if (_cameras!.isNotEmpty) {
-      _controller = CameraController(
-        _cameras![0],
-        ResolutionPreset.max,
-          enableAudio:false,
-          imageFormatGroup: ImageFormatGroup.yuv420
-      );
+      _controller = CameraController(_cameras![0], ResolutionPreset.max,
+          enableAudio: false, imageFormatGroup: ImageFormatGroup.yuv420);
       //_controller!.addListener(onCameraView);
       //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
       _controller!.initialize().then((_) {
@@ -58,28 +53,28 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  onCameraView() async{
-    if(isDetecting)return;
+  onCameraView() async {
+    if (isDetecting) return;
     isDetecting = true;
     XFile pic = await _controller!.takePicture();
 
     Uint8List data = await pic.readAsBytes();
     BufferImage? image = await BufferImage.fromFile(data);
-    if(image != null){
-
-      if(image.width > 1000){
+    if (image != null) {
+      if (image.width > 1000) {
         image.scaleDown(image.width / 800);
       }
 
-      var results = await decodeImageInIsolate(image.buffer, image.width, image.height);
+      var results =
+          await decodeImageInIsolate(image.buffer, image.width, image.height);
 
-      if(results != null ) {
-        if(!mounted)return;
+      if (results != null) {
+        if (!mounted) return;
         Navigator.of(context).pushNamed('/result', arguments: results);
-      }else{
+      } else {
         print('detected nothing');
       }
-    }else{
+    } else {
       print('can\'t take picture from camera');
     }
     isDetecting = false;
@@ -93,21 +88,22 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  changeBoltMode(){
+  changeBoltMode() {
     var cIndex = FlashMode.values.indexOf(_flashMode);
     cIndex++;
-    if(cIndex >= FlashMode.values.length){
+    if (cIndex >= FlashMode.values.length) {
       cIndex = 0;
     }
     setState(() {
       _flashMode = FlashMode.values[cIndex];
     });
-    try{
+    try {
       _controller?.setFlashMode(_flashMode);
-    }catch(_){}
+    } catch (_) {}
   }
-  Icon getBolt(){
-    switch(_flashMode){
+
+  Icon getBolt() {
+    switch (_flashMode) {
       case FlashMode.off:
         return Icon(CupertinoIcons.bolt);
       case FlashMode.always:
@@ -126,24 +122,32 @@ class _CameraPageState extends State<CameraPage> {
         middle: Text('Camera'),
       ),
       child: Center(
-          child: _controller == null
-              ? Text(detectedCamera ? 'Not detected cameras' : 'Detecting')
-              : CameraPreview(
-                  _controller!,
-                  child: Stack(children: [
+        child: _controller == null
+            ? Text(detectedCamera ? 'Not detected cameras' : 'Detecting')
+            : CameraPreview(
+                _controller!,
+                child: Stack(
+                  children: [
                     Align(
                       alignment: Alignment(0, 0.7),
-                      child: CupertinoIconButton(icon: Icon(CupertinoIcons.qrcode_viewfinder),onPressed: onCameraView,),
+                      child: CupertinoIconButton(
+                        icon: Icon(CupertinoIcons.qrcode_viewfinder),
+                        onPressed: onCameraView,
+                      ),
                     ),
                     Align(
-                      alignment: Alignment(1,-1),
+                      alignment: Alignment(1, -1),
                       child: Padding(
                         padding: EdgeInsets.only(right: 20, top: 80),
-                        child: CupertinoIconButton(icon: getBolt(),onPressed: changeBoltMode,),
+                        child: CupertinoIconButton(
+                          icon: getBolt(),
+                          onPressed: changeBoltMode,
+                        ),
                       ),
                     )
-                  ],),
+                  ],
                 ),
+              ),
       ),
     );
   }

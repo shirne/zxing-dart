@@ -1,11 +1,8 @@
-
-
 import 'package:flutter/cupertino.dart';
 
-class IndexPage extends StatefulWidget{
+class IndexPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _IndexPageState();
-
 }
 
 class _IndexPageState extends State<IndexPage> {
@@ -18,11 +15,9 @@ class _IndexPageState extends State<IndexPage> {
       child: Center(
         child: CupertinoButton(
           child: const Text('Test'),
-          onPressed: () {
-          },
+          onPressed: () {},
         ),
       ),
     );
   }
-
 }

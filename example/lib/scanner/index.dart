@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:example/scanner/result.dart';
-import 'package:zxing_lib/common.dart';
-import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
-import '../models/image_source.dart';
 import '../models/utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
@@ -69,20 +65,21 @@ class _IndexPageState extends State<_IndexPage> {
     }
     if (fileData != null) {
       BufferImage? image = await BufferImage.fromFile(fileData);
-      if(image == null){
+      if (image == null) {
         alert(context, 'Can\'t read the image');
         return;
       }
       setState(() {
         isReading = true;
       });
-      var results = await decodeImageInIsolate(image.buffer, image.width, image.height);
+      var results =
+          await decodeImageInIsolate(image.buffer, image.width, image.height);
       setState(() {
         isReading = false;
       });
-      if(results != null){
+      if (results != null) {
         Navigator.of(context).pushNamed('/result', arguments: results);
-      }else{
+      } else {
         alert(context, 'Can\'t detect barcodes or qrcodes');
       }
     } else {
@@ -90,9 +87,7 @@ class _IndexPageState extends State<_IndexPage> {
     }
   }
 
-  isoEntry(BufferImage image){
-
-  }
+  isoEntry(BufferImage image) {}
 
   Future<Uint8List?> _pickFile() async {
     FilePickerResult? result =

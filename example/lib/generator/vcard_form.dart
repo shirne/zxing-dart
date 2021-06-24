@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
@@ -7,11 +5,10 @@ import '../widgets/form_cell.dart';
 import '../widgets/cupertino_list_tile.dart';
 import '../widgets/list_tile_group.dart';
 
-
-class VCardForm extends StatefulWidget{
+class VCardForm extends StatefulWidget {
   final AddressBookParsedResult result;
 
-  const VCardForm({Key? key,required this.result}) : super(key: key);
+  const VCardForm({Key? key, required this.result}) : super(key: key);
 
   @override
   State<VCardForm> createState() => _TextFormState();
@@ -32,7 +29,8 @@ class _TextFormState extends State<VCardForm> {
     _nameController.addListener(() {
       widget.result.names![0] = _nameController.text;
     });
-    _telController = TextEditingController(text: widget.result.phoneNumbers![0]);
+    _telController =
+        TextEditingController(text: widget.result.phoneNumbers![0]);
     _telController.addListener(() {
       widget.result.phoneNumbers![0] = _telController.text;
     });
@@ -56,30 +54,29 @@ class _TextFormState extends State<VCardForm> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
       children: [
         FormCell(
-            label: Text('Name.'),
-            field: CupertinoTextField(controller: _nameController)
+          label: Text('Name.'),
+          field: CupertinoTextField(controller: _nameController),
         ),
         FormCell(
-            label: Text('Tel.'),
-            field: CupertinoTextField(controller: _telController)
+          label: Text('Tel.'),
+          field: CupertinoTextField(controller: _telController),
         ),
         FormCell(
-            label: Text('Org.'),
-            field: CupertinoTextField(controller: _orgController)
+          label: Text('Org.'),
+          field: CupertinoTextField(controller: _orgController),
         ),
         FormCell(
-            label: Text('Title'),
-            field: CupertinoTextField(controller: _titleController)
+          label: Text('Title'),
+          field: CupertinoTextField(controller: _titleController),
         ),
         FormCell(
-            label: Text('Add'),
-            field: CupertinoTextField(controller: _addController)
+          label: Text('Add'),
+          field: CupertinoTextField(controller: _addController),
         ),
         CupertinoListTile(
           title: Text('Note'),

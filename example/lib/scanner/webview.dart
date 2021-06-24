@@ -11,11 +11,10 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
-
   @override
   void initState() {
     super.initState();
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     }
   }
@@ -28,13 +27,13 @@ class _WebviewPageState extends State<WebviewPage> {
       ),
       child: WebView(
         initialUrl: 'https://flutter.cn',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated:(webview){
+        javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (webview) {
           print(webview);
-            webview.evaluateJavascript("""
+          webview.evaluateJavascript("""
             alert('aaa');
             """);
-          }
+        },
       ),
     );
   }

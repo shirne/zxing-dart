@@ -30,7 +30,8 @@ class _IndexPageState extends State<IndexPage> {
   bool _isCreating = false;
 
   setResult() async {
-    ResultGenerator? newResult = await pickerType<ResultGenerator>(context, ResultGenerator.values, result);
+    ResultGenerator? newResult = await pickerType<ResultGenerator>(
+        context, ResultGenerator.values, result);
     if (newResult != null) {
       setState(() {
         result = newResult;
@@ -38,8 +39,9 @@ class _IndexPageState extends State<IndexPage> {
     }
   }
 
-  setStyle() async{
-    QRCodeStyle? newStyle = await pickerType<QRCodeStyle>(context, QRCodeStyle.values, style);
+  setStyle() async {
+    QRCodeStyle? newStyle =
+        await pickerType<QRCodeStyle>(context, QRCodeStyle.values, style);
     if (newStyle != null) {
       setState(() {
         style = newStyle;
@@ -56,15 +58,15 @@ class _IndexPageState extends State<IndexPage> {
       case ResultGenerator.vcard:
         return VCardForm(
             result: results.putIfAbsent(type, () => typeResult(type))
-            as AddressBookParsedResult);
+                as AddressBookParsedResult);
       case ResultGenerator.sms:
         return SMSForm(
             result: results.putIfAbsent(type, () => typeResult(type))
-            as SMSParsedResult);
+                as SMSParsedResult);
       case ResultGenerator.geo:
         return GeoForm(
             result: results.putIfAbsent(type, () => typeResult(type))
-            as GeoParsedResult);
+                as GeoParsedResult);
       default:
         return TextForm(
             result: results.putIfAbsent(type, () => typeResult(type))
@@ -78,11 +80,11 @@ class _IndexPageState extends State<IndexPage> {
         return AddressBookParsedResult()
           ..addName('')
           ..addPhoneNumber('')
-        ..addAddress('');
+          ..addAddress('');
       case ResultGenerator.sms:
         return SMSParsedResult([''], [''], '', '');
       case ResultGenerator.geo:
-        return GeoParsedResult(0,0);
+        return GeoParsedResult(0, 0);
       case ResultGenerator.wifi:
         return WifiParsedResult('WEP', '', '');
       default:
@@ -97,7 +99,7 @@ class _IndexPageState extends State<IndexPage> {
     QRCode code = Encoder.encode(content);
     print(content);
     ByteMatrix matrix = code.matrix!;
-    if(pixelSize < 1){
+    if (pixelSize < 1) {
       pixelSize = 350 ~/ matrix.width;
     }
     BufferImage image = BufferImage(matrix.width * pixelSize + pixelSize * 2,
@@ -110,16 +112,16 @@ class _IndexPageState extends State<IndexPage> {
     for (int x = 0; x < matrix.width; x++) {
       for (int y = 0; y < matrix.height; y++) {
         if (matrix.get(x, y) == 1) {
-          if(blackImage != null) {
+          if (blackImage != null) {
             image.drawImage(
-                blackImage,
-                Offset(
-                    (pixelSize + x * pixelSize).toDouble(),
-                    (pixelSize + y * pixelSize).toDouble(),
-                ),
+              blackImage,
+              Offset(
+                (pixelSize + x * pixelSize).toDouble(),
+                (pixelSize + y * pixelSize).toDouble(),
+              ),
             );
           }
-        }else if(whiteImage != null){
+        } else if (whiteImage != null) {
           image.drawImage(
             whiteImage,
             Offset(
@@ -134,25 +136,25 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   createQrCode() async {
-    if(_isCreating)return;
+    if (_isCreating) return;
     _isCreating = true;
     var _result = results[result];
     if (_result != null) {
       image = await createQrcode(result.generator(_result));
       showCupertinoDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('qrcode'),
-              content: AspectRatio(
-                aspectRatio: 1,
-                child: Image(
-                  image: RgbaImage.fromBufferImage(image),
-                ),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text('qrcode'),
+            content: AspectRatio(
+              aspectRatio: 1,
+              child: Image(
+                image: RgbaImage.fromBufferImage(image),
               ),
-            );
-          },
+            ),
+          );
+        },
       );
 
       _isCreating = false;
@@ -195,8 +197,7 @@ class _IndexPageState extends State<IndexPage> {
                   ),
                 ],
               ),
-              forms.putIfAbsent(result,
-                  () => formWidget(result))
+              forms.putIfAbsent(result, () => formWidget(result))
             ],
           ),
         ),

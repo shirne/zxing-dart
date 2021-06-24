@@ -83,8 +83,8 @@ class _BinarizerPageState extends State<BinarizerPage> {
     hybridBinaryImage =
         bin2Image(HybridBinarizer(ImageLuminanceSource(bufferImage!.copy())));
     setState(() {});
-    inverseImage = bin2Image(
-        GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy()..inverse())));
+    inverseImage = bin2Image(GlobalHistogramBinarizer(
+        ImageLuminanceSource(bufferImage!.copy()..inverse())));
     setState(() {
       imageLoadStatus = 2;
     });
@@ -214,8 +214,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
                   ),
                   padding: EdgeInsets.only(bottom: 20),
                 ),
-              if(imageLoadStatus == 1)
-                CircularProgressIndicator(),
+              if (imageLoadStatus == 1) CircularProgressIndicator(),
             ],
           ),
         ),

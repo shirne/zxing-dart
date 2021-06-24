@@ -1,16 +1,13 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
 import '../widgets/cupertino_list_tile.dart';
 import '../widgets/list_tile_group.dart';
 
-
-class TextForm extends StatefulWidget{
+class TextForm extends StatefulWidget {
   final TextParsedResult result;
 
-  const TextForm({Key? key,required this.result}) : super(key: key);
+  const TextForm({Key? key, required this.result}) : super(key: key);
 
   @override
   State<TextForm> createState() => _TextFormState();
@@ -27,7 +24,6 @@ class _TextFormState extends State<TextForm> {
       widget.result.text = _controller.text;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

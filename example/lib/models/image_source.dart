@@ -1,5 +1,3 @@
-
-
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:math' as Math;
@@ -8,24 +6,25 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:zxing_lib/zxing.dart';
 
 class ImageLuminanceSource extends LuminanceSource {
-
-  static final double minus45InRadians = -0.7853981633974483; // Math.toRadians(-45.0)
+  static final double minus45InRadians =
+      -0.7853981633974483; // Math.toRadians(-45.0)
 
   late Uint8List buffer;
   AbstractImage image;
   final int left;
   final int top;
 
-  ImageLuminanceSource(this.image, [this.left = 0, this.top = 0, int? width, int? height])
-      :super(width ?? image.width, height ?? image.height) {
-
-    if(width == null) width = image.width - left;
-    if(height == null) height = image.height - top;
+  ImageLuminanceSource(this.image,
+      [this.left = 0, this.top = 0, int? width, int? height])
+      : super(width ?? image.width, height ?? image.height) {
+    if (width == null) width = image.width - left;
+    if (height == null) height = image.height - top;
 
     int sourceWidth = image.width;
     int sourceHeight = image.height;
     if (left + width > sourceWidth || top + height > sourceHeight) {
-      throw ArgumentError("Crop rectangle($left, $top) does not fit within image($sourceWidth x $sourceHeight) data.");
+      throw ArgumentError(
+          "Crop rectangle($left, $top) does not fit within image($sourceWidth x $sourceHeight) data.");
     }
 
     buffer = Uint8List(width * height);
@@ -44,44 +43,51 @@ class ImageLuminanceSource extends LuminanceSource {
           // (306*R) >> 10 is approximately equal to R*0.299, and so on.
           // 0x200 >> 10 is 0.5, it implements rounding.
           buffer[(y - top) * width + x] = (306 * color.red +
-              601 * color.green +
-              117 * color.blue +
-              0x200) >> 10;
+                  601 * color.green +
+                  117 * color.blue +
+                  0x200) >>
+              10;
         }
       }
     }
   }
 
-  scaleDown(int scale){
-    var newImage = BufferImage((image.width / scale).ceil(),(image.height / scale).ceil());
+  scaleDown(int scale) {
+    var newImage = BufferImage(
+        (image.width / scale).ceil(), (image.height / scale).ceil());
     List<Color?> colors = List.filled(scale * scale, null);
-    for(int y=0; y < newImage.width; y++){
-      for(int x=0; x < newImage.width; x++){
+    for (int y = 0; y < newImage.width; y++) {
+      for (int x = 0; x < newImage.width; x++) {
         int count = 0;
         colors.fillRange(0, colors.length, null);
-        for(int sy=0; sy < scale; sy++){
-          if(y * scale + sy >= image.height)break;
-          for(int sx=0; sx < scale; sx++){
-            if(x * scale + sx >= image.width)break;
-            count ++;
-            colors[sy*scale + sx] = image.getColor(x * scale + sx, y * scale + sy);
+        for (int sy = 0; sy < scale; sy++) {
+          if (y * scale + sy >= image.height) break;
+          for (int sx = 0; sx < scale; sx++) {
+            if (x * scale + sx >= image.width) break;
+            count++;
+            colors[sy * scale + sx] =
+                image.getColor(x * scale + sx, y * scale + sy);
           }
         }
-        if(count  < 1) break;
+        if (count < 1) break;
 
         int alpha = 0;
         int red = 0;
         int green = 0;
         int blue = 0;
-        for(Color? color in colors){
-          if(color != null){
+        for (Color? color in colors) {
+          if (color != null) {
             alpha += color.alpha;
             red += color.red;
             green += color.green;
             blue += color.blue;
           }
         }
-        newImage.setColor(x, y, Color.fromARGB(alpha ~/ count, red ~/ count , green ~/ count, blue ~/ count));
+        newImage.setColor(
+            x,
+            y,
+            Color.fromARGB(
+                alpha ~/ count, red ~/ count, green ~/ count, blue ~/ count));
       }
     }
 
@@ -104,8 +110,6 @@ class ImageLuminanceSource extends LuminanceSource {
 
   @override
   Int8List get matrix {
-
-
     // The underlying raster of image consists of area bytes with the luminance values
     //image.getDataElements(left, top, width, height, matrix);
     Int8List matrix = Int8List.fromList(buffer);
@@ -117,7 +121,13 @@ class ImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return ImageLuminanceSource(image.copy(), this.left + left, this.top + top, width, height);
+    return ImageLuminanceSource(
+      image.copy(),
+      this.left + left,
+      this.top + top,
+      width,
+      height,
+    );
   }
 
   /// This is always true, since the image is a gray-scale image.
@@ -131,15 +141,20 @@ class ImageLuminanceSource extends LuminanceSource {
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.
-    var newImage = image.copy()..rotate(Math.pi/2);
+    var newImage = image.copy()..rotate(Math.pi / 2);
 
     // Maintain the cropped region, but rotate it too.
-    return ImageLuminanceSource(newImage, top, sourceWidth - (left + width), height, width);
+    return ImageLuminanceSource(
+      newImage,
+      top,
+      sourceWidth - (left + width),
+      height,
+      width,
+    );
   }
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-
     int oldCenterX = left + width ~/ 2;
     int oldCenterY = top + height ~/ 2;
 
@@ -147,14 +162,18 @@ class ImageLuminanceSource extends LuminanceSource {
     int sourceDimension = Math.max(image.width, image.height);
     var newImage = image.copy()..rotate(Math.pi / 4);
 
-
     int halfDimension = Math.max(width, height) ~/ 2;
     int newLeft = Math.max(0, oldCenterX - halfDimension);
     int newTop = Math.max(0, oldCenterY - halfDimension);
     int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
     int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
-    return ImageLuminanceSource(newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
+    return ImageLuminanceSource(
+      newImage,
+      newLeft,
+      newTop,
+      newRight - newLeft,
+      newBottom - newTop,
+    );
   }
-
 }

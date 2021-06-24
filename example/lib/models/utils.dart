@@ -1,17 +1,14 @@
-
 import 'dart:async';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
 
-import 'image_source.dart';
-
-Future<bool?> alert<bool>(BuildContext context, String message, {String? title, List<Widget>? actions}){
+Future<bool?> alert<bool>(BuildContext context, String message,
+    {String? title, List<Widget>? actions}) {
   return showCupertinoDialog<bool>(
     context: context,
     barrierDismissible: true,
@@ -21,88 +18,105 @@ Future<bool?> alert<bool>(BuildContext context, String message, {String? title, 
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 200, horizontal: 50),
           child: CupertinoAlertDialog(
-            title: title == null ? null : Text(title),
-            content: Column(
-              children: message.split(RegExp("[\r\n]+")).map<Widget>((row)=>Text(row)).toList(),
-            ),
-              actions:actions ?? [
-                CupertinoButton(child: Text('OK'), onPressed: (){
-                  Navigator.pop(context, true);
-                })
-              ]
-          ),
+              title: title == null ? null : Text(title),
+              content: Column(
+                children: message
+                    .split(RegExp("[\r\n]+"))
+                    .map<Widget>((row) => Text(row))
+                    .toList(),
+              ),
+              actions: actions ??
+                  [
+                    CupertinoButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                    )
+                  ]),
         ),
       );
     },
   );
 }
 
-class IsoMessage{
+class IsoMessage {
   final SendPort? sendPort;
   final Uint8List byteData;
   final int width;
   final int height;
 
   IsoMessage(this.sendPort, this.byteData, this.width, this.height);
-
 }
 
-Future<List<Result>?> decodeImageInIsolate(Uint8List image, int width, int height,{bool isRgb = true}){
+Future<List<Result>?> decodeImageInIsolate(
+    Uint8List image, int width, int height,
+    {bool isRgb = true}) {
   var complete = Completer<List<Result>?>();
   var port = ReceivePort();
   port.listen((message) {
     print("onData: $message");
-    if(!complete.isCompleted) {
+    if (!complete.isCompleted) {
       complete.complete(message as List<Result>?);
     }
-  }, onDone: (){
+  }, onDone: () {
     print('iso close');
-  }, onError: (error){
+  }, onError: (error) {
     print('iso error: $error');
   });
 
   //TransferableTypedData data = TransferableTypedData.fromList( [image,color2Uint(height),color2Uint(width)]);
-  IsoMessage message = IsoMessage(port.sendPort,image,width,height);
-  if(isRgb) {
-    Isolate.spawn<IsoMessage>(
-        decodeImage, message, onExit: port.sendPort, onError: port.sendPort, debugName: "decodeImage");
-  }else{
-    Isolate.spawn<IsoMessage>(
-        decodeCamera, message, onExit: port.sendPort, onError: port.sendPort, debugName: "decodeCamera");
+  IsoMessage message = IsoMessage(port.sendPort, image, width, height);
+  if (isRgb) {
+    Isolate.spawn<IsoMessage>(decodeImage, message,
+        onExit: port.sendPort,
+        onError: port.sendPort,
+        debugName: "decodeImage");
+  } else {
+    Isolate.spawn<IsoMessage>(decodeCamera, message,
+        onExit: port.sendPort,
+        onError: port.sendPort,
+        debugName: "decodeCamera");
   }
 
   return complete.future;
 }
 
-Uint8List color2Uint(int color){
-  return Uint8List.fromList([color >> 16 & 0xff, color >> 8 & 0xff, color & 0xff, color >> 16 & 0xff]);
+Uint8List color2Uint(int color) {
+  return Uint8List.fromList([
+    color >> 16 & 0xff,
+    color >> 8 & 0xff,
+    color & 0xff,
+    color >> 16 & 0xff
+  ]);
 }
 
-int getColor(int r, int g, int b, [int a = 255]){
+int getColor(int r, int g, int b, [int a = 255]) {
   return (r << 16) + (g << 8) + b + (a << 24);
 }
 
-int getColorFromByte(List<int> byte, int index,{bool isLog = false}){
-  return getColor(byte[index], byte[index+1], byte[index+2], byte[index+3]);
+int getColorFromByte(List<int> byte, int index, {bool isLog = false}) {
+  return getColor(
+      byte[index], byte[index + 1], byte[index + 2], byte[index + 3]);
 }
 
-List<Result>? decodeImage(IsoMessage message){
+List<Result>? decodeImage(IsoMessage message) {
   int length = message.byteData.length;
 
-  var pixels = List<int>.generate(length ~/ 4, (index)=>getColorFromByte(message.byteData, index * 4));
+  var pixels = List<int>.generate(
+      length ~/ 4, (index) => getColorFromByte(message.byteData, index * 4));
 
-  LuminanceSource imageSource = RGBLuminanceSource(message.width, message.height, pixels);
+  LuminanceSource imageSource =
+      RGBLuminanceSource(message.width, message.height, pixels);
 
   BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
 
   MultipleBarcodeReader reader =
-  GenericMultipleBarcodeReader(MultiFormatReader());
+      GenericMultipleBarcodeReader(MultiFormatReader());
   try {
     print('start decode...');
-    var results = reader.decodeMultiple(bitmap, {
-      DecodeHintType.TRY_HARDER: true,
-      DecodeHintType.ALSO_INVERTED: true
-    });
+    var results = reader.decodeMultiple(bitmap,
+        {DecodeHintType.TRY_HARDER: true, DecodeHintType.ALSO_INVERTED: true});
 
     message.sendPort?.send(results);
     return results;
@@ -112,20 +126,19 @@ List<Result>? decodeImage(IsoMessage message){
   return null;
 }
 
-List<Result>? decodeCamera(IsoMessage message){
+List<Result>? decodeCamera(IsoMessage message) {
   var yuvData = Int8List.fromList(message.byteData);
 
-  LuminanceSource imageSource = PlanarYUVLuminanceSource(yuvData,message.width,message.height);
+  LuminanceSource imageSource =
+      PlanarYUVLuminanceSource(yuvData, message.width, message.height);
 
   BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
 
   MultipleBarcodeReader reader =
-  GenericMultipleBarcodeReader(MultiFormatReader());
+      GenericMultipleBarcodeReader(MultiFormatReader());
   try {
-    var results = reader.decodeMultiple(bitmap, {
-      DecodeHintType.TRY_HARDER: true,
-      DecodeHintType.ALSO_INVERTED: true
-    });
+    var results = reader.decodeMultiple(bitmap,
+        {DecodeHintType.TRY_HARDER: true, DecodeHintType.ALSO_INVERTED: true});
     message.sendPort?.send(results);
     return results;
   } on NotFoundException catch (_) {}

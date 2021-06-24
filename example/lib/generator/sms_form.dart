@@ -1,5 +1,3 @@
-
-
 import 'package:example/widgets/form_cell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
@@ -7,11 +5,10 @@ import 'package:zxing_lib/client.dart';
 import '../widgets/cupertino_list_tile.dart';
 import '../widgets/list_tile_group.dart';
 
-
-class SMSForm extends StatefulWidget{
+class SMSForm extends StatefulWidget {
   final SMSParsedResult result;
 
-  const SMSForm({Key? key,required this.result}) : super(key: key);
+  const SMSForm({Key? key, required this.result}) : super(key: key);
 
   @override
   State<SMSForm> createState() => _SMSFormState();
@@ -39,18 +36,17 @@ class _SMSFormState extends State<SMSForm> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
       children: [
         FormCell(
-            label: Text('phone No.'),
-            field: CupertinoTextField(controller: _numController)
+          label: Text('phone No.'),
+          field: CupertinoTextField(controller: _numController),
         ),
         FormCell(
-            label: Text('subject'),
-            field: CupertinoTextField(controller: _subController)
+          label: Text('subject'),
+          field: CupertinoTextField(controller: _subController),
         ),
         CupertinoListTile(
           title: Text('body'),
