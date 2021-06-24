@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
 /// Tests [MaxiCodeReader] against a fixed set of test images.
-void main(){
-
+void main() {
   test('Maxicode1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE)
-    ..addTest(6, 6, 0.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/maxicode-1",
+        MultiFormatReader(), BarcodeFormat.MAXICODE)
+      ..addTest(6, 6, 0.0)
+      ..testBlackBox();
   });
-
 }

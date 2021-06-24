@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 
 import '../common/abstract_negative_black_box.dart';
 
 /// This test ensures that unsupported barcodes do not decode.
 ///
-void main(){
-
+void main() {
   test('UnsupportedBlackBoxTestCase', () {
     AbstractNegativeBlackBoxTestCase("test/resources/blackbox/unsupported")
-    ..addNegativeTest(0, 0.0)
-    ..addNegativeTest(0, 90.0)
-    ..addNegativeTest(0, 180.0)
-    ..addNegativeTest(0, 270.0)
-        ..testBlackBox();
+      ..addNegativeTest(0, 0.0)
+      ..addNegativeTest(0, 90.0)
+      ..addNegativeTest(0, 180.0)
+      ..addNegativeTest(0, 270.0)
+      ..testBlackBox();
   });
-
 }

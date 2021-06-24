@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('Code128BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/code128-2", new MultiFormatReader(), BarcodeFormat.CODE_128)
-    ..addTest(36, 39, 0.0)
-    ..addTest(36, 39, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/code128-2",
+        MultiFormatReader(), BarcodeFormat.CODE_128)
+      ..addTest(36, 39, 0.0)
+      ..addTest(36, 39, 180.0)
+      ..testBlackBox();
   });
-
 }

@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-
-void main(){
-
+void main() {
   test('testApplyMaskPenaltyRule1', () {
-    ByteMatrix matrix = new ByteMatrix(4, 1);
+    ByteMatrix matrix = ByteMatrix(4, 1);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(2, 0, 0);
     matrix.set(3, 0, 0);
     expect(0, MaskUtil.applyMaskPenaltyRule1(matrix));
     // Horizontal.
-    matrix = new ByteMatrix(6, 1);
+    matrix = ByteMatrix(6, 1);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(2, 0, 0);
@@ -43,7 +38,7 @@ void main(){
     matrix.set(5, 0, 0);
     expect(4, MaskUtil.applyMaskPenaltyRule1(matrix));
     // Vertical.
-    matrix = new ByteMatrix(1, 6);
+    matrix = ByteMatrix(1, 6);
     matrix.set(0, 0, 0);
     matrix.set(0, 1, 0);
     matrix.set(0, 2, 0);
@@ -56,22 +51,22 @@ void main(){
   });
 
   test('testApplyMaskPenaltyRule2', () {
-    ByteMatrix matrix = new ByteMatrix(1, 1);
+    ByteMatrix matrix = ByteMatrix(1, 1);
     matrix.set(0, 0, 0);
     expect(0, MaskUtil.applyMaskPenaltyRule2(matrix));
-    matrix = new ByteMatrix(2, 2);
+    matrix = ByteMatrix(2, 2);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(0, 1, 0);
     matrix.set(1, 1, 1);
     expect(0, MaskUtil.applyMaskPenaltyRule2(matrix));
-    matrix = new ByteMatrix(2, 2);
+    matrix = ByteMatrix(2, 2);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(0, 1, 0);
     matrix.set(1, 1, 0);
     expect(3, MaskUtil.applyMaskPenaltyRule2(matrix));
-    matrix = new ByteMatrix(3, 3);
+    matrix = ByteMatrix(3, 3);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(2, 0, 0);
@@ -87,7 +82,7 @@ void main(){
 
   test('testApplyMaskPenaltyRule3', () {
     // Horizontal 00001011101.
-    ByteMatrix matrix = new ByteMatrix(11, 1);
+    ByteMatrix matrix = ByteMatrix(11, 1);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 0);
     matrix.set(2, 0, 0);
@@ -101,7 +96,7 @@ void main(){
     matrix.set(10, 0, 1);
     expect(40, MaskUtil.applyMaskPenaltyRule3(matrix));
     // Horizontal 10111010000.
-    matrix = new ByteMatrix(11, 1);
+    matrix = ByteMatrix(11, 1);
     matrix.set(0, 0, 1);
     matrix.set(1, 0, 0);
     matrix.set(2, 0, 1);
@@ -115,7 +110,7 @@ void main(){
     matrix.set(10, 0, 0);
     expect(40, MaskUtil.applyMaskPenaltyRule3(matrix));
     // Vertical 00001011101.
-    matrix = new ByteMatrix(1, 11);
+    matrix = ByteMatrix(1, 11);
     matrix.set(0, 0, 0);
     matrix.set(0, 1, 0);
     matrix.set(0, 2, 0);
@@ -129,7 +124,7 @@ void main(){
     matrix.set(0, 10, 1);
     expect(40, MaskUtil.applyMaskPenaltyRule3(matrix));
     // Vertical 10111010000.
-    matrix = new ByteMatrix(1, 11);
+    matrix = ByteMatrix(1, 11);
     matrix.set(0, 0, 1);
     matrix.set(0, 1, 0);
     matrix.set(0, 2, 1);
@@ -146,16 +141,16 @@ void main(){
 
   test('testApplyMaskPenaltyRule4', () {
     // Dark cell ratio = 0%
-    ByteMatrix matrix = new ByteMatrix(1, 1);
+    ByteMatrix matrix = ByteMatrix(1, 1);
     matrix.set(0, 0, 0);
     expect(100, MaskUtil.applyMaskPenaltyRule4(matrix));
     // Dark cell ratio = 5%
-    matrix = new ByteMatrix(2, 1);
+    matrix = ByteMatrix(2, 1);
     matrix.set(0, 0, 0);
     matrix.set(0, 0, 1);
     expect(0, MaskUtil.applyMaskPenaltyRule4(matrix));
     // Dark cell ratio = 66.67%
-    matrix = new ByteMatrix(6, 1);
+    matrix = ByteMatrix(6, 1);
     matrix.set(0, 0, 0);
     matrix.set(1, 0, 1);
     matrix.set(2, 0, 1);
@@ -164,8 +159,6 @@ void main(){
     matrix.set(5, 0, 0);
     expect(30, MaskUtil.applyMaskPenaltyRule4(matrix));
   });
-
-
 
   // See mask patterns on the page 43 of JISX0510:2004.
   test('testGetDataMaskBit', () {

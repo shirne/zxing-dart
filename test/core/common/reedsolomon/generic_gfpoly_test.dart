@@ -14,36 +14,32 @@
  * limitations under the License.
  */
 
-
-
 import 'dart:typed_data';
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
-
 /// Tests [GenericGFPoly].
 void main() {
-
   final GenericGF field = GenericGF.qrCodeField256;
 
   test('testPolynomialString', () {
     expect("0", field.zero.toString());
     expect("-1", field.buildMonomial(0, -1).toString());
-    GenericGFPoly p = new GenericGFPoly(field, Int32List.fromList([3, 0, -2, 1, 1]));
+    GenericGFPoly p =
+        GenericGFPoly(field, Int32List.fromList([3, 0, -2, 1, 1]));
     expect("a^25x^4 - ax^2 + x + 1", p.toString());
-    p = new GenericGFPoly(field, Int32List.fromList([3]));
+    p = GenericGFPoly(field, Int32List.fromList([3]));
     expect("a^25", p.toString());
   });
 
-  test('testZero',() {
-    expect(field.zero,field.buildMonomial(1, 0));
+  test('testZero', () {
+    expect(field.zero, field.buildMonomial(1, 0));
     expect(field.zero, field.buildMonomial(1, 2).multiplyInt(0));
   });
 
-  test('testEvaluate',() {
+  test('testEvaluate', () {
     expect(3, field.buildMonomial(0, 3).evaluateAt(0));
   });
-
 }

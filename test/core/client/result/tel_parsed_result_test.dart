@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
@@ -28,10 +21,9 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [TelParsedResult].
 ///
-void main(){
-
+void main() {
   void doTest(String contents, String number, String? title) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEL, result.type);
     TelParsedResult telResult = result as TelParsedResult;
@@ -44,6 +36,4 @@ void main(){
     doTest("tel:+15551212", "+15551212", null);
     doTest("tel:2125551212", "2125551212", null);
   });
-
-
 }

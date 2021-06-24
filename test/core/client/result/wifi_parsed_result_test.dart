@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
@@ -22,15 +21,10 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [WifiParsedResult].
 ///
-void main(){
-
-
+void main() {
   /// Given the string contents for the barcode, check that it matches our expectations
-  void doTest(String contents,
-      String ssid,
-      String? password,
-      String type) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+  void doTest(String contents, String ssid, String? password, String type) {
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
 
     // Ensure it is a wifi code
@@ -48,15 +42,20 @@ void main(){
   });
 
   test('testWep', () {
-    doTest("WIFI:S:TenChars;P:0123456789;T:WEP;;", "TenChars", "0123456789", "WEP");
-    doTest("WIFI:S:TenChars;P:abcde56789;T:WEP;;", "TenChars", "abcde56789", "WEP");
+    doTest("WIFI:S:TenChars;P:0123456789;T:WEP;;", "TenChars", "0123456789",
+        "WEP");
+    doTest("WIFI:S:TenChars;P:abcde56789;T:WEP;;", "TenChars", "abcde56789",
+        "WEP");
     // Non hex should not fail at this level
-    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere", "WEP");
+    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere",
+        "WEP");
 
     // Escaped semicolons
-    doTest("WIFI:S:Ten\\;\\;Chars;P:0123456789;T:WEP;;", "Ten;;Chars", "0123456789", "WEP");
+    doTest("WIFI:S:Ten\\;\\;Chars;P:0123456789;T:WEP;;", "Ten;;Chars",
+        "0123456789", "WEP");
     // Escaped colons
-    doTest("WIFI:S:Ten\\:\\:Chars;P:0123456789;T:WEP;;", "Ten::Chars", "0123456789", "WEP");
+    doTest("WIFI:S:Ten\\:\\:Chars;P:0123456789;T:WEP;;", "Ten::Chars",
+        "0123456789", "WEP");
 
     // TODO(vikrama) Need a test for SB as well.
   });
@@ -64,20 +63,26 @@ void main(){
   /// Put in checks for the length of the password for wep.
   test('testWpa', () {
     doTest("WIFI:S:TenChars;P:wow;T:WPA;;", "TenChars", "wow", "WPA");
-    doTest("WIFI:S:TenChars;P:space is silent;T:WPA;;", "TenChars", "space is silent", "WPA");
-    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere", "WEP");
+    doTest("WIFI:S:TenChars;P:space is silent;T:WPA;;", "TenChars",
+        "space is silent", "WPA");
+    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere",
+        "WEP");
 
     // Escaped semicolons
-    doTest("WIFI:S:TenChars;P:hello\\;there;T:WEP;;", "TenChars", "hello;there", "WEP");
+    doTest("WIFI:S:TenChars;P:hello\\;there;T:WEP;;", "TenChars", "hello;there",
+        "WEP");
     // Escaped colons
-    doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there", "WEP");
+    doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there",
+        "WEP");
   });
 
   test('testEscape', () {
-    doTest("WIFI:T:WPA;S:test;P:my_password\\\\;;", "test", "my_password\\", "WPA");
-    doTest("WIFI:T:WPA;S:My_WiFi_SSID;P:abc123/;;", "My_WiFi_SSID", "abc123/", "WPA");
-    doTest("WIFI:T:WPA;S:\"foo\\;bar\\\\baz\";;", "\"foo;bar\\baz\"", null, "WPA");
+    doTest("WIFI:T:WPA;S:test;P:my_password\\\\;;", "test", "my_password\\",
+        "WPA");
+    doTest("WIFI:T:WPA;S:My_WiFi_SSID;P:abc123/;;", "My_WiFi_SSID", "abc123/",
+        "WPA");
+    doTest(
+        "WIFI:T:WPA;S:\"foo\\;bar\\\\baz\";;", "\"foo;bar\\baz\"", null, "WPA");
     doTest("WIFI:T:WPA;S:test;P:\\\"abcd\\\";;", "test", "\"abcd\"", "WPA");
   });
-
 }

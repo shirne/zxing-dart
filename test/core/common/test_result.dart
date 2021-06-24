@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-
-
 /// Encapsulates the result of one test over a batch of black-box images.
 class TestResult {
-
   final int mustPassCount;
   final int tryHarderCount;
   final int maxMisreads;
   final int maxTryHarderMisreads;
   final double rotation;
 
-  TestResult(this.mustPassCount, this.tryHarderCount, this.maxMisreads, this.maxTryHarderMisreads, this.rotation);
+  TestResult(this.mustPassCount, this.tryHarderCount, this.maxMisreads,
+      this.maxTryHarderMisreads, this.rotation);
 
   int getMustPassCount() {
     return mustPassCount;
@@ -34,11 +32,11 @@ class TestResult {
   int getTryHarderCount() {
     return tryHarderCount;
   }
-  
+
   int getMaxMisreads() {
     return maxMisreads;
   }
-  
+
   int getMaxTryHarderMisreads() {
     return maxTryHarderMisreads;
   }
@@ -46,5 +44,4 @@ class TestResult {
   double getRotation() {
     return rotation;
   }
-
 }

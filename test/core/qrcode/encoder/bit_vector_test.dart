@@ -18,8 +18,6 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
-
-
 void main() {
   int getUnsignedInt(BitArray v) {
     int result = 0;
@@ -32,7 +30,7 @@ void main() {
   }
 
   test('testAppendBit', () {
-    BitArray v = new BitArray();
+    BitArray v = BitArray();
     expect(0, v.sizeInBytes);
     // 1
     v.appendBit(true);
@@ -77,22 +75,22 @@ void main() {
   });
 
   test('testAppendBits', () {
-    BitArray v = new BitArray();
+    BitArray v = BitArray();
     v.appendBits(0x1, 1);
     expect(1, v.size);
     expect(0x80000000, getUnsignedInt(v));
-    v = new BitArray();
+    v = BitArray();
     v.appendBits(0xff, 8);
     expect(8, v.size);
     expect(0xff000000, getUnsignedInt(v));
-    v = new BitArray();
+    v = BitArray();
     v.appendBits(0xff7, 12);
     expect(12, v.size);
     expect(0xff700000, getUnsignedInt(v));
   });
 
   test('testNumBytes', () {
-    BitArray v = new BitArray();
+    BitArray v = BitArray();
     expect(0, v.sizeInBytes);
     v.appendBit(false);
     // 1 bit was added in the vector, so 1 byte should be consumed.
@@ -107,9 +105,9 @@ void main() {
   });
 
   test('testAppendBitVector', () {
-    BitArray v1 = new BitArray();
+    BitArray v1 = BitArray();
     v1.appendBits(0xbe, 8);
-    BitArray v2 = new BitArray();
+    BitArray v2 = BitArray();
     v2.appendBits(0xef, 8);
     v1.appendBitArray(v2);
     // beef = 1011 1110 1110 1111
@@ -117,25 +115,25 @@ void main() {
   });
 
   test('testXOR', () {
-    BitArray v1 = new BitArray();
+    BitArray v1 = BitArray();
     v1.appendBits(0x5555aaaa, 32);
-    BitArray v2 = new BitArray();
+    BitArray v2 = BitArray();
     v2.appendBits(0xaaaa5555, 32);
     v1.xor(v2);
     expect(0xffffffff, getUnsignedInt(v1));
   });
 
   test('testXOR2', () {
-    BitArray v1 = new BitArray();
+    BitArray v1 = BitArray();
     v1.appendBits(0x2a, 7); // 010 1010
-    BitArray v2 = new BitArray();
+    BitArray v2 = BitArray();
     v2.appendBits(0x55, 7); // 101 0101
     v1.xor(v2);
     expect(0xfe000000, getUnsignedInt(v1)); // 1111 1110
   });
 
   test('testAt', () {
-    BitArray v = new BitArray();
+    BitArray v = BitArray();
     v.appendBits(0xdead, 16); // 1101 1110 1010 1101
     assert(v[0]);
     assert(v[1]);
@@ -159,7 +157,7 @@ void main() {
   });
 
   test('testToString', () {
-    BitArray v = new BitArray();
+    BitArray v = BitArray();
     v.appendBits(0xdead, 16); // 1101 1110 1010 1101
     expect(" XX.XXXX. X.X.XX.X", v.toString());
   });

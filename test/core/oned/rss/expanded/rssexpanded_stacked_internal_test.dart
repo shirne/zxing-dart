@@ -24,11 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -38,19 +33,20 @@ import 'package:zxing_lib/zxing.dart';
 import 'test_case_util.dart';
 
 /// Tests [RSSExpandedReader] handling of stacked RSS barcodes.
-void main(){
+void main() {
+  test('testDecodingRowByRow', () async {
+    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
 
-  test('testDecodingRowByRow', () async{
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
-
-    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
+    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
+        "test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     int firstRowNumber = binaryMap.height ~/ 3;
     BitArray firstRow = binaryMap.getBlackRow(firstRowNumber, null);
     try {
       rssExpandedReader.decodeRow2pairs(firstRowNumber, firstRow);
-      fail( "NotFoundException expected");
-    } catch ( _) { // NotFoundException
+      fail("NotFoundException expected");
+    } catch (_) {
+      // NotFoundException
       // ok
     }
 
@@ -66,20 +62,20 @@ void main(){
     BitArray secondRow = binaryMap.getBlackRow(secondRowNumber, null);
     secondRow.reverse();
 
-    List<ExpandedPair> totalPairs = rssExpandedReader.decodeRow2pairs(secondRowNumber, secondRow);
+    List<ExpandedPair> totalPairs =
+        rssExpandedReader.decodeRow2pairs(secondRowNumber, secondRow);
 
     Result result = RSSExpandedReader.constructResult(totalPairs);
     expect("(01)98898765432106(3202)012345(15)991231", result.text);
   });
 
-  test('testCompleteDecode', () async{
-    OneDReader rssExpandedReader = new RSSExpandedReader();
+  test('testCompleteDecode', () async {
+    OneDReader rssExpandedReader = RSSExpandedReader();
 
-    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap("test/resources/blackbox/rssexpandedstacked-2/1000.png");
+    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
+        "test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     Result result = rssExpandedReader.decode(binaryMap);
     expect("(01)98898765432106(3202)012345(15)991231", result.text);
   });
-
-
 }

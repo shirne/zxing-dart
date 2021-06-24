@@ -36,8 +36,8 @@ void main() {
       COLS * ROWS, (index) => index < YUV.length ? YUV[index] : 0);
 
   test('testNoCrop', () {
-    PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(
-        Int8List.fromList(YUV), COLS, ROWS);
+    PlanarYUVLuminanceSource source =
+        PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS);
     assertListEquals(Y, 0, source.matrix, 0, Y.length);
     for (int r = 0; r < ROWS; r++) {
       assertListEquals(Y, r * COLS, source.getRow(r, null), 0, COLS);
@@ -45,21 +45,24 @@ void main() {
   });
 
   test('testCrop', () {
-    PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
-        Int8List.fromList(YUV), COLS, ROWS, left:1, top:1, width:COLS - 2, height:ROWS - 2);
+    PlanarYUVLuminanceSource source = PlanarYUVLuminanceSource(
+        Int8List.fromList(YUV), COLS, ROWS,
+        left: 1, top: 1, width: COLS - 2, height: ROWS - 2);
     expect(source.isCropSupported, true);
     Int8List cropMatrix = source.matrix;
     for (int r = 0; r < ROWS - 2; r++) {
-      assertListEquals(Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
+      assertListEquals(
+          Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
     }
     for (int r = 0; r < ROWS - 2; r++) {
-      assertListEquals(Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS - 2);
+      assertListEquals(
+          Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS - 2);
     }
   });
 
   test('testThumbnail', () {
-    PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
-        Int8List.fromList(YUV), COLS, ROWS);
+    PlanarYUVLuminanceSource source =
+        PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS);
     expect(source.renderThumbnail(), [
       0xFF000000,
       0xFF010101,
@@ -69,12 +72,10 @@ void main() {
       0xFFFDFDFD
     ]);
   });
-
-
 }
 
-void assertListEquals(List<int> expected, int expectedFrom,
-    Int8List actual, int actualFrom, int length) {
+void assertListEquals(List<int> expected, int expectedFrom, Int8List actual,
+    int actualFrom, int length) {
   for (int i = 0; i < length; i++) {
     expect(actual[actualFrom + i], expected[expectedFrom + i]);
   }

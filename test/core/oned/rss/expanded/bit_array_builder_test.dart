@@ -24,19 +24,12 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 
-
-
-void main(){
-
-
+void main() {
   BitArray buildBitArray(List<List<int>> pairValues) {
     List<ExpandedPair> pairs = [];
     for (int i = 0; i < pairValues.length; ++i) {
@@ -46,25 +39,24 @@ void main(){
       if (i == 0) {
         leftChar = null;
       } else {
-        leftChar = new DataCharacter(pair[0], 0);
+        leftChar = DataCharacter(pair[0], 0);
       }
 
       DataCharacter? rightChar;
       if (i == 0) {
-        rightChar = new DataCharacter(pair[0], 0);
+        rightChar = DataCharacter(pair[0], 0);
       } else if (pair.length == 2) {
-        rightChar = new DataCharacter(pair[1], 0);
+        rightChar = DataCharacter(pair[1], 0);
       } else {
         rightChar = null;
       }
 
-      ExpandedPair expandedPair = new ExpandedPair(leftChar, rightChar, null);
+      ExpandedPair expandedPair = ExpandedPair(leftChar, rightChar, null);
       pairs.add(expandedPair);
     }
 
     return BitArrayBuilder.buildBitArray(pairs);
   }
-
 
   void checkBinary(List<List<int>> pairValues, String expected) {
     BitArray binary = buildBitArray(pairValues);
@@ -72,12 +64,13 @@ void main(){
   }
 
   test('testBuildBitArray1', () {
-    List<List<int>> pairValues = [[19], [673, 16]];
+    List<List<int>> pairValues = [
+      [19],
+      [673, 16]
+    ];
 
     String expected = " .......X ..XX..X. X.X....X .......X ....";
 
     checkBinary(pairValues, expected);
   });
-
-
 }

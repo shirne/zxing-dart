@@ -29,7 +29,6 @@ void main() {
   ]);
 
   test('testCrop', () {
-
     expect(source.isCropSupported, true);
     LuminanceSource cropped = source.crop(1, 1, 1, 1);
     expect(cropped.height, 1);
@@ -38,10 +37,10 @@ void main() {
   });
 
   test('testMatrix', () {
-    expect(source.matrix, [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
+    expect(source.matrix,
+        [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
     LuminanceSource croppedFullWidth = source.crop(0, 1, 3, 2);
-    expect(croppedFullWidth.matrix,
-        [0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
+    expect(croppedFullWidth.matrix, [0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
     LuminanceSource croppedCorner = source.crop(1, 1, 2, 2);
     expect(croppedCorner.matrix, [0x7F, 0x3F, 0x7F, 0x3F]);
   });

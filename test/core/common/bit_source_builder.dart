@@ -16,11 +16,9 @@
 
 import 'dart:typed_data';
 
-
 /// Class that lets one easily build an array of bytes by appending bits at a time.
 ///
 class BitSourceBuilder {
-
   final BytesBuilder output = BytesBuilder();
   int nextByte = 0;
   int bitsLeftInNextByte = 8;
@@ -53,5 +51,4 @@ class BitSourceBuilder {
     }
     return output.takeBytes();
   }
-
 }

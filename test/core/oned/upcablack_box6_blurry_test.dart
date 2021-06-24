@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -23,13 +21,12 @@ import '../common/abstract_black_box.dart';
 
 /// A set of blurry images taken with a fixed-focus device.
 
-void main(){
-
+void main() {
   test('UPCABlackBox6BlurryTestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/upca-6", new MultiFormatReader(), BarcodeFormat.UPC_A)
-    ..addTest(0, 0, 0.0)
-    ..addTest(0, 0, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/upca-6",
+        MultiFormatReader(), BarcodeFormat.UPC_A)
+      ..addTest(0, 0, 0.0)
+      ..addTest(0, 0, 180.0)
+      ..testBlackBox();
   });
-
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
@@ -22,33 +21,29 @@ import '../../utils.dart';
 import 'debug_placement.dart';
 
 /// Tests the DataMatrix placement algorithm.
-void main(){
-
-
-
+void main() {
   test('testPlacement', () {
-    String codewords = unVisualize("66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"); //"AIMAIM" encoded
-    DebugPlacement placement = new DebugPlacement(codewords, 12, 12);
+    String codewords = unVisualize(
+        "66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"); //"AIMAIM" encoded
+    DebugPlacement placement = DebugPlacement(codewords, 12, 12);
     placement.place();
-    List<String> expected =
-        ["011100001111",
-        "001010101000",
-        "010001010100",
-        "001010100010",
-        "000111000100",
-        "011000010100",
-        "000100001101",
-        "011000010000",
-        "001100001101",
-        "100010010111",
-        "011101011010",
-        "001011001010"];
+    List<String> expected = [
+      "011100001111",
+      "001010101000",
+      "010001010100",
+      "001010100010",
+      "000111000100",
+      "011000010100",
+      "000100001101",
+      "011000010000",
+      "001100001101",
+      "100010010111",
+      "011101011010",
+      "001011001010"
+    ];
     List<String> actual = placement.toBitFieldStringArray();
     for (int i = 0; i < actual.length; i++) {
-      expect(expected[i], actual[i], reason:"Row $i");
+      expect(expected[i], actual[i], reason: "Row $i");
     }
   });
-
-
-
 }

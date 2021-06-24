@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('EAN13BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/ean13-1", new MultiFormatReader(), BarcodeFormat.EAN_13)
-    ..addTest(30, 32, 0.0)
-    ..addTest(27, 32, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/ean13-1",
+        MultiFormatReader(), BarcodeFormat.EAN_13)
+      ..addTest(30, 32, 0.0)
+      ..addTest(27, 32, 180.0)
+      ..testBlackBox();
   });
-
 }

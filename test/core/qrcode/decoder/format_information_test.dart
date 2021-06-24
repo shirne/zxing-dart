@@ -18,8 +18,7 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-void main(){
+void main() {
   const int MASKED_TEST_FORMAT_INFO = 0x2BED;
   const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
 
@@ -61,7 +60,8 @@ void main(){
         FormatInformation.decodeFormatInformation(
             MASKED_TEST_FORMAT_INFO ^ 0x07, MASKED_TEST_FORMAT_INFO ^ 0x07));
     assert(FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F) == null);
+            MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F) ==
+        null);
   });
 
   test('testDecodeWithMisread', () {

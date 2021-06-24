@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
 import 'dart:io';
 
 import 'package:image/image.dart';
@@ -37,35 +36,41 @@ import 'package:zxing_lib/zxing.dart';
 import '../../../buffered_image_luminance_source.dart';
 import '../../../common/abstract_black_box.dart';
 
-void main(){
-
-
+void main() {
   Image readImage(String fileName) {
-    File path = File( AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path +'/'+ fileName);
+    File path = File(AbstractBlackBoxTestCase.buildTestBase(
+                "test/resources/blackbox/rssexpanded-1/")
+            .path +
+        '/' +
+        fileName);
     return decodeImage(path.readAsBytesSync())!;
   }
 
-  test('testFindFinderPatterns', () async{
+  test('testFindFinderPatterns', () async {
     Image image = readImage("2.png");
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(
+        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
     List<ExpandedPair> previousPairs = [];
 
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
-    ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+    ExpandedPair pair1 =
+        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair1);
     FinderPattern finderPattern = pair1.finderPattern!;
     //assertNotNull(finderPattern);
     expect(0, finderPattern.value);
 
-    ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    ExpandedPair pair2 =
+        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair2);
     finderPattern = pair2.finderPattern!;
     //assertNotNull(finderPattern);
     expect(1, finderPattern.value);
 
-    ExpandedPair pair3 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    ExpandedPair pair3 =
+        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair3);
     finderPattern = pair3.finderPattern!;
     //assertNotNull(finderPattern);
@@ -74,62 +79,72 @@ void main(){
     try {
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
-      fail( "NotFoundException expected");
-    } on NotFoundException catch ( _) {
+      fail("NotFoundException expected");
+    } on NotFoundException catch (_) {
       // ok
     }
   });
 
-  test('testRetrieveNextPairPatterns', () async{
+  test('testRetrieveNextPairPatterns', () async {
     Image image = readImage("3.png");
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(
+        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
     List<ExpandedPair> previousPairs = [];
 
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
-    ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+    ExpandedPair pair1 =
+        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair1);
     FinderPattern finderPattern = pair1.finderPattern!;
     //assertNotNull(finderPattern);
     expect(0, finderPattern.value);
 
-    ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    ExpandedPair pair2 =
+        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair2);
     finderPattern = pair2.finderPattern!;
     //assertNotNull(finderPattern);
     expect(0, finderPattern.value);
   });
 
-  test('testDecodeCheckCharacter', () async{
+  test('testDecodeCheckCharacter', () async {
     Image image = readImage("3.png");
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(
+        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 
-    List<int> startEnd = [145, 243]; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    List<int> startEnd = [145, 243];
     int value = 0; // A
-    FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
+    FinderPattern finderPatternA1 = FinderPattern(
+        value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
     //{1, 8, 4, 1, 1};
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
-    DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
+    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+    DataCharacter dataCharacter =
+        rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
 
     expect(98, dataCharacter.value);
   });
 
-  test('testDecodeDataCharacter', () async{
+  test('testDecodeDataCharacter', () async {
     Image image = readImage("3.png");
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(
+        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 
-    List<int> startEnd = [145, 243]; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    List<int> startEnd = [145, 243];
     int value = 0; // A
-    FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
+    FinderPattern finderPatternA1 = FinderPattern(
+        value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
     //{1, 8, 4, 1, 1};
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
-    DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, false);
+    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+    DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(
+        row, finderPatternA1, true, false);
 
     expect(19, dataCharacter.value);
     expect(1007, dataCharacter.checksumPortion);
   });
-
 }

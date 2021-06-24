@@ -24,32 +24,27 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
-
-
-void main(){
-
+void main() {
   test('testRSSExpanded', () {
-    Map<String,String> uncommonAIs = {};
+    Map<String, String> uncommonAIs = {};
     uncommonAIs["123"] = "544654";
-    Result result =
-        new Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654", null, null, BarcodeFormat.RSS_EXPANDED);
-    ExpandedProductParsedResult o = new ExpandedProductResultParser().parse(result)!;
+    Result result = Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654",
+        null, null, BarcodeFormat.RSS_EXPANDED);
+    ExpandedProductParsedResult o =
+        ExpandedProductResultParser().parse(result)!;
     //assertNotNull(o);
     expect("66546", o.productID);
-    assert(o.sscc==null);
-    assert(o.lotNumber==null);
-    assert(o.productionDate==null);
+    assert(o.sscc == null);
+    assert(o.lotNumber == null);
+    assert(o.productionDate == null);
     expect("001205", o.packagingDate);
-    assert(o.bestBeforeDate==null);
-    assert(o.expirationDate==null);
+    assert(o.bestBeforeDate == null);
+    assert(o.expirationDate == null);
     expect("6544", o.weight);
     expect("KG", o.weightType);
     expect("2", o.weightIncrement);

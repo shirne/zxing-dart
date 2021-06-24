@@ -19,7 +19,6 @@ import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
 void main() {
   test('testMask0', () {
     testMaskAcrossDimensions(0, (i, j) => (i + j) % 2 == 0);
@@ -64,7 +63,7 @@ void testMaskAcrossDimensions(
 }
 
 void testMask(DataMask mask, int dimension, bool Function(int, int) condition) {
-  BitMatrix bits = new BitMatrix(dimension);
+  BitMatrix bits = BitMatrix(dimension);
   mask.unmaskBitMatrix(bits, dimension);
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-void main(){
-
+void main() {
   test('testForBits', () {
     expect(Mode.TERMINATOR, Mode.forBits(0x00));
     expect(Mode.NUMERIC, Mode.forBits(0x01));
@@ -35,19 +32,24 @@ void main(){
     try {
       Mode.forBits(0x10);
       assert(false);
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });
 
   test('testCharacterCount', () {
     // Spot check a few values
-    expect(10, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)));
-    expect(12, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)));
-    expect(14, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(40)));
-    expect(9, Mode.ALPHANUMERIC.getCharacterCountBits(Version.getVersionForNumber(6)));
+    expect(
+        10, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)));
+    expect(12,
+        Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)));
+    expect(14,
+        Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(40)));
+    expect(
+        9,
+        Mode.ALPHANUMERIC
+            .getCharacterCountBits(Version.getVersionForNumber(6)));
     expect(8, Mode.BYTE.getCharacterCountBits(Version.getVersionForNumber(7)));
     expect(8, Mode.KANJI.getCharacterCountBits(Version.getVersionForNumber(8)));
   });
-
 }

@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
-
+void main() {
   test('DataMatrixBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/datamatrix-1", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
-    ..addTest(21, 21, 0.0)
-    ..addTest(21, 21, 90.0)
-    ..addTest(21, 21, 180.0)
-    ..addTest(21, 21, 270.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/datamatrix-1",
+        MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+      ..addTest(21, 21, 0.0)
+      ..addTest(21, 21, 90.0)
+      ..addTest(21, 21, 180.0)
+      ..addTest(21, 21, 270.0)
+      ..testBlackBox();
   });
-
 }

@@ -24,14 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -39,16 +31,14 @@ import 'package:zxing_lib/oned.dart';
 
 import 'binary_util.dart';
 
+void main() {
+  test('testNoAi', () {
+    BitArray information = BinaryUtil.buildBitArrayFromString(
+        " .......X ..XX..X. X.X....X .......X ....");
 
-
-void main(){
-
-  test('testNoAi', (){
-    BitArray information = BinaryUtil.buildBitArrayFromString(" .......X ..XX..X. X.X....X .......X ....");
-
-    AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(information);
+    AbstractExpandedDecoder decoder =
+        AbstractExpandedDecoder.createDecoder(information);
     String decoded = decoder.parseInformation();
     expect("(10)12A", decoded);
   });
-
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -22,13 +21,12 @@ import '../common/abstract_black_box.dart';
 
 /// This is a set of mobile image taken at 480x360 with difficult lighting.
 ///
-void main(){
-
+void main() {
   test('EAN13BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/ean13-2", new MultiFormatReader(), BarcodeFormat.EAN_13)
-    ..addTest(12, 17, 0.0, 0, 1)
-    ..addTest(11, 17, 180.0, 0, 1)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/ean13-2",
+        MultiFormatReader(), BarcodeFormat.EAN_13)
+      ..addTest(12, 17, 0.0, 0, 1)
+      ..addTest(11, 17, 180.0, 0, 1)
+      ..testBlackBox();
   });
-
 }

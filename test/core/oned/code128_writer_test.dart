@@ -23,8 +23,7 @@ import 'package:zxing_lib/zxing.dart';
 import '../utils.dart';
 
 /// Tests [Code128Writer].
-void main(){
-
+void main() {
   const String FNC1 = "11110101110";
   const String FNC2 = "11110101000";
   const String FNC3 = "10111100010";
@@ -44,16 +43,15 @@ void main(){
 
   //@Before
   //void setUp() {
-  //  writer = new Code128Writer();
-  //  reader = new Code128Reader();
+  //  writer = Code128Writer();
+  //  reader = Code128Reader();
   //}
 
-
-  void testEncode(String toEncode, String expected){
+  void testEncode(String toEncode, String expected) {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual, reason:toEncode);
+    expect(expected, actual, reason: toEncode);
 
     BitArray row = result.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
@@ -61,10 +59,18 @@ void main(){
     expect(toEncode, actualRoundtripResultText);
   }
 
-  test('testEncodeWithFunc3', (){
+  test('testEncodeWithFunc3', () {
     String toEncode = "\u00f3" + "123";
     //                                                       "1"            "2"             "3"          check digit 51
-    String expected = QUIET_SPACE + START_CODE_B + FNC3 + "10011100110" + "11001110010" + "11001011100" + "11101000110" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE +
+        START_CODE_B +
+        FNC3 +
+        "10011100110" +
+        "11001110010" +
+        "11001011100" +
+        "11101000110" +
+        STOP +
+        QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -72,10 +78,18 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testEncodeWithFunc2', (){
+  test('testEncodeWithFunc2', () {
     String toEncode = "\u00f2" + "123";
     //                                                       "1"            "2"             "3"          check digit 56
-    String expected = QUIET_SPACE + START_CODE_B + FNC2 + "10011100110" + "11001110010" + "11001011100" + "11100010110" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE +
+        START_CODE_B +
+        FNC2 +
+        "10011100110" +
+        "11001110010" +
+        "11001011100" +
+        "11100010110" +
+        STOP +
+        QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -83,10 +97,18 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testEncodeWithFunc1', (){
+  test('testEncodeWithFunc1', () {
     String toEncode = "\u00f1" + "123";
     //                                                       "12"                           "3"          check digit 92
-    String expected = QUIET_SPACE + START_CODE_C + FNC1 + "10110011100" + SWITCH_CODE_B + "11001011100" + "10101111000" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE +
+        START_CODE_C +
+        FNC1 +
+        "10110011100" +
+        SWITCH_CODE_B +
+        "11001011100" +
+        "10101111000" +
+        STOP +
+        QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -94,7 +116,7 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testRoundtrip', (){
+  test('testRoundtrip', () {
     String toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
     String expected = "1095817160526";
 
@@ -105,10 +127,18 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testEncodeWithFunc4', (){
+  test('testEncodeWithFunc4', () {
     String toEncode = "\u00f4" + "123";
     //                                                       "1"            "2"             "3"          check digit 59
-    String expected = QUIET_SPACE + START_CODE_B + FNC4B + "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE +
+        START_CODE_B +
+        FNC4B +
+        "10011100110" +
+        "11001110010" +
+        "11001011100" +
+        "11100011010" +
+        STOP +
+        QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -116,10 +146,19 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testEncodeWithFncsAndNumberInCodesetA', (){
+  test('testEncodeWithFncsAndNumberInCodesetA', () {
     String toEncode = "\n" + "\u00f1" + "\u00f4" + "1" + "\n";
 
-    String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A + "10011100110" + LF + "10101111000" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE +
+        START_CODE_A +
+        LF +
+        FNC1 +
+        FNC4A +
+        "10011100110" +
+        LF +
+        "10101111000" +
+        STOP +
+        QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -128,14 +167,40 @@ void main(){
     expect(expected, actual);
   });
 
-  test('testEncodeSwitchBetweenCodesetsAAndB', (){
+  test('testEncodeSwitchBetweenCodesetsAAndB', () {
     // start with A switch to B and back to A
     //                                                      "\x00"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
-    testEncode("\x00ABab\u0010", QUIET_SPACE + START_CODE_A + "10100001100" + "10100011000" + "10001011000" + SWITCH_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
+    testEncode(
+        "\x00ABab\u0010",
+        QUIET_SPACE +
+            START_CODE_A +
+            "10100001100" +
+            "10100011000" +
+            "10001011000" +
+            SWITCH_CODE_B +
+            "10010110000" +
+            "10010000110" +
+            SWITCH_CODE_A +
+            "10100111100" +
+            "11001110100" +
+            STOP +
+            QUIET_SPACE);
 
     // start with B switch to A and back to B
     //                                                "a"             "b"             Switch to A     "\x00             "Switch to B"   "a"             "b"             check digit
-    testEncode("ab\x00ab", QUIET_SPACE + START_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B + "10010110000" + "10010000110" + "11010001110" + STOP + QUIET_SPACE);
+    testEncode(
+        "ab\x00ab",
+        QUIET_SPACE +
+            START_CODE_B +
+            "10010110000" +
+            "10010000110" +
+            SWITCH_CODE_A +
+            "10100001100" +
+            SWITCH_CODE_B +
+            "10010110000" +
+            "10010000110" +
+            "11010001110" +
+            STOP +
+            QUIET_SPACE);
   });
-
 }

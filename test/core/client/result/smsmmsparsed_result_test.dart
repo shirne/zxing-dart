@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
@@ -30,15 +23,10 @@ import '../../utils.dart';
 
 /// Tests [SMSParsedResult].
 ///
-void main(){
-
-  void doTest(String contents,
-      String number,
-      String? subject,
-      String? body,
-      String? via,
-      String parsedURI) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+void main() {
+  void doTest(String contents, String number, String? subject, String? body,
+      String? via, String parsedURI) {
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.SMS, result.type);
     SMSParsedResult smsResult = result as SMSParsedResult;
@@ -51,20 +39,17 @@ void main(){
 
   test('testSMS', () {
     doTest("sms:+15551212", "+15551212", null, null, null, "sms:+15551212");
-    doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null,
-           "sms:+15551212?body=bar&subject=foo");
+    doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar",
+        null, "sms:+15551212?body=bar&subject=foo");
     doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333",
-           "sms:+15551212;via=999333");
+        "sms:+15551212;via=999333");
   });
 
   test('testMMS', () {
     doTest("mms:+15551212", "+15551212", null, null, null, "sms:+15551212");
-    doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null,
-           "sms:+15551212?body=bar&subject=foo");
+    doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar",
+        null, "sms:+15551212?body=bar&subject=foo");
     doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333",
-           "sms:+15551212;via=999333");
+        "sms:+15551212;via=999333");
   });
-
-
-
 }

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-void main(){
-
+void main() {
   test('testForBits', () {
     expect(ErrorCorrectionLevel.M, ErrorCorrectionLevel.values[0]);
     expect(ErrorCorrectionLevel.L, ErrorCorrectionLevel.values[1]);
@@ -33,9 +30,8 @@ void main(){
   test('testBadECLevel', () {
     try {
       ErrorCorrectionLevel.values[4];
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });
-
 }

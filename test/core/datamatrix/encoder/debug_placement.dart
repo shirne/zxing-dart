@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-
 import 'package:zxing_lib/datamatrix.dart';
 
 class DebugPlacement extends DefaultPlacement {
-
-  DebugPlacement(String codewords, int numcols, int numrows):super(codewords, numcols, numrows);
+  DebugPlacement(String codewords, int numcols, int numrows)
+      : super(codewords, numcols, numrows);
 
   List<String> toBitFieldStringArray() {
     List<String> array = List.filled(numRows, '');
     int startPos = 0;
     for (int row = 0; row < numRows; row++) {
-      StringBuffer sb = new StringBuffer();
+      StringBuffer sb = StringBuffer();
       for (int i = 0; i < numCols; i++) {
         sb.write(bits[startPos + i] == 1 ? '1' : '0');
       }
@@ -34,5 +33,4 @@ class DebugPlacement extends DefaultPlacement {
     }
     return array;
   }
-
 }

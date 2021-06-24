@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
@@ -22,19 +21,16 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [ISBNParsedResult].
 ///
-void main(){
-
+void main() {
   void doTest(String contents) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.EAN_13);
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.EAN_13);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.ISBN, result.type);
     ISBNParsedResult isbnResult = result as ISBNParsedResult;
     expect(contents, isbnResult.isbn);
   }
+
   test('testISBN', () {
     doTest("9784567890123");
   });
-
-
-
 }

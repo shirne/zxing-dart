@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('Code39ExtendedBlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/code39-2", new Code39Reader(false, true), BarcodeFormat.CODE_39)
-    ..addTest(2, 2, 0.0)
-    ..addTest(2, 2, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/code39-2",
+        Code39Reader(false, true), BarcodeFormat.CODE_39)
+      ..addTest(2, 2, 0.0)
+      ..addTest(2, 2, 180.0)
+      ..testBlackBox();
   });
-
 }

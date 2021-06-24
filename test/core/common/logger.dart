@@ -1,6 +1,5 @@
-
 /// A simple logger
-class Logger{
+class Logger {
   final String prefix;
   static const _logTypes = {
     LoggerType.fine: 'FINE',
@@ -11,35 +10,30 @@ class Logger{
 
   Logger([this.prefix = '']);
 
-  void fine(Object message){
+  void fine(Object message) {
     record(message, LoggerType.fine);
   }
 
-  void info(Object message){
+  void info(Object message) {
     record(message, LoggerType.info);
   }
 
-  void error(Object message){
+  void error(Object message) {
     record(message, LoggerType.error);
   }
 
-  void warning(Object message){
+  void warning(Object message) {
     record(message, LoggerType.warning);
   }
 
-  void record(Object message, [LoggerType type = LoggerType.info]){
+  void record(Object message, [LoggerType type = LoggerType.info]) {
     print("[${_logTypes[type]}] $prefix $message");
   }
 
   static var _loggers = <Type, Logger>{};
-  static Logger getLogger(Type belong){
+  static Logger getLogger(Type belong) {
     return _loggers.putIfAbsent(belong, () => Logger());
   }
 }
 
-enum LoggerType{
-  fine,
-  info,
-  warning,
-  error
-}
+enum LoggerType { fine, info, warning, error }

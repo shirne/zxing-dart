@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('UPCABlackBox5TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/upca-5", new MultiFormatReader(), BarcodeFormat.UPC_A)
-    ..addTest(20, 23, 0.0, 0, 0)
-    ..addTest(22, 23, 180.0, 0, 0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/upca-5",
+        MultiFormatReader(), BarcodeFormat.UPC_A)
+      ..addTest(20, 23, 0.0, 0, 0)
+      ..addTest(22, 23, 180.0, 0, 0)
+      ..testBlackBox();
   });
-
 }

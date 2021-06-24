@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -24,7 +23,7 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('PDF417BlackBox3TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/pdf417-3",
-        new MultiFormatReader(), BarcodeFormat.PDF_417)
+        MultiFormatReader(), BarcodeFormat.PDF_417)
       ..addTest(19, 19, 0.0, 0, 0)
       ..addTest(19, 19, 180.0, 0, 0)
       ..testBlackBox();

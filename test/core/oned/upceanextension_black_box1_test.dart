@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('UPCEANExtensionBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/upcean-extension-1", MultiFormatReader(), BarcodeFormat.EAN_13)
-    ..addTest(2, 2, 0.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/upcean-extension-1",
+        MultiFormatReader(), BarcodeFormat.EAN_13)
+      ..addTest(2, 2, 0.0)
+      ..testBlackBox();
   });
-
 }

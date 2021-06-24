@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-void main(){
-
+void main() {
   test('test', () {
-
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
-    QRCode qrCode = new QRCode(
-      mode: Mode.BYTE,
-      ecLevel: ErrorCorrectionLevel.H,
-      version: Version.getVersionForNumber(7),
-      maskPattern: 3
-    );
-
+    QRCode qrCode = QRCode(
+        mode: Mode.BYTE,
+        ecLevel: ErrorCorrectionLevel.H,
+        version: Version.getVersionForNumber(7),
+        maskPattern: 3);
 
     expect(Mode.BYTE, qrCode.mode);
     expect(ErrorCorrectionLevel.H, qrCode.ecLevel);
@@ -41,7 +34,7 @@ void main(){
     expect(3, qrCode.maskPattern);
 
     // Prepare the matrix.
-    ByteMatrix matrix = new ByteMatrix(45, 45);
+    ByteMatrix matrix = ByteMatrix(45, 45);
     // Just set bogus zero/one values.
     for (int y = 0; y < 45; ++y) {
       for (int x = 0; x < 45; ++x) {
@@ -55,26 +48,24 @@ void main(){
   });
 
   test('testToString1', () {
-    QRCode qrCode = new QRCode();
-    String expected =
-      "<<\n" +
-      " mode: null\n" +
-      " ecLevel: null\n" +
-      " version: null\n" +
-      " maskPattern: -1\n" +
-      " matrix: null\n" +
-      ">>\n";
+    QRCode qrCode = QRCode();
+    String expected = "<<\n" +
+        " mode: null\n" +
+        " ecLevel: null\n" +
+        " version: null\n" +
+        " maskPattern: -1\n" +
+        " matrix: null\n" +
+        ">>\n";
     expect(expected, qrCode.toString());
   });
 
   test('testToString2', () {
-    QRCode qrCode = new QRCode(
-      mode: Mode.BYTE,
-      ecLevel: ErrorCorrectionLevel.H,
-      version: Version.getVersionForNumber(1),
-      maskPattern: 3
-    );
-    ByteMatrix matrix = new ByteMatrix(21, 21);
+    QRCode qrCode = QRCode(
+        mode: Mode.BYTE,
+        ecLevel: ErrorCorrectionLevel.H,
+        version: Version.getVersionForNumber(1),
+        maskPattern: 3);
+    ByteMatrix matrix = ByteMatrix(21, 21);
     for (int y = 0; y < 21; ++y) {
       for (int x = 0; x < 21; ++x) {
         matrix.set(x, y, (y + x) % 2);
@@ -118,5 +109,4 @@ void main(){
     assert(QRCode.isValidMaskPattern(7));
     assert(!QRCode.isValidMaskPattern(8));
   });
-
 }

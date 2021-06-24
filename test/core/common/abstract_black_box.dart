@@ -26,8 +26,6 @@ import 'logger.dart';
 import 'properties.dart';
 import 'test_result.dart';
 
-
-
 class AbstractBlackBoxTestCase {
   static final Logger _log = Logger.getLogger(AbstractBlackBoxTestCase);
 
@@ -100,7 +98,8 @@ class AbstractBlackBoxTestCase {
         LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
         BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
         try {
-          if (_decode(bitmap, rotation, expectedText, expectedMetadata.properties,
+          if (_decode(
+              bitmap, rotation, expectedText, expectedMetadata.properties,
               filename: fileBaseName)) {
             passedCounts[x]++;
           } else {
@@ -110,8 +109,9 @@ class AbstractBlackBoxTestCase {
           _log.fine("could not read $fileBaseName at rotation $rotation");
         }
         try {
-          if (_decode(bitmap, rotation, expectedText, expectedMetadata.properties,
-              tryHarder: true,filename: fileBaseName)) {
+          if (_decode(
+              bitmap, rotation, expectedText, expectedMetadata.properties,
+              tryHarder: true, filename: fileBaseName)) {
             tryHarderCounts[x]++;
           } else {
             tryHarderMisreadCounts[x]++;
@@ -215,7 +215,8 @@ class AbstractBlackBoxTestCase {
   Reader? get reader => _barcodeReader;
 
   bool _decode(BinaryBitmap source, double rotation, String expectedText,
-      Map<Object, Object> expectedMetadata,{ bool tryHarder = false, filename = ''}) {
+      Map<Object, Object> expectedMetadata,
+      {bool tryHarder = false, filename = ''}) {
     String suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
 
     var hints = Map<DecodeHintType, Object>.from(_hints);
@@ -251,8 +252,7 @@ class AbstractBlackBoxTestCase {
       return false;
     }
 
-    Map<ResultMetadataType, Object>? resultMetadata =
-        result.resultMetadata;
+    Map<ResultMetadataType, Object>? resultMetadata = result.resultMetadata;
     for (MapEntry metadatum in expectedMetadata.entries) {
       ResultMetadataType key = string2RMType(metadatum.key)!;
       Object expectedValue = metadatum.value;
@@ -267,9 +267,9 @@ class AbstractBlackBoxTestCase {
     return true;
   }
 
-  ResultMetadataType? string2RMType(String type){
-    for(ResultMetadataType rType in ResultMetadataType.values){
-      if(rType.toString().replaceFirst('ResultMetadataType.', '') == type){
+  ResultMetadataType? string2RMType(String type) {
+    for (ResultMetadataType rType in ResultMetadataType.values) {
+      if (rType.toString().replaceFirst('ResultMetadataType.', '') == type) {
         return rType;
       }
     }
@@ -293,9 +293,9 @@ class AbstractBlackBoxTestCase {
     //double radians = Math.pi * 2 * (degrees / 360);
 
     // Transform simply to find out the new bounding box (don't actually run the image through it)
-    //AffineTransform at = new AffineTransform();
+    //AffineTransform at = AffineTransform();
     //at.rotate(radians, original.width / 2.0, original.height / 2.0);
-    //BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+    //BufferedImageOp op = AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
     //original.rotate(radians);
 
@@ -305,13 +305,13 @@ class AbstractBlackBoxTestCase {
 
     // Real transform, now that we know the size of the new image and how to translate after we rotate
     // to keep it centered
-    //at = new AffineTransform();
+    //at = AffineTransform();
     //at.rotate(radians, width / 2.0, height / 2.0);
     //at.translate((width - original.width) / 2.0,
     //             (height - original.height) / 2.0);
-    //op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+    //op = AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
-    //return op.filter(original, new BufferedImage(width, height, original.getType()));
+    //return op.filter(original, BufferedImage(width, height, original.getType()));
 
     return copyRotate(original, degrees, interpolation: Interpolation.linear);
   }

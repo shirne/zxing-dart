@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('QRCodeBlackBox3TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-3", new MultiFormatReader(), BarcodeFormat.QR_CODE)
-    ..addTest(38, 38, 0.0)
-    ..addTest(39, 39, 90.0)
-    ..addTest(36, 36, 180.0)
-    ..addTest(39, 39, 270.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-3",
+        MultiFormatReader(), BarcodeFormat.QR_CODE)
+      ..addTest(38, 38, 0.0)
+      ..addTest(39, 39, 90.0)
+      ..addTest(36, 36, 180.0)
+      ..addTest(39, 39, 270.0)
+      ..testBlackBox();
   });
-
 }

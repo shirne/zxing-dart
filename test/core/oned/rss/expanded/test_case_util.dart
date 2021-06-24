@@ -24,8 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
-
 import 'dart:io';
 
 import 'package:image/image.dart';
@@ -35,20 +33,18 @@ import 'package:zxing_lib/zxing.dart';
 import '../../../buffered_image_luminance_source.dart';
 
 class TestCaseUtil {
-
   TestCaseUtil();
 
-  static Image getImage(String path){
-
+  static Image getImage(String path) {
     File file = File(path);
 
     return decodeImage(file.readAsBytesSync())!;
   }
 
-  static BinaryBitmap getBinaryBitmap(String path){
+  static BinaryBitmap getBinaryBitmap(String path) {
     Image bufferedImage = getImage(path);
-    BufferedImageLuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
+    BufferedImageLuminanceSource luminanceSource =
+        BufferedImageLuminanceSource(bufferedImage);
     return BinaryBitmap(GlobalHistogramBinarizer(luminanceSource));
   }
-
 }

@@ -24,11 +24,8 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../../utils.dart';
 
-
-
 /// Tests [Decoder].
-void main(){
-
+void main() {
   final List<ResultPoint> noPoints = [];
 
   final RegExp dotX = RegExp("[^.X]");
@@ -39,7 +36,7 @@ void main(){
   }
 
   BitArray toBitArray(String bits) {
-    BitArray inBit = new BitArray();
+    BitArray inBit = BitArray();
     List<String> str = bits.replaceAll(dotX, "").split('');
     for (String aStr in str) {
       inBit.appendBit(aStr == 'X');
@@ -55,188 +52,203 @@ void main(){
     return result;
   }
 
-  void testHighLevelDecodeString(String expectedString, String b){
+  void testHighLevelDecodeString(String expectedString, String b) {
     BitArray bits = toBitArray(stripSpace(b));
-    expect(expectedString, Decoder.highLevelDecode(toBooleanArray(bits)), reason: "highLevelDecode() failed for input bits: $b");
+    expect(expectedString, Decoder.highLevelDecode(toBooleanArray(bits)),
+        reason: "highLevelDecode() failed for input bits: $b");
   }
 
-  test('testHighLevelDecode', (){
-      // no ECI codes
-      testHighLevelDecodeString("A. b.",
-          // 'A'  P/S   '. ' L/L    b    D/L    '.'
-          "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
+  test('testHighLevelDecode', () {
+    // no ECI codes
+    testHighLevelDecodeString(
+        "A. b.",
+        // 'A'  P/S   '. ' L/L    b    D/L    '.'
+        "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
 
-      // initial ECI code 26 (switch to UTF-8)
-      testHighLevelDecodeString("Ça",
-          // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-          "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+    // initial ECI code 26 (switch to UTF-8)
+    testHighLevelDecodeString(
+        "Ça",
+        // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+        "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
 
-      // initial character without ECI (must be interpreted as ISO_8859_1)
-      // followed by ECI code 26 (= UTF-8) and UTF-8 text
-      testHighLevelDecodeString("±Ça",
-         // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-         "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+    // initial character without ECI (must be interpreted as ISO_8859_1)
+    // followed by ECI code 26 (= UTF-8) and UTF-8 text
+    testHighLevelDecodeString(
+        "±Ça",
+        // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+        "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
   });
 
-  test('testAztecResult', (){
+  test('testAztecResult', () {
     BitMatrix matrix = BitMatrix.parse(
         "X X X X X     X X X       X X X     X X X     \n" +
-        "X X X     X X X     X X X X     X X X     X X \n" +
-        "  X   X X       X   X   X X X X     X     X X \n" +
-        "  X   X X     X X     X     X   X       X   X \n" +
-        "  X X   X X         X               X X     X \n" +
-        "  X X   X X X X X X X X X X X X X X X     X   \n" +
-        "  X X X X X                       X   X X X   \n" +
-        "  X   X   X   X X X X X X X X X   X X X   X X \n" +
-        "  X   X X X   X               X   X X       X \n" +
-        "  X X   X X   X   X X X X X   X   X X X X   X \n" +
-        "  X X   X X   X   X       X   X   X   X X X   \n" +
-        "  X   X   X   X   X   X   X   X   X   X   X   \n" +
-        "  X X X   X   X   X       X   X   X X   X X   \n" +
-        "  X X X X X   X   X X X X X   X   X X X   X X \n" +
-        "X X   X X X   X               X   X   X X   X \n" +
-        "  X       X   X X X X X X X X X   X   X     X \n" +
-        "  X X   X X                       X X   X X   \n" +
-        "  X X X   X X X X X X X X X X X X X X   X X   \n" +
-        "X     X     X     X X   X X               X X \n" +
-        "X   X X X X X   X X X X X     X   X   X     X \n" +
-        "X X X   X X X X           X X X       X     X \n" +
-        "X X     X X X     X X X X     X X X     X X   \n" +
-        "    X X X     X X X       X X X     X X X X   \n",
-        "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, false, 30, 2);
-    DecoderResult result = new Decoder().decode(r);
+            "X X X     X X X     X X X X     X X X     X X \n" +
+            "  X   X X       X   X   X X X X     X     X X \n" +
+            "  X   X X     X X     X     X   X       X   X \n" +
+            "  X X   X X         X               X X     X \n" +
+            "  X X   X X X X X X X X X X X X X X X     X   \n" +
+            "  X X X X X                       X   X X X   \n" +
+            "  X   X   X   X X X X X X X X X   X X X   X X \n" +
+            "  X   X X X   X               X   X X       X \n" +
+            "  X X   X X   X   X X X X X   X   X X X X   X \n" +
+            "  X X   X X   X   X       X   X   X   X X X   \n" +
+            "  X   X   X   X   X   X   X   X   X   X   X   \n" +
+            "  X X X   X   X   X       X   X   X X   X X   \n" +
+            "  X X X X X   X   X X X X X   X   X X X   X X \n" +
+            "X X   X X X   X               X   X   X X   X \n" +
+            "  X       X   X X X X X X X X X   X   X     X \n" +
+            "  X X   X X                       X X   X X   \n" +
+            "  X X X   X X X X X X X X X X X X X X   X X   \n" +
+            "X     X     X     X X   X X               X X \n" +
+            "X   X X X X X   X X X X X     X   X   X     X \n" +
+            "X X X   X X X X           X X X       X     X \n" +
+            "X X     X X X     X X X X     X X X     X X   \n" +
+            "    X X X     X X X       X X X     X X X X   \n",
+        "X ",
+        "  ");
+    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, false, 30, 2);
+    DecoderResult result = Decoder().decode(r);
     expect(result.text, "88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
     assertArrayEquals(
-        Uint8List.fromList([-11, 85, 85, 117, 107, 90, -42, -75, -83, 107,
-            90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
-            90, -42, -80]),
+        Uint8List.fromList([
+          -11, 85, 85, 117, 107, 90, -42, -75, -83, 107, //
+          90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
+          90, -42, -80
+        ]),
         result.rawBytes);
     expect(result.numBits, 180);
   });
 
-  test('testAztecResultECI', (){
+  test('testAztecResultECI', () {
     BitMatrix matrix = BitMatrix.parse(
         "      X     X X X   X           X     \n" +
-        "    X X   X X   X X X X X X X   X     \n" +
-        "    X X                         X   X \n" +
-        "  X X X X X X X X X X X X X X X X X   \n" +
-        "      X                       X       \n" +
-        "      X   X X X X X X X X X   X   X   \n" +
-        "  X X X   X               X   X X X   \n" +
-        "  X   X   X   X X X X X   X   X X X   \n" +
-        "      X   X   X       X   X   X X X   \n" +
-        "  X   X   X   X   X   X   X   X   X   \n" +
-        "X   X X   X   X       X   X   X     X \n" +
-        "  X X X   X   X X X X X   X   X X     \n" +
-        "      X   X               X   X X   X \n" +
-        "      X   X X X X X X X X X   X   X X \n" +
-        "  X   X                       X       \n" +
-        "X X   X X X X X X X X X X X X X X X   \n" +
-        "X X     X   X         X X X       X X \n" +
-        "  X   X   X   X X X X X     X X   X   \n" +
-        "X     X       X X   X X X       X     \n",
-        "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, false, 15, 1);
-    DecoderResult result = new Decoder().decode(r);
+            "    X X   X X   X X X X X X X   X     \n" +
+            "    X X                         X   X \n" +
+            "  X X X X X X X X X X X X X X X X X   \n" +
+            "      X                       X       \n" +
+            "      X   X X X X X X X X X   X   X   \n" +
+            "  X X X   X               X   X X X   \n" +
+            "  X   X   X   X X X X X   X   X X X   \n" +
+            "      X   X   X       X   X   X X X   \n" +
+            "  X   X   X   X   X   X   X   X   X   \n" +
+            "X   X X   X   X       X   X   X     X \n" +
+            "  X X X   X   X X X X X   X   X X     \n" +
+            "      X   X               X   X X   X \n" +
+            "      X   X X X X X X X X X   X   X X \n" +
+            "  X   X                       X       \n" +
+            "X X   X X X X X X X X X X X X X X X   \n" +
+            "X X     X   X         X X X       X X \n" +
+            "  X   X   X   X X X X X     X X   X   \n" +
+            "X     X       X X   X X X       X     \n",
+        "X ",
+        "  ");
+    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, false, 15, 1);
+    DecoderResult result = Decoder().decode(r);
     expect(result.text, "Français");
   });
 
   //@Test(expected = FormatException.class)
-  test('testDecodeTooManyErrors', (){
-    BitMatrix matrix = BitMatrix.parse(""
-        + "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n"
-        + "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n"
-        + "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n"
-        + ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n"
-        + "X X X . . X X X X X . . . . . X X . . . X . X . X . X \n"
-        + "X X . . . . . . . . X . . . X . X X X . X . . X . . . \n"
-        + "X X . . X . . . . . X X . . . . . X . . . . X . . X X \n"
-        + ". . . X . X . X . . . . . X X X X X X . . . . . . X X \n"
-        + "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
-        + "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
-        + ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
-        + ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
-        + "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
-        + "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
-        + "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
-        + "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
-        + ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
-        + "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
-        + "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
-        + ". . . . X . X X X . . . . X X X X . . X X X X . . . . \n"
-        + ". . X . . X . X . . . X . X X . X X . X . . . X . X . \n"
-        + "X X . . X . . X X X X X X X . . X . X X X X X X X . . \n"
-        + "X . X X . . X X . . . . . X . . . . . . X X . X X X . \n"
-        + "X . . X X . . X X . X . X . . . . X . X . . X . . X . \n"
-        + "X . X . X . . X . X X X X X X X X . X X X X . . X X . \n"
-        + "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n"
-        + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
-        "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, true, 16, 4);
+  test('testDecodeTooManyErrors', () {
+    BitMatrix matrix = BitMatrix.parse(
+        "" +
+            "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n" +
+            "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n" +
+            "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n" +
+            ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n" +
+            "X X X . . X X X X X . . . . . X X . . . X . X . X . X \n" +
+            "X X . . . . . . . . X . . . X . X X X . X . . X . . . \n" +
+            "X X . . X . . . . . X X . . . . . X . . . . X . . X X \n" +
+            ". . . X . X . X . . . . . X X X X X X . . . . . . X X \n" +
+            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n" +
+            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n" +
+            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n" +
+            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n" +
+            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n" +
+            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n" +
+            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n" +
+            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n" +
+            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n" +
+            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n" +
+            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n" +
+            ". . . . X . X X X . . . . X X X X . . X X X X . . . . \n" +
+            ". . X . . X . X . . . X . X X . X X . X . . . X . X . \n" +
+            "X X . . X . . X X X X X X X . . X . X X X X X X X . . \n" +
+            "X . X X . . X X . . . . . X . . . . . . X X . X X X . \n" +
+            "X . . X X . . X X . X . X . . . . X . X . . X . . X . \n" +
+            "X . X . X . . X . X X X X X X X X . X X X X . . X X . \n" +
+            "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n" +
+            "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
+        "X ",
+        ". ");
+    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
-      new Decoder().decode(r);
+      Decoder().decode(r);
       fail('here should be FormatException');
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });
 
   //@Test(expected = FormatException.class)
-  test('testDecodeTooManyErrors2', (){
-    BitMatrix matrix = BitMatrix.parse(""
-        + ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n"
-        + "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n"
-        + ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n"
-        + "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n"
-        + "X X . X . . X . X X . . . . . X X . . . . . X . . . X \n"
-        + "X . . X . . . . . . X . . . X . X X X X X X X . . . X \n"
-        + "X . . X X . . X . . X X . . . . . X . . . . . X X X . \n"
-        + ". . X X X X . X . . . . . X X X X X X . . . . . . X X \n"
-        + "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
-        + "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
-        + ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
-        + ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
-        + "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
-        + "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
-        + "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
-        + "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
-        + ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
-        + "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
-        + "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
-        + ". . X X X X X . X . . . . X X X X . . X X X . X . X . \n"
-        + ". . X X . X . X . . . X . X X . X X . . . . X X . . . \n"
-        + "X . . . X . X . X X X X X X . . X . X X X X X . X . . \n"
-        + ". X . . . X X X . . . . . X . . . . . X X X X X . X . \n"
-        + "X . . X . X X X X . X . X . . . . X . X X . X . . X . \n"
-        + "X . . . X X . X . X X X X X X X X . X X X X . . X X . \n"
-        + ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n"
-        + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
-        "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, noPoints, true, 16, 4);
+  test('testDecodeTooManyErrors2', () {
+    BitMatrix matrix = BitMatrix.parse(
+        "" +
+            ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n" +
+            "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n" +
+            ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n" +
+            "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n" +
+            "X X . X . . X . X X . . . . . X X . . . . . X . . . X \n" +
+            "X . . X . . . . . . X . . . X . X X X X X X X . . . X \n" +
+            "X . . X X . . X . . X X . . . . . X . . . . . X X X . \n" +
+            ". . X X X X . X . . . . . X X X X X X . . . . . . X X \n" +
+            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n" +
+            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n" +
+            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n" +
+            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n" +
+            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n" +
+            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n" +
+            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n" +
+            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n" +
+            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n" +
+            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n" +
+            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n" +
+            ". . X X X X X . X . . . . X X X X . . X X X . X . X . \n" +
+            ". . X X . X . X . . . X . X X . X X . . . . X X . . . \n" +
+            "X . . . X . X . X X X X X X . . X . X X X X X . X . . \n" +
+            ". X . . . X X X . . . . . X . . . . . X X X X X . X . \n" +
+            "X . . X . X X X X . X . X . . . . X . X X . X . . X . \n" +
+            "X . . . X X . X . X X X X X X X X . X X X X . . X X . \n" +
+            ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n" +
+            "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
+        "X ",
+        ". ");
+    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
-      new Decoder().decode(r);
+      Decoder().decode(r);
       fail('here should be FormatException');
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });
 
   test('testRawBytes', () {
     List<bool> bool0 = [];
-    List<bool> bool1 = [true] ;
-    List<bool> bool7 = [true, false, true, false, true, false, true ];
-    List<bool> bool8 = [true, false, true, false, true, false, true, false ];
-    List<bool> bool9 = [true, false, true, false, true, false, true, false,
-                        true ];
-    List<bool> bool16 = [false, true, true, false, false, false, true, true,
-                         true, true, false, false, false, false, false, true ];
+    List<bool> bool1 = [true];
+    List<bool> bool7 = [true, false, true, false, true, false, true];
+    List<bool> bool8 = [true, false, true, false, true, false, true, false];
+    List<bool> bool9 = [
+      true, false, true, false, true, false, true, false, true //
+    ];
+    List<bool> bool16 = [
+      false, true, true, false, false, false, true, true, true, //
+      true, false, false, false, false, false, true
+    ];
     Uint8List byte0 = Uint8List.fromList([]);
-    Uint8List byte1 = Uint8List.fromList([ -128 ]);
-    Uint8List byte7 = Uint8List.fromList([ -86 ]);
-    Uint8List byte8 = Uint8List.fromList([ -86 ]);
-    Uint8List byte9 = Uint8List.fromList([ -86, -128 ]);
-    Uint8List byte16 = Uint8List.fromList([ 99, -63 ]);
+    Uint8List byte1 = Uint8List.fromList([-128]);
+    Uint8List byte7 = Uint8List.fromList([-86]);
+    Uint8List byte8 = Uint8List.fromList([-86]);
+    Uint8List byte9 = Uint8List.fromList([-86, -128]);
+    Uint8List byte16 = Uint8List.fromList([99, -63]);
 
     assertArrayEquals(byte0, Decoder.convertBoolArrayToByteArray(bool0));
     assertArrayEquals(byte1, Decoder.convertBoolArrayToByteArray(bool1));

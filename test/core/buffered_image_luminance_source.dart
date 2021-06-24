@@ -20,24 +20,22 @@ import 'dart:math' as Math;
 import 'package:image/image.dart';
 import 'package:zxing_lib/zxing.dart';
 
-
 /// This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.
 ///
 class BufferedImageLuminanceSource extends LuminanceSource {
-
-  static const double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
+  static const double MINUS_45_IN_RADIANS =
+      -0.7853981633974483; // Math.toRadians(-45.0)
 
   late Uint8List buffer;
   Image image;
   final int left;
   final int top;
 
-  BufferedImageLuminanceSource(this.image, [this.left = 0, this.top = 0, int? width, int? height])
-      :super(width ?? image.width, height ?? image.height) {
-
-    if(width == null) width = image.width - left;
-    if(height == null) height = image.height - top;
-
+  BufferedImageLuminanceSource(this.image,
+      [this.left = 0, this.top = 0, int? width, int? height])
+      : super(width ?? image.width, height ?? image.height) {
+    if (width == null) width = image.width - left;
+    if (height == null) height = image.height - top;
 
     int sourceWidth = image.width;
     int sourceHeight = image.height;
@@ -62,13 +60,13 @@ class BufferedImageLuminanceSource extends LuminanceSource {
           // (306*R) >> 10 is approximately equal to R*0.299, and so on.
           // 0x200 >> 10 is 0.5, it implements rounding.
           buffer[(y - top) * width + x] = (306 * getRed(color) +
-              601 * getGreen(color) +
-              117 * getBlue(color) +
-              0x200) >> 10;
+                  601 * getGreen(color) +
+                  117 * getBlue(color) +
+                  0x200) >>
+              10;
         }
       }
     }
-
   }
 
   @override
@@ -88,7 +86,6 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   Int8List get matrix {
-
     // The underlying raster of image consists of area bytes with the luminance values
     //image.getDataElements(left, top, width, height, matrix);
     Int8List matrix = Int8List.fromList(buffer);
@@ -101,7 +98,8 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return BufferedImageLuminanceSource(image.clone(), this.left + left, this.top + top, width, height);
+    return BufferedImageLuminanceSource(
+        image.clone(), this.left + left, this.top + top, width, height);
   }
 
   /// This is always true, since the image is a gray-scale image.
@@ -120,12 +118,12 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     var newImage = copyRotate(image, 90);
 
     // Maintain the cropped region, but rotate it too.
-    return BufferedImageLuminanceSource(newImage, top, sourceWidth - (left + width), height, width);
+    return BufferedImageLuminanceSource(
+        newImage, top, sourceWidth - (left + width), height, width);
   }
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-
     int oldCenterX = left + width ~/ 2;
     int oldCenterY = top + height ~/ 2;
 
@@ -133,7 +131,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     //AffineTransform transform = AffineTransform.getRotateInstance(MINUS_45_IN_RADIANS, oldCenterX, oldCenterY);
 
     int sourceDimension = Math.max(image.width, image.height);
-    //BufferedImage rotatedImage = new BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
+    //BufferedImage rotatedImage = BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
     var newImage = copyRotate(image, 45);
 
     int halfDimension = Math.max(width, height) ~/ 2;
@@ -142,7 +140,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
     int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
-    return BufferedImageLuminanceSource(newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
+    return BufferedImageLuminanceSource(
+        newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
   }
-
 }

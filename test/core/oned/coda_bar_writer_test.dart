@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -30,35 +22,44 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../utils.dart';
 
-
-
-void main(){
-
-
+void main() {
   BitMatrix encode(String input) {
-    return new CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
+    return CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
   }
+
   void doTest(String input, String expected) {
     BitMatrix result = encode(input);
     expect(expected, matrixToString(result));
   }
+
   test('testEncode', () {
-    doTest("B515-3/B",
-           "00000" +
-           "1001001011" + "0110101001" + "0101011001" + "0110101001" + "0101001101" +
-           "0110010101" + "01101101011" + "01001001011" +
-           "00000");
+    doTest(
+        "B515-3/B",
+        "00000" +
+            "1001001011" +
+            "0110101001" +
+            "0101011001" +
+            "0110101001" +
+            "0101001101" +
+            "0110010101" +
+            "01101101011" +
+            "01001001011" +
+            "00000");
   });
 
   test('testEncode2', () {
-    doTest("T123T",
-           "00000" +
-           "1011001001" + "0101011001" + "0101001011" + "0110010101" + "01011001001" +
-           "00000");
+    doTest(
+        "T123T",
+        "00000" +
+            "1011001001" +
+            "0101011001" +
+            "0101001011" +
+            "0110010101" +
+            "01011001001" +
+            "00000");
   });
 
   test('testAltStartEnd', () {
     expect(encode(r"T123456789-$T"), encode(r"A123456789-$A"));
   });
-
 }

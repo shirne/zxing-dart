@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'dart:io';
 
 import 'package:image/image.dart';
@@ -31,19 +30,24 @@ import '../common/abstract_black_box.dart';
 /// I'm looking for a way to do it
 ///
 /// todo Not passed yet
-void main(){
-
-  test('testMulti', () async{
+void main() {
+  test('testMulti', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-2");
+    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+        "test/resources/blackbox/multi-2");
 
     File testImage = File(testBase.path + '/multi.jpg');
     Image image = decodeImage(testImage.readAsBytesSync())!;
-    var scaleImage = copyResize(image, width:image.width ~/2, height:image.height~/2, interpolation: Interpolation.average);
-    BufferedImageLuminanceSource source = BufferedImageLuminanceSource(scaleImage);
+    var scaleImage = copyResize(image,
+        width: image.width ~/ 2,
+        height: image.height ~/ 2,
+        interpolation: Interpolation.average);
+    BufferedImageLuminanceSource source =
+        BufferedImageLuminanceSource(scaleImage);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    MultipleBarcodeReader reader =
+        GenericMultipleBarcodeReader(MultiFormatReader());
     List<Result> results = reader.decodeMultiple(bitmap);
     //assertNotNull(results);
     expect(results.length, 2);
@@ -55,25 +59,32 @@ void main(){
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 
-  testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}){
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-2");
+  testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}) {
+    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+        "test/resources/blackbox/multi-2");
     int startTimer = DateTime.now().millisecondsSinceEpoch;
 
     File testImage = File('${testBase.path}/$name');
     Image image = decodeImage(testImage.readAsBytesSync())!;
-    if(down > 0){
+    if (down > 0) {
       //image.scaleDown(down.toDouble());
-      image = copyResize(image, width:(image.width / down).ceil(), height:(image.height / down).ceil(), interpolation: Interpolation.average);
+      image = copyResize(image,
+          width: (image.width / down).ceil(),
+          height: (image.height / down).ceil(),
+          interpolation: Interpolation.average);
     }
     List<int> pixels = [];
-    for(int y = 0;y < image.height; y++){
-      for(int x = 0;x < image.width; x++){
+    for (int y = 0; y < image.height; y++) {
+      for (int x = 0; x < image.width; x++) {
         int color = image.getPixel(x, y);
-        pixels.add(((color & 0xff) << 16) + ((color >> 8) & 0xff) + ((color >> 16) & 0xff));
+        pixels.add(((color & 0xff) << 16) +
+            ((color >> 8) & 0xff) +
+            ((color >> 16) & 0xff));
       }
     }
 
-    LuminanceSource source = RGBLuminanceSource(image.width, image.height, pixels);
+    LuminanceSource source =
+        RGBLuminanceSource(image.width, image.height, pixels);
 
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     var reader = MultiFormatReader();
@@ -86,22 +97,23 @@ void main(){
 
     try {
       result = reader.decode(BinaryBitmap(HybridBinarizer(source)), hints);
-    } on NotFoundException catch(_){
+    } on NotFoundException catch (_) {
       try {
-        result = reader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), hints);
-      } on NotFoundException catch(_){ }
+        result = reader.decode(
+            BinaryBitmap(GlobalHistogramBinarizer(source)), hints);
+      } on NotFoundException catch (_) {}
     }
     print('${DateTime.now().millisecondsSinceEpoch - startTimer} ms');
-    if(result == null){
+    if (result == null) {
       print('decode failed: $name');
-    }else {
+    } else {
       expect(text, result.text);
       expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
       print('decoded:$name');
     }
   }
 
-  test('testHardQR', (){
+  test('testHardQR', () {
     testQR('inverted.png');
     testQR('inverse.jpg', down: 3);
     testQR('qr-clip3.png', down: 3);

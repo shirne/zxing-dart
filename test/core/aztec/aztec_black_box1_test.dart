@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/aztec.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('AztecBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/aztec-1", new AztecReader(), BarcodeFormat.AZTEC)
-    ..addTest(14, 14, 0.0)
-    ..addTest(14, 14, 90.0)
-    ..addTest(14, 14, 180.0)
-    ..addTest(14, 14, 270.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase(
+        "test/resources/blackbox/aztec-1", AztecReader(), BarcodeFormat.AZTEC)
+      ..addTest(14, 14, 0.0)
+      ..addTest(14, 14, 90.0)
+      ..addTest(14, 14, 180.0)
+      ..addTest(14, 14, 270.0)
+      ..testBlackBox();
   });
-
 }

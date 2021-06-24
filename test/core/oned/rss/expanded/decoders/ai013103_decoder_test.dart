@@ -24,41 +24,41 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import 'abstract_decoder.dart';
 
-
-void main(){
-
+void main() {
   final String header = "..X..";
 
-  test('test0131031', (){
-    String data = header + AbstractDecoderTest.compressedGtin900123456798908 + AbstractDecoderTest.compressed15bitWeight1750;
+  test('test0131031', () {
+    String data = header +
+        AbstractDecoderTest.compressedGtin900123456798908 +
+        AbstractDecoderTest.compressed15bitWeight1750;
     String expected = "(01)90012345678908(3103)001750";
     assertCorrectBinaryString(data, expected);
   });
 
-  test('test0131032', (){
-    String data = header + AbstractDecoderTest.compressedGtin900000000000008 + AbstractDecoderTest.compressed15bitWeight0;
+  test('test0131032', () {
+    String data = header +
+        AbstractDecoderTest.compressedGtin900000000000008 +
+        AbstractDecoderTest.compressed15bitWeight0;
     String expected = "(01)90000000000003(3103)000000";
     assertCorrectBinaryString(data, expected);
   });
 
   //@Test(expected = NotFoundException.class)
-  test('test013103invalid', (){
-    String data = header + AbstractDecoderTest.compressedGtin900123456798908 + AbstractDecoderTest.compressed15bitWeight1750 + "..";
+  test('test013103invalid', () {
+    String data = header +
+        AbstractDecoderTest.compressedGtin900123456798908 +
+        AbstractDecoderTest.compressed15bitWeight1750 +
+        "..";
     try {
       assertCorrectBinaryString(data, "");
       fail('accepted NotFoundException');
-    } on NotFoundException catch(_){
+    } on NotFoundException catch (_) {
       // passed
     }
   });

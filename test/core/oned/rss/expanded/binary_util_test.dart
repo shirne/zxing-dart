@@ -24,32 +24,28 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
 import 'binary_util.dart';
 
+void main() {
+  const Pattern SPACE = " ";
 
-void main(){
+  void check(String data) {
+    BitArray binary = BinaryUtil.buildBitArrayFromString(data);
+    expect(data, binary.toString());
+  }
 
-   const Pattern SPACE = " ";
-
-   void check(String data) {
-     BitArray binary = BinaryUtil.buildBitArrayFromString(data);
-     expect(data, binary.toString());
-   }
-   void checkWithoutSpaces(String data) {
-     String dataWithoutSpaces = data.replaceAll(SPACE, "");
-     BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
-     expect(data, binary.toString());
-   }
+  void checkWithoutSpaces(String data) {
+    String dataWithoutSpaces = data.replaceAll(SPACE, "");
+    BitArray binary =
+        BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
+    expect(data, binary.toString());
+  }
 
   test('testBuildBitArrayFromString', () {
-
     String data = " ..X..X.. ..XXX... XXXXXXXX ........";
     check(data);
 
@@ -65,7 +61,6 @@ void main(){
     data = " ....XX.. ..XX..XX ....X.X. ........";
     check(data);
   });
-
 
   test('testBuildBitArrayFromStringWithoutSpaces', () {
     String data = " ..X..X.. ..XXX... XXXXXXXX ........";
@@ -83,6 +78,4 @@ void main(){
     data = " ....XX.. ..XX..XX ....X.X. ........";
     checkWithoutSpaces(data);
   });
-
-
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -26,16 +25,14 @@ import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/pdf417.dart';
 import 'package:zxing_lib/zxing.dart';
 
-
 import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
 import '../common/logger.dart';
 import '../common/test_result.dart';
 
-void main(){
-  test('PDF417BlackBox4TestCase', (){
-    PDF417BlackBox4TestCase()
-    ..testBlackBox();
+void main() {
+  test('PDF417BlackBox4TestCase', () {
+    PDF417BlackBox4TestCase()..testBlackBox();
   });
 }
 
@@ -49,15 +46,16 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
   final List<TestResult> testResults = [];
 
-  PDF417BlackBox4TestCase():super("test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417) {
+  PDF417BlackBox4TestCase()
+      : super("test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417) {
     testResults.add(TestResult(3, 3, 0, 0, 0.0));
   }
 
   @override
-  void testBlackBox(){
+  void testBlackBox() {
     assert(testResults.isNotEmpty);
 
-    Map<String,List<File>> imageFiles = getImageFileLists();
+    Map<String, List<File>> imageFiles = getImageFileLists();
     assert(imageFiles.isNotEmpty);
     int testCount = testResults.length;
 
@@ -66,16 +64,16 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
     Directory testBase = getTestBase();
 
-    for (MapEntry<String,List<File>> testImageGroup in imageFiles.entries) {
+    for (MapEntry<String, List<File>> testImageGroup in imageFiles.entries) {
       log.fine("Starting Image Group ${testImageGroup.key}");
 
       String fileBaseName = testImageGroup.key;
       String expectedText;
-      File expectedTextFile = File(testBase.path +'/'+fileBaseName + ".txt");
+      File expectedTextFile = File(testBase.path + '/' + fileBaseName + ".txt");
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
-        expectedTextFile = File(testBase.path +'/'+fileBaseName + ".bin");
+        expectedTextFile = File(testBase.path + '/' + fileBaseName + ".bin");
         assert(expectedTextFile.existsSync());
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
@@ -85,17 +83,19 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         for (File imageFile in testImageGroup.value) {
           Image image = decodeImage(imageFile.readAsBytesSync())!;
           double rotation = testResults[x].getRotation();
-          Image rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotation);
+          Image rotatedImage =
+              AbstractBlackBoxTestCase.rotateImage(image, rotation);
           LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
           BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
           try {
             results.addAll(decode(bitmap, false));
-          } on ReaderException catch ( _) {
+          } on ReaderException catch (_) {
             // ignore
           }
         }
-        results.sort((Result r, Result o) => getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
+        results.sort((Result r, Result o) =>
+            getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
         var resultText = StringBuffer();
         String? fileId;
         for (Result result in results) {
@@ -107,7 +107,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
           expect(fileId, resultMetadata.fileId, reason: "FileId");
           resultText.write(result.text);
         }
-        expect( resultText.toString(), expectedText, reason:"ExpectedText");
+        expect(resultText.toString(), expectedText, reason: "ExpectedText");
         passedCounts[x]++;
         tryHarderCounts[x]++;
       }
@@ -120,15 +120,21 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     int numberOfTests = imageFiles.keys.length;
     for (int x = 0; x < testResults.length; x++) {
       TestResult testResult = testResults[x];
-      log.info("Rotation ${testResult.getRotation()} degrees:", );
-      log.info(" ${passedCounts[x]} of $numberOfTests images passed (${testResult.getMustPassCount()} required)");
-      log.info(" ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.getTryHarderCount()} required)");
+      log.info(
+        "Rotation ${testResult.getRotation()} degrees:",
+      );
+      log.info(
+          " ${passedCounts[x]} of $numberOfTests images passed (${testResult.getMustPassCount()} required)");
+      log.info(
+          " ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.getTryHarderCount()} required)");
       totalFound += passedCounts[x] + tryHarderCounts[x];
-      totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
+      totalMustPass +=
+          testResult.getMustPassCount() + testResult.getTryHarderCount();
     }
 
     int totalTests = numberOfTests * testCount * 2;
-    log.info("Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)");
+    log.info(
+        "Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)");
     if (totalFound > totalMustPass) {
       log.warning("+++ Test too lax by ${totalFound - totalMustPass} images");
     } else if (totalFound < totalMustPass) {
@@ -138,19 +144,23 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
       TestResult testResult = testResults[x];
-      String label = "Rotation ${testResult.getRotation()} degrees: Too many images failed";
-      assert( passedCounts[x] >= testResult.getMustPassCount(), label);
-      assert( tryHarderCounts[x] >= testResult.getTryHarderCount(), "Try harder, $label");
+      String label =
+          "Rotation ${testResult.getRotation()} degrees: Too many images failed";
+      assert(passedCounts[x] >= testResult.getMustPassCount(), label);
+      assert(tryHarderCounts[x] >= testResult.getTryHarderCount(),
+          "Try harder, $label");
     }
   }
 
   static PDF417ResultMetadata? getMeta(Result result) {
-    return result.resultMetadata == null ? null :
-      result.resultMetadata![ResultMetadataType.PDF417_EXTRA_METADATA] as PDF417ResultMetadata?;
+    return result.resultMetadata == null
+        ? null
+        : result.resultMetadata![ResultMetadataType.PDF417_EXTRA_METADATA]
+            as PDF417ResultMetadata?;
   }
 
-  List<Result> decode(BinaryBitmap source, bool tryHarder){
-    Map<DecodeHintType,Object> hints = {};
+  List<Result> decode(BinaryBitmap source, bool tryHarder) {
+    Map<DecodeHintType, Object> hints = {};
     if (tryHarder) {
       hints[DecodeHintType.TRY_HARDER] = true;
     }
@@ -158,15 +168,15 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     return barcodeReader.decodeMultiple(source, hints);
   }
 
-  Map<String,List<File>> getImageFileLists(){
-    Map<String,List<File>> result = {};
+  Map<String, List<File>> getImageFileLists() {
+    Map<String, List<File>> result = {};
     for (File file in getImageFiles()) {
       String testImageFileName = file.uri.pathSegments.last;
-      String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('-'));
-      List<File> files = result.putIfAbsent(fileBaseName, ()=>[]);
+      String fileBaseName =
+          testImageFileName.substring(0, testImageFileName.indexOf('-'));
+      List<File> files = result.putIfAbsent(fileBaseName, () => []);
       files.add(file);
     }
     return result;
   }
-
 }

@@ -21,10 +21,7 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
-
 void main() {
-
-
   bool bitSet(Int32List bits, int i) {
     return (bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
   }
@@ -48,9 +45,8 @@ void main() {
     return newBits;
   }
 
-
   test('testGetSet', () {
-    BitArray array = new BitArray(33);
+    BitArray array = BitArray(33);
     for (int i = 0; i < 33; i++) {
       assert(!array[i]);
       array.set(i);
@@ -59,31 +55,31 @@ void main() {
   });
 
   test('testGetNextSet1', () {
-    BitArray array = new BitArray(32);
+    BitArray array = BitArray(32);
     for (int i = 0; i < array.size; i++) {
       expect(32, array.getNextSet(i), reason: i.toString());
     }
-    array = new BitArray(33);
+    array = BitArray(33);
     for (int i = 0; i < array.size; i++) {
       expect(33, array.getNextSet(i), reason: i.toString());
     }
   });
 
   test('testGetNextSet2', () {
-    BitArray array = new BitArray(33);    
+    BitArray array = BitArray(33);
     array.set(31);
     for (int i = 0; i < array.size; i++) {
-      expect( i <= 31 ? 31 : 33, array.getNextSet(i), reason: i.toString());
+      expect(i <= 31 ? 31 : 33, array.getNextSet(i), reason: i.toString());
     }
-    array = new BitArray(33);
+    array = BitArray(33);
     array.set(32);
     for (int i = 0; i < array.size; i++) {
-      expect( 32, array.getNextSet(i), reason: i.toString());
+      expect(32, array.getNextSet(i), reason: i.toString());
     }
   });
 
   test('testGetNextSet3', () {
-    BitArray array = new BitArray(63);    
+    BitArray array = BitArray(63);
     array.set(31);
     array.set(32);
     for (int i = 0; i < array.size; i++) {
@@ -100,7 +96,7 @@ void main() {
   });
 
   test('testGetNextSet4', () {
-    BitArray array = new BitArray(63);
+    BitArray array = BitArray(63);
     array.set(33);
     array.set(40);
     for (int i = 0; i < array.size; i++) {
@@ -112,14 +108,14 @@ void main() {
       } else {
         expected = 63;
       }
-      expect(expected, array.getNextSet(i), reason:i.toString());
+      expect(expected, array.getNextSet(i), reason: i.toString());
     }
   });
 
   test('testGetNextSet5', () {
-    Random r = new Random(0xDEADBEEF);
+    Random r = Random(0xDEADBEEF);
     for (int i = 0; i < 10; i++) {
-      BitArray array = new BitArray(1 + r.nextInt(100));
+      BitArray array = BitArray(1 + r.nextInt(100));
       int numSet = r.nextInt(20);
       for (int j = 0; j < numSet; j++) {
         array.set(r.nextInt(array.size));
@@ -137,9 +133,8 @@ void main() {
     }
   });
 
-
   test('testSetBulk', () {
-    BitArray array = new BitArray(64);
+    BitArray array = BitArray(64);
     array.setBulk(32, 0xFFFF0000);
     for (int i = 0; i < 48; i++) {
       assert(!array[i]);
@@ -150,7 +145,7 @@ void main() {
   });
 
   test('testSetRange', () {
-    BitArray array = new BitArray(64);
+    BitArray array = BitArray(64);
     array.setRange(28, 36);
     assert(!array[27]);
     for (int i = 28; i < 36; i++) {
@@ -160,7 +155,7 @@ void main() {
   });
 
   test('testClear', () {
-    BitArray array = new BitArray(32);
+    BitArray array = BitArray(32);
     for (int i = 0; i < 32; i++) {
       array.set(i);
     }
@@ -171,7 +166,7 @@ void main() {
   });
 
   test('testFlip', () {
-    BitArray array = new BitArray(32);
+    BitArray array = BitArray(32);
     assert(!array[5]);
     array.flip(5);
     assert(array[5]);
@@ -180,7 +175,7 @@ void main() {
   });
 
   test('testGetArray', () {
-    BitArray array = new BitArray(64);
+    BitArray array = BitArray(64);
     array.set(0);
     array.set(63);
     List<int> ints = array.getBitArray();
@@ -189,7 +184,7 @@ void main() {
   });
 
   test('testIsRange', () {
-    BitArray array = new BitArray(64);
+    BitArray array = BitArray(64);
     assert(array.isRange(0, 64, false));
     assert(!array.isRange(0, 64, true));
     array.set(32);
@@ -227,11 +222,11 @@ void main() {
   });
 
   test('testEquals', () {
-    BitArray a = new BitArray(32);
-    BitArray b = new BitArray(32);
+    BitArray a = BitArray(32);
+    BitArray b = BitArray(32);
     expect(a, b);
     expect(a.hashCode, b.hashCode);
-    assert(a != new BitArray(31));
+    assert(a != BitArray(31));
     a.set(16);
     assert(a != b);
     assert(a.hashCode != b.hashCode);

@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
 /// Tests [VINParsedResult].
-void main(){
-
-  void doTest(String contents,
+void main() {
+  void doTest(
+      String contents,
       String wmi,
       String vds,
       String vis,
@@ -33,7 +31,7 @@ void main(){
       int year,
       int plant,
       String sequential) {
-    Result fakeResult = new Result(contents, null, null, BarcodeFormat.CODE_39);
+    Result fakeResult = Result(contents, null, null, BarcodeFormat.CODE_39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.VIN, result.type);
     VINParsedResult vinResult = result as VINParsedResult;
@@ -48,19 +46,22 @@ void main(){
   }
 
   test('testNotVIN', () {
-    Result fakeResult = new Result("1M8GDM9A1KP042788", null, null, BarcodeFormat.CODE_39);
+    Result fakeResult =
+        Result("1M8GDM9A1KP042788", null, null, BarcodeFormat.CODE_39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEXT, result.type);
-    fakeResult = new Result("1M8GDM9AXKP042788", null, null, BarcodeFormat.CODE_128);
+    fakeResult =
+        Result("1M8GDM9AXKP042788", null, null, BarcodeFormat.CODE_128);
     result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEXT, result.type);
   });
 
   test('testVIN', () {
-    doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 80 /* P */, "042788");
-    doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A", 1989, 80 /* P */, "042788");
-    doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC", 2001, 49 /* 1 */, "000237");
+    doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A",
+        1989, 80 /* P */, "042788");
+    doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A",
+        1989, 80 /* P */, "042788");
+    doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC",
+        2001, 49 /* 1 */, "000237");
   });
-
-
 }

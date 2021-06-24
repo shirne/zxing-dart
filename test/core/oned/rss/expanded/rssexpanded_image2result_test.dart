@@ -29,11 +29,6 @@
  *
  */
 
-
-
-
-
-
 import 'dart:io';
 
 import 'package:image/image.dart';
@@ -47,23 +42,26 @@ import 'package:zxing_lib/zxing.dart';
 import '../../../buffered_image_luminance_source.dart';
 import '../../../common/abstract_black_box.dart';
 
-
-
-void main(){
-
-  void assertCorrectImage2result(String fileName, ExpandedProductParsedResult expected) async{
-    String path = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path + '/' + (fileName);
+void main() {
+  void assertCorrectImage2result(
+      String fileName, ExpandedProductParsedResult expected) async {
+    String path = AbstractBlackBoxTestCase.buildTestBase(
+                "test/resources/blackbox/rssexpanded-1/")
+            .path +
+        '/' +
+        (fileName);
 
     Image image = decodeImage(File(path).readAsBytesSync())!;
-    BinaryBitmap binaryMap =  BinaryBitmap( GlobalHistogramBinarizer( BufferedImageLuminanceSource(image)));
+    BinaryBitmap binaryMap = BinaryBitmap(
+        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
     Result theResult;
     try {
-      RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
+      RSSExpandedReader rssExpandedReader = RSSExpandedReader();
       theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
-    } on ReaderException catch ( re) {
+    } on ReaderException catch (re) {
       fail(re.toString());
     }
 
@@ -74,19 +72,24 @@ void main(){
     expect(expected, result);
   }
 
-  test('testDecodeRow2result2', (){
+  test('testDecodeRow2result2', () {
     // (01)90012345678908(3103)001750
-    ExpandedProductParsedResult expected =
-        ExpandedProductParsedResult("(01)90012345678908(3103)001750",
-                                        "90012345678908",
-                                        null, null, null, null, null, null,
-                                        "001750",
-                                        ExpandedProductParsedResult.KILOGRAM,
-                                        "3", null, null, null, {});
+    ExpandedProductParsedResult expected = ExpandedProductParsedResult(
+        "(01)90012345678908(3103)001750",
+        "90012345678908",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "001750",
+        ExpandedProductParsedResult.KILOGRAM,
+        "3",
+        null,
+        null,
+        null, {});
 
     assertCorrectImage2result("2.png", expected);
   });
-
-
-
 }

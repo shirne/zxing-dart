@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -24,18 +23,17 @@ import 'package:zxing_lib/zxing.dart';
 import '../utils.dart';
 
 /// Tests [ITFWriter].
-void main(){
-
-
+void main() {
   void doTest(String input, String expected) {
-    BitMatrix result = new ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
+    BitMatrix result = ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
     expect(expected, matrixToString(result));
   }
 
   test('testEncode', () {
-    doTest("00123456789012",
-           "0000010101010111000111000101110100010101110001110111010001010001110100011" +
-           "100010101000101011100011101011101000111000101110100010101110001110100000");
+    doTest(
+        "00123456789012",
+        "0000010101010111000111000101110100010101110001110111010001010001110100011" +
+            "100010101000101011100011101011101000111000101110100010101110001110100000");
   });
 
   //@Test(expected = IllegalArgumentException.class)
@@ -43,9 +41,8 @@ void main(){
     try {
       ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
       fail('should thrown ArgumentError');
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });
-
 }

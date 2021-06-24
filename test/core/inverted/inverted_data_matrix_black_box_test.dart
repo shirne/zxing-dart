@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
 /// Inverted barcodes
-void main(){
-
+void main() {
   test('InvertedDataMatrixBlackBoxTestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/inverted", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
-    ..addHint(DecodeHintType.ALSO_INVERTED)
-    ..addTest(1, 1, 0.0)
-    ..addTest(1, 1, 90.0)
-    ..addTest(1, 1, 180.0)
-    ..addTest(1, 1, 270.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/inverted",
+        MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+      ..addHint(DecodeHintType.ALSO_INVERTED)
+      ..addTest(1, 1, 0.0)
+      ..addTest(1, 1, 90.0)
+      ..addTest(1, 1, 180.0)
+      ..addTest(1, 1, 270.0)
+      ..testBlackBox();
   });
-
 }

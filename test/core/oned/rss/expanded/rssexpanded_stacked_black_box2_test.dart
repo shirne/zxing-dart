@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -32,14 +31,12 @@ import '../../../common/abstract_black_box.dart';
 
 /// A test of [RSSExpandedReader] against a fixed test set of images including
 /// stacked RSS barcodes.
-void main(){
-    
+void main() {
   test('RSSExpandedStackedBlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/rssexpandedstacked-2", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
-    ..addTest(2, 7, 0.0)
-    ..addTest(2, 7, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase("test/resources/blackbox/rssexpandedstacked-2",
+        MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
+      ..addTest(2, 7, 0.0)
+      ..addTest(2, 7, 180.0)
+      ..testBlackBox();
   });
-
 }
-    

@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
 
-
-void main(){
-
+void main() {
   test('ITFBlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/itf-2", MultiFormatReader(), BarcodeFormat.ITF)
-    ..addTest(13, 13, 0.0)
-    ..addTest(13, 13, 180.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase(
+        "test/resources/blackbox/itf-2", MultiFormatReader(), BarcodeFormat.ITF)
+      ..addTest(13, 13, 0.0)
+      ..addTest(13, 13, 180.0)
+      ..testBlackBox();
   });
-
 }

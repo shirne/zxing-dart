@@ -22,9 +22,9 @@ import '../../common/bit_source_builder.dart';
 
 /// Tests [DecodedBitStreamParser].
 ///
-void main(){
+void main() {
   test('testSimpleByteMode', () {
-    BitSourceBuilder builder = new BitSourceBuilder();
+    BitSourceBuilder builder = BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
     builder.write(0x03, 8); // 3 bytes
     builder.write(0xF1, 8);
@@ -37,7 +37,7 @@ void main(){
   });
 
   test('testSimpleSJIS', () {
-    BitSourceBuilder builder = new BitSourceBuilder();
+    BitSourceBuilder builder = BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
     builder.write(0x04, 8); // 4 bytes
     builder.write(0xA1, 8);
@@ -51,7 +51,7 @@ void main(){
   });
 
   test('testECI', () {
-    BitSourceBuilder builder = new BitSourceBuilder();
+    BitSourceBuilder builder = BitSourceBuilder();
     builder.write(0x07, 4); // ECI mode
     builder.write(0x02, 8); // ECI 2 = CP437 encoding
     builder.write(0x04, 4); // Byte mode
@@ -66,7 +66,7 @@ void main(){
   });
 
   test('testHanzi', () {
-    BitSourceBuilder builder = new BitSourceBuilder();
+    BitSourceBuilder builder = BitSourceBuilder();
     builder.write(0x0D, 4); // Hanzi mode
     builder.write(0x01, 4); // Subset 1 = GB2312 encoding
     builder.write(0x01, 8); // 1 characters
@@ -78,7 +78,7 @@ void main(){
   });
 
   test('testHanziLevel1', () {
-    BitSourceBuilder builder = new BitSourceBuilder();
+    BitSourceBuilder builder = BitSourceBuilder();
     builder.write(0x0D, 4); // Hanzi mode
     builder.write(0x01, 4); // Subset 1 = GB2312 encoding
     builder.write(0x01, 8); // 1 characters
@@ -91,5 +91,4 @@ void main(){
   });
 
   // TODO definitely need more tests here
-
 }

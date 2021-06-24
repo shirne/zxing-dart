@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/oned.dart';
 
 /// Tests [EANManufacturerOrgSupport].
 ///
-void main(){
-
+void main() {
   test('testLookup', () {
-    EANManufacturerOrgSupport support = new EANManufacturerOrgSupport();
+    EANManufacturerOrgSupport support = EANManufacturerOrgSupport();
     assert(support.lookupCountryIdentifier("472000") == null);
     expect("US/CA", support.lookupCountryIdentifier("000000"));
     expect("MO", support.lookupCountryIdentifier("958000"));
     expect("GB", support.lookupCountryIdentifier("500000"));
     expect("GB", support.lookupCountryIdentifier("509000"));
   });
-
 }

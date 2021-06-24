@@ -3,14 +3,15 @@ import 'dart:typed_data';
 
 import 'package:zxing_lib/common.dart';
 
-
 const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;
 
 String arrayToString(List<int> data) {
-  StringBuilder sb = new StringBuilder("{");
+  StringBuilder sb = StringBuilder("{");
   for (int i = 0; i < data.length; i++) {
-    sb.write(i > 0 ? ",${data[i].toRadixString(16)}" : "${data[i].toRadixString(16)}", );
+    sb.write(
+      i > 0 ? ",${data[i].toRadixString(16)}" : "${data[i].toRadixString(16)}",
+    );
   }
   sb.write('}');
   return sb.toString();
@@ -22,7 +23,8 @@ Random getPseudoRandom() {
 
 void assertDataEquals(String message, List<int> expected, List<int> received) {
   for (int i = 0; i < expected.length; i++) {
-    assert(expected[i] == received[i], "$message. Mismatch at $i. Expected $expected, got ${received.getRange(0, expected.length)}");
+    assert(expected[i] == received[i],
+        "$message. Mismatch at $i. Expected $expected, got ${received.getRange(0, expected.length)}");
   }
 }
 
@@ -41,7 +43,7 @@ void corrupt(List<int> received, int howMany, Random random, int max) {
 }
 
 void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
-  ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+  ReedSolomonEncoder encoder = ReedSolomonEncoder(field);
   Int32List messageExpected = Int32List(dataWords.length + ecWords.length);
   Int32List message = Int32List(dataWords.length + ecWords.length);
   List.copyRange(messageExpected, 0, dataWords, 0, dataWords.length);
@@ -49,7 +51,11 @@ void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
   List.copyRange(messageExpected, dataWords.length, ecWords, 0, ecWords.length);
   List.copyRange(message, 0, dataWords, 0, dataWords.length);
   encoder.encode(message, ecWords.length);
-  assertDataEquals( "Encode in $field (${dataWords.length},${ecWords.length}) failed", messageExpected, message,);
+  assertDataEquals(
+    "Encode in $field (${dataWords.length},${ecWords.length}) failed",
+    messageExpected,
+    message,
+  );
 }
 
 void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
@@ -70,14 +76,20 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
       corrupt(message, i, random, field.size);
       try {
         decoder.decode(message, ecWords.length);
-      } catch ( e) { // ReedSolomonException
+      } catch (e) {
+        // ReedSolomonException
         // fail only if maxErrors exceeded
-        assert(i > maxErrors, "Decode in $field (${dataWords.length},${ecWords.length}) failed at $i errors: $e");
+        assert(i > maxErrors,
+            "Decode in $field (${dataWords.length},${ecWords.length}) failed at $i errors: $e");
         // else stop
         break;
       }
       if (i < maxErrors) {
-        assertDataEquals("Decode in $field (${dataWords.length}, ${ecWords.length}) failed at $i errors", dataWords, message, );
+        assertDataEquals(
+          "Decode in $field (${dataWords.length}, ${ecWords.length}) failed at $i errors",
+          dataWords,
+          message,
+        );
       }
     }
   }
@@ -88,12 +100,12 @@ void testEncodeDecode(GenericGF field, List<int> dataWords, List<int> ecWords) {
   testDecoder(field, dataWords, ecWords);
 }
 
-
-
 void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
-  assert(dataSize > 0 && dataSize <= field.size - 3, "Invalid data size for $field" );
-  assert(ecSize > 0 && ecSize + dataSize <= field.size, "Invalid ECC size for $field" );
-  ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+  assert(dataSize > 0 && dataSize <= field.size - 3,
+      "Invalid data size for $field");
+  assert(ecSize > 0 && ecSize + dataSize <= field.size,
+      "Invalid ECC size for $field");
+  ReedSolomonEncoder encoder = ReedSolomonEncoder(field);
   Int32List message = Int32List(dataSize + ecSize);
   Int32List dataWords = Int32List(dataSize);
   Int32List ecWords = Int32List(ecSize);

@@ -20,13 +20,10 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
-
-
 void main() {
-
   test('testSource', () {
     Uint8List bytes = Uint8List.fromList([1, 2, 3, 4, 5]);
-    BitSource source = new BitSource(bytes);
+    BitSource source = BitSource(bytes);
     expect(40, source.available());
     expect(0, source.readBits(1));
     expect(39, source.available());
@@ -43,5 +40,4 @@ void main() {
     expect(5, source.readBits(6));
     expect(0, source.available());
   });
-
 }

@@ -26,15 +26,12 @@ import 'package:zxing_lib/zxing.dart';
 import '../../buffered_image_luminance_source.dart';
 import '../../common/abstract_black_box.dart';
 
-
-
-
 /// Tests [QRCodeMultiReader].
-void main(){
-
-  test('testMultiQRCodes', () async{
+void main() {
+  test('testMultiQRCodes', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-qrcode-1");
+    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+        "test/resources/blackbox/multi-qrcode-1");
 
     File testImage = File(testBase.path + "/1.png");
     Image image = decodeImage(testImage.readAsBytesSync())!;
@@ -53,10 +50,14 @@ void main(){
       assert(result.resultMetadata != null);
     }
     Set<String> expectedContents = {};
-    expectedContents.add("You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
-    expectedContents.add("You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!");
-    expectedContents.add("You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)");
-    expectedContents.add("You get to CREATE OUR JOURNAL PROMPT FOR THE DAY!  Yay!  Way to go!  ");
+    expectedContents.add(
+        "You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
+    expectedContents.add(
+        "You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!");
+    expectedContents.add(
+        "You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)");
+    expectedContents.add(
+        "You get to CREATE OUR JOURNAL PROMPT FOR THE DAY!  Yay!  Way to go!  ");
     expect(barcodeContents, expectedContents);
   });
 
@@ -66,9 +67,11 @@ void main(){
     Result sa3 = Result("SA3", [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
-    sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
+    sa2.putMetadata(
+        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
     sa2.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
-    sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
+    sa3.putMetadata(
+        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
     Result nsa = Result("NotSA", [], <ResultPoint>[], BarcodeFormat.QR_CODE);

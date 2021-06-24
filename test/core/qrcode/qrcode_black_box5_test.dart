@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -27,7 +26,7 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('QRCodeBlackBox5TestCase', () {
     AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-5",
-        new MultiFormatReader(), BarcodeFormat.QR_CODE)
+        MultiFormatReader(), BarcodeFormat.QR_CODE)
       ..addTest(19, 19, 0.0)
       ..addTest(19, 19, 90.0)
       ..addTest(19, 19, 180.0)

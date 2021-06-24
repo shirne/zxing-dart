@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/client.dart';
@@ -23,10 +21,9 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [ProductParsedResult].
 ///
-void main(){
-
+void main() {
   void doTest(String contents, String normalized, BarcodeFormat format) {
-    Result fakeResult = new Result(contents, null, null, format);
+    Result fakeResult = Result(contents, null, null, format);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.PRODUCT, result.type);
     ProductParsedResult productResult = result as ProductParsedResult;
@@ -34,12 +31,10 @@ void main(){
     expect(normalized, productResult.normalizedProductID);
   }
 
-
   test('testProduct', () {
     doTest("123456789012", "123456789012", BarcodeFormat.UPC_A);
     doTest("00393157", "00393157", BarcodeFormat.EAN_8);
     doTest("5051140178499", "5051140178499", BarcodeFormat.EAN_13);
     doTest("01234565", "012345000065", BarcodeFormat.UPC_E);
   });
-
 }

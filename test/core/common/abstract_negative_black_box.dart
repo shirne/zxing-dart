@@ -44,19 +44,19 @@ class TestResult {
 ///
 
 class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
-
   static final Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase);
 
   final List<TestResult> testResults = [];
 
   // Use the multiformat reader to evaluate all decoders in the system.
-  AbstractNegativeBlackBoxTestCase(String testBasePathSuffix):super(testBasePathSuffix, MultiFormatReader(), null);
+  AbstractNegativeBlackBoxTestCase(String testBasePathSuffix)
+      : super(testBasePathSuffix, MultiFormatReader(), null);
 
   void addNegativeTest(int falsePositivesAllowed, double rotation) {
     testResults.add(TestResult(falsePositivesAllowed, rotation));
   }
 
-  void testBlackBox(){
+  void testBlackBox() {
     assert(testResults.isNotEmpty);
 
     List<File> imageFiles = getImageFiles();
@@ -65,7 +65,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
       log.info("Starting $testImage");
       Image image = decodeImage(testImage.readAsBytesSync())!;
       //if (image == null) {
-      //  throw new IOException("Could not read image: " + testImage);
+      //  throw IOException("Could not read image: " + testImage);
       //}
       for (int x = 0; x < testResults.length; x++) {
         TestResult testResult = testResults[x];
@@ -85,16 +85,19 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     }
 
     if (totalFalsePositives < totalAllowed) {
-      log.warning("+++ Test too lax by ${totalAllowed - totalFalsePositives} images");
+      log.warning(
+          "+++ Test too lax by ${totalAllowed - totalFalsePositives} images");
     } else if (totalFalsePositives > totalAllowed) {
-      log.warning("--- Test failed by ${totalFalsePositives - totalAllowed} images");
+      log.warning(
+          "--- Test failed by ${totalFalsePositives - totalAllowed} images");
     }
 
     for (int x = 0; x < testResults.length; x++) {
       TestResult testResult = testResults[x];
-      log.info("Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)");
+      log.info(
+          "Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)");
       assert(falsePositives[x] <= testResult.getFalsePositivesAllowed(),
-      "Rotation ${testResult.getRotation()} degrees: Too many false positives found");
+          "Rotation ${testResult.getRotation()} degrees: Too many false positives found");
     }
   }
 
@@ -104,29 +107,31 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   /// @param rotationInDegrees The amount of rotation to apply
   /// @return true if nothing found, false if a non-existent barcode was detected
   bool checkForFalsePositives(Image image, double rotationInDegrees) {
-    Image rotatedImage = AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
+    Image rotatedImage =
+        AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
     LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
     Result? result;
     try {
       result = reader!.decode(bitmap);
-      log.info("Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
+      log.info(
+          "Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
-    } on ReaderException catch ( _) {
+    } on ReaderException catch (_) {
       // continue
     }
 
     // Try "try harder" getMode
-    Map<DecodeHintType,Object> hints = {};
+    Map<DecodeHintType, Object> hints = {};
     hints[DecodeHintType.TRY_HARDER] = true;
     try {
       result = reader!.decode(bitmap, hints);
-      log.info("Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
+      log.info(
+          "Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
       return false;
-    } on ReaderException catch ( _) {
+    } on ReaderException catch (_) {
       // continue
     }
     return true;
   }
-
 }

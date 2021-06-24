@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/scaffolding.dart';
 
 import '../common/abstract_negative_black_box.dart';
 
 /// This test ensures that random images with high contrast patterns do not decode as barcodes.
 ///
-void main(){
-
+void main() {
   test('FalsePositivesBlackBoxTestCase', () {
     AbstractNegativeBlackBoxTestCase("test/resources/blackbox/falsepositives")
-    ..addNegativeTest(2, 0.0)
-    ..addNegativeTest(2, 90.0)
-    ..addNegativeTest(2, 180.0)
-    ..addNegativeTest(2, 270.0)
-        ..testBlackBox();
+      ..addNegativeTest(2, 0.0)
+      ..addNegativeTest(2, 90.0)
+      ..addNegativeTest(2, 180.0)
+      ..addNegativeTest(2, 270.0)
+      ..testBlackBox();
   });
-
 }

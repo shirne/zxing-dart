@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -23,18 +22,20 @@ import 'package:zxing_lib/zxing.dart';
 
 import '../utils.dart';
 
-
-void main(){
-
+void main() {
   test('testEncode', () {
-    String testStr = "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
-    BitMatrix result = EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.length, 0);
+    String testStr =
+        "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
+    BitMatrix result = EAN13Writer()
+        .encode("5901234123457", BarcodeFormat.EAN_13, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
   test('testAddChecksumAndEncode', () {
-    String testStr = "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
-    BitMatrix result = EAN13Writer().encode("590123412345", BarcodeFormat.EAN_13, testStr.length, 0);
+    String testStr =
+        "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
+    BitMatrix result = EAN13Writer()
+        .encode("590123412345", BarcodeFormat.EAN_13, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
@@ -43,7 +44,7 @@ void main(){
     try {
       EAN13Writer().encode("5901234123abc", BarcodeFormat.EAN_13, 0, 0);
       fail('should throw Argument Error');
-    }catch(_){
+    } catch (_) {
       // passed
     }
   });

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/datamatrix.dart';
@@ -23,14 +21,13 @@ import 'package:zxing_lib/datamatrix.dart';
 import '../../utils.dart';
 
 /// Tests for [HighLevelEncoder].
-void main(){
-
+void main() {
   final List<SymbolInfo> testSymbols = [
     SymbolInfo(false, 3, 5, 8, 8, 1),
     SymbolInfo(false, 5, 7, 10, 10, 1),
-      /*rect*/SymbolInfo(true, 5, 7, 16, 6, 1),
+    /*rect*/ SymbolInfo(true, 5, 7, 16, 6, 1),
     SymbolInfo(false, 8, 10, 12, 12, 1),
-      /*rect*/SymbolInfo(true, 10, 11, 14, 6, 2),
+    /*rect*/ SymbolInfo(true, 10, 11, 14, 6, 2),
     SymbolInfo(false, 13, 0, 0, 0, 1),
     SymbolInfo(false, 77, 0, 0, 0, 1)
     //The last entries are fake entries to test special conditions with C40 encoding
@@ -45,7 +42,7 @@ void main(){
   }
 
   String createBinaryMessage(int len) {
-    StringBuffer sb = new StringBuffer();
+    StringBuffer sb = StringBuffer();
     sb.write("\u00ABäöüéàá-");
     for (int i = 0; i < len - 9; i++) {
       sb.write('\u00B7');
@@ -66,16 +63,13 @@ void main(){
     }
   }
 
-
   String encodeHighLevel(String msg) {
     String encoded = HighLevelEncoder.encodeHighLevel(msg);
     //DecodeHighLevel.decode(encoded);
     return visualize(encoded);
   }
 
-
   test('testASCIIEncodation', () {
-
     String visualized = encodeHighLevel("123456");
     expect("142 164 186", visualized);
 
@@ -87,7 +81,6 @@ void main(){
   });
 
   test('testC40EncodationBasic1', () {
-
     String visualized = encodeHighLevel("AIMAIMAIM");
 
     expect("230 91 11 91 11 91 11 254", visualized);
@@ -95,7 +88,6 @@ void main(){
   });
 
   test('testC40EncodationBasic2', () {
-
     String visualized = encodeHighLevel("AIMAIAB");
     expect("230 91 11 90 255 254 67 129", visualized);
     //"B" is normally encoded as "15" (one C40 value)
@@ -117,7 +109,8 @@ void main(){
     //"else" case
 
     visualized = encodeHighLevel("AIMAIMAIMë");
-    expect("230 91 11 91 11 91 11 254 235 108", visualized); //Activate when additional rectangulars are available
+    expect("230 91 11 91 11 91 11 254 235 108",
+        visualized); //Activate when additional rectangulars are available
     //Expl: 230 = shift to C40, "91 11" = "AIM",
     //"�" in C40 encodes to: 1 30 2 11 which doesn't fit into a triplet
     //"10 243" =
@@ -128,11 +121,11 @@ void main(){
   test('testC40EncodationSpecExample', () {
     //Example in Figure 1 in the spec
     String visualized = encodeHighLevel("A1B2C3D4E5F6G7H8I9J0K1L2");
-    expect("230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254", visualized);
+    expect("230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254",
+        visualized);
   });
 
   test('testC40EncodationSpecialCases1', () {
-
     //Special tests avoiding ultra-long test strings because these tests are only used
     //with the 16x48 symbol (47 data codewords)
     useTestSymbols();
@@ -160,14 +153,12 @@ void main(){
   });
 
   test('testC40EncodationSpecialCases2', () {
-
     String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIMAI");
     expect("230 91 11 91 11 91 11 91 11 91 11 91 11 254 66 74", visualized);
     //available > 2, rest = 2 --> unlatch and encode as ASCII
   });
 
   test('testTextEncodation', () {
-
     String visualized = encodeHighLevel("aimaimaim");
     expect("239 91 11 91 11 91 11 254", visualized);
     //239 shifts to Text encodation, 254 unlatches
@@ -183,12 +174,12 @@ void main(){
     visualized = encodeHighLevel("aimaimaimB");
     expect("239 91 11 91 11 91 11 254 67 129", visualized);
 
-    visualized = encodeHighLevel(r"aimaimaim{txt}""\u0004");
-    expect("239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
+    visualized = encodeHighLevel(r"aimaimaim{txt}" "\u0004");
+    expect(
+        "239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
   });
 
   test('testX12Encodation', () {
-
     //238 shifts to X12 encodation, 254 unlatches
 
     String visualized = encodeHighLevel("ABC>ABC123>AB");
@@ -204,17 +195,17 @@ void main(){
     expect("238 89 233 14 192 100 207 44 31 96 82 70", visualized);
 
     visualized = encodeHighLevel("ABC>ABC123>ABCDEF");
-    expect("238 89 233 14 192 100 207 44 31 96 82 254 70 71 129 237", visualized);
-
+    expect(
+        "238 89 233 14 192 100 207 44 31 96 82 254 70 71 129 237", visualized);
   });
 
   test('testEDIFACTEncodation', () {
-
     //240 shifts to EDIFACT encodation
 
     String visualized = encodeHighLevel(".A.C1.3.DATA.123DATA.123DATA");
-    expect("240 184 27 131 198 236 238 16 21 1 187 28 179 16 21 1 187 28 179 16 21 1",
-                 visualized);
+    expect(
+        "240 184 27 131 198 236 238 16 21 1 187 28 179 16 21 1 187 28 179 16 21 1",
+        visualized);
 
     visualized = encodeHighLevel(".A.C1.3.X.X2..");
     expect("240 184 27 131 198 236 238 98 230 50 47 47", visualized);
@@ -235,15 +226,17 @@ void main(){
     expect("240 184 27 131 198 236 238 89", visualized);
 
     //Checking temporary unlatch from EDIFACT
-    visualized = encodeHighLevel(".XXX.XXX.XXX.XXX.XXX.XXX.üXX.XXX.XXX.XXX.XXX.XXX.XXX");
-    expect("240 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24"
-                     + " 124 47 235 125 240" //<-- this is the temporary unlatch
-                     + " 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 89 89",
-                 visualized);
+    visualized =
+        encodeHighLevel(".XXX.XXX.XXX.XXX.XXX.XXX.üXX.XXX.XXX.XXX.XXX.XXX.XXX");
+    expect(
+        "240 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24" +
+            " 124 47 235 125 240" //<-- this is the temporary unlatch
+            +
+            " 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 89 89",
+        visualized);
   });
 
   test('testBase256Encodation', () {
-
     //231 shifts to Base256 encodation
 
     String visualized = encodeHighLevel("\u00ABäöüé\u00BB");
@@ -256,19 +249,25 @@ void main(){
     visualized = encodeHighLevel(" 23£"); //ASCII only (for reference)
     expect("33 153 235 36 129", visualized);
 
-    visualized = encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
+    visualized =
+        encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
     expect("231 51 108 59 226 126 1 104 99 153 53 129", visualized);
 
     visualized = encodeHighLevel("\u00ABäöüé\u00BB 23£ 1234567890123456789");
-    expect("231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208"
-                     + " 220 142 164 186 208 58 129 59 209 104 254 150 45", visualized);
+    expect(
+        "231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208" +
+            " 220 142 164 186 208 58 129 59 209 104 254 150 45",
+        visualized);
 
     visualized = encodeHighLevel(createBinaryMessage(20));
-    expect("231 44 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 253 150",
-                 visualized);
-    visualized = encodeHighLevel(createBinaryMessage(19)); //padding necessary at the end
-    expect("231 63 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 1 129",
-                 visualized);
+    expect(
+        "231 44 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 253 150",
+        visualized);
+    visualized =
+        encodeHighLevel(createBinaryMessage(19)); //padding necessary at the end
+    expect(
+        "231 63 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 1 129",
+        visualized);
 
     visualized = encodeHighLevel(createBinaryMessage(276));
     assertStartsWith("231 38 219 2 208 120 20 150 35", visualized);
@@ -279,21 +278,19 @@ void main(){
     assertEndsWith("146 40 190 87", visualized);
   });
 
-
   test('testUnlatchingFromC40', () {
-
     String visualized = encodeHighLevel("AIMAIMAIMAIMaimaimaim");
-    expect("230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11", visualized);
+    expect(
+        "230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11", visualized);
   });
 
   test('testUnlatchingFromText', () {
-
     String visualized = encodeHighLevel("aimaimaimaim12345678");
-    expect("239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237", visualized);
+    expect(
+        "239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237", visualized);
   });
 
   test('testHelloWorld', () {
-
     String visualized = encodeHighLevel("Hello World!");
     expect("73 239 116 130 175 123 148 64 158 233 254 34", visualized);
   });
@@ -327,21 +324,20 @@ void main(){
     //of an encoding problem of the character 0x0060 in Java source code.
 
     String visualized = encodeHighLevel("fiykmj*Rh2`,e6");
-    expect("239 122 87 154 40 7 171 115 207 12 130 71 155 254 129 237", visualized);
-
+    expect("239 122 87 154 40 7 171 115 207 12 130 71 155 254 129 237",
+        visualized);
   });
 
   test('testMacroCharacters', () {
-
-    String visualized = encodeHighLevel("[)>\u001E05\u001D5555\u001C6666\u001E\u0004");
+    String visualized =
+        encodeHighLevel("[)>\u001E05\u001D5555\u001C6666\u001E\u0004");
     //expect("92 42 63 31 135 30 185 185 29 196 196 31 5 129 87 237", visualized);
     expect("236 185 185 29 196 196 129 56", visualized);
   });
 
   test('testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle', () {
-
     String visualized = encodeHighLevel("*MEMANT-1F-MESTECH");
-    expect("238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
+    expect(
+        "238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
   });
-
 }

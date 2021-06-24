@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-
 import 'dart:math';
-
 
 import '../../../common/reedsolomon/reed_solomon.dart' as ReedSolomon;
 
-
-abstract class AbstractErrorCorrectionTestCase  {
-
+abstract class AbstractErrorCorrectionTestCase {
   static void corrupt(List<int> received, int howMany, Random random) {
     ReedSolomon.corrupt(received, howMany, random, 929);
   }
@@ -45,7 +41,6 @@ abstract class AbstractErrorCorrectionTestCase  {
   }
 
   static Random getRandom() {
-    return new Random(0xDEADBEEF);
+    return Random(0xDEADBEEF);
   }
-
 }

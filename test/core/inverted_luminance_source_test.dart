@@ -21,24 +21,19 @@ import 'package:zxing_lib/zxing.dart';
 
 import 'buffered_image_luminance_source.dart';
 
-
-
 /// Tests [InvertedLuminanceSource].
 void main() {
-
   test('testInverted', () async {
-
-    Image image = Image( 2, 1);
+    Image image = Image(2, 1);
     image.fill(getColor(0, 0, 0, 255));
-    //BufferedImage image = new BufferedImage(2, 1, BufferedImage.TYPE_INT_RGB);
+    //BufferedImage image = BufferedImage(2, 1, BufferedImage.TYPE_INT_RGB);
     //image.setRGB(0, 0, 0xFFFFFF);
     image.setPixel(0, 0, 0xffffffff);
 
-    LuminanceSource source = new BufferedImageLuminanceSource(image);
+    LuminanceSource source = BufferedImageLuminanceSource(image);
 
     expect(source.getRow(0, null), [0xFF.toSigned(8), 0]);
-    LuminanceSource inverted = new InvertedLuminanceSource(source);
+    LuminanceSource inverted = InvertedLuminanceSource(source);
     expect(inverted.getRow(0, null), [0, 0xFF.toSigned(8)]);
   });
-
 }

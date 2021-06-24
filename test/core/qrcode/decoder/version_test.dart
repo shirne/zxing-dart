@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-
-void main(){
-
+void main() {
   //@Test(expected = IllegalArgumentException.class)
   test('testBadVersion', () {
     try {
       Version.getVersionForNumber(0);
       fail('expected');
-    }catch(_){
+    } catch (_) {
       //passed
     }
   });
@@ -38,11 +35,10 @@ void main(){
     }
   });
 
-
-
-  test('testGetProvisionalVersionForDimension', (){
+  test('testGetProvisionalVersionForDimension', () {
     for (int i = 1; i <= 40; i++) {
-      expect(i, Version.getProvisionalVersionForDimension(4 * i + 17).versionNumber);
+      expect(i,
+          Version.getProvisionalVersionForDimension(4 * i + 17).versionNumber);
     }
   });
 
@@ -55,7 +51,6 @@ void main(){
     doTestVersion(27, 0x1B08E);
     doTestVersion(32, 0x209D5);
   });
-
 }
 
 void checkVersion(Version? version, int number, int dimension) {

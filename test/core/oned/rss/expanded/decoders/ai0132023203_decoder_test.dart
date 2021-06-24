@@ -24,28 +24,26 @@
  *   http://www.piramidepse.com/
  */
 
-
-
-
-
 import 'package:test/scaffolding.dart';
 
 import 'abstract_decoder.dart';
 
-
-void main(){
-
+void main() {
   final String header = "..X.X";
 
-  test('test0132021', (){
-    String data = header + AbstractDecoderTest.compressedGtin900123456798908 + AbstractDecoderTest.compressed15bitWeight1750;
+  test('test0132021', () {
+    String data = header +
+        AbstractDecoderTest.compressedGtin900123456798908 +
+        AbstractDecoderTest.compressed15bitWeight1750;
     String expected = "(01)90012345678908(3202)001750";
 
     assertCorrectBinaryString(data, expected);
   });
 
-  test('test0132031', (){
-    String data = header + AbstractDecoderTest.compressedGtin900123456798908 + AbstractDecoderTest.compressed15bitWeight11750;
+  test('test0132031', () {
+    String data = header +
+        AbstractDecoderTest.compressedGtin900123456798908 +
+        AbstractDecoderTest.compressed15bitWeight11750;
     String expected = "(01)90012345678908(3203)001750";
 
     assertCorrectBinaryString(data, expected);

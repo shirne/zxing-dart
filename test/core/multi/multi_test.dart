@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
 import 'dart:io';
 
 import 'package:image/image.dart';
@@ -30,18 +27,19 @@ import '../buffered_image_luminance_source.dart';
 import '../common/abstract_black_box.dart';
 
 /// Tests [MultipleBarcodeReader].
-void main(){
-
-  test('testMulti', () async{
+void main() {
+  test('testMulti', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/multi-1");
+    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+        "test/resources/blackbox/multi-1");
 
     File testImage = File(testBase.path + '/1.png');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    MultipleBarcodeReader reader =
+        GenericMultipleBarcodeReader(MultiFormatReader());
     List<Result> results = reader.decodeMultiple(bitmap);
     //assertNotNull(results);
     expect(results.length, 2);
@@ -52,5 +50,4 @@ void main(){
     expect("www.airtable.com/jobs", results[1].text);
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
-
 }

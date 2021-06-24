@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/aztec.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -25,15 +22,14 @@ import '../common/abstract_black_box.dart';
 
 /// A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
 ///
-void main(){
-
+void main() {
   test('AztecBlackBox2TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/aztec-2", new AztecReader(), BarcodeFormat.AZTEC)
-    ..addTest(5, 5, 0.0)
-    ..addTest(4, 4, 90.0)
-    ..addTest(6, 6, 180.0)
-    ..addTest(3, 3, 270.0)
-        ..testBlackBox();
+    AbstractBlackBoxTestCase(
+        "test/resources/blackbox/aztec-2", AztecReader(), BarcodeFormat.AZTEC)
+      ..addTest(5, 5, 0.0)
+      ..addTest(4, 4, 90.0)
+      ..addTest(6, 6, 180.0)
+      ..addTest(3, 3, 270.0)
+      ..testBlackBox();
   });
-
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/datamatrix.dart';
@@ -22,15 +21,13 @@ import 'package:zxing_lib/datamatrix.dart';
 import '../../utils.dart';
 
 /// Tests for the ECC200 error correction.
-void main(){
-
-
-
+void main() {
   test('testRS', () {
     //Sample from Annexe R in ISO/IEC 16022:2000(E)
     List<int> cw = [142, 164, 186];
     SymbolInfo symbolInfo = SymbolInfo.lookup(3)!;
-    String s = ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
+    String s =
+        ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
     expect("142 164 186 114 25 5 88 102", visualize(s));
 
     //"A" encoded (ASCII encoding + 2 padding characters)
@@ -38,5 +35,4 @@ void main(){
     s = ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
     expect("66 129 70 138 234 82 82 95", visualize(s));
   });
-
 }
