@@ -19,6 +19,7 @@ import 'dart:math';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/pdf417.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import 'abstract_error_correction.dart';
 
@@ -85,8 +86,7 @@ void main() {
     try {
       checkDecode(received);
       fail("Should not have decoded");
-    } catch (_) {
-      // ChecksumException
+    } on ChecksumException catch (_) {
       // good
     }
   });

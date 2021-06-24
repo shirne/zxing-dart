@@ -42,6 +42,7 @@ void main() {
         DecodeHintType.PURE_BARCODE: true,
         DecodeHintType.TRY_HARDER: true,
       });
+      print(result.text);
     } on ReaderException catch (_) {}
   });
 

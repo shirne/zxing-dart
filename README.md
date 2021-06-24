@@ -1,4 +1,4 @@
-# zxing-dart
+# ZXing-Dart
 [![pub package](https://img.shields.io/pub/v/zxing_lib.svg)](https://pub.dartlang.org/packages/zxing_lib)
 
 A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode multiple 1D/2D barcodes.

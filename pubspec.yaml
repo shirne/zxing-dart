@@ -11,7 +11,7 @@ dependencies:
   intl: ^0.17.0
   fixnum: ^1.0.0
   convert: ^3.0.0
-  charset: ^0.1.0
+  charset: ^0.1.1
 
 dev_dependencies:
   test:

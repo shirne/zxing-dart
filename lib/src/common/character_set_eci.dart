@@ -60,7 +60,7 @@ class CharacterSetECI {
   static final ISO8859_16 =
       CharacterSetECI('iso8859_16', 18, latin10, ['latin-10', 'iso-8859-16']);
   static final SJIS = CharacterSetECI('sjis', 20, StringUtils.shiftJisCharset,
-      ['shift-jis', 'ms932', 'iso-2022-jp', 'jis']);
+      ['shift-jis','shift_jis', 'ms932', 'iso-2022-jp', 'jis']);
   static final Cp1250 = CharacterSetECI('cp1250', 21, cp437, 'windows-1250');
   static final Cp1251 = CharacterSetECI('cp1251', 22, cp437, 'windows-1251');
   static final Cp1252 = CharacterSetECI('cp1252', 23, cp437, 'windows-1252');
@@ -73,6 +73,7 @@ class CharacterSetECI {
   static final Big5 = CharacterSetECI('big5', 28, gbk);
   static final GB18030 = CharacterSetECI(
       'gb18030', 29, gbk, ['gb-2312', 'gb2312', 'euc_cn', 'gbk']);
+
   // EUC-KR, KS_C_5601 and KS X 1001
   static final EUC_KR = CharacterSetECI('euc_kr', 30, eucKr,
       ['ks_c_5601', 'euc-kr']);

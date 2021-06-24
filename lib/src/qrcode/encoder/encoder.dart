@@ -86,8 +86,8 @@ class Encoder {
     BitArray headerBits = BitArray();
 
     // Append ECI segment if applicable
-    if (mode == Mode.BYTE && hasEncodingHint) {
-      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding!);
+    if (mode == Mode.BYTE && hasEncodingHint && encoding != null) {
+      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
         _appendECI(eci, headerBits);
       }
