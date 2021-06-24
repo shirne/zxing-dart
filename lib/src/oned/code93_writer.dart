@@ -20,7 +20,6 @@ import 'one_dimensional_code_writer.dart';
 
 /// This object renders a CODE93 code as a BitMatrix
 class Code93Writer extends OneDimensionalCodeWriter {
-
   // @protected
   @override
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_93];
@@ -52,13 +51,15 @@ class Code93Writer extends OneDimensionalCodeWriter {
 
     //add two checksums
     int check1 = _computeChecksumIndex(contents, 20);
-    pos += _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
+    pos +=
+        _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
 
     //append the contents to reflect the first checksum added
     contents += Code93Reader.ALPHABET_STRING[check1];
 
     int check2 = _computeChecksumIndex(contents, 15);
-    pos += _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
+    pos +=
+        _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
 
     //end character (*)
     pos += _appendPattern(result, pos, Code93Reader.asteriskEncoding);
@@ -122,8 +123,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
       } else if (character <= 31) {
         // ESC - US: (%)A - (%)E
         extCont.write('b');
-        extCont
-            .writeCharCode(65 /* A */ + character - 27);
+        extCont.writeCharCode(65 /* A */ + character - 27);
       } else if (character == 32 /*   */ ||
           character == 36 /* $ */ ||
           character == 37 /* % */ ||
@@ -133,8 +133,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
       } else if (character <= 44 /* , */) {
         // ! " # & ' ( ) * ,: (/)A - (/)L
         extCont.write('c');
-        extCont.writeCharCode(
-            65 /* A */ + character - 33 /* ! */);
+        extCont.writeCharCode(65 /* A */ + character - 33 /* ! */);
       } else if (character <= 57 /* 9 */) {
         extCont.writeCharCode(character);
       } else if (character == 58 /* : */) {
@@ -143,8 +142,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
       } else if (character <= 63 /* ? */) {
         // ; - ?: (%)F - (%)J
         extCont.write('b');
-        extCont.writeCharCode(
-            70 /* F */ + character - 59 /* ; */);
+        extCont.writeCharCode(70 /* F */ + character - 59 /* ; */);
       } else if (character == 64 /* @ */) {
         // @: (%)V
         extCont.write("bV");
@@ -154,21 +152,18 @@ class Code93Writer extends OneDimensionalCodeWriter {
       } else if (character <= 95 /* _ */) {
         // [ - _: (%)K - (%)O
         extCont.write('b');
-        extCont.writeCharCode(
-            75 /* K */ + character - 91 /* [ */);
+        extCont.writeCharCode(75 /* K */ + character - 91 /* [ */);
       } else if (character == 96 /* ` */) {
         // `: (%)W
         extCont.write("bW");
       } else if (character <= 122 /* z */) {
         // a - z: (*)A - (*)Z
         extCont.writeCharCode(100 /* d */);
-        extCont.writeCharCode(
-            65 /* A */ + character - 97 /* a */);
+        extCont.writeCharCode(65 /* A */ + character - 97 /* a */);
       } else if (character <= 127) {
         // { - DEL: (%)P - (%)T
         extCont.write('b');
-        extCont.writeCharCode(
-            80 /* P */ + character - 123 /* { */);
+        extCont.writeCharCode(80 /* P */ + character - 123 /* { */);
       } else {
         throw Exception(
             "Requested content contains a non-encodable character: 'chr($character)'");

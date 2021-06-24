@@ -54,9 +54,11 @@ class Decoder {
   ];
 
   static const List<String> _MIXED_TABLE = [
-    "CTRL_PS", " ", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\b", "\t",
+    "CTRL_PS", " ", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07",
+    "\b", "\t",
     "\n", //
-    "\x0e", "\f", "\r", "\x1b", "\x1c", "\x1d", "\x1e", "\x1f", "@", "\\", "^", "_",
+    "\x0e", "\f", "\r", "\x1b", "\x1c", "\x1d", "\x1e", "\x1f", "@", "\\", "^",
+    "_",
     "`", "|", "~", "\x7f", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
   ];
 

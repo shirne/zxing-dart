@@ -32,6 +32,7 @@ import 'compaction.dart';
 /// annex P.
 class PDF417HighLevelEncoder {
   static final int _blankCode = 32 /*   */;
+
   /// code for Text compaction
   static const int _TEXT_COMPACTION = 0;
 
@@ -383,13 +384,11 @@ class PDF417HighLevelEncoder {
   }
 
   static bool _isAlphaUpper(int ch) {
-    return ch == _blankCode ||
-        (ch >= 65 /* A */ && ch <= 90 /* Z */);
+    return ch == _blankCode || (ch >= 65 /* A */ && ch <= 90 /* Z */);
   }
 
   static bool _isAlphaLower(int ch) {
-    return ch == _blankCode ||
-        (ch >= 97 /* a */ && ch <= 122 /* z */);
+    return ch == _blankCode || (ch >= 97 /* a */ && ch <= 122 /* z */);
   }
 
   static bool _isMixed(int ch) {
@@ -401,7 +400,10 @@ class PDF417HighLevelEncoder {
   }
 
   static bool _isText(int chr) {
-    return chr == 9 /*'\t'*/ || chr == 10 /*'\n'*/ || chr == 13 /*'\r'*/ || (chr >= 32 && chr <= 126);
+    return chr == 9 /*'\t'*/ ||
+        chr == 10 /*'\n'*/ ||
+        chr == 13 /*'\r'*/ ||
+        (chr >= 32 && chr <= 126);
   }
 
   /// Determines the number of consecutive characters that are encodable using numeric compaction.
@@ -470,7 +472,6 @@ class PDF417HighLevelEncoder {
   /// @return the requested character count
   static int _determineConsecutiveBinaryCount(
       String msg, int startpos, Encoding encoding) {
-
     int len = msg.length;
     int idx = startpos;
     while (idx < len) {

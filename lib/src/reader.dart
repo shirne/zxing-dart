@@ -29,7 +29,6 @@ import 'result.dart';
 /// @author Sean Owen
 /// @author dswitkin@google.com (Daniel Switkin)
 abstract class Reader {
-
   /// Locates and decodes a barcode in some format within an [image]. This method also accepts
   /// [hints], each possibly associated to some data, which may help the implementation decode.
   ///

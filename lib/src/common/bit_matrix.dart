@@ -61,7 +61,7 @@ class BitMatrix {
   /// @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
   /// @return `BitMatrix` representation of image
   static BitMatrix parse(Object image, [String a = '', String b = '']) {
-    if(image is String){
+    if (image is String) {
       return _parseString(image, a, b);
     }
     image = image as List<List<bool>>;
@@ -180,9 +180,9 @@ class BitMatrix {
 
   /// <p>Flips every bit in the matrix.</p>
   void flip([int? x, int? y]) {
-    if(x == null || y == null){
+    if (x == null || y == null) {
       _flipAll();
-    }else {
+    } else {
       _flipPoint(x, y);
     }
   }
@@ -197,7 +197,7 @@ class BitMatrix {
         _rowSize != mask._rowSize) {
       throw ArgumentError("input matrix dimensions do not match");
     }
-    BitArray rowArray = BitArray( _width);
+    BitArray rowArray = BitArray(_width);
     for (int y = 0; y < _height; y++) {
       int offset = y * _rowSize;
       List<int> row = mask.getRow(y, rowArray).getBitArray();
@@ -268,7 +268,7 @@ class BitMatrix {
 
   /// Modifies this `BitMatrix` to represent the same but rotated 180 degrees
   void rotate180() {
-    BitArray topRow = BitArray( _width);
+    BitArray topRow = BitArray(_width);
     BitArray bottomRow = BitArray(_width);
     int maxHeight = (_height + 1) ~/ 2;
     for (int i = 0; i < maxHeight; i++) {
@@ -415,7 +415,7 @@ class BitMatrix {
     return _width == other._width &&
         _height == other._height &&
         _rowSize == other._rowSize &&
-        Utils.arrayEquals(_bits,  other._bits);
+        Utils.arrayEquals(_bits, other._bits);
   }
 
   @override

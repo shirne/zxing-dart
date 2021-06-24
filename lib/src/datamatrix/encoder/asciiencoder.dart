@@ -28,7 +28,8 @@ class ASCIIEncoder implements Encoder {
     int n = HighLevelEncoder.determineConsecutiveDigitCount(
         context.message, context.pos);
     if (n >= 2) {
-      context.writeCodeword(_encodeASCIIDigits(context.message.codeUnitAt(context.pos),
+      context.writeCodeword(_encodeASCIIDigits(
+          context.message.codeUnitAt(context.pos),
           context.message.codeUnitAt(context.pos + 1)));
       context.pos += 2;
     } else {

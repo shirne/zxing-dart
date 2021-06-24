@@ -60,23 +60,21 @@ class CalendarParsedResult extends ParsedResult {
       this.latitude,
       this.longitude)
       : super(ParsedResultType.CALENDAR) {
-
     this._start = _parseDate(startString);
 
     if (endString == null) {
       int durationMS = _parseDurationMS(durationString);
       _end = durationMS < 0 ? -1 : _start + durationMS;
     } else {
-
       this._end = _parseDate(endString);
-
     }
 
     this._startAllDay = startString != null && startString.length == 8;
     this._endAllDay = endString != null && endString.length == 8;
   }
 
-  setDuration(DateTime start, DateTime end, {bool startAllDay = false,bool endAllDay = false}){
+  setDuration(DateTime start, DateTime end,
+      {bool startAllDay = false, bool endAllDay = false}) {
     this._start = start.millisecondsSinceEpoch;
     this._end = end.millisecondsSinceEpoch;
     this._startAllDay = startAllDay;

@@ -46,8 +46,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     }
     List<BarcodeFormat>? supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {
-      throw Exception(
-          "Can only encode $supportedFormats, but got $format");
+      throw Exception("Can only encode $supportedFormats, but got $format");
     }
 
     int sidesMargin = defaultMargin;

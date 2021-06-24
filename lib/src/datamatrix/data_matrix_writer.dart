@@ -62,12 +62,14 @@ class DataMatrixWriter implements Writer {
         shape = requestedShape;
       }
       // @SuppressWarnings("deprecation")
-      Dimension? requestedMinSize = hints[EncodeHintType.MIN_SIZE] as Dimension?;
+      Dimension? requestedMinSize =
+          hints[EncodeHintType.MIN_SIZE] as Dimension?;
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
       // @SuppressWarnings("deprecation")
-      Dimension? requestedMaxSize = hints[EncodeHintType.MAX_SIZE] as Dimension?;
+      Dimension? requestedMaxSize =
+          hints[EncodeHintType.MAX_SIZE] as Dimension?;
       if (requestedMaxSize != null) {
         maxSize = requestedMaxSize;
       }
@@ -84,8 +86,8 @@ class DataMatrixWriter implements Writer {
     String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);
 
     //3. step: Module placement in Matrix
-    DefaultPlacement placement = DefaultPlacement(codewords,
-        symbolInfo.symbolDataWidth, symbolInfo.symbolDataHeight);
+    DefaultPlacement placement = DefaultPlacement(
+        codewords, symbolInfo.symbolDataWidth, symbolInfo.symbolDataHeight);
     placement.place();
 
     //4. step: low-level encoding
@@ -102,8 +104,8 @@ class DataMatrixWriter implements Writer {
     int symbolWidth = symbolInfo.symbolDataWidth;
     int symbolHeight = symbolInfo.symbolDataHeight;
 
-    ByteMatrix matrix = ByteMatrix(
-        symbolInfo.symbolWidth, symbolInfo.symbolHeight);
+    ByteMatrix matrix =
+        ByteMatrix(symbolInfo.symbolWidth, symbolInfo.symbolHeight);
 
     int matrixY = 0;
 

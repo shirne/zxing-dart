@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../result.dart';
 import 'uriparsed_result.dart';
 import 'result_parser.dart';

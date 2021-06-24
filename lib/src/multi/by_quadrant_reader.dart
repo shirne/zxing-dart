@@ -96,8 +96,8 @@ class ByQuadrantReader implements Reader {
       for (int i = 0; i < points.length; i++) {
         ResultPoint? relative = points[i];
         if (relative != null) {
-          points[i] = ResultPoint(
-              relative.x + leftOffset, relative.y + topOffset);
+          points[i] =
+              ResultPoint(relative.x + leftOffset, relative.y + topOffset);
         }
       }
     }

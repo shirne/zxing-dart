@@ -43,9 +43,8 @@ class AI01AndOtherAIs extends AI01decoder {
 
     buff.write("(01)");
     int initialGtinPosition = buff.length;
-    int firstGtinDigit = this
-        .generalDecoder
-        .extractNumericValueFromBitArray(_HEADER_SIZE, 4);
+    int firstGtinDigit =
+        this.generalDecoder.extractNumericValueFromBitArray(_HEADER_SIZE, 4);
     buff.write(firstGtinDigit);
 
     this.encodeCompressedGtinWithoutAI(

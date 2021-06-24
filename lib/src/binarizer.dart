@@ -51,10 +51,10 @@ abstract class Binarizer {
   /// throws [NotFoundException] if image can't be binarized to make a matrix
   BitMatrix get blackMatrix;
 
-  /// Creates a new [Binarizer] with the same type as this Binarizer implementation, but with pristine
+  /// Creates a [Binarizer] with the same type as this Binarizer implementation, but with pristine
   /// state.
   ///
-  /// The new [Binarizer] will operate on [source].
+  /// The [Binarizer] will operate on [source].
   /// This is needed because Binarizer implementations may be stateful, e.g. keeping a cache
   /// of 1 bit data. See Effective Java for why we can't use Java's clone() method.
   Binarizer createBinarizer(LuminanceSource source);

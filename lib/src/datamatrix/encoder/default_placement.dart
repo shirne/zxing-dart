@@ -29,8 +29,7 @@ class DefaultPlacement {
   /// @param numcols   the number of columns
   /// @param numrows   the number of rows
   DefaultPlacement(this._codewords, this._numCols, this._numRows)
-      : this._bits =
-  Int8List.fromList(List.filled(_numCols * _numRows, -1));
+      : this._bits = Int8List.fromList(List.filled(_numCols * _numRows, -1));
 
   int get numRows => _numRows;
 

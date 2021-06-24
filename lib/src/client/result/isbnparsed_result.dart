@@ -25,7 +25,6 @@ class ISBNParsedResult extends ParsedResult {
 
   ISBNParsedResult(this.isbn) : super(ParsedResultType.ISBN);
 
-
   @override
   String get displayResult {
     return isbn;

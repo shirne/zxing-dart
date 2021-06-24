@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import '../barcode_format.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -23,7 +21,6 @@ import 'one_dimensional_code_writer.dart';
 ///
 /// @author erik.barbara@gmail.com (Erik Barbara)
 class ITFWriter extends OneDimensionalCodeWriter {
-
   static const List<int> _START_PATTERN = [1, 1, 1, 1];
   static const List<int> _END_PATTERN = [3, 1, 1];
 
@@ -32,16 +29,16 @@ class ITFWriter extends OneDimensionalCodeWriter {
 
   // See [ITFReader.PATTERNS]
   static const List<List<int>> _PATTERNS = [
-      [_N, _N, _W, _W, _N], // 0
-      [_W, _N, _N, _N, _W], // 1
-      [_N, _W, _N, _N, _W], // 2
-      [_W, _W, _N, _N, _N], // 3
-      [_N, _N, _W, _N, _W], // 4
-      [_W, _N, _W, _N, _N], // 5
-      [_N, _W, _W, _N, _N], // 6
-      [_N, _N, _N, _W, _W], // 7
-      [_W, _N, _N, _W, _N], // 8
-      [_N, _W, _N, _W, _N]  // 9
+    [_N, _N, _W, _W, _N], // 0
+    [_W, _N, _N, _N, _W], // 1
+    [_N, _W, _N, _N, _W], // 2
+    [_W, _W, _N, _N, _N], // 3
+    [_N, _N, _W, _N, _W], // 4
+    [_W, _N, _W, _N, _N], // 5
+    [_N, _W, _W, _N, _N], // 6
+    [_N, _N, _N, _W, _W], // 7
+    [_W, _N, _N, _W, _N], // 8
+    [_N, _W, _N, _W, _N] // 9
   ];
 
   // @protected
@@ -56,26 +53,27 @@ class ITFWriter extends OneDimensionalCodeWriter {
     }
     if (length > 80) {
       throw Exception(
-          "Requested contents should be less than 80 digits long, but got $length" );
+          "Requested contents should be less than 80 digits long, but got $length");
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
     List<bool> result = List.filled(9 + 9 * length, false);
-    int pos = OneDimensionalCodeWriter.appendPattern(result, 0, _START_PATTERN, true);
+    int pos =
+        OneDimensionalCodeWriter.appendPattern(result, 0, _START_PATTERN, true);
     for (int i = 0; i < length; i += 2) {
       int one = int.parse(contents[i]);
-      int two = int.parse(contents[i+1]);
+      int two = int.parse(contents[i + 1]);
       List<int> encoding = List.filled(10, 0);
       for (int j = 0; j < 5; j++) {
         encoding[2 * j] = _PATTERNS[one][j];
         encoding[2 * j + 1] = _PATTERNS[two][j];
       }
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, encoding, true);
+      pos +=
+          OneDimensionalCodeWriter.appendPattern(result, pos, encoding, true);
     }
     OneDimensionalCodeWriter.appendPattern(result, pos, _END_PATTERN, true);
 
     return result;
   }
-
 }

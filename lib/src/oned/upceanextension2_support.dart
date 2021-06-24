@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
 import '../common/bit_array.dart';
 import '../barcode_format.dart';
 import '../not_found_exception.dart';
@@ -28,33 +25,35 @@ import 'upceanreader.dart';
 
 /// See [UPCEANExtension5Support]
 class UPCEANExtension2Support {
-
-  final List<int> _decodeMiddleCounters = [0,0,0,0];
+  final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
   final StringBuffer _decodeRowStringBuffer = StringBuffer();
 
-  Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange){
-
+  Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange) {
     StringBuffer result = _decodeRowStringBuffer;
     result.clear();
     int end = _decodeMiddle(row, extensionStartRange, result);
 
     String resultString = result.toString();
-    Map<ResultMetadataType,Object>? extensionData = _parseExtensionString(resultString);
+    Map<ResultMetadataType, Object>? extensionData =
+        _parseExtensionString(resultString);
 
-    Result? extensionResult =
-        Result(resultString,
-                   null,
-                   [ ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0, rowNumber.toDouble()),
-                     ResultPoint(end.toDouble(), rowNumber.toDouble()),
-                   ],
-                   BarcodeFormat.UPC_EAN_EXTENSION);
+    Result? extensionResult = Result(
+        resultString,
+        null,
+        [
+          ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0,
+              rowNumber.toDouble()),
+          ResultPoint(end.toDouble(), rowNumber.toDouble()),
+        ],
+        BarcodeFormat.UPC_EAN_EXTENSION);
     if (extensionData != null) {
       extensionResult.putAllMetadata(extensionData);
     }
     return extensionResult;
   }
 
-  int _decodeMiddle(BitArray row, List<int> startRange, StringBuffer resultString){
+  int _decodeMiddle(
+      BitArray row, List<int> startRange, StringBuffer resultString) {
     List<int> counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -66,7 +65,8 @@ class UPCEANExtension2Support {
     int checkParity = 0;
 
     for (int x = 0; x < 2 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.lAndGPatterns);
+      int bestMatch = UPCEANReader.decodeDigit(
+          row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
@@ -95,13 +95,12 @@ class UPCEANExtension2Support {
   /// @param raw raw content of extension
   /// @return formatted interpretation of raw content as a [Map] mapping
   ///  one [ResultMetadataType] to appropriate value, or `null` if not known
-  static Map<ResultMetadataType,Object>? _parseExtensionString(String raw) {
+  static Map<ResultMetadataType, Object>? _parseExtensionString(String raw) {
     if (raw.length != 2) {
       return null;
     }
-    Map<ResultMetadataType,Object> result = {};
+    Map<ResultMetadataType, Object> result = {};
     result[ResultMetadataType.ISSUE_NUMBER] = raw.toString();
     return result;
   }
-
 }

@@ -51,8 +51,7 @@ class QRCodeReader implements Reader {
       decoderResult = _decoder.decodeMatrix(bits, hints);
       points = _noPoints;
     } else {
-      DetectorResult detectorResult =
-          Detector(image.blackMatrix).detect(hints);
+      DetectorResult detectorResult = Detector(image.blackMatrix).detect(hints);
       decoderResult = _decoder.decodeMatrix(detectorResult.bits, hints);
       points = detectorResult.points;
     }
@@ -63,8 +62,8 @@ class QRCodeReader implements Reader {
           .applyMirroredCorrection(points);
     }
 
-    Result result = Result(decoderResult.text,
-        decoderResult.rawBytes, points, BarcodeFormat.QR_CODE);
+    Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+        BarcodeFormat.QR_CODE);
     List<Uint8List>? byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);

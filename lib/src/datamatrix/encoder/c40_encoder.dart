@@ -38,8 +38,7 @@ class C40Encoder implements Encoder {
 
       int curCodewordCount = context.codewordCount + unwritten;
       context.updateSymbolInfo(curCodewordCount);
-      int available =
-          context.symbolInfo!.dataCapacity - curCodewordCount;
+      int available = context.symbolInfo!.dataCapacity - curCodewordCount;
 
       if (!context.hasMoreCharacters) {
         //Avoid having a single C40 value in the last triplet
@@ -96,8 +95,7 @@ class C40Encoder implements Encoder {
 
     int curCodewordCount = context.codewordCount + unwritten;
     context.updateSymbolInfo(curCodewordCount);
-    int available =
-        context.symbolInfo!.dataCapacity - curCodewordCount;
+    int available = context.symbolInfo!.dataCapacity - curCodewordCount;
 
     if (rest == 2) {
       buffer.write('\x00'); //Shift 1
@@ -130,11 +128,12 @@ class C40Encoder implements Encoder {
   }
 
   int encodeChar(int chr, StringBuffer sb) {
-    if (chr == 32) { // ' '
+    if (chr == 32) {
+      // ' '
       sb.write('\x03');
       return 1;
     }
-    
+
     if (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) {
       sb.writeCharCode(chr - 48 + 4);
       return 1;

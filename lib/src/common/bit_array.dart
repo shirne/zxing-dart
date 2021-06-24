@@ -33,7 +33,7 @@ class BitArray {
   BitArray([this._size = 0]) {
     if (_size == 0) {
       this._bits = Int32List(1);
-    }else{
+    } else {
       this._bits = _makeArray(_size);
     }
   }
@@ -55,7 +55,7 @@ class BitArray {
     }
   }
 
-  bool operator [](int i){
+  bool operator [](int i) {
     return get(i);
   }
 
@@ -186,7 +186,7 @@ class BitArray {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
-      int mask = (2 << lastBit) - (1 << firstBit) ;
+      int mask = (2 << lastBit) - (1 << firstBit);
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
@@ -303,12 +303,12 @@ class BitArray {
       return false;
     }
     BitArray other = o;
-    return _size == other._size && Utils.arrayEquals(_bits,  other._bits);
+    return _size == other._size && Utils.arrayEquals(_bits, other._bits);
   }
 
   @override
   int get hashCode {
-    return 31 * _size + Utils.arrayHashCode(_bits) ;
+    return 31 * _size + Utils.arrayHashCode(_bits);
   }
 
   @override
@@ -324,6 +324,6 @@ class BitArray {
   }
 
   BitArray clone() {
-    return BitArray.test( Int32List.fromList(_bits.toList()), _size);
+    return BitArray.test(Int32List.fromList(_bits.toList()), _size);
   }
 }

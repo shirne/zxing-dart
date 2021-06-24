@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../barcode_format.dart';
 import '../formats_exception.dart';
 import 'ean13_reader.dart';
@@ -26,7 +25,6 @@ import 'upceanwriter.dart';
 ///
 /// @author aripollak@gmail.com (Ari Pollak)
 class EAN13Writer extends UPCEANWriter {
-
   static const int _CODE_WIDTH = 3 + // start guard
       (7 * 6) + // left bars
       5 + // middle guard
@@ -46,7 +44,7 @@ class EAN13Writer extends UPCEANWriter {
         int check;
         try {
           check = UPCEANReader.getStandardUPCEANChecksum(contents);
-        } on FormatsException catch ( fe) {
+        } on FormatsException catch (fe) {
           throw ArgumentError(fe);
         }
         contents += check.toString();
@@ -56,7 +54,7 @@ class EAN13Writer extends UPCEANWriter {
           if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
             throw ArgumentError("Contents do not pass checksum");
           }
-        } on FormatsException catch ( _) {
+        } on FormatsException catch (_) {
           throw ArgumentError("Illegal contents");
         }
         break;
@@ -72,7 +70,8 @@ class EAN13Writer extends UPCEANWriter {
     List<bool> result = List.filled(_CODE_WIDTH, false);
     int pos = 0;
 
-    pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+    pos += OneDimensionalCodeWriter.appendPattern(
+        result, pos, UPCEANReader.START_END_PATTERN, true);
 
     // See EAN13Reader for a description of how the first digit & left bars are encoded
     for (int i = 1; i <= 6; i++) {
@@ -80,18 +79,21 @@ class EAN13Writer extends UPCEANWriter {
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.lAndGPatterns[digit], false);
+      pos += OneDimensionalCodeWriter.appendPattern(
+          result, pos, UPCEANReader.lAndGPatterns[digit], false);
     }
 
-    pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
+    pos += OneDimensionalCodeWriter.appendPattern(
+        result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
     for (int i = 7; i <= 12; i++) {
       int digit = int.parse(contents[i]);
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
+      pos += OneDimensionalCodeWriter.appendPattern(
+          result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }
-    OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+    OneDimensionalCodeWriter.appendPattern(
+        result, pos, UPCEANReader.START_END_PATTERN, true);
 
     return result;
   }
-
 }

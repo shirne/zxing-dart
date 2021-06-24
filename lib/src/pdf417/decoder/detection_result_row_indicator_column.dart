@@ -47,8 +47,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       BarcodeMetadata barcodeMetadata) {
     _setRowNumbers();
     _removeIncorrectCodewords(codewords, barcodeMetadata);
-    ResultPoint top =
-        isLeft ? boundingBox.topLeft : boundingBox.topRight;
+    ResultPoint top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
     ResultPoint bottom =
         isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
     int firstRow = imageRowToCodewordIndex(top.y.toInt());
@@ -128,8 +127,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // use row height count to make detection of invalid row numbers more reliable
   void _adjustIncompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
-    ResultPoint top =
-        isLeft ? boundingBox.topLeft : boundingBox.topRight;
+    ResultPoint top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
     ResultPoint bottom =
         isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
     int firstRow = imageRowToCodewordIndex(top.y.toInt());
@@ -239,14 +237,12 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       }
       switch (codewordRowNumber % 3) {
         case 0:
-          if (rowIndicatorValue * 3 + 1 !=
-              barcodeMetadata.rowCountUpperPart) {
+          if (rowIndicatorValue * 3 + 1 != barcodeMetadata.rowCountUpperPart) {
             codewords[codewordRow] = null;
           }
           break;
         case 1:
-          if (rowIndicatorValue ~/ 3 !=
-                  barcodeMetadata.errorCorrectionLevel ||
+          if (rowIndicatorValue ~/ 3 != barcodeMetadata.errorCorrectionLevel ||
               rowIndicatorValue % 3 != barcodeMetadata.rowCountLowerPart) {
             codewords[codewordRow] = null;
           }

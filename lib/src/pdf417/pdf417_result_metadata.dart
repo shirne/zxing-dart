@@ -16,7 +16,6 @@
 
 /// @author Guenther Grau
 class PDF417ResultMetadata {
-
   /// The File segment index represents the segment of the whole file distributed over different symbols.
   int segmentIndex = 0;
 
@@ -48,6 +47,4 @@ class PDF417ResultMetadata {
   /// optionalData old optional data format as int array
   @Deprecated('use dedicated already parsed fields')
   List<int>? optionalData;
-
-
 }

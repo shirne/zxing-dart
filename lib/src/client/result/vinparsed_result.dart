@@ -29,29 +29,37 @@ class VINParsedResult extends ParsedResult {
   int plantCode;
   String sequentialNumber;
 
-  VINParsedResult(
-  {this.vin = '',
-      this.worldManufacturerID = '',
-      this.vehicleDescriptorSection = '',
-      this.vehicleIdentifierSection = '',
-      this.countryCode,
-      this.vehicleAttributes = '',
-      this.modelYear = 0,
-      this.plantCode = 0,
-      this.sequentialNumber = ''}):super(ParsedResultType.VIN);
+  VINParsedResult({
+    this.vin = '',
+    this.worldManufacturerID = '',
+    this.vehicleDescriptorSection = '',
+    this.vehicleIdentifierSection = '',
+    this.countryCode,
+    this.vehicleAttributes = '',
+    this.modelYear = 0,
+    this.plantCode = 0,
+    this.sequentialNumber = '',
+  }) : super(ParsedResultType.VIN);
 
   @override
   String get displayResult {
     StringBuffer result = StringBuffer();
-    result.write(worldManufacturerID); result.write(' ');
-    result.write(vehicleDescriptorSection); result.write(' ');
-    result.write(vehicleIdentifierSection); result.write('\n');
+    result.write(worldManufacturerID);
+    result.write(' ');
+    result.write(vehicleDescriptorSection);
+    result.write(' ');
+    result.write(vehicleIdentifierSection);
+    result.write('\n');
     if (countryCode != null) {
-      result.write(countryCode); result.write(' ');
+      result.write(countryCode);
+      result.write(' ');
     }
-    result.write(modelYear); result.write(' ');
-    result.writeCharCode(plantCode); result.write(' ');
-    result.write(sequentialNumber); result.write('\n');
+    result.write(modelYear);
+    result.write(' ');
+    result.writeCharCode(plantCode);
+    result.write(' ');
+    result.write(sequentialNumber);
+    result.write('\n');
     return result.toString();
   }
 }

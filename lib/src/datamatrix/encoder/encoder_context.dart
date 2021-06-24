@@ -39,7 +39,7 @@ class EncoderContext {
     StringBuffer sb = StringBuffer();
     for (int i = 0, c = msgBinary.length; i < c; i++) {
       int ch = msgBinary[i] & 0xff;
-      if (ch == 63/*'?'*/ && msg[i] != '?') {
+      if (ch == 63 /*'?'*/ && msg[i] != '?') {
         throw Exception(
             "Message contains characters outside ISO-8859-1 encoding.");
       }
@@ -77,9 +77,9 @@ class EncoderContext {
   }
 
   void writeCodeword(dynamic codeword) {
-    if(codeword is int){
+    if (codeword is int) {
       this._codewords.writeCharCode(codeword);
-    }else{
+    } else {
       this._codewords.write(codeword);
     }
   }
@@ -109,7 +109,8 @@ class EncoderContext {
   void updateSymbolInfo([int? len]) {
     if (len == null) len = codewordCount;
     if (this._symbolInfo == null || len > this._symbolInfo!.dataCapacity) {
-      this._symbolInfo = SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
+      this._symbolInfo =
+          SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
     }
   }
 

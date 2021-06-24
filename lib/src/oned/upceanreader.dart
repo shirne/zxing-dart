@@ -45,7 +45,7 @@ abstract class UPCEANReader extends OneDReader {
   static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
 
   /// Start/end guard pattern.
-  static const List<int> START_END_PATTERN = [ 1, 1, 1 ];
+  static const List<int> START_END_PATTERN = [1, 1, 1];
 
   /// Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
   static const List<int> MIDDLE_PATTERN = [1, 1, 1, 1, 1];
@@ -78,11 +78,11 @@ abstract class UPCEANReader extends OneDReader {
                   [L_PATTERNS[index - 10].length - idx - 1]));
 
   /* static {
-    L_AND_G_PATTERNS = new int[20][];
+    L_AND_G_PATTERNS = int[20][];
     List.copyRange(L_AND_G_PATTERNS, 0, L_PATTERNS, 0, 10);
     for (int i = 10; i < 20; i++) {
       List<int> widths = L_PATTERNS[i - 10];
-      List<int> reversedWidths = new int[widths.length];
+      List<int> reversedWidths = int[widths.length];
       for (int j = 0; j < widths.length; j++) {
         reversedWidths[j] = widths[widths.length - j - 1];
       }

@@ -41,7 +41,6 @@ import 'one_dreader.dart';
 ///
 /// @author kevin.osullivan@sita.aero, SITA Lab.
 class ITFReader extends OneDReader {
-
   static const double _MAX_AVG_VARIANCE = 0.38;
   static const double _MAX_INDIVIDUAL_VARIANCE = 0.5;
 
@@ -61,40 +60,39 @@ class ITFReader extends OneDReader {
   /// searching for the END_PATTERN
   static const List<int> _START_PATTERN = [_N, _N, _N, _N];
   static const List<List<int>> _END_PATTERN_REVERSED = [
-      [_N, _N, _w], // 2x
-      [_N, _N, _W]  // 3x
+    [_N, _N, _w], // 2x
+    [_N, _N, _W] // 3x
   ];
 
   // See ITFWriter.PATTERNS
 
   /// Patterns of Wide / Narrow lines to indicate each digit
   static const List<List<int>> _PATTERNS = [
-      [_N, _N, _w, _w, _N], // 0
-      [_w, _N, _N, _N, _w], // 1
-      [_N, _w, _N, _N, _w], // 2
-      [_w, _w, _N, _N, _N], // 3
-      [_N, _N, _w, _N, _w], // 4
-      [_w, _N, _w, _N, _N], // 5
-      [_N, _w, _w, _N, _N], // 6
-      [_N, _N, _N, _w, _w], // 7
-      [_w, _N, _N, _w, _N], // 8
-      [_N, _w, _N, _w, _N], // 9
-      [_N, _N, _W, _W, _N], // 0
-      [_W, _N, _N, _N, _W], // 1
-      [_N, _W, _N, _N, _W], // 2
-      [_W, _W, _N, _N, _N], // 3
-      [_N, _N, _W, _N, _W], // 4
-      [_W, _N, _W, _N, _N], // 5
-      [_N, _W, _W, _N, _N], // 6
-      [_N, _N, _N, _W, _W], // 7
-      [_W, _N, _N, _W, _N], // 8
-      [_N, _W, _N, _W, _N]  // 9
+    [_N, _N, _w, _w, _N], // 0
+    [_w, _N, _N, _N, _w], // 1
+    [_N, _w, _N, _N, _w], // 2
+    [_w, _w, _N, _N, _N], // 3
+    [_N, _N, _w, _N, _w], // 4
+    [_w, _N, _w, _N, _N], // 5
+    [_N, _w, _w, _N, _N], // 6
+    [_N, _N, _N, _w, _w], // 7
+    [_w, _N, _N, _w, _N], // 8
+    [_N, _w, _N, _w, _N], // 9
+    [_N, _N, _W, _W, _N], // 0
+    [_W, _N, _N, _N, _W], // 1
+    [_N, _W, _N, _N, _W], // 2
+    [_W, _W, _N, _N, _N], // 3
+    [_N, _N, _W, _N, _W], // 4
+    [_W, _N, _W, _N, _N], // 5
+    [_N, _W, _W, _N, _N], // 6
+    [_N, _N, _N, _W, _W], // 7
+    [_W, _N, _N, _W, _N], // 8
+    [_N, _W, _N, _W, _N] // 9
   ];
 
   @override
-  Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints)
-     {
-
+  Result decodeRow(
+      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     // Find out where the Middle section (payload) starts & ends
     List<int> startRange = _decodeStart(row);
     List<int> endRange = _decodeEnd(row);
@@ -103,7 +101,8 @@ class ITFReader extends OneDReader {
     _decodeMiddle(row, startRange[1], endRange[0], result);
     String resultString = result.toString();
 
-    List<int>? allowedLengths = hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
+    List<int>? allowedLengths =
+        hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
 
     if (allowedLengths == null) {
       allowedLengths = _DEFAULT_ALLOWED_LENGTHS;
@@ -133,8 +132,10 @@ class ITFReader extends OneDReader {
     return Result(
         resultString,
         null, // no natural byte representation for these barcodes
-        [ResultPoint(startRange[1].toDouble(), rowNumber.toDouble()),
-                           ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())],
+        [
+          ResultPoint(startRange[1].toDouble(), rowNumber.toDouble()),
+          ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())
+        ],
         BarcodeFormat.ITF);
   }
 
@@ -142,11 +143,8 @@ class ITFReader extends OneDReader {
   /// @param payloadStart offset of start pattern
   /// @param resultString [StringBuffer] to append decoded chars to
   /// @throws NotFoundException if decoding could not complete successfully
-  static void _decodeMiddle(BitArray row,
-                                   int payloadStart,
-                                   int payloadEnd,
-                                   StringBuffer resultString){
-
+  static void _decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
+      StringBuffer resultString) {
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
     // 5
     // interleaved white lines for the second digit.
@@ -157,7 +155,6 @@ class ITFReader extends OneDReader {
     List<int> counterWhite = List.filled(5, 0);
 
     while (payloadStart < payloadEnd) {
-
       // Get 10 runs of black/white.
       OneDReader.recordPattern(row, payloadStart, counterDigitPair);
       // Split them into each array
@@ -183,7 +180,7 @@ class ITFReader extends OneDReader {
   /// @param row row of black/white values to search
   /// @return Array, containing index of start of 'start block' and end of
   ///         'start block'
-  List<int> _decodeStart(BitArray row){
+  List<int> _decodeStart(BitArray row) {
     int endStart = _skipWhiteSpace(row);
     List<int> startPattern = _findGuardPattern(row, endStart, _START_PATTERN);
 
@@ -210,9 +207,9 @@ class ITFReader extends OneDReader {
   /// @param row bit array representing the scanned barcode.
   /// @param startPattern index into row of the start or end pattern.
   /// @throws NotFoundException if the quiet zone cannot be found
-  void _validateQuietZone(BitArray row, int startPattern){
-
-    int quietCount = this._narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
+  void _validateQuietZone(BitArray row, int startPattern) {
+    int quietCount = this._narrowLineWidth *
+        10; // expect to find this many pixels of quiet zone
 
     // if there are not so many pixel at all let's try as many as possible
     quietCount = Math.min(quietCount, startPattern);
@@ -234,7 +231,7 @@ class ITFReader extends OneDReader {
   /// @param row row of black/white values to search
   /// @return index of the first black line.
   /// @throws NotFoundException
-  static int _skipWhiteSpace(BitArray row){
+  static int _skipWhiteSpace(BitArray row) {
     int width = row.size;
     int endStart = row.getNextSet(0);
     if (endStart == width) {
@@ -249,8 +246,7 @@ class ITFReader extends OneDReader {
   /// @param row row of black/white values to search
   /// @return Array, containing index of start of 'end block' and end of 'end
   ///         block'
-  List<int> _decodeEnd(BitArray row){
-
+  List<int> _decodeEnd(BitArray row) {
     // For convenience, reverse the row and then
     // search from 'the start' for the end block
     row.reverse();
@@ -259,7 +255,7 @@ class ITFReader extends OneDReader {
       List<int> endPattern;
       try {
         endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[0]);
-      } on NotFoundException catch ( _) {
+      } on NotFoundException catch (_) {
         endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[1]);
       }
 
@@ -289,9 +285,8 @@ class ITFReader extends OneDReader {
   /// @return start/end horizontal offset of guard pattern, as an array of two
   ///         ints
   /// @throws NotFoundException if pattern is not found
-  static List<int> _findGuardPattern(BitArray row,
-                                        int rowOffset,
-                                        List<int> pattern){
+  static List<int> _findGuardPattern(
+      BitArray row, int rowOffset, List<int> pattern) {
     int patternLength = pattern.length;
     List<int> counters = List.filled(patternLength, 0);
     int width = row.size;
@@ -304,7 +299,9 @@ class ITFReader extends OneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (OneDReader.patternMatchVariance(counters, pattern, _MAX_INDIVIDUAL_VARIANCE) < _MAX_AVG_VARIANCE) {
+          if (OneDReader.patternMatchVariance(
+                  counters, pattern, _MAX_INDIVIDUAL_VARIANCE) <
+              _MAX_AVG_VARIANCE) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -328,13 +325,14 @@ class ITFReader extends OneDReader {
   /// @param counters the counts of runs of observed black/white/black/... values
   /// @return The decoded digit
   /// @throws NotFoundException if digit cannot be decoded
-  static int _decodeDigit(List<int> counters){
+  static int _decodeDigit(List<int> counters) {
     double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     int max = _PATTERNS.length;
     for (int i = 0; i < max; i++) {
       List<int> pattern = _PATTERNS[i];
-      double variance = OneDReader.patternMatchVariance(counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
+      double variance = OneDReader.patternMatchVariance(
+          counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;
@@ -349,5 +347,4 @@ class ITFReader extends OneDReader {
       throw NotFoundException.instance;
     }
   }
-
 }

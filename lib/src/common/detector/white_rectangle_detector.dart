@@ -19,7 +19,6 @@ import '../../result_point.dart';
 import '../bit_matrix.dart';
 import 'math_utils.dart';
 
-
 /// Detects a candidate barcode-like rectangular region within an image.
 ///
 /// It starts around the center of the image, increases the size of the candidate
@@ -44,7 +43,8 @@ class WhiteRectangleDetector {
   /// @param x x position of search center
   /// @param y y position of search center
   /// @throws NotFoundException if image is too small to accommodate `initSize`
-  WhiteRectangleDetector(this._image, [int initSize = _INIT_SIZE, int? x, int? y])
+  WhiteRectangleDetector(this._image,
+      [int initSize = _INIT_SIZE, int? x, int? y])
       : _height = _image.height,
         _width = _image.width,
         _leftInit = (x ?? _image.width ~/ 2) - initSize ~/ 2,

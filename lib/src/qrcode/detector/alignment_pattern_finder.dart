@@ -120,7 +120,8 @@ class AlignmentPatternFinder {
         j++;
       }
       if (_foundPatternCross(stateCount)) {
-        AlignmentPattern? confirmed = _handlePossibleCenter(stateCount, i, maxJ);
+        AlignmentPattern? confirmed =
+            _handlePossibleCenter(stateCount, i, maxJ);
         if (confirmed != null) {
           return confirmed;
         }

@@ -104,8 +104,8 @@ class PerspectiveTransform {
       double denominator = dx1 * dy2 - dx2 * dy1;
       double a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
       double a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
-      return PerspectiveTransform._(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3,
-          x0, y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0, a13, a23, 1.0);
+      return PerspectiveTransform._(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0,
+          y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0, a13, a23, 1.0);
     }
   }
 

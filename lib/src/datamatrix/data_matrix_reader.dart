@@ -52,8 +52,8 @@ class DataMatrixReader implements Reader {
       decoderResult = _decoder.decodeMatrix(detectorResult.bits);
       points = detectorResult.points;
     }
-    Result result = Result(decoderResult.text,
-        decoderResult.rawBytes, points, BarcodeFormat.DATA_MATRIX);
+    Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+        BarcodeFormat.DATA_MATRIX);
     List<Uint8List>? byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);

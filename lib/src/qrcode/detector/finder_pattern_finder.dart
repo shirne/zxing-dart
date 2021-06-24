@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import '../../common/bit_matrix.dart';
 
 import '../../decode_hint_type.dart';
@@ -37,7 +35,8 @@ class FinderPatternFinder {
   //@protected
   static const int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   //@protected
-  static const int MAX_MODULES = 97; // support up to version 20 for mobile clients
+  static const int MAX_MODULES =
+      97; // support up to version 20 for mobile clients
 
   final BitMatrix _image;
   final List<FinderPattern> _possibleCenters;
@@ -45,8 +44,7 @@ class FinderPatternFinder {
   final List<int> _crossCheckStateCount;
   final ResultPointCallback? _resultPointCallback;
 
-  FinderPatternFinder(this._image,
-      [ this._resultPointCallback])
+  FinderPatternFinder(this._image, [this._resultPointCallback])
       : _possibleCenters = [],
         _crossCheckStateCount = [0, 0, 0, 0, 0];
 
@@ -600,9 +598,7 @@ class FinderPatternFinder {
   }
 
   int _centerCompare(FinderPattern center1, FinderPattern center2) {
-    return center1
-        .estimatedModuleSize
-        .compareTo(center2.estimatedModuleSize);
+    return center1.estimatedModuleSize.compareTo(center2.estimatedModuleSize);
   }
 
   /// @return the 3 best [FinderPattern]s from our list of candidates. The "best" are

@@ -1,4 +1,3 @@
-
 /// A StringBuilder extends [StringBuffer]. methods like StringBuilder from Java
 class StringBuilder extends StringBuffer {
   String? _buffer;
@@ -11,11 +10,11 @@ class StringBuilder extends StringBuffer {
     }
   }
 
-  String operator [](int idx){
+  String operator [](int idx) {
     return charAt(idx);
   }
 
-  operator []=(int idx, String char){
+  operator []=(int idx, String char) {
     setCharAt(idx, char);
   }
 
@@ -25,10 +24,10 @@ class StringBuilder extends StringBuffer {
   }
 
   void setCharAt(int index, dynamic char) {
-    replace(index, index+1, char);
+    replace(index, index + 1, char);
   }
 
-  int codePointAt(int index){
+  int codePointAt(int index) {
     _initBuffer();
     return _buffer!.codeUnitAt(index);
   }
@@ -36,10 +35,9 @@ class StringBuilder extends StringBuffer {
   void replace(int start, int end, dynamic obj) {
     _initBuffer();
     super.clear();
-    if(start > 0)super.write(_buffer!.substring(0, start));
+    if (start > 0) super.write(_buffer!.substring(0, start));
     _writeAuto(obj);
-    if (end < _buffer!.length)
-      super.write(_buffer!.substring(end));
+    if (end < _buffer!.length) super.write(_buffer!.substring(end));
     _buffer = null;
   }
 
@@ -58,27 +56,26 @@ class StringBuilder extends StringBuffer {
   insert(int offset, Object? obj) {
     _initBuffer();
     super.clear();
-    if(offset > 0)super.write(_buffer!.substring(0, offset));
+    if (offset > 0) super.write(_buffer!.substring(0, offset));
     _writeAuto(obj);
-    if (offset < _buffer!.length)
-      super.write(_buffer!.substring(offset));
+    if (offset < _buffer!.length) super.write(_buffer!.substring(offset));
     _buffer = null;
   }
 
-  _writeAuto(Object? obj){
-    if(obj is int) {
+  _writeAuto(Object? obj) {
+    if (obj is int) {
       super.writeCharCode(obj);
-    }else if(obj is List){
-      if(obj.isNotEmpty){
-        if(obj[0] is int){
+    } else if (obj is List) {
+      if (obj.isNotEmpty) {
+        if (obj[0] is int) {
           obj.forEach((element) {
             super.writeCharCode(element);
           });
-        }else{
+        } else {
           super.writeAll(obj);
         }
       }
-    }else if(obj != null) {
+    } else if (obj != null) {
       super.write(obj);
     }
   }
@@ -86,7 +83,7 @@ class StringBuilder extends StringBuffer {
   delete(int start, int end) {
     _initBuffer();
     super.clear();
-    if(start > 0)super.write(_buffer!.substring(0, start));
+    if (start > 0) super.write(_buffer!.substring(0, start));
     if (end < _buffer!.length - 1) super.write(_buffer!.substring(end));
     _buffer = null;
   }
@@ -95,10 +92,10 @@ class StringBuilder extends StringBuffer {
     delete(idx, idx + 1);
   }
 
-  setLength(int length){
-    if(length > this.length){
+  setLength(int length) {
+    if (length > this.length) {
       writeAll(List.filled(length - this.length, "\x00"));
-    }else {
+    } else {
       delete(length, this.length);
     }
   }

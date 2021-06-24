@@ -66,7 +66,6 @@ class X12Encoder extends C40Encoder {
         sb.write('\x03');
         break;
       default:
-
         if (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) {
           sb.writeCharCode(chr - 48 + 4);
         } else if (chr >= 65 /* A */ && chr <= 90 /* Z */) {
@@ -82,8 +81,7 @@ class X12Encoder extends C40Encoder {
   @override
   void handleEOD(EncoderContext context, StringBuffer buffer) {
     context.updateSymbolInfo();
-    int available =
-        context.symbolInfo!.dataCapacity - context.codewordCount;
+    int available = context.symbolInfo!.dataCapacity - context.codewordCount;
     int count = buffer.length;
     context.pos -= count;
     if (context.remainingCharacters > 1 ||

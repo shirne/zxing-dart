@@ -114,15 +114,15 @@ class DetectionResult {
         for (int barcodeColumn = 1;
             barcodeColumn <= _barcodeColumnCount;
             barcodeColumn++) {
-          Codeword? codeword = _detectionResultColumns[barcodeColumn]!
-              .codewords[codewordsRow];
+          Codeword? codeword =
+              _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
           if (codeword == null) {
             continue;
           }
           codeword.rowNumber = lriCodewords[codewordsRow]!.rowNumber;
           if (!codeword.hasValidRowNumber()) {
-            _detectionResultColumns[barcodeColumn]!
-                .codewords[codewordsRow] = null;
+            _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow] =
+                null;
           }
         }
       }
@@ -298,13 +298,14 @@ class DetectionResult {
           formatter.write("    |   ");
           continue;
         }
-        Codeword? codeword = _detectionResultColumns[barcodeColumn]!
-            .codewords[codewordsRow];
+        Codeword? codeword =
+            _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword == null) {
           formatter.write("    |   ");
           continue;
         }
-        formatter.write(" ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}");
+        formatter.write(
+            " ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}");
       }
       formatter.write("\n");
     }

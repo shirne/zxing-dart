@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 

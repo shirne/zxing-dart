@@ -33,11 +33,11 @@ class MathUtils {
   /// @param d real value to round
   /// @return nearest `int`
   static int round(double d) {
-    if(d.isNaN )return 0;
-    if(d.isInfinite){
-      if(d.sign == 1){
+    if (d.isNaN) return 0;
+    if (d.isInfinite) {
+      if (d.sign == 1) {
         return MAX_VALUE;
-      }else{
+      } else {
         return MIN_VALUE;
       }
     }
@@ -74,7 +74,7 @@ class MathUtils {
     return count;
   }*/
 
-   static int bitCount(int i){
+  static int bitCount(int i) {
     i = i - ((i >> 1) & 0x55555555);
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
     i = (i + (i >> 4)) & 0x0f0f0f0f;

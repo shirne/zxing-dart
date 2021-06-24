@@ -94,27 +94,32 @@ class HighLevelEncoder {
   // in that mode.  An entry of 0 indicates no mapping exists.
   static final List<Map<int, int>> _charMap = [
     {
-      32: 1, 65: 2, 66: 3, 67: 4, 68: 5, 69: 6, 70: 7, 71: 8, 72: 9, 73: 10, // A-Z
+      // A-Z
+      32: 1, 65: 2, 66: 3, 67: 4, 68: 5, 69: 6, 70: 7, 71: 8, 72: 9, 73: 10,
       74: 11, 75: 12, 76: 13, 77: 14, 78: 15, 79: 16, 80: 17, 81: 18, 82: 19,
       83: 20, 84: 21, 85: 22, 86: 23, 87: 24, 88: 25, 89: 26, 90: 27
     },
     {
-      32: 1, 97: 2, 98: 3, 99: 4, 100: 5, 101: 6, 102: 7, 103: 8, 104: 9,  // a-z
+      // a-z
+      32: 1, 97: 2, 98: 3, 99: 4, 100: 5, 101: 6, 102: 7, 103: 8, 104: 9,
       105: 10, 106: 11, 107: 12, 108: 13, 109: 14, 110: 15, 111: 16, 112: 17,
       113: 18, 114: 19, 115: 20, 116: 21, 117: 22, 118: 23, 119: 24, 120: 25,
       121: 26, 122: 27
     },
     {
-      32: 1, 44: 12, 46: 13, 48: 2, 49: 3, 50: 4, 51: 5, 52: 6, 53: 7, 54: 8,  // BLANK 0-9,.
+      // BLANK 0-9,.
+      32: 1, 44: 12, 46: 13, 48: 2, 49: 3, 50: 4, 51: 5, 52: 6, 53: 7, 54: 8,
       55: 9, 56: 10, 57: 11
     },
     {
-      1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12, // \0 \1\2\3\4\5\6\7\b\t\n\13\f\r\33\34\35\36\37@\\^_`|~\177
+      // \0 \1\2\3\4\5\6\7\b\t\n\13\f\r\33\34\35\36\37@\\^_`|~\177
+      1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12,
       12: 13, 13: 14, 27: 15, 28: 16, 29: 17, 30: 18, 31: 19, 32: 1, 64: 20,
       92: 21, 94: 22, 95: 23, 96: 24, 124: 25, 126: 26, 127: 27
     },
     {
-      13: 1, 33: 6, 35: 8, 36: 9, 37: 10, 38: 11, 39: 12, 40: 13, 41: 14, // \0\r\0\0\0\0!\'#$%&'()*+,-./:;<=>?[]{}
+      // \0\r\0\0\0\0!\'#$%&'()*+,-./:;<=>?[]{}
+      13: 1, 33: 6, 35: 8, 36: 9, 37: 10, 38: 11, 39: 12, 40: 13, 41: 14,
       42: 15, 43: 16, 44: 17, 45: 18, 46: 19, 47: 20, 58: 21, 59: 22,
       60: 23, 61: 24, 62: 25, 63: 26, 91: 27, 93: 28, 123: 29, 125: 30
     },
@@ -189,7 +194,7 @@ class HighLevelEncoder {
       return states.every((ele) => element.bitCount <= ele.bitCount);
     });
     // We are left with a set of states.  Find the shortest one.
-    //State minState = Collections.min(states, new Comparator<State>() {
+    //State minState = Collections.min(states, Comparator<State>() {
     //  @override
     //  int compare(State a, State b) {
     //    return a.getBitCount() - b.getBitCount();
@@ -225,9 +230,7 @@ class HighLevelEncoder {
           stateNoBinary = state.endBinaryShift(index);
         }
         // Try generating the character by latching to its mode
-        if (!charInCurrentTable ||
-            mode == state.mode ||
-            mode == MODE_DIGIT) {
+        if (!charInCurrentTable || mode == state.mode || mode == MODE_DIGIT) {
           // If the character is in the current table, we don't want to latch to
           // any other mode except possibly digit (which uses only 4 bits).  Any
           // other latch would be equally successful *after* this character, and
@@ -295,7 +298,7 @@ class HighLevelEncoder {
     //        states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))
     //    .toList();
     List<State> result = [];
-    List<State> removedState=[];
+    List<State> removedState = [];
     for (State newState in states) {
       bool add = true;
       for (Iterator<State> iterator = result.iterator; iterator.moveNext();) {

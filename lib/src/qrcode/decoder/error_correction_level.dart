@@ -29,8 +29,8 @@ enum ErrorCorrectionLevel {
   Q, //(0x03),
 }
 
-int ecOrdinal(ErrorCorrectionLevel ecLevel){
-  switch(ecLevel){
+int ecOrdinal(ErrorCorrectionLevel ecLevel) {
+  switch (ecLevel) {
     case ErrorCorrectionLevel.L:
       return 0;
     case ErrorCorrectionLevel.M:

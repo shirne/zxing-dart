@@ -31,15 +31,12 @@ class QRCode {
   late int maskPattern;
   ByteMatrix? matrix;
 
-  QRCode({
-    this.mode,
-    this.ecLevel,
-    this.version,
-    this.maskPattern = -1,
-    this.matrix
-});
-
-
+  QRCode(
+      {this.mode,
+      this.ecLevel,
+      this.version,
+      this.maskPattern = -1,
+      this.matrix});
 
   @override
   String toString() {
@@ -62,8 +59,6 @@ class QRCode {
     result.write(">>\n");
     return result.toString();
   }
-
-
 
   // Check if "mask_pattern" is valid.
   static bool isValidMaskPattern(int maskPattern) {

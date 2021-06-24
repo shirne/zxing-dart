@@ -22,7 +22,6 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class GeoParsedResult extends ParsedResult {
-
   /// latitude in degrees
   double latitude;
 
@@ -35,7 +34,8 @@ class GeoParsedResult extends ParsedResult {
   /// query string associated with geo URI or null if none exists
   String? query;
 
-  GeoParsedResult(this.latitude, this.longitude, [this.altitude = 0, this.query])
+  GeoParsedResult(this.latitude, this.longitude,
+      [this.altitude = 0, this.query])
       : super(ParsedResultType.GEO);
 
   String get geoURI {

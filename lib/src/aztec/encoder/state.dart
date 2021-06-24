@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -120,8 +119,8 @@ class State {
             : (_binaryShiftByteCount == 62)
                 ? 9
                 : 8;
-    State result = State(
-        token, mode, _binaryShiftByteCount + 1, bitCount + deltaBitCount);
+    State result =
+        State(token, mode, _binaryShiftByteCount + 1, bitCount + deltaBitCount);
     if (result._binaryShiftByteCount == 2047 + 31) {
       // The string is as long as it's allowed to be.  We should end it.
       result = result.endBinaryShift(index + 1);

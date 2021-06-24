@@ -102,9 +102,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
           } else if (c < 32 /*   */) {
             extendedContent.write('%');
             extendedContent.writeCharCode((65 /* A */ + (c - 27)));
-          } else if (c <= 44 /* , */ ||
-              character == '/' ||
-              character == ':') {
+          } else if (c <= 44 /* , */ || character == '/' || character == ':') {
             extendedContent.write('/');
             extendedContent.writeCharCode((65 /* A */ + (c - 33)));
           } else if (c <= 57 /* 9 */) {

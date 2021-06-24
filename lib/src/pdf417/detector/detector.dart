@@ -68,8 +68,7 @@ class Detector {
 
     BitMatrix bitMatrix = image.blackMatrix;
 
-    List<List<ResultPoint?>> barcodeCoordinates =
-        _detect(multiple, bitMatrix);
+    List<List<ResultPoint?>> barcodeCoordinates = _detect(multiple, bitMatrix);
     // Try 180, 270, 90 degree rotations, in that order
     for (int rotate = 0; barcodeCoordinates.isEmpty && rotate < 3; rotate++) {
       bitMatrix = bitMatrix.clone();
@@ -88,8 +87,7 @@ class Detector {
   /// be found and returned
   /// @param bitMatrix bit matrix to detect barcodes in
   /// @return List of ResultPoint arrays containing the coordinates of found barcodes
-  static List<List<ResultPoint?>> _detect(
-      bool multiple, BitMatrix bitMatrix) {
+  static List<List<ResultPoint?>> _detect(bool multiple, BitMatrix bitMatrix) {
     List<List<ResultPoint?>> barcodeCoordinates = [];
     int row = 0;
     int column = 0;
@@ -160,7 +158,7 @@ class Detector {
             matrix, height, width, startRow, startColumn, _START_PATTERN),
         _INDEXES_START_PATTERN);
 
-    if(result[4] != null){
+    if (result[4] != null) {
       startColumn = result[4]!.x.toInt();
       startRow = result[4]!.y.toInt();
     }
@@ -210,10 +208,7 @@ class Detector {
     // Last row of the current symbol that contains pattern
     if (found) {
       int skippedRowCount = 0;
-      List<int> previousRowLoc = [
-        result[0]!.x.toInt(),
-        result[1]!.x.toInt()
-      ];
+      List<int> previousRowLoc = [result[0]!.x.toInt(), result[1]!.x.toInt()];
       for (; stopRow < height; stopRow++) {
         List<int>? loc = _findGuardPattern(
             matrix, previousRowLoc[0], stopRow, width, pattern, counters);
@@ -235,10 +230,8 @@ class Detector {
         }
       }
       stopRow -= skippedRowCount + 1;
-      result[2] =
-          ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
-      result[3] =
-          ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
+      result[2] = ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
+      result[3] = ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
     if (stopRow - startRow < _BARCODE_MIN_HEIGHT) {
       result.fillRange(0, result.length, null);
@@ -256,7 +249,7 @@ class Detector {
   /// @return start/end horizontal offset of guard pattern, as an array of two ints.
   static List<int>? _findGuardPattern(BitMatrix matrix, int column, int row,
       int width, List<int> pattern, List<int> counters) {
-    counters.fillRange( 0, counters.length, 0);
+    counters.fillRange(0, counters.length, 0);
     int patternStart = column;
     int pixelDrift = 0;
 

@@ -31,6 +31,7 @@ import 'pdf417_high_level_encoder.dart';
 class PDF417 {
   /// The start pattern (17 bits)
   static const int _START_PATTERN = 0x1fea8;
+
   /// The stop pattern (18 bits)
   static const int _STOP_PATTERN = 0x3fa29;
 

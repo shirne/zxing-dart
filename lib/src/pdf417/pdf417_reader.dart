@@ -50,7 +50,8 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     List<Result> result = _decodeStatic(image, hints, false);
-    if (result.length == 0 ) { // || result[0] == null
+    if (result.length == 0) {
+      // || result[0] == null
       throw NotFoundException.instance;
     }
     return result[0];
@@ -63,7 +64,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
       return _decodeStatic(image, hints, true);
     } on FormatsException catch (_) {
       throw NotFoundException.instance;
-    } on ChecksumException catch (_){
+    } on ChecksumException catch (_) {
       throw NotFoundException.instance;
     }
   }
@@ -82,10 +83,10 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
           points[7],
           _getMinCodewordWidth(points),
           _getMaxCodewordWidth(points));
-      Result result = Result(decoderResult.text,
-          decoderResult.rawBytes, points, BarcodeFormat.PDF_417);
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL,
-          decoderResult.ecLevel!);
+      Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+          BarcodeFormat.PDF_417);
+      result.putMetadata(
+          ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ecLevel!);
       PDF417ResultMetadata? pdf417ResultMetadata =
           decoderResult.other as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {

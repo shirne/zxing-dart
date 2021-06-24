@@ -34,10 +34,11 @@ class ReedSolomonEncoder {
   GenericGFPoly _buildGenerator(int degree) {
     if (degree >= _cachedGenerators.length) {
       GenericGFPoly lastGenerator =
-        _cachedGenerators[_cachedGenerators.length - 1];
+          _cachedGenerators[_cachedGenerators.length - 1];
       for (int d = _cachedGenerators.length; d <= degree; d++) {
         GenericGFPoly nextGenerator = lastGenerator.multiply(GenericGFPoly(
-            _field, Int32List.fromList([1, _field.exp(d - 1 + _field.generatorBase)])));
+            _field,
+            Int32List.fromList([1, _field.exp(d - 1 + _field.generatorBase)])));
         _cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
       }

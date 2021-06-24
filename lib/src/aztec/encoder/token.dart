@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../common/bit_array.dart';
 
 import 'binary_shift_token.dart';

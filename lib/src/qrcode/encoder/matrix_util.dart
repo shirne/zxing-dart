@@ -335,8 +335,7 @@ class MatrixUtil {
 
     if (bits.size != 15) {
       // Just in case.
-      throw WriterException(
-          "should not happen but we got: ${bits.size}");
+      throw WriterException("should not happen but we got: ${bits.size}");
     }
   }
 
@@ -344,14 +343,12 @@ class MatrixUtil {
   // See 8.10 of JISX0510:2004 (p.45) for details.
   static void makeVersionInfoBits(Version version, BitArray bits) {
     bits.appendBits(version.versionNumber, 6);
-    int bchCode =
-        calculateBCHCode(version.versionNumber, _VERSION_INFO_POLY);
+    int bchCode = calculateBCHCode(version.versionNumber, _VERSION_INFO_POLY);
     bits.appendBits(bchCode, 12);
 
     if (bits.size != 18) {
       // Just in case.
-      throw WriterException(
-          "should not happen but we got: ${bits.size}");
+      throw WriterException("should not happen but we got: ${bits.size}");
     }
   }
 
@@ -386,7 +383,6 @@ class MatrixUtil {
 
   static void _embedHorizontalSeparationPattern(
       int xStart, int yStart, ByteMatrix matrix) {
-    
     for (int x = 0; x < 8; ++x) {
       if (!_isEmpty(matrix.get(xStart + x, yStart))) {
         throw WriterException();
@@ -453,8 +449,7 @@ class MatrixUtil {
     // Right top corner.
     _embedVerticalSeparationPattern(matrix.height - vspSize - 1, 0, matrix);
     // Left bottom corner.
-    _embedVerticalSeparationPattern(
-        vspSize, matrix.height - vspSize, matrix);
+    _embedVerticalSeparationPattern(vspSize, matrix.height - vspSize, matrix);
   }
 
   // Embed position adjustment patterns if need be.
@@ -465,7 +460,8 @@ class MatrixUtil {
       return;
     }
     int index = version.versionNumber - 1;
-    List<int> coordinates = _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
+    List<int> coordinates =
+        _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
     for (int y in coordinates) {
       if (y >= 0) {
         for (int x in coordinates) {

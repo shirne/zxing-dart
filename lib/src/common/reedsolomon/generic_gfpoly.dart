@@ -36,11 +36,11 @@ class GenericGFPoly {
   /// @throws IllegalArgumentException if argument is null or empty,
   /// or if leading coefficient is 0 and this is not a
   /// constant polynomial (that is, it is not the monomial "0")
-  GenericGFPoly(this._field, Int32List coefficients):
-        assert(coefficients.length > 0,'IllegalArgument'),
-      this._coefficients = Int32List.fromList(coefficients.skipWhile((value) => value == 0).toList())
-  {
-    if(this._coefficients.length < 1){
+  GenericGFPoly(this._field, Int32List coefficients)
+      : assert(coefficients.length > 0, 'IllegalArgument'),
+        this._coefficients = Int32List.fromList(
+            coefficients.skipWhile((value) => value == 0).toList()) {
+    if (this._coefficients.length < 1) {
       this._coefficients = Int32List(1);
     }
   }
@@ -180,12 +180,11 @@ class GenericGFPoly {
 
     while (remainder.degree >= other.degree && !remainder.isZero) {
       int degreeDifference = remainder.degree - other.degree;
-      int scale = _field.multiply(
-          remainder.getCoefficient(remainder.degree),
+      int scale = _field.multiply(remainder.getCoefficient(remainder.degree),
           inverseDenominatorLeadingTerm);
       GenericGFPoly term = other.multiplyByMonomial(degreeDifference, scale);
       GenericGFPoly iterationQuotient =
-        _field.buildMonomial(degreeDifference, scale);
+          _field.buildMonomial(degreeDifference, scale);
       quotient = quotient.addOrSubtract(iterationQuotient);
       remainder = remainder.addOrSubtract(term);
     }

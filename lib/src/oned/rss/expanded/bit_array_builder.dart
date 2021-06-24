@@ -41,7 +41,7 @@ class BitArrayBuilder {
 
     int size = 12 * charNumber;
 
-    BitArray binary = BitArray( size);
+    BitArray binary = BitArray(size);
     int accPos = 0;
 
     ExpandedPair firstPair = pairs[0];

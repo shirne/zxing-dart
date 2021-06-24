@@ -113,7 +113,6 @@ class ExpandedProductParsedResult extends ParsedResult {
     return hash;
   }
 
-
   @override
   String get displayResult {
     return rawText.toString();

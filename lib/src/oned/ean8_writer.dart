@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../barcode_format.dart';
 import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';

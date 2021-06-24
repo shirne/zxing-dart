@@ -91,11 +91,17 @@ class GeneralAppIdDecoder {
     if (pos + 7 > this._information.size) {
       int numeric = extractNumericValueFromBitArray(pos, 4);
       if (numeric == 0) {
-        return DecodedNumeric(this._information.size,
-            DecodedNumeric.fnc1, DecodedNumeric.fnc1);
+        return DecodedNumeric(
+          this._information.size,
+          DecodedNumeric.fnc1,
+          DecodedNumeric.fnc1,
+        );
       }
       return DecodedNumeric(
-          this._information.size, numeric - 1, DecodedNumeric.fnc1);
+        this._information.size,
+        numeric - 1,
+        DecodedNumeric.fnc1,
+      );
     }
     int numeric = extractNumericValueFromBitArray(pos, 7);
 
@@ -132,11 +138,10 @@ class GeneralAppIdDecoder {
 
     DecodedInformation? lastDecoded = _parseBlocks();
     if (lastDecoded != null && lastDecoded.isRemaining) {
-      return DecodedInformation(this._current.position,
-          this._buffer.toString(), lastDecoded.remainingValue);
+      return DecodedInformation(this._current.position, this._buffer.toString(),
+          lastDecoded.remainingValue);
     }
-    return DecodedInformation(
-        this._current.position, this._buffer.toString());
+    return DecodedInformation(this._current.position, this._buffer.toString());
   }
 
   DecodedInformation? _parseBlocks() {
@@ -177,8 +182,8 @@ class GeneralAppIdDecoder {
           information =
               DecodedInformation(_current.position, _buffer.toString());
         } else {
-          information = DecodedInformation(_current.position,
-              _buffer.toString(), numeric.secondDigit);
+          information = DecodedInformation(
+              _current.position, _buffer.toString(), numeric.secondDigit);
         }
         return BlockParsedResult(information, true);
       }

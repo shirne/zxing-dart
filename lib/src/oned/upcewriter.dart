@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import '../barcode_format.dart';
 import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';
@@ -27,7 +25,6 @@ import 'upcereader.dart';
 ///
 /// @author 0979097955s@gmail.com (RX)
 class UPCEWriter extends UPCEANWriter {
-
   static const int _CODE_WIDTH = 3 + // start guard
       (7 * 6) + // bars
       6; // end guard
@@ -43,24 +40,28 @@ class UPCEWriter extends UPCEANWriter {
         // No check digit present, calculate it and add it
         int check;
         try {
-          check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents));
-        } on FormatsException catch ( fe) { //
+          check = UPCEANReader.getStandardUPCEANChecksum(
+              UPCEReader.convertUPCEtoUPCA(contents));
+        } on FormatsException catch (fe) {
+          //
           throw ArgumentError(fe);
         }
         contents += check.toString();
         break;
       case 8:
         try {
-          if (!UPCEANReader.checkStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents))) {
+          if (!UPCEANReader.checkStandardUPCEANChecksum(
+              UPCEReader.convertUPCEtoUPCA(contents))) {
             throw ArgumentError("Contents do not pass checksum");
           }
-        } on FormatsException catch ( _) { //
+        } on FormatsException catch (_) {
+          //
           throw ArgumentError("Illegal contents");
         }
         break;
       default:
         throw ArgumentError(
-            "Requested contents should be 7 or 8 digits long, but got $length" );
+            "Requested contents should be 7 or 8 digits long, but got $length");
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
@@ -71,22 +72,25 @@ class UPCEWriter extends UPCEANWriter {
     }
 
     int checkDigit = int.parse(contents[7]);
-    int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
+    int parities =
+        UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
     List<bool> result = List.filled(_CODE_WIDTH, false);
 
-    int pos = OneDimensionalCodeWriter.appendPattern(result, 0, UPCEANReader.START_END_PATTERN, true);
+    int pos = OneDimensionalCodeWriter.appendPattern(
+        result, 0, UPCEANReader.START_END_PATTERN, true);
 
     for (int i = 1; i <= 6; i++) {
       int digit = int.parse(contents[i]);
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
-      pos += OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.lAndGPatterns[digit], false);
+      pos += OneDimensionalCodeWriter.appendPattern(
+          result, pos, UPCEANReader.lAndGPatterns[digit], false);
     }
 
-    OneDimensionalCodeWriter.appendPattern(result, pos, UPCEANReader.END_PATTERN, false);
+    OneDimensionalCodeWriter.appendPattern(
+        result, pos, UPCEANReader.END_PATTERN, false);
 
     return result;
   }
-
 }

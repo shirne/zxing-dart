@@ -20,7 +20,7 @@ import 'reader_exception.dart';
 ///
 /// It might have been partially detected but could not be confirmed.
 class ArgumentsException extends ReaderException {
-  static final ArgumentsException _instance = ArgumentsException('ArgumentsException');
+  static final _instance = ArgumentsException('ArgumentsException');
 
   static ArgumentsException get instance => _instance;
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../result_point.dart';
 
 /// Encapsulates a finder pattern, which are the three square patterns found in
@@ -45,7 +44,7 @@ class FinderPattern extends ResultPoint {
   }
 
   /// Combines this object's current estimate of a finder pattern position and module size
-  /// with a new estimate. It returns a new `FinderPattern` containing a weighted average
+  /// with a new estimate. It returns a new [FinderPattern] containing a weighted average
   /// based on count.
   FinderPattern combineEstimate(double i, double j, double newModuleSize) {
     int combinedCount = _count + 1;

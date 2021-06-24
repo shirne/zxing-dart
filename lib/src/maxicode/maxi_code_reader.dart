@@ -43,8 +43,8 @@ class MaxiCodeReader implements Reader {
     // and can't detect it in an image
     BitMatrix bits = _extractPureBits(image.blackMatrix);
     DecoderResult decoderResult = _decoder.decode(bits, hints);
-    Result result = Result(decoderResult.text,
-        decoderResult.rawBytes, _NO_POINTS, BarcodeFormat.MAXICODE);
+    Result result = Result(decoderResult.text, decoderResult.rawBytes,
+        _NO_POINTS, BarcodeFormat.MAXICODE);
 
     String? ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {

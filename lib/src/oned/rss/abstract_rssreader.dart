@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../common/detector/math_utils.dart';
 
 import '../../not_found_exception.dart';

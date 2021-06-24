@@ -74,7 +74,7 @@ class CodaBarReader extends OneDReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    _counters.fillRange(0,_counters.length, 0);
+    _counters.fillRange(0, _counters.length, 0);
     _setCounters(row);
     int startOffset = _findStartPattern();
     int nextStart = startOffset;
@@ -109,7 +109,8 @@ class CodaBarReader extends OneDReader {
     // We need to see whitespace equal to 50% of the last pattern size,
     // otherwise this is probably a false positive. The exception is if we are
     // at the end of the row. (I.e. the barcode barely fits.)
-    if (nextStart < _counterLength && trailingWhitespace < lastPatternSize / 2) {
+    if (nextStart < _counterLength &&
+        trailingWhitespace < lastPatternSize / 2) {
       throw NotFoundException.instance;
     }
 
@@ -199,7 +200,8 @@ class CodaBarReader extends OneDReader {
       mins[i] = 0.0; // Accept arbitrarily small "short" stripes.
       mins[i + 2] = (sizes[i] / counts[i] + sizes[i + 2] / counts[i + 2]) / 2.0;
       maxes[i] = mins[i + 2];
-      maxes[i + 2] = (sizes[i + 2] * _MAX_ACCEPTABLE + _PADDING) / counts[i + 2];
+      maxes[i + 2] =
+          (sizes[i + 2] * _MAX_ACCEPTABLE + _PADDING) / counts[i + 2];
     }
 
     // Now verify that all of the stripes are within the thresholds.

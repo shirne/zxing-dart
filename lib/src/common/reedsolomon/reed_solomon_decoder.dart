@@ -68,7 +68,7 @@ class ReedSolomonDecoder {
     }
     GenericGFPoly syndrome = GenericGFPoly(_field, syndromeCoefficients);
     List<GenericGFPoly> sigmaOmega =
-      _runEuclideanAlgorithm(_field.buildMonomial(twoS, 1), syndrome, twoS);
+        _runEuclideanAlgorithm(_field.buildMonomial(twoS, 1), syndrome, twoS);
     GenericGFPoly sigma = sigmaOmega[0];
     GenericGFPoly omega = sigmaOmega[1];
     List<int> errorLocations = _findErrorLocations(sigma);
@@ -123,7 +123,8 @@ class ReedSolomonDecoder {
       t = q.multiply(tLast).addOrSubtract(tLastLast);
 
       if (r.degree >= rLast.degree) {
-        throw ReedSolomonException("Division algorithm failed to reduce polynomial?");
+        throw ReedSolomonException(
+            "Division algorithm failed to reduce polynomial?");
       }
     }
 
@@ -154,7 +155,8 @@ class ReedSolomonDecoder {
       }
     }
     if (e != numErrors) {
-      throw ReedSolomonException("Error locator degree does not match number of roots ($e != $numErrors)");
+      throw ReedSolomonException(
+          "Error locator degree does not match number of roots ($e != $numErrors)");
     }
     return result;
   }

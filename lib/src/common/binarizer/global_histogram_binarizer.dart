@@ -52,7 +52,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     LuminanceSource source = luminanceSource;
     int width = source.width;
     if (row == null || row.size < width) {
-      row = BitArray( width);
+      row = BitArray(width);
     } else {
       row.clear();
     }

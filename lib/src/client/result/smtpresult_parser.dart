@@ -30,8 +30,8 @@ class SMTPResultParser extends ResultParser {
       return null;
     }
     String emailAddress = rawText.substring(5);
-    String? subject ;
-    String? body ;
+    String? subject;
+    String? body;
     int colon = emailAddress.indexOf(':');
     if (colon >= 0) {
       subject = emailAddress.substring(colon + 1);
@@ -42,7 +42,6 @@ class SMTPResultParser extends ResultParser {
         subject = subject.substring(0, colon);
       }
     }
-    return EmailAddressParsedResult(
-        [emailAddress], null, null, subject, body);
+    return EmailAddressParsedResult([emailAddress], null, null, subject, body);
   }
 }

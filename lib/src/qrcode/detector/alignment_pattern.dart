@@ -37,7 +37,7 @@ class AlignmentPattern extends ResultPoint {
   }
 
   /// Combines this object's current estimate of a finder pattern position and module size
-  /// with a new estimate. It returns a new `FinderPattern` containing an average of the two.
+  /// with a new estimate. It returns a new [FinderPattern]` containing an average of the two.
   AlignmentPattern combineEstimate(double i, double j, double newModuleSize) {
     double combinedX = (x + j) / 2.0;
     double combinedY = (y + i) / 2.0;

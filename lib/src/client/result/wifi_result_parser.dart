@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../result.dart';
 import 'result_parser.dart';
 import 'wifi_parsed_result.dart';
@@ -59,7 +58,8 @@ class WifiResultParser extends ResultParser {
     // To try to retain backwards compatibility, we set one or the other based on whether the string
     // is 'true' or 'false':
     bool hidden = false;
-    String? phase2Method = matchSinglePrefixedField("PH2:", rawText, ';', false);
+    String? phase2Method =
+        matchSinglePrefixedField("PH2:", rawText, ';', false);
     String? hValue = matchSinglePrefixedField("H:", rawText, ';', false);
     if (hValue != null) {
       // If PH2 was specified separately, or if the value is clearly bool, interpret it as 'hidden'
@@ -74,7 +74,7 @@ class WifiResultParser extends ResultParser {
 
     String? identity = matchSinglePrefixedField("I:", rawText, ';', false);
     String? anonymousIdentity =
-    matchSinglePrefixedField("A:", rawText, ';', false);
+        matchSinglePrefixedField("A:", rawText, ';', false);
     String? eapMethod = matchSinglePrefixedField("E:", rawText, ';', false);
 
     return WifiParsedResult(type, ssid, pass, hidden, identity,

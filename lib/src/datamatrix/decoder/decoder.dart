@@ -35,7 +35,7 @@ import 'decoded_bit_stream_parser.dart';
 class Decoder {
   final ReedSolomonDecoder _rsDecoder;
 
-  Decoder():_rsDecoder = ReedSolomonDecoder(GenericGF.dataMatrixField256);
+  Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.dataMatrixField256);
 
   /// <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
   /// "true" is taken to mean a black module.</p>
@@ -98,8 +98,8 @@ class Decoder {
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
-    Int32List codewordsInts =
-    Int32List.fromList(List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF));
+    Int32List codewordsInts = Int32List.fromList(
+        List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF));
 
     try {
       _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);

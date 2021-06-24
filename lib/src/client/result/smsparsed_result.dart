@@ -29,20 +29,20 @@ class SMSParsedResult extends ParsedResult {
 
   SMSParsedResult.single(String number, String? via, this.subject, this.body)
       : _numbers = [number],
-        _vias = [if(via != null)via],
+        _vias = [if (via != null) via],
         super(ParsedResultType.SMS);
 
   SMSParsedResult(this._numbers, this._vias, this.subject, this.body)
       : super(ParsedResultType.SMS);
 
-  addNumber(String num, [String? via]){
+  addNumber(String num, [String? via]) {
     _numbers.add(num);
-    if(via != null){
-      if(_vias == null){
+    if (via != null) {
+      if (_vias == null) {
         _vias = List.filled(_numbers.length - 1, '');
       }
       _vias!.add(via);
-    }else if(_vias != null){
+    } else if (_vias != null) {
       _vias!.add('');
     }
   }
@@ -85,7 +85,6 @@ class SMSParsedResult extends ParsedResult {
   List<String> get numbers => _numbers;
 
   List<String>? get vias => _vias;
-
 
   @override
   String get displayResult {

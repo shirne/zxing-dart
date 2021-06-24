@@ -24,7 +24,8 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 abstract class AbstractDoCoMoResultParser extends ResultParser {
-  static final RegExp _aTextAlphaNumeric = RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
+  static final RegExp _aTextAlphaNumeric =
+      RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
 
   List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) {
     return matchPrefixedField(prefix, rawText, ';', true);

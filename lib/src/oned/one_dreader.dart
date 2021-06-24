@@ -60,8 +60,7 @@ abstract class OneDReader implements Reader {
         if (points != null) {
           int height = rotatedImage.height;
           for (int i = 0; i < points.length; i++) {
-            points[i] =
-                ResultPoint(height - points[i]!.y - 1, points[i]!.x);
+            points[i] = ResultPoint(height - points[i]!.y - 1, points[i]!.x);
           }
         }
         return result;
@@ -91,7 +90,7 @@ abstract class OneDReader implements Reader {
   Result _doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
     int width = image.width;
     int height = image.height;
-    BitArray row = BitArray( width);
+    BitArray row = BitArray(width);
 
     bool tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -151,10 +150,8 @@ abstract class OneDReader implements Reader {
             // And remember to flip the result points horizontally.
             List<ResultPoint?>? points = result.resultPoints;
             if (points != null) {
-              points[0] = ResultPoint(
-                  width - points[0]!.x - 1, points[0]!.y);
-              points[1] = ResultPoint(
-                  width - points[1]!.x - 1, points[1]!.y);
+              points[0] = ResultPoint(width - points[0]!.x - 1, points[0]!.y);
+              points[1] = ResultPoint(width - points[1]!.x - 1, points[1]!.y);
             }
           }
           return result;

@@ -16,7 +16,6 @@
 
 import 'dart:math' as Math;
 
-
 import '../../common/bit_matrix.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/detector_result.dart';
@@ -56,7 +55,7 @@ class Detector {
   /// @throws FormatException if a QR Code cannot be decoded
   DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
     _resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-            as ResultPointCallback?;
+        as ResultPointCallback?;
 
     FinderPatternFinder finder =
         FinderPatternFinder(_image, _resultPointCallback);
@@ -74,30 +73,28 @@ class Detector {
     if (moduleSize < 1.0) {
       throw NotFoundException.instance;
     }
-    int dimension = _computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+    int dimension =
+        _computeDimension(topLeft, topRight, bottomLeft, moduleSize);
     Version provisionalVersion =
         Version.getProvisionalVersionForDimension(dimension);
-    int modulesBetweenFPCenters =
-        provisionalVersion.dimensionForVersion - 7;
+    int modulesBetweenFPCenters = provisionalVersion.dimensionForVersion - 7;
 
     AlignmentPattern? alignmentPattern;
     // Anything above version 1 has an alignment pattern
     if (provisionalVersion.alignmentPatternCenters.length > 0) {
       // Guess where a "bottom right" finder pattern would have been
-      double bottomRightX =
-          topRight.x - topLeft.x + bottomLeft.x;
-      double bottomRightY =
-          topRight.y - topLeft.y + bottomLeft.y;
+      double bottomRightX = topRight.x - topLeft.x + bottomLeft.x;
+      double bottomRightY = topRight.y - topLeft.y + bottomLeft.y;
 
       // Estimate that alignment pattern is closer by 3 modules
       // from "bottom right" to known top left location
       double correctionToTopLeft = 1.0 - 3.0 / modulesBetweenFPCenters;
-      int estAlignmentX = (topLeft.x +
-              correctionToTopLeft * (bottomRightX - topLeft.x))
-          .toInt();
-      int estAlignmentY = (topLeft.y +
-              correctionToTopLeft * (bottomRightY - topLeft.y))
-          .toInt();
+      int estAlignmentX =
+          (topLeft.x + correctionToTopLeft * (bottomRightX - topLeft.x))
+              .toInt();
+      int estAlignmentY =
+          (topLeft.y + correctionToTopLeft * (bottomRightY - topLeft.y))
+              .toInt();
 
       // Kind of arbitrary -- expand search radius before giving up
       for (int i = 4; i <= 16; i <<= 1) {

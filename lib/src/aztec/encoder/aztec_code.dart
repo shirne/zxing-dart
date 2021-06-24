@@ -20,7 +20,6 @@ import '../../common/bit_matrix.dart';
 ///
 /// @author Rustam Abdullaev
 class AztecCode {
-
   /// whether if compact instead of full mode
   late bool isCompact;
 
@@ -41,6 +40,6 @@ class AztecCode {
     this.size = 0,
     this.layers = 0,
     this.codeWords = 0,
-    this.matrix
+    this.matrix,
   });
 }

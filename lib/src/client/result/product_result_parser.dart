@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../oned/upcereader.dart';
 import '../../barcode_format.dart';
 import '../../result.dart';
@@ -22,7 +21,7 @@ import 'product_parsed_result.dart';
 import 'result_parser.dart';
 
 /// Parses strings of digits that represent a UPC code.
-/// 
+///
 /// @author dswitkin@google.com (Daniel Switkin)
 class ProductResultParser extends ResultParser {
   // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.

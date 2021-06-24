@@ -95,7 +95,8 @@ class DataBlock {
       for (int j = 0; j < numResultBlocks; j++) {
         int jOffset = specialVersion ? (j + 8) % numResultBlocks : j;
         int iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
-        result[jOffset]._codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
+        result[jOffset]._codewords[iOffset] =
+            rawCodewords[rawCodewordsOffset++];
       }
     }
 

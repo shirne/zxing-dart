@@ -33,7 +33,8 @@ class DecodedInformation extends DecodedObject {
   final int _remainingValue;
   final bool _remaining;
 
-  DecodedInformation(int newPosition, this._newString, [this._remainingValue = 0])
+  DecodedInformation(int newPosition, this._newString,
+      [this._remainingValue = 0])
       : this._remaining = _remainingValue > 0,
         super(newPosition);
 

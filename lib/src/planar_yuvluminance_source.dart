@@ -35,13 +35,20 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   final int _left;
   final int _top;
 
-  PlanarYUVLuminanceSource(this._yuvData, this._dataWidth, this._dataHeight,
-  {int left = 0, int top = 0, int? width, int? height, bool isReverseHorizontal = false})
-      :_left = left,
+  PlanarYUVLuminanceSource(
+    this._yuvData,
+    this._dataWidth,
+    this._dataHeight, {
+    int left = 0,
+    int top = 0,
+    int? width,
+    int? height,
+    bool isReverseHorizontal = false,
+  })  : _left = left,
         _top = top,
         super(width ?? (_dataWidth - left), height ?? (_dataHeight - top)) {
-    if(width == null) width = _dataWidth - _left;
-    if(height == null) height = _dataHeight - _top;
+    if (width == null) width = _dataWidth - _left;
+    if (height == null) height = _dataHeight - _top;
     if (_left + width > _dataWidth || _top + height > _dataHeight) {
       throw Exception("Crop rectangle does not fit within image data.");
     }
@@ -67,7 +74,6 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
   @override
   Int8List get matrix {
-
     // If the caller asks for the entire underlying image, save the copy and give them the
     // original data. The docs specifically warn that result.length must be ignored.
     if (width == _dataWidth && height == _dataHeight) {
@@ -87,7 +93,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      List.copyRange(matrix, outputOffset, _yuvData, inputOffset, inputOffset + width);
+      List.copyRange(
+          matrix, outputOffset, _yuvData, inputOffset, inputOffset + width);
       inputOffset += _dataWidth;
     }
     return matrix;
@@ -98,8 +105,15 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
-    return PlanarYUVLuminanceSource(_yuvData, _dataWidth, _dataHeight,
-        left:this._left + left, top:this._top + top, width: width,height: height);
+    return PlanarYUVLuminanceSource(
+      _yuvData,
+      _dataWidth,
+      _dataHeight,
+      left: this._left + left,
+      top: this._top + top,
+      width: width,
+      height: height,
+    );
   }
 
   List<int> renderThumbnail() {

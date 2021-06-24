@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../barcode_format.dart';
 import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
@@ -111,16 +110,14 @@ class Code128Writer extends OneDimensionalCodeWriter {
             // Then handle normal characters otherwise
             switch (codeSet) {
               case _CODE_CODE_A:
-                patternIndex =
-                    contents.codeUnitAt(position) - 32 /*   */;
+                patternIndex = contents.codeUnitAt(position) - 32 /*   */;
                 if (patternIndex < 0) {
                   // everything below a space character comes behind the underscore in the code patterns table
                   patternIndex += 96 /* ` */;
                 }
                 break;
               case _CODE_CODE_B:
-                patternIndex =
-                    contents.codeUnitAt(position) - 32 /*   */;
+                patternIndex = contents.codeUnitAt(position) - 32 /*   */;
                 break;
               default:
                 // CODE_CODE_C

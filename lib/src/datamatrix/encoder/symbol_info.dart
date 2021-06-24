@@ -78,20 +78,26 @@ class SymbolInfo {
       : _rsBlockData = rsBlockData ?? _dataCapacity,
         _rsBlockError = rsBlockError ?? _errorCodewords;
 
-  static SymbolInfo? lookup(int dataCodewords, [Object? shapeOrIsRect, Object? minSizeOrFail, Dimension? maxSize, bool fail = true]){
+  static SymbolInfo? lookup(int dataCodewords,
+      [Object? shapeOrIsRect,
+      Object? minSizeOrFail,
+      Dimension? maxSize,
+      bool fail = true]) {
     late SymbolShapeHint shape;
     Dimension? minSize;
-    if(shapeOrIsRect is bool){
+    if (shapeOrIsRect is bool) {
       shape = shapeOrIsRect
           ? SymbolShapeHint.FORCE_NONE
           : SymbolShapeHint.FORCE_SQUARE;
-    }else{
-      shape = shapeOrIsRect == null ? SymbolShapeHint.FORCE_NONE : (shapeOrIsRect as SymbolShapeHint);
+    } else {
+      shape = shapeOrIsRect == null
+          ? SymbolShapeHint.FORCE_NONE
+          : (shapeOrIsRect as SymbolShapeHint);
     }
 
-    if(minSizeOrFail is bool){
+    if (minSizeOrFail is bool) {
       fail = minSizeOrFail;
-    }else{
+    } else {
       minSize = minSizeOrFail as Dimension?;
     }
     return _lookup(dataCodewords, shape, minSize, maxSize, fail);

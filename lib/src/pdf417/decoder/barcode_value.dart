@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 /// @author Guenther Grau
 class BarcodeValue {
   final Map<int, int> _values = {};

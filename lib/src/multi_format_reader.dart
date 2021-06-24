@@ -76,7 +76,8 @@ class MultiFormatReader implements Reader {
 
     bool tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
     // @SuppressWarnings("unchecked")
-    List<BarcodeFormat>? formats = hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+    List<BarcodeFormat>? formats =
+        hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
     List<Reader> readers = [];
     if (formats != null) {
       bool addOneDReader = formats.contains(BarcodeFormat.UPC_A) ||
@@ -129,7 +130,7 @@ class MultiFormatReader implements Reader {
         readers.add(MultiFormatOneDReader(hints));
       }
     }
-    this._readers = readers;//.toList();
+    this._readers = readers; //.toList();
   }
 
   @override

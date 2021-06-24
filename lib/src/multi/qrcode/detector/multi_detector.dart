@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../../qrcode/detector/finder_pattern_info.dart';
 import '../../../common/bit_matrix.dart';
 import '../../../common/detector_result.dart';
@@ -36,7 +35,8 @@ class MultiDetector extends Detector {
   MultiDetector(BitMatrix image) : super(image);
 
   List<DetectorResult> detectMulti(Map<DecodeHintType, Object>? hints) {
-    ResultPointCallback? resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+    ResultPointCallback? resultPointCallback =
+        hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback?;
     MultiFinderPatternFinder finder =
         MultiFinderPatternFinder(image, resultPointCallback);

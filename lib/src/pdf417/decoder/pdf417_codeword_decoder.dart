@@ -21,14 +21,13 @@ import '../pdf417_common.dart';
 /// @author Guenther Grau
 /// @author creatale GmbH (christoph.schulz@creatale.de)
 class PDF417CodewordDecoder {
-
   static bool _isInit = false;
   static final List<List<double>> _ratiosTable = List.generate(
       PDF417Common.SYMBOL_TABLE.length,
       (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0));
 
   static init() {
-    if(_isInit)return;
+    if (_isInit) return;
     _isInit = true;
     // Pre-computes the symbol ratio table.
     for (int i = 0; i < PDF417Common.SYMBOL_TABLE.length; i++) {
@@ -50,7 +49,8 @@ class PDF417CodewordDecoder {
   PDF417CodewordDecoder._();
 
   static int getDecodedValue(List<int> moduleBitCount) {
-    int decodedValue = _getDecodedCodewordValue(_sampleBitCounts(moduleBitCount));
+    int decodedValue =
+        _getDecodedCodewordValue(_sampleBitCounts(moduleBitCount));
     if (decodedValue != -1) {
       return decodedValue;
     }

@@ -155,13 +155,14 @@ class DecodedBitStreamParser {
     }
 
     return DecoderResult(
-        bytes,
-        result.toString(),
-        byteSegments.isEmpty ? null : byteSegments,
-        ecLevel == null ? null : ecLevel.toString(),
-        saSequence:symbolSequence,
-        saParity:parityData,
-        symbologyModifier:symbologyModifier);
+      bytes,
+      result.toString(),
+      byteSegments.isEmpty ? null : byteSegments,
+      ecLevel == null ? null : ecLevel.toString(),
+      saSequence: symbolSequence,
+      saParity: parityData,
+      symbologyModifier: symbologyModifier,
+    );
   }
 
   /// See specification GBT 18284-2000
@@ -179,7 +180,8 @@ class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = (((twoBytes ~/ 0x060) << 8) & 0xFFFFFFFF) | (twoBytes % 0x060);
+      int assembledTwoBytes =
+          (((twoBytes ~/ 0x060) << 8) & 0xFFFFFFFF) | (twoBytes % 0x060);
       if (assembledTwoBytes < 0x00A00) {
         // In the 0xA1A1 to 0xAAFE range
         assembledTwoBytes += 0x0A1A1;
@@ -210,7 +212,8 @@ class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = (((twoBytes ~/ 0x0C0) << 8) & 0xFFFFFFFF) | (twoBytes % 0x0C0);
+      int assembledTwoBytes =
+          (((twoBytes ~/ 0x0C0) << 8) & 0xFFFFFFFF) | (twoBytes % 0x0C0);
       if (assembledTwoBytes < 0x01F00) {
         // In the 0x8140 to 0x9FFC range
         assembledTwoBytes += 0x08140;

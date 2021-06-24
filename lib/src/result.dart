@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import 'barcode_format.dart';
 import 'result_metadata_type.dart';
 import 'result_point.dart';
@@ -78,16 +77,16 @@ class Result {
   }
 
   void addResultPoints(List<ResultPoint?>? newPoints) {
-    if(newPoints != null){
-      if(_resultPoints == null){
+    if (newPoints != null) {
+      if (_resultPoints == null) {
         _resultPoints = newPoints;
-      }else {
+      } else {
         _resultPoints!.addAll(newPoints);
       }
     }
   }
 
-  int get timestamp=> _timestamp;
+  int get timestamp => _timestamp;
 
   @override
   String toString() {

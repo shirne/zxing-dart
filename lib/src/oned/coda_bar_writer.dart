@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../common/detector/math_utils.dart';
 
 import '../barcode_format.dart';
@@ -28,12 +27,10 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   static const List<String> _START_END_CHARS = ['A', 'B', 'C', 'D'];
   static const List<String> _ALT_START_END_CHARS = ['T', 'N', '*', 'E'];
   static const List<String> _CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = [
-    '/',
-    ':',
-    '+',
-    '.'
+    '/', ':', '+', '.' //
   ];
-  static const String _DEFAULT_GUARD = 'A';//START_END_CHARS[0];
+  //START_END_CHARS[0];
+  static const String _DEFAULT_GUARD = 'A';
 
   //@protected
   @override

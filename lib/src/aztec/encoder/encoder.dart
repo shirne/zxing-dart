@@ -214,7 +214,7 @@ class Encoder {
       size: matrixSize,
       layers: layers,
       codeWords: messageSizeInWords,
-      matrix: matrix
+      matrix: matrix,
     );
   }
 

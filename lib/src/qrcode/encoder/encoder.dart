@@ -65,14 +65,16 @@ class Encoder {
   }
 
   static QRCode encode(String content,
-      [ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H, Map<EncodeHintType, Object>? hints]) {
+      [ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H,
+      Map<EncodeHintType, Object>? hints]) {
     // Determine what character encoding has been specified by the caller, if any
     Encoding? encoding = defaultByteModeEncoding;
     bool hasEncodingHint =
         hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
-      encoding =
-          CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.charset;
+      encoding = CharacterSetECI.getCharacterSetECIByName(
+              hints[EncodeHintType.CHARACTER_SET].toString())
+          ?.charset;
     }
 
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
@@ -94,7 +96,8 @@ class Encoder {
     // Append the FNC1 mode header for GS1 formatted data if applicable
     bool hasGS1FormatHint =
         hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT);
-    if (hasGS1FormatHint && hints[EncodeHintType.GS1_FORMAT].toString() == 'true') {
+    if (hasGS1FormatHint &&
+        hints[EncodeHintType.GS1_FORMAT].toString() == 'true') {
       // GS1 formatted codes are prefixed with a FNC1 in first position mode header
       appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
     }
@@ -112,7 +115,8 @@ class Encoder {
       int versionNumber =
           int.parse(hints[EncodeHintType.QR_VERSION].toString());
       version = Version.getVersionForNumber(versionNumber);
-      int bitsNeeded = _calculateBitsNeeded(mode, headerBits, dataBits, version);
+      int bitsNeeded =
+          _calculateBitsNeeded(mode, headerBits, dataBits, version);
       if (!_willFit(bitsNeeded, version, ecLevel)) {
         throw WriterException("Data too big for requested version");
       }
@@ -123,15 +127,13 @@ class Encoder {
     BitArray headerAndDataBits = BitArray();
     headerAndDataBits.appendBitArray(headerBits);
     // Find "length" of main segment and write it
-    int numLetters =
-        mode == Mode.BYTE ? dataBits.sizeInBytes : content.length;
+    int numLetters = mode == Mode.BYTE ? dataBits.sizeInBytes : content.length;
     appendLengthInfo(numLetters, version, mode, headerAndDataBits);
     // Put data together into the overall payload
     headerAndDataBits.appendBitArray(dataBits);
 
     ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-    int numDataBytes =
-        version.totalCodewords - ecBlocks.totalECCodewords;
+    int numDataBytes = version.totalCodewords - ecBlocks.totalECCodewords;
 
     // Terminate the bits properly.
     terminateBits(numDataBytes, headerAndDataBits);
@@ -140,7 +142,7 @@ class Encoder {
     BitArray finalBits = interleaveWithECBytes(headerAndDataBits,
         version.totalCodewords, numDataBytes, ecBlocks.numBlocks);
 
-    QRCode qrCode = QRCode(ecLevel:ecLevel, mode: mode, version: version);
+    QRCode qrCode = QRCode(ecLevel: ecLevel, mode: mode, version: version);
 
     //  Choose the mask pattern and set to "qrCode".
     int dimension = version.dimensionForVersion;
@@ -251,7 +253,8 @@ class Encoder {
 
   static int _chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel,
       Version version, ByteMatrix matrix) {
-    int minPenalty = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
+    int minPenalty =
+        MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
     // We try all mask patterns to choose the best one.
     for (int maskPattern = 0;
@@ -267,7 +270,8 @@ class Encoder {
     return bestMaskPattern;
   }
 
-  static Version _chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) {
+  static Version _chooseVersion(
+      int numInputBits, ErrorCorrectionLevel ecLevel) {
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
       if (_willFit(numInputBits, version, ecLevel)) {

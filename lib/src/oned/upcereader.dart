@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
 
@@ -102,7 +101,8 @@ class UPCEReader extends UPCEANReader {
   //@protected
   @override
   List<int> decodeEnd(BitArray row, int endStart) {
-    return UPCEANReader.findGuardPattern(row, endStart, true, _MIDDLE_END_PATTERN);
+    return UPCEANReader.findGuardPattern(
+        row, endStart, true, _MIDDLE_END_PATTERN);
   }
 
   //@protected
@@ -116,7 +116,7 @@ class UPCEReader extends UPCEANReader {
     for (int numSys = 0; numSys <= 1; numSys++) {
       for (int d = 0; d < 10; d++) {
         if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-          resultString.insert( 0, 48 /* 0 */ + numSys);
+          resultString.insert(0, 48 /* 0 */ + numSys);
           resultString.writeCharCode(48 /* 0 */ + d);
           return;
         }
@@ -133,7 +133,8 @@ class UPCEReader extends UPCEANReader {
   /// @param upce UPC-E code as string of digits
   /// @return equivalent UPC-A code as string of digits
   static String convertUPCEtoUPCA(String upce) {
-    List<int> upceChars = List.generate(6, (index)=>upce.codeUnitAt(index+1));
+    List<int> upceChars =
+        List.generate(6, (index) => upce.codeUnitAt(index + 1));
     // upce.getChars(1, 7, upceChars, 0);
     StringBuffer result = StringBuffer();
     result.write(upce[0]);

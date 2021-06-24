@@ -165,46 +165,47 @@ class AddressBookParsedResult extends ParsedResult {
 
   List<String>? get urls => _urls;
 
-  addName(String name){
-    if(_names == null){
+  addName(String name) {
+    if (_names == null) {
       _names = [];
     }
     _names!.add(name);
   }
-  addNickname(String name){
-    if(_nicknames == null){
+
+  addNickname(String name) {
+    if (_nicknames == null) {
       _nicknames = [];
     }
     _nicknames!.add(name);
   }
 
-  addPhoneNumber(String phone, [String? type]){
-    if(_phoneNumbers == null){
+  addPhoneNumber(String phone, [String? type]) {
+    if (_phoneNumbers == null) {
       _phoneNumbers = [];
     }
-    if(_phoneTypes == null){
+    if (_phoneTypes == null) {
       _phoneTypes = [];
     }
     _phoneNumbers!.add(phone);
     _phoneTypes!.add(type);
   }
 
-  addEmail(String email, [String? type]){
-    if(_emails == null){
+  addEmail(String email, [String? type]) {
+    if (_emails == null) {
       _emails = [];
     }
-    if(_emailTypes == null){
+    if (_emailTypes == null) {
       _emailTypes = [];
     }
     _emails!.add(email);
     _emailTypes!.add(type);
   }
 
-  addAddress(String address, [String? type]){
-    if(_addresses == null){
+  addAddress(String address, [String? type]) {
+    if (_addresses == null) {
       _addresses = [];
     }
-    if(_addressTypes == null){
+    if (_addressTypes == null) {
       _addressTypes = [];
     }
     _addresses!.add(address);

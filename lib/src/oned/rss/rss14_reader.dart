@@ -123,10 +123,8 @@ class RSS14Reader extends AbstractRSSReader {
     }
     buffer.write(checkDigit);
 
-    List<ResultPoint> leftPoints =
-        leftPair.finderPattern.resultPoints;
-    List<ResultPoint> rightPoints =
-        rightPair.finderPattern.resultPoints;
+    List<ResultPoint> leftPoints = leftPair.finderPattern.resultPoints;
+    List<ResultPoint> rightPoints = rightPair.finderPattern.resultPoints;
     Result result = Result(
         buffer.toString(),
         null,
@@ -143,10 +141,9 @@ class RSS14Reader extends AbstractRSSReader {
 
   static bool _checkChecksum(Pair leftPair, Pair rightPair) {
     int checkValue =
-        (leftPair.checksumPortion + 16 * rightPair.checksumPortion) %
-            79;
-    int targetCheckValue = 9 * leftPair.finderPattern.value +
-        rightPair.finderPattern.value;
+        (leftPair.checksumPortion + 16 * rightPair.checksumPortion) % 79;
+    int targetCheckValue =
+        9 * leftPair.finderPattern.value + rightPair.finderPattern.value;
     if (targetCheckValue > 72) {
       targetCheckValue--;
     }
@@ -163,7 +160,8 @@ class RSS14Reader extends AbstractRSSReader {
       FinderPattern pattern =
           _parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-      ResultPointCallback? resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+      ResultPointCallback? resultPointCallback =
+          hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
               as ResultPointCallback?;
 
       if (resultPointCallback != null) {
@@ -179,10 +177,8 @@ class RSS14Reader extends AbstractRSSReader {
 
       DataCharacter outside = _decodeDataCharacter(row, pattern, true);
       DataCharacter inside = _decodeDataCharacter(row, pattern, false);
-      return Pair(
-          1597 * outside.value + inside.value,
-          outside.checksumPortion + 4 * inside.checksumPortion,
-          pattern);
+      return Pair(1597 * outside.value + inside.value,
+          outside.checksumPortion + 4 * inside.checksumPortion, pattern);
     } on NotFoundException catch (_) {
       return null;
     }
@@ -194,8 +190,7 @@ class RSS14Reader extends AbstractRSSReader {
     counters.fillRange(0, counters.length, 0);
 
     if (outsideChar) {
-      OneDReader.recordPatternInReverse(
-          row, pattern.startEnd[0], counters);
+      OneDReader.recordPatternInReverse(row, pattern.startEnd[0], counters);
     } else {
       OneDReader.recordPattern(row, pattern.startEnd[1], counters);
       // reverse it

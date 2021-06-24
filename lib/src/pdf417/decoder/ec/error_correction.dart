@@ -87,7 +87,8 @@ class ErrorCorrection {
     return errorLocations.length;
   }
 
-  List<ModulusPoly> _runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) {
+  List<ModulusPoly> _runEuclideanAlgorithm(
+      ModulusPoly a, ModulusPoly b, int R) {
     // Assume a's degree is >= b's
     if (a.degree < b.degree) {
       ModulusPoly temp = a;

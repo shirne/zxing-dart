@@ -70,9 +70,10 @@ class PDF417Writer implements Writer {
             int.parse(hints[EncodeHintType.ERROR_CORRECTION].toString());
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-        Encoding? encoding =
-        CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.charset;
-        if(encoding != null)encoder.setEncoding(encoding);
+        Encoding? encoding = CharacterSetECI.getCharacterSetECIByName(
+                hints[EncodeHintType.CHARACTER_SET].toString())
+            ?.charset;
+        if (encoding != null) encoder.setEncoding(encoding);
       }
     }
 
@@ -99,9 +100,8 @@ class PDF417Writer implements Writer {
     int scale = Math.min(scaleX, scaleY);
 
     if (scale > 1) {
-      List<Uint8List> scaledMatrix = encoder
-          .barcodeMatrix!
-          .getScaledMatrix(scale, scale * aspectRatio);
+      List<Uint8List> scaledMatrix =
+          encoder.barcodeMatrix!.getScaledMatrix(scale, scale * aspectRatio);
       if (rotated) {
         scaledMatrix = _rotateArray(scaledMatrix);
       }

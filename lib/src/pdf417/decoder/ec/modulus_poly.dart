@@ -104,8 +104,8 @@ class ModulusPoly {
     List.copyRange(sumDiff, 0, largerCoefficients, 0, lengthDiff);
 
     for (int i = lengthDiff; i < largerCoefficients.length; i++) {
-      sumDiff[i] =
-          _field.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+      sumDiff[i] = _field.add(
+          smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
     }
 
     return ModulusPoly(_field, sumDiff);
@@ -136,8 +136,8 @@ class ModulusPoly {
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
-        product[i + j] =
-            _field.add(product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
+        product[i + j] = _field.add(
+            product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
       }
     }
     return ModulusPoly(_field, product);

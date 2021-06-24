@@ -97,7 +97,14 @@ class RSSExpandedReader extends AbstractRSSReader {
     [_FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B],
     [_FINDER_PAT_A, _FINDER_PAT_C, _FINDER_PAT_B, _FINDER_PAT_D],
     [_FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, _FINDER_PAT_C],
-    [_FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B,_FINDER_PAT_D, _FINDER_PAT_D, _FINDER_PAT_F ], //
+    [
+      _FINDER_PAT_A,
+      _FINDER_PAT_E,
+      _FINDER_PAT_B,
+      _FINDER_PAT_D,
+      _FINDER_PAT_D,
+      _FINDER_PAT_F
+    ], //
     [
       _FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, //
       _FINDER_PAT_E, _FINDER_PAT_F, _FINDER_PAT_F
@@ -107,7 +114,8 @@ class RSSExpandedReader extends AbstractRSSReader {
       _FINDER_PAT_C, _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_D
     ],
     [
-      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, _FINDER_PAT_C, //
+      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B,
+      _FINDER_PAT_C, //
       _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_E, _FINDER_PAT_E
     ],
     [
@@ -362,8 +370,7 @@ class RSSExpandedReader extends AbstractRSSReader {
         AbstractExpandedDecoder.createDecoder(binary);
     String resultingString = decoder.parseInformation();
 
-    List<ResultPoint> firstPoints =
-        pairs[0].finderPattern!.resultPoints;
+    List<ResultPoint> firstPoints = pairs[0].finderPattern!.resultPoints;
     List<ResultPoint> lastPoints =
         pairs[pairs.length - 1].finderPattern!.resultPoints;
 
@@ -585,8 +592,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     counters.fillRange(0, counters.length, 0);
 
     if (leftChar) {
-      OneDReader.recordPatternInReverse(
-          row, pattern.startEnd[0], counters);
+      OneDReader.recordPatternInReverse(row, pattern.startEnd[0], counters);
     } else {
       OneDReader.recordPattern(row, pattern.startEnd[1], counters);
       // reverse it
@@ -640,10 +646,8 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     _adjustOddEvenCounts(numModules);
 
-    int weightRowNumber = 4 * pattern.value +
-        (isOddPattern ? 0 : 2) +
-        (leftChar ? 0 : 1) -
-        1;
+    int weightRowNumber =
+        4 * pattern.value + (isOddPattern ? 0 : 2) + (leftChar ? 0 : 1) - 1;
 
     int oddSum = 0;
     int oddChecksumPortion = 0;
@@ -763,23 +767,19 @@ class RSSExpandedReader extends AbstractRSSReader {
       if (decrementOdd) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(
-          this.oddCounts, this.oddRoundingErrors);
+      AbstractRSSReader.increment(this.oddCounts, this.oddRoundingErrors);
     }
     if (decrementOdd) {
-      AbstractRSSReader.decrement(
-          this.oddCounts, this.oddRoundingErrors);
+      AbstractRSSReader.decrement(this.oddCounts, this.oddRoundingErrors);
     }
     if (incrementEven) {
       if (decrementEven) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(
-          this.evenCounts, this.oddRoundingErrors);
+      AbstractRSSReader.increment(this.evenCounts, this.oddRoundingErrors);
     }
     if (decrementEven) {
-      AbstractRSSReader.decrement(
-          this.evenCounts, this.evenRoundingErrors);
+      AbstractRSSReader.decrement(this.evenCounts, this.evenRoundingErrors);
     }
   }
 }

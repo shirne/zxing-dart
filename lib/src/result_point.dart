@@ -54,7 +54,6 @@ class ResultPoint {
   ///
   /// @param patterns array of three [ResultPoint] to order
   static void orderBestPatterns(List<ResultPoint> patterns) {
-
     // Find distances between pattern centers
     double zeroOneDistance = distance(patterns[0], patterns[1]);
     double oneTwoDistance = distance(patterns[1], patterns[2]);

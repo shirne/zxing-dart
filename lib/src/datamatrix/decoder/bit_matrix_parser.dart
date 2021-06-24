@@ -38,8 +38,8 @@ class BitMatrixParser {
 
     this._version = _readVersion(bitMatrix);
     this._mappingBitMatrix = _extractDataRegion(bitMatrix);
-    this._readMappingMatrix = BitMatrix(
-        this._mappingBitMatrix.width, this._mappingBitMatrix.height);
+    this._readMappingMatrix =
+        BitMatrix(this._mappingBitMatrix.width, this._mappingBitMatrix.height);
   }
 
   Version get version => _version;
@@ -118,7 +118,8 @@ class BitMatrixParser {
           if ((row < numRows) &&
               (column >= 0) &&
               !_readMappingMatrix.get(column, row)) {
-            result[resultOffset++] = _readUtah(row, column, numRows, numColumns);
+            result[resultOffset++] =
+                _readUtah(row, column, numRows, numColumns);
           }
           row -= 2;
           column += 2;
@@ -131,7 +132,8 @@ class BitMatrixParser {
           if ((row >= 0) &&
               (column < numColumns) &&
               !_readMappingMatrix.get(column, row)) {
-            result[resultOffset++] = _readUtah(row, column, numRows, numColumns);
+            result[resultOffset++] =
+                _readUtah(row, column, numRows, numColumns);
           }
           row += 2;
           column -= 2;

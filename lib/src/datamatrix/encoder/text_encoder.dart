@@ -23,7 +23,8 @@ class TextEncoder extends C40Encoder {
 
   @override
   int encodeChar(int chr, StringBuffer sb) {
-    if (chr == 32) { // ' '
+    // ' '
+    if (chr == 32) {
       sb.write('\x03');
       return 1;
     }

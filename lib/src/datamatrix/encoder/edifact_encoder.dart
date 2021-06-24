@@ -65,14 +65,13 @@ class EdifactEncoder implements Encoder {
       if (count == 1) {
         //Only an unlatch at the end
         context.updateSymbolInfo();
-        int available = context.symbolInfo!.dataCapacity -
-            context.codewordCount;
+        int available =
+            context.symbolInfo!.dataCapacity - context.codewordCount;
         int remaining = context.remainingCharacters;
         // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
         if (remaining > available) {
           context.updateSymbolInfo(context.codewordCount + 1);
-          available = context.symbolInfo!.dataCapacity -
-              context.codewordCount;
+          available = context.symbolInfo!.dataCapacity - context.codewordCount;
         }
         if (remaining <= available && available <= 2) {
           return; //No unlatch
@@ -89,8 +88,8 @@ class EdifactEncoder implements Encoder {
 
       if (restChars <= 2) {
         context.updateSymbolInfo(context.codewordCount + restChars);
-        int available = context.symbolInfo!.dataCapacity -
-            context.codewordCount;
+        int available =
+            context.symbolInfo!.dataCapacity - context.codewordCount;
         if (available >= 3) {
           restInAscii = false;
           context.updateSymbolInfo(context.codewordCount + encoded.length);
@@ -110,7 +109,6 @@ class EdifactEncoder implements Encoder {
   }
 
   static void _encodeChar(int chr, StringBuffer sb) {
-
     if (chr >= 32 /*   */ && chr <= 63 /* ? */) {
       sb.writeCharCode(chr);
     } else if (chr >= 64 /* @ */ && chr <= 94 /* ^ */) {

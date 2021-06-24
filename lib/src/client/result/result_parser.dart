@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
 import 'dart:convert';
 
 import 'product_result_parser.dart';
@@ -53,28 +50,27 @@ import 'vcard_result_parser.dart';
 ///
 /// @author Sean Owen
 abstract class ResultParser {
-
   static final List<ResultParser> _parsers = [
-      BookmarkDoCoMoResultParser(),
-      AddressBookDoCoMoResultParser(),
-      EmailDoCoMoResultParser(),
-      AddressBookAUResultParser(),
-      VCardResultParser(),
-      BizcardResultParser(),
-      VEventResultParser(),
-      EmailAddressResultParser(),
-      SMTPResultParser(),
-      TelResultParser(),
-      SMSMMSResultParser(),
-      SMSTOMMSTOResultParser(),
-      GeoResultParser(),
-      WifiResultParser(),
-      URLTOResultParser(),
-      URIResultParser(),
-      ISBNResultParser(),
-      ProductResultParser(),
-      ExpandedProductResultParser(),
-      VINResultParser(),
+    BookmarkDoCoMoResultParser(),
+    AddressBookDoCoMoResultParser(),
+    EmailDoCoMoResultParser(),
+    AddressBookAUResultParser(),
+    VCardResultParser(),
+    BizcardResultParser(),
+    VEventResultParser(),
+    EmailAddressResultParser(),
+    SMTPResultParser(),
+    TelResultParser(),
+    SMSMMSResultParser(),
+    SMSTOMMSTOResultParser(),
+    GeoResultParser(),
+    WifiResultParser(),
+    URLTOResultParser(),
+    URIResultParser(),
+    ISBNResultParser(),
+    ProductResultParser(),
+    ExpandedProductResultParser(),
+    VINResultParser(),
   ];
 
   static final RegExp _digits = RegExp(r"^\d+$");
@@ -112,7 +108,7 @@ abstract class ResultParser {
 
   //@protected
   List<String>? maybeWrap(String? value) {
-    return value == null ? null : [ value ];
+    return value == null ? null : [value];
   }
 
   //@protected
@@ -154,7 +150,10 @@ abstract class ResultParser {
 
   //@protected
   bool isStringOfDigits(String? value, int length) {
-    return value != null && length > 0 && length == value.length && _digits.hasMatch(value);
+    return value != null &&
+        length > 0 &&
+        length == value.length &&
+        _digits.hasMatch(value);
   }
 
   // @protected
@@ -163,22 +162,23 @@ abstract class ResultParser {
       return false;
     }
     int max = offset + length;
-    return value.length >= max && _digits.hasMatch(value.substring(offset, max));
+    return value.length >= max &&
+        _digits.hasMatch(value.substring(offset, max));
   }
 
-  Map<String,String>? parseNameValuePairs(String uri) {
+  Map<String, String>? parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;
     }
-    Map<String,String> result = {};
+    Map<String, String> result = {};
     for (String keyValue in uri.substring(paramStart + 1).split(_ampersand)) {
       _appendKeyValue(keyValue, result);
     }
     return result;
   }
 
-  void _appendKeyValue(String keyValue, Map<String,String> result) {
+  void _appendKeyValue(String keyValue, Map<String, String> result) {
     List<String> keyValueTokens = keyValue.split(_equals); // todo 2
     if (keyValueTokens.length == 2) {
       String key = keyValueTokens[0];
@@ -186,7 +186,8 @@ abstract class ResultParser {
       try {
         value = urlDecode(value);
         result[key] = value;
-      } catch ( _) { // IllegalArgumentException
+      } catch (_) {
+        // IllegalArgumentException
         // continue; invalid data such as an escape like %0t
       }
     }
@@ -196,12 +197,14 @@ abstract class ResultParser {
     try {
       //todo decodeFull or decodeComponent or decodeQueryComponent ?
       return Uri.decodeQueryComponent(encoded, encoding: utf8);
-    } catch ( _) { // UnsupportedEncodingException
+    } catch (_) {
+      // UnsupportedEncodingException
       rethrow; // can't happen
     }
   }
 
-  List<String>? matchPrefixedField(String prefix, String rawText, String endChar, bool trim) {
+  List<String>? matchPrefixedField(
+      String prefix, String rawText, String endChar, bool trim) {
     List<String>? matches;
     int i = 0;
     int max = rawText.length;
@@ -257,9 +260,9 @@ abstract class ResultParser {
     return count;
   }
 
-  String? matchSinglePrefixedField(String prefix, String rawText, String endChar, bool trim) {
+  String? matchSinglePrefixedField(
+      String prefix, String rawText, String endChar, bool trim) {
     List<String>? matches = matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];
   }
-
 }

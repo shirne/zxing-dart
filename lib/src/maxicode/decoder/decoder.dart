@@ -66,7 +66,7 @@ class Decoder {
     }
 
     List.copyRange(datawords, 0, codewords, 0, 10);
-    List.copyRange(datawords, 10, codewords, 20, datawords.length + 10 );
+    List.copyRange(datawords, 10, codewords, 20, datawords.length + 10);
 
     return DecodedBitStreamParser.decode(datawords, mode);
   }
@@ -79,7 +79,8 @@ class Decoder {
     int divisor = mode == _ALL ? 1 : 2;
 
     // First read into an array of ints
-    Int32List codewordsInts = Int32List(codewords ~/ divisor); //codewords ~/ divisor
+    Int32List codewordsInts =
+        Int32List(codewords ~/ divisor); //codewords ~/ divisor
     for (int i = 0; i < codewords; i++) {
       if ((mode == _ALL) || (i % 2 == (mode - 1))) {
         codewordsInts[i ~/ divisor] = codewordBytes[i + start] & 0xFF;

@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-
-
-
 import '../../result.dart';
 import 'result_parser.dart';
 import 'uriparsed_result.dart';
 
-
 /// Tries to parse results that are a URI of some kind.
-/// 
+///
 /// @author Sean Owen
 class URIResultParser extends ResultParser {
-
   static final RegExp _allowedUrlCharsPattern =
       RegExp(r"^[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+$");
   static final RegExp _userInHost = RegExp(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
-  static final RegExp _urlWithProtocolPattern = RegExp(r"[a-zA-Z][a-zA-Z0-9+-.]+:");
+  static final RegExp _urlWithProtocolPattern =
+      RegExp(r"[a-zA-Z][a-zA-Z0-9+-.]+:");
   static final RegExp _urlWithoutProtocolPattern = RegExp(
       "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
-      "(:\\d{1,5})?" + // maybe port
-      r"(/|\?|$)"); // query, path or nothing
+          "(:\\d{1,5})?" + // maybe port
+          r"(/|\?|$)"); // query, path or nothing
 
   @override
   URIParsedResult? parse(Result result) {
@@ -76,5 +72,4 @@ class URIResultParser extends ResultParser {
     m = _urlWithoutProtocolPattern.firstMatch(uri);
     return m != null && m.start == 0;
   }
-
 }

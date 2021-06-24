@@ -511,10 +511,8 @@ class Code128Reader extends OneDReader {
     // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
     // to read off. Would be slightly better to properly read. Here we just skip it:
     nextStart = row.getNextUnset(nextStart);
-    if (!row.isRange(
-        nextStart,
-        Math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2),
-        false)) {
+    if (!row.isRange(nextStart,
+        Math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2), false)) {
       throw NotFoundException.instance;
     }
 

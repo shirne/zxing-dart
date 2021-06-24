@@ -73,11 +73,11 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         subHeight++;
       }
       List<List<int>> blackPoints =
-      _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+          _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
       BitMatrix newMatrix = BitMatrix(width, height);
-      _calculateThresholdForBlock(luminances, subWidth, subHeight, width, height,
-          blackPoints, newMatrix);
+      _calculateThresholdForBlock(luminances, subWidth, subHeight, width,
+          height, blackPoints, newMatrix);
       _matrix = newMatrix;
     } else {
       // If the image is too small, fall back to the global histogram approach.
@@ -139,8 +139,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   static void _thresholdBlock(Int8List luminances, int xoffset, int yoffset,
       int threshold, int stride, BitMatrix matrix) {
     for (int y = 0, offset = yoffset * stride + xoffset;
-    y < BLOCK_SIZE;
-    y++, offset += stride) {
+        y < BLOCK_SIZE;
+        y++, offset += stride) {
       for (int x = 0; x < BLOCK_SIZE; x++) {
         // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
         if ((luminances[offset + x] & 0xFF) <= threshold) {
@@ -153,12 +153,12 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// Calculates a single black point for each block of pixels and saves it away.
   /// See the following thread for a discussion of this algorithm:
   ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-  static List<List<int>> _calculateBlackPoints(Int8List luminances,
-      int subWidth, int subHeight, int width, int height) {
+  static List<List<int>> _calculateBlackPoints(
+      Int8List luminances, int subWidth, int subHeight, int width, int height) {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;
-    List<List<int>> blackPoints = List.generate(
-        subHeight, (index) => List.filled(subWidth, 0));
+    List<List<int>> blackPoints =
+        List.generate(subHeight, (index) => List.filled(subWidth, 0));
     for (int y = 0; y < subHeight; y++) {
       int yOffset = y << BLOCK_SIZE_POWER;
       if (yOffset > maxYOffset) {
@@ -173,8 +173,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         int min = 0xFF;
         int max = 0;
         for (int yy = 0, offset = yOffset * width + xOffset;
-        yy < BLOCK_SIZE;
-        yy++, offset += width) {
+            yy < BLOCK_SIZE;
+            yy++, offset += width) {
           for (int xx = 0; xx < BLOCK_SIZE; xx++) {
             int pixel = luminances[offset + xx] & 0xFF;
             sum += pixel;
@@ -219,8 +219,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
 
             // The (min < bp) is arbitrary but works better than other heuristics that were tried.
             int averageNeighborBlackPoint = (blackPoints[y - 1][x] +
-                (2 * blackPoints[y][x - 1]) +
-                blackPoints[y - 1][x - 1]) ~/
+                    (2 * blackPoints[y][x - 1]) +
+                    blackPoints[y - 1][x - 1]) ~/
                 4;
             if (min < averageNeighborBlackPoint) {
               average = averageNeighborBlackPoint;

@@ -138,7 +138,8 @@ class DecodedBitStreamParser {
     }
 
     return DecoderResult(bytes, result.toString(),
-        byteSegments.isEmpty ? null : byteSegments, null, symbologyModifier:symbologyModifier);
+        byteSegments.isEmpty ? null : byteSegments, null,
+        symbologyModifier: symbologyModifier);
   }
 
   /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2

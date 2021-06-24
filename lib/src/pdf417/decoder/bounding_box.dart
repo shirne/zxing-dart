@@ -106,8 +106,7 @@ class BoundingBox {
       if (newMaxY >= _image.height) {
         newMaxY = _image.height - 1;
       }
-      ResultPoint newBottom =
-          ResultPoint(bottom.x, newMaxY.toDouble());
+      ResultPoint newBottom = ResultPoint(bottom.x, newMaxY.toDouble());
       if (isLeft) {
         newBottomLeft = newBottom;
       } else {

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import '../common/bit_array.dart';
 
 import '../barcode_format.dart';
@@ -39,7 +37,6 @@ import 'upcereader.dart';
 ///
 /// @author Sean Owen
 class MultiFormatUPCEANReader extends OneDReader {
-
   //static const List<UPCEANReader> _EMPTY_READER_ARRAY = [];
 
   late List<UPCEANReader> _readers;
@@ -47,7 +44,7 @@ class MultiFormatUPCEANReader extends OneDReader {
   MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
     List<BarcodeFormat>? possibleFormats =
-      hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+        hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
     List<UPCEANReader> readers = [];
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
@@ -72,14 +69,14 @@ class MultiFormatUPCEANReader extends OneDReader {
   }
 
   @override
-  Result decodeRow(int rowNumber,
-                          BitArray row,
-                          Map<DecodeHintType, Object>? hints){
+  Result decodeRow(
+      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     // Compute this location once and reuse it on multiple implementations
     List<int> startGuardPattern = UPCEANReader.findStartGuardPattern(row);
     for (UPCEANReader reader in _readers) {
       try {
-        Result result = reader.decodeRow(rowNumber, row, hints, startGuardPattern);
+        Result result =
+            reader.decodeRow(rowNumber, row, hints, startGuardPattern);
         // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
         // followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
         // UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
@@ -92,24 +89,24 @@ class MultiFormatUPCEANReader extends OneDReader {
         // result if appropriate.
         //
         // But, don't return UPC-A if UPC-A was not a requested format!
-        bool ean13MayBeUPCA =
-            result.barcodeFormat == BarcodeFormat.EAN_13 &&
-                result.text[0] == '0';
+        bool ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.EAN_13 &&
+            result.text[0] == '0';
         // @SuppressWarnings("unchecked")
-        List<BarcodeFormat>? possibleFormats = hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-        bool canReturnUPCA = possibleFormats == null || possibleFormats.contains(BarcodeFormat.UPC_A);
-  
+        List<BarcodeFormat>? possibleFormats =
+            hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+        bool canReturnUPCA = possibleFormats == null ||
+            possibleFormats.contains(BarcodeFormat.UPC_A);
+
         if (ean13MayBeUPCA && canReturnUPCA) {
           // Transfer the metadata across
-          Result resultUPCA = Result(result.text.substring(1),
-                                         result.rawBytes,
-                                         result.resultPoints,
-                                         BarcodeFormat.UPC_A);
+          Result resultUPCA = Result(result.text.substring(1), result.rawBytes,
+              result.resultPoints, BarcodeFormat.UPC_A);
           resultUPCA.putAllMetadata(result.resultMetadata);
           return resultUPCA;
         }
         return result;
-      } on ReaderException catch ( _) { //
+      } on ReaderException catch (_) {
+        //
         // continue
       }
     }
@@ -123,5 +120,4 @@ class MultiFormatUPCEANReader extends OneDReader {
       reader.reset();
     }
   }
-
 }

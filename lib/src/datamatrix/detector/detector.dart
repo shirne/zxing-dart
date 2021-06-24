@@ -32,7 +32,8 @@ class Detector {
   final BitMatrix _image;
   final WhiteRectangleDetector _rectangleDetector;
 
-  Detector(this._image) : this._rectangleDetector = WhiteRectangleDetector(_image);
+  Detector(this._image)
+      : this._rectangleDetector = WhiteRectangleDetector(_image);
 
   /// <p>Detects a Data Matrix Code in an image.</p>
   ///
@@ -72,8 +73,7 @@ class Detector {
     BitMatrix bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight,
         topRight, dimensionTop, dimensionRight);
 
-    return DetectorResult(
-        bits, [topLeft, bottomLeft, bottomRight, topRight]);
+    return DetectorResult(bits, [topLeft, bottomLeft, bottomRight, topRight]);
   }
 
   static ResultPoint _shiftPoint(ResultPoint point, ResultPoint to, int div) {
@@ -260,10 +260,8 @@ class Detector {
 
     // WhiteRectangleDetector returns points inside of the rectangle.
     // I want points on the edges.
-    double centerX =
-        (pointA.x + pointB.x + pointC.x + pointD.x) / 4;
-    double centerY =
-        (pointA.y + pointB.y + pointC.y + pointD.y) / 4;
+    double centerX = (pointA.x + pointB.x + pointC.x + pointD.x) / 4;
+    double centerY = (pointA.y + pointB.y + pointC.y + pointD.y) / 4;
     pointA = _moveAway(pointA, centerX, centerY);
     pointB = _moveAway(pointB, centerX, centerY);
     pointC = _moveAway(pointC, centerX, centerY);
@@ -286,10 +284,7 @@ class Detector {
   }
 
   bool _isValid(ResultPoint p) {
-    return p.x >= 0 &&
-        p.x < _image.width &&
-        p.y > 0 &&
-        p.y < _image.height;
+    return p.x >= 0 && p.x < _image.width && p.y > 0 && p.y < _image.height;
   }
 
   static BitMatrix _sampleGrid(

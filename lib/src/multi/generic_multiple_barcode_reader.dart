@@ -131,16 +131,18 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     // Decode below barcode
     if (maxY < height - _MIN_DIMENSION_TO_RECUR) {
       _doDecodeMultiple(
-          image.crop(0, maxY.toInt(), width, height - maxY.toInt()),
-          hints,
-          results,
-          xOffset,
-          yOffset + maxY.toInt(),
-          currentDepth + 1);
+        image.crop(0, maxY.toInt(), width, height - maxY.toInt()),
+        hints,
+        results,
+        xOffset,
+        yOffset + maxY.toInt(),
+        currentDepth + 1,
+      );
     }
   }
 
-  static Result _translateResultPoints(Result result, int xOffset, int yOffset) {
+  static Result _translateResultPoints(
+      Result result, int xOffset, int yOffset) {
     List<ResultPoint?>? oldResultPoints = result.resultPoints;
     if (oldResultPoints == null) {
       return result;
@@ -149,17 +151,18 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     for (int i = 0; i < oldResultPoints.length; i++) {
       ResultPoint? oldPoint = oldResultPoints[i];
       if (oldPoint != null) {
-        newResultPoints.add(
-            ResultPoint(oldPoint.x + xOffset, oldPoint.y + yOffset));
+        newResultPoints
+            .add(ResultPoint(oldPoint.x + xOffset, oldPoint.y + yOffset));
       }
     }
     Result newResult = Result.full(
-        result.text,
-        result.rawBytes,
-        result.numBits,
-        newResultPoints,
-        result.barcodeFormat,
-        result.timestamp);
+      result.text,
+      result.rawBytes,
+      result.numBits,
+      newResultPoints,
+      result.barcodeFormat,
+      result.timestamp,
+    );
     newResult.putAllMetadata(result.resultMetadata);
     return newResult;
   }

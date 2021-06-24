@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../../result.dart';
 import 'abstract_do_co_mo_result_parser.dart';
 import 'email_address_parsed_result.dart';
@@ -27,7 +26,6 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class EmailAddressResultParser extends AbstractDoCoMoResultParser {
-
   static final Pattern _comma = ",";
 
   @override
@@ -42,14 +40,15 @@ class EmailAddressResultParser extends AbstractDoCoMoResultParser {
       }
       try {
         hostEmail = urlDecode(hostEmail);
-      }  catch ( _) { // IllegalArgumentException
+      } catch (_) {
+        // IllegalArgumentException
         return null;
       }
       List<String>? tos;
       if (hostEmail.isNotEmpty) {
         tos = hostEmail.split(_comma);
       }
-      Map<String,String>? nameValues = parseNameValuePairs(rawText);
+      Map<String, String>? nameValues = parseNameValuePairs(rawText);
       List<String>? ccs;
       List<String>? bccs;
       String? subject;
@@ -80,5 +79,4 @@ class EmailAddressResultParser extends AbstractDoCoMoResultParser {
       return EmailAddressParsedResult(rawText);
     }
   }
-
 }

@@ -34,9 +34,9 @@ class FieldParser {
   static final Object _variableLength = Object();
 
   static final List<List<Object>> _twoDigitDataLength = [
-    // "DIGITS", new Integer(LENGTH)
+    // "DIGITS", Integer(LENGTH)
     //    or
-    // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
+    // "DIGITS", VARIABLE_LENGTH, Integer(MAX_SIZE)
 
     ["00", 18],
     ["01", 14],

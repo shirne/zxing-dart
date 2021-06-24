@@ -34,10 +34,13 @@ import 'x12_encoder.dart';
 class HighLevelEncoder {
   /// Padding character
   static const int _PAD = 129;
+
   /// mode latch to C40 encodation mode
   static const int LATCH_TO_C40 = 230;
+
   /// mode latch to Base 256 encodation mode
   static const int LATCH_TO_BASE256 = 231;
+
   /// FNC1 Codeword
   //static const int _FNC1 = 232;
   /// Structured Append Codeword
@@ -46,28 +49,37 @@ class HighLevelEncoder {
   //static const int _READER_PROGRAMMING = 234;
   /// Upper Shift chr
   static const int UPPER_SHIFT = 235;
+
   /// 05 Macro
   static const int _MACRO_05 = 236;
+
   /// 06 Macro
   static const int _MACRO_06 = 237;
+
   /// mode latch to ANSI X.12 encodation mode
   static const int LATCH_TO_ANSIX12 = 238;
+
   /// mode latch to Text encodation mode
   static const int LATCH_TO_TEXT = 239;
+
   /// mode latch to EDIFACT encodation mode
   static const int LATCH_TO_EDIFACT = 240;
+
   /// ECI character (Extended Channel Interpretation)
   //static const int _ECI = 241;
 
   /// Unlatch from C40 encodation
   static const int C40_UNLATCH = 254;
+
   /// Unlatch from X12 encodation
   static const int X12_UNLATCH = 254;
 
   /// 05 Macro header
   static const String _MACRO_05_HEADER = "[)>\u001E05\u001D";
+
   /// 06 Macro header
   static const String _MACRO_06_HEADER = "[)>\u001E06\u001D";
+
   /// Macro trailer
   static const String _MACRO_TRAILER = "\u001E\u0004";
 
@@ -117,7 +129,8 @@ class HighLevelEncoder {
       context.writeCodeword(_MACRO_05);
       context.setSkipAtEnd(2);
       context.pos += _MACRO_05_HEADER.length;
-    } else if (msg.startsWith(_MACRO_06_HEADER) && msg.endsWith(_MACRO_TRAILER)) {
+    } else if (msg.startsWith(_MACRO_06_HEADER) &&
+        msg.endsWith(_MACRO_TRAILER)) {
       context.writeCodeword(_MACRO_06);
       context.setSkipAtEnd(2);
       context.pos += _MACRO_06_HEADER.length;
@@ -256,7 +269,8 @@ class HighLevelEncoder {
       if (charsProcessed >= 4) {
         List<int> intCharCounts = Int32List(6);
         Int8List mins = Int8List(6);
-        _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
+        _findMinimums(
+            charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
         int minCount = _getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] <
@@ -443,7 +457,6 @@ class HighLevelEncoder {
   static void illegalCharacter(int c) {
     String hex = (c).toRadixString(16);
     hex = "0000".substring(0, 4 - hex.length) + hex;
-    throw Exception(
-        "Illegal character: chr($c) (0x$hex)");
+    throw Exception("Illegal character: chr($c) (0x$hex)");
   }
 }

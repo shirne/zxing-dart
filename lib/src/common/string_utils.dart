@@ -69,14 +69,16 @@ class StringUtils {
   static Encoding? guessCharset(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
-      return CharacterSetECI.getCharacterSetECIByName(hints[DecodeHintType.CHARACTER_SET].toString())?.charset;
+      return CharacterSetECI.getCharacterSetECIByName(
+              hints[DecodeHintType.CHARACTER_SET].toString())
+          ?.charset;
     }
 
     // First try UTF-16, assuming anything with its BOM is UTF-16
     if (bytes.length > 2 &&
         ((bytes[0] == 0xFE && bytes[1] == 0xFF) ||
             (bytes[0] == 0xFF && bytes[1] == 0xFE))) {
-      return utf16;//StandardCharsets.UTF_16;
+      return utf16; //StandardCharsets.UTF_16;
     }
 
     // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,

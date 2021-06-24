@@ -159,7 +159,8 @@ class DecodedBitStreamParser {
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
     String fileId = "";
-    for (;codeIndex < codewords[0] &&
+    for (;
+        codeIndex < codewords[0] &&
             codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
             codewords[codeIndex] != _BEGIN_MACRO_PDF417_OPTIONAL_FIELD;
         codeIndex++) {
@@ -200,8 +201,7 @@ class DecodedBitStreamParser {
               StringBuffer segmentCount = StringBuffer();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, segmentCount);
-              resultMetadata
-                  .segmentCount = int.parse(segmentCount.toString());
+              resultMetadata.segmentCount = int.parse(segmentCount.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
               StringBuffer timestamp = StringBuffer();
@@ -211,12 +211,14 @@ class DecodedBitStreamParser {
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
               StringBuffer checksum = StringBuffer();
-              codeIndex = _numericCompaction(codewords, codeIndex + 1, checksum);
+              codeIndex =
+                  _numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.checksum = int.parse(checksum.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
               StringBuffer fileSize = StringBuffer();
-              codeIndex = _numericCompaction(codewords, codeIndex + 1, fileSize);
+              codeIndex =
+                  _numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.fileSize = int.parse(fileSize.toString());
               break;
             default:
@@ -301,7 +303,8 @@ class DecodedBitStreamParser {
         }
       }
     }
-    _decodeTextCompaction(textCompactionData, byteCompactionData, index, result);
+    _decodeTextCompaction(
+        textCompactionData, byteCompactionData, index, result);
     return codeIndex;
   }
 

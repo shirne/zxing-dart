@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import '../not_found_exception.dart';
 import 'bit_matrix.dart';
 import 'default_grid_sampler.dart';

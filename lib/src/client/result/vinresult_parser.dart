@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import 'package:zxing_lib/src/arguments_exception.dart';
 
 import '../../barcode_format.dart';
@@ -27,7 +25,6 @@ import 'vinparsed_result.dart';
 ///
 /// @author Sean Owen
 class VINResultParser extends ResultParser {
-
   static final RegExp _ioq = RegExp("[IOQ]");
   static final RegExp _az09 = RegExp(r"^[A-Z0-9]{17}$");
 
@@ -46,16 +43,19 @@ class VINResultParser extends ResultParser {
         return null;
       }
       String wmi = rawText.substring(0, 3);
-      return VINParsedResult(vin:rawText,
-          worldManufacturerID:wmi,
-          vehicleDescriptorSection:rawText.substring(3, 9),
-          vehicleIdentifierSection:rawText.substring(9, 17),
-          countryCode:_countryCode(wmi),
-          vehicleAttributes:rawText.substring(3, 8),
-          modelYear:_modelYear(rawText.codeUnitAt(9)),
-          plantCode:rawText.codeUnitAt(10),
-          sequentialNumber:rawText.substring(11));
-    } on ArgumentsException catch ( _) { // IllegalArgumentException
+      return VINParsedResult(
+        vin: rawText,
+        worldManufacturerID: wmi,
+        vehicleDescriptorSection: rawText.substring(3, 9),
+        vehicleIdentifierSection: rawText.substring(9, 17),
+        countryCode: _countryCode(wmi),
+        vehicleAttributes: rawText.substring(3, 8),
+        modelYear: _modelYear(rawText.codeUnitAt(9)),
+        plantCode: rawText.codeUnitAt(10),
+        sequentialNumber: rawText.substring(11),
+      );
+    } on ArgumentsException catch (_) {
+      // IllegalArgumentException
       return null;
     }
   }
@@ -69,7 +69,7 @@ class VINResultParser extends ResultParser {
     String expectedCheckChar = _checkChar(sum % 11);
     return checkedChar == expectedCheckChar;
   }
-  
+
   static int _vinCharValue(int c) {
     if (c >= 65 /*'A'*/ && c <= 73 /*'I'*/) {
       return (c - 65) + 1;
@@ -85,7 +85,7 @@ class VINResultParser extends ResultParser {
     }
     throw ArgumentsException();
   }
-  
+
   static int _vinPositionWeight(int position) {
     if (position >= 1 && position <= 7) {
       return 9 - position;
@@ -111,7 +111,7 @@ class VINResultParser extends ResultParser {
     }
     throw ArgumentsException();
   }
-  
+
   static int _modelYear(int c) {
     if (c >= 69 /*'E'*/ && c <= 72 /*'H'*/) {
       return (c - 69) + 1984;
@@ -153,7 +153,8 @@ class VINResultParser extends ResultParser {
         }
         break;
       case '9':
-        if ((c2 >= 65 /* A */ && c2 <= 69 /* E */) || (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
+        if ((c2 >= 65 /* A */ && c2 <= 69 /* E */) ||
+            (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
           return "BR";
         }
         break;
@@ -205,5 +206,4 @@ class VINResultParser extends ResultParser {
     }
     return null;
   }
-
 }

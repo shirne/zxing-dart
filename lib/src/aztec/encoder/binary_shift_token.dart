@@ -20,7 +20,6 @@ import '../../common/bit_array.dart';
 
 import 'token.dart';
 
-
 class BinaryShiftToken extends Token {
   final int _binaryShiftStart;
   final int _binaryShiftByteCount;

@@ -66,10 +66,9 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
       : super(image, resultPointCallback);
 
   int _compare(FinderPattern? center1, FinderPattern? center2) {
-    if(center1 == null) return center2 == null ? 0 : -1;
-    if(center2 == null) return 1;
-    double value =
-        center2.estimatedModuleSize - center1.estimatedModuleSize;
+    if (center1 == null) return center2 == null ? 0 : -1;
+    if (center2 == null) return 1;
+    double value = center2.estimatedModuleSize - center1.estimatedModuleSize;
     return value < 0.0
         ? -1
         : value > 0.0
@@ -98,7 +97,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
 
     // Sort by estimated module size to speed up the upcoming checks
     possibleCenters.sort(_compare);
-    //Collections.sort(possibleCenters, new ModuleSizeComparator());
+    //Collections.sort(possibleCenters, ModuleSizeComparator());
 
     /*
      * Now lets start: build a list of tuples of three finder locations that
@@ -130,8 +129,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
         //}
 
         // Compare the expected module sizes; if they are really off, skip
-        double vModSize12 = (p1.estimatedModuleSize -
-                p2.estimatedModuleSize) /
+        double vModSize12 = (p1.estimatedModuleSize - p2.estimatedModuleSize) /
             Math.min(p1.estimatedModuleSize, p2.estimatedModuleSize);
         double vModSize12A =
             (p1.estimatedModuleSize - p2.estimatedModuleSize).abs();
@@ -151,8 +149,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           // Compare the expected module sizes; if they are really off, skip
           double vModSize23 =
               (p2.estimatedModuleSize - p3.estimatedModuleSize) /
-                  Math.min(
-                      p2.estimatedModuleSize, p3.estimatedModuleSize);
+                  Math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
           double vModSize23A =
               (p2.estimatedModuleSize - p3.estimatedModuleSize).abs();
           if (vModSize23A > _DIFF_MODSIZE_CUTOFF &&
@@ -167,12 +164,9 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
 
           // Calculate the distances: a = topleft-bottomleft, b=topleft-topright, c = diagonal
           FinderPatternInfo info = FinderPatternInfo(test);
-          double dA =
-              ResultPoint.distance(info.topLeft, info.bottomLeft);
-          double dC =
-              ResultPoint.distance(info.topRight, info.bottomLeft);
-          double dB =
-              ResultPoint.distance(info.topLeft, info.topRight);
+          double dA = ResultPoint.distance(info.topLeft, info.bottomLeft);
+          double dC = ResultPoint.distance(info.topRight, info.bottomLeft);
+          double dB = ResultPoint.distance(info.topLeft, info.topRight);
 
           // Check the sizes
           double estimatedModuleCount =

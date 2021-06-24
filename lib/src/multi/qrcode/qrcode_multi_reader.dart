@@ -54,8 +54,8 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
           (decoderResult.other as QRCodeDecoderMetaData)
               .applyMirroredCorrection(points);
         }
-        Result result = Result(decoderResult.text,
-            decoderResult.rawBytes, points, BarcodeFormat.QR_CODE);
+        Result result = Result(decoderResult.text, decoderResult.rawBytes,
+            points, BarcodeFormat.QR_CODE);
         List<Uint8List>? byteSegments = decoderResult.byteSegments;
         if (byteSegments != null) {
           result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
@@ -104,8 +104,8 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     StringBuffer newText = StringBuffer();
     BytesBuilder newRawBytes = BytesBuilder();
     BytesBuilder newByteSegment = BytesBuilder();
-    //ByteArrayOutputStream newRawBytes = new ByteArrayOutputStream();
-    //ByteArrayOutputStream newByteSegment = new ByteArrayOutputStream();
+    //ByteArrayOutputStream newRawBytes = ByteArrayOutputStream();
+    //ByteArrayOutputStream newByteSegment = ByteArrayOutputStream();
     for (Result saResult in saResults) {
       newText.write(saResult.text);
       List<int>? saBytes = saResult.rawBytes;
@@ -136,11 +136,13 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
 
   static int _compareResult(Result a, Result b) {
     int aNumber =
-    (a.resultMetadata![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
-            as int?) ?? 0;
+        (a.resultMetadata![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
+                as int?) ??
+            0;
     int bNumber =
         (b.resultMetadata![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
-            as int?) ?? 0;
+                as int?) ??
+            0;
     return aNumber.compareTo(bNumber);
   }
 }

@@ -25,7 +25,6 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
-
   @override
   EmailAddressParsedResult? parse(Result result) {
     String rawText = ResultParser.getMassagedText(result);

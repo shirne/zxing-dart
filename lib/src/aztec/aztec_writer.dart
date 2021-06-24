@@ -37,8 +37,9 @@ class AztecWriter implements Writer {
     int layers = Encoder.DEFAULT_AZTEC_LAYERS;
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-        charset =
-            CharacterSetECI.getCharacterSetECIByName(hints[EncodeHintType.CHARACTER_SET].toString())?.charset;
+        charset = CharacterSetECI.getCharacterSetECIByName(
+                hints[EncodeHintType.CHARACTER_SET].toString())
+            ?.charset;
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
         eccPercent =

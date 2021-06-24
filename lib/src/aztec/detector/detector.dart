@@ -219,8 +219,7 @@ class Detector {
       parameterData >>= 4;
     }
     try {
-      ReedSolomonDecoder rsDecoder =
-          ReedSolomonDecoder(GenericGF.aztecParam);
+      ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(GenericGF.aztecParam);
       rsDecoder.decode(parameterWords, numECCodewords);
     } on ReedSolomonException catch (_) {
       throw NotFoundException.instance;
@@ -307,8 +306,7 @@ class Detector {
 
     //Get a white rectangle that can be the border of the matrix in center bull's eye or
     try {
-      List<ResultPoint> cornerPoints =
-          WhiteRectangleDetector(_image).detect();
+      List<ResultPoint> cornerPoints = WhiteRectangleDetector(_image).detect();
       pointA = cornerPoints[0];
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
@@ -331,10 +329,8 @@ class Detector {
     }
 
     //Compute the center of the rectangle
-    int cx = MathUtils.round(
-        (pointA.x + pointD.x + pointB.x + pointC.x) / 4.0);
-    int cy = MathUtils.round(
-        (pointA.y + pointD.y + pointB.y + pointC.y) / 4.0);
+    int cx = MathUtils.round((pointA.x + pointD.x + pointB.x + pointC.x) / 4.0);
+    int cy = MathUtils.round((pointA.y + pointD.y + pointB.y + pointC.y) / 4.0);
 
     // Redetermine the white rectangle starting from previously computed center.
     // This will ensure that we end up with a white rectangle in center bull's eye
@@ -360,10 +356,8 @@ class Detector {
     }
 
     // Recompute the center of the rectangle
-    cx = MathUtils.round(
-        (pointA.x + pointD.x + pointB.x + pointC.x) / 4.0);
-    cy = MathUtils.round(
-        (pointA.y + pointD.y + pointB.y + pointC.y) / 4.0);
+    cx = MathUtils.round((pointA.x + pointD.x + pointB.x + pointC.x) / 4.0);
+    cy = MathUtils.round((pointA.y + pointD.y + pointB.y + pointC.y) / 4.0);
 
     return Point(cx, cy);
   }
@@ -566,8 +560,8 @@ class Detector {
   }
 
   static double _distance(Point a, Point b) {
-    return MathUtils.distance(a.x.toDouble(), a.y.toDouble(),
-        b.x.toDouble(), b.y.toDouble());
+    return MathUtils.distance(
+        a.x.toDouble(), a.y.toDouble(), b.x.toDouble(), b.y.toDouble());
   }
 
   static double _distanceResult(ResultPoint a, ResultPoint b) {
