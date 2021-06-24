@@ -46,7 +46,7 @@ class PDF417ResultMetadata {
   int checksum = -1;
 
   /// optionalData old optional data format as int array
-  @deprecated
+  @Deprecated('use dedicated already parsed fields')
   List<int>? optionalData;
 
 

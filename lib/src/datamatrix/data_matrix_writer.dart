@@ -39,15 +39,15 @@ class DataMatrixWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw Exception("Found empty contents");
+      throw ArgumentError("Found empty contents");
     }
 
     if (format != BarcodeFormat.DATA_MATRIX) {
-      throw Exception("Can only encode DATA_MATRIX, but got $format");
+      throw ArgumentError("Can only encode DATA_MATRIX, but got $format");
     }
 
     if (width < 0 || height < 0) {
-      throw Exception(
+      throw ArgumentError(
           "Requested dimensions can't be negative: $width" 'x$height');
     }
 

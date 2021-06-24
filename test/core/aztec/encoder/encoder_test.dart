@@ -32,8 +32,8 @@ void main(){
   final Encoding iso_8859_1 = latin1;
   final Encoding utf_8 = utf8;
   final Encoding? shiftJis = StringUtils.shiftJisCharset;
-  final Encoding? iso_8859_15 = latin1;
-  final Encoding? windows1252 = latin1;
+  final Encoding? iso_8859_15 = CharacterSetECI.ISO8859_15.charset;
+  final Encoding? windows1252 = CharacterSetECI.Cp1252.charset;
 
   final RegExp dotX = RegExp("[^.X]");
   final RegExp spaces = RegExp("\\s+");
@@ -89,7 +89,7 @@ void main(){
       hints[EncodeHintType.CHARACTER_SET] = charset.name;
     }
     hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
-    AztecWriter writer = new AztecWriter();
+    AztecWriter writer = AztecWriter();
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
     AztecCode aztec = Encoder.encode(data, eccPercent,
         Encoder.DEFAULT_AZTEC_LAYERS, charset);
@@ -98,7 +98,7 @@ void main(){
     BitMatrix matrix2 = aztec.matrix!;
     expect(matrix, matrix2);
     AztecDetectorResult r =
-    new AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
+    AztecDetectorResult(matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = new Decoder().decode(r);
     expect(res.text, data,);
     // Check error correction by introducing up to eccPercent/2 errors
@@ -254,8 +254,8 @@ void main(){
   test('testAztecWriter', (){
     testWriter("Espa\u00F1ol", null, 25, true, 1);                   // Without ECI (implicit ISO-8859-1)
     testWriter("Espa\u00F1ol", iso_8859_1, 25, true, 1);             // Explicit ISO-8859-1
-    // testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
-    // testWriter("\u20AC 1 sample data.", ISO_8859_15, 25, true, 2);
+    // testWriter("\u20AC 1 sample data.", windows1252, 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
+    testWriter("\u20AC 1 sample data.", iso_8859_15, 25, true, 2);
     testWriter("\u20AC 1 sample data.", utf_8, 25, true, 2);
     testWriter("\u20AC 1 sample data.", utf_8, 100, true, 3);
     testWriter("\u20AC 1 sample data.", utf_8, 300, true, 4);
@@ -543,14 +543,14 @@ void main(){
     try {
       Encoder.encode(alphabet, 25, 33);
       fail("Encode should have failed.  No such thing as 33 layers");
-    } catch ( _) { // IllegalArgumentException
+    } on ArgumentError catch ( _) { // IllegalArgumentException
       // continue
     }
 
     try {
       Encoder.encode(alphabet, 25, -1);
       fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch ( _) { // IllegalArgumentException
+    } on ArgumentError catch ( _) { // IllegalArgumentException
       // continue
     }
   });
@@ -564,7 +564,7 @@ void main(){
     try {
       Encoder.encode(alphabet4, 0, -4);
       fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch ( _) { // IllegalArgumentException
+    } on ArgumentError catch ( _) { // IllegalArgumentException
       // continue
     }
 

@@ -89,18 +89,18 @@ class Encoder {
       compact = userSpecifiedLayers < 0;
       layers = (userSpecifiedLayers).abs();
       if (layers > (compact ? _MAX_NB_BITS_COMPACT : _MAX_NB_BITS)) {
-        throw Exception("Illegal value $userSpecifiedLayers for layers");
+        throw ArgumentError("Illegal value $userSpecifiedLayers for layers");
       }
       totalBitsLayer = _totalBitsInLayer(layers, compact);
       wordSize = _WORD_SIZE[layers];
       int usableBitsInLayers = totalBitsLayer - (totalBitsLayer % wordSize);
       stuffedBits = stuffBits(bits, wordSize);
       if (stuffedBits.size + eccBits > usableBitsInLayers) {
-        throw Exception("Data to large for user specified layer");
+        throw ArgumentError("Data to large for user specified layer");
       }
       if (compact && stuffedBits.size > wordSize * 64) {
         // Compact format only allows 64 data words, though C4 can hold more words than that
-        throw Exception("Data to large for user specified layer");
+        throw ArgumentError("Data to large for user specified layer");
       }
     } else {
       wordSize = 0;

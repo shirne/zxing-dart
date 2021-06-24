@@ -37,13 +37,13 @@ enum EncodeHintType {
   ///
   /// @deprecated use width/height params in
   /// {@link com.google.zxing.datamatrix.DataMatrixWriter#encode(String, BarcodeFormat, int, int)}
-  @deprecated
+  @Deprecated('use width/height params instead')
   MIN_SIZE,
 
   /// Specifies a maximum barcode size (type [Dimension]). Only applicable to Data Matrix now.
   ///
   /// @deprecated without replacement
-  @deprecated
+  @Deprecated('without replacement')
   MAX_SIZE,
 
   /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
