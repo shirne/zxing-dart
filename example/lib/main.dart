@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return CupertinoApp(
       title: 'ZXing Demo',
       theme: CupertinoThemeData(primaryColor: Colors.red),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'ZXing Demo'),
     );
   }
 }

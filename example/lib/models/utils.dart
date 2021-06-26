@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -18,22 +19,23 @@ Future<bool?> alert<bool>(BuildContext context, String message,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 200, horizontal: 50),
           child: CupertinoAlertDialog(
-              title: title == null ? null : Text(title),
-              content: Column(
-                children: message
-                    .split(RegExp("[\r\n]+"))
-                    .map<Widget>((row) => Text(row))
-                    .toList(),
-              ),
-              actions: actions ??
-                  [
-                    CupertinoButton(
-                      child: Text('OK'),
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                    )
-                  ]),
+            title: title == null ? null : Text(title),
+            content: Column(
+              children: message
+                  .split(RegExp("[\r\n]+"))
+                  .map<Widget>((row) => Text(row))
+                  .toList(),
+            ),
+            actions: actions ??
+                [
+                  CupertinoButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  )
+                ],
+          ),
         ),
       );
     },
@@ -51,7 +53,12 @@ class IsoMessage {
 
 Future<List<Result>?> decodeImageInIsolate(
     Uint8List image, int width, int height,
-    {bool isRgb = true}) {
+    {bool isRgb = true}) async {
+  if(kIsWeb){
+    return isRgb
+        ? decodeImage(IsoMessage(null, image, width, height))
+        : decodeCamera(IsoMessage(null, image, width, height));
+  }
   var complete = Completer<List<Result>?>();
   var port = ReceivePort();
   port.listen((message) {
@@ -65,17 +72,12 @@ Future<List<Result>?> decodeImageInIsolate(
     print('iso error: $error');
   });
 
-  //TransferableTypedData data = TransferableTypedData.fromList( [image,color2Uint(height),color2Uint(width)]);
   IsoMessage message = IsoMessage(port.sendPort, image, width, height);
   if (isRgb) {
     Isolate.spawn<IsoMessage>(decodeImage, message,
-        onExit: port.sendPort,
-        onError: port.sendPort,
         debugName: "decodeImage");
   } else {
     Isolate.spawn<IsoMessage>(decodeCamera, message,
-        onExit: port.sendPort,
-        onError: port.sendPort,
         debugName: "decodeCamera");
   }
 
