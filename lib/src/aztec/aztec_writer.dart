@@ -56,7 +56,7 @@ class AztecWriter implements Writer {
   static BitMatrix _encodeStatic(String contents, BarcodeFormat format,
       int width, int height, Encoding? charset, int eccPercent, int layers) {
     if (format != BarcodeFormat.AZTEC) {
-      throw Exception("Can only encode AZTEC, but got $format");
+      throw ArgumentError("Can only encode AZTEC, but got $format");
     }
     AztecCode aztec = Encoder.encode(contents, eccPercent, layers, charset);
     return _renderResult(aztec, width, height);
@@ -65,7 +65,7 @@ class AztecWriter implements Writer {
   static BitMatrix _renderResult(AztecCode code, int width, int height) {
     BitMatrix? input = code.matrix;
     if (input == null) {
-      throw Exception();
+      throw ArgumentError();
     }
     int inputWidth = input.width;
     int inputHeight = input.height;

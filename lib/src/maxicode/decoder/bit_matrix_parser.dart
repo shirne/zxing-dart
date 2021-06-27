@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:typed_data';
 
 import '../../common/bit_matrix.dart';
@@ -21,6 +23,7 @@ import '../../common/bit_matrix.dart';
 /// @author mike32767
 /// @author Manuel Kasten
 class BitMatrixParser {
+
   static const List<List<int>> _BITNR = [
     [121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2],
     [123,122,129,128,135,134,141,140,147,146,153,152,159,158,165,164,171,170,177,176,183,182,189,188,195,194,201,200,816, -3],

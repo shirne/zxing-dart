@@ -36,15 +36,15 @@ class QRCodeWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw Exception("Found empty contents");
+      throw ArgumentError("Found empty contents");
     }
 
     if (format != BarcodeFormat.QR_CODE) {
-      throw Exception("Can only encode QR_CODE, but got $format");
+      throw ArgumentError("Can only encode QR_CODE, but got $format");
     }
 
     if (width < 0 || height < 0) {
-      throw Exception("Requested dimensions are too small: $width x $height");
+      throw ArgumentError("Requested dimensions are too small: $width x $height");
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
