@@ -124,6 +124,7 @@ List<Result>? decodeImage(IsoMessage message) {
     return results;
   } on NotFoundException catch (_) {
     print(_);
+    message.sendPort?.send(null);
   }
   return null;
 }

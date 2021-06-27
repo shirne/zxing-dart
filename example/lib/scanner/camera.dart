@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/utils.dart';
@@ -55,7 +56,9 @@ class _CameraPageState extends State<CameraPage> {
 
   onCameraView() async {
     if (isDetecting) return;
-    isDetecting = true;
+    setState(() {
+      isDetecting = true;
+    });
     XFile pic = await _controller!.takePicture();
 
     Uint8List data = await pic.readAsBytes();
@@ -67,17 +70,24 @@ class _CameraPageState extends State<CameraPage> {
 
       var results =
           await decodeImageInIsolate(image.buffer, image.width, image.height);
-
+      if (!mounted) return;
+      setState(() {
+        isDetecting = false;
+      });
       if (results != null) {
-        if (!mounted) return;
         Navigator.of(context).pushNamed('/result', arguments: results);
       } else {
         print('detected nothing');
+        if ( !kIsWeb) {
+          onCameraView();
+        }
       }
     } else {
+      setState(() {
+        isDetecting = false;
+      });
       print('can\'t take picture from camera');
     }
-    isDetecting = false;
     _controller?.setFocusMode(FocusMode.auto);
   }
 
@@ -131,7 +141,14 @@ class _CameraPageState extends State<CameraPage> {
                     Align(
                       alignment: Alignment(0, 0.7),
                       child: CupertinoIconButton(
-                        icon: Icon(CupertinoIcons.qrcode_viewfinder),
+                        icon: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (isDetecting) CupertinoActivityIndicator(),
+                            Icon(CupertinoIcons.qrcode_viewfinder),
+                          ],
+                        ),
                         onPressed: onCameraView,
                       ),
                     ),

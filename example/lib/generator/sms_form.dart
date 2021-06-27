@@ -1,7 +1,8 @@
-import 'package:example/widgets/form_cell.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
+import '../widgets/form_cell.dart';
 import '../widgets/cupertino_list_tile.dart';
 import '../widgets/list_tile_group.dart';
 

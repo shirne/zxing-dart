@@ -9,6 +9,9 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Aztec Demo'),
+      ),
       child: Center(
         child: Text('aztec'),
       ),

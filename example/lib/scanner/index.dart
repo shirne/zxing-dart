@@ -2,14 +2,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
-import 'package:example/scanner/result.dart';
 import 'package:zxing_lib/zxing.dart';
-import '../models/utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
+import '../models/utils.dart';
+import 'result.dart';
 import 'binarizer.dart';
 import 'camera.dart';
 
