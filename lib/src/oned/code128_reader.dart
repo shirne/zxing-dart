@@ -482,9 +482,6 @@ class Code128Reader extends OneDReader {
                   }
                 }
                 break;
-              case _CODE_FNC_2:
-                symbologyModifier = 4;
-                break;
               case _CODE_CODE_A:
                 codeSet = _CODE_CODE_A;
                 break;

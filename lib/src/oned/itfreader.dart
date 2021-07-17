@@ -23,6 +23,7 @@ import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
+import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'one_dreader.dart';
 
@@ -129,7 +130,7 @@ class ITFReader extends OneDReader {
       throw FormatsException.instance;
     }
 
-    return Result(
+    final resultObject = Result(
         resultString,
         null, // no natural byte representation for these barcodes
         [
@@ -137,6 +138,8 @@ class ITFReader extends OneDReader {
           ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())
         ],
         BarcodeFormat.ITF);
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0");
+    return resultObject;
   }
 
   /// @param row          row of black/white values to search

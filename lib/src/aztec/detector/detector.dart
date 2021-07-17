@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import 'dart:math';
 import 'dart:typed_data';
 
 import '../../common/bit_matrix.dart';
@@ -427,15 +428,21 @@ class Detector {
     return result;
   }
 
-  /// @return true if the border of the rectangle passed in parameter is compound of white points only
+  /// return true if the border of the rectangle passed in parameter is compound of white points only
   ///         or black points only
   bool _isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4) {
     int corr = 3;
 
-    p1 = Point(p1.x - corr, p1.y + corr);
-    p2 = Point(p2.x - corr, p2.y - corr);
-    p3 = Point(p3.x + corr, p3.y - corr);
-    p4 = Point(p4.x + corr, p4.y + corr);
+    p1 = Point(max(0, p1.x - corr), min(_image.height - 1, p1.y + corr));
+    p2 = Point(max(0, p2.x - corr), max(0, p2.y - corr));
+    p3 = Point(
+      min(_image.height - 1, p3.x + corr),
+      max(0, min(_image.height - 1, p3.y - corr)),
+    );
+    p4 = Point(
+      min(_image.width - 1, p4.x + corr),
+      min(_image.height - 1, p4.y + corr),
+    );
 
     int cInit = _getColor(p4, p1);
 
@@ -462,7 +469,7 @@ class Detector {
 
   /// Gets the color of a segment
   ///
-  /// @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
+  /// return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
   int _getColor(Point p1, Point p2) {
     double d = _distance(p1, p2);
     double dx = (p2.x - p1.x) / d;
