@@ -85,14 +85,15 @@ class MathUtils {
 
   static int binarySearch(List<int> arr, int value, [int start = 0, int? end]) {
     late int mid;
-    if (end == null) end = arr.length - 1;
+    end ??= arr.length - 1;
     while (start <= end!) {
       mid = start + ((end - start) / 2).round();
       if (arr[mid] == value) return mid;
-      if (arr[mid] < value)
+      if (arr[mid] < value) {
         start = mid + 1;
-      else
+      } else {
         end = mid - 1;
+      }
     }
     return -1;
   }

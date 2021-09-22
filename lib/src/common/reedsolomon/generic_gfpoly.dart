@@ -37,11 +37,11 @@ class GenericGFPoly {
   /// or if leading coefficient is 0 and this is not a
   /// constant polynomial (that is, it is not the monomial "0")
   GenericGFPoly(this._field, Int32List coefficients)
-      : assert(coefficients.length > 0, 'IllegalArgument'),
-        this._coefficients = Int32List.fromList(
+      : assert(coefficients.isNotEmpty, 'IllegalArgument'),
+        _coefficients = Int32List.fromList(
             coefficients.skipWhile((value) => value == 0).toList()) {
-    if (this._coefficients.length < 1) {
-      this._coefficients = Int32List(1);
+    if (this._coefficients.isEmpty) {
+      _coefficients = Int32List(1);
     }
   }
 
@@ -92,7 +92,7 @@ class GenericGFPoly {
       return this;
     }
 
-    List<int> smallerCoefficients = this._coefficients;
+    List<int> smallerCoefficients = _coefficients;
     List<int> largerCoefficients = other._coefficients;
     if (smallerCoefficients.length > largerCoefficients.length) {
       List<int> temp = smallerCoefficients;
@@ -119,7 +119,7 @@ class GenericGFPoly {
     if (isZero || other.isZero) {
       return _field.zero;
     }
-    Int32List aCoefficients = this._coefficients;
+    Int32List aCoefficients = _coefficients;
     int aLength = aCoefficients.length;
     Int32List bCoefficients = other._coefficients;
     int bLength = bCoefficients.length;

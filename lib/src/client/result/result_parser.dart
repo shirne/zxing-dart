@@ -227,9 +227,7 @@ abstract class ResultParser {
           i++;
         } else {
           // found a match
-          if (matches == null) {
-            matches = []; // lazy init
-          }
+          matches ??= [];
           String element = unescapeBackslash(rawText.substring(start, i));
           if (trim) {
             element = element.trim();

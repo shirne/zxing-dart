@@ -50,9 +50,7 @@ class WifiResultParser extends ResultParser {
     }
     String? pass = matchSinglePrefixedField("P:", rawText, ';', false);
     String? type = matchSinglePrefixedField("T:", rawText, ';', false);
-    if (type == null) {
-      type = "nopass";
-    }
+    type ??= "nopass";
 
     // Unfortunately, in the past, H: was not just used for bool 'hidden', but 'phase 2 method'.
     // To try to retain backwards compatibility, we set one or the other based on whether the string

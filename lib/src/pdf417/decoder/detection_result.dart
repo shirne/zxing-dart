@@ -31,7 +31,7 @@ class DetectionResult {
   final int _barcodeColumnCount;
 
   DetectionResult(this._barcodeMetadata, this.boundingBox)
-      : this._barcodeColumnCount = _barcodeMetadata.columnCount,
+      : _barcodeColumnCount = _barcodeMetadata.columnCount,
         _detectionResultColumns =
             List.filled(_barcodeMetadata.columnCount + 2, null);
 
@@ -283,9 +283,7 @@ class DetectionResult {
   @override
   String toString() {
     DetectionResultColumn? rowIndicatorColumn = _detectionResultColumns[0];
-    if (rowIndicatorColumn == null) {
-      rowIndicatorColumn = _detectionResultColumns[_barcodeColumnCount + 1];
-    }
+    rowIndicatorColumn ??= _detectionResultColumns[_barcodeColumnCount + 1];
     StringBuffer formatter = StringBuffer();
     for (int codewordsRow = 0;
         codewordsRow < rowIndicatorColumn!.codewords.length;

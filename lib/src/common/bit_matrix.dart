@@ -47,7 +47,7 @@ class BitMatrix {
   /// @param width bit matrix width
   /// @param height bit matrix height
   BitMatrix(this._width, [int? height])
-      : this._height = height ?? _width,
+      : _height = height ?? _width,
         _rowSize = (_width + 31) ~/ 32,
         _bits = Int32List(((_width + 31) ~/ 32) * (height ?? _width)),
         assert(_width > 0, "Both dimensions must be greater than 0");
@@ -230,7 +230,7 @@ class BitMatrix {
     }
     int right = left + width;
     int bottom = top + height;
-    if (bottom > this._height || right > this._width) {
+    if (bottom > _height || right > _width) {
       throw ArgumentError("The region must fit inside the matrix");
     }
     for (int y = top; y < bottom; y++) {
@@ -408,7 +408,7 @@ class BitMatrix {
 
   @override
   operator ==(Object o) {
-    if (!(o is BitMatrix)) {
+    if (o is! BitMatrix) {
       return false;
     }
     BitMatrix other = o;
@@ -432,6 +432,7 @@ class BitMatrix {
   /// @param unsetString representation of an unset bit
   /// @param lineSeparator newline character in string representation
   /// @return string representation of entire matrix utilizing given strings and line separator
+  @override
   String toString(
       [String setString = "X ",
       String unsetString = "  ",

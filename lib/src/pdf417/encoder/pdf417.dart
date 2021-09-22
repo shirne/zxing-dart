@@ -724,24 +724,24 @@ class PDF417 {
   /// @param maxRows maximum allowed rows
   /// @param minRows minimum allowed rows
   void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
-    this._maxCols = maxCols;
-    this._minCols = minCols;
-    this._maxRows = maxRows;
-    this._minRows = minRows;
+    _maxCols = maxCols;
+    _minCols = minCols;
+    _maxRows = maxRows;
+    _minRows = minRows;
   }
 
   /// @param compaction compaction mode to use
   void setCompaction(Compaction compaction) {
-    this._compaction = compaction;
+    _compaction = compaction;
   }
 
   /// @param compact if true, enables compaction
   void setCompact(bool compact) {
-    this._compact = compact;
+    _compact = compact;
   }
 
   /// @param encoding sets character encoding to use
   void setEncoding(Encoding encoding) {
-    this._encoding = encoding;
+    _encoding = encoding;
   }
 }

@@ -45,8 +45,8 @@ class RGBLuminanceSource extends LuminanceSource {
   }
 
   RGBLuminanceSource(int width, int height, List<int> pixels)
-      : this._dataWidth = width,
-        this._dataHeight = height,
+      : _dataWidth = width,
+        _dataHeight = height,
         _left = 0,
         _top = 0,
         _luminances = intList2Int8List(pixels),
@@ -62,13 +62,13 @@ class RGBLuminanceSource extends LuminanceSource {
 
   @override
   Int8List getRow(int y, Int8List? row) {
-    assert(y >= 0 && y < this.height, "Requested row is outside the image: $y");
+    assert(y >= 0 && y < height, "Requested row is outside the image: $y");
 
-    if (row == null || row.length < this.width) {
-      row = Int8List(this.width);
+    if (row == null || row.length < width) {
+      row = Int8List(width);
     }
     int offset = (y + _top) * _dataWidth + _left;
-    List.copyRange(row, 0, _luminances, offset, offset + this.width);
+    List.copyRange(row, 0, _luminances, offset, offset + width);
     return row;
   }
 
@@ -106,6 +106,6 @@ class RGBLuminanceSource extends LuminanceSource {
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
     return RGBLuminanceSource._(_luminances, _dataWidth, _dataHeight,
-        this._left + left, this._top + top, width, height);
+        _left + left, _top + top, width, height);
   }
 }

@@ -32,7 +32,7 @@ class SimpleToken extends Token {
 
   @override
   String toString() {
-    int value = this._value & ((1 << _bitCount) - 1);
+    int value = _value & ((1 << _bitCount) - 1);
     value |= 1 << _bitCount;
     return '<${(value | (1 << _bitCount)).toRadixString(2).substring(1)}>';
   }

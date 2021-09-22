@@ -42,7 +42,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
 
     if (width < 0 || height < 0) {
       throw Exception(
-          "Negative size is not allowed. Input: $width" + 'x$height');
+          "Negative size is not allowed. Input: $width" 'x$height');
     }
     List<BarcodeFormat>? supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {

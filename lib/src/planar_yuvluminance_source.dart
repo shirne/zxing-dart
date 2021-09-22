@@ -47,8 +47,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   })  : _left = left,
         _top = top,
         super(width ?? (_dataWidth - left), height ?? (_dataHeight - top)) {
-    if (width == null) width = _dataWidth - _left;
-    if (height == null) height = _dataHeight - _top;
+    width ??= _dataWidth - _left;
+    height ??= _dataHeight - _top;
     if (_left + width > _dataWidth || _top + height > _dataHeight) {
       throw Exception("Crop rectangle does not fit within image data.");
     }
@@ -109,8 +109,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
       _yuvData,
       _dataWidth,
       _dataHeight,
-      left: this._left + left,
-      top: this._top + top,
+      left: _left + left,
+      top: _top + top,
       width: width,
       height: height,
     );
@@ -141,7 +141,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   int get getThumbnailHeight => height ~/ _THUMBNAIL_SCALE_FACTOR;
 
   void _reverseHorizontal(int width, int height) {
-    Int8List yuvData = this._yuvData;
+    Int8List yuvData = _yuvData;
     for (int y = 0, rowStart = _top * _dataWidth + _left;
         y < height;
         y++, rowStart += _dataWidth) {

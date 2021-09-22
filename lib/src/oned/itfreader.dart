@@ -105,9 +105,7 @@ class ITFReader extends OneDReader {
     List<int>? allowedLengths =
         hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
 
-    if (allowedLengths == null) {
-      allowedLengths = _DEFAULT_ALLOWED_LENGTHS;
-    }
+    allowedLengths ??= _DEFAULT_ALLOWED_LENGTHS;
 
     // To avoid false positives with 2D barcodes (and other patterns), make
     // an assumption that the decoded string must be a 'standard' length if it's short
@@ -190,7 +188,7 @@ class ITFReader extends OneDReader {
     // Determine the width of a narrow line in pixels. We can do this by
     // getting the width of the start pattern and dividing by 4 because its
     // made up of 4 narrow lines.
-    this._narrowLineWidth = (startPattern[1] - startPattern[0]) ~/ 4;
+    _narrowLineWidth = (startPattern[1] - startPattern[0]) ~/ 4;
 
     _validateQuietZone(row, startPattern[0]);
 
@@ -211,7 +209,7 @@ class ITFReader extends OneDReader {
   /// @param startPattern index into row of the start or end pattern.
   /// @throws NotFoundException if the quiet zone cannot be found
   void _validateQuietZone(BitArray row, int startPattern) {
-    int quietCount = this._narrowLineWidth *
+    int quietCount = _narrowLineWidth *
         10; // expect to find this many pixels of quiet zone
 
     // if there are not so many pixel at all let's try as many as possible

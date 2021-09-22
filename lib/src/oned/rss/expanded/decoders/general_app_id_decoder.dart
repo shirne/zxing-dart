@@ -49,7 +49,7 @@ class GeneralAppIdDecoder {
     String? remaining;
     do {
       DecodedInformation info =
-          this.decodeGeneralPurposeField(currentPosition, remaining);
+          decodeGeneralPurposeField(currentPosition, remaining);
       String? parsedFields =
           FieldParser.parseFieldsInGeneralPurpose(info.newString);
       if (parsedFields != null) {
@@ -74,31 +74,31 @@ class GeneralAppIdDecoder {
   bool _isStillNumeric(int pos) {
     // It's numeric if it still has 7 positions
     // and one of the first 4 bits is "1".
-    if (pos + 7 > this._information.size) {
-      return pos + 4 <= this._information.size;
+    if (pos + 7 > _information.size) {
+      return pos + 4 <= _information.size;
     }
 
     for (int i = pos; i < pos + 3; ++i) {
-      if (this._information.get(i)) {
+      if (_information.get(i)) {
         return true;
       }
     }
 
-    return this._information.get(pos + 3);
+    return _information.get(pos + 3);
   }
 
   DecodedNumeric _decodeNumeric(int pos) {
-    if (pos + 7 > this._information.size) {
+    if (pos + 7 > _information.size) {
       int numeric = extractNumericValueFromBitArray(pos, 4);
       if (numeric == 0) {
         return DecodedNumeric(
-          this._information.size,
+          _information.size,
           DecodedNumeric.fnc1,
           DecodedNumeric.fnc1,
         );
       }
       return DecodedNumeric(
-        this._information.size,
+        _information.size,
         numeric - 1,
         DecodedNumeric.fnc1,
       );
@@ -112,7 +112,7 @@ class GeneralAppIdDecoder {
   }
 
   int extractNumericValueFromBitArray(int pos, int bits) {
-    return extractNumericFromBitArray(this._information, pos, bits);
+    return extractNumericFromBitArray(_information, pos, bits);
   }
 
   static int extractNumericFromBitArray(
@@ -128,20 +128,20 @@ class GeneralAppIdDecoder {
   }
 
   DecodedInformation decodeGeneralPurposeField(int pos, String? remaining) {
-    this._buffer.clear();
+    _buffer.clear();
 
     if (remaining != null) {
-      this._buffer.write(remaining);
+      _buffer.write(remaining);
     }
 
-    this._current.position = pos;
+    _current.position = pos;
 
     DecodedInformation? lastDecoded = _parseBlocks();
     if (lastDecoded != null && lastDecoded.isRemaining) {
-      return DecodedInformation(this._current.position, this._buffer.toString(),
+      return DecodedInformation(_current.position, _buffer.toString(),
           lastDecoded.remainingValue);
     }
-    return DecodedInformation(this._current.position, this._buffer.toString());
+    return DecodedInformation(_current.position, _buffer.toString());
   }
 
   DecodedInformation? _parseBlocks() {
@@ -221,10 +221,10 @@ class GeneralAppIdDecoder {
       _current.incrementPosition(3);
       _current.setNumeric();
     } else if (_isAlphaTo646ToAlphaLatch(_current.position)) {
-      if (_current.position + 5 < this._information.size) {
+      if (_current.position + 5 < _information.size) {
         _current.incrementPosition(5);
       } else {
-        _current.position = this._information.size;
+        _current.position = _information.size;
       }
 
       _current.setAlpha();
@@ -250,10 +250,10 @@ class GeneralAppIdDecoder {
       _current.incrementPosition(3);
       _current.setNumeric();
     } else if (_isAlphaTo646ToAlphaLatch(_current.position)) {
-      if (_current.position + 5 < this._information.size) {
+      if (_current.position + 5 < _information.size) {
         _current.incrementPosition(5);
       } else {
-        _current.position = this._information.size;
+        _current.position = _information.size;
       }
 
       _current.setIsoIec646();
@@ -262,7 +262,7 @@ class GeneralAppIdDecoder {
   }
 
   bool _isStillIsoIec646(int pos) {
-    if (pos + 5 > this._information.size) {
+    if (pos + 5 > _information.size) {
       return false;
     }
 
@@ -271,7 +271,7 @@ class GeneralAppIdDecoder {
       return true;
     }
 
-    if (pos + 7 > this._information.size) {
+    if (pos + 7 > _information.size) {
       return false;
     }
 
@@ -280,7 +280,7 @@ class GeneralAppIdDecoder {
       return true;
     }
 
-    if (pos + 8 > this._information.size) {
+    if (pos + 8 > _information.size) {
       return false;
     }
 
@@ -381,7 +381,7 @@ class GeneralAppIdDecoder {
   }
 
   bool _isStillAlpha(int pos) {
-    if (pos + 5 > this._information.size) {
+    if (pos + 5 > _information.size) {
       return false;
     }
 
@@ -391,7 +391,7 @@ class GeneralAppIdDecoder {
       return true;
     }
 
-    if (pos + 6 > this._information.size) {
+    if (pos + 6 > _information.size) {
       return false;
     }
 
@@ -439,16 +439,16 @@ class GeneralAppIdDecoder {
   }
 
   bool _isAlphaTo646ToAlphaLatch(int pos) {
-    if (pos + 1 > this._information.size) {
+    if (pos + 1 > _information.size) {
       return false;
     }
 
-    for (int i = 0; i < 5 && i + pos < this._information.size; ++i) {
+    for (int i = 0; i < 5 && i + pos < _information.size; ++i) {
       if (i == 2) {
-        if (!this._information.get(pos + 2)) {
+        if (!_information.get(pos + 2)) {
           return false;
         }
-      } else if (this._information.get(pos + i)) {
+      } else if (_information.get(pos + i)) {
         return false;
       }
     }
@@ -458,12 +458,12 @@ class GeneralAppIdDecoder {
 
   bool _isAlphaOr646ToNumericLatch(int pos) {
     // Next is alphanumeric if there are 3 positions and they are all zeros
-    if (pos + 3 > this._information.size) {
+    if (pos + 3 > _information.size) {
       return false;
     }
 
     for (int i = pos; i < pos + 3; ++i) {
-      if (this._information.get(i)) {
+      if (_information.get(i)) {
         return false;
       }
     }
@@ -473,12 +473,12 @@ class GeneralAppIdDecoder {
   bool _isNumericToAlphaNumericLatch(int pos) {
     // Next is alphanumeric if there are 4 positions and they are all zeros, or
     // if there is a subset of this just before the end of the symbol
-    if (pos + 1 > this._information.size) {
+    if (pos + 1 > _information.size) {
       return false;
     }
 
-    for (int i = 0; i < 4 && i + pos < this._information.size; ++i) {
-      if (this._information.get(pos + i)) {
+    for (int i = 0; i < 4 && i + pos < _information.size; ++i) {
+      if (_information.get(pos + i)) {
         return false;
       }
     }

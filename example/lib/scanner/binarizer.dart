@@ -123,7 +123,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
     );
     final files = await FileSelectorPlatform.instance
         .openFiles(acceptedTypeGroups: [typeGroup]);
-    if (files.length > 0) {
+    if (files.isNotEmpty) {
       return await files.first.readAsBytes();
     }
     return null;

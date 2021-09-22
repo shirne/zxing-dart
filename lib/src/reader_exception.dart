@@ -25,6 +25,7 @@ abstract class ReaderException implements Exception {
 
   ReaderException([this.message]);
 
+  @override
   String toString() {
     Object? message = this.message;
     if (message == null) return "Exception";

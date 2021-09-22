@@ -357,28 +357,31 @@ class HighLevelEncoder {
 
   static bool isDigit(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
   }
 
   static bool isExtendedASCII(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return ch >= 128 && ch <= 255;
   }
 
   static bool _isNativeC40(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return (ch == 32 /*   */) ||
         (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
         (ch >= 65 /* A */ && ch <= 90 /* Z */);
@@ -386,10 +389,11 @@ class HighLevelEncoder {
 
   static bool _isNativeText(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return (ch == 32 /*   */) ||
         (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
         (ch >= 97 /* a */ && ch <= 122 /* z */);
@@ -397,10 +401,11 @@ class HighLevelEncoder {
 
   static bool _isNativeX12(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return _isX12TermSep(ch) ||
         (ch == 32 /*   */) ||
         (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
@@ -409,10 +414,11 @@ class HighLevelEncoder {
 
   static bool _isX12TermSep(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return (ch == 13) //CR
         ||
         (ch == 42 /* * */) ||
@@ -421,10 +427,11 @@ class HighLevelEncoder {
 
   static bool _isNativeEDIFACT(dynamic chr) {
     int ch = 0;
-    if (chr is String)
+    if (chr is String) {
       ch = chr.codeUnitAt(0);
-    else
+    } else {
       ch = chr as int;
+    }
     return ch >= 32 /*   */ && ch <= 94 /* ^ */;
   }
 

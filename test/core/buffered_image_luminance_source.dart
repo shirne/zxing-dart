@@ -34,8 +34,8 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   BufferedImageLuminanceSource(this.image,
       [this.left = 0, this.top = 0, int? width, int? height])
       : super(width ?? image.width, height ?? image.height) {
-    if (width == null) width = image.width - left;
-    if (height == null) height = image.height - top;
+    width ??= image.width - left;
+    height ??= image.height - top;
 
     int sourceWidth = image.width;
     int sourceHeight = image.height;

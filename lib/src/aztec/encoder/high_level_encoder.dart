@@ -18,7 +18,6 @@ import 'dart:convert';
 
 import '../../common/bit_array.dart';
 import '../../common/character_set_eci.dart';
-
 import 'state.dart';
 
 /// This produces nearly optimal encodings of text into the first-level of
@@ -225,10 +224,8 @@ class HighLevelEncoder {
     for (int mode = 0; mode <= MODE_PUNCT; mode++) {
       int charInMode = _charMap[mode][ch] ?? 0;
       if (charInMode > 0) {
-        if (stateNoBinary == null) {
-          // Only create stateNoBinary the first time it's required.
-          stateNoBinary = state.endBinaryShift(index);
-        }
+        // Only create stateNoBinary the first time it's required.
+        stateNoBinary ??= state.endBinaryShift(index);
         // Try generating the character by latching to its mode
         if (!charInCurrentTable || mode == state.mode || mode == MODE_DIGIT) {
           // If the character is in the current table, we don't want to latch to
@@ -312,9 +309,9 @@ class HighLevelEncoder {
         }
       }
       //result.removeWhere((element) => newState.isBetterThanOrEqualTo(element));
-      removedState.forEach((rState) {
+      for (var rState in removedState) {
         result.remove(rState);
-      });
+      }
       removedState.clear();
       if (add) {
         result.add(newState);

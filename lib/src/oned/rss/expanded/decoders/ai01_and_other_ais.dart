@@ -44,12 +44,12 @@ class AI01AndOtherAIs extends AI01decoder {
     buff.write("(01)");
     int initialGtinPosition = buff.length;
     int firstGtinDigit =
-        this.generalDecoder.extractNumericValueFromBitArray(_HEADER_SIZE, 4);
+        generalDecoder.extractNumericValueFromBitArray(_HEADER_SIZE, 4);
     buff.write(firstGtinDigit);
 
-    this.encodeCompressedGtinWithoutAI(
+    encodeCompressedGtinWithoutAI(
         buff, _HEADER_SIZE + 4, initialGtinPosition);
 
-    return this.generalDecoder.decodeAllCodes(buff, _HEADER_SIZE + 44);
+    return generalDecoder.decodeAllCodes(buff, _HEADER_SIZE + 44);
   }
 }

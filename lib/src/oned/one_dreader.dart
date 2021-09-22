@@ -16,9 +16,8 @@
 
 import 'dart:math' as Math;
 
-import '../common/bit_array.dart';
-
 import '../binary_bitmap.dart';
+import '../common/bit_array.dart';
 import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
@@ -38,7 +37,7 @@ abstract class OneDReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     try {
       return _doDecode(image, hints);
-    } on NotFoundException catch (nfe) {
+    } on NotFoundException catch (_) {
       bool tryHarder =
           hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported) {
@@ -65,7 +64,7 @@ abstract class OneDReader implements Reader {
         }
         return result;
       } else {
-        throw nfe;
+        rethrow;
       }
     }
   }

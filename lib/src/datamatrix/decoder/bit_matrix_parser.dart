@@ -36,10 +36,10 @@ class BitMatrixParser {
       throw ArgumentsException.instance;
     }
 
-    this._version = _readVersion(bitMatrix);
-    this._mappingBitMatrix = _extractDataRegion(bitMatrix);
-    this._readMappingMatrix =
-        BitMatrix(this._mappingBitMatrix.width, this._mappingBitMatrix.height);
+    _version = _readVersion(bitMatrix);
+    _mappingBitMatrix = _extractDataRegion(bitMatrix);
+    _readMappingMatrix =
+        BitMatrix(_mappingBitMatrix.width, _mappingBitMatrix.height);
   }
 
   Version get version => _version;

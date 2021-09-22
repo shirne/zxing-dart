@@ -42,7 +42,7 @@ abstract class AbstractExpandedDecoder {
   final GeneralAppIdDecoder _generalDecoder;
 
   AbstractExpandedDecoder(this._information)
-      : this._generalDecoder = GeneralAppIdDecoder(_information);
+      : _generalDecoder = GeneralAppIdDecoder(_information);
 
   BitArray get information => _information;
 

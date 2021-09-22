@@ -40,7 +40,7 @@ class AlignmentPatternFinder {
   final int _width;
   final int _height;
   final double _moduleSize;
-  late List<int> _crossCheckStateCount = List.filled(3, 0);
+  late final List<int> _crossCheckStateCount = List.filled(3, 0);
   final ResultPointCallback? _resultPointCallback;
 
   /// <p>Creates a finder that will look in a portion of the whole image.</p>
@@ -61,8 +61,8 @@ class AlignmentPatternFinder {
   /// @return [AlignmentPattern] if found
   /// @throws NotFoundException if not found
   AlignmentPattern find() {
-    int startX = this._startX;
-    int height = this._height;
+    int startX = _startX;
+    int height = _height;
     int maxJ = startX + _width;
     int middleI = _startY + (height ~/ 2);
     // We are looking for black/white/black modules in 1:1:1 ratio;
@@ -147,7 +147,7 @@ class AlignmentPatternFinder {
   /// @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
   ///         used by alignment patterns to be considered a match
   bool _foundPatternCross(List<int> stateCount) {
-    double moduleSize = this._moduleSize;
+    double moduleSize = _moduleSize;
     double maxVariance = moduleSize / 2.0;
     for (int i = 0; i < 3; i++) {
       if ((moduleSize - stateCount[i]).abs() >= maxVariance) {
@@ -168,7 +168,7 @@ class AlignmentPatternFinder {
   /// @return vertical center of alignment pattern, or {@link double#NaN} if not found
   double _crossCheckVertical(
       int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    BitMatrix image = this._image;
+    BitMatrix image = _image;
 
     int maxI = image.height;
     List<int> stateCount = _crossCheckStateCount;

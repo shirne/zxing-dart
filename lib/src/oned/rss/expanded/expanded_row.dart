@@ -27,14 +27,14 @@ class ExpandedRow {
   final bool _wasReversed;
 
   ExpandedRow(List<ExpandedPair> pairs, this._rowNumber, this._wasReversed)
-      : this._pairs = pairs.toList();
+      : _pairs = pairs.toList();
 
   List<ExpandedPair> get pairs => _pairs;
 
   int get rowNumber => _rowNumber;
 
   bool isEquivalent(List<ExpandedPair> otherPairs) {
-    return this._pairs == otherPairs;
+    return _pairs == otherPairs;
   }
 
   @override
@@ -45,11 +45,11 @@ class ExpandedRow {
   /// Two rows are equal if they contain the same pairs in the same order.
   @override
   operator ==(Object o) {
-    if (!(o is ExpandedRow)) {
+    if (o is! ExpandedRow) {
       return false;
     }
     ExpandedRow that = o;
-    return Utils.arrayEquals(this._pairs, that._pairs) &&
+    return Utils.arrayEquals(_pairs, that._pairs) &&
         _wasReversed == that._wasReversed;
   }
 

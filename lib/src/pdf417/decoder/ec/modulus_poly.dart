@@ -22,7 +22,7 @@ class ModulusPoly {
   late List<int> _coefficients;
 
   ModulusPoly(this._field, List<int> coefficients) {
-    if (coefficients.length == 0) {
+    if (coefficients.isEmpty) {
       throw ArgumentError();
     }
     int coefficientsLength = coefficients.length;
@@ -34,14 +34,14 @@ class ModulusPoly {
         firstNonZero++;
       }
       if (firstNonZero == coefficientsLength) {
-        this._coefficients = [];
+        _coefficients = [];
       } else {
-        this._coefficients = List.filled(coefficientsLength - firstNonZero, 0);
-        List.copyRange(this._coefficients, 0, coefficients, firstNonZero,
-            firstNonZero + this._coefficients.length);
+        _coefficients = List.filled(coefficientsLength - firstNonZero, 0);
+        List.copyRange(_coefficients, 0, coefficients, firstNonZero,
+            firstNonZero + _coefficients.length);
       }
     } else {
-      this._coefficients = coefficients;
+      _coefficients = coefficients;
     }
   }
 
@@ -91,7 +91,7 @@ class ModulusPoly {
       return this;
     }
 
-    List<int> smallerCoefficients = this._coefficients;
+    List<int> smallerCoefficients = _coefficients;
     List<int> largerCoefficients = other._coefficients;
     if (smallerCoefficients.length > largerCoefficients.length) {
       List<int> temp = smallerCoefficients;
@@ -128,7 +128,7 @@ class ModulusPoly {
     if (isZero || other.isZero) {
       return _field.zero;
     }
-    List<int> aCoefficients = this._coefficients;
+    List<int> aCoefficients = _coefficients;
     int aLength = aCoefficients.length;
     List<int> bCoefficients = other._coefficients;
     int bLength = bCoefficients.length;
@@ -185,7 +185,7 @@ class ModulusPoly {
   @override
   String toString() {
     StringBuffer result = StringBuffer();
-    for (int deg = this.degree; deg >= 0; deg--) {
+    for (int deg = degree; deg >= 0; deg--) {
       int coefficient = getCoefficient(deg);
       if (coefficient != 0) {
         if (coefficient < 0) {

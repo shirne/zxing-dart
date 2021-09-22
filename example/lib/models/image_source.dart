@@ -6,7 +6,7 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:zxing_lib/zxing.dart';
 
 class ImageLuminanceSource extends LuminanceSource {
-  static final double minus45InRadians =
+  static const double minus45InRadians =
       -0.7853981633974483; // Math.toRadians(-45.0)
 
   late Uint8List buffer;
@@ -17,8 +17,8 @@ class ImageLuminanceSource extends LuminanceSource {
   ImageLuminanceSource(this.image,
       [this.left = 0, this.top = 0, int? width, int? height])
       : super(width ?? image.width, height ?? image.height) {
-    if (width == null) width = image.width - left;
-    if (height == null) height = image.height - top;
+    width ??= image.width - left;
+    height ??= image.height - top;
 
     int sourceWidth = image.width;
     int sourceHeight = image.height;

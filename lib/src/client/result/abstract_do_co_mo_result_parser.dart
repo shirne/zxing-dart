@@ -43,6 +43,6 @@ abstract class AbstractDoCoMoResultParser extends ResultParser {
   bool isBasicallyValidEmailAddress(String? email) {
     return email != null &&
         _aTextAlphaNumeric.hasMatch(email) &&
-        email.indexOf('@') >= 0;
+        email.contains('@');
   }
 }

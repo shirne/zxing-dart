@@ -109,7 +109,7 @@ void main() {
       40, 628, 33, 749, 267, 506, 213, 928, 465, 248, 493, 72, 780, 699,
       780, 493, 755, 84, 198, 628, 368, 156, 198, 809, 19, 113
     ];
-    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
@@ -127,7 +127,7 @@ void main() {
       25, 477, 928, 111, 100, 0, 252, 21, 86, 923, 2, 2, 0, 1, 0, 0, 0, //
       923, 5, 130, 923, 6, 1, 500, 13, 0
     ];
-    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 

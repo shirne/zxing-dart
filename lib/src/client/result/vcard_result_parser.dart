@@ -118,7 +118,7 @@ class VCardResultParser extends ResultParser {
       // (led by ;) ultimately ending in colon
       var regMatches = reg.allMatches(rawText, i);
 
-      if (regMatches.length < 1) break;
+      if (regMatches.isEmpty) break;
       var matcher = regMatches.first;
       i = matcher.end; // group 0 = whole pattern; end(0) is past final colon
 
@@ -133,9 +133,7 @@ class VCardResultParser extends ResultParser {
       String? valueType;
       if (metadataString != null) {
         for (String metadatum in metadataString.split(_semicolon)) {
-          if (metadata == null) {
-            metadata = [];
-          }
+          metadata ??= [];
           metadata.add(metadatum);
           List<String> metadatumTokens = metadatum.split(_equal); // todo , 2
           if (metadatumTokens.length > 1) {
@@ -175,9 +173,7 @@ class VCardResultParser extends ResultParser {
         i = max;
       } else if (i > matchStart) {
         // found a match
-        if (matches == null) {
-          matches = []; // lazy init
-        }
+        matches ??= [];
         if (i >= 1 && rawText[i - 1] == '\r') {
           i--; // Back up over \r, which really should be there
         }
@@ -298,7 +294,7 @@ class VCardResultParser extends ResultParser {
     }
     List<String> result = [];
     for (List<String> list in lists) {
-      String? value = list.length > 0 ? list[0] : null;
+      String? value = list.isNotEmpty ? list[0] : null;
       if (value != null && value.isNotEmpty) {
         result.add(value);
       }
@@ -312,7 +308,7 @@ class VCardResultParser extends ResultParser {
     }
     List<String?> result = [];
     for (List<String> list in lists) {
-      String? value = list.length > 0 ? list[0] : null;
+      String? value = list.isNotEmpty ? list[0] : null;
       if (value != null && value.isNotEmpty) {
         String? type;
         for (int i = 1; i < list.length; i++) {

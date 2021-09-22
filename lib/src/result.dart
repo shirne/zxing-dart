@@ -30,8 +30,8 @@ class Result {
 
   Result(this._text, this._rawBytes, this._resultPoints, this._format,
       [int? timestamp])
-      : this._numBits = _rawBytes == null ? 0 : (8 * _rawBytes.length),
-        this._timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+      : _numBits = _rawBytes == null ? 0 : (8 * _rawBytes.length),
+        _timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
   Result.full(this._text, this._rawBytes, this._numBits, this._resultPoints,
       this._format, this._timestamp);
@@ -60,9 +60,7 @@ class Result {
   Map<ResultMetadataType, Object>? get resultMetadata => _resultMetadata;
 
   void putMetadata(ResultMetadataType type, Object value) {
-    if (_resultMetadata == null) {
-      _resultMetadata = {};
-    }
+    _resultMetadata ??= {};
     _resultMetadata![type] = value;
   }
 

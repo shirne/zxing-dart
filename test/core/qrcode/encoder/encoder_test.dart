@@ -86,8 +86,7 @@ void main() {
 
   test('testEncodeDefault', () {
     QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
-    String expected = "<<\n" +
-        " mode: ALPHANUMERIC\n" +
+    String expected = "<<\n" " mode: ALPHANUMERIC\n" +
         " ecLevel: H\n" +
         " version: 1\n" +
         " maskPattern: 4\n" +
@@ -141,8 +140,7 @@ void main() {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.CHARACTER_SET] = "UTF8";
     QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
-    String expected = "<<\n" +
-        " mode: BYTE\n" +
+    String expected = "<<\n" " mode: BYTE\n" +
         " ecLevel: H\n" +
         " version: 1\n" +
         " maskPattern: 6\n" +
@@ -178,8 +176,7 @@ void main() {
     // Nihon in Kanji
     QRCode qrCode =
         Encoder.encode("\u65e5\u672c", ErrorCorrectionLevel.M, hints);
-    String expected = "<<\n" +
-        " mode: KANJI\n" +
+    String expected = "<<\n" " mode: KANJI\n" +
         " ecLevel: M\n" +
         " version: 1\n" +
         " maskPattern: 0\n" +
@@ -213,8 +210,7 @@ void main() {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.CHARACTER_SET] = "Shift_JIS";
     QRCode qrCode = Encoder.encode("0123", ErrorCorrectionLevel.M, hints);
-    String expected = "<<\n" +
-        " mode: NUMERIC\n" +
+    String expected = "<<\n" " mode: NUMERIC\n" +
         " ecLevel: M\n" +
         " version: 1\n" +
         " maskPattern: 2\n" +
@@ -279,8 +275,7 @@ void main() {
     hints[EncodeHintType.CHARACTER_SET] = "UTF8";
     hints[EncodeHintType.GS1_FORMAT] = true;
     QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
-    String expected = "<<\n" +
-        " mode: BYTE\n" +
+    String expected = "<<\n" " mode: BYTE\n" +
         " ecLevel: H\n" +
         " version: 1\n" +
         " maskPattern: 5\n" +
@@ -668,8 +663,7 @@ Uint8List bytes(List<int> ints) {
 }
 
 void verifyGS1EncodedData(QRCode qrCode) {
-  String expected = "<<\n" +
-      " mode: ALPHANUMERIC\n" +
+  String expected = "<<\n" " mode: ALPHANUMERIC\n" +
       " ecLevel: H\n" +
       " version: 2\n" +
       " maskPattern: 4\n" +
@@ -704,8 +698,7 @@ void verifyGS1EncodedData(QRCode qrCode) {
 }
 
 void verifyNotGS1EncodedData(QRCode qrCode) {
-  String expected = "<<\n" +
-      " mode: ALPHANUMERIC\n" +
+  String expected = "<<\n" " mode: ALPHANUMERIC\n" +
       " ecLevel: H\n" +
       " version: 1\n" +
       " maskPattern: 4\n" +

@@ -31,7 +31,7 @@ void main() {
     array.set(0, 2, -1);
     array.set(1, 2, -1);
     array.set(2, 2, -1);
-    String expected = " 0 1 0\n" + " 1 0 1\n" + "      \n";
+    String expected = " 0 1 0\n" " 1 0 1\n" + "      \n";
     expect(expected, array.toString());
   });
 
@@ -49,8 +49,7 @@ void main() {
     ByteMatrix matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
-    String expected = " 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n" +
-        " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n" +
+    String expected = " 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n" " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n" +
         " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n" +
@@ -79,8 +78,7 @@ void main() {
     ByteMatrix matrix = ByteMatrix(25, 25);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(2), matrix);
-    String expected = " 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n" +
-        " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n" +
+    String expected = " 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n" " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n" +
         " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n" +
@@ -112,8 +110,7 @@ void main() {
     ByteMatrix matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedTypeInfo(ErrorCorrectionLevel.M, 5, matrix);
-    String expected = "                 0                        \n" +
-        "                 1                        \n" +
+    String expected = "                 0                        \n" "                 1                        \n" +
         "                 1                        \n" +
         "                 1                        \n" +
         "                 0                        \n" +
@@ -143,8 +140,7 @@ void main() {
     ByteMatrix matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.maybeEmbedVersionInfo(Version.getVersionForNumber(7), matrix);
-    String expected = "                     0 0 1                \n" +
-        "                     0 1 0                \n" +
+    String expected = "                     0 0 1                \n" "                     0 1 0                \n" +
         "                     0 1 0                \n" +
         "                     0 1 1                \n" +
         "                     1 1 1                \n" +
@@ -174,8 +170,7 @@ void main() {
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
     BitArray bits = BitArray();
     MatrixUtil.embedDataBits(bits, -1, matrix);
-    String expected = " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +
-        " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n" +
+    String expected = " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n" +
         " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
@@ -205,7 +200,7 @@ void main() {
       42, 159, 74, 221, 244, 169, 239, 150, 138,
       70, 237, 85, 224, 96, 74, 219, 61
     ];
-    BitArray bits = new BitArray();
+    BitArray bits = BitArray();
     for (int c in bytes) {
       bits.appendBits(c, 8);
     }
@@ -216,8 +211,7 @@ void main() {
         Version.getVersionForNumber(1), // Version 1
         3, // Mask pattern 3
         matrix);
-    String expected = " 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n" +
-        " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n" +
+    String expected = " 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n" " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n" +
         " 1 0 1 1 1 0 1 0 0 0 0 1 0 0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n" +
         " 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 1 1 0 1\n" +

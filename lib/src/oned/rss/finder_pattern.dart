@@ -36,7 +36,7 @@ class FinderPattern {
 
   @override
   operator ==(Object o) {
-    if (!(o is FinderPattern)) {
+    if (o is! FinderPattern) {
       return false;
     }
     FinderPattern that = o;

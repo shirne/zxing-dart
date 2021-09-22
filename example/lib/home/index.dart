@@ -20,7 +20,7 @@ class _IndexPageState extends State<IndexPage> {
             crossAxisCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            children: [
+            children: const [
               IconItem(
                 image: 'aztec.png',
                 title: 'Aztec',

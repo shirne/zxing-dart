@@ -68,9 +68,9 @@ class StringBuilder extends StringBuffer {
     } else if (obj is List) {
       if (obj.isNotEmpty) {
         if (obj[0] is int) {
-          obj.forEach((element) {
+          for (var element in obj) {
             super.writeCharCode(element);
-          });
+          }
         } else {
           super.writeAll(obj);
         }
@@ -100,6 +100,7 @@ class StringBuilder extends StringBuffer {
     }
   }
 
+  @override
   void write(Object? object) {
     _buffer = null;
     super.write(object);
@@ -108,6 +109,7 @@ class StringBuilder extends StringBuffer {
   /// Adds the string representation of [charCode] to the buffer.
   ///
   /// Equivalent to `write(String.fromCharCode(charCode))`.
+  @override
   void writeCharCode(int charCode) {
     _buffer = null;
     super.writeCharCode(charCode);
@@ -117,17 +119,20 @@ class StringBuilder extends StringBuffer {
   ///
   /// Writes each individual object in [objects] in iteration order,
   /// and writes [separator] between any two objects.
+  @override
   void writeAll(Iterable<dynamic> objects, [String separator = ""]) {
     _buffer = null;
     super.writeAll(objects, separator);
   }
 
+  @override
   void writeln([Object? obj = ""]) {
     _buffer = null;
     super.writeln(obj);
   }
 
   /// Clears the string buffer.
+  @override
   void clear() {
     _buffer = null;
     super.clear();

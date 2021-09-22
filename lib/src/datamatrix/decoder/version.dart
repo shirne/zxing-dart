@@ -72,7 +72,7 @@ class Version {
     for (ECB ecBlock in ecbArray) {
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }
-    this._totalCodewords = total;
+    _totalCodewords = total;
   }
 
   int get versionNumber => _versionNumber;

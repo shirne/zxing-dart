@@ -10,7 +10,7 @@ String arrayToString(List<int> data) {
   StringBuilder sb = StringBuilder("{");
   for (int i = 0; i < data.length; i++) {
     sb.write(
-      i > 0 ? ",${data[i].toRadixString(16)}" : "${data[i].toRadixString(16)}",
+      i > 0 ? ",${data[i].toRadixString(16)}" : data[i].toRadixString(16),
     );
   }
   sb.write('}');
@@ -29,7 +29,7 @@ void assertDataEquals(String message, List<int> expected, List<int> received) {
 }
 
 void corrupt(List<int> received, int howMany, Random random, int max) {
-  Set<int> corrupted = Set();
+  Set<int> corrupted = {};
   for (int j = 0; j < howMany; j++) {
     int location = random.nextInt(received.length);
     int value = random.nextInt(max);

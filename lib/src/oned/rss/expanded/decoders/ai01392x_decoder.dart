@@ -40,7 +40,7 @@ class AI01392xDecoder extends AI01decoder {
 
   @override
   String parseInformation() {
-    if (this.information.size < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
+    if (information.size < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
       throw NotFoundException.instance;
     }
 
@@ -48,14 +48,13 @@ class AI01392xDecoder extends AI01decoder {
 
     encodeCompressedGtin(buf, _HEADER_SIZE);
 
-    int lastAIdigit = this.generalDecoder.extractNumericValueFromBitArray(
+    int lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
         _HEADER_SIZE + AI01decoder.GTIN_SIZE, _LAST_DIGIT_SIZE);
     buf.write("(392");
     buf.write(lastAIdigit);
     buf.write(')');
 
-    DecodedInformation decodedInformation = this
-        .generalDecoder
+    DecodedInformation decodedInformation = generalDecoder
         .decodeGeneralPurposeField(
             _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE, null);
     buf.write(decodedInformation.newString);

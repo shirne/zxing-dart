@@ -215,7 +215,7 @@ class BitMatrixParser {
   void setMirror(bool mirror) {
     _parsedVersion = null;
     _parsedFormatInfo = null;
-    this._isMirror = mirror;
+    _isMirror = mirror;
   }
 
   /// Mirror the bit matrix in order to attempt a second reading.

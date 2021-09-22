@@ -1,13 +1,13 @@
 /// A simple property reader
 class Properties {
   final Map<String, String> _properties = {};
-  Properties? _defaults;
+  final Properties? _defaults;
 
   Properties([this._defaults]);
 
   load(String inString) {
     List<String> lines = inString.split(RegExp("(\r\n|\r|\n)"));
-    lines.forEach((element) {
+    for (var element in lines) {
       if (!element.startsWith('<')) {
         int equalPos = element.indexOf('=');
         if (equalPos > 0) {
@@ -16,7 +16,7 @@ class Properties {
           _properties[key] = value;
         }
       }
-    });
+    }
   }
 
   Map<String, String> get properties => _properties;

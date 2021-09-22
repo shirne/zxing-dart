@@ -50,7 +50,7 @@ class ExpandedPair {
 
   @override
   operator ==(Object o) {
-    if (!(o is ExpandedPair)) {
+    if (o is! ExpandedPair) {
       return false;
     }
     ExpandedPair that = o;

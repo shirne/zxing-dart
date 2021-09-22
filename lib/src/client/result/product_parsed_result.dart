@@ -25,7 +25,7 @@ class ProductParsedResult extends ParsedResult {
   String normalizedProductID;
 
   ProductParsedResult(this.productID, [String? normalizedProductID])
-      : this.normalizedProductID = normalizedProductID ?? productID,
+      : normalizedProductID = normalizedProductID ?? productID,
         super(ParsedResultType.PRODUCT);
 
   @override

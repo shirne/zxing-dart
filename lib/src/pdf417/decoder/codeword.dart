@@ -51,7 +51,7 @@ class Codeword {
   int get rowNumber => _rowNumber;
 
   set rowNumber(int rowNumber) {
-    this._rowNumber = rowNumber;
+    _rowNumber = rowNumber;
   }
 
   @override

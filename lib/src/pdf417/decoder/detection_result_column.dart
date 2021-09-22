@@ -25,7 +25,7 @@ class DetectionResultColumn {
   final List<Codeword?> _codewords;
 
   DetectionResultColumn(BoundingBox boundingBox)
-      : this._boundingBox = BoundingBox.copy(boundingBox),
+      : _boundingBox = BoundingBox.copy(boundingBox),
         _codewords = List.filled(boundingBox.maxY - boundingBox.minY + 1, null);
 
   Codeword? getCodewordNearby(int imageRow) {

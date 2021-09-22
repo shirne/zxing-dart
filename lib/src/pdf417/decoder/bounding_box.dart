@@ -47,26 +47,26 @@ class BoundingBox {
       topRight = ResultPoint(_image.width - 1, topLeft.y);
       bottomRight = ResultPoint(_image.width - 1, bottomLeft.y);
     }
-    this._topLeft = topLeft;
-    this._bottomLeft = bottomLeft;
-    this._topRight = topRight;
-    this._bottomRight = bottomRight;
-    this._minX = Math.min(topLeft.x.toInt(), bottomLeft.x.toInt());
-    this._maxX = Math.max(topRight.x.toInt(), bottomRight.x.toInt());
-    this._minY = Math.min(topLeft.y.toInt(), topRight.y.toInt());
-    this._maxY = Math.max(bottomLeft.y.toInt(), bottomRight.y.toInt());
+    _topLeft = topLeft;
+    _bottomLeft = bottomLeft;
+    _topRight = topRight;
+    _bottomRight = bottomRight;
+    _minX = Math.min(topLeft.x.toInt(), bottomLeft.x.toInt());
+    _maxX = Math.max(topRight.x.toInt(), bottomRight.x.toInt());
+    _minY = Math.min(topLeft.y.toInt(), topRight.y.toInt());
+    _maxY = Math.max(bottomLeft.y.toInt(), bottomRight.y.toInt());
   }
 
   BoundingBox.copy(BoundingBox boundingBox)
-      : this._image = boundingBox._image,
-        this._topLeft = boundingBox._topLeft,
-        this._bottomLeft = boundingBox._bottomLeft,
-        this._topRight = boundingBox._topRight,
-        this._bottomRight = boundingBox._bottomRight,
-        this._minX = boundingBox._minX,
-        this._maxX = boundingBox._maxX,
-        this._minY = boundingBox._minY,
-        this._maxY = boundingBox._maxY;
+      : _image = boundingBox._image,
+        _topLeft = boundingBox._topLeft,
+        _bottomLeft = boundingBox._bottomLeft,
+        _topRight = boundingBox._topRight,
+        _bottomRight = boundingBox._bottomRight,
+        _minX = boundingBox._minX,
+        _maxX = boundingBox._maxX,
+        _minY = boundingBox._minY,
+        _maxY = boundingBox._maxY;
 
   static BoundingBox? merge(BoundingBox? leftBox, BoundingBox? rightBox) {
     if (leftBox == null) {

@@ -2,11 +2,11 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:flutter/painting.dart';
 
 abstract class QRCodeStyle {
-  static const normal = const NormalQRCodeStyle();
-  static const rRect = const RRectQRCodeStyle();
-  static const rRectOut = const RRectOutQRCodeStyle();
-  static const dot = const DotQRCodeStyle();
-  static const dotOut = const DotOutQRCodeStyle();
+  static const normal = NormalQRCodeStyle();
+  static const rRect = RRectQRCodeStyle();
+  static const rRectOut = RRectOutQRCodeStyle();
+  static const dot = DotQRCodeStyle();
+  static const dotOut = DotOutQRCodeStyle();
 
   static const values = <QRCodeStyle>[normal, rRect, rRectOut, dot, dotOut];
 
@@ -78,6 +78,7 @@ class RRectOutQRCodeStyle extends QRCodeStyle {
     return image;
   }
 
+  @override
   Future<BufferImage?> whiteBlock(int size,
       {Color blackColor = const Color(0xff000000),
       Color whiteColor = const Color(0xffffffff)}) async {

@@ -142,23 +142,23 @@ class RSSExpandedReader extends AbstractRSSReader {
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     // Rows can start with even pattern in case in prev rows there where odd number of patters.
     // So lets try twice
-    this._pairs.clear();
-    this._startFromEven = false;
+    _pairs.clear();
+    _startFromEven = false;
     try {
       return constructResult(decodeRow2pairs(rowNumber, row));
     } on NotFoundException catch (_) {
       // OK
     }
 
-    this._pairs.clear();
-    this._startFromEven = true;
+    _pairs.clear();
+    _startFromEven = true;
     return constructResult(decodeRow2pairs(rowNumber, row));
   }
 
   @override
   void reset() {
-    this._pairs.clear();
-    this._rows.clear();
+    _pairs.clear();
+    _rows.clear();
   }
 
   // Not for testing
@@ -166,9 +166,9 @@ class RSSExpandedReader extends AbstractRSSReader {
     bool done = false;
     while (!done) {
       try {
-        this._pairs.add(retrieveNextPair(row, this._pairs, rowNumber)!);
+        _pairs.add(retrieveNextPair(row, _pairs, rowNumber)!);
       } on NotFoundException catch (_) {
-        if (this._pairs.isEmpty) {
+        if (_pairs.isEmpty) {
           rethrow;
         }
         // exit this loop when retrieveNextPair() fails and throws
@@ -178,10 +178,10 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     // TODO: verify sequence of finder patterns as in checkPairSequence()
     if (_checkChecksum()) {
-      return this._pairs;
+      return _pairs;
     }
 
-    bool tryStackedDecode = this._rows.isNotEmpty;
+    bool tryStackedDecode = _rows.isNotEmpty;
     _storeRow(rowNumber); // TODO: deal with reversed rows
     if (tryStackedDecode) {
       // When the image is 180-rotated, then rows are sorted in wrong direction.
@@ -203,15 +203,15 @@ class RSSExpandedReader extends AbstractRSSReader {
     // Limit number of rows we are checking
     // We use recursive algorithm with pure complexity and don't want it to take forever
     // Stacked barcode can have up to 11 rows, so 25 seems reasonable enough
-    if (this._rows.length > 25) {
+    if (_rows.length > 25) {
       // We will never have a chance to get result, so clear it
-      this._rows.clear();
+      _rows.clear();
       return null;
     }
 
-    this._pairs.clear();
+    _pairs.clear();
     if (reverse) {
-      this._rows.setAll(0, this._rows.reversed.toList());
+      _rows.setAll(0, _rows.reversed.toList());
     }
 
     List<ExpandedPair>? ps;
@@ -222,7 +222,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     }
 
     if (reverse) {
-      this._rows.setAll(0, this._rows.reversed.toList());
+      _rows.setAll(0, _rows.reversed.toList());
     }
 
     return ps;
@@ -234,15 +234,15 @@ class RSSExpandedReader extends AbstractRSSReader {
       List<ExpandedRow> collectedRows, int currentRow) {
     for (int i = currentRow; i < _rows.length; i++) {
       ExpandedRow row = _rows[i];
-      this._pairs.clear();
+      _pairs.clear();
       for (ExpandedRow collectedRow in collectedRows) {
-        this._pairs.addAll(collectedRow.pairs);
+        _pairs.addAll(collectedRow.pairs);
       }
-      this._pairs.addAll(row.pairs);
+      _pairs.addAll(row.pairs);
 
-      if (_isValidSequence(this._pairs)) {
+      if (_isValidSequence(_pairs)) {
         if (_checkChecksum()) {
-          return this._pairs;
+          return _pairs;
         }
 
         List<ExpandedRow> rs = collectedRows.toList();
@@ -285,13 +285,13 @@ class RSSExpandedReader extends AbstractRSSReader {
     int insertPos = 0;
     bool prevIsSame = false;
     bool nextIsSame = false;
-    while (insertPos < this._rows.length) {
-      ExpandedRow erow = this._rows[insertPos];
+    while (insertPos < _rows.length) {
+      ExpandedRow erow = _rows[insertPos];
       if (erow.rowNumber > rowNumber) {
-        nextIsSame = erow.isEquivalent(this._pairs);
+        nextIsSame = erow.isEquivalent(_pairs);
         break;
       }
-      prevIsSame = erow.isEquivalent(this._pairs);
+      prevIsSame = erow.isEquivalent(_pairs);
       insertPos++;
     }
     if (nextIsSame || prevIsSame) {
@@ -303,13 +303,13 @@ class RSSExpandedReader extends AbstractRSSReader {
     // Try to merge partial rows
 
     // Check whether the row is part of an already detected row
-    if (_isPartialRow(this._pairs, this._rows)) {
+    if (_isPartialRow(_pairs, _rows)) {
       return;
     }
 
-    this._rows.insert(insertPos, ExpandedRow(this._pairs, rowNumber, false));
+    _rows.insert(insertPos, ExpandedRow(_pairs, rowNumber, false));
 
-    _removePartialRows(this._pairs, this._rows);
+    _removePartialRows(_pairs, _rows);
   }
 
   // Remove all the rows that contains only specified pairs
@@ -384,7 +384,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   bool _checkChecksum() {
-    ExpandedPair firstPair = this._pairs[0];
+    ExpandedPair firstPair = _pairs[0];
     DataCharacter? checkCharacter = firstPair.leftChar;
     DataCharacter? firstCharacter = firstPair.rightChar;
 
@@ -395,8 +395,8 @@ class RSSExpandedReader extends AbstractRSSReader {
     int checksum = firstCharacter.checksumPortion;
     int s = 2;
 
-    for (int i = 1; i < this._pairs.length; ++i) {
-      ExpandedPair currentPair = this._pairs[i];
+    for (int i = 1; i < _pairs.length; ++i) {
+      ExpandedPair currentPair = _pairs[i];
       checksum += currentPair.leftChar!.checksumPortion;
       s++;
       DataCharacter? currentRightChar = currentPair.rightChar;
@@ -438,10 +438,10 @@ class RSSExpandedReader extends AbstractRSSReader {
     bool keepFinding = true;
     int forcedOffset = -1;
     do {
-      this._findNextPair(row, previousPairs, forcedOffset);
+      _findNextPair(row, previousPairs, forcedOffset);
       pattern = _parseFoundFinderPattern(row, rowNumber, isOddPattern);
       if (pattern == null) {
-        forcedOffset = _getNextSecondBar(row, this._startEnd[0]);
+        forcedOffset = _getNextSecondBar(row, _startEnd[0]);
       } else {
         keepFinding = false;
       }
@@ -451,7 +451,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     // bool mayBeLast = checkPairSequence(previousPairs, pattern);
 
     DataCharacter leftChar =
-        this.decodeDataCharacter(row, pattern!, isOddPattern, true);
+        decodeDataCharacter(row, pattern!, isOddPattern, true);
 
     if (previousPairs.isNotEmpty &&
         previousPairs[previousPairs.length - 1].mustBeLast) {
@@ -460,7 +460,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     DataCharacter? rightChar;
     try {
-      rightChar = this.decodeDataCharacter(row, pattern, isOddPattern, false);
+      rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);
     } on NotFoundException catch (_) {
       rightChar = null;
     }
@@ -469,7 +469,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   void _findNextPair(
       BitArray row, List<ExpandedPair> previousPairs, int forcedOffset) {
-    List<int> counters = this.decodeFinderCounters;
+    List<int> counters = decodeFinderCounters;
     counters.fillRange(0, 4, 0);
 
     int width = row.size;
@@ -509,8 +509,8 @@ class RSSExpandedReader extends AbstractRSSReader {
           }
 
           if (AbstractRSSReader.isFinderPattern(counters)) {
-            this._startEnd[0] = patternStart;
-            this._startEnd[1] = x;
+            _startEnd[0] = patternStart;
+            _startEnd[1] = x;
             return;
           }
 
@@ -553,27 +553,27 @@ class RSSExpandedReader extends AbstractRSSReader {
     if (oddPattern) {
       // If pattern number is odd, we need to locate element 1 *before* the current block.
 
-      int firstElementStart = this._startEnd[0] - 1;
+      int firstElementStart = _startEnd[0] - 1;
       // Locate element 1
       while (firstElementStart >= 0 && !row.get(firstElementStart)) {
         firstElementStart--;
       }
 
       firstElementStart++;
-      firstCounter = this._startEnd[0] - firstElementStart;
+      firstCounter = _startEnd[0] - firstElementStart;
       start = firstElementStart;
-      end = this._startEnd[1];
+      end = _startEnd[1];
     } else {
       // If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.
 
-      start = this._startEnd[0];
+      start = _startEnd[0];
 
-      end = row.getNextUnset(this._startEnd[1] + 1);
-      firstCounter = end - this._startEnd[1];
+      end = row.getNextUnset(_startEnd[1] + 1);
+      firstCounter = end - _startEnd[1];
     }
 
     // Make 'counters' hold 1-4
-    List<int> counters = this.decodeFinderCounters;
+    List<int> counters = decodeFinderCounters;
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
 
     counters[0] = firstCounter;
@@ -588,7 +588,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   DataCharacter decodeDataCharacter(
       BitArray row, FinderPattern pattern, bool isOddPattern, bool leftChar) {
-    List<int> counters = this.dataCharacterCounters;
+    List<int> counters = dataCharacterCounters;
     counters.fillRange(0, counters.length, 0);
 
     if (leftChar) {
@@ -690,8 +690,8 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   void _adjustOddEvenCounts(int numModules) {
-    int oddSum = MathUtils.sum(this.oddCounts);
-    int evenSum = MathUtils.sum(this.evenCounts);
+    int oddSum = MathUtils.sum(oddCounts);
+    int evenSum = MathUtils.sum(evenCounts);
 
     bool incrementOdd = false;
     bool decrementOdd = false;
@@ -767,19 +767,19 @@ class RSSExpandedReader extends AbstractRSSReader {
       if (decrementOdd) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(this.oddCounts, this.oddRoundingErrors);
+      AbstractRSSReader.increment(oddCounts, oddRoundingErrors);
     }
     if (decrementOdd) {
-      AbstractRSSReader.decrement(this.oddCounts, this.oddRoundingErrors);
+      AbstractRSSReader.decrement(oddCounts, oddRoundingErrors);
     }
     if (incrementEven) {
       if (decrementEven) {
         throw NotFoundException.instance;
       }
-      AbstractRSSReader.increment(this.evenCounts, this.oddRoundingErrors);
+      AbstractRSSReader.increment(evenCounts, oddRoundingErrors);
     }
     if (decrementEven) {
-      AbstractRSSReader.decrement(this.evenCounts, this.evenRoundingErrors);
+      AbstractRSSReader.decrement(evenCounts, evenRoundingErrors);
     }
   }
 }

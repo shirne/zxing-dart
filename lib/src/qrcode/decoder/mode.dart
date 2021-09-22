@@ -22,33 +22,33 @@ import 'version.dart';
 /// @author Sean Owen
 class Mode {
   // Not really a mode...
-  static const TERMINATOR = const Mode([0, 0, 0], 0x00, 'TERMINATOR');
-  static const NUMERIC = const Mode([10, 12, 14], 0x01, 'NUMERIC');
-  static const ALPHANUMERIC = const Mode([9, 11, 13], 0x02, 'ALPHANUMERIC');
+  static const TERMINATOR = Mode([0, 0, 0], 0x00, 'TERMINATOR');
+  static const NUMERIC = Mode([10, 12, 14], 0x01, 'NUMERIC');
+  static const ALPHANUMERIC = Mode([9, 11, 13], 0x02, 'ALPHANUMERIC');
   // Not supported
-  static const STRUCTURED_APPEND = const Mode(
+  static const STRUCTURED_APPEND = Mode(
     [0, 0, 0],
     0x03,
     'STRUCTURED_APPEND',
   );
-  static const BYTE = const Mode([8, 16, 16], 0x04, 'BYTE');
-  static const FNC1_FIRST_POSITION = const Mode(
+  static const BYTE = Mode([8, 16, 16], 0x04, 'BYTE');
+  static const FNC1_FIRST_POSITION = Mode(
     [0, 0, 0],
     0x05,
     'FNC1_FIRST_POSITION',
   );
 
   // character counts don't apply
-  static const ECI = const Mode([0, 0, 0], 0x07, 'ECI');
-  static const KANJI = const Mode([8, 10, 12], 0x08, 'KANJI');
-  static const FNC1_SECOND_POSITION = const Mode(
+  static const ECI = Mode([0, 0, 0], 0x07, 'ECI');
+  static const KANJI = Mode([8, 10, 12], 0x08, 'KANJI');
+  static const FNC1_SECOND_POSITION = Mode(
     [0, 0, 0],
     0x09,
     'FNC1_SECOND_POSITION',
   );
 
   /// See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
-  static const HANZI = const Mode([8, 10, 12], 0x0D, 'HANZI');
+  static const HANZI = Mode([8, 10, 12], 0x0D, 'HANZI');
 
   static const values = [
     TERMINATOR,

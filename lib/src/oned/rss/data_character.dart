@@ -32,7 +32,7 @@ class DataCharacter {
 
   @override
   operator ==(Object o) {
-    if (!(o is DataCharacter)) {
+    if (o is! DataCharacter) {
       return false;
     }
     DataCharacter that = o;

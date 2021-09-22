@@ -42,7 +42,7 @@ class MultiDetector extends Detector {
         MultiFinderPatternFinder(image, resultPointCallback);
     List<FinderPatternInfo> infos = finder.findMulti(hints);
 
-    if (infos.length == 0) {
+    if (infos.isEmpty) {
       throw NotFoundException.instance;
     }
 

@@ -71,9 +71,7 @@ class AddressBookAUResultParser extends ResultParser {
       String? value = matchSinglePrefixedField(
           prefix + i.toString() + ':', rawText, '\r', true);
       if (value == null) continue;
-      if (values == null) {
-        values = []; // lazy init
-      }
+      values ??= [];
       values.add(value);
     }
     if (values == null) {

@@ -58,15 +58,15 @@ class PerspectiveTransform {
   }
 
   void transformPoints(List<double> points) {
-    double a11 = this._a11;
-    double a12 = this._a12;
-    double a13 = this._a13;
-    double a21 = this._a21;
-    double a22 = this._a22;
-    double a23 = this._a23;
-    double a31 = this._a31;
-    double a32 = this._a32;
-    double a33 = this._a33;
+    double a11 = _a11;
+    double a12 = _a12;
+    double a13 = _a13;
+    double a21 = _a21;
+    double a22 = _a22;
+    double a23 = _a23;
+    double a31 = _a31;
+    double a32 = _a32;
+    double a33 = _a33;
     int maxI = points.length - 1; // points.length must be even
     for (int i = 0; i < maxI; i += 2) {
       double x = points[i];

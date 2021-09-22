@@ -36,8 +36,7 @@ void main() {
     assertEqualOrNaN(longitude, geoResult.longitude, EPSILON);
     assertEqualOrNaN(altitude, geoResult.altitude, EPSILON);
     expect(query, geoResult.query);
-    expect(uri == null ? contents.toLowerCase(/*Locale.ENGLISH*/) : uri,
-        geoResult.geoURI);
+    expect(uri ?? contents.toLowerCase(/*Locale.ENGLISH*/), geoResult.geoURI);
   }
 
   test('testGeo', () {

@@ -85,7 +85,7 @@ class MultiFormatOneDReader extends OneDReader {
       readers.add(RSS14Reader());
       readers.add(RSSExpandedReader());
     }
-    this._readers = readers; //.toList();
+    _readers = readers; //.toList();
   }
 
   @override

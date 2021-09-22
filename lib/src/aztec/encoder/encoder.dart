@@ -56,7 +56,7 @@ class Encoder {
       [int minECCPercent = DEFAULT_AZTEC_LAYERS,
       int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
       Encoding? charset]) {
-    List<int> bytes = (null != charset ? charset : latin1).encode(data);
+    List<int> bytes = (charset ?? latin1).encode(data);
     return encodeData(
         Uint8List.fromList(bytes), minECCPercent, userSpecifiedLayers, charset);
   }

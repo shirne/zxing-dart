@@ -19,7 +19,7 @@
 ///
 /// @author Sean Owen
 class ReedSolomonException implements Exception {
-  String _message;
+  final String _message;
   ReedSolomonException(this._message);
 
   @override

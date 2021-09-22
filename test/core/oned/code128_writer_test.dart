@@ -60,7 +60,7 @@ void main() {
   }
 
   test('testEncodeWithFunc3', () {
-    String toEncode = "\u00f3" + "123";
+    String toEncode = "\u00f3" "123";
     //                                                       "1"            "2"             "3"          check digit 51
     String expected = QUIET_SPACE +
         START_CODE_B +
@@ -79,7 +79,7 @@ void main() {
   });
 
   test('testEncodeWithFunc2', () {
-    String toEncode = "\u00f2" + "123";
+    String toEncode = "\u00f2" "123";
     //                                                       "1"            "2"             "3"          check digit 56
     String expected = QUIET_SPACE +
         START_CODE_B +
@@ -98,7 +98,7 @@ void main() {
   });
 
   test('testEncodeWithFunc1', () {
-    String toEncode = "\u00f1" + "123";
+    String toEncode = "\u00f1" "123";
     //                                                       "12"                           "3"          check digit 92
     String expected = QUIET_SPACE +
         START_CODE_C +
@@ -117,7 +117,7 @@ void main() {
   });
 
   test('testRoundtrip', () {
-    String toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
+    String toEncode = "\u00f1" "10958" + "\u00f1" + "17160526";
     String expected = "1095817160526";
 
     BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
@@ -128,7 +128,7 @@ void main() {
   });
 
   test('testEncodeWithFunc4', () {
-    String toEncode = "\u00f4" + "123";
+    String toEncode = "\u00f4" "123";
     //                                                       "1"            "2"             "3"          check digit 59
     String expected = QUIET_SPACE +
         START_CODE_B +
@@ -147,7 +147,7 @@ void main() {
   });
 
   test('testEncodeWithFncsAndNumberInCodesetA', () {
-    String toEncode = "\n" + "\u00f1" + "\u00f4" + "1" + "\n";
+    String toEncode = "\n" "\u00f1" + "\u00f4" + "1" + "\n";
 
     String expected = QUIET_SPACE +
         START_CODE_A +

@@ -36,7 +36,7 @@ class CurrentParsingState {
   int get position => _position;
 
   set position(int position) {
-    this._position = position;
+    _position = position;
   }
 
   void incrementPosition(int delta) {
@@ -50,14 +50,14 @@ class CurrentParsingState {
   bool get isIsoIec646 => _encoding == _State.ISO_IEC_646;
 
   void setNumeric() {
-    this._encoding = _State.NUMERIC;
+    _encoding = _State.NUMERIC;
   }
 
   void setAlpha() {
-    this._encoding = _State.ALPHA;
+    _encoding = _State.ALPHA;
   }
 
   void setIsoIec646() {
-    this._encoding = _State.ISO_IEC_646;
+    _encoding = _State.ISO_IEC_646;
   }
 }

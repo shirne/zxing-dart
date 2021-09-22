@@ -30,8 +30,8 @@ class BarcodeMatrix {
   /// @param height the height of the matrix (Rows)
   /// @param width  the width of the matrix (Cols)
   BarcodeMatrix(this._height, int width)
-      : this._width = width * 17,
-        this._matrix =
+      : _width = width * 17,
+        _matrix =
             List.generate(_height, (index) => BarcodeRow((width + 4) * 17 + 1));
 
   void set(int x, int y, int value) {

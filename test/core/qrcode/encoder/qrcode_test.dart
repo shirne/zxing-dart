@@ -49,8 +49,7 @@ void main() {
 
   test('testToString1', () {
     QRCode qrCode = QRCode();
-    String expected = "<<\n" +
-        " mode: null\n" +
+    String expected = "<<\n" " mode: null\n" +
         " ecLevel: null\n" +
         " version: null\n" +
         " maskPattern: -1\n" +
@@ -72,8 +71,7 @@ void main() {
       }
     }
     qrCode.matrix = matrix;
-    String expected = "<<\n" +
-        " mode: BYTE\n" +
+    String expected = "<<\n" " mode: BYTE\n" +
         " ecLevel: H\n" +
         " version: 1\n" +
         " maskPattern: 3\n" +

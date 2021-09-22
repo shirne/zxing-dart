@@ -202,12 +202,12 @@ class AbstractBlackBoxTestCase {
         "Please download and install test images, and run from the 'test' directory");
     List<File> paths = [];
     var files = _testBase.listSync();
-    files.forEach((element) {
+    for (var element in files) {
       if (element is File && imageSuffix.hasMatch(element.path)) {
         // "*.{jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG}"
         paths.add(element);
       }
-    });
+    }
 
     return paths;
   }
@@ -222,6 +222,7 @@ class AbstractBlackBoxTestCase {
     var hints = Map<DecodeHintType, Object>.from(_hints);
     if (tryHarder) {
       hints[DecodeHintType.TRY_HARDER] = true;
+      hints[DecodeHintType.ALSO_INVERTED] = true;
     }
 
     // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
@@ -235,9 +236,7 @@ class AbstractBlackBoxTestCase {
       // continue
     }
 
-    if (result == null) {
-      result = _barcodeReader!.decode(source, hints);
-    }
+    result ??= _barcodeReader!.decode(source, hints);
 
     if (_expectedFormat != result.barcodeFormat) {
       _log.warning(
@@ -279,8 +278,7 @@ class AbstractBlackBoxTestCase {
   static String readFileAsString(File file, Encoding charset) {
     String stringContents = file.readAsStringSync(encoding: charset);
     if (stringContents.endsWith("\n")) {
-      _log.info("String contents of file $file end with a newline. " +
-          "This may not be intended and cause a test failure");
+      _log.info("String contents of file $file end with a newline. " "This may not be intended and cause a test failure");
     }
     return stringContents;
   }

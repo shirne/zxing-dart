@@ -38,5 +38,5 @@ class DecodedChar extends DecodedObject {
 
   int get value => _value;
 
-  bool get isFNC1 => this._value == fnc1;
+  bool get isFNC1 => _value == fnc1;
 }

@@ -16,10 +16,9 @@
 
 import 'dart:typed_data';
 
-import '../common/decoder_result.dart';
-
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
+import '../common/decoder_result.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
@@ -57,16 +56,16 @@ class AztecReader implements Reader {
         AztecDetectorResult detectorResult = detector.detect(true);
         points = detectorResult.points;
         decoderResult = Decoder().decode(detectorResult);
-      } on NotFoundException catch (e) {
+      } on NotFoundException catch (_) {
         if (notFoundException != null) {
           throw notFoundException;
         }
-        throw e;
-      } on FormatsException catch (e) {
+        rethrow;
+      } on FormatsException catch (_) {
         if (formatException != null) {
           throw formatException;
         }
-        throw e;
+        rethrow;
       }
     }
 

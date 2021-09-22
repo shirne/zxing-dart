@@ -22,7 +22,7 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class SMSParsedResult extends ParsedResult {
-  List<String> _numbers;
+  final List<String> _numbers;
   List<String>? _vias;
   String? subject;
   String? body;
@@ -38,9 +38,7 @@ class SMSParsedResult extends ParsedResult {
   addNumber(String num, [String? via]) {
     _numbers.add(num);
     if (via != null) {
-      if (_vias == null) {
-        _vias = List.filled(_numbers.length - 1, '');
-      }
+      _vias ??= List.filled(_numbers.length - 1, '');
       _vias!.add(via);
     } else if (_vias != null) {
       _vias!.add('');

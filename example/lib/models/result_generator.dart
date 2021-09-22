@@ -1,11 +1,11 @@
 import 'package:zxing_lib/client.dart';
 
 abstract class ResultGenerator<T extends ParsedResult> {
-  static const text = const TextResultGenerator();
-  static const wifi = const WifiResultGenerator();
-  static const geo = const GeoResultGenerator();
-  static const vcard = const VCardResultGenerator();
-  static const sms = const SMSResultGenerator();
+  static const text = TextResultGenerator();
+  static const wifi = WifiResultGenerator();
+  static const geo = GeoResultGenerator();
+  static const vcard = VCardResultGenerator();
+  static const sms = SMSResultGenerator();
 
   static const values = <ResultGenerator>[text, wifi, geo, vcard, sms];
 
@@ -103,7 +103,7 @@ class VCardResultGenerator extends ResultGenerator<AddressBookParsedResult> {
   }
 
   _writeN(String name, StringBuffer buffer) {
-    List<String> namePart = name.split(RegExp('\s+'));
+    List<String> namePart = name.split(RegExp('\\s+'));
     if (namePart.length < 2) {
       buffer.write("N:$name\r\n");
     } else {

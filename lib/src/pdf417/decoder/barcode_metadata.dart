@@ -24,7 +24,7 @@ class BarcodeMetadata {
 
   BarcodeMetadata(this._columnCount, this._rowCountUpperPart,
       this._rowCountLowerPart, this._errorCorrectionLevel)
-      : this._rowCount = _rowCountUpperPart + _rowCountLowerPart;
+      : _rowCount = _rowCountUpperPart + _rowCountLowerPart;
 
   int get columnCount => _columnCount;
 

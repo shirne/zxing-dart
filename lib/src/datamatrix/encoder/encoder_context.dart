@@ -45,25 +45,25 @@ class EncoderContext {
       }
       sb.writeCharCode(ch);
     }
-    this._msg = sb.toString(); //Not Unicode here!
+    _msg = sb.toString(); //Not Unicode here!
     _shape = SymbolShapeHint.FORCE_NONE;
-    this._codewords = StringBuffer();
+    _codewords = StringBuffer();
     _newEncoding = -1;
   }
 
   void setSymbolShape(SymbolShapeHint shape) {
-    this._shape = shape;
+    _shape = shape;
   }
 
   void setSizeConstraints(Dimension? minSize, Dimension? maxSize) {
-    this._minSize = minSize;
-    this._maxSize = maxSize;
+    _minSize = minSize;
+    _maxSize = maxSize;
   }
 
   String get message => _msg;
 
   void setSkipAtEnd(int count) {
-    this._skipAtEnd = count;
+    _skipAtEnd = count;
   }
 
   int get currentChar => _msg.codeUnitAt(pos);
@@ -73,14 +73,14 @@ class EncoderContext {
   StringBuffer get codewords => _codewords;
 
   void writeCodewords(String codewords) {
-    this._codewords.write(codewords);
+    _codewords.write(codewords);
   }
 
   void writeCodeword(dynamic codeword) {
     if (codeword is int) {
-      this._codewords.writeCharCode(codeword);
+      _codewords.writeCharCode(codeword);
     } else {
-      this._codewords.write(codeword);
+      _codewords.write(codeword);
     }
   }
 
@@ -89,11 +89,11 @@ class EncoderContext {
   int get newEncoding => _newEncoding;
 
   void signalEncoderChange(int encoding) {
-    this._newEncoding = encoding;
+    _newEncoding = encoding;
   }
 
   void resetEncoderSignal() {
-    this._newEncoding = -1;
+    _newEncoding = -1;
   }
 
   bool get hasMoreCharacters => pos < _getTotalMessageCharCount();
@@ -107,14 +107,14 @@ class EncoderContext {
   SymbolInfo? get symbolInfo => _symbolInfo;
 
   void updateSymbolInfo([int? len]) {
-    if (len == null) len = codewordCount;
-    if (this._symbolInfo == null || len > this._symbolInfo!.dataCapacity) {
-      this._symbolInfo =
+    len ??= codewordCount;
+    if (_symbolInfo == null || len > _symbolInfo!.dataCapacity) {
+      _symbolInfo =
           SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
     }
   }
 
   void resetSymbolInfo() {
-    this._symbolInfo = null;
+    _symbolInfo = null;
   }
 }

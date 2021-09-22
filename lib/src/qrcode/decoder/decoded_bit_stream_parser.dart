@@ -158,7 +158,7 @@ class DecodedBitStreamParser {
       bytes,
       result.toString(),
       byteSegments.isEmpty ? null : byteSegments,
-      ecLevel == null ? null : ecLevel.toString(),
+      ecLevel?.toString(),
       saSequence: symbolSequence,
       saParity: parityData,
       symbologyModifier: symbologyModifier,

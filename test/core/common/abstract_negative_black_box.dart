@@ -56,6 +56,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     testResults.add(TestResult(falsePositivesAllowed, rotation));
   }
 
+  @override
   void testBlackBox() {
     assert(testResults.isNotEmpty);
 

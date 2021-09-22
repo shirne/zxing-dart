@@ -23,6 +23,7 @@ class WriterException implements Exception {
 
   WriterException([this.message]);
 
+  @override
   String toString() {
     Object? message = this.message;
     if (message == null) return "Exception";

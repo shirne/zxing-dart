@@ -32,9 +32,9 @@ class BitArray {
 
   BitArray([this._size = 0]) {
     if (_size == 0) {
-      this._bits = Int32List(1);
+      _bits = Int32List(1);
     } else {
-      this._bits = _makeArray(_size);
+      _bits = _makeArray(_size);
     }
   }
 
@@ -51,7 +51,7 @@ class BitArray {
     if (size > _bits.length * 32) {
       Int32List newBits = _makeArray(size);
       List.copyRange(newBits, 0, _bits, 0, _bits.length);
-      this._bits = newBits;
+      _bits = newBits;
     }
   }
 
@@ -299,7 +299,7 @@ class BitArray {
 
   @override
   operator ==(Object o) {
-    if (!(o is BitArray)) {
+    if (o is! BitArray) {
       return false;
     }
     BitArray other = o;

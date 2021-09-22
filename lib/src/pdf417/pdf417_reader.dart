@@ -50,7 +50,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     List<Result> result = _decodeStatic(image, hints, false);
-    if (result.length == 0) {
+    if (result.isEmpty) {
       // || result[0] == null
       throw NotFoundException.instance;
     }

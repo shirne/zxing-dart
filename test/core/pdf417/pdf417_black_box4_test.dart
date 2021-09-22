@@ -32,7 +32,7 @@ import '../common/test_result.dart';
 
 void main() {
   test('PDF417BlackBox4TestCase', () {
-    PDF417BlackBox4TestCase()..testBlackBox();
+    PDF417BlackBox4TestCase().testBlackBox();
   });
 }
 
@@ -101,9 +101,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         for (Result result in results) {
           PDF417ResultMetadata resultMetadata = getMeta(result)!;
           //assertNotNull("resultMetadata", resultMetadata);
-          if (fileId == null) {
-            fileId = resultMetadata.fileId;
-          }
+          fileId ??= resultMetadata.fileId;
           expect(fileId, resultMetadata.fileId, reason: "FileId");
           resultText.write(result.text);
         }

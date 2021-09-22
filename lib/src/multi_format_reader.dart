@@ -72,7 +72,7 @@ class MultiFormatReader implements Reader {
   ///
   /// @param hints The set of hints to use for subsequent calls to decode(image)
   void setHints(Map<DecodeHintType, Object>? hints) {
-    this._hints = hints;
+    _hints = hints;
 
     bool tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
     // @SuppressWarnings("unchecked")
@@ -130,7 +130,7 @@ class MultiFormatReader implements Reader {
         readers.add(MultiFormatOneDReader(hints));
       }
     }
-    this._readers = readers; //.toList();
+    _readers = readers; //.toList();
   }
 
   @override

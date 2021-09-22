@@ -33,7 +33,7 @@ class Detector {
   final WhiteRectangleDetector _rectangleDetector;
 
   Detector(this._image)
-      : this._rectangleDetector = WhiteRectangleDetector(_image);
+      : _rectangleDetector = WhiteRectangleDetector(_image);
 
   /// <p>Detects a Data Matrix Code in an image.</p>
   ///

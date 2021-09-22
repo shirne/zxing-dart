@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:buffer_image/buffer_image.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:buffer_image/buffer_image.dart';
+import 'package:camera/camera.dart';
+import 'package:shirne_dialog/shirne_dialog.dart';
 
 import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
@@ -77,8 +78,8 @@ class _CameraPageState extends State<CameraPage> {
       if (results != null) {
         Navigator.of(context).pushNamed('/result', arguments: results);
       } else {
-        print('detected nothing');
-        if ( !kIsWeb) {
+        MyDialog.of(context).toast('detected nothing');
+        if (!kIsWeb) {
           onCameraView();
         }
       }

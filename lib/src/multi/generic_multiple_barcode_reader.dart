@@ -79,7 +79,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       results.add(_translateResultPoints(result, xOffset, yOffset));
     }
     List<ResultPoint?>? resultPoints = result.resultPoints;
-    if (resultPoints == null || resultPoints.length == 0) {
+    if (resultPoints == null || resultPoints.isEmpty) {
       return;
     }
     int width = image.width;

@@ -65,7 +65,7 @@ class MultiFormatUPCEANReader extends OneDReader {
       readers.add(EAN8Reader());
       readers.add(UPCEReader());
     }
-    this._readers = readers.toList();
+    _readers = readers.toList();
   }
 
   @override

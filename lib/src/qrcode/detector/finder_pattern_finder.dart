@@ -330,7 +330,7 @@ class FinderPatternFinder {
   /// @return vertical center of finder pattern, or {@link double#NaN} if not found
   double _crossCheckVertical(
       int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    BitMatrix image = this._image;
+    BitMatrix image = _image;
 
     int maxI = image.height;
     List<int> stateCount = _getCrossCheckStateCount();
@@ -406,7 +406,7 @@ class FinderPatternFinder {
   /// check a vertical cross check and locate the real center of the alignment pattern.</p>
   double _crossCheckHorizontal(
       int startJ, int centerI, int maxCount, int originalStateCountTotal) {
-    BitMatrix image = this._image;
+    BitMatrix image = _image;
 
     int maxJ = image.width;
     List<int> stateCount = _getCrossCheckStateCount();

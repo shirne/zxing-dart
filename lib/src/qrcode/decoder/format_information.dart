@@ -142,11 +142,11 @@ class FormatInformation {
 
   @override
   operator ==(Object o) {
-    if (!(o is FormatInformation)) {
+    if (o is! FormatInformation) {
       return false;
     }
     FormatInformation other = o;
-    return this._errorCorrectionLevel == other._errorCorrectionLevel &&
-        this._dataMask == other._dataMask;
+    return _errorCorrectionLevel == other._errorCorrectionLevel &&
+        _dataMask == other._dataMask;
   }
 }

@@ -30,7 +30,7 @@ class Logger {
     print("[${_logTypes[type]}] $prefix $message");
   }
 
-  static var _loggers = <Type, Logger>{};
+  static final _loggers = <Type, Logger>{};
   static Logger getLogger(Type belong) {
     return _loggers.putIfAbsent(belong, () => Logger());
   }

@@ -166,7 +166,7 @@ class DecodedBitStreamParser {
         codeIndex++) {
       fileId += codewords[codeIndex].toString().padLeft(3, '0');
     }
-    if (fileId.length == 0) {
+    if (fileId.isEmpty) {
       // at least one fileId codeword is required (Annex H.2)
       throw FormatsException.instance;
     }

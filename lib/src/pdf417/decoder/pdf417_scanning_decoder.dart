@@ -269,7 +269,7 @@ class PDF417ScanningDecoder {
     int calculatedNumberOfCodewords =
         detectionResult.barcodeColumnCount * detectionResult.barcodeRowCount -
             _getNumberOfECCodeWords(detectionResult.barcodeECLevel);
-    if (numberOfCodewords.length == 0) {
+    if (numberOfCodewords.isEmpty) {
       if (calculatedNumberOfCodewords < 1 ||
           calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
         throw NotFoundException.instance;
@@ -301,7 +301,7 @@ class PDF417ScanningDecoder {
           column++) {
         List<int> values = barcodeMatrix[row][column + 1].getValue();
         int codewordIndex = row * detectionResult.barcodeColumnCount + column;
-        if (values.length == 0) {
+        if (values.isEmpty) {
           erasures.add(codewordIndex);
         } else if (values.length == 1) {
           codewords[codewordIndex] = values[0];
@@ -354,7 +354,7 @@ class PDF417ScanningDecoder {
       } on ChecksumException catch (_) {
         //
       }
-      if (ambiguousIndexCount.length == 0) {
+      if (ambiguousIndexCount.isEmpty) {
         throw ChecksumException.getChecksumInstance();
       }
       for (int i = 0; i < ambiguousIndexCount.length; i++) {
@@ -578,7 +578,7 @@ class PDF417ScanningDecoder {
 
   static DecoderResult _decodeCodewords(
       List<int> codewords, int ecLevel, List<int> erasures) {
-    if (codewords.length == 0) {
+    if (codewords.isEmpty) {
       throw FormatsException.instance;
     }
 
@@ -677,7 +677,7 @@ class PDF417ScanningDecoder {
       );
       for (int column = 0; column < barcodeMatrix[row].length; column++) {
         BarcodeValue barcodeValue = barcodeMatrix[row][column];
-        if (barcodeValue.getValue().length == 0) {
+        if (barcodeValue.getValue().isEmpty) {
           formatter.write("        ");
         } else {
           formatter.write(

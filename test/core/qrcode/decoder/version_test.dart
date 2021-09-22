@@ -58,7 +58,7 @@ void checkVersion(Version? version, int number, int dimension) {
   expect(number, version?.versionNumber);
   assert(version?.alignmentPatternCenters != null);
   if (number > 1) {
-    assert(version!.alignmentPatternCenters.length > 0);
+    assert(version!.alignmentPatternCenters.isNotEmpty);
   }
   expect(dimension, version?.dimensionForVersion);
   assert(version?.getECBlocksForLevel(ErrorCorrectionLevel.H) != null);

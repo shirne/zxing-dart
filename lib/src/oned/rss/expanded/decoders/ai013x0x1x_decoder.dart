@@ -46,7 +46,7 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
 
   @override
   String parseInformation() {
-    if (this.information.size !=
+    if (information.size !=
         _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE + _DATE_SIZE) {
       throw NotFoundException.instance;
     }
@@ -63,15 +63,14 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   }
 
   void _encodeCompressedDate(StringBuffer buf, int currentPos) {
-    int numericDate = this
-        .generalDecoder
+    int numericDate = generalDecoder
         .extractNumericValueFromBitArray(currentPos, _DATE_SIZE);
     if (numericDate == 38400) {
       return;
     }
 
     buf.write('(');
-    buf.write(this._dateCode);
+    buf.write(_dateCode);
     buf.write(')');
 
     int day = numericDate % 32;
@@ -98,7 +97,7 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   @override
   void addWeightCode(StringBuffer buf, int weight) {
     buf.write('(');
-    buf.write(this._firstAIdigits);
+    buf.write(_firstAIdigits);
     buf.write(weight ~/ 100000);
     buf.write(')');
   }

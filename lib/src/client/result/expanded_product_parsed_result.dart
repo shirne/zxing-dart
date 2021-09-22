@@ -73,7 +73,7 @@ class ExpandedProductParsedResult extends ParsedResult {
 
   @override
   operator ==(Object o) {
-    if (!(o is ExpandedProductParsedResult)) {
+    if (o is! ExpandedProductParsedResult) {
       return false;
     }
 

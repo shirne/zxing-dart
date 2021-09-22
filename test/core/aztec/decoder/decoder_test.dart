@@ -81,8 +81,7 @@ void main() {
 
   test('testAztecResult', () {
     BitMatrix matrix = BitMatrix.parse(
-        "X X X X X     X X X       X X X     X X X     \n" +
-            "X X X     X X X     X X X X     X X X     X X \n" +
+        "X X X X X     X X X       X X X     X X X     \n" "X X X     X X X     X X X X     X X X     X X \n" +
             "  X   X X       X   X   X X X X     X     X X \n" +
             "  X   X X     X X     X     X   X       X   X \n" +
             "  X X   X X         X               X X     X \n" +
@@ -121,8 +120,7 @@ void main() {
 
   test('testAztecResultECI', () {
     BitMatrix matrix = BitMatrix.parse(
-        "      X     X X X   X           X     \n" +
-            "    X X   X X   X X X X X X X   X     \n" +
+        "      X     X X X   X           X     \n" "    X X   X X   X X X X X X X   X     \n" +
             "    X X                         X   X \n" +
             "  X X X X X X X X X X X X X X X X X   \n" +
             "      X                       X       \n" +
@@ -150,8 +148,7 @@ void main() {
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors', () {
     BitMatrix matrix = BitMatrix.parse(
-        "" +
-            "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n" +
+        "" "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n" +
             "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n" +
             "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n" +
             ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n" +
@@ -192,8 +189,7 @@ void main() {
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors2', () {
     BitMatrix matrix = BitMatrix.parse(
-        "" +
-            ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n" +
+        "" ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n" +
             "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n" +
             ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n" +
             "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n" +

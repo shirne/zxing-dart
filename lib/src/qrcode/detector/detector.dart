@@ -81,7 +81,7 @@ class Detector {
 
     AlignmentPattern? alignmentPattern;
     // Anything above version 1 has an alignment pattern
-    if (provisionalVersion.alignmentPatternCenters.length > 0) {
+    if (provisionalVersion.alignmentPatternCenters.isNotEmpty) {
       // Guess where a "bottom right" finder pattern would have been
       double bottomRightX = topRight.x - topLeft.x + bottomLeft.x;
       double bottomRightY = topRight.y - topLeft.y + bottomLeft.y;

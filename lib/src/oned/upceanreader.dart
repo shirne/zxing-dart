@@ -131,15 +131,14 @@ abstract class UPCEANReader extends OneDReader {
   /// @throws NotFoundException if no potential barcode is found
   /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
   /// @throws FormatException if a potential barcode is found but format is invalid
+  @override
   Result decodeRow(
     int rowNumber,
     BitArray row,
     Map<DecodeHintType, Object>? hints, [
     List<int>? startGuardRange,
   ]) {
-    if (startGuardRange == null) {
-      startGuardRange = findStartGuardPattern(row);
-    }
+    startGuardRange ??= findStartGuardPattern(row);
     ResultPointCallback? resultPointCallback =
         hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback?;
@@ -312,9 +311,7 @@ abstract class UPCEANReader extends OneDReader {
   static List<int> _findGuardPattern(
       BitArray row, int rowOffset, bool whiteFirst, List<int> pattern,
       [List<int>? counters]) {
-    if (counters == null) {
-      counters = List.filled(pattern.length, 0);
-    }
+    counters ??= List.filled(pattern.length, 0);
     int width = row.size;
     rowOffset =
         whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
