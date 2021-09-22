@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebviewPage extends StatefulWidget {
-  const WebviewPage();
+  const WebviewPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _WebviewPageState();
 }
@@ -22,7 +23,7 @@ class _WebviewPageState extends State<WebviewPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Webview'),
       ),
       child: WebView(

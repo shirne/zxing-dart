@@ -81,27 +81,28 @@ void main() {
 
   test('testAztecResult', () {
     BitMatrix matrix = BitMatrix.parse(
-        "X X X X X     X X X       X X X     X X X     \n" "X X X     X X X     X X X X     X X X     X X \n" +
-            "  X   X X       X   X   X X X X     X     X X \n" +
-            "  X   X X     X X     X     X   X       X   X \n" +
-            "  X X   X X         X               X X     X \n" +
-            "  X X   X X X X X X X X X X X X X X X     X   \n" +
-            "  X X X X X                       X   X X X   \n" +
-            "  X   X   X   X X X X X X X X X   X X X   X X \n" +
-            "  X   X X X   X               X   X X       X \n" +
-            "  X X   X X   X   X X X X X   X   X X X X   X \n" +
-            "  X X   X X   X   X       X   X   X   X X X   \n" +
-            "  X   X   X   X   X   X   X   X   X   X   X   \n" +
-            "  X X X   X   X   X       X   X   X X   X X   \n" +
-            "  X X X X X   X   X X X X X   X   X X X   X X \n" +
-            "X X   X X X   X               X   X   X X   X \n" +
-            "  X       X   X X X X X X X X X   X   X     X \n" +
-            "  X X   X X                       X X   X X   \n" +
-            "  X X X   X X X X X X X X X X X X X X   X X   \n" +
-            "X     X     X     X X   X X               X X \n" +
-            "X   X X X X X   X X X X X     X   X   X     X \n" +
-            "X X X   X X X X           X X X       X     X \n" +
-            "X X     X X X     X X X X     X X X     X X   \n" +
+        "X X X X X     X X X       X X X     X X X     \n"
+            "X X X     X X X     X X X X     X X X     X X \n"
+            "  X   X X       X   X   X X X X     X     X X \n"
+            "  X   X X     X X     X     X   X       X   X \n"
+            "  X X   X X         X               X X     X \n"
+            "  X X   X X X X X X X X X X X X X X X     X   \n"
+            "  X X X X X                       X   X X X   \n"
+            "  X   X   X   X X X X X X X X X   X X X   X X \n"
+            "  X   X X X   X               X   X X       X \n"
+            "  X X   X X   X   X X X X X   X   X X X X   X \n"
+            "  X X   X X   X   X       X   X   X   X X X   \n"
+            "  X   X   X   X   X   X   X   X   X   X   X   \n"
+            "  X X X   X   X   X       X   X   X X   X X   \n"
+            "  X X X X X   X   X X X X X   X   X X X   X X \n"
+            "X X   X X X   X               X   X   X X   X \n"
+            "  X       X   X X X X X X X X X   X   X     X \n"
+            "  X X   X X                       X X   X X   \n"
+            "  X X X   X X X X X X X X X X X X X X   X X   \n"
+            "X     X     X     X X   X X               X X \n"
+            "X   X X X X X   X X X X X     X   X   X     X \n"
+            "X X X   X X X X           X X X       X     X \n"
+            "X X     X X X     X X X X     X X X     X X   \n"
             "    X X X     X X X       X X X     X X X X   \n",
         "X ",
         "  ");
@@ -120,23 +121,24 @@ void main() {
 
   test('testAztecResultECI', () {
     BitMatrix matrix = BitMatrix.parse(
-        "      X     X X X   X           X     \n" "    X X   X X   X X X X X X X   X     \n" +
-            "    X X                         X   X \n" +
-            "  X X X X X X X X X X X X X X X X X   \n" +
-            "      X                       X       \n" +
-            "      X   X X X X X X X X X   X   X   \n" +
-            "  X X X   X               X   X X X   \n" +
-            "  X   X   X   X X X X X   X   X X X   \n" +
-            "      X   X   X       X   X   X X X   \n" +
-            "  X   X   X   X   X   X   X   X   X   \n" +
-            "X   X X   X   X       X   X   X     X \n" +
-            "  X X X   X   X X X X X   X   X X     \n" +
-            "      X   X               X   X X   X \n" +
-            "      X   X X X X X X X X X   X   X X \n" +
-            "  X   X                       X       \n" +
-            "X X   X X X X X X X X X X X X X X X   \n" +
-            "X X     X   X         X X X       X X \n" +
-            "  X   X   X   X X X X X     X X   X   \n" +
+        "      X     X X X   X           X     \n"
+            "    X X   X X   X X X X X X X   X     \n"
+            "    X X                         X   X \n"
+            "  X X X X X X X X X X X X X X X X X   \n"
+            "      X                       X       \n"
+            "      X   X X X X X X X X X   X   X   \n"
+            "  X X X   X               X   X X X   \n"
+            "  X   X   X   X X X X X   X   X X X   \n"
+            "      X   X   X       X   X   X X X   \n"
+            "  X   X   X   X   X   X   X   X   X   \n"
+            "X   X X   X   X       X   X   X     X \n"
+            "  X X X   X   X X X X X   X   X X     \n"
+            "      X   X               X   X X   X \n"
+            "      X   X X X X X X X X X   X   X X \n"
+            "  X   X                       X       \n"
+            "X X   X X X X X X X X X X X X X X X   \n"
+            "X X     X   X         X X X       X X \n"
+            "  X   X   X   X X X X X     X X   X   \n"
             "X     X       X X   X X X       X     \n",
         "X ",
         "  ");
@@ -148,32 +150,33 @@ void main() {
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors', () {
     BitMatrix matrix = BitMatrix.parse(
-        "" "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n" +
-            "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n" +
-            "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n" +
-            ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n" +
-            "X X X . . X X X X X . . . . . X X . . . X . X . X . X \n" +
-            "X X . . . . . . . . X . . . X . X X X . X . . X . . . \n" +
-            "X X . . X . . . . . X X . . . . . X . . . . X . . X X \n" +
-            ". . . X . X . X . . . . . X X X X X X . . . . . . X X \n" +
-            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n" +
-            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n" +
-            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n" +
-            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n" +
-            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n" +
-            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n" +
-            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n" +
-            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n" +
-            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n" +
-            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n" +
-            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n" +
-            ". . . . X . X X X . . . . X X X X . . X X X X . . . . \n" +
-            ". . X . . X . X . . . X . X X . X X . X . . . X . X . \n" +
-            "X X . . X . . X X X X X X X . . X . X X X X X X X . . \n" +
-            "X . X X . . X X . . . . . X . . . . . . X X . X X X . \n" +
-            "X . . X X . . X X . X . X . . . . X . X . . X . . X . \n" +
-            "X . X . X . . X . X X X X X X X X . X X X X . . X X . \n" +
-            "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n" +
+        ""
+            "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n"
+            "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n"
+            "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n"
+            ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n"
+            "X X X . . X X X X X . . . . . X X . . . X . X . X . X \n"
+            "X X . . . . . . . . X . . . X . X X X . X . . X . . . \n"
+            "X X . . X . . . . . X X . . . . . X . . . . X . . X X \n"
+            ". . . X . X . X . . . . . X X X X X X . . . . . . X X \n"
+            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
+            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
+            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
+            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
+            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
+            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
+            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
+            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
+            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
+            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
+            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
+            ". . . . X . X X X . . . . X X X X . . X X X X . . . . \n"
+            ". . X . . X . X . . . X . X X . X X . X . . . X . X . \n"
+            "X X . . X . . X X X X X X X . . X . X X X X X X X . . \n"
+            "X . X X . . X X . . . . . X . . . . . . X X . X X X . \n"
+            "X . . X X . . X X . X . X . . . . X . X . . X . . X . \n"
+            "X . X . X . . X . X X X X X X X X . X X X X . . X X . \n"
+            "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n"
             "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
         "X ",
         ". ");
@@ -189,32 +192,33 @@ void main() {
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors2', () {
     BitMatrix matrix = BitMatrix.parse(
-        "" ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n" +
-            "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n" +
-            ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n" +
-            "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n" +
-            "X X . X . . X . X X . . . . . X X . . . . . X . . . X \n" +
-            "X . . X . . . . . . X . . . X . X X X X X X X . . . X \n" +
-            "X . . X X . . X . . X X . . . . . X . . . . . X X X . \n" +
-            ". . X X X X . X . . . . . X X X X X X . . . . . . X X \n" +
-            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n" +
-            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n" +
-            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n" +
-            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n" +
-            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n" +
-            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n" +
-            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n" +
-            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n" +
-            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n" +
-            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n" +
-            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n" +
-            ". . X X X X X . X . . . . X X X X . . X X X . X . X . \n" +
-            ". . X X . X . X . . . X . X X . X X . . . . X X . . . \n" +
-            "X . . . X . X . X X X X X X . . X . X X X X X . X . . \n" +
-            ". X . . . X X X . . . . . X . . . . . X X X X X . X . \n" +
-            "X . . X . X X X X . X . X . . . . X . X X . X . . X . \n" +
-            "X . . . X X . X . X X X X X X X X . X X X X . . X X . \n" +
-            ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n" +
+        ""
+            ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n"
+            "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n"
+            ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n"
+            "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n"
+            "X X . X . . X . X X . . . . . X X . . . . . X . . . X \n"
+            "X . . X . . . . . . X . . . X . X X X X X X X . . . X \n"
+            "X . . X X . . X . . X X . . . . . X . . . . . X X X . \n"
+            ". . X X X X . X . . . . . X X X X X X . . . . . . X X \n"
+            "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
+            "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
+            ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
+            ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
+            "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
+            "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
+            "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
+            "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
+            ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
+            "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
+            "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
+            ". . X X X X X . X . . . . X X X X . . X X X . X . X . \n"
+            ". . X X . X . X . . . X . X X . X X . . . . X X . . . \n"
+            "X . . . X . X . X X X X X X . . X . X X X X X . X . . \n"
+            ". X . . . X X X . . . . . X . . . . . X X X X X . X . \n"
+            "X . . X . X X X X . X . X . . . . X . X X . X . . X . \n"
+            "X . . . X X . X . X X X X X X X X . X X X X . . X X . \n"
+            ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n"
             "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
         "X ",
         ". ");

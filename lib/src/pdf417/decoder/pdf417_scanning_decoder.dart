@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
+import '../../checksum_exception.dart';
 import '../../common/bit_matrix.dart';
 import '../../common/decoder_result.dart';
 import '../../common/detector/math_utils.dart';
-
-import '../../checksum_exception.dart';
 import '../../formats_exception.dart';
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
@@ -138,8 +137,8 @@ class PDF417ScanningDecoder {
         if (codeword != null) {
           detectionResultColumn.setCodeword(imageRow, codeword);
           previousStartColumn = startColumn;
-          minCodewordWidth = Math.min(minCodewordWidth, codeword.width);
-          maxCodewordWidth = Math.max(maxCodewordWidth, codeword.width);
+          minCodewordWidth = math.min(minCodewordWidth, codeword.width);
+          maxCodewordWidth = math.max(maxCodewordWidth, codeword.width);
         }
       }
     }
@@ -203,7 +202,7 @@ class PDF417ScanningDecoder {
   static int _getMax(List<int> values) {
     int maxValue = -1;
     for (int value in values) {
-      maxValue = Math.max(maxValue, value);
+      maxValue = math.max(maxValue, value);
     }
     return maxValue;
   }

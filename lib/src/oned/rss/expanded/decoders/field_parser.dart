@@ -24,7 +24,7 @@
  *   http://www.piramidepse.com/
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../../../not_found_exception.dart';
 
@@ -272,7 +272,7 @@ class FieldParser {
   static String _processVariableAI(
       int aiSize, int variableFieldSize, String rawInformation) {
     String ai = rawInformation.substring(0, aiSize);
-    int maxSize = Math.min(rawInformation.length, aiSize + variableFieldSize);
+    int maxSize = math.min(rawInformation.length, aiSize + variableFieldSize);
     String field = rawInformation.substring(aiSize, maxSize);
     String remaining = rawInformation.substring(maxSize);
     String result = '($ai)$field';

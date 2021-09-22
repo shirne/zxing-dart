@@ -22,7 +22,7 @@ class FormCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: label,
           ),
           Expanded(
@@ -33,7 +33,7 @@ class FormCell extends StatelessWidget {
             ),
           ),
           if (isLink)
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Icon(
                 CupertinoIcons.right_chevron,

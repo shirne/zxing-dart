@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class IndexPage extends StatefulWidget {
+  const IndexPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _IndexPageState();
 }
@@ -9,13 +11,13 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('ZXing Demo'),
       ),
       backgroundColor: CupertinoColors.lightBackgroundGray,
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: GridView.count(
             crossAxisCount: 2,
             mainAxisSpacing: 10,
@@ -68,11 +70,11 @@ class IconItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: CupertinoColors.white,
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
@@ -90,7 +92,7 @@ class IconItem extends StatelessWidget {
                 style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle,
               )
             else
-              Text(' ')
+              const Text(' ')
           ],
         ),
       ),

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import '../../binarizer.dart';
@@ -132,7 +132,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   static int _cap(int value, int max) {
-    return value < 2 ? 2 : Math.min(value, max);
+    return value < 2 ? 2 : math.min(value, max);
   }
 
   /// Applies a single threshold to a block of pixels.

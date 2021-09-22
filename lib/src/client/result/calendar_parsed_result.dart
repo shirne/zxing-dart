@@ -83,7 +83,7 @@ class CalendarParsedResult extends ParsedResult {
 
   /// @return start time
   /// @deprecated use {@link #getStartTimestamp()}
-  @deprecated
+  @Deprecated('use [getStartTimestamp]')
   DateTime get start => DateTime.fromMillisecondsSinceEpoch(_start);
 
   /// @return start time
@@ -95,7 +95,7 @@ class CalendarParsedResult extends ParsedResult {
 
   /// @return event end [Date], or `null` if event has no duration
   /// @deprecated use {@link #getEndTimestamp()}
-  @deprecated
+  @Deprecated('use [getEndTimestamp]')
   DateTime? get end =>
       _end < 0 ? null : DateTime.fromMillisecondsSinceEpoch(_end);
 

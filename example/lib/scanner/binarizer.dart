@@ -12,12 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
 
-import '../models/utils.dart';
 import '../models/image_source.dart';
+import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class BinarizerPage extends StatefulWidget {
-  const BinarizerPage();
+  const BinarizerPage({Key? key}) : super(key: key);
 
   @override
   State<BinarizerPage> createState() => _BinarizerPageState();
@@ -36,7 +36,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
   takePicture() async {
     XFile? picture =
         await Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
-      return TakePhoto();
+      return const TakePhoto();
     }));
     if (picture != null) {
       setState(() {
@@ -132,16 +132,14 @@ class _BinarizerPageState extends State<BinarizerPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Binarizer'),
       ),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -149,25 +147,23 @@ class _BinarizerPageState extends State<BinarizerPage> {
                     onPressed: () {
                       loadFile();
                     },
-                    child: Text('file...'),
+                    child: const Text('file...'),
                   ),
                   CupertinoButton.filled(
                     onPressed: () {
                       takePicture();
                     },
-                    child: Text('Camera...'),
+                    child: const Text('Camera...'),
                   )
                 ],
               ),
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               if (bufferImage != null)
                 Padding(
                   child: Image(
                     image: RgbaImage.fromBufferImage(bufferImage!, scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (grayImage != null)
                 Padding(
@@ -176,7 +172,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
                         BufferImage.fromGray(grayImage!),
                         scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (deNoiseImage != null)
                 Padding(
@@ -185,7 +181,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
                         BufferImage.fromGray(deNoiseImage!),
                         scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (binaryImage != null)
                 Padding(
@@ -194,7 +190,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
                         BufferImage.fromGray(binaryImage!),
                         scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (hybridBinaryImage != null)
                 Padding(
@@ -203,7 +199,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
                         BufferImage.fromGray(hybridBinaryImage!),
                         scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (inverseImage != null)
                 Padding(
@@ -212,9 +208,9 @@ class _BinarizerPageState extends State<BinarizerPage> {
                         BufferImage.fromGray(inverseImage!),
                         scale: 1),
                   ),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                 ),
-              if (imageLoadStatus == 1) CircularProgressIndicator(),
+              if (imageLoadStatus == 1) const CircularProgressIndicator(),
             ],
           ),
         ),
@@ -224,6 +220,8 @@ class _BinarizerPageState extends State<BinarizerPage> {
 }
 
 class TakePhoto extends StatefulWidget {
+  const TakePhoto({Key? key}) : super(key: key);
+
   @override
   State<TakePhoto> createState() => _TakePhotoState();
 }
@@ -275,7 +273,7 @@ class _TakePhotoState extends State<TakePhoto> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Camera'),
       ),
       child: Center(
@@ -286,9 +284,9 @@ class _TakePhotoState extends State<TakePhoto> {
                 child: Stack(
                   children: [
                     Align(
-                      alignment: Alignment(0, 0.7),
+                      alignment: const Alignment(0, 0.7),
                       child: CupertinoIconButton(
-                        icon: Icon(CupertinoIcons.camera),
+                        icon: const Icon(CupertinoIcons.camera),
                         onPressed: takePicture,
                       ),
                     )

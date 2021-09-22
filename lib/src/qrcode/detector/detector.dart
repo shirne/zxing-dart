@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../common/bit_matrix.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/detector_result.dart';
 import '../../common/grid_sampler.dart';
 import '../../common/perspective_transform.dart';
-import '../../qrcode/decoder/version.dart';
-
 import '../../decode_hint_type.dart';
 import '../../not_found_exception.dart';
+import '../../qrcode/decoder/version.dart';
 import '../../result_point.dart';
 import '../../result_point_callback.dart';
 import 'alignment_pattern.dart';
@@ -354,16 +353,16 @@ class Detector {
     // Look for an alignment pattern (3 modules in size) around where it
     // should be
     int allowance = (allowanceFactor * overallEstModuleSize).toInt();
-    int alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
+    int alignmentAreaLeftX = math.max(0, estAlignmentX - allowance);
     int alignmentAreaRightX =
-        Math.min(_image.width - 1, estAlignmentX + allowance);
+        math.min(_image.width - 1, estAlignmentX + allowance);
     if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
       throw NotFoundException.instance;
     }
 
-    int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
+    int alignmentAreaTopY = math.max(0, estAlignmentY - allowance);
     int alignmentAreaBottomY =
-        Math.min(_image.height - 1, estAlignmentY + allowance);
+        math.min(_image.height - 1, estAlignmentY + allowance);
     if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
       throw NotFoundException.instance;
     }

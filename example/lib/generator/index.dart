@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/qrcode.dart';
 
-import '../models/result_generator.dart';
-import '../widgets/list_tile_group.dart';
-import '../widgets/cupertino_list_tile.dart';
 import '../models/qrcode_style.dart';
+import '../models/result_generator.dart';
+import '../widgets/cupertino_list_tile.dart';
+import '../widgets/list_tile_group.dart';
 import '../widgets/type_picker.dart';
 import 'geo_form.dart';
 import 'sms_form.dart';
+import 'text_form.dart';
 import 'vcard_form.dart';
 import 'wifi_form.dart';
-import 'text_form.dart';
 
 class IndexPage extends StatefulWidget {
+  const IndexPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _IndexPageState();
 }
@@ -146,7 +148,7 @@ class _IndexPageState extends State<IndexPage> {
         barrierDismissible: true,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text('qrcode'),
+            title: const Text('qrcode'),
             content: AspectRatio(
               aspectRatio: 1,
               child: Image(
@@ -165,10 +167,10 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Generator'),
+        middle: const Text('Generator'),
         trailing: CupertinoButton(
-          padding: EdgeInsets.all(0),
-          child: Text('Create'),
+          padding: const EdgeInsets.all(0),
+          child: const Text('Create'),
           onPressed: () {
             createQrCode();
           },
@@ -177,13 +179,13 @@ class _IndexPageState extends State<IndexPage> {
       backgroundColor: Colors.black12,
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
               ListTileGroup(
                 children: [
                   CupertinoListTile(
-                    title: Text('内容类型'),
+                    title: const Text('内容类型'),
                     onTap: () {
                       setResult();
                     },
@@ -191,7 +193,7 @@ class _IndexPageState extends State<IndexPage> {
                   ),
                   CupertinoListTile(
                     onTap: setStyle,
-                    title: Text('二维码样式'),
+                    title: const Text('二维码样式'),
                     trailing: Text(style.name),
                     isLink: true,
                   ),

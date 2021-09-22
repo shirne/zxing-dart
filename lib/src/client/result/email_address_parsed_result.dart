@@ -35,9 +35,8 @@ class EmailAddressParsedResult extends ParsedResult {
 
   /// @return first elements of [tos] or `null` if none
   /// @deprecated use [tos]
-  @deprecated
-  String? get emailAddress =>
-      _tos == null || _tos!.isEmpty ? null : _tos![0];
+  @Deprecated('use [tos]')
+  String? get emailAddress => _tos == null || _tos!.isEmpty ? null : _tos![0];
 
   List<String>? get tos => _tos;
 
@@ -62,7 +61,7 @@ class EmailAddressParsedResult extends ParsedResult {
 
   /// @return "mailto:"
   /// @deprecated without replacement
-  @deprecated
+  @Deprecated('no replacement')
   String get mailtoURI => "mailto:";
 
   @override

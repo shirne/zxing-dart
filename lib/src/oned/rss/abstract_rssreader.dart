@@ -15,7 +15,6 @@
  */
 
 import '../../common/detector/math_utils.dart';
-
 import '../../not_found_exception.dart';
 import '../one_dreader.dart';
 
@@ -79,7 +78,7 @@ abstract class AbstractRSSReader extends OneDReader {
   /// @return sum of values
   /// @deprecated call {@link MathUtils#sum(List<int>)}
   // @protected
-  @deprecated
+  @Deprecated('call [MathUtils::sum]')
   static int count(List<int> array) {
     return MathUtils.sum(array);
   }

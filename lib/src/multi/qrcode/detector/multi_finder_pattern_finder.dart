@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
 import 'dart:core';
+import 'dart:math' as math;
 
 import '../../../common/bit_matrix.dart';
+import '../../../decode_hint_type.dart';
+import '../../../not_found_exception.dart';
 import '../../../qrcode/detector/finder_pattern.dart';
 import '../../../qrcode/detector/finder_pattern_finder.dart';
 import '../../../qrcode/detector/finder_pattern_info.dart';
-import '../../../decode_hint_type.dart';
-import '../../../not_found_exception.dart';
 import '../../../result_point.dart';
 import '../../../result_point_callback.dart';
 
@@ -130,7 +130,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
 
         // Compare the expected module sizes; if they are really off, skip
         double vModSize12 = (p1.estimatedModuleSize - p2.estimatedModuleSize) /
-            Math.min(p1.estimatedModuleSize, p2.estimatedModuleSize);
+            math.min(p1.estimatedModuleSize, p2.estimatedModuleSize);
         double vModSize12A =
             (p1.estimatedModuleSize - p2.estimatedModuleSize).abs();
         if (vModSize12A > _DIFF_MODSIZE_CUTOFF &&
@@ -149,7 +149,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           // Compare the expected module sizes; if they are really off, skip
           double vModSize23 =
               (p2.estimatedModuleSize - p3.estimatedModuleSize) /
-                  Math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
+                  math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
           double vModSize23A =
               (p2.estimatedModuleSize - p3.estimatedModuleSize).abs();
           if (vModSize23A > _DIFF_MODSIZE_CUTOFF &&
@@ -177,15 +177,15 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           }
 
           // Calculate the difference of the edge lengths in percent
-          double vABBC = ((dA - dB) / Math.min(dA, dB)).abs();
+          double vABBC = ((dA - dB) / math.min(dA, dB)).abs();
           if (vABBC >= 0.1) {
             continue;
           }
 
           // Calculate the diagonal length by assuming a 90° angle at topleft
-          double dCpy = Math.sqrt(dA * dA + dB * dB);
+          double dCpy = math.sqrt(dA * dA + dB * dB);
           // Compare to the real distance in %
-          double vPyC = ((dC - dCpy) / Math.min(dC, dCpy)).abs();
+          double vPyC = ((dC - dCpy) / math.min(dC, dCpy)).abs();
 
           if (vPyC >= 0.1) {
             continue;

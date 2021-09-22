@@ -17,7 +17,7 @@ Future<bool?> alert<bool>(BuildContext context, String message,
       return Align(
         alignment: Alignment.center,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 200, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 200, horizontal: 50),
           child: CupertinoAlertDialog(
             title: title == null ? null : Text(title),
             content: Column(
@@ -29,7 +29,7 @@ Future<bool?> alert<bool>(BuildContext context, String message,
             actions: actions ??
                 [
                   CupertinoButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
@@ -54,7 +54,7 @@ class IsoMessage {
 Future<List<Result>?> decodeImageInIsolate(
     Uint8List image, int width, int height,
     {bool isRgb = true}) async {
-  if(kIsWeb){
+  if (kIsWeb) {
     return isRgb
         ? decodeImage(IsoMessage(null, image, width, height))
         : decodeCamera(IsoMessage(null, image, width, height));
@@ -74,11 +74,9 @@ Future<List<Result>?> decodeImageInIsolate(
 
   IsoMessage message = IsoMessage(port.sendPort, image, width, height);
   if (isRgb) {
-    Isolate.spawn<IsoMessage>(decodeImage, message,
-        debugName: "decodeImage");
+    Isolate.spawn<IsoMessage>(decodeImage, message, debugName: "decodeImage");
   } else {
-    Isolate.spawn<IsoMessage>(decodeCamera, message,
-        debugName: "decodeCamera");
+    Isolate.spawn<IsoMessage>(decodeCamera, message, debugName: "decodeCamera");
   }
 
   return complete.future;

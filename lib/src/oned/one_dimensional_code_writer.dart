@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../common/bit_matrix.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 
@@ -41,8 +40,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     }
 
     if (width < 0 || height < 0) {
-      throw Exception(
-          "Negative size is not allowed. Input: $width" 'x$height');
+      throw Exception("Negative size is not allowed. Input: $width" 'x$height');
     }
     List<BarcodeFormat>? supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {
@@ -66,8 +64,8 @@ abstract class OneDimensionalCodeWriter implements Writer {
     int inputWidth = code.length;
     // Add quiet zone on both sides.
     int fullWidth = inputWidth + sidesMargin;
-    int outputWidth = Math.max(width, fullWidth);
-    int outputHeight = Math.max(1, height);
+    int outputWidth = math.max(width, fullWidth);
+    int outputHeight = math.max(1, height);
 
     int multiple = outputWidth ~/ fullWidth;
     int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;

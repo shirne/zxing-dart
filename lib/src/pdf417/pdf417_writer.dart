@@ -15,13 +15,12 @@
  */
 
 import 'dart:convert';
-import 'dart:math' as Math;
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import '../../common.dart';
-import '../common/bit_matrix.dart';
-
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'encoder/compaction.dart';
@@ -97,7 +96,7 @@ class PDF417Writer implements Writer {
 
     int scaleX = width ~/ originalScale[0].length;
     int scaleY = height ~/ originalScale.length;
-    int scale = Math.min(scaleX, scaleY);
+    int scale = math.min(scaleX, scaleY);
 
     if (scale > 1) {
       List<Uint8List> scaledMatrix =

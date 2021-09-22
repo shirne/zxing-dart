@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../common/bit_matrix.dart';
 import '../../common/detector/white_rectangle_detector.dart';
 import '../../common/detector_result.dart';
 import '../../common/grid_sampler.dart';
-
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 
@@ -32,8 +31,7 @@ class Detector {
   final BitMatrix _image;
   final WhiteRectangleDetector _rectangleDetector;
 
-  Detector(this._image)
-      : _rectangleDetector = WhiteRectangleDetector(_image);
+  Detector(this._image) : _rectangleDetector = WhiteRectangleDetector(_image);
 
   /// <p>Detects a Data Matrix Code in an image.</p>
   ///
@@ -67,7 +65,7 @@ class Detector {
     if (4 * dimensionTop < 6 * dimensionRight &&
         4 * dimensionRight < 6 * dimensionTop) {
       // The matrix is square
-      dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
+      dimensionTop = dimensionRight = math.max(dimensionTop, dimensionRight);
     }
 
     BitMatrix bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight,

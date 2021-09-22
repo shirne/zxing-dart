@@ -35,12 +35,11 @@ class FinderPattern {
   List<ResultPoint> get resultPoints => _resultPoints;
 
   @override
-  operator ==(Object o) {
-    if (o is! FinderPattern) {
+  operator ==(Object other) {
+    if (other is! FinderPattern) {
       return false;
     }
-    FinderPattern that = o;
-    return _value == that._value;
+    return _value == other._value;
   }
 
   @override

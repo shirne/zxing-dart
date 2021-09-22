@@ -31,7 +31,7 @@ class URIParsedResult extends ParsedResult {
   /// @return true if the URI contains suspicious patterns that may suggest it intends to
   ///  mislead the user about its true nature
   /// @deprecated see {@link URIResultParser#isPossiblyMaliciousURI(String)}
-  @deprecated
+  @Deprecated('see [URIResultParser::isPossiblyMaliciousURI]')
   bool isPossiblyMaliciousURI() {
     return URIResultParser.isPossiblyMaliciousURI(uri);
   }

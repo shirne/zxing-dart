@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../common/bit_matrix.dart';
-
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 
@@ -51,10 +50,10 @@ class BoundingBox {
     _bottomLeft = bottomLeft;
     _topRight = topRight;
     _bottomRight = bottomRight;
-    _minX = Math.min(topLeft.x.toInt(), bottomLeft.x.toInt());
-    _maxX = Math.max(topRight.x.toInt(), bottomRight.x.toInt());
-    _minY = Math.min(topLeft.y.toInt(), topRight.y.toInt());
-    _maxY = Math.max(bottomLeft.y.toInt(), bottomRight.y.toInt());
+    _minX = math.min(topLeft.x.toInt(), bottomLeft.x.toInt());
+    _maxX = math.max(topRight.x.toInt(), bottomRight.x.toInt());
+    _minY = math.min(topLeft.y.toInt(), topRight.y.toInt());
+    _maxY = math.max(bottomLeft.y.toInt(), bottomRight.y.toInt());
   }
 
   BoundingBox.copy(BoundingBox boundingBox)

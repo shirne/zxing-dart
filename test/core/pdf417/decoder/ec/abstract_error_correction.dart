@@ -16,11 +16,11 @@
 
 import 'dart:math';
 
-import '../../../common/reedsolomon/reed_solomon.dart' as ReedSolomon;
+import '../../../common/reedsolomon/reed_solomon.dart' as reed_solomon;
 
 abstract class AbstractErrorCorrectionTestCase {
   static void corrupt(List<int> received, int howMany, Random random) {
-    ReedSolomon.corrupt(received, howMany, random, 929);
+    reed_solomon.corrupt(received, howMany, random, 929);
   }
 
   static List<int> erase(List<int> received, int howMany, Random random) {

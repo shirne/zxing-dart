@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../../common/bit_matrix.dart';
+import 'dart:math' as math;
 
 import '../../binary_bitmap.dart';
+import '../../common/bit_matrix.dart';
 import '../../decode_hint_type.dart';
 import '../../result_point.dart';
 import 'pdf417_detector_result.dart';
@@ -106,10 +105,10 @@ class Detector {
         column = 0;
         for (List<ResultPoint?> barcodeCoordinate in barcodeCoordinates) {
           if (barcodeCoordinate[1] != null) {
-            row = Math.max(row, barcodeCoordinate[1]!.y).toInt();
+            row = math.max(row, barcodeCoordinate[1]!.y).toInt();
           }
           if (barcodeCoordinate[3] != null) {
-            row = Math.max(row, barcodeCoordinate[3]!.y.toInt());
+            row = math.max(row, barcodeCoordinate[3]!.y.toInt());
           }
         }
         row += _ROW_STEP;

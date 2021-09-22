@@ -407,11 +407,10 @@ class BitMatrix {
   int get rowSize => _rowSize;
 
   @override
-  operator ==(Object o) {
-    if (o is! BitMatrix) {
+  operator ==(Object other) {
+    if (other is! BitMatrix) {
       return false;
     }
-    BitMatrix other = o;
     return _width == other._width &&
         _height == other._height &&
         _rowSize == other._rowSize &&

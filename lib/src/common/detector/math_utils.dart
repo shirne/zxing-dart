@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import 'package:fixnum/fixnum.dart';
 
@@ -52,7 +52,7 @@ class MathUtils {
   static double distance(double aX, double aY, double bX, double bY) {
     double xDiff = aX - bX;
     double yDiff = aY - bY;
-    return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+    return math.sqrt(xDiff * xDiff + yDiff * yDiff);
   }
 
   /// @param array values to sum

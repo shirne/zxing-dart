@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:buffer_image/buffer_image.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:buffer_image/buffer_image.dart';
-import 'package:camera/camera.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 
 import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage();
+  const CameraPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _CameraPageState();
 }
@@ -116,20 +117,20 @@ class _CameraPageState extends State<CameraPage> {
   Icon getBolt() {
     switch (_flashMode) {
       case FlashMode.off:
-        return Icon(CupertinoIcons.bolt);
+        return const Icon(CupertinoIcons.bolt);
       case FlashMode.always:
-        return Icon(CupertinoIcons.bolt_fill);
+        return const Icon(CupertinoIcons.bolt_fill);
       case FlashMode.auto:
-        return Icon(CupertinoIcons.bolt_badge_a);
+        return const Icon(CupertinoIcons.bolt_badge_a);
       case FlashMode.torch:
-        return Icon(CupertinoIcons.bolt_circle_fill);
+        return const Icon(CupertinoIcons.bolt_circle_fill);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Camera'),
       ),
       child: Center(
@@ -140,23 +141,23 @@ class _CameraPageState extends State<CameraPage> {
                 child: Stack(
                   children: [
                     Align(
-                      alignment: Alignment(0, 0.7),
+                      alignment: const Alignment(0, 0.7),
                       child: CupertinoIconButton(
                         icon: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (isDetecting) CupertinoActivityIndicator(),
-                            Icon(CupertinoIcons.qrcode_viewfinder),
+                            if (isDetecting) const CupertinoActivityIndicator(),
+                            const Icon(CupertinoIcons.qrcode_viewfinder),
                           ],
                         ),
                         onPressed: onCameraView,
                       ),
                     ),
                     Align(
-                      alignment: Alignment(1, -1),
+                      alignment: const Alignment(1, -1),
                       child: Padding(
-                        padding: EdgeInsets.only(right: 20, top: 80),
+                        padding: const EdgeInsets.only(right: 20, top: 80),
                         child: CupertinoIconButton(
                           icon: getBolt(),
                           onPressed: changeBoltMode,

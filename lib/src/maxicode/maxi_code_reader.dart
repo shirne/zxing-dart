@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../common/bit_matrix.dart';
-import '../common/decoder_result.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
+import '../common/bit_matrix.dart';
+import '../common/decoder_result.dart';
 import '../decode_hint_type.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
@@ -81,7 +80,7 @@ class MaxiCodeReader implements Reader {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
         int ix = left +
-            Math.min(
+            math.min(
                 (x * width + width ~/ 2 + (y & 0x01) * width ~/ 2) ~/
                     _MATRIX_WIDTH,
                 width);

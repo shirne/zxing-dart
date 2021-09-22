@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../common/bit_array.dart';
-import '../common/detector/math_utils.dart';
-import '../common/string_builder.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
+import '../common/bit_array.dart';
+import '../common/detector/math_utils.dart';
+import '../common/string_builder.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
+import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
-import '../result.dart';
 import 'one_dreader.dart';
 
 /// Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
@@ -169,7 +168,7 @@ class Code39Reader extends OneDReader {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
           if (_toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
-              row.isRange(Math.max(0, patternStart - ((i - patternStart) ~/ 2)),
+              row.isRange(math.max(0, patternStart - ((i - patternStart) ~/ 2)),
                   patternStart, false)) {
             return [patternStart, i];
           }

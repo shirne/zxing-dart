@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
+import 'dart:convert';
 /*
  * This file has been modified from its original form in Barcode4J.
  */
 
-import 'dart:math' as Math;
-import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import '../../common/character_set_eci.dart';
 import '../../common/string_builder.dart';
-
 import '../../writer_exception.dart';
 import 'compaction.dart';
 
@@ -363,7 +362,7 @@ class PDF417HighLevelEncoder {
     BigInt num0 = BigInt.from(0);
     while (idx < count) {
       tmp.clear();
-      int len = Math.min(44, count - idx);
+      int len = math.min(44, count - idx);
       String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
       BigInt bigint = BigInt.parse(part);
       do {

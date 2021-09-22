@@ -15,7 +15,6 @@
  */
 
 import '../../common/detector/math_utils.dart';
-
 import 'error_correction_level.dart';
 
 /// Encapsulates a QR Code's format information, including the data mask used and
@@ -141,11 +140,10 @@ class FormatInformation {
   }
 
   @override
-  operator ==(Object o) {
-    if (o is! FormatInformation) {
+  operator ==(Object other) {
+    if (other is! FormatInformation) {
       return false;
     }
-    FormatInformation other = o;
     return _errorCorrectionLevel == other._errorCorrectionLevel &&
         _dataMask == other._dataMask;
   }

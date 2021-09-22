@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
-import '../widgets/list_tile_group.dart';
 import '../widgets/form_cell.dart';
+import '../widgets/list_tile_group.dart';
 
 class WIFIForm extends StatefulWidget {
   final WifiParsedResult result;
@@ -65,15 +65,15 @@ class _TextFormState extends State<WIFIForm> {
     return ListTileGroup(
       children: [
         FormCell(
-          label: Text('SSID'),
+          label: const Text('SSID'),
           field: CupertinoTextField(controller: _ssidController),
         ),
         FormCell(
-          label: Text('Password'),
+          label: const Text('Password'),
           field: CupertinoTextField(controller: _passController),
         ),
         FormCell(
-          label: Text('Type'),
+          label: const Text('Type'),
           field: GestureDetector(
             onTap: selectType,
             child: Text(widget.result.networkEncryption),

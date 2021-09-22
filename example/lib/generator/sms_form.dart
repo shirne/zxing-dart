@@ -1,9 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
-import '../widgets/form_cell.dart';
 import '../widgets/cupertino_list_tile.dart';
+import '../widgets/form_cell.dart';
 import '../widgets/list_tile_group.dart';
 
 class SMSForm extends StatefulWidget {
@@ -42,14 +41,14 @@ class _SMSFormState extends State<SMSForm> {
     return ListTileGroup(
       children: [
         FormCell(
-          label: Text('phone No.'),
+          label: const Text('phone No.'),
           field: CupertinoTextField(controller: _numController),
         ),
         FormCell(
-          label: Text('subject'),
+          label: const Text('subject'),
           field: CupertinoTextField(controller: _subController),
         ),
-        CupertinoListTile(
+        const CupertinoListTile(
           title: Text('body'),
         ),
         CupertinoTextField(

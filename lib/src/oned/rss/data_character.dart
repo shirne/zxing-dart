@@ -31,12 +31,11 @@ class DataCharacter {
   }
 
   @override
-  operator ==(Object o) {
-    if (o is! DataCharacter) {
+  operator ==(Object other) {
+    if (other is! DataCharacter) {
       return false;
     }
-    DataCharacter that = o;
-    return _value == that._value && _checksumPortion == that._checksumPortion;
+    return _value == other._value && _checksumPortion == other._checksumPortion;
   }
 
   @override

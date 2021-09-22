@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'home/index.dart' as home;
 import 'generator/index.dart' as generator;
+import 'home/index.dart' as home;
 import 'scanner/index.dart' as scanner;
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return const CupertinoApp(
       title: 'ZXing Demo',
       theme: CupertinoThemeData(primaryColor: Colors.red),
       home: MyHomePage(title: 'ZXing Demo'),
@@ -54,11 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (BuildContext context) {
             switch (index) {
               case 1:
-                return scanner.IndexPage();
+                return const scanner.IndexPage();
               case 2:
-                return generator.IndexPage();
+                return const generator.IndexPage();
               default:
-                return home.IndexPage();
+                return const home.IndexPage();
             }
           },
         );

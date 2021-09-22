@@ -63,8 +63,9 @@ void main() {
 
   test('testStartEnd', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DTEND:20080505T234555Z\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DTEND:20080505T234555Z\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -75,8 +76,9 @@ void main() {
 
   test('testNoVCalendar', () {
     doTest(
-        "BEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DTEND:20080505T234555Z\r\n" +
+        "BEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DTEND:20080505T234555Z\r\n"
             "END:VEVENT",
         null,
         null,
@@ -87,7 +89,8 @@ void main() {
 
   test('testStart', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -98,8 +101,9 @@ void main() {
 
   test('testDuration', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DURATION:P1D\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DURATION:P1D\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -107,8 +111,9 @@ void main() {
         "20080504T123456Z",
         "20080505T123456Z");
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DURATION:P1DT2H3M4S\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DURATION:P1DT2H3M4S\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -119,8 +124,9 @@ void main() {
 
   test('testSummary', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "SUMMARY:foo\r\n" +
-            "DTSTART:20080504T123456Z\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "SUMMARY:foo\r\n"
+            "DTSTART:20080504T123456Z\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         "foo",
@@ -131,8 +137,9 @@ void main() {
 
   test('testLocation', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "LOCATION:Miami\r\n" +
-            "DTSTART:20080504T123456Z\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "LOCATION:Miami\r\n"
+            "DTSTART:20080504T123456Z\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -143,8 +150,9 @@ void main() {
 
   test('testDescription', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DESCRIPTION:This is a test\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DESCRIPTION:This is a test\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         "This is a test",
         null,
@@ -152,8 +160,9 @@ void main() {
         "20080504T123456Z",
         null);
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "DESCRIPTION:This is a test\r\n\t with a continuation\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "DESCRIPTION:This is a test\r\n\t with a continuation\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         "This is a test with a continuation",
         null,
@@ -164,8 +173,9 @@ void main() {
 
   test('testGeo', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "GEO:-12.345;-45.678\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "GEO:-12.345;-45.678\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -181,8 +191,9 @@ void main() {
   test('testBadGeo', () {
     // Not parsed as VEVENT
     Result fakeResult = Result(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "GEO:-12.345\r\n" +
-            "END:VEVENT\r\nEND:VCALENDAR",
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+        "GEO:-12.345\r\n"
+        "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
         BarcodeFormat.QR_CODE);
@@ -192,8 +203,9 @@ void main() {
 
   test('testOrganizer', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "ORGANIZER:mailto:bob@example.org\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "ORGANIZER:mailto:bob@example.org\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -208,9 +220,10 @@ void main() {
 
   test('testAttendees', () {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" "DTSTART:20080504T123456Z\r\n" +
-            "ATTENDEE:mailto:bob@example.org\r\n" +
-            "ATTENDEE:mailto:alice@example.org\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+            "DTSTART:20080504T123456Z\r\n"
+            "ATTENDEE:mailto:bob@example.org\r\n"
+            "ATTENDEE:mailto:alice@example.org\r\n"
             "END:VEVENT\r\nEND:VCALENDAR",
         null,
         null,
@@ -225,19 +238,20 @@ void main() {
 
   test('testVEventEscapes', () {
     doTest(
-        "BEGIN:VEVENT\n" "CREATED:20111109T110351Z\n" +
-            "LAST-MODIFIED:20111109T170034Z\n" +
-            "DTSTAMP:20111109T170034Z\n" +
-            "UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2\n" +
-            "SUMMARY:Summary line\n" +
-            "CATEGORIES:Private\n" +
-            "DTSTART;TZID=Europe/Vienna:20111110T110000\n" +
-            "DTEND;TZID=Europe/Vienna:20111110T120000\n" +
-            "LOCATION:Location\\, with\\, escaped\\, commas\n" +
-            "DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n\n" +
-            "  \\n\n" +
-            "SEQUENCE:1\n" +
-            "X-MOZ-GENERATION:1\n" +
+        "BEGIN:VEVENT\n"
+            "CREATED:20111109T110351Z\n"
+            "LAST-MODIFIED:20111109T170034Z\n"
+            "DTSTAMP:20111109T170034Z\n"
+            "UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2\n"
+            "SUMMARY:Summary line\n"
+            "CATEGORIES:Private\n"
+            "DTSTART;TZID=Europe/Vienna:20111110T110000\n"
+            "DTEND;TZID=Europe/Vienna:20111110T120000\n"
+            "LOCATION:Location\\, with\\, escaped\\, commas\n"
+            "DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n\n"
+            "  \\n\n"
+            "SEQUENCE:1\n"
+            "X-MOZ-GENERATION:1\n"
             "END:VEVENT",
         "Meeting with a friend\nlook at homepage first\n\n\n  \n",
         "Summary line",
@@ -248,8 +262,9 @@ void main() {
 
   test('testAllDayValueDate', () {
     doTest(
-        "BEGIN:VEVENT\n" "DTSTART;VALUE=DATE:20111110\n" +
-            "DTEND;VALUE=DATE:20111110\n" +
+        "BEGIN:VEVENT\n"
+            "DTSTART;VALUE=DATE:20111110\n"
+            "DTEND;VALUE=DATE:20111110\n"
             "END:VEVENT",
         null,
         null,

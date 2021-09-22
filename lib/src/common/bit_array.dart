@@ -15,7 +15,6 @@
  */
 
 import 'dart:math' as math;
-
 import 'dart:typed_data';
 
 import 'package:fixnum/fixnum.dart';
@@ -298,11 +297,10 @@ class BitArray {
   }
 
   @override
-  operator ==(Object o) {
-    if (o is! BitArray) {
+  operator ==(Object other) {
+    if (other is! BitArray) {
       return false;
     }
-    BitArray other = o;
     return _size == other._size && Utils.arrayEquals(_bits, other._bits);
   }
 

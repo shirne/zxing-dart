@@ -76,7 +76,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
   /// @param startColor unused
   /// @return 9
   /// @deprecated without replacement; intended as an internal-only method
-  @deprecated
+  @Deprecated('not replacement; intended as an internal-only method')
   static int appendPatternDpr(
       List<bool> target, int pos, List<int> pattern, bool startColor) {
     for (int bit in pattern) {

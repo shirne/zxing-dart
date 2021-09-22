@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../common/bit_matrix.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'decoder/error_correction_level.dart';
@@ -44,7 +43,8 @@ class QRCodeWriter implements Writer {
     }
 
     if (width < 0 || height < 0) {
-      throw ArgumentError("Requested dimensions are too small: $width x $height");
+      throw ArgumentError(
+          "Requested dimensions are too small: $width x $height");
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
@@ -75,10 +75,10 @@ class QRCodeWriter implements Writer {
     int inputHeight = input.height;
     int qrWidth = inputWidth + (quietZone * 2);
     int qrHeight = inputHeight + (quietZone * 2);
-    int outputWidth = Math.max(width, qrWidth);
-    int outputHeight = Math.max(height, qrHeight);
+    int outputWidth = math.max(width, qrWidth);
+    int outputHeight = math.max(height, qrHeight);
 
-    int multiple = Math.min(outputWidth ~/ qrWidth, outputHeight ~/ qrHeight);
+    int multiple = math.min(outputWidth ~/ qrWidth, outputHeight ~/ qrHeight);
     // Padding includes both the quiet zone and the extra white pixels to accommodate the requested
     // dimensions. For example, if input is 25x25 the QR will be 33x33 including the quiet zone.
     // If the requested size is 200x160, the multiple will be 4, for a QR of 132x132. These will

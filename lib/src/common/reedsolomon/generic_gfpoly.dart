@@ -40,7 +40,7 @@ class GenericGFPoly {
       : assert(coefficients.isNotEmpty, 'IllegalArgument'),
         _coefficients = Int32List.fromList(
             coefficients.skipWhile((value) => value == 0).toList()) {
-    if (this._coefficients.isEmpty) {
+    if (_coefficients.isEmpty) {
       _coefficients = Int32List(1);
     }
   }

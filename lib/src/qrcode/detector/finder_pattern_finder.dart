@@ -15,7 +15,6 @@
  */
 
 import '../../common/bit_matrix.dart';
-
 import '../../decode_hint_type.dart';
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
@@ -218,13 +217,13 @@ class FinderPatternFinder {
   }
 
   //@protected
-  @deprecated
+  @Deprecated('no message.')
   void clearCounts(List<int> counts) {
     doClearCounts(counts);
   }
 
   //@protected
-  @deprecated
+  @Deprecated('no message.')
   void shiftCounts2(List<int> stateCount) {
     doShiftCounts2(stateCount);
   }

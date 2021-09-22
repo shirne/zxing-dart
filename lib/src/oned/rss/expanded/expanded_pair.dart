@@ -49,14 +49,13 @@ class ExpandedPair {
   }
 
   @override
-  operator ==(Object o) {
-    if (o is! ExpandedPair) {
+  operator ==(Object other) {
+    if (other is! ExpandedPair) {
       return false;
     }
-    ExpandedPair that = o;
-    return (_leftChar == that._leftChar) &&
-        (_rightChar == that._rightChar) &&
-        (_finderPattern == that._finderPattern);
+    return (_leftChar == other._leftChar) &&
+        (_rightChar == other._rightChar) &&
+        (_finderPattern == other._finderPattern);
   }
 
   @override

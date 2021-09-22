@@ -37,12 +37,12 @@ class PDF417Common {
   /// @param moduleBitCount values to sum
   /// @return sum of values
   /// @deprecated call {@link MathUtils#sum(List<int>)}
-  @deprecated
+  @Deprecated('call [MathUtils.sum]')
   static int getBitCountSum(List<int> moduleBitCount) {
     return MathUtils.sum(moduleBitCount);
   }
 
-  @deprecated
+  @Deprecated('no message.')
   static List<int> toIntArray(List<int>? list) {
     if (list == null || list.isEmpty) {
       return _EMPTY_INT_ARRAY;

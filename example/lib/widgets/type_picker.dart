@@ -45,11 +45,11 @@ Future<T?>? pickerType<T>(BuildContext context, List<T> values, T value) {
       return Align(
         alignment: Alignment.center,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 200, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 200, horizontal: 50),
           child: CupertinoPopupSurface(
             child: Column(
               children: [
-                Text(
+                const Text(
                   '请选择',
                   style: TextStyle(
                     height: 2.4,
@@ -68,7 +68,7 @@ Future<T?>? pickerType<T>(BuildContext context, List<T> values, T value) {
                   ),
                 ),
                 CupertinoButton(
-                  child: Text('确定'),
+                  child: const Text('确定'),
                   onPressed: () {
                     Navigator.of(context).pop(value);
                   },

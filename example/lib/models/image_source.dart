@@ -1,6 +1,6 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:math' as Math;
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -141,7 +141,7 @@ class ImageLuminanceSource extends LuminanceSource {
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.
-    var newImage = image.copy()..rotate(Math.pi / 2);
+    var newImage = image.copy()..rotate(math.pi / 2);
 
     // Maintain the cropped region, but rotate it too.
     return ImageLuminanceSource(
@@ -159,14 +159,14 @@ class ImageLuminanceSource extends LuminanceSource {
     int oldCenterY = top + height ~/ 2;
 
     // Rotate 45 degrees counterclockwise.
-    int sourceDimension = Math.max(image.width, image.height);
-    var newImage = image.copy()..rotate(Math.pi / 4);
+    int sourceDimension = math.max(image.width, image.height);
+    var newImage = image.copy()..rotate(math.pi / 4);
 
-    int halfDimension = Math.max(width, height) ~/ 2;
-    int newLeft = Math.max(0, oldCenterX - halfDimension);
-    int newTop = Math.max(0, oldCenterY - halfDimension);
-    int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
-    int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
+    int halfDimension = math.max(width, height) ~/ 2;
+    int newLeft = math.max(0, oldCenterX - halfDimension);
+    int newTop = math.max(0, oldCenterY - halfDimension);
+    int newRight = math.min(sourceDimension - 1, oldCenterX + halfDimension);
+    int newBottom = math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
     return ImageLuminanceSource(
       newImage,

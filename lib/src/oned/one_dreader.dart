@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../binary_bitmap.dart';
 import '../common/bit_array.dart';
@@ -93,7 +93,7 @@ abstract class OneDReader implements Reader {
 
     bool tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    int rowStep = Math.max(1, height >> (tryHarder ? 8 : 5));
+    int rowStep = math.max(1, height >> (tryHarder ? 8 : 5));
     late int maxLines;
     if (tryHarder) {
       maxLines = height; // Look at the whole image, not just the center

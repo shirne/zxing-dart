@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../result_point.dart';
 import '../pdf417_common.dart';
@@ -71,7 +71,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       if (rowDifference == 0) {
         currentRowHeight++;
       } else if (rowDifference == 1) {
-        maxRowHeight = Math.max(maxRowHeight, currentRowHeight);
+        maxRowHeight = math.max(maxRowHeight, currentRowHeight);
         currentRowHeight = 1;
         barcodeRow = codeword.rowNumber;
       } else if (rowDifference < 0 ||
@@ -151,7 +151,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       if (rowDifference == 0) {
         currentRowHeight++;
       } else if (rowDifference == 1) {
-        maxRowHeight = Math.max(maxRowHeight, currentRowHeight);
+        maxRowHeight = math.max(maxRowHeight, currentRowHeight);
         currentRowHeight = 1;
         barcodeRow = codeword.rowNumber;
       } else if (codeword.rowNumber >= barcodeMetadata.rowCount) {

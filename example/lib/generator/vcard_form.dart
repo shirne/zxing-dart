@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
-import '../widgets/form_cell.dart';
 import '../widgets/cupertino_list_tile.dart';
+import '../widgets/form_cell.dart';
 import '../widgets/list_tile_group.dart';
 
 class VCardForm extends StatefulWidget {
@@ -59,26 +59,26 @@ class _TextFormState extends State<VCardForm> {
     return ListTileGroup(
       children: [
         FormCell(
-          label: Text('Name.'),
+          label: const Text('Name.'),
           field: CupertinoTextField(controller: _nameController),
         ),
         FormCell(
-          label: Text('Tel.'),
+          label: const Text('Tel.'),
           field: CupertinoTextField(controller: _telController),
         ),
         FormCell(
-          label: Text('Org.'),
+          label: const Text('Org.'),
           field: CupertinoTextField(controller: _orgController),
         ),
         FormCell(
-          label: Text('Title'),
+          label: const Text('Title'),
           field: CupertinoTextField(controller: _titleController),
         ),
         FormCell(
-          label: Text('Add'),
+          label: const Text('Add'),
           field: CupertinoTextField(controller: _addController),
         ),
-        CupertinoListTile(
+        const CupertinoListTile(
           title: Text('Note'),
         ),
         CupertinoTextField(

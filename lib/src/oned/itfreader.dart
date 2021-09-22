@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../common/bit_array.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
+import '../common/bit_array.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
@@ -209,11 +208,11 @@ class ITFReader extends OneDReader {
   /// @param startPattern index into row of the start or end pattern.
   /// @throws NotFoundException if the quiet zone cannot be found
   void _validateQuietZone(BitArray row, int startPattern) {
-    int quietCount = _narrowLineWidth *
-        10; // expect to find this many pixels of quiet zone
+    int quietCount =
+        _narrowLineWidth * 10; // expect to find this many pixels of quiet zone
 
     // if there are not so many pixel at all let's try as many as possible
-    quietCount = Math.min(quietCount, startPattern);
+    quietCount = math.min(quietCount, startPattern);
 
     for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
       if (row.get(i)) {

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import 'dart:math' as math;
 import 'dart:typed_data';
-import 'dart:math' as Math;
 
 import 'package:image/image.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -130,15 +130,15 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     // Rotate 45 degrees counterclockwise.
     //AffineTransform transform = AffineTransform.getRotateInstance(MINUS_45_IN_RADIANS, oldCenterX, oldCenterY);
 
-    int sourceDimension = Math.max(image.width, image.height);
+    int sourceDimension = math.max(image.width, image.height);
     //BufferedImage rotatedImage = BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
     var newImage = copyRotate(image, 45);
 
-    int halfDimension = Math.max(width, height) ~/ 2;
-    int newLeft = Math.max(0, oldCenterX - halfDimension);
-    int newTop = Math.max(0, oldCenterY - halfDimension);
-    int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
-    int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
+    int halfDimension = math.max(width, height) ~/ 2;
+    int newLeft = math.max(0, oldCenterX - halfDimension);
+    int newTop = math.max(0, oldCenterY - halfDimension);
+    int newRight = math.min(sourceDimension - 1, oldCenterX + halfDimension);
+    int newBottom = math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
     return BufferedImageLuminanceSource(
         newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);

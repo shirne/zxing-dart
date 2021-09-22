@@ -31,7 +31,7 @@ class CupertinoListTile extends StatelessWidget {
           children: <Widget>[
             if (leading != null)
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: leading!,
@@ -49,10 +49,10 @@ class CupertinoListTile extends StatelessWidget {
             ),
             if (trailing != null)
               Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: trailing!),
             if (isLink)
-              Padding(
+              const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Icon(
                     CupertinoIcons.right_chevron,

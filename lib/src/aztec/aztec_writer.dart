@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
 import 'dart:convert';
-
-import '../common/character_set_eci.dart';
-
-import '../common/bit_matrix.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
+import '../common/character_set_eci.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'encoder/aztec_code.dart';
@@ -69,11 +67,11 @@ class AztecWriter implements Writer {
     }
     int inputWidth = input.width;
     int inputHeight = input.height;
-    int outputWidth = Math.max(width, inputWidth);
-    int outputHeight = Math.max(height, inputHeight);
+    int outputWidth = math.max(width, inputWidth);
+    int outputHeight = math.max(height, inputHeight);
 
     int multiple =
-        Math.min(outputWidth ~/ inputWidth, outputHeight ~/ inputHeight);
+        math.min(outputWidth ~/ inputWidth, outputHeight ~/ inputHeight);
     int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
     int topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
 

@@ -117,7 +117,7 @@ void main() {
   });
 
   test('testRoundtrip', () {
-    String toEncode = "\u00f1" "10958" + "\u00f1" + "17160526";
+    String toEncode = "\u00f1" "10958" "\u00f1" "17160526";
     String expected = "1095817160526";
 
     BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
@@ -147,7 +147,7 @@ void main() {
   });
 
   test('testEncodeWithFncsAndNumberInCodesetA', () {
-    String toEncode = "\n" "\u00f1" + "\u00f4" + "1" + "\n";
+    String toEncode = "\n" "\u00f1" "\u00f4" "1" "\n";
 
     String expected = QUIET_SPACE +
         START_CODE_A +

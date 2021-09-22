@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../checksum_exception.dart';
-import '../common/decoder_result.dart';
-import '../common/detector/math_utils.dart';
-import '../formats_exception.dart';
-import '../multi/multiple_barcode_reader.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
+import '../checksum_exception.dart';
+import '../common/decoder_result.dart';
+import '../common/detector/math_utils.dart';
 import '../decode_hint_type.dart';
+import '../formats_exception.dart';
+import '../multi/multiple_barcode_reader.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../result.dart';
@@ -115,13 +114,13 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   }
 
   static int _getMaxCodewordWidth(List<ResultPoint?> p) {
-    return Math.max(
-        Math.max(
+    return math.max(
+        math.max(
             _getMaxWidth(p[0], p[4]),
             _getMaxWidth(p[6], p[2]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN),
-        Math.max(
+        math.max(
             _getMaxWidth(p[1], p[5]),
             _getMaxWidth(p[7], p[3]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
@@ -129,13 +128,13 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   }
 
   static int _getMinCodewordWidth(List<ResultPoint?> p) {
-    return Math.min(
-        Math.min(
+    return math.min(
+        math.min(
             _getMinWidth(p[0], p[4]),
             _getMinWidth(p[6], p[2]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/
                 PDF417Common.MODULES_IN_STOP_PATTERN),
-        Math.min(
+        math.min(
             _getMinWidth(p[1], p[5]),
             _getMinWidth(p[7], p[3]) *
                 PDF417Common.MODULES_IN_CODEWORD ~/

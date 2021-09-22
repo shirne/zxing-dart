@@ -37,11 +37,11 @@ class _GeoFormState extends State<GeoForm> {
     return ListTileGroup(
       children: [
         FormCell(
-          label: Text('latitude'),
+          label: const Text('latitude'),
           field: CupertinoTextField(controller: _latController),
         ),
         FormCell(
-          label: Text('longitude'),
+          label: const Text('longitude'),
           field: CupertinoTextField(controller: _lngController),
         ),
       ],

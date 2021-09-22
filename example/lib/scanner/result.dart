@@ -33,9 +33,9 @@ class _ResultPageState extends State<ResultPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 20),
+                        decoration: const BoxDecoration(
                           border: Border(
                             top: BorderSide(
                               color: CupertinoColors.lightBackgroundGray,
@@ -48,8 +48,8 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: CupertinoColors.inactiveGray,
@@ -60,7 +60,8 @@ class _ResultPageState extends State<ResultPage> {
                       ),
                     ],
                   ),
-                ).toList(),
+                )
+                .toList(),
           ),
         ),
       ),

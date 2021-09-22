@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
+import '../../common/bit_array.dart';
 import '../../common/character_set_eci.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_encoder.dart';
 import '../../common/string_utils.dart';
+import '../../encode_hint_type.dart';
 import '../../qrcode/decoder/mode.dart';
 import '../../qrcode/decoder/version.dart';
-
-import '../../common/bit_array.dart';
-
 import '../../writer_exception.dart';
 import '../decoder/error_correction_level.dart';
-
-import '../../encode_hint_type.dart';
 import 'block_pair.dart';
 import 'byte_matrix.dart';
 import 'mask_util.dart';
@@ -410,8 +407,8 @@ class Encoder {
       Uint8List ecBytes = generateECBytes(dataBytes, numEcBytesInBlock[0]);
       blocks.add(BlockPair(dataBytes, ecBytes));
 
-      maxNumDataBytes = Math.max(maxNumDataBytes, size);
-      maxNumEcBytes = Math.max(maxNumEcBytes, ecBytes.length);
+      maxNumDataBytes = math.max(maxNumDataBytes, size);
+      maxNumEcBytes = math.max(maxNumEcBytes, ecBytes.length);
       dataBytesOffset += numDataBytesInBlock[0];
     }
     if (numDataBytes != dataBytesOffset) {

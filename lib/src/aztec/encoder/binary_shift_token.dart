@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../common/bit_array.dart';
-
 import 'token.dart';
 
 class BinaryShiftToken extends Token {
@@ -39,7 +38,7 @@ class BinaryShiftToken extends Token {
           bitArray.appendBits(_binaryShiftByteCount - 31, 16);
         } else if (i == 0) {
           // 1 <= binaryShiftByteCode <= 62
-          bitArray.appendBits(Math.min(_binaryShiftByteCount, 31), 5);
+          bitArray.appendBits(math.min(_binaryShiftByteCount, 31), 5);
         } else {
           // 32 <= binaryShiftCount <= 62 and i == 31
           bitArray.appendBits(_binaryShiftByteCount - 31, 5);

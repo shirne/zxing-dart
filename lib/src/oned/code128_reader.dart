@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 import 'dart:typed_data';
 
-import '../common/bit_array.dart';
-import '../common/string_builder.dart';
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
+import '../common/bit_array.dart';
+import '../common/string_builder.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
@@ -192,7 +192,7 @@ class Code128Reader extends OneDReader {
           }
           // Look for whitespace before start pattern, >= 50% of width of start pattern
           if (bestMatch >= 0 &&
-              row.isRange(Math.max(0, patternStart - (i - patternStart) ~/ 2),
+              row.isRange(math.max(0, patternStart - (i - patternStart) ~/ 2),
                   patternStart, false)) {
             return [patternStart, i, bestMatch];
           }
@@ -509,7 +509,7 @@ class Code128Reader extends OneDReader {
     // to read off. Would be slightly better to properly read. Here we just skip it:
     nextStart = row.getNextUnset(nextStart);
     if (!row.isRange(nextStart,
-        Math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2), false)) {
+        math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2), false)) {
       throw NotFoundException.instance;
     }
 

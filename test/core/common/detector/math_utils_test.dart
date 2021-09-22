@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
@@ -52,10 +52,10 @@ void main() {
   });
 
   test('testDistance', () {
-    expect(Math.sqrt(8.0), MathUtils.distance(1.0, 2.0, 3.0, 4.0));
+    expect(math.sqrt(8.0), MathUtils.distance(1.0, 2.0, 3.0, 4.0));
     expect(0.0, MathUtils.distance(1.0, 2.0, 1.0, 2.0));
 
-    expect(Math.sqrt(8.0), MathUtils.distance(1, 2, 3, 4));
+    expect(math.sqrt(8.0), MathUtils.distance(1, 2, 3, 4));
     expect(0.0, MathUtils.distance(1, 2, 1, 2));
   });
 

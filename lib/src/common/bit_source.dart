@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 /// This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
@@ -54,7 +53,7 @@ class BitSource {
     // First, read remainder from current byte
     if (_bitOffset > 0) {
       int bitsLeft = 8 - _bitOffset;
-      int toRead = Math.min(numBits, bitsLeft);
+      int toRead = math.min(numBits, bitsLeft);
       int bitsToNotRead = bitsLeft - toRead;
       int mask = (0xFF >> (8 - toRead)) << bitsToNotRead;
       result = (_bytes[_byteOffset] & mask) >> bitsToNotRead;

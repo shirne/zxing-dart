@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
-
-import '../qrcode/encoder/byte_matrix.dart';
-
-import '../common/bit_matrix.dart';
+import 'dart:math' as math;
 
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
 import '../dimension.dart';
 import '../encode_hint_type.dart';
+import '../qrcode/encoder/byte_matrix.dart';
 import '../writer.dart';
 import 'encoder/default_placement.dart';
 import 'encoder/error_correction.dart';
@@ -160,11 +158,11 @@ class DataMatrixWriter implements Writer {
       ByteMatrix matrix, int reqWidth, int reqHeight) {
     int matrixWidth = matrix.width;
     int matrixHeight = matrix.height;
-    int outputWidth = Math.max(reqWidth, matrixWidth);
-    int outputHeight = Math.max(reqHeight, matrixHeight);
+    int outputWidth = math.max(reqWidth, matrixWidth);
+    int outputHeight = math.max(reqHeight, matrixHeight);
 
     int multiple =
-        Math.min(outputWidth ~/ matrixWidth, outputHeight ~/ matrixHeight);
+        math.min(outputWidth ~/ matrixWidth, outputHeight ~/ matrixHeight);
 
     int leftPadding = (outputWidth - (matrixWidth * multiple)) ~/ 2;
     int topPadding = (outputHeight - (matrixHeight * multiple)) ~/ 2;

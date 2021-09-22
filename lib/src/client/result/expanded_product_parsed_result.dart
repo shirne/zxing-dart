@@ -72,12 +72,10 @@ class ExpandedProductParsedResult extends ParsedResult {
       : super(ParsedResultType.PRODUCT);
 
   @override
-  operator ==(Object o) {
-    if (o is! ExpandedProductParsedResult) {
+  operator ==(Object other) {
+    if (other is! ExpandedProductParsedResult) {
       return false;
     }
-
-    ExpandedProductParsedResult other = o;
 
     // todo equal
     return productID == other.productID &&

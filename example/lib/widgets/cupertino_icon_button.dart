@@ -10,7 +10,7 @@ class CupertinoIconButton extends StatelessWidget {
       {Key? key,
       this.icon,
       this.onPressed,
-      this.color = const Color(0),
+      this.color = const Color(0x00000000),
       this.shape = BoxShape.circle})
       : super(key: key);
 

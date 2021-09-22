@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
@@ -27,7 +27,7 @@ import '../bit_matrix.dart';
 ///
 /// @author Sean Owen
 /// @deprecated without replacement since 3.3.0
-@deprecated
+@Deprecated('no replacement since 3.3.0')
 class MonochromeRectangleDetector {
   static const int _MAX_MODULES = 32;
 
@@ -48,8 +48,8 @@ class MonochromeRectangleDetector {
     int width = _image.width;
     int halfHeight = height ~/ 2;
     int halfWidth = width ~/ 2;
-    int deltaY = Math.max(1, height ~/ (_MAX_MODULES * 8));
-    int deltaX = Math.max(1, width ~/ (_MAX_MODULES * 8));
+    int deltaY = math.max(1, height ~/ (_MAX_MODULES * 8));
+    int deltaX = math.max(1, width ~/ (_MAX_MODULES * 8));
 
     int top = 0;
     int bottom = height;

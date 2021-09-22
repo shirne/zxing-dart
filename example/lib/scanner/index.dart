@@ -2,19 +2,21 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
-import 'package:zxing_lib/zxing.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import '../models/utils.dart';
-import 'result.dart';
 import 'binarizer.dart';
 import 'camera.dart';
+import 'result.dart';
 
 class IndexPage extends StatelessWidget {
+  const IndexPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -121,7 +123,7 @@ class _IndexPageState extends State<_IndexPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Scanner'),
       ),
       child: Center(
@@ -129,7 +131,7 @@ class _IndexPageState extends State<_IndexPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CupertinoButton.filled(
@@ -138,7 +140,7 @@ class _IndexPageState extends State<_IndexPage> {
                 openCamera();
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CupertinoButton.filled(
@@ -147,7 +149,7 @@ class _IndexPageState extends State<_IndexPage> {
                 openBinarizer();
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CupertinoButton.filled(
@@ -156,7 +158,7 @@ class _IndexPageState extends State<_IndexPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (isReading) CupertinoActivityIndicator(),
+                    if (isReading) const CupertinoActivityIndicator(),
                     const Text('Image discern')
                   ],
                 ),
@@ -165,13 +167,9 @@ class _IndexPageState extends State<_IndexPage> {
                 openFile();
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text('Multi decode mode'),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 10),
+            const Text('Multi decode mode'),
+            const SizedBox(height: 20),
           ],
         ),
       ),
