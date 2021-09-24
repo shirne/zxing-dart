@@ -278,7 +278,8 @@ class AbstractBlackBoxTestCase {
   static String readFileAsString(File file, Encoding charset) {
     String stringContents = file.readAsStringSync(encoding: charset);
     if (stringContents.endsWith("\n")) {
-      _log.info("String contents of file $file end with a newline. " "This may not be intended and cause a test failure");
+      _log.info("String contents of file $file end with a newline. "
+          "This may not be intended and cause a test failure");
     }
     return stringContents;
   }

@@ -49,8 +49,9 @@ class ReductionAreaScale extends Dispatch {
             start_w >= lef_w &&
             start_w < rig_w) {
           newByte[index] = emptyByte[areaSize++];
-        } else
+        } else {
           newByte[index] = 255;
+        }
       }
     }
     return grayScaleDispatch.dispatch(newByte, width, height, rect);

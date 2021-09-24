@@ -47,8 +47,9 @@ class TranslationScale extends Dispatch {
 
           if ((rect.bottom - i) < offsetY || (rect.right - j) < offsetX) {
             newByte[current] = 255;
-          } else
+          } else {
             newByte[current] = newByte[offset];
+          }
         }
 
         //从右上角开始copy
@@ -56,10 +57,11 @@ class TranslationScale extends Dispatch {
           offset = (i - offsetY) * width + rect.right + rect.left - j - offsetX;
           current = i * width + rect.right + rect.left - j;
 
-          if (i > (rect.bottom + offsetY) || (rect.right - j) < offsetX)
+          if (i > (rect.bottom + offsetY) || (rect.right - j) < offsetX) {
             newByte[current] = 255;
-          else
+          } else {
             newByte[current] = newByte[offset];
+          }
         }
 
         //从左下角开始copy
@@ -67,10 +69,11 @@ class TranslationScale extends Dispatch {
           offset = (rect.bottom + rect.top - i - offsetY) * width + j - offsetX;
           current = (rect.bottom + rect.top - i) * width + j;
 
-          if ((rect.bottom - i) < offsetY || j > (rect.right + offsetX))
+          if ((rect.bottom - i) < offsetY || j > (rect.right + offsetX)) {
             newByte[current] = 255;
-          else
+          } else {
             newByte[current] = newByte[offset];
+          }
         }
 
         //从左上角开始copy
@@ -78,10 +81,11 @@ class TranslationScale extends Dispatch {
           offset = (i - offsetY) * width + j - offsetX;
           current = i * width + j;
 
-          if (i > (rect.bottom + offsetY) || j > (rect.right + offsetX))
+          if (i > (rect.bottom + offsetY) || j > (rect.right + offsetX)) {
             newByte[current] = 255;
-          else
+          } else {
             newByte[current] = newByte[offset];
+          }
         }
       }
     }
