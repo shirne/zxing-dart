@@ -15,6 +15,7 @@
  */
 
 import '../barcode_format.dart';
+import '../encode_hint_type.dart';
 import 'one_dimensional_code_writer.dart';
 
 /// This object renders a ITF code as a [BitMatrix].
@@ -46,7 +47,8 @@ class ITFWriter extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.ITF];
 
   @override
-  List<bool> encodeContent(String contents) {
+  List<bool> encodeContent(String contents,
+      [Map<EncodeHintType, Object?>? hints]) {
     int length = contents.length;
     if (length % 2 != 0) {
       throw Exception("The length of the input should be even");

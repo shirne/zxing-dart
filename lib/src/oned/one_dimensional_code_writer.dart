@@ -117,5 +117,6 @@ abstract class OneDimensionalCodeWriter implements Writer {
   ///
   /// @param contents barcode contents to encode
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
-  List<bool> encodeContent(String contents);
+  List<bool> encodeContent(String contents,
+      [Map<EncodeHintType, Object?>? hints]);
 }

@@ -24,7 +24,6 @@ import '../../common/grid_sampler.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
-
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 import '../aztec_detector_result.dart';
@@ -472,6 +471,9 @@ class Detector {
   /// return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
   int _getColor(Point p1, Point p2) {
     double d = _distance(p1, p2);
+    if (d == 0.0) {
+      return 0;
+    }
     double dx = (p2.x - p1.x) / d;
     double dy = (p2.y - p1.y) / d;
     int error = 0;
@@ -481,13 +483,13 @@ class Detector {
 
     bool colorModel = _image.get(p1.x, p1.y);
 
-    int iMax = d.ceil();
+    int iMax = d.floor();
     for (int i = 0; i < iMax; i++) {
-      px += dx;
-      py += dy;
       if (_image.get(MathUtils.round(px), MathUtils.round(py)) != colorModel) {
         error++;
       }
+      px += dx;
+      py += dy;
     }
 
     double errRatio = error / d;
@@ -557,7 +559,7 @@ class Detector {
   }
 
   bool _isValid(int x, int y) {
-    return x >= 0 && x < _image.width && y > 0 && y < _image.height;
+    return x >= 0 && x < _image.width && y >= 0 && y < _image.height;
   }
 
   bool _isValidPoint(ResultPoint point) {

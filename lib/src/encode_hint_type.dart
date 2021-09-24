@@ -81,7 +81,10 @@ enum EncodeHintType {
   /// (Type [Integer], or [String] representation of the integer value).
   QR_MASK_PATTERN,
 
-  /// Specifies whether the data should be encoded to the GS1 standard (type [bool], or "true" or "false"
-  /// {@link String } value).
+  /// Specifies whether the data should be encoded to the GS1 standard (type [bool],
+  /// or "true" or "false" [String] value).
   GS1_FORMAT,
+
+  /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type [String]). Valid values are "A", "B", "C".
+  FORCE_CODE_SET,
 }

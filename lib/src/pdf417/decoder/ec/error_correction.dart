@@ -156,6 +156,9 @@ class ErrorCorrection {
   List<int> _findErrorMagnitudes(ModulusPoly errorEvaluator,
       ModulusPoly errorLocator, List<int> errorLocations) {
     int errorLocatorDegree = errorLocator.degree;
+    if (errorLocatorDegree < 1) {
+      return [0];
+    }
     List<int> formalDerivativeCoefficients = List.filled(errorLocatorDegree, 0);
     for (int i = 1; i <= errorLocatorDegree; i++) {
       formalDerivativeCoefficients[errorLocatorDegree - i] =

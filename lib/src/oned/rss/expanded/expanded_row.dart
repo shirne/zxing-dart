@@ -15,7 +15,6 @@
  */
 
 import '../../../common/utils.dart';
-
 import 'expanded_pair.dart';
 
 /// One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
@@ -23,10 +22,7 @@ class ExpandedRow {
   final List<ExpandedPair> _pairs;
   final int _rowNumber;
 
-  /// Did this row of the image have to be reversed (mirrored) to recognize the pairs?
-  final bool _wasReversed;
-
-  ExpandedRow(List<ExpandedPair> pairs, this._rowNumber, this._wasReversed)
+  ExpandedRow(List<ExpandedPair> pairs, this._rowNumber)
       : _pairs = pairs.toList();
 
   List<ExpandedPair> get pairs => _pairs;
@@ -44,17 +40,15 @@ class ExpandedRow {
 
   /// Two rows are equal if they contain the same pairs in the same order.
   @override
-  operator ==(Object o) {
-    if (o is! ExpandedRow) {
+  operator ==(Object other) {
+    if (other is! ExpandedRow) {
       return false;
     }
-    ExpandedRow that = o;
-    return Utils.arrayEquals(_pairs, that._pairs) &&
-        _wasReversed == that._wasReversed;
+    return Utils.arrayEquals(_pairs, other._pairs);
   }
 
   @override
   int get hashCode {
-    return _pairs.hashCode ^ _wasReversed.hashCode;
+    return _pairs.hashCode;
   }
 }

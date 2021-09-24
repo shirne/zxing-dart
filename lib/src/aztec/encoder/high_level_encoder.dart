@@ -314,7 +314,7 @@ class HighLevelEncoder {
       }
       removedState.clear();
       if (add) {
-        result.add(newState);
+        result.insert(0, newState);
       }
     }
     return result;

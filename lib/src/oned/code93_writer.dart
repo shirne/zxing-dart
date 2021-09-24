@@ -15,6 +15,7 @@
  */
 
 import '../barcode_format.dart';
+import '../encode_hint_type.dart';
 import 'code93_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -27,7 +28,8 @@ class Code93Writer extends OneDimensionalCodeWriter {
   /// @param contents barcode contents to encode. It should not be encoded for extended characters.
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
   @override
-  List<bool> encodeContent(String contents) {
+  List<bool> encodeContent(String contents,
+      [Map<EncodeHintType, Object?>? hints]) {
     contents = convertToExtended(contents);
     int length = contents.length;
     if (length > 80) {

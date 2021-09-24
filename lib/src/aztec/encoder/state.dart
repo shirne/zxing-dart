@@ -18,7 +18,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import '../../common/bit_array.dart';
-
 import 'high_level_encoder.dart';
 import 'token.dart';
 
@@ -39,8 +38,16 @@ class State {
   final int _binaryShiftByteCount;
   // The total number of bits generated (including Binary Shift).
   final int _bitCount;
+  final int _binaryShiftCost;
 
-  State(this._token, this._mode, this._binaryShiftByteCount, this._bitCount);
+  State(
+    this._token,
+    this._mode,
+    this._binaryShiftByteCount,
+    this._bitCount, [
+    int? binaryShiftCost,
+  ]) : _binaryShiftCost =
+            binaryShiftCost ?? _calculateBinaryShiftCost(_binaryShiftByteCount);
 
   int get mode => _mode;
 
@@ -92,8 +99,8 @@ class State {
     Token token = _token;
     int thisModeBitCount = _mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
-    token = token.add(
-        HighLevelEncoder.shiftTable[_mode][mode], thisModeBitCount);
+    token =
+        token.add(HighLevelEncoder.shiftTable[_mode][mode], thisModeBitCount);
     token = token.add(value, 5);
     return State(token, _mode, 0, _bitCount + thisModeBitCount + 5);
   }
@@ -144,12 +151,11 @@ class State {
   // Returns true if "this" state is better (or equal) to be in than "that"
   // state under all possible circumstances.
   bool isBetterThanOrEqualTo(State other) {
-    int newModeBitCount = _bitCount +
-        (HighLevelEncoder.LATCH_TABLE[_mode][other._mode] >> 16);
+    int newModeBitCount =
+        _bitCount + (HighLevelEncoder.LATCH_TABLE[_mode][other._mode] >> 16);
     if (_binaryShiftByteCount < other._binaryShiftByteCount) {
       // add additional B/S encoding cost of other, if any
-      newModeBitCount +=
-          _calculateBinaryShiftCost(other) - _calculateBinaryShiftCost(this);
+      newModeBitCount += other._binaryShiftCost - _binaryShiftCost;
     } else if (_binaryShiftByteCount > other._binaryShiftByteCount &&
         other._binaryShiftByteCount > 0) {
       // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
@@ -181,14 +187,14 @@ class State {
     return "${HighLevelEncoder.MODE_NAMES[_mode]} bits=$_bitCount bytes=$_binaryShiftByteCount";
   }
 
-  static int _calculateBinaryShiftCost(State state) {
-    if (state._binaryShiftByteCount > 62) {
+  static int _calculateBinaryShiftCost(int binaryShiftByteCount) {
+    if (binaryShiftByteCount > 62) {
       return 21; // B/S with extended length
     }
-    if (state._binaryShiftByteCount > 31) {
+    if (binaryShiftByteCount > 31) {
       return 20; // two B/S
     }
-    if (state._binaryShiftByteCount > 0) {
+    if (binaryShiftByteCount > 0) {
       return 10; // one B/S
     }
     return 0;

@@ -23,7 +23,6 @@ import '../../common/decoder_result.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
-
 import '../../formats_exception.dart';
 import '../aztec_detector_result.dart';
 
@@ -183,8 +182,11 @@ class Decoder {
                 }
                 eci = eci * 10 + (nextDigit - 2);
               }
-              CharacterSetECI charsetECI =
-                  CharacterSetECI.getCharacterSetECIByValue(eci)!;
+              CharacterSetECI? charsetECI =
+                  CharacterSetECI.getCharacterSetECIByValue(eci);
+              if (charsetECI == null) {
+                throw FormatsException.instance;
+              }
               encoding = charsetECI.charset!;
           }
           // Go back to whatever mode we had been in

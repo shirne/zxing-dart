@@ -584,7 +584,7 @@ void main() {
         "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......");
   });
 
-  test('testUserSpecifiedLayers', () {
+  void doTestUserSpecifiedLayers(int userSpecifiedLayers) {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     expect(aztec.layers, 2);
@@ -595,35 +595,42 @@ void main() {
     assert(!aztec.isCompact);
 
     try {
-      Encoder.encode(alphabet, 25, 33);
-      fail("Encode should have failed.  No such thing as 33 layers");
+      Encoder.encode(alphabet, 25, userSpecifiedLayers);
+      fail(
+          "Encode should have failed.  No such thing as $userSpecifiedLayers layers");
     } on ArgumentError catch (_) {
       // IllegalArgumentException
       // continue
     }
+  }
 
+  test('testUserSpecifiedLayers', () {
+    doTestUserSpecifiedLayers(33);
+  });
+  test('testUserSpecifiedLayers2', () {
+    doTestUserSpecifiedLayers(-1);
+  });
+
+  test('testBorderCompact4CaseFailed', () {
+    // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
+    // be error correction
+    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // encodes as 26 * 5 * 4 = 520 bits of data
+    String alphabet4 = alphabet * 4;
     try {
-      Encoder.encode(alphabet, 25, -1);
-      fail("Encode should have failed.  Text can't fit in 1-layer compact");
+      Encoder.encode(alphabet4, 0, -4);
+      fail('Rest must be error correction');
     } on ArgumentError catch (_) {
       // IllegalArgumentException
       // continue
     }
   });
-
   test('testBorderCompact4Case', () {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
     // be error correction
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // encodes as 26 * 5 * 4 = 520 bits of data
-    String alphabet4 = alphabet + alphabet + alphabet + alphabet;
-    try {
-      Encoder.encode(alphabet4, 0, -4);
-      fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } on ArgumentError catch (_) {
-      // IllegalArgumentException
-      // continue
-    }
+    String alphabet4 = alphabet * 4;
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode =

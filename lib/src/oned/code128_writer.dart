@@ -15,6 +15,7 @@
  */
 
 import '../barcode_format.dart';
+import '../encode_hint_type.dart';
 import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -33,10 +34,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
   static const int _CODE_STOP = 106;
 
   // Dummy characters used to specify control characters in input
-  static const String _ESCAPE_FNC_1 = '\u00f1';
-  static const String _ESCAPE_FNC_2 = '\u00f2';
-  static const String _ESCAPE_FNC_3 = '\u00f3';
-  static const String _ESCAPE_FNC_4 = '\u00f4';
+  static const int _ESCAPE_FNC_1 = 0xf1; //'\u00f1';
+  static const int _ESCAPE_FNC_2 = 0xf2; //'\u00f2';
+  static const int _ESCAPE_FNC_3 = 0xf3; //'\u00f3';
+  static const int _ESCAPE_FNC_4 = 0xf4; //'\u00f4';
 
   static const int _CODE_FNC_1 = 102; // Code A, Code B, Code C
   static const int _CODE_FNC_2 = 97; // Code A, Code B
@@ -50,27 +51,79 @@ class Code128Writer extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_128];
 
   @override
-  List<bool> encodeContent(String contents) {
+  List<bool> encodeContent(String contents,
+      [Map<EncodeHintType, Object?>? hints]) {
     int length = contents.length;
     // Check length
     if (length < 1 || length > 80) {
       throw Exception(
           "Contents length should be between 1 and 80 characters, but got $length");
     }
+    // Check for forced code set hint.
+    int forcedCodeSet = -1;
+    if (hints != null && hints.containsKey(EncodeHintType.FORCE_CODE_SET)) {
+      String codeSetHint = hints[EncodeHintType.FORCE_CODE_SET] as String;
+      switch (codeSetHint) {
+        case "A":
+          forcedCodeSet = _CODE_CODE_A;
+          break;
+        case "B":
+          forcedCodeSet = _CODE_CODE_B;
+          break;
+        case "C":
+          forcedCodeSet = _CODE_CODE_C;
+          break;
+        default:
+          throw ArgumentError("Unsupported code set hint: " + codeSetHint);
+      }
+    }
+
     // Check content
     for (int i = 0; i < length; i++) {
-      String c = contents[i];
+      int c = contents.codeUnitAt(i);
+      // check for non ascii characters that are not special GS1 characters
       switch (c) {
+        // special function characters
         case _ESCAPE_FNC_1:
         case _ESCAPE_FNC_2:
         case _ESCAPE_FNC_3:
         case _ESCAPE_FNC_4:
           break;
+        // non ascii characters
         default:
-          if (c.codeUnitAt(0) > 127) {
-            // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
-            throw Exception("Bad character in input: $c");
+          if (c > 127) {
+            // no full Latin-1 character set available at the moment
+            // shift and manual code change are not supported
+            throw ArgumentError("Bad character in input: ASCII value=: $c");
           }
+      }
+      // check characters for compatibility with forced code set
+      switch (forcedCodeSet) {
+        case _CODE_CODE_A:
+          // allows no ascii above 95 (no lower caps, no special symbols)
+          if (c > 95 && c <= 127) {
+            throw ArgumentError(
+                "Bad character in input for forced code set A: ASCII value=$c");
+          }
+          break;
+        case _CODE_CODE_B:
+          // allows no ascii below 32 (terminal symbols)
+          if (c <= 32) {
+            throw ArgumentError(
+                "Bad character in input for forced code set B: ASCII value=$c");
+          }
+          break;
+        case _CODE_CODE_C:
+          // allows only numbers and no FNC 2/3/4
+          if (c < 48 ||
+              (c > 57 && c <= 127) ||
+              c == _ESCAPE_FNC_2 ||
+              c == _ESCAPE_FNC_3 ||
+              c == _ESCAPE_FNC_4) {
+            throw ArgumentError(
+                "Bad character in input for forced code set C: ASCII value=$c");
+          }
+          break;
       }
     }
 
@@ -82,14 +135,18 @@ class Code128Writer extends OneDimensionalCodeWriter {
 
     while (position < length) {
       //Select code to use
-      int newCodeSet = _chooseCode(contents, position, codeSet);
-
+      int newCodeSet;
+      if (forcedCodeSet == -1) {
+        newCodeSet = _chooseCode(contents, position, codeSet);
+      } else {
+        newCodeSet = forcedCodeSet;
+      }
       //Get the pattern index
       int patternIndex;
       if (newCodeSet == codeSet) {
         // Encode the current character
         // First handle escapes
-        switch (contents[position]) {
+        switch (contents.codeUnitAt(position)) {
           case _ESCAPE_FNC_1:
             patternIndex = _CODE_FNC_1;
             break;
@@ -121,6 +178,11 @@ class Code128Writer extends OneDimensionalCodeWriter {
                 break;
               default:
                 // CODE_CODE_C
+                if (position + 1 == length) {
+                  // this is the last character, but the encoding is C, which always encodes two characers
+                  throw ArgumentError(
+                      "Bad number of characters for digit only encoding.");
+                }
                 patternIndex =
                     int.parse(contents.substring(position, position + 2));
                 position++; // Also incremented below
@@ -222,8 +284,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
         if (c < 32 /*   */ ||
             (oldCode == _CODE_CODE_A &&
                 (c < 96 /* ` */ ||
-                    (c >= _ESCAPE_FNC_1.codeUnitAt(0) &&
-                        c <= _ESCAPE_FNC_4.codeUnitAt(0))))) {
+                    (c >= _ESCAPE_FNC_1 && c <= _ESCAPE_FNC_4)))) {
           // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
           return _CODE_CODE_A;
         }

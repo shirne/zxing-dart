@@ -323,7 +323,7 @@ class Detector {
     int fromX = from.x.toInt();
     int fromY = from.y.toInt();
     int toX = to.x.toInt();
-    int toY = to.y.toInt();
+    int toY = math.min(_image.height - 1, to.y.toInt());
     bool steep = (toY - fromY).abs() > (toX - fromX).abs();
     if (steep) {
       int temp = fromX;

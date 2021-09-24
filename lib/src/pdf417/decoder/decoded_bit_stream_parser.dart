@@ -19,7 +19,6 @@ import 'dart:typed_data';
 
 import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
-
 import '../../formats_exception.dart';
 import '../pdf417_result_metadata.dart';
 
@@ -98,9 +97,11 @@ class DecodedBitStreamParser {
           codeIndex = _numericCompaction(codewords, codeIndex, result);
           break;
         case _ECI_CHARSET:
-          CharacterSetECI charsetECI =
-              CharacterSetECI.getCharacterSetECIByValue(
-                  codewords[codeIndex++])!;
+          CharacterSetECI? charsetECI =
+              CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+          if (charsetECI == null) {
+            throw FormatsException.instance;
+          }
           encoding = charsetECI.charset!;
           break;
         case _ECI_GENERAL_PURPOSE:
@@ -152,25 +153,28 @@ class DecodedBitStreamParser {
     for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
       segmentIndexArray[i] = codewords[codeIndex];
     }
-    resultMetadata.segmentIndex = int.parse(_decodeBase900toBase10(
-        segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS));
+
+    String segmentIndexString = _decodeBase900toBase10(
+        segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS);
+    resultMetadata.segmentIndex =
+        segmentIndexString.isEmpty ? 0 : int.parse(segmentIndexString);
 
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
-    String fileId = "";
+    StringBuffer fileId = StringBuffer();
     for (;
         codeIndex < codewords[0] &&
             codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
             codewords[codeIndex] != _BEGIN_MACRO_PDF417_OPTIONAL_FIELD;
         codeIndex++) {
-      fileId += codewords[codeIndex].toString().padLeft(3, '0');
+      fileId.write(codewords[codeIndex].toString().padLeft(3, '0'));
     }
     if (fileId.isEmpty) {
       // at least one fileId codeword is required (Annex H.2)
       throw FormatsException.instance;
     }
-    resultMetadata.fileId = fileId;
+    resultMetadata.fileId = fileId.toString();
 
     int optionalFieldsStart = -1;
     if (codewords[codeIndex] == _BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {

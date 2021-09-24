@@ -41,22 +41,22 @@ class CharacterSetECI {
       CharacterSetECI('iso8859_4', 6, latin4, ['latin-4', 'iso-8859-4']);
   static final ISO8859_5 = CharacterSetECI(
       'iso8859_5', 7, latinCyrillic, ['cyrillic', 'iso-8859-5']);
-  static final ISO8859_6 =
-      CharacterSetECI('iso8859_6', 8, latinArabic, ['arabic', 'iso-8859-6']);
+  //static final ISO8859_6 =
+  //    CharacterSetECI('iso8859_6', 8, latinArabic, ['arabic', 'iso-8859-6']);
   static final ISO8859_7 =
       CharacterSetECI('iso8859_7', 9, latinGreek, ['greek', 'iso-8859-7']);
-  static final ISO8859_8 =
-      CharacterSetECI('iso8859_8', 10, latinHebrew, ['hebrew', 'iso-8859-8']);
+  //static final ISO8859_8 =
+  //    CharacterSetECI('iso8859_8', 10, latinHebrew, ['hebrew', 'iso-8859-8']);
   static final ISO8859_9 =
       CharacterSetECI('iso8859_9', 11, latin5, ['latin-5', 'iso-8859-9']);
-  static final ISO8859_10 =
-      CharacterSetECI('iso8859_10', 12, latin6, ['latin-6', 'iso-8859-10']);
-  static final ISO8859_11 =
-      CharacterSetECI('iso8859_11', 13, latinThai, ['tis620', 'iso-8859-11']);
+  //static final ISO8859_10 =
+  //    CharacterSetECI('iso8859_10', 12, latin6, ['latin-6', 'iso-8859-10']);
+  //static final ISO8859_11 =
+  //    CharacterSetECI('iso8859_11', 13, latinThai, ['tis620', 'iso-8859-11']);
   static final ISO8859_13 =
       CharacterSetECI('iso8859_13', 15, latin7, ['latin-7', 'iso-8859-13']);
-  static final ISO8859_14 =
-      CharacterSetECI('iso8859_14', 16, latin8, ['latin-8', 'iso-8859-14']);
+  //static final ISO8859_14 =
+  //    CharacterSetECI('iso8859_14', 16, latin8, ['latin-8', 'iso-8859-14']);
   static final ISO8859_15 =
       CharacterSetECI('iso8859_15', 17, latin9, ['latin-9', 'iso-8859-15']);
   static final ISO8859_16 =
@@ -87,14 +87,14 @@ class CharacterSetECI {
     ISO8859_3,
     ISO8859_4,
     ISO8859_5,
-    ISO8859_6,
+    //ISO8859_6,
     ISO8859_7,
-    ISO8859_8,
+    //ISO8859_8,
     ISO8859_9,
-    ISO8859_10,
-    ISO8859_11,
+    //ISO8859_10,
+    //ISO8859_11,
     ISO8859_13,
-    ISO8859_14,
+    //ISO8859_14,
     ISO8859_15,
     ISO8859_16,
     SJIS,

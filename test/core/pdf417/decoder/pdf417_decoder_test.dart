@@ -18,6 +18,7 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/pdf417.dart';
+import 'package:zxing_lib/zxing.dart';
 
 /// Tests [DecodedBitStreamParser].
 void main() {
@@ -159,8 +160,7 @@ void main() {
 
     try {
       DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } catch (_) {
-      // FormatException
+    } on FormatsException catch (_) {
       // continue
     }
   });
@@ -171,8 +171,7 @@ void main() {
 
     try {
       DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } catch (_) {
-      // FormatException
+    } on FormatsException catch (_) {
       // continue
     }
   });
@@ -182,8 +181,7 @@ void main() {
 
     try {
       DecodedBitStreamParser.decode(sampleCodes, "0");
-    } catch (_) {
-      // FormatException
+    } on FormatsException catch (_) {
       // continue
     }
   });
