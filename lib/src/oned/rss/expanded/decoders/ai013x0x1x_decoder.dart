@@ -63,8 +63,8 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   }
 
   void _encodeCompressedDate(StringBuffer buf, int currentPos) {
-    int numericDate = generalDecoder
-        .extractNumericValueFromBitArray(currentPos, _DATE_SIZE);
+    int numericDate =
+        generalDecoder.extractNumericValueFromBitArray(currentPos, _DATE_SIZE);
     if (numericDate == 38400) {
       return;
     }

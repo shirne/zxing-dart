@@ -16,8 +16,6 @@
 
 import 'dart:typed_data';
 
-import 'package:fixnum/fixnum.dart';
-
 import 'generic_gfpoly.dart';
 
 /// This class contains utility methods for performing mathematical operations over
@@ -99,7 +97,7 @@ class GenericGF {
   ///
   /// @return sum/difference of a and b
   static int addOrSubtract(int a, int b) {
-    return (Int32(a) ^ Int32(b)).toInt();
+    return a ^ b;
   }
 
   /// @return 2 to the power of a in GF(size)

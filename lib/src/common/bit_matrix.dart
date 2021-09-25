@@ -16,8 +16,6 @@
 
 import 'dart:typed_data';
 
-import 'package:fixnum/fixnum.dart';
-
 import 'bit_array.dart';
 import 'utils.dart';
 
@@ -147,8 +145,7 @@ class BitMatrix {
   /// @return value of given bit in matrix
   bool get(int x, int y) {
     int offset = y * _rowSize + (x ~/ 32);
-    return offset < _bits.length &&
-        ((Int32(_bits[offset]).shiftRightUnsigned(x & 0x1f)) & 1) != 0;
+    return ((_bits[offset] >>> (x & 0x1f)) & 1) != 0;
   }
 
   /// <p>Sets the given bit to true.</p>
@@ -295,7 +292,7 @@ class BitMatrix {
     for (int y = 0; y < _height; y++) {
       for (int x = 0; x < _width; x++) {
         int offset = y * _rowSize + (x ~/ 32);
-        if (((Int32(_bits[offset]).shiftRightUnsigned(x & 0x1f)) & 1) != 0) {
+        if (((_bits[offset] >>> (x & 0x1f)) & 1) != 0) {
           var newOffset = (newHeight - 1 - x) * newRowSize + (y ~/ 32);
           newBits[newOffset] |= 1 << (y & 0x1f);
         }
@@ -318,7 +315,7 @@ class BitMatrix {
 
     for (int y = 0; y < _height; y++) {
       for (int x32 = 0; x32 < _rowSize; x32++) {
-        var theBits = Int32(_bits[y * _rowSize + x32]);
+        var theBits = _bits[y * _rowSize + x32];
         if (theBits != 0) {
           if (y < top) {
             top = y;
@@ -337,7 +334,7 @@ class BitMatrix {
           }
           if (x32 * 32 + 31 > right) {
             int bit = 31;
-            while ((theBits.shiftRightUnsigned(bit)) == 0) {
+            while ((theBits >>> bit) == 0) {
               bit--;
             }
             if ((x32 * 32 + bit) > right) {
@@ -369,7 +366,7 @@ class BitMatrix {
     int y = bitsOffset ~/ _rowSize;
     int x = (bitsOffset % _rowSize) * 32;
 
-    var theBits = Int32(_bits[bitsOffset]);
+    var theBits = _bits[bitsOffset];
     int bit = 0;
     while ((theBits << (31 - bit) & 0xFFFFFFFF) == 0) {
       bit++;
@@ -390,9 +387,9 @@ class BitMatrix {
     int y = bitsOffset ~/ _rowSize;
     int x = (bitsOffset % _rowSize) * 32;
 
-    var theBits = Int32(_bits[bitsOffset]);
+    var theBits = _bits[bitsOffset];
     int bit = 31;
-    while ((theBits.shiftRightUnsigned(bit)) == 0) {
+    while ((theBits >>> bit) == 0) {
       bit--;
     }
     x += bit;

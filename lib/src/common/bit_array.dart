@@ -17,8 +17,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:fixnum/fixnum.dart';
-
 import 'detector/math_utils.dart';
 import 'utils.dart';
 
@@ -282,12 +280,12 @@ class BitArray {
     // now correct the int's if the bit size isn't a multiple of 32
     if (_size != oldBitsLen * 32) {
       int leftOffset = oldBitsLen * 32 - _size;
-      var currentInt = Int32(newBits[0]).shiftRightUnsigned(leftOffset);
+      var currentInt = newBits[0] >>> leftOffset;
       for (int i = 1; i < oldBitsLen; i++) {
-        var nextInt = Int32(newBits[i]);
+        var nextInt = newBits[i];
         currentInt |= (nextInt << (32 - leftOffset)).toSigned(32);
         newBits[i - 1] = currentInt.toInt();
-        currentInt = nextInt.shiftRightUnsigned(leftOffset);
+        currentInt = nextInt >>> leftOffset;
       }
       newBits[oldBitsLen - 1] = currentInt.toInt();
     }

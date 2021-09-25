@@ -67,8 +67,8 @@ class AI01393xDecoder extends AI01decoder {
     }
     buf.write(firstThreeDigits);
 
-    DecodedInformation generalInformation = generalDecoder
-        .decodeGeneralPurposeField(
+    DecodedInformation generalInformation =
+        generalDecoder.decodeGeneralPurposeField(
             _HEADER_SIZE +
                 AI01decoder.GTIN_SIZE +
                 _LAST_DIGIT_SIZE +

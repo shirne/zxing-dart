@@ -16,8 +16,6 @@
 
 import 'dart:math' as math;
 
-import 'package:fixnum/fixnum.dart';
-
 /// General math-related and numeric utility functions.
 class MathUtils {
   static const MIN_VALUE = -2147483648;
@@ -126,6 +124,15 @@ class MathUtils {
   }
 
   static int numberOfTrailingZeros(int i) {
-    return Int32(i).numberOfTrailingZeros();
+    return bitCount32((i & -i) - 1);
+  }
+
+  static int bitCount32(int i) {
+    i -= ((i >> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+    i = ((i + (i >> 4)) & 0x0F0F0F0F);
+    i += (i >> 8);
+    i += (i >> 16);
+    return (i & 0x0000003F);
   }
 }

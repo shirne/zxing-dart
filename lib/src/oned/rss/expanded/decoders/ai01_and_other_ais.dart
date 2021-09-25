@@ -47,8 +47,7 @@ class AI01AndOtherAIs extends AI01decoder {
         generalDecoder.extractNumericValueFromBitArray(_HEADER_SIZE, 4);
     buff.write(firstGtinDigit);
 
-    encodeCompressedGtinWithoutAI(
-        buff, _HEADER_SIZE + 4, initialGtinPosition);
+    encodeCompressedGtinWithoutAI(buff, _HEADER_SIZE + 4, initialGtinPosition);
 
     return generalDecoder.decodeAllCodes(buff, _HEADER_SIZE + 44);
   }

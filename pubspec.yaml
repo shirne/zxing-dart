@@ -5,11 +5,10 @@ homepage: https://www.shirne.com/
 repository: https://github.com/shirne/zxing-dart
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   intl: ^0.17.0
-  fixnum: ^1.0.0
   convert: ^3.0.0
   charset: ^0.1.1
 
