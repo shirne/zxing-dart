@@ -149,26 +149,35 @@ class DecodedBitStreamParser {
       // we must have at least two bytes left for the segment index
       throw FormatsException.instance;
     }
-    List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
-    for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
-      segmentIndexArray[i] = codewords[codeIndex];
-    }
+    List<int> segmentIndexArray = List.generate(
+        _NUMBER_OF_SEQUENCE_CODEWORDS, (_) => codewords[codeIndex++]);
+    //List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
+    //for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
+    //  segmentIndexArray[i] = codewords[codeIndex];
+    //}
 
     String segmentIndexString = _decodeBase900toBase10(
         segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS);
-    resultMetadata.segmentIndex =
-        segmentIndexString.isEmpty ? 0 : int.parse(segmentIndexString);
+    if (segmentIndexString.isEmpty) {
+      resultMetadata.segmentIndex = 0;
+    } else {
+      try {
+        resultMetadata.segmentIndex = int.parse(segmentIndexString);
+      } on FormatException catch (_) {
+        throw FormatsException.instance;
+      }
+    }
 
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
     StringBuffer fileId = StringBuffer();
-    for (;
-        codeIndex < codewords[0] &&
-            codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
-            codewords[codeIndex] != _BEGIN_MACRO_PDF417_OPTIONAL_FIELD;
-        codeIndex++) {
+    while (codeIndex < codewords[0] &&
+        codeIndex < codewords.length &&
+        codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
+        codewords[codeIndex] != _BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       fileId.write(codewords[codeIndex].toString().padLeft(3, '0'));
+      codeIndex++;
     }
     if (fileId.isEmpty) {
       // at least one fileId codeword is required (Annex H.2)

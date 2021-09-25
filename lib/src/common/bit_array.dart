@@ -211,12 +211,19 @@ class BitArray {
   /// @param value `int` containing bits to append
   /// @param numBits bits from value to append
   void appendBits(int value, int numBits) {
-    assert(numBits >= 0 && numBits <= 32, r'Num bits must be between 0 and 32');
-
-    _ensureCapacity(_size + numBits);
-    for (int numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
-      appendBit(((value >> (numBitsLeft - 1)) & 0x01) == 1);
+    if (numBits >= 0 && numBits <= 32) {
+      throw ArgumentError(r'Num bits must be between 0 and 32');
     }
+
+    int nextSize = _size;
+    _ensureCapacity(nextSize + numBits);
+    for (int numBitsLeft = numBits - 1; numBitsLeft >= 0; numBitsLeft--) {
+      if ((value & (1 << numBitsLeft)) != 0) {
+        bits[nextSize ~/ 32] |= 1 << (nextSize & 0x1F);
+      }
+      nextSize++;
+    }
+    _size = nextSize;
   }
 
   void appendBitArray(BitArray other) {
@@ -269,13 +276,7 @@ class BitArray {
     int len = (_size - 1) ~/ 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
-      var x = Int32(_bits[i]);
-      x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1);
-      x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2);
-      x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4);
-      x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8);
-      x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16);
-      newBits[len - i] = x.toInt();
+      newBits[len - i] = Utils.reverseSign32(_bits[i]);
     }
     // now correct the int's if the bit size isn't a multiple of 32
     if (_size != oldBitsLen * 32) {
