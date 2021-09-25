@@ -18,7 +18,6 @@ import '../../common/bit_array.dart';
 import '../../common/detector/math_utils.dart';
 import '../../qrcode/decoder/error_correction_level.dart';
 import '../../qrcode/decoder/version.dart';
-
 import '../../writer_exception.dart';
 import 'byte_matrix.dart';
 import 'mask_util.dart';
@@ -301,7 +300,7 @@ class MatrixUtil {
   // operations. We don't care if coefficients are positive or negative.
   static int calculateBCHCode(int value, int poly) {
     if (poly == 0) {
-      throw Exception("0 polynomial");
+      throw ArgumentError("0 polynomial");
     }
     // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
     // from 13 to make it 12.

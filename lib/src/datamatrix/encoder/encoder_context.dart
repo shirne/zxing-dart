@@ -40,7 +40,7 @@ class EncoderContext {
     for (int i = 0, c = msgBinary.length; i < c; i++) {
       int ch = msgBinary[i] & 0xff;
       if (ch == 63 /*'?'*/ && msg[i] != '?') {
-        throw Exception(
+        throw ArgumentError(
             "Message contains characters outside ISO-8859-1 encoding.");
       }
       sb.writeCharCode(ch);
@@ -109,8 +109,7 @@ class EncoderContext {
   void updateSymbolInfo([int? len]) {
     len ??= codewordCount;
     if (_symbolInfo == null || len > _symbolInfo!.dataCapacity) {
-      _symbolInfo =
-          SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
+      _symbolInfo = SymbolInfo.lookup(len, _shape, _minSize, _maxSize, true);
     }
   }
 

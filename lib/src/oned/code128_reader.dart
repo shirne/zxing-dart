@@ -458,6 +458,7 @@ class Code128Reader extends OneDReader {
             if (code < 10) {
               result.write('0');
             }
+            // This is not char
             result.write(code);
           } else {
             if (code != _CODE_STOP) {
@@ -498,7 +499,7 @@ class Code128Reader extends OneDReader {
 
       // Unshift back to another code set if we were shifted
       if (unshift) {
-        codeSet = codeSet == _CODE_CODE_A ? _CODE_CODE_B : _CODE_CODE_A;
+        codeSet = (codeSet == _CODE_CODE_A) ? _CODE_CODE_B : _CODE_CODE_A;
       }
     }
 

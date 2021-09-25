@@ -103,7 +103,7 @@ class Mode {
         // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
         return HANZI;
       default:
-        throw Exception();
+        throw ArgumentError();
     }
   }
 

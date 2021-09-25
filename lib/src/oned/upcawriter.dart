@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import '../common/bit_matrix.dart';
-
 import '../barcode_format.dart';
+import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'ean13_writer.dart';
@@ -31,7 +30,7 @@ class UPCAWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (format != BarcodeFormat.UPC_A) {
-      throw Exception("Can only encode UPC-A, but got $format");
+      throw ArgumentError("Can only encode UPC-A, but got $format");
     }
     // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
     return _subWriter.encode(

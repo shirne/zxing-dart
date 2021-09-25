@@ -17,7 +17,6 @@
 import 'dart:typed_data';
 
 import '../../common/detector/math_utils.dart';
-
 import '../../dimension.dart';
 import 'asciiencoder.dart';
 import 'base256_encoder.dart';
@@ -464,6 +463,6 @@ class HighLevelEncoder {
   static void illegalCharacter(int c) {
     String hex = (c).toRadixString(16);
     hex = "0000".substring(0, 4 - hex.length) + hex;
-    throw Exception("Illegal character: chr($c) (0x$hex)");
+    throw ArgumentError("Illegal character: chr($c) (0x$hex)");
   }
 }

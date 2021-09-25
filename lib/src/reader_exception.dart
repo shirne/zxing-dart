@@ -32,3 +32,17 @@ abstract class ReaderException implements Exception {
     return "Exception: $message";
   }
 }
+
+class ParseException implements Exception {
+  // disable stack traces when not running inside test units
+  final dynamic message;
+
+  ParseException([this.message]);
+
+  @override
+  String toString() {
+    Object? message = this.message;
+    if (message == null) return "Exception";
+    return "Exception: $message";
+  }
+}

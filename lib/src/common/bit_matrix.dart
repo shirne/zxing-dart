@@ -49,8 +49,11 @@ class BitMatrix {
   BitMatrix(this._width, [int? height])
       : _height = height ?? _width,
         _rowSize = (_width + 31) ~/ 32,
-        _bits = Int32List(((_width + 31) ~/ 32) * (height ?? _width)),
-        assert(_width > 0, "Both dimensions must be greater than 0");
+        _bits = Int32List(((_width + 31) ~/ 32) * (height ?? _width)) {
+    if (_width < 1 || _height < 1) {
+      throw ArgumentError("Both dimensions must be greater than 0");
+    }
+  }
 
   BitMatrix._(this._width, this._height, this._rowSize, this._bits);
 
@@ -98,7 +101,7 @@ class BitMatrix {
           if (rowLength == -1) {
             rowLength = bitsPos - rowStartPos;
           } else if (bitsPos - rowStartPos != rowLength) {
-            throw Exception("row lengths do not match");
+            throw ArgumentError("row lengths do not match");
           }
           rowStartPos = bitsPos;
           nRows++;

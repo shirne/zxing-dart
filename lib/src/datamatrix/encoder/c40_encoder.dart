@@ -15,7 +15,6 @@
  */
 
 import '../../common/string_builder.dart';
-
 import 'encoder.dart';
 import 'encoder_context.dart';
 import 'high_level_encoder.dart';
@@ -122,7 +121,7 @@ class C40Encoder implements Encoder {
         context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
       }
     } else {
-      throw Exception("Unexpected case. Please report!");
+      throw StateError("Unexpected case. Please report!");
     }
     context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
   }

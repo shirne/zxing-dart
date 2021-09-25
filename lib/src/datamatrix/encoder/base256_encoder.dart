@@ -15,7 +15,6 @@
  */
 
 import '../../common/string_builder.dart';
-
 import 'encoder.dart';
 import 'encoder_context.dart';
 import 'high_level_encoder.dart';
@@ -54,7 +53,7 @@ class Base256Encoder implements Encoder {
         buffer.setCharAt(0, (dataCount ~/ 250) + 249);
         buffer.insert(1, dataCount % 250);
       } else {
-        throw Exception("Message length not in valid ranges: $dataCount");
+        throw StateError("Message length not in valid ranges: $dataCount");
       }
     }
     for (int i = 0, l = buffer.length; i < l; i++) {

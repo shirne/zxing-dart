@@ -25,7 +25,6 @@
  */
 
 import '../../../../common/bit_array.dart';
-
 import 'ai013103decoder.dart';
 import 'ai01320x_decoder.dart';
 import 'ai01392x_decoder.dart';
@@ -98,6 +97,6 @@ abstract class AbstractExpandedDecoder {
         return AI013x0x1xDecoder(information, "320", "17");
     }
 
-    throw Exception("unknown decoder: $information");
+    throw StateError("unknown decoder: $information");
   }
 }

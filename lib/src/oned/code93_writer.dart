@@ -33,7 +33,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     contents = convertToExtended(contents);
     int length = contents.length;
     if (length > 80) {
-      throw Exception(
+      throw ArgumentError(
           "Requested contents should be less than 80 digits long after converting to extended encoding, but got $length");
     }
 
@@ -167,7 +167,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
         extCont.write('b');
         extCont.writeCharCode(80 /* P */ + character - 123 /* { */);
       } else {
-        throw Exception(
+        throw ArgumentError(
             "Requested content contains a non-encodable character: 'chr($character)'");
       }
     }

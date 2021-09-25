@@ -82,7 +82,7 @@ class ModulusPoly {
 
   ModulusPoly add(ModulusPoly other) {
     if (_field != other._field) {
-      throw Exception("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
     }
     if (isZero) {
       return other;
@@ -113,7 +113,7 @@ class ModulusPoly {
 
   ModulusPoly subtract(ModulusPoly other) {
     if (_field != other._field) {
-      throw Exception("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
     }
     if (other.isZero) {
       return this;
@@ -123,7 +123,7 @@ class ModulusPoly {
 
   ModulusPoly multiplyPoly(ModulusPoly other) {
     if (_field != other._field) {
-      throw Exception("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
     }
     if (isZero || other.isZero) {
       return _field.zero;
@@ -169,7 +169,7 @@ class ModulusPoly {
 
   ModulusPoly multiplyByMonomial(int degree, int coefficient) {
     if (degree < 0) {
-      throw Exception();
+      throw ArgumentError();
     }
     if (coefficient == 0) {
       return _field.zero;

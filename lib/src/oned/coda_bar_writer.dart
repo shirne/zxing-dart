@@ -52,18 +52,18 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
       bool endsAlt = _ALT_START_END_CHARS.contains(lastChar);
       if (startsNormal) {
         if (!endsNormal) {
-          throw Exception("Invalid start/end guards: " + contents);
+          throw ArgumentError("Invalid start/end guards: " + contents);
         }
         // else already has valid start/end
       } else if (startsAlt) {
         if (!endsAlt) {
-          throw Exception("Invalid start/end guards: " + contents);
+          throw ArgumentError("Invalid start/end guards: " + contents);
         }
         // else already has valid start/end
       } else {
         // Doesn't start with a guard
         if (endsNormal || endsAlt) {
-          throw Exception("Invalid start/end guards: " + contents);
+          throw ArgumentError("Invalid start/end guards: " + contents);
         }
         // else doesn't end with guard either, so add a default
         contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;
@@ -81,7 +81,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
           .contains(contents[i])) {
         resultLength += 10;
       } else {
-        throw Exception("Cannot encode : '" + contents[i] + '\'');
+        throw ArgumentError("Cannot encode : '${contents[i]}'");
       }
     }
     // A blank is placed between each character.

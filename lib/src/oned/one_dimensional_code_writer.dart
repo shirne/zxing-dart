@@ -36,15 +36,16 @@ abstract class OneDimensionalCodeWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw Exception("Found empty contents");
+      throw ArgumentError("Found empty contents");
     }
 
     if (width < 0 || height < 0) {
-      throw Exception("Negative size is not allowed. Input: $width" 'x$height');
+      throw ArgumentError(
+          "Negative size is not allowed. Input: $width" 'x$height');
     }
     List<BarcodeFormat>? supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {
-      throw Exception("Can only encode $supportedFormats, but got $format");
+      throw ArgumentError("Can only encode $supportedFormats, but got $format");
     }
 
     int sidesMargin = defaultMargin;
@@ -52,7 +53,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
       sidesMargin = int.parse(hints[EncodeHintType.MARGIN].toString());
     }
 
-    List<bool> code = encodeContent(contents);
+    List<bool> code = encodeContent(contents, hints);
     return _renderResult(code, width, height, sidesMargin);
   }
 
@@ -85,7 +86,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @throws IllegalArgumentException if input contains characters other than digits 0-9.
   static void checkNumeric(String contents) {
     if (!_numeric.hasMatch(contents)) {
-      throw Exception("Input should only contain digits 0-9 ($contents)");
+      throw ArgumentError("Input should only contain digits 0-9 ($contents)");
     }
   }
 

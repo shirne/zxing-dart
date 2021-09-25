@@ -34,17 +34,17 @@ class InterruptGrayscale extends Dispatch {
   }
 
   void openOp(Uint8List newByte, int width, Rect rect, int offset) {
-    for (int step_h = rect.top + offset;
-        step_h + stepY < rect.bottom;
-        step_h += stepY) {
-      for (int step_w = rect.left + offset;
-          step_w + stepX < rect.right;
-          step_w += stepX) {
+    for (int stepH = rect.top + offset;
+        stepH + stepY < rect.bottom;
+        stepH += stepY) {
+      for (int stepW = rect.left + offset;
+          stepW + stepX < rect.right;
+          stepW += stepX) {
         int count = 0;
         int avage = 0;
         int min = 256;
-        for (int y_ = step_h; y_ < step_h + stepY; y_++) {
-          for (int x_ = step_w; x_ < step_w + stepX; x_++) {
+        for (int y_ = stepH; y_ < stepH + stepY; y_++) {
+          for (int x_ = stepW; x_ < stepW + stepX; x_++) {
             if ((newByte[y_ * width + x_] & 0xff) < 150) count++;
             avage += newByte[y_ * width + x_] & 0xff;
             if ((newByte[y_ * width + x_] & 0xff) < min) {
@@ -56,8 +56,8 @@ class InterruptGrayscale extends Dispatch {
           continue;
         }
         avage ~/= stepY * stepX;
-        for (int y_ = step_h; y_ < step_h + stepY; y_++) {
-          for (int x_ = step_w; x_ < step_w + stepX; x_++) {
+        for (int y_ = stepH; y_ < stepH + stepY; y_++) {
+          for (int x_ = stepW; x_ < stepW + stepX; x_++) {
             newByte[y_ * width + x_] = (min ~/ 5 * 4);
           }
         }
@@ -66,16 +66,16 @@ class InterruptGrayscale extends Dispatch {
   }
 
   void closeOp(Uint8List newByte, int width, Rect rect, int offset) {
-    for (int step_h = rect.top + offset;
-        step_h + stepY < rect.bottom;
-        step_h += stepY) {
-      for (int step_w = rect.left + offset;
-          step_w + stepX < rect.right;
-          step_w += stepX) {
+    for (int stepH = rect.top + offset;
+        stepH + stepY < rect.bottom;
+        stepH += stepY) {
+      for (int stepW = rect.left + offset;
+          stepW + stepX < rect.right;
+          stepW += stepX) {
         int count = 0;
         int max = 0;
-        for (int y_ = step_h; y_ < step_h + stepY; y_++) {
-          for (int x_ = step_w; x_ < step_w + stepX; x_++) {
+        for (int y_ = stepH; y_ < stepH + stepY; y_++) {
+          for (int x_ = stepW; x_ < stepW + stepX; x_++) {
             if ((newByte[y_ * width + x_] & 0xff) < 150) count++;
             if ((newByte[y_ * width + x_] & 0xff) > max) {
               max = newByte[y_ * width + x_] & 0xff;
@@ -85,8 +85,8 @@ class InterruptGrayscale extends Dispatch {
         if (count > stepX * stepY / 2) {
           continue;
         }
-        for (int y_ = step_h; y_ < step_h + stepY; y_++) {
-          for (int x_ = step_w; x_ < step_w + stepX; x_++) {
+        for (int y_ = stepH; y_ < stepH + stepY; y_++) {
+          for (int x_ = stepW; x_ < stepW + stepX; x_++) {
             newByte[y_ * width + x_] = max;
           }
         }

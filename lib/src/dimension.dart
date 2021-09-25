@@ -19,9 +19,11 @@ class Dimension {
   final int _width;
   final int _height;
 
-  Dimension(this._width, this._height)
-      : assert(_width > 0, 'Argument width must greater then zero'),
-        assert(_height > 0, 'Argument height must greater then zero');
+  Dimension(this._width, this._height) {
+    if (_width < 0 || _height < 0) {
+      throw ArgumentError('Argument width & height must greater then zero');
+    }
+  }
 
   /// width of this
   int get width => _width;

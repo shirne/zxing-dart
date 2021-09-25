@@ -51,10 +51,10 @@ class ITFWriter extends OneDimensionalCodeWriter {
       [Map<EncodeHintType, Object?>? hints]) {
     int length = contents.length;
     if (length % 2 != 0) {
-      throw Exception("The length of the input should be even");
+      throw ArgumentError("The length of the input should be even");
     }
     if (length > 80) {
-      throw Exception(
+      throw ArgumentError(
           "Requested contents should be less than 80 digits long, but got $length");
     }
 

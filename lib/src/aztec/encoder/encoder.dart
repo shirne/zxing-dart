@@ -21,7 +21,6 @@ import '../../common/bit_array.dart';
 import '../../common/bit_matrix.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_encoder.dart';
-
 import 'aztec_code.dart';
 import 'high_level_encoder.dart';
 
@@ -110,7 +109,7 @@ class Encoder {
       // is the same size, but has more data.
       for (int i = 0;; i++) {
         if (i > _MAX_NB_BITS) {
-          throw Exception("Data too large for an Aztec code");
+          throw ArgumentError("Data too large for an Aztec code");
         }
         compact = i <= 3;
         layers = compact ? i + 1 : i;
@@ -334,7 +333,7 @@ class Encoder {
       case 12:
         return GenericGF.aztecData12;
       default:
-        throw Exception("Unsupported word size $wordSize");
+        throw ArgumentError("Unsupported word size $wordSize");
     }
   }
 

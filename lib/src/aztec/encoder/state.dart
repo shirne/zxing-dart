@@ -64,7 +64,7 @@ class State {
     if (eci < 0) {
       token = token.add(0, 3); // 0: FNC1
     } else if (eci > 999999) {
-      throw Exception("ECI code must be between 0 and 999999");
+      throw ArgumentError("ECI code must be between 0 and 999999");
     } else {
       Uint8List eciDigits = latin1.encode(eci.toString());
       token = token.add(eciDigits.length, 3); // 1-6: number of ECI digits

@@ -31,7 +31,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
       [Map<EncodeHintType, Object?>? hints]) {
     int length = contents.length;
     if (length > 80) {
-      throw Exception(
+      throw ArgumentError(
           "Requested contents should be less than 80 digits long, but got $length");
     }
 
@@ -41,7 +41,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
         contents = _tryToConvertToExtendedMode(contents);
         length = contents.length;
         if (length > 80) {
-          throw Exception(
+          throw ArgumentError(
               "Requested contents should be less than 80 digits long, but got $length (extended full ASCII mode)");
         }
         break;
@@ -124,7 +124,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
             extendedContent.write('%');
             extendedContent.writeCharCode((80 /* P */ + (c - 123)));
           } else {
-            throw Exception(
+            throw ArgumentError(
                 "Requested content contains a non-encodable character: '" +
                     contents[i] +
                     "'");

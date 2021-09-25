@@ -16,7 +16,7 @@
 
 import 'dart:typed_data';
 
-import '../../arguments_exception.dart';
+import 'package:zxing_lib/zxing.dart';
 
 import '../../common/bit_matrix.dart';
 import '../../formats_exception.dart';
@@ -33,7 +33,7 @@ class BitMatrixParser {
   BitMatrixParser(BitMatrix bitMatrix) {
     int dimension = bitMatrix.height;
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-      throw ArgumentsException.instance;
+      throw FormatsException.instance;
     }
 
     _version = _readVersion(bitMatrix);
@@ -400,7 +400,7 @@ class BitMatrixParser {
     int symbolSizeColumns = _version.symbolSizeColumns;
 
     if (bitMatrix.height != symbolSizeRows) {
-      throw Exception("Dimension of bitMatrix must match the version size");
+      throw ArgumentError("Dimension of bitMatrix must match the version size");
     }
 
     int dataRegionSizeRows = _version.dataRegionSizeRows;

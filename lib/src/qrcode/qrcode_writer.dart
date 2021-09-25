@@ -69,7 +69,7 @@ class QRCodeWriter implements Writer {
       QRCode code, int width, int height, int quietZone) {
     ByteMatrix? input = code.matrix;
     if (input == null) {
-      throw Exception();
+      throw StateError('ByteMatrix input is null');
     }
     int inputWidth = input.width;
     int inputHeight = input.height;

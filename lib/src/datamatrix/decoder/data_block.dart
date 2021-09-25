@@ -101,7 +101,7 @@ class DataBlock {
     }
 
     if (rawCodewordsOffset != rawCodewords.length) {
-      throw Exception();
+      throw ArgumentError();
     }
 
     return result;

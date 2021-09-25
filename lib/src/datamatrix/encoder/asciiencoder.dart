@@ -15,8 +15,8 @@
  */
 
 import 'encoder.dart';
-import 'high_level_encoder.dart';
 import 'encoder_context.dart';
+import 'high_level_encoder.dart';
 
 class ASCIIEncoder implements Encoder {
   @override
@@ -59,7 +59,7 @@ class ASCIIEncoder implements Encoder {
             context.signalEncoderChange(HighLevelEncoder.EDIFACT_ENCODATION);
             break;
           default:
-            throw Exception("Illegal mode: $newMode");
+            throw StateError("Illegal mode: $newMode");
         }
       } else if (HighLevelEncoder.isExtendedASCII(c)) {
         context.writeCodeword(HighLevelEncoder.UPPER_SHIFT);
@@ -77,6 +77,6 @@ class ASCIIEncoder implements Encoder {
       int num = (digit1 - 48) * 10 + (digit2 - 48);
       return num + 130;
     }
-    throw Exception("not digits: $digit1 $digit2");
+    throw ArgumentError("not digits: $digit1 $digit2");
   }
 }

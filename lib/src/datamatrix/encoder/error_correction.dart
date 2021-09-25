@@ -15,7 +15,6 @@
  */
 
 import '../../common/string_builder.dart';
-
 import 'symbol_info.dart';
 
 /// Error Correction Code for ECC200.
@@ -116,7 +115,7 @@ class ErrorCorrection {
   /// @return the codewords with interleaved error correction.
   static String encodeECC200(String codewords, SymbolInfo symbolInfo) {
     if (codewords.length != symbolInfo.dataCapacity) {
-      throw Exception(
+      throw ArgumentError(
           "The number of codewords does not match the selected symbol");
     }
     StringBuilder sb = StringBuilder();
@@ -158,7 +157,7 @@ class ErrorCorrection {
       }
     }
     if (table < 0) {
-      throw Exception(
+      throw ArgumentError(
           "Illegal number of error correction codewords specified: $numECWords");
     }
     List<int> poly = _FACTORS[table];

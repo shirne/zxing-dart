@@ -85,7 +85,7 @@ class GenericGF {
   /// @return the monomial representing coefficient * x^degree
   GenericGFPoly buildMonomial(int degree, int coefficient) {
     if (degree < 0) {
-      throw Exception('IllegalArgument');
+      throw ArgumentError('IllegalArgument');
     }
     if (coefficient == 0) {
       return _zero;
@@ -110,7 +110,7 @@ class GenericGF {
   /// @return base 2 log of a in GF(size)
   int log(int a) {
     if (a == 0) {
-      throw Exception('IllegalArgument');
+      throw ArgumentError('IllegalArgument');
     }
     return _logTable[a];
   }
@@ -118,7 +118,7 @@ class GenericGF {
   /// @return multiplicative inverse of a
   int inverse(int a) {
     if (a == 0) {
-      throw Exception('Arithmetic');
+      throw ArgumentError('Arithmetic');
     }
     return _expTable[_size - _logTable[a] - 1];
   }

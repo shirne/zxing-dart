@@ -15,9 +15,7 @@
  */
 
 import '../../common/string_builder.dart';
-
 import 'encoder.dart';
-
 import 'encoder_context.dart';
 import 'high_level_encoder.dart';
 
@@ -79,7 +77,7 @@ class EdifactEncoder implements Encoder {
       }
 
       if (count > 4) {
-        throw Exception("Count must not exceed 4");
+        throw StateError("Count must not exceed 4");
       }
       int restChars = count - 1;
       String encoded = _encodeToCodewords(buffer);
@@ -121,7 +119,7 @@ class EdifactEncoder implements Encoder {
   static String _encodeToCodewords(StringBuilder sb) {
     int len = sb.length;
     if (len == 0) {
-      throw Exception("StringBuffer must not be empty");
+      throw StateError("StringBuffer must not be empty");
     }
     int c1 = sb.codePointAt(0);
     int c2 = len >= 2 ? sb.codePointAt(1) : 0;

@@ -48,11 +48,11 @@ class ReedSolomonEncoder {
 
   void encode(List<int> toEncode, int ecBytes) {
     if (ecBytes == 0) {
-      throw Exception("No error correction bytes");
+      throw ArgumentError("No error correction bytes");
     }
     int dataBytes = toEncode.length - ecBytes;
     if (dataBytes <= 0) {
-      throw Exception("No data bytes provided");
+      throw ArgumentError("No data bytes provided");
     }
     GenericGFPoly generator = _buildGenerator(ecBytes);
     Int32List infoCoefficients = Int32List(dataBytes);

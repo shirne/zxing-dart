@@ -257,7 +257,7 @@ class Decoder {
       case _Table.DIGIT:
         return _DIGIT_TABLE[code];
       default:
-        // Should not reach here.
+        // Should not reach here. [IllegalStateException]
         throw Exception("Bad table");
     }
   }

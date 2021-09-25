@@ -145,7 +145,7 @@ class SymbolInfo {
       case 36:
         return 6;
       default:
-        throw Exception("Cannot handle this number of data regions");
+        throw StateError("Cannot handle this number of data regions");
     }
   }
 
@@ -161,7 +161,7 @@ class SymbolInfo {
       case 36:
         return 6;
       default:
-        throw Exception("Cannot handle this number of data regions");
+        throw StateError("Cannot handle this number of data regions");
     }
   }
 

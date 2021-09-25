@@ -155,7 +155,7 @@ class HighLevelEncoder {
     if (_charset != null) {
       CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(_charset!);
       if (null == eci) {
-        throw Exception("No ECI code for character set ${_charset!.name}");
+        throw ArgumentError("No ECI code for character set ${_charset!.name}");
       }
       initialState = initialState.appendFLGn(eci.value);
     }

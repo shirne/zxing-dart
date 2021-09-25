@@ -16,6 +16,7 @@
 
 import 'package:intl/intl.dart';
 
+import '../../reader_exception.dart';
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 
@@ -60,13 +61,21 @@ class CalendarParsedResult extends ParsedResult {
       this.latitude,
       this.longitude)
       : super(ParsedResultType.CALENDAR) {
-    _start = _parseDate(startString);
+    try {
+      _start = _parseDate(startString);
+    } on ParseException catch (_) {
+      throw ArgumentError(_.toString());
+    }
 
     if (endString == null) {
       int durationMS = _parseDurationMS(durationString);
       _end = durationMS < 0 ? -1 : _start + durationMS;
     } else {
-      _end = _parseDate(endString);
+      try {
+        _end = _parseDate(endString);
+      } on ParseException catch (_) {
+        throw ArgumentError(_.toString());
+      }
     }
 
     _startAllDay = startString != null && startString.length == 8;
@@ -128,7 +137,7 @@ class CalendarParsedResult extends ParsedResult {
   /// @throws ParseException if not able to parse as a date
   static int _parseDate(String? when) {
     if (when == null || !_dateTime.hasMatch(when)) {
-      throw Exception('Date Parse error $when');
+      throw ParseException('Date Parse error $when');
     }
     DateTime date = DateTime.parse(when);
 

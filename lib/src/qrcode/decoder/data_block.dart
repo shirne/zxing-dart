@@ -44,7 +44,7 @@ class DataBlock {
   static List<DataBlock> getDataBlocks(
       Uint8List rawCodewords, Version version, ErrorCorrectionLevel ecLevel) {
     if (rawCodewords.length != version.totalCodewords) {
-      throw Exception();
+      throw ArgumentError();
     }
 
     // Figure out the number and size of data blocks used by this version and

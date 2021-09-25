@@ -211,7 +211,7 @@ class BitArray {
   /// @param value `int` containing bits to append
   /// @param numBits bits from value to append
   void appendBits(int value, int numBits) {
-    if (numBits >= 0 && numBits <= 32) {
+    if (numBits < 0 || numBits > 32) {
       throw ArgumentError(r'Num bits must be between 0 and 32');
     }
 
@@ -235,8 +235,9 @@ class BitArray {
   }
 
   void xor(BitArray other) {
-    assert(_size == other._size, r"Sizes don't match");
-
+    if (_size != other._size) {
+      throw ArgumentError("Sizes don't match");
+    }
     for (int i = 0; i < _bits.length; i++) {
       // The last int could be incomplete (i.e. not have 32 bits in
       // it) but there is no problem since 0 XOR 0 == 0.

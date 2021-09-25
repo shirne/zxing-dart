@@ -56,7 +56,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
     int length = contents.length;
     // Check length
     if (length < 1 || length > 80) {
-      throw Exception(
+      throw ArgumentError(
           "Contents length should be between 1 and 80 characters, but got $length");
     }
     // Check for forced code set hint.
@@ -74,7 +74,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
           forcedCodeSet = _CODE_CODE_C;
           break;
         default:
-          throw ArgumentError("Unsupported code set hint: " + codeSetHint);
+          throw ArgumentError("Unsupported code set hint: $codeSetHint");
       }
     }
 
@@ -253,10 +253,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
     if (start >= last) {
       return _CType.UNCODABLE;
     }
-    if (value[start] == _ESCAPE_FNC_1) {
+    int c = value.codeUnitAt(start);
+    if (c == _ESCAPE_FNC_1) {
       return _CType.FNC_1;
     }
-    int c = value.codeUnitAt(start);
     if (c < 48 /* 0 */ || c > 57 /* 9 */) {
       return _CType.UNCODABLE;
     }

@@ -54,7 +54,7 @@ class ModulusGF {
 
   ModulusPoly buildMonomial(int degree, int coefficient) {
     if (degree < 0) {
-      throw Exception();
+      throw ArgumentError();
     }
     if (coefficient == 0) {
       return _zero;
@@ -78,14 +78,15 @@ class ModulusGF {
 
   int log(int a) {
     if (a == 0) {
-      throw Exception();
+      throw ArgumentError();
     }
     return _logTable[a];
   }
 
   int inverse(int a) {
     if (a == 0) {
-      throw Exception('Arithmetic');
+      //ArithmeticException
+      throw ArgumentError();
     }
     return _expTable[_modulus - _logTable[a] - 1];
   }

@@ -127,17 +127,17 @@ class AddressBookParsedResult extends ParsedResult {
     if (_phoneNumbers != null &&
         _phoneTypes != null &&
         _phoneNumbers!.length != _phoneTypes!.length) {
-      throw Exception("Phone numbers and types lengths differ");
+      throw ArgumentError("Phone numbers and types lengths differ");
     }
     if (_emails != null &&
         _emailTypes != null &&
         _emails!.length != _emailTypes!.length) {
-      throw Exception("Emails and types lengths differ");
+      throw ArgumentError("Emails and types lengths differ");
     }
     if (_addresses != null &&
         _addressTypes != null &&
         _addresses!.length != _addressTypes!.length) {
-      throw Exception("Addresses and types lengths differ");
+      throw ArgumentError("Addresses and types lengths differ");
     }
   }
 

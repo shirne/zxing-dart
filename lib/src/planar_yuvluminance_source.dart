@@ -50,7 +50,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     width ??= _dataWidth - _left;
     height ??= _dataHeight - _top;
     if (_left + width > _dataWidth || _top + height > _dataHeight) {
-      throw Exception("Crop rectangle does not fit within image data.");
+      throw ArgumentError("Crop rectangle does not fit within image data.");
     }
 
     if (isReverseHorizontal) {
@@ -61,7 +61,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   @override
   Int8List getRow(int y, Int8List? row) {
     if (y < 0 || y >= height) {
-      throw Exception("Requested row is outside the image: $y");
+      throw ArgumentError("Requested row is outside the image: $y");
     }
 
     if (row == null || row.length < width) {

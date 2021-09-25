@@ -54,16 +54,19 @@ class RGBLuminanceSource extends LuminanceSource {
 
   RGBLuminanceSource._(this._luminances, this._dataWidth, this._dataHeight,
       [this._left = 0, this._top = 0, int? width, int? height])
-      : assert(_left + (width ?? _dataWidth) <= _dataWidth,
-            r'Crop rectangle does not fit within image data.'),
-        assert(_top + (height ?? _dataHeight) <= _dataHeight,
-            r'Crop rectangle does not fit within image data.'),
-        super(width ?? _dataWidth, height ?? _dataHeight);
+      : super(width ?? _dataWidth, height ?? _dataHeight) {
+    if (width != null && height != null) {
+      if (_left + width > _dataWidth || _top + height > _dataHeight) {
+        throw ArgumentError("Crop rectangle does not fit within image data.");
+      }
+    }
+  }
 
   @override
   Int8List getRow(int y, Int8List? row) {
-    assert(y >= 0 && y < height, "Requested row is outside the image: $y");
-
+    if (y < 0 || y >= height) {
+      throw ArgumentError("Requested row is outside the image: $y");
+    }
     if (row == null || row.length < width) {
       row = Int8List(width);
     }

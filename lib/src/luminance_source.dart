@@ -69,7 +69,8 @@ abstract class LuminanceSource {
   /// @param height The height of the rectangle to crop.
   /// @return A cropped version of this object.
   LuminanceSource crop(int left, int top, int width, int height) {
-    throw Exception("This luminance source does not support cropping.");
+    throw UnimplementedError(
+        "This luminance source does not support cropping.");
   }
 
   /// Get whether this subclass supports counter-clockwise rotation.
@@ -86,7 +87,7 @@ abstract class LuminanceSource {
   /// Returns a new object with rotated image data by 90 degrees counterclockwise.
   /// Only callable if [isRotateSupported] is true.
   LuminanceSource rotateCounterClockwise() {
-    throw Exception(
+    throw UnimplementedError(
         "This luminance source does not support rotation by 90 degrees.");
   }
 
@@ -95,7 +96,7 @@ abstract class LuminanceSource {
   /// Returns a new object with rotated image data by 45 degrees counterclockwise.
   /// Only callable if [isRotateSupported] is true.
   LuminanceSource rotateCounterClockwise45() {
-    throw Exception(
+    throw UnimplementedError(
         "This luminance source does not support rotation by 45 degrees.");
   }
 

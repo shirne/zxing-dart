@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-import '../../arguments_exception.dart';
-
-import '../../common/detector/math_utils.dart';
 import '../../common/bit_matrix.dart';
-
+import '../../common/detector/math_utils.dart';
 import '../../formats_exception.dart';
 import 'error_correction_level.dart';
 import 'format_information.dart';
@@ -123,7 +120,7 @@ class Version {
       return getVersionForNumber((dimension - 17) ~/ 4);
     } on ArgumentError catch (_) {
       //IllegalArgumentException
-      throw ArgumentsException.instance;
+      throw FormatsException.instance;
     }
   }
 

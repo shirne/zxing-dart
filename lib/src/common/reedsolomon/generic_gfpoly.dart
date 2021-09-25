@@ -36,10 +36,12 @@ class GenericGFPoly {
   /// @throws IllegalArgumentException if argument is null or empty,
   /// or if leading coefficient is 0 and this is not a
   /// constant polynomial (that is, it is not the monomial "0")
-  GenericGFPoly(this._field, Int32List coefficients)
-      : assert(coefficients.isNotEmpty, 'IllegalArgument'),
-        _coefficients = Int32List.fromList(
-            coefficients.skipWhile((value) => value == 0).toList()) {
+  GenericGFPoly(this._field, Int32List coefficients) {
+    if (coefficients.isEmpty) {
+      throw ArgumentError();
+    }
+    _coefficients = Int32List.fromList(
+        coefficients.skipWhile((value) => value == 0).toList());
     if (_coefficients.isEmpty) {
       _coefficients = Int32List(1);
     }
@@ -83,7 +85,7 @@ class GenericGFPoly {
 
   GenericGFPoly addOrSubtract(GenericGFPoly other) {
     if (_field != other._field) {
-      throw Exception("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
     }
     if (isZero) {
       return other;
@@ -114,7 +116,7 @@ class GenericGFPoly {
 
   GenericGFPoly multiply(GenericGFPoly other) {
     if (_field != other._field) {
-      throw Exception("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
     }
     if (isZero || other.isZero) {
       return _field.zero;
@@ -151,7 +153,7 @@ class GenericGFPoly {
 
   GenericGFPoly multiplyByMonomial(int degree, int coefficient) {
     if (degree < 0) {
-      throw Exception('IllegalArgument');
+      throw ArgumentError('IllegalArgument');
     }
     if (coefficient == 0) {
       return _field.zero;
@@ -166,10 +168,10 @@ class GenericGFPoly {
 
   List<GenericGFPoly> divide(GenericGFPoly other) {
     if (_field != other._field) {
-      throw Exception("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
     }
     if (other.isZero) {
-      throw Exception("Divide by 0");
+      throw ArgumentError("Divide by 0");
     }
 
     GenericGFPoly quotient = _field.zero;

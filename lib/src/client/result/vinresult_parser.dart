@@ -54,7 +54,7 @@ class VINResultParser extends ResultParser {
         plantCode: rawText.codeUnitAt(10),
         sequentialNumber: rawText.substring(11),
       );
-    } on ArgumentsException catch (_) {
+    } on ArgumentError catch (_) {
       // IllegalArgumentException
       return null;
     }
@@ -83,7 +83,7 @@ class VINResultParser extends ResultParser {
     if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
       return c - 48;
     }
-    throw ArgumentsException();
+    throw ArgumentError();
   }
 
   static int _vinPositionWeight(int position) {
@@ -99,7 +99,7 @@ class VINResultParser extends ResultParser {
     if (position >= 10 && position <= 17) {
       return 19 - position;
     }
-    throw ArgumentsException();
+    throw ArgumentError();
   }
 
   static String _checkChar(int remainder) {
@@ -109,7 +109,7 @@ class VINResultParser extends ResultParser {
     if (remainder == 10) {
       return 'X';
     }
-    throw ArgumentsException();
+    throw ArgumentError();
   }
 
   static int _modelYear(int c) {
@@ -134,7 +134,7 @@ class VINResultParser extends ResultParser {
     if (c >= 65 /*'A'*/ && c <= 68 /*'D'*/) {
       return (c - 65) + 2010;
     }
-    throw ArgumentsException();
+    throw ArgumentError();
   }
 
   static String? _countryCode(String wmi) {

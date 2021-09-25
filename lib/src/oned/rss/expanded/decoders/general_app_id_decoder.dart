@@ -26,7 +26,6 @@
 
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
-
 import '../../../../formats_exception.dart';
 import 'block_parsed_result.dart';
 import 'current_parsing_state.dart';
@@ -138,8 +137,8 @@ class GeneralAppIdDecoder {
 
     DecodedInformation? lastDecoded = _parseBlocks();
     if (lastDecoded != null && lastDecoded.isRemaining) {
-      return DecodedInformation(_current.position, _buffer.toString(),
-          lastDecoded.remainingValue);
+      return DecodedInformation(
+          _current.position, _buffer.toString(), lastDecoded.remainingValue);
     }
     return DecodedInformation(_current.position, _buffer.toString());
   }
@@ -433,7 +432,7 @@ class GeneralAppIdDecoder {
         c = '/';
         break;
       default:
-        throw Exception("Decoding invalid alphanumeric value: $sixBitValue");
+        throw StateError("Decoding invalid alphanumeric value: $sixBitValue");
     }
     return DecodedChar(pos + 6, c.codeUnitAt(0));
   }

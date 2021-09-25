@@ -51,7 +51,7 @@ void main() {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual, reason: toEncode);
+    expect(actual, expected, reason: toEncode);
 
     BitArray row = result.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
@@ -74,7 +74,7 @@ void main() {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testEncodeWithFunc2', () {
@@ -92,7 +92,7 @@ void main() {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testEncodeWithFunc1', () {
@@ -110,7 +110,7 @@ void main() {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testRoundtrip', () {
@@ -121,7 +121,7 @@ void main() {
     BitArray row = encResult.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
     String actual = rtResult.text;
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testEncodeWithFunc4', () {
@@ -139,7 +139,7 @@ void main() {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = matrixToString(result);
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testEncodeWithFncsAndNumberInCodesetA', () {
@@ -160,7 +160,7 @@ void main() {
 
     String actual = matrixToString(result);
 
-    expect(expected, actual);
+    expect(actual, expected);
   });
 
   test('testEncodeSwitchBetweenCodesetsAAndB', () {
@@ -204,8 +204,7 @@ void main() {
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "A"};
 
     try {
-      BitMatrix result =
-          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
       fail(
           'Lower case characters should not be accepted when the code set is forced to A.');
     } on ArgumentError catch (_) {
@@ -218,8 +217,9 @@ void main() {
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "B"};
     try {
-      BitMatrix result =
-          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      fail(
+          'Characters with ASCII value below 32 should not be accepted when the code set is forced to B.');
     } on ArgumentError catch (_) {
       //IllegalArgumentException
     }
@@ -231,8 +231,7 @@ void main() {
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "C"};
     try {
-      BitMatrix result =
-          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
       fail(
           'Non-digit characters should not be accepted when the code set is forced to C.');
     } on ArgumentError catch (_) {
@@ -246,8 +245,7 @@ void main() {
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "C"};
     try {
-      BitMatrix result =
-          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
       fail(
           'Function codes other than 1 should not be accepted when the code set is forced to C.');
     } on ArgumentError catch (_) {
@@ -261,8 +259,7 @@ void main() {
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "C"};
     try {
-      BitMatrix result =
-          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
       fail(
           'An uneven amount of digits should not be accepted when the code set is forced to C.');
     } on ArgumentError catch (_) {

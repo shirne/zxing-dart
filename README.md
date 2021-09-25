@@ -19,6 +19,11 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 |:---:|:---:|
 |![01](preview/01.png "01")|![02](preview/02.png "02")|
 
+## Exception Type
+* IllegalArgumentException => ArgumentError
+* FormatException => FormatsException
+* IllegalStateException => StateError
+
 ## Getting Started
 
 This project is a starting point for a Dart

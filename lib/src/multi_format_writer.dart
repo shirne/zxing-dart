@@ -82,7 +82,7 @@ class MultiFormatWriter implements Writer {
         writer = AztecWriter();
         break;
       default:
-        throw Exception("No encoder available for format $format");
+        throw ArgumentError("No encoder available for format $format");
     }
     return writer.encode(contents, format, width, height, hints);
   }
