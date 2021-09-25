@@ -35,6 +35,7 @@ class AbstractBlackBoxTestCase {
   final BarcodeFormat? _expectedFormat;
   final List<TestResult> _testResults = [];
   final Map<DecodeHintType, Object> _hints = {};
+  final Image Function(Image, String)? _imageProcess;
 
   static Directory buildTestBase(String testBasePathSuffix) {
     // A little workaround to prevent aggravation in my IDE
@@ -44,7 +45,8 @@ class AbstractBlackBoxTestCase {
   }
 
   AbstractBlackBoxTestCase(
-      String testBasePathSuffix, this._barcodeReader, this._expectedFormat)
+      String testBasePathSuffix, this._barcodeReader, this._expectedFormat,
+      [this._imageProcess])
       : _testBase = buildTestBase(testBasePathSuffix);
 
   Directory getTestBase() {
@@ -70,6 +72,9 @@ class AbstractBlackBoxTestCase {
       _log.info("Starting ${testImage.path}");
 
       Image image = decodeImage(testImage.readAsBytesSync())!;
+      if (_imageProcess != null) {
+        image = _imageProcess!.call(image, testImage.absolute.path);
+      }
 
       String testImageFileName = testImage.uri.pathSegments.last;
       String fileBaseName =
@@ -93,7 +98,7 @@ class AbstractBlackBoxTestCase {
       }
 
       for (int x = 0; x < testCount; x++) {
-        double rotation = _testResults[x].getRotation();
+        double rotation = _testResults[x].rotation;
         Image rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
         BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
@@ -130,23 +135,22 @@ class AbstractBlackBoxTestCase {
 
     for (int x = 0; x < _testResults.length; x++) {
       TestResult testResult = _testResults[x];
-      _log.info("Rotation ${testResult.getRotation()} degrees:");
+      _log.info("Rotation ${testResult.rotation} degrees:");
       _log.info(
-          " ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.getMustPassCount()} required)");
+          " ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)");
       int failed = imageFiles.length - passedCounts[x];
       _log.info(
           " ${misreadCounts[x]} failed due to misreads, ${failed - misreadCounts[x]} not detected");
       _log.info(
-          " ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.getTryHarderCount()} required)");
+          " ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.tryHarderCount} required)");
       failed = imageFiles.length - tryHarderCounts[x];
       _log.info(
           " ${tryHarderMisreadCounts[x]} failed due to misreads, ${failed - tryHarderMisreadCounts[x]} not detected");
       totalFound += passedCounts[x] + tryHarderCounts[x];
-      totalMustPass +=
-          testResult.getMustPassCount() + testResult.getTryHarderCount();
+      totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
       totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
       totalMaxMisread +=
-          testResult.getMaxMisreads() + testResult.getMaxTryHarderMisreads();
+          testResult.maxMisreads + testResult.maxTryHarderMisreads;
     }
 
     int totalTests = imageFiles.length * testCount * 2;
@@ -171,14 +175,14 @@ class AbstractBlackBoxTestCase {
     for (int x = 0; x < testCount; x++) {
       TestResult testResult = _testResults[x];
       String label =
-          "Rotation ${testResult.getRotation()} degrees: Too many images failed";
-      assert(passedCounts[x] >= testResult.getMustPassCount(), label);
-      assert(tryHarderCounts[x] >= testResult.getTryHarderCount(),
+          "Rotation ${testResult.rotation} degrees: Too many images failed";
+      assert(passedCounts[x] >= testResult.mustPassCount, label);
+      assert(tryHarderCounts[x] >= testResult.tryHarderCount,
           "Try harder, $label");
       label =
-          "Rotation ${testResult.getRotation()} degrees: Too many images misread";
-      assert(misreadCounts[x] <= testResult.getMaxMisreads(), label);
-      assert(tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads(),
+          "Rotation ${testResult.rotation} degrees: Too many images misread";
+      assert(misreadCounts[x] <= testResult.maxMisreads, label);
+      assert(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads,
           "Try harder, $label");
     }
   }

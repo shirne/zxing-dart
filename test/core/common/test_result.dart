@@ -24,24 +24,4 @@ class TestResult {
 
   TestResult(this.mustPassCount, this.tryHarderCount, this.maxMisreads,
       this.maxTryHarderMisreads, this.rotation);
-
-  int getMustPassCount() {
-    return mustPassCount;
-  }
-
-  int getTryHarderCount() {
-    return tryHarderCount;
-  }
-
-  int getMaxMisreads() {
-    return maxMisreads;
-  }
-
-  int getMaxTryHarderMisreads() {
-    return maxTryHarderMisreads;
-  }
-
-  double getRotation() {
-    return rotation;
-  }
 }

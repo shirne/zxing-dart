@@ -10,7 +10,7 @@ class OverDarkScale extends Dispatch {
     final random = math.Random();
     double rand = random.nextDouble() / 2 + 0.4;
     for (int i = 0; i < width * height; i++) {
-      data[i] = (255 * math.pow((data[i] & 0xff) ~/ 255, rand)).toInt();
+      data[i] = (255 * math.pow((data[i] & 0xff) / 255, rand)).toInt();
     }
     return data;
   }

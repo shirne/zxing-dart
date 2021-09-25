@@ -82,7 +82,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         List<Result> results = [];
         for (File imageFile in testImageGroup.value) {
           Image image = decodeImage(imageFile.readAsBytesSync())!;
-          double rotation = testResults[x].getRotation();
+          double rotation = testResults[x].rotation;
           Image rotatedImage =
               AbstractBlackBoxTestCase.rotateImage(image, rotation);
           LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
@@ -119,15 +119,14 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     for (int x = 0; x < testResults.length; x++) {
       TestResult testResult = testResults[x];
       log.info(
-        "Rotation ${testResult.getRotation()} degrees:",
+        "Rotation ${testResult.rotation} degrees:",
       );
       log.info(
-          " ${passedCounts[x]} of $numberOfTests images passed (${testResult.getMustPassCount()} required)");
+          " ${passedCounts[x]} of $numberOfTests images passed (${testResult.mustPassCount} required)");
       log.info(
-          " ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.getTryHarderCount()} required)");
+          " ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.tryHarderCount} required)");
       totalFound += passedCounts[x] + tryHarderCounts[x];
-      totalMustPass +=
-          testResult.getMustPassCount() + testResult.getTryHarderCount();
+      totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
     }
 
     int totalTests = numberOfTests * testCount * 2;
@@ -143,9 +142,9 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     for (int x = 0; x < testCount; x++) {
       TestResult testResult = testResults[x];
       String label =
-          "Rotation ${testResult.getRotation()} degrees: Too many images failed";
-      assert(passedCounts[x] >= testResult.getMustPassCount(), label);
-      assert(tryHarderCounts[x] >= testResult.getTryHarderCount(),
+          "Rotation ${testResult.rotation} degrees: Too many images failed";
+      assert(passedCounts[x] >= testResult.mustPassCount, label);
+      assert(tryHarderCounts[x] >= testResult.tryHarderCount,
           "Try harder, $label");
     }
   }
