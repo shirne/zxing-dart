@@ -21,30 +21,30 @@ class OverlayGrayscale extends Dispatch {
     int stepX = 2;
     int stepY = 2;
 
-    for (int start_h = rect.top; start_h < rect.bottom; start_h += stepY) {
-      for (int start_w = rect.left; start_w < rect.right; start_w += stepX) {
-        int oriAvage = 0;
-        int tranAvage = 0;
+    for (int startH = rect.top; startH < rect.bottom; startH += stepY) {
+      for (int startW = rect.left; startW < rect.right; startW += stepX) {
+        int oriAverage = 0;
+        int tranAverage = 0;
         int min = 256;
-        for (int i = start_h; i < start_h + stepY; i++) {
-          for (int j = start_w; j < start_w + stepX; j++) {
-            oriAvage += (newByte[i * width + j] & 0xff);
-            tranAvage += (tranByte[i * width + j] & 0xff);
+        for (int i = startH; i < startH + stepY; i++) {
+          for (int j = startW; j < startW + stepX; j++) {
+            oriAverage += (newByte[i * width + j] & 0xff);
+            tranAverage += (tranByte[i * width + j] & 0xff);
             if ((tranByte[i * width + j] & 0xff) < min) {
               min = tranByte[i * width + j] & 0xff;
             }
           }
         }
 
-        if (oriAvage <= tranAvage) {
+        if (oriAverage <= tranAverage) {
           continue;
         }
 
-        for (int i = start_h; i < start_h + stepY; i++) {
+        for (int i = startH; i < startH + stepY; i++) {
           //System.arraycopy(tranByte, i * width + start_w, newByte,
           //    i * width + start_w, start_w + stepX - start_w);
-          List.copyRange(newByte, i * width + start_w, tranByte,
-              i * width + start_w, start_w + stepX + i * width);
+          List.copyRange(newByte, i * width + startW, tranByte,
+              i * width + startW, startW + stepX + i * width);
         }
       }
     }

@@ -213,7 +213,7 @@ void main() {
     }
   });
   test('testEncodeWithForcedCodeSetFailureCodeSetBBadCharacter', () {
-    String toEncode = "ASdf\00123"; // \0 (ascii value 0)
+    String toEncode = "ASdf\x000123"; // \0 (ascii value 0)
     // Characters with ASCII value below 32 should not be accepted when the code set is forced to B.
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "B"};

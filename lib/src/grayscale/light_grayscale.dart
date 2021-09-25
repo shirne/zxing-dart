@@ -20,9 +20,9 @@ class LightGrayscale extends Dispatch {
     Uint8List newByte = Uint8List.fromList(data);
     final random = math.Random();
     int rand = random.nextInt(4) + 3;
-    for (int start_h = rect.top; start_h < rect.bottom; start_h++) {
-      for (int start_w = rect.left; start_w < rect.right; start_w++) {
-        int index = start_h * width + start_w;
+    for (int startH = rect.top; startH < rect.bottom; startH++) {
+      for (int startW = rect.left; startW < rect.right; startW++) {
+        int index = startH * width + startW;
         newByte[index] = (newByte[index] * rand);
       }
     }

@@ -22,32 +22,32 @@ class ReductionAreaScale extends Dispatch {
 
     int reductWidth, reductHeight = 0;
 
-    for (double start_h = rect.top.toDouble();
-        start_h < rect.bottom;
-        start_h += step) {
+    for (double startH = rect.top.toDouble();
+        startH < rect.bottom;
+        startH += step) {
       reductHeight++;
-      for (double start_w = rect.left.toDouble();
-          start_w < rect.right;
-          start_w += step) {
-        int index = (start_h.toInt()) * width + start_w.toInt();
+      for (double startW = rect.left.toDouble();
+          startW < rect.right;
+          startW += step) {
+        int index = (startH.toInt()) * width + startW.toInt();
         emptyByte[areaSize] = newByte[index];
         areaSize++;
       }
     }
     reductWidth = areaSize ~/ reductHeight;
     areaSize = 0;
-    for (int start_h = rect.top; start_h < rect.bottom; start_h++) {
-      for (int start_w = rect.left; start_w < rect.right; start_w++) {
-        int index = start_h * width + start_w;
-        int lef_w = (rect.width - reductWidth) ~/ 2 + rect.left;
-        int rig_w = lef_w + reductWidth;
-        int top_h = (rect.height - reductHeight) ~/ 2 + rect.top;
-        int bot_h = top_h + reductHeight;
+    for (int startH = rect.top; startH < rect.bottom; startH++) {
+      for (int startW = rect.left; startW < rect.right; startW++) {
+        int index = startH * width + startW;
+        int lefW = (rect.width - reductWidth) ~/ 2 + rect.left;
+        int rigW = lefW + reductWidth;
+        int topH = (rect.height - reductHeight) ~/ 2 + rect.top;
+        int botH = topH + reductHeight;
 
-        if (start_h >= top_h &&
-            start_h < bot_h &&
-            start_w >= lef_w &&
-            start_w < rig_w) {
+        if (startH >= topH &&
+            startH < botH &&
+            startW >= lefW &&
+            startW < rigW) {
           newByte[index] = emptyByte[areaSize++];
         } else {
           newByte[index] = 255;

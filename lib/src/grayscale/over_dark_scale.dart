@@ -20,9 +20,9 @@ class OverDarkScale extends Dispatch {
     Uint8List newByte = Uint8List.fromList(data);
     final random = math.Random();
     double rand = random.nextDouble() / 2 + 0.4;
-    for (int start_h = rect.top; start_h < rect.bottom; start_h++) {
-      for (int start_w = rect.left; start_w < rect.right; start_w++) {
-        int index = start_h * width + start_w;
+    for (int startH = rect.top; startH < rect.bottom; startH++) {
+      for (int startW = rect.left; startW < rect.right; startW++) {
+        int index = startH * width + startW;
         newByte[index] =
             (255 * math.pow((newByte[index] & 0xff) / 255, rand)).toInt();
       }
