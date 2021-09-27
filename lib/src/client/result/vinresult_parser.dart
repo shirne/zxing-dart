@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import 'package:zxing_lib/src/arguments_exception.dart';
-
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'result_parser.dart';

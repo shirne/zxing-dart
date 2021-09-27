@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import '../common/bit_array.dart';
-import '../common/string_builder.dart';
-
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
+import '../common/bit_array.dart';
+import '../common/string_builder.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../result.dart';
@@ -49,9 +48,8 @@ class UPCAReader extends UPCEANReader {
   BarcodeFormat get barcodeFormat => BarcodeFormat.UPC_A;
 
   @override
-  int decodeMiddle(
-      BitArray row, List<int> startRange, StringBuilder resultString) {
-    return _ean13Reader.decodeMiddle(row, startRange, resultString);
+  int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
+    return _ean13Reader.decodeMiddle(row, startRange, result);
   }
 
   static Result _maybeReturnResult(Result result) {

@@ -28,19 +28,13 @@ enum _State { NUMERIC, ALPHA, ISO_IEC_646 }
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class CurrentParsingState {
-  int _position = 0;
+  int position = 0;
   _State _encoding = _State.NUMERIC;
 
   CurrentParsingState();
 
-  int get position => _position;
-
-  set position(int position) {
-    _position = position;
-  }
-
   void incrementPosition(int delta) {
-    _position += delta;
+    position += delta;
   }
 
   bool get isAlpha => _encoding == _State.ALPHA;

@@ -22,7 +22,7 @@ import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
 void main() {
-  bool bitSet(Int32List bits, int i) {
+  bool bitSet(Uint32List bits, int i) {
     return (bits[i ~/ 32] & (1 << (i & 0x1F))) != 0;
   }
 
@@ -35,65 +35,15 @@ void main() {
     return true;
   }
 
-  Int32List reverseOriginal(Int32List oldBits, int size) {
-    Int32List newBits = Int32List(oldBits.length);
+  Uint32List reverseOriginal(Uint32List oldBits, int size) {
+    Uint32List newBits = Uint32List(oldBits.length);
     for (int i = 0; i < size; i++) {
       if (bitSet(oldBits, size - i - 1)) {
-        newBits[i ~/ 32] = (newBits[i ~/ 32] | 1 << (i & 0x1F)).toSigned(32);
+        newBits[i ~/ 32] = (newBits[i ~/ 32] | 1 << (i & 0x1F)).toUnsigned(32);
       }
     }
     return newBits;
   }
-
-  /// zxing 以前的实现
-  int reverse(int x) {
-    x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1);
-    x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2);
-    x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4);
-    x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8);
-    x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16);
-    return x;
-  }
-
-  /// java.lang.Integer.inverse 实现
-  int reverse2(int i) {
-    i = ((i & 0x55555555) << 1).toSigned(32) | (i >>> 1) & 0x55555555;
-    i = ((i & 0x33333333) << 2).toSigned(32) | (i >>> 2) & 0x33333333;
-    i = ((i & 0x0f0f0f0f) << 4).toSigned(32) | (i >>> 4) & 0x0f0f0f0f;
-
-    return (i << 24).toSigned(32) |
-        ((i & 0xff00) << 8).toSigned(32) |
-        ((i >>> 8) & 0xff00) |
-        (i >>> 24);
-  }
-
-  /// fixnum的Int32运算
-  /*int reverseInt32(int i) {
-    Int32 x = Int32(i);
-    x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1);
-    x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2);
-    x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4);
-    x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8);
-    x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16);
-    return x.toInt();
-  }*/
-
-  test('testBit', () {
-    for (int a in [
-      5,
-      99,
-      654512,
-      545482263,
-      4294967296,
-    ]) {
-      int reverseFun = Utils.reverseSign32(a);
-      int reverse2Fun = reverse2(a);
-      //int reverseI32 = reverseInt32(a);
-      expect(reverseFun, reverse2Fun,
-          reason:
-              '$a reverted error\n${reverseFun.toRadixString(2)}\n${reverse2Fun.toRadixString(2)}');
-    }
-  });
 
   test('testGetSet', () {
     BitArray array = BitArray(33);
@@ -230,7 +180,7 @@ void main() {
     array.set(63);
     List<int> ints = array.getBitArray();
     expect(1, ints[0]);
-    expect(MathUtils.MIN_VALUE, ints[1]);
+    expect(2147483648, ints[1]);
   });
 
   test('testIsRange', () {
@@ -255,12 +205,14 @@ void main() {
   });
 
   test('reverseAlgorithmTest', () {
-    Int32List oldBits = Int32List.fromList([128, 256, 512, 6453324, 50934953]);
+    Uint32List oldBits =
+        Uint32List.fromList([128, 256, 512, 6453324, 50934953]);
     for (int size = 1; size < 160; size++) {
-      Int32List newBitsOriginal = reverseOriginal(oldBits, size);
-      BitArray newBitArray = BitArray.test(Int32List.fromList(oldBits), size);
+      Uint32List newBitsOriginal = reverseOriginal(oldBits, size);
+      BitArray newBitArray = BitArray.test(Uint32List.fromList(oldBits), size);
       newBitArray.reverse();
-      Int32List newBitsNew = newBitArray.getBitArray();
+      Uint32List newBitsNew = newBitArray.getBitArray();
+      expect(newBitsOriginal.join(","), newBitsNew.join(","));
       assert(arraysAreEqual(newBitsOriginal, newBitsNew, size ~/ 32 + 1));
     }
   });

@@ -24,12 +24,12 @@ import 'utils.dart';
 ///
 /// @author Sean Owen
 class BitArray {
-  late Int32List _bits;
+  late Uint32List _bits;
   int _size;
 
   BitArray([this._size = 0]) {
     if (_size == 0) {
-      _bits = Int32List(1);
+      _bits = Uint32List(1);
     } else {
       _bits = _makeArray(_size);
     }
@@ -38,7 +38,7 @@ class BitArray {
   BitArray.test(this._bits, this._size);
 
   // for tests
-  Int32List get bits => _bits;
+  Uint32List get bits => _bits;
 
   int get size => _size;
 
@@ -46,7 +46,7 @@ class BitArray {
 
   void _ensureCapacity(int size) {
     if (size > _bits.length * 32) {
-      Int32List newBits = _makeArray(size);
+      Uint32List newBits = _makeArray(size);
       List.copyRange(newBits, 0, _bits, 0, _bits.length);
       _bits = newBits;
     }
@@ -246,7 +246,7 @@ class BitArray {
   ///
   /// @param bitOffset first bit to start writing
   /// @param array array to write into. Bytes are written most-significant byte first. This is the opposite
-  ///  of the internal representation, which is exposed by {@link #getBitArray()}
+  ///  of the internal representation, which is exposed by [getBitArray]
   /// @param offset position in array to start writing
   /// @param numBytes how many bytes to write
   void toBytes(int bitOffset, Uint8List array, int offset, int numBytes) {
@@ -264,13 +264,13 @@ class BitArray {
 
   /// @return underlying array of ints. The first element holds the first 32 bits, and the least
   ///         significant bit is bit 0.
-  Int32List getBitArray() {
+  Uint32List getBitArray() {
     return _bits;
   }
 
   /// Reverses all bits in the array.
   void reverse() {
-    Int32List newBits = Int32List(_bits.length);
+    Uint32List newBits = Uint32List(_bits.length);
     // reverse all int's first
     int len = (_size - 1) ~/ 32;
     int oldBitsLen = len + 1;
@@ -283,7 +283,7 @@ class BitArray {
       var currentInt = newBits[0] >>> leftOffset;
       for (int i = 1; i < oldBitsLen; i++) {
         var nextInt = newBits[i];
-        currentInt |= (nextInt << (32 - leftOffset)).toSigned(32);
+        currentInt |= (nextInt << (32 - leftOffset)).toUnsigned(32);
         newBits[i - 1] = currentInt.toInt();
         currentInt = nextInt >>> leftOffset;
       }
@@ -292,8 +292,8 @@ class BitArray {
     _bits = newBits;
   }
 
-  static Int32List _makeArray(int size) {
-    return Int32List((size + 31) ~/ 32);
+  static Uint32List _makeArray(int size) {
+    return Uint32List((size + 31) ~/ 32);
   }
 
   @override
@@ -322,6 +322,6 @@ class BitArray {
   }
 
   BitArray clone() {
-    return BitArray.test(Int32List.fromList(_bits.toList()), _size);
+    return BitArray.test(Uint32List.fromList(_bits.toList()), _size);
   }
 }

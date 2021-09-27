@@ -59,13 +59,13 @@ class DataMatrixWriter implements Writer {
       if (requestedShape != null) {
         shape = requestedShape;
       }
-      // @SuppressWarnings("deprecation")
+      // ignore: deprecated_consistency
       Dimension? requestedMinSize =
           hints[EncodeHintType.MIN_SIZE] as Dimension?;
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
-      // @SuppressWarnings("deprecation")
+      // ignore: deprecated_consistency
       Dimension? requestedMaxSize =
           hints[EncodeHintType.MAX_SIZE] as Dimension?;
       if (requestedMaxSize != null) {

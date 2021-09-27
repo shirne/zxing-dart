@@ -254,6 +254,8 @@ class DecodedBitStreamParser {
         // do not include terminator
         optionalFieldsLength--;
       }
+
+      // ignore: deprecated_consistency
       resultMetadata.optionalData = codewords.sublist(
           optionalFieldsStart, optionalFieldsStart + optionalFieldsLength);
     }

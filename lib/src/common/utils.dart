@@ -39,11 +39,11 @@ class Utils {
   }
 
   static int reverseSign32(int x) {
-    x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1).toSigned(32);
-    x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2).toSigned(32);
-    x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4).toSigned(32);
-    x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8).toSigned(32);
-    x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16).toSigned(32);
+    x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1).toUnsigned(32);
+    x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2).toUnsigned(32);
+    x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4).toUnsigned(32);
+    x = ((x >> 8) & 0x00ff00ff) | ((x & 0x00ff00ff) << 8).toUnsigned(32);
+    x = ((x >> 16) & 0x0000ffff) | ((x & 0x0000ffff) << 16).toUnsigned(32);
     return x;
   }
 

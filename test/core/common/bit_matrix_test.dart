@@ -88,6 +88,7 @@ void main() {
     BitMatrix matrix = BitMatrix(5);
     assert(matrix.getEnclosingRectangle() == null);
     matrix.setRegion(1, 1, 1, 1);
+    print(matrix.data.toList().map((a) => a.toRadixString(2)));
     expect([1, 1, 1, 1], matrix.getEnclosingRectangle());
     matrix.setRegion(1, 1, 3, 2);
     expect([1, 1, 3, 2], matrix.getEnclosingRectangle());

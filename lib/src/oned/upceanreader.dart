@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import '../common/bit_array.dart';
-import '../common/string_builder.dart';
-
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
+import '../common/bit_array.dart';
+import '../common/string_builder.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
@@ -391,6 +390,5 @@ abstract class UPCEANReader extends OneDReader {
   /// @param resultString [StringBuffer] to append decoded chars to
   /// @return horizontal offset of first pixel after the "middle" that was decoded
   /// @throws NotFoundException if decoding could not complete successfully
-  int decodeMiddle(
-      BitArray row, List<int> startRange, StringBuilder resultString);
+  int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result);
 }

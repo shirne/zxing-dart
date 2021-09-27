@@ -22,12 +22,12 @@ class Codeword {
   final int _endX;
   final int _bucket;
   final int _value;
-  int _rowNumber = _BARCODE_ROW_UNKNOWN;
+  int rowNumber = _BARCODE_ROW_UNKNOWN;
 
   Codeword(this._startX, this._endX, this._bucket, this._value);
 
   bool hasValidRowNumber() {
-    return isValidRowNumber(_rowNumber);
+    return isValidRowNumber(rowNumber);
   }
 
   bool isValidRowNumber(int rowNumber) {
@@ -35,7 +35,7 @@ class Codeword {
   }
 
   void setRowNumberAsRowIndicatorColumn() {
-    _rowNumber = (_value ~/ 30) * 3 + _bucket ~/ 3;
+    rowNumber = (_value ~/ 30) * 3 + _bucket ~/ 3;
   }
 
   int get width => _endX - _startX;
@@ -48,14 +48,8 @@ class Codeword {
 
   int get value => _value;
 
-  int get rowNumber => _rowNumber;
-
-  set rowNumber(int rowNumber) {
-    _rowNumber = rowNumber;
-  }
-
   @override
   String toString() {
-    return "$_rowNumber|$_value";
+    return "$rowNumber|$_value";
   }
 }

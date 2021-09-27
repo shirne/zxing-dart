@@ -41,7 +41,7 @@ void main() {
     expect(resultMetadata.sender, "CEN BE");
     expect(resultMetadata.addressee, "ISO CH");
 
-    //@SuppressWarnings("deprecation")
+    // ignore: deprecated_consistency
     List<int> optionalData = resultMetadata.optionalData!;
     expect(optionalData[0], 1,
         reason:
@@ -69,7 +69,7 @@ void main() {
     assert(resultMetadata.addressee == null);
     assert(resultMetadata.sender == null);
 
-    //@SuppressWarnings("deprecation")
+    // ignore: deprecated_consistency
     List<int> optionalData = resultMetadata.optionalData!;
     expect(1, optionalData[0],
         reason:
@@ -94,6 +94,8 @@ void main() {
     expect(-1, resultMetadata.segmentCount);
     assert(resultMetadata.addressee == null);
     assert(resultMetadata.sender == null);
+
+    // ignore: deprecated_consistency
     assert(resultMetadata.optionalData == null);
 
     // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
@@ -151,6 +153,8 @@ void main() {
     expect("000", resultMetadata.fileId);
     assert(resultMetadata.isLastSegment);
     expect(-1, resultMetadata.segmentCount);
+
+    // ignore: deprecated_consistency
     assert(resultMetadata.optionalData == null);
   });
 

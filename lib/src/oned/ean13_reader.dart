@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
+import '../barcode_format.dart';
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
-
-import '../barcode_format.dart';
 import '../not_found_exception.dart';
 import 'upceanreader.dart';
 
@@ -65,8 +64,7 @@ class EAN13Reader extends UPCEANReader {
   EAN13Reader();
 
   @override
-  int decodeMiddle(
-      BitArray row, List<int> startRange, StringBuilder resultString) {
+  int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
     List<int> counters = _decodeMiddleCounters;
     counters.fillRange(0, counters.length, 0);
     int end = row.size;
@@ -77,7 +75,7 @@ class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
-      resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
+      result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
       }
@@ -86,7 +84,7 @@ class EAN13Reader extends UPCEANReader {
       }
     }
 
-    _determineFirstDigit(resultString, lgPatternFound);
+    _determineFirstDigit(result, lgPatternFound);
 
     List<int> middleRange = UPCEANReader.findGuardPattern(
         row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
@@ -95,7 +93,7 @@ class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
-      resultString.writeCharCode(48 /* 0 */ + bestMatch);
+      result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
       }

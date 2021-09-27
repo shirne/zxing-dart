@@ -38,7 +38,7 @@ class BitMatrix {
   int _width;
   int _height;
   int _rowSize;
-  Int32List _bits;
+  Uint32List _bits;
 
   /// Creates an empty `BitMatrix`.
   ///
@@ -47,7 +47,7 @@ class BitMatrix {
   BitMatrix(this._width, [int? height])
       : _height = height ?? _width,
         _rowSize = (_width + 31) ~/ 32,
-        _bits = Int32List(((_width + 31) ~/ 32) * (height ?? _width)) {
+        _bits = Uint32List(((_width + 31) ~/ 32) * (height ?? _width)) {
     if (_width < 1 || _height < 1) {
       throw ArgumentError("Both dimensions must be greater than 0");
     }
@@ -55,7 +55,7 @@ class BitMatrix {
 
   BitMatrix._(this._width, this._height, this._rowSize, this._bits);
 
-  Int32List get data => _bits;
+  Uint32List get data => _bits;
 
   /// Interprets a 2D array of booleans as a `BitMatrix`, where "true" means an "on" bit.
   ///
@@ -236,7 +236,7 @@ class BitMatrix {
     for (int y = top; y < bottom; y++) {
       int offset = y * _rowSize;
       for (int x = left; x < right; x++) {
-        _bits[offset + (x ~/ 32)] |= (1 << (x & 0x1f) & 0xFFFFFFFF);
+        _bits[offset + (x ~/ 32)] |= 1 << (x & 0x1f);
       }
     }
   }
@@ -287,7 +287,7 @@ class BitMatrix {
     int newWidth = _height;
     int newHeight = _width;
     int newRowSize = (newWidth + 31) ~/ 32;
-    Int32List newBits = Int32List(newRowSize * newHeight);
+    Uint32List newBits = Uint32List(newRowSize * newHeight);
 
     for (int y = 0; y < _height; y++) {
       for (int x = 0; x < _width; x++) {
@@ -325,7 +325,7 @@ class BitMatrix {
           }
           if (x32 * 32 < left) {
             int bit = 0;
-            while ((theBits << (31 - bit)) == 0) {
+            while ((theBits << (31 - bit)).toUnsigned(32) == 0) {
               bit++;
             }
             if ((x32 * 32 + bit) < left) {
@@ -368,7 +368,7 @@ class BitMatrix {
 
     var theBits = _bits[bitsOffset];
     int bit = 0;
-    while ((theBits << (31 - bit) & 0xFFFFFFFF) == 0) {
+    while ((theBits << (31 - bit)).toUnsigned(32) == 0) {
       bit++;
     }
     x += bit;
@@ -454,6 +454,6 @@ class BitMatrix {
   // @override
   BitMatrix clone() {
     return BitMatrix._(
-        _width, _height, _rowSize, Int32List.fromList(_bits.toList()));
+        _width, _height, _rowSize, Uint32List.fromList(_bits.toList()));
   }
 }

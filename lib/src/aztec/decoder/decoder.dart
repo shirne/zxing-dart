@@ -401,7 +401,7 @@ class Decoder {
         res |= 0x01;
       }
     }
-    return res;
+    return res.toSigned(32);
   }
 
   /// Reads a code of length 8 in an array of bits, padding with zeros

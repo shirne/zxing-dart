@@ -29,6 +29,8 @@ void main() {
         52,
         52, {
       EncodeHintType.DATA_MATRIX_SHAPE: SymbolShapeHint.FORCE_SQUARE,
+
+      // ignore: deprecated_consistency
       EncodeHintType.MIN_SIZE: Dimension(52, 52)
     });
     expect(encode.get(0, 0), true);
@@ -42,6 +44,7 @@ void main() {
     DataMatrixWriter writer = DataMatrixWriter();
     BitMatrix matrix = writer.encode(
         "Hello Google", BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
+
     //assert(matrix != null);
     assert(bigEnough >= matrix.width);
     assert(bigEnough >= matrix.height);

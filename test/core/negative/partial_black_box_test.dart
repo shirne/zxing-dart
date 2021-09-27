@@ -73,7 +73,7 @@ void main() {
   test('p11Test', () {
     Result? result;
     var row = BitArray.test(
-        Int32List.fromList([
+        Uint32List.fromList([
           0,
           0,
           0,
