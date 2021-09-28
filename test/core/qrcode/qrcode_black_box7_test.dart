@@ -64,10 +64,10 @@ void main() {
       BarcodeFormat.QR_CODE,
       dispatcher,
     )
-      ..addTest(1, 2, 0.0)
-      ..addTest(1, 2, 90.0)
-      ..addTest(1, 2, 180.0)
-      ..addTest(1, 2, 270.0)
+      ..addTest(2, 2, 0.0)
+      ..addTest(2, 2, 90.0)
+      ..addTest(2, 2, 180.0)
+      ..addTest(2, 2, 270.0)
       ..testBlackBox();
   });
 }
