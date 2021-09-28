@@ -107,14 +107,14 @@ class BitArray {
       return _size;
     }
     int bitsOffset = from ~/ 32;
-    int currentBits = ~_bits[bitsOffset];
+    int currentBits = (~_bits[bitsOffset]).toUnsigned(32);
     // mask off lesser bits first
-    currentBits &= ~((1 << (from & 0x1F)) - 1);
+    currentBits &= (~((1 << (from & 0x1F)) - 1)).toUnsigned(32);
     while (currentBits == 0) {
       if (++bitsOffset == _bits.length) {
         return _size;
       }
-      currentBits = ~_bits[bitsOffset];
+      currentBits = (~_bits[bitsOffset]).toUnsigned(32);
     }
     int result =
         (bitsOffset * 32) + MathUtils.numberOfTrailingZeros(currentBits);

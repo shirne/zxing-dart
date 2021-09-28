@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:fixnum/fixnum.dart';
-import 'dart:math' as math;
 import 'package:test/test.dart';
 import 'package:zxing_lib/common.dart';
 
@@ -52,6 +51,20 @@ void main() {
     }
   });
 
+  test('textBitNegate', () {
+    for (int a in [
+      1,
+      5,
+      99,
+      654512,
+      545482263,
+      4294967296,
+    ]) {
+      expect((~Int32(a)).toInt(), (~a).toSigned(32),
+          reason: '$a reverted error}');
+    }
+  });
+
   test('testBit', () {
     for (int a in [
       5,
@@ -66,6 +79,24 @@ void main() {
       expect(reverseFun, reverse2Fun,
           reason:
               '$a reverted error\n${reverseFun.toRadixString(2)}\n${reverse2Fun.toRadixString(2)}');
+    }
+  });
+
+  test('testTrailingZeros', () {
+    for (int a in [
+      -9956,
+      -1,
+      -9655832654,
+      5,
+      99,
+      1952,
+      654512,
+      6632112,
+      545482263,
+      4294967296,
+    ]) {
+      expect(
+          Int32(a).numberOfTrailingZeros(), MathUtils.numberOfTrailingZeros(a));
     }
   });
 
