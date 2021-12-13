@@ -81,6 +81,13 @@ enum EncodeHintType {
   /// (Type [Integer], or [String] representation of the integer value).
   QR_MASK_PATTERN,
 
+  /// Specifies whether to use compact mode for QR code (type [bool], or "true" or "false"
+  /// Please note that when compaction is performed, the most compact character encoding is chosen
+  /// for characters in the input that are not in the ISO-8859-1 character set. Based on experience,
+  /// some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
+  /// be forced to UTF-8 by means of the [Encoding] encoding hint.
+  QR_COMPACT,
+
   /// Specifies whether the data should be encoded to the GS1 standard (type [bool],
   /// or "true" or "false" [String] value).
   GS1_FORMAT,

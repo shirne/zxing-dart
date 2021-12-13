@@ -270,8 +270,8 @@ void main() {
     testWriter("Espa\u00F1ol", null, 25, true, 1);
     // Explicit ISO-8859-1
     testWriter("Espa\u00F1ol", iso_8859_1, 25, true, 1);
-    // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
-    // testWriter("\u20AC 1 sample data.", windows1252, 25, true, 2);
+    // ISO-8859-1 can't encode Euro; Windows-1252 can
+    testWriter("\u20AC 1 sample data.", windows1252, 25, true, 2);
     testWriter("\u20AC 1 sample data.", iso_8859_15, 25, true, 2);
     testWriter("\u20AC 1 sample data.", utf_8, 25, true, 2);
     testWriter("\u20AC 1 sample data.", utf_8, 100, true, 3);

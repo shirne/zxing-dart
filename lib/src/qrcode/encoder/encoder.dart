@@ -33,6 +33,7 @@ import 'block_pair.dart';
 import 'byte_matrix.dart';
 import 'mask_util.dart';
 import 'matrix_util.dart';
+import 'minimal_encoder.dart';
 import 'qrcode.dart';
 
 /// @author satorux@google.com (Satoru Takabayashi) - creator
@@ -64,6 +65,17 @@ class Encoder {
   static QRCode encode(String content,
       [ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H,
       Map<EncodeHintType, Object>? hints]) {
+    Version version;
+    BitArray headerAndDataBits;
+    Mode mode;
+
+    bool hasGS1FormatHint = hints != null &&
+        hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+        hints[EncodeHintType.GS1_FORMAT] as bool;
+    bool hasCompactionHint = hints != null &&
+        hints.containsKey(EncodeHintType.QR_COMPACT) &&
+        hints[EncodeHintType.QR_COMPACT] as bool;
+
     // Determine what character encoding has been specified by the caller, if any
     Encoding? encoding = defaultByteModeEncoding;
     bool hasEncodingHint =
@@ -74,60 +86,70 @@ class Encoder {
           ?.charset;
     }
 
-    // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
-    // multiple modes / segments even if that were more efficient. Twould be nice.
-    Mode mode = _chooseMode(content, encoding);
+    if (hasCompactionHint) {
+      mode = Mode.BYTE;
 
-    // This will store the header information, like mode and
-    // length, as well as "header" segments like an ECI segment.
-    BitArray headerBits = BitArray();
+      Encoding? priorityEncoding =
+          encoding == defaultByteModeEncoding ? null : encoding;
+      ResultList rn = MinimalEncoder.encode(
+          content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
 
-    // Append ECI segment if applicable
-    if (mode == Mode.BYTE && hasEncodingHint && encoding != null) {
-      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
-      if (eci != null) {
-        _appendECI(eci, headerBits);
-      }
-    }
-
-    // Append the FNC1 mode header for GS1 formatted data if applicable
-    bool hasGS1FormatHint =
-        hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT);
-    if (hasGS1FormatHint &&
-        hints[EncodeHintType.GS1_FORMAT].toString() == 'true') {
-      // GS1 formatted codes are prefixed with a FNC1 in first position mode header
-      appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
-    }
-
-    // (With ECI in place,) Write the mode marker
-    appendModeInfo(mode, headerBits);
-
-    // Collect data within the main segment, separately, to count its size if needed. Don't add it to
-    // main payload yet.
-    BitArray dataBits = BitArray();
-    appendBytes(content, mode, dataBits, encoding!);
-
-    Version version;
-    if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
-      int versionNumber =
-          int.parse(hints[EncodeHintType.QR_VERSION].toString());
-      version = Version.getVersionForNumber(versionNumber);
-      int bitsNeeded =
-          _calculateBitsNeeded(mode, headerBits, dataBits, version);
-      if (!_willFit(bitsNeeded, version, ecLevel)) {
-        throw WriterException("Data too big for requested version");
-      }
+      headerAndDataBits = BitArray();
+      rn.getBits(headerAndDataBits);
+      version = rn.getVersion();
     } else {
-      version = _recommendVersion(ecLevel, mode, headerBits, dataBits);
-    }
+      // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
+      // multiple modes / segments even if that were more efficient.
+      mode = _chooseMode(content, encoding);
 
-    BitArray headerAndDataBits = BitArray();
-    headerAndDataBits.appendBitArray(headerBits);
-    // Find "length" of main segment and write it
-    int numLetters = mode == Mode.BYTE ? dataBits.sizeInBytes : content.length;
-    appendLengthInfo(numLetters, version, mode, headerAndDataBits);
-    // Put data together into the overall payload
-    headerAndDataBits.appendBitArray(dataBits);
+      // This will store the header information, like mode and
+      // length, as well as "header" segments like an ECI segment.
+      BitArray headerBits = BitArray();
+
+      // Append ECI segment if applicable
+      if (mode == Mode.BYTE && hasEncodingHint && encoding != null) {
+        CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
+        if (eci != null) {
+          _appendECI(eci, headerBits);
+        }
+      }
+
+      // Append the FNC1 mode header for GS1 formatted data if applicable
+      if (hasGS1FormatHint) {
+        // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+        appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+      }
+
+      // (With ECI in place,) Write the mode marker
+      appendModeInfo(mode, headerBits);
+
+      // Collect data within the main segment, separately, to count its size if needed. Don't add it to
+      // main payload yet.
+      BitArray dataBits = BitArray();
+      appendBytes(content, mode, dataBits, encoding!);
+
+      if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
+        int versionNumber =
+            int.parse(hints[EncodeHintType.QR_VERSION].toString());
+        version = Version.getVersionForNumber(versionNumber);
+        int bitsNeeded =
+            _calculateBitsNeeded(mode, headerBits, dataBits, version);
+        if (!_willFit(bitsNeeded, version, ecLevel)) {
+          throw WriterException("Data too big for requested version");
+        }
+      } else {
+        version = _recommendVersion(ecLevel, mode, headerBits, dataBits);
+      }
+
+      headerAndDataBits = BitArray();
+      headerAndDataBits.appendBitArray(headerBits);
+      // Find "length" of main segment and write it
+      int numLetters =
+          mode == Mode.BYTE ? dataBits.sizeInBytes : content.length;
+      appendLengthInfo(numLetters, version, mode, headerAndDataBits);
+      // Put data together into the overall payload
+      headerAndDataBits.appendBitArray(dataBits);
+    }
 
     ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
     int numDataBytes = version.totalCodewords - ecBlocks.totalECCodewords;
@@ -208,7 +230,7 @@ class Encoder {
   /// if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
   static Mode _chooseMode(String content, [Encoding? encoding]) {
     if (StringUtils.shiftJisCharset == encoding &&
-        _isOnlyDoubleByteKanji(content)) {
+        isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
     }
@@ -233,7 +255,7 @@ class Encoder {
     return Mode.BYTE;
   }
 
-  static bool _isOnlyDoubleByteKanji(String content) {
+  static bool isOnlyDoubleByteKanji(String content) {
     List<int> bytes = StringUtils.shiftJisCharset!.encode(content);
     int length = bytes.length;
     if (length % 2 != 0) {
@@ -301,6 +323,7 @@ class Encoder {
       throw WriterException(
           "data bits cannot fit in the QR Code ${bits.size} > $capacity");
     }
+    // Append Mode.TERMINATE if there is enough space (value is 0000)
     for (int i = 0; i < 4 && bits.size < capacity; ++i) {
       bits.appendBit(false);
     }

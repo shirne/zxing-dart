@@ -80,7 +80,7 @@ class DecodedBitStreamParser {
     StringBuilder resultTrailer = StringBuilder();
     List<Uint8List> byteSegments = [];
     _Mode mode = _Mode.ASCII_ENCODE;
-    // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+    // Could be replaceable by looking directly at 'bytes', if we're sure of not having to account for multi byte values.
     Set<int> fnc1Positions = {};
     int symbologyModifier = 0;
     bool isECIencoded = false;

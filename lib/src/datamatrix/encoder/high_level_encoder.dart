@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import '../../common/detector/math_utils.dart';
@@ -165,6 +166,27 @@ class HighLevelEncoder {
   }
 
   static int lookAheadTest(String msg, int startPos, int currentMode) {
+    int newMode = lookAheadTestIntern(msg, startPos, currentMode);
+    if (currentMode == X12_ENCODATION && newMode == X12_ENCODATION) {
+      int endPos = math.min(startPos + 3, msg.length);
+      for (int i = startPos; i < endPos; i++) {
+        if (!_isNativeX12(msg.codeUnitAt(i))) {
+          return ASCII_ENCODATION;
+        }
+      }
+    } else if (currentMode == EDIFACT_ENCODATION &&
+        newMode == EDIFACT_ENCODATION) {
+      int endpos = math.min(startPos + 4, msg.length);
+      for (int i = startPos; i < endpos; i++) {
+        if (!_isNativeEDIFACT(msg.codeUnitAt(i))) {
+          return ASCII_ENCODATION;
+        }
+      }
+    }
+    return newMode;
+  }
+
+  static int lookAheadTestIntern(String msg, int startPos, int currentMode) {
     if (startPos >= msg.length) {
       return currentMode;
     }
@@ -268,45 +290,66 @@ class HighLevelEncoder {
       if (charsProcessed >= 4) {
         List<int> intCharCounts = Int32List(6);
         Int8List mins = Int8List(6);
-        _findMinimums(
-            charCounts, intCharCounts, MathUtils.MAX_VALUE, mins); // int.MAX
-        int minCount = _getMinimumCount(mins);
+        _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
 
         if (intCharCounts[ASCII_ENCODATION] <
-                intCharCounts[BASE256_ENCODATION] &&
-            intCharCounts[ASCII_ENCODATION] < intCharCounts[C40_ENCODATION] &&
-            intCharCounts[ASCII_ENCODATION] < intCharCounts[TEXT_ENCODATION] &&
-            intCharCounts[ASCII_ENCODATION] < intCharCounts[X12_ENCODATION] &&
-            intCharCounts[ASCII_ENCODATION] <
-                intCharCounts[EDIFACT_ENCODATION]) {
+            min([
+              intCharCounts[BASE256_ENCODATION],
+              intCharCounts[C40_ENCODATION],
+              intCharCounts[TEXT_ENCODATION],
+              intCharCounts[X12_ENCODATION],
+              intCharCounts[EDIFACT_ENCODATION],
+            ])) {
           return ASCII_ENCODATION;
         }
         if (intCharCounts[BASE256_ENCODATION] <
                 intCharCounts[ASCII_ENCODATION] ||
-            (mins[C40_ENCODATION] +
-                    mins[TEXT_ENCODATION] +
-                    mins[X12_ENCODATION] +
-                    mins[EDIFACT_ENCODATION]) ==
-                0) {
+            intCharCounts[BASE256_ENCODATION] + 1 <
+                min([
+                  intCharCounts[C40_ENCODATION],
+                  intCharCounts[TEXT_ENCODATION],
+                  intCharCounts[X12_ENCODATION],
+                  intCharCounts[EDIFACT_ENCODATION],
+                ])) {
           return BASE256_ENCODATION;
         }
-        if (minCount == 1 && mins[EDIFACT_ENCODATION] > 0) {
+        if (intCharCounts[EDIFACT_ENCODATION] + 1 <
+            min([
+              intCharCounts[BASE256_ENCODATION],
+              intCharCounts[C40_ENCODATION],
+              intCharCounts[TEXT_ENCODATION],
+              intCharCounts[X12_ENCODATION],
+              intCharCounts[ASCII_ENCODATION],
+            ])) {
           return EDIFACT_ENCODATION;
         }
-        if (minCount == 1 && mins[TEXT_ENCODATION] > 0) {
+        if (intCharCounts[TEXT_ENCODATION] + 1 <
+            min([
+              intCharCounts[BASE256_ENCODATION],
+              intCharCounts[C40_ENCODATION],
+              intCharCounts[EDIFACT_ENCODATION],
+              intCharCounts[X12_ENCODATION],
+              intCharCounts[ASCII_ENCODATION],
+            ])) {
           return TEXT_ENCODATION;
         }
-        if (minCount == 1 && mins[X12_ENCODATION] > 0) {
+        if (intCharCounts[X12_ENCODATION] + 1 <
+            min([
+              intCharCounts[BASE256_ENCODATION],
+              intCharCounts[C40_ENCODATION],
+              intCharCounts[EDIFACT_ENCODATION],
+              intCharCounts[TEXT_ENCODATION],
+              intCharCounts[ASCII_ENCODATION],
+            ])) {
           return X12_ENCODATION;
         }
         if (intCharCounts[C40_ENCODATION] + 1 <
-                intCharCounts[ASCII_ENCODATION] &&
-            intCharCounts[C40_ENCODATION] + 1 <
-                intCharCounts[BASE256_ENCODATION] &&
-            intCharCounts[C40_ENCODATION] + 1 <
-                intCharCounts[EDIFACT_ENCODATION] &&
-            intCharCounts[C40_ENCODATION] + 1 <
-                intCharCounts[TEXT_ENCODATION]) {
+            min([
+              intCharCounts[ASCII_ENCODATION],
+              intCharCounts[BASE256_ENCODATION],
+              intCharCounts[EDIFACT_ENCODATION],
+              intCharCounts[TEXT_ENCODATION]
+            ])) {
           if (intCharCounts[C40_ENCODATION] < intCharCounts[X12_ENCODATION]) {
             return C40_ENCODATION;
           }
@@ -327,6 +370,11 @@ class HighLevelEncoder {
         }
       }
     }
+  }
+
+  static int min(List<int> lists) {
+    return lists.fold(lists.first,
+        (previousValue, element) => math.min(previousValue, element));
   }
 
   static int _findMinimums(List<double> charCounts, List<int> intCharCounts,
@@ -354,14 +402,8 @@ class HighLevelEncoder {
     return minCount;
   }
 
-  static bool isDigit(dynamic chr) {
-    int ch = 0;
-    if (chr is String) {
-      ch = chr.codeUnitAt(0);
-    } else {
-      ch = chr as int;
-    }
-    return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
+  static bool isDigit(int chr) {
+    return chr >= 48 /* 0 */ && chr <= 57 /* 9 */;
   }
 
   static bool isExtendedASCII(dynamic chr) {
@@ -424,14 +466,8 @@ class HighLevelEncoder {
         (ch == 62 /* > */);
   }
 
-  static bool _isNativeEDIFACT(dynamic chr) {
-    int ch = 0;
-    if (chr is String) {
-      ch = chr.codeUnitAt(0);
-    } else {
-      ch = chr as int;
-    }
-    return ch >= 32 /*   */ && ch <= 94 /* ^ */;
+  static bool _isNativeEDIFACT(int chr) {
+    return chr >= 32 /*   */ && chr <= 94 /* ^ */;
   }
 
   static bool _isSpecialB256(dynamic chr) {
@@ -444,20 +480,13 @@ class HighLevelEncoder {
   /// @param startPos the start position within the message
   /// @return the requested character count
   static int determineConsecutiveDigitCount(String msg, int startPos) {
-    int count = 0;
+    //int count = 0;
     int len = msg.length;
     int idx = startPos;
-    if (idx < len) {
-      int ch = msg.codeUnitAt(idx);
-      while (isDigit(ch) && idx < len) {
-        count++;
-        idx++;
-        if (idx < len) {
-          ch = msg.codeUnitAt(idx);
-        }
-      }
+    while (idx < len && isDigit(msg.codeUnitAt(idx))) {
+      idx++;
     }
-    return count;
+    return idx - startPos;
   }
 
   static void illegalCharacter(int c) {

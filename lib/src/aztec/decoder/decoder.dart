@@ -152,6 +152,15 @@ class Decoder {
           }
           int n = _readCode(correctedBits, index, 3);
           index += 3;
+          // flush bytes before changing character set
+          try {
+            result.write(encoding.decode(decodedBytes.takeBytes()));
+          } catch (_) {
+            // UnsupportedEncodingException
+            // can't happen
+            rethrow;
+          }
+          decodedBytes.clear();
           switch (n) {
             case 0:
               result.writeCharCode(29); // translate FNC1 as ASCII 29
@@ -159,16 +168,6 @@ class Decoder {
             case 7:
               throw FormatsException.instance; // FLG(7) is reserved and illegal
             default:
-              // flush bytes before changing character set
-              try {
-                result.write(encoding.decode(decodedBytes.takeBytes()));
-              } catch (_) {
-                // UnsupportedEncodingException
-                // can't happen
-                rethrow;
-              }
-              decodedBytes.clear();
-
               // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
               int eci = 0;
               if (endIndex - index < 4 * n) {

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'byte_matrix.dart';
@@ -101,8 +100,9 @@ class MaskUtil {
   }
 
   static bool _isWhiteHorizontal(Int8List rowArray, int from, int to) {
-    from = math.max(from, 0);
-    to = math.min(to, rowArray.length);
+    if (from < 0 || rowArray.length < to) {
+      return false;
+    }
     for (int i = from; i < to; i++) {
       if (rowArray[i] == 1) {
         return false;
@@ -113,8 +113,9 @@ class MaskUtil {
 
   static bool _isWhiteVertical(
       List<Int8List> array, int col, int from, int to) {
-    from = math.max(from, 0);
-    to = math.min(to, array.length);
+    if (from < 0 || array.length < to) {
+      return false;
+    }
     for (int i = from; i < to; i++) {
       if (array[i][col] == 1) {
         return false;

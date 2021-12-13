@@ -17,7 +17,6 @@
 import '../../qrcode/decoder/error_correction_level.dart';
 import '../../qrcode/decoder/mode.dart';
 import '../../qrcode/decoder/version.dart';
-
 import 'byte_matrix.dart';
 
 /// @author satorux@google.com (Satoru Takabayashi) - creator
@@ -25,6 +24,7 @@ import 'byte_matrix.dart';
 class QRCode {
   static const int NUM_MASK_PATTERNS = 8;
 
+  ///the mode. Not relevant if [EncodeHintType.QR_COMPACT] is selected.
   Mode? mode;
   ErrorCorrectionLevel? ecLevel;
   Version? version;

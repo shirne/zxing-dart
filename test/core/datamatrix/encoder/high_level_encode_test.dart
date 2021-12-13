@@ -176,7 +176,7 @@ void main() {
 
     visualized = encodeHighLevel(r"aimaimaim{txt}" "\u0004");
     expect(
-        "239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
+        "239 91 11 91 11 91 11 254 124 117 121 117 126 5 129 237", visualized);
   });
 
   test('testX12Encodation', () {
@@ -251,11 +251,11 @@ void main() {
 
     visualized =
         encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
-    expect("231 51 108 59 226 126 1 104 99 153 53 129", visualized);
+    expect("231 50 108 59 226 126 1 104 33 153 53 129", visualized);
 
     visualized = encodeHighLevel("\u00ABäöüé\u00BB 23£ 1234567890123456789");
     expect(
-        "231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208"
+        "231 54 108 59 226 126 1 104 99 10 161 167 33 142 164 186 208"
         " 220 142 164 186 208 58 129 59 209 104 254 150 45",
         visualized);
 
@@ -300,18 +300,18 @@ void main() {
     //EDIFACT encoding correctly
 
     String visualized = encodeHighLevel("CREX-TAN:h");
-    expect("240 13 33 88 181 64 78 124 59 105", visualized);
+    expect("68 83 70 89 46 85 66 79 59 105", visualized);
 
     visualized = encodeHighLevel("CREX-TAN:hh");
-    expect("240 13 33 88 181 64 78 124 59 105 105 129", visualized);
+    expect("68 83 70 89 46 85 66 79 59 105 105 129", visualized);
 
     visualized = encodeHighLevel("CREX-TAN:hhh");
-    expect("240 13 33 88 181 64 78 124 59 105 105 105", visualized);
+    expect("68 83 70 89 46 85 66 79 59 105 105 105", visualized);
   });
 
   test('testX12Unlatch', () {
     String visualized = encodeHighLevel("*DTCP01");
-    expect("238 9 10 104 141 254 50 129", visualized);
+    expect("43 69 85 68 81 131 129 56", visualized);
   });
 
   test('testX12Unlatch2', () {
@@ -324,7 +324,7 @@ void main() {
     //of an encoding problem of the character 0x0060 in Java source code.
 
     String visualized = encodeHighLevel("fiykmj*Rh2`,e6");
-    expect("239 122 87 154 40 7 171 115 207 12 130 71 155 254 129 237",
+    expect("103 106 122 108 110 107 43 83 105 51 97 45 102 55 129 237",
         visualized);
   });
 
@@ -337,7 +337,49 @@ void main() {
 
   test('testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle', () {
     String visualized = encodeHighLevel("*MEMANT-1F-MESTECH");
+    expect("240 168 209 77 4 229 45 196 107 77 21 53 5 12 135 192", visualized);
+  });
+
+  test('testX12AndEDIFACTSpecErrors', () {
+    //X12 encoding error with spec conform float point comparisons in lookAheadTest()
+    String visualized =
+        encodeHighLevel("AAAAAAAAAAA**\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
+        "230 89 191 89 191 89 191 89 178 56 114 10 243 177 63 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
+            "191 89 191 89 191 254 66 129",
+        visualized);
+    //X12 encoding error with integer comparisons in lookAheadTest()
+    visualized =
+        encodeHighLevel("AAAAAAAAAAAA0+****AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    expect(
+        "238 89 191 89 191 89 191 89 191 254 240 194 186 170 170 160 65 4 16 65 4 16 65 4 16 65 4 16 65 4 " +
+            "16 65 4 16 65 4 16 65 124 129 167 62 212 107",
+        visualized);
+    //EDIFACT encoding error with spec conform float point comparisons in lookAheadTest()
+    visualized =
+        encodeHighLevel("AAAAAAAAAAA++++\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    expect(
+        "230 89 191 89 191 89 191 254 66 66 44 44 44 44 235 125 230 89 191 89 191 89 191 89 191 89 191 89 " +
+            "191 89 191 89 191 89 191 89 191 254 129 17 167 62 212 107",
+        visualized);
+    //EDIFACT encoding error with integer comparisons in lookAheadTest()
+    visualized =
+        encodeHighLevel("++++++++++AAa0 0++++++++++++++++++++++++++++++");
+    expect(
+        "240 174 186 235 174 186 235 174 176 65 124 98 240 194 12 43 174 186 235 174 186 235 174 186 235 " +
+            "174 186 235 174 186 235 174 186 235 174 186 235 173 240 129 167 62 212 107",
+        visualized);
+    visualized =
+        encodeHighLevel("AAAAAAAAAAAA*+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    expect(
+        "230 89 191 89 191 89 191 89 191 7 170 64 191 89 191 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
+            "191 89 191 66",
+        visualized);
+    visualized =
+        encodeHighLevel("AAAAAAAAAAA*0a0 *AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    expect(
+        "230 89 191 89 191 89 191 89 178 56 227 6 228 7 183 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
+            "191 89 191 89 191 254 66 66",
+        visualized);
   });
 }
