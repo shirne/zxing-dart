@@ -17,9 +17,9 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
 import '../common/character_set_eci.dart';
+import '../barcode_format.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'encoder/aztec_code.dart';
@@ -36,7 +36,7 @@ class AztecWriter implements Writer {
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         charset = CharacterSetECI.getCharacterSetECIByName(
-                hints[EncodeHintType.CHARACTER_SET].toString())
+                hints[EncodeHintType.CHARACTER_SET] as String)
             ?.charset;
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {

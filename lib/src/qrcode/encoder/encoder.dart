@@ -134,7 +134,7 @@ class Encoder {
         version = Version.getVersionForNumber(versionNumber);
         int bitsNeeded =
             _calculateBitsNeeded(mode, headerBits, dataBits, version);
-        if (!_willFit(bitsNeeded, version, ecLevel)) {
+        if (!willFit(bitsNeeded, version, ecLevel)) {
           throw WriterException("Data too big for requested version");
         }
       } else {
@@ -293,7 +293,7 @@ class Encoder {
       int numInputBits, ErrorCorrectionLevel ecLevel) {
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
-      if (_willFit(numInputBits, version, ecLevel)) {
+      if (willFit(numInputBits, version, ecLevel)) {
         return version;
       }
     }
@@ -302,7 +302,7 @@ class Encoder {
 
   /// @return true if the number of input bits will fit in a code with the specified version and
   /// error correction level.
-  static bool _willFit(
+  static bool willFit(
       int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
     // In the following comments, we use numbers of Version 7-H.
     // numBytes = 196

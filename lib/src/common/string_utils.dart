@@ -59,6 +59,18 @@ class StringUtils {
     return c!.name;
   }
 
+  static bool canEncode(Encoding? encoding, String char) {
+    if (encoding == null) return false;
+    try {
+      encoding.encode(char);
+    } on FormatException catch (_) {
+      return false;
+    } on ArgumentError catch (_) {
+      return false;
+    }
+    return true;
+  }
+
   /// @param bytes bytes encoding a string, whose encoding should be guessed
   /// @param hints decode hints if applicable
   /// @return Charset of guessed encoding; at the moment will only guess one of:

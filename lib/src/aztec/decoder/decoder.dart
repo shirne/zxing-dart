@@ -257,7 +257,7 @@ class Decoder {
         return _DIGIT_TABLE[code];
       default:
         // Should not reach here. [IllegalStateException]
-        throw Exception("Bad table");
+        throw ArgumentError("Bad table");
     }
   }
 

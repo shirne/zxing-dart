@@ -17,7 +17,6 @@
 import 'dart:convert';
 
 import 'package:charset/charset.dart';
-import 'package:convert/convert.dart';
 
 import '../formats_exception.dart';
 import 'string_utils.dart';
@@ -63,10 +62,14 @@ class CharacterSetECI {
       CharacterSetECI('iso8859_16', 18, latin10, ['latin-10', 'iso-8859-16']);
   static final SJIS = CharacterSetECI('sjis', 20, StringUtils.shiftJisCharset,
       ['shift-jis', 'shift_jis', 'ms932', 'iso-2022-jp', 'jis']);
-  static final Cp1250 = CharacterSetECI('cp1250', 21, cp437, 'windows-1250');
-  static final Cp1251 = CharacterSetECI('cp1251', 22, cp437, 'windows-1251');
-  static final Cp1252 = CharacterSetECI('cp1252', 23, cp437, 'windows-1252');
-  static final Cp1256 = CharacterSetECI('cp1256', 24, cp437, 'windows-1256');
+  static final Cp1250 = CharacterSetECI(
+      'cp1250', 21, windows1250, ['windows-1250', 'windows1250']);
+  static final Cp1251 = CharacterSetECI(
+      'cp1251', 22, windows1251, ['windows-1251', 'windows1251']);
+  static final Cp1252 = CharacterSetECI(
+      'cp1252', 23, windows1252, ['windows-1252', 'windows1252']);
+  static final Cp1256 = CharacterSetECI(
+      'cp1256', 24, windows1256, ['windows-1256', 'windows1256']);
   static final UnicodeBigUnmarked = CharacterSetECI('unicode-big-unmarked', 25,
       utf16, ['utf-16be', 'utf-16', 'utf-16be', 'unicode-big']);
   static final UTF8 = CharacterSetECI('utf8', 26, utf8, ['utf-8']);

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:test/expect.dart';
@@ -246,7 +247,7 @@ void main() {
 
   test('testEncodeGS1WithStringTypeHint', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.GS1_FORMAT] = "true";
+    hints[EncodeHintType.GS1_FORMAT] = true;
     QRCode qrCode =
         Encoder.encode("100001%11171218", ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
@@ -269,7 +270,7 @@ void main() {
 
   test('testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.GS1_FORMAT] = "false";
+    hints[EncodeHintType.GS1_FORMAT] = false;
     QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
@@ -663,198 +664,208 @@ void main() {
   });
 
   test('testMinimalEncoder1', () {
-    verifyMinimalEncoding("A", "ALPHANUMERIC(A),TERMINATOR()", false);
+    verifyMinimalEncoding("A", "ALPHANUMERIC(A)", null, false);
   });
 
   test('testMinimalEncoder2', () {
-    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB),TERMINATOR()", false);
+    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB)", null, false);
   });
 
   test('testMinimalEncoder3', () {
-    verifyMinimalEncoding("ABC", "ALPHANUMERIC(AB,C),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC", "ALPHANUMERIC(ABC)", null, false);
   });
 
   test('testMinimalEncoder4', () {
-    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(AB,CD),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(ABCD)", null, false);
   });
 
   test('testMinimalEncoder5', () {
-    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(AB,CD,E),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(ABCDE)", null, false);
   });
 
   test('testMinimalEncoder6', () {
-    verifyMinimalEncoding(
-        "ABCDEF", "ALPHANUMERIC(AB,CD,EF),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(ABCDEF)", null, false);
   });
 
   test('testMinimalEncoder7', () {
-    verifyMinimalEncoding(
-        "ABCDEFG", "ALPHANUMERIC(AB,CD,EF,G),TERMINATO" + "R()", false);
+    verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(ABCDEFG)", null, false);
   });
 
   test('testMinimalEncoder8', () {
-    verifyMinimalEncoding("1", "NUMERIC(1),TERMINATOR()", false);
+    verifyMinimalEncoding("1", "NUMERIC(1)", null, false);
   });
 
   test('testMinimalEncoder9', () {
-    verifyMinimalEncoding("12", "NUMERIC(12),TERMINATOR()", false);
+    verifyMinimalEncoding("12", "NUMERIC(12)", null, false);
   });
 
   test('testMinimalEncoder10', () {
-    verifyMinimalEncoding("123", "NUMERIC(123),TERMINATOR()", false);
+    verifyMinimalEncoding("123", "NUMERIC(123)", null, false);
   });
 
   test('testMinimalEncoder11', () {
-    verifyMinimalEncoding("1234", "NUMERIC(123,4),TERMINATOR()", false);
+    verifyMinimalEncoding("1234", "NUMERIC(1234)", null, false);
   });
 
   test('testMinimalEncoder12', () {
-    verifyMinimalEncoding("12345", "NUMERIC(123,45),TERMINATOR()", false);
+    verifyMinimalEncoding("12345", "NUMERIC(12345)", null, false);
   });
 
   test('testMinimalEncoder13', () {
-    verifyMinimalEncoding("123456", "NUMERIC(123,456),TERMINATOR()", false);
+    verifyMinimalEncoding("123456", "NUMERIC(123456)", null, false);
   });
 
   test('testMinimalEncoder14', () {
-    verifyMinimalEncoding("123A", "ALPHANUMERIC(12,3A),TERMINATOR()", false);
+    verifyMinimalEncoding("123A", "ALPHANUMERIC(123A)", null, false);
   });
 
   test('testMinimalEncoder15', () {
-    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1),TERMINATOR()", false);
+    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1)", null, false);
   });
 
   test('testMinimalEncoder16', () {
-    verifyMinimalEncoding("A12", "ALPHANUMERIC(A1,2),TERMINATOR()", false);
+    verifyMinimalEncoding("A12", "ALPHANUMERIC(A12)", null, false);
   });
 
   test('testMinimalEncoder17', () {
-    verifyMinimalEncoding("A123", "ALPHANUMERIC(A1,23),TERMINATOR()", false);
+    verifyMinimalEncoding("A123", "ALPHANUMERIC(A123)", null, false);
   });
 
   test('testMinimalEncoder18', () {
-    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1,23,4),TERMINATOR()", false);
+    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1234)", null, false);
   });
 
   test('testMinimalEncoder19', () {
-    verifyMinimalEncoding(
-        "A12345", "ALPHANUMERIC(A1,23,45),TERMINATOR()", false);
+    verifyMinimalEncoding("A12345", "ALPHANUMERIC(A12345)", null, false);
   });
 
   test('testMinimalEncoder20', () {
-    verifyMinimalEncoding(
-        "A123456", "ALPHANUMERIC(A1,23,45,6),TERMINATOR()", false);
+    verifyMinimalEncoding("A123456", "ALPHANUMERIC(A123456)", null, false);
   });
 
   test('testMinimalEncoder21', () {
-    verifyMinimalEncoding(
-        "A1234567", "ALPHANUMERIC(A1,23,45,67),TERMINATOR()", false);
+    verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1234567)", null, false);
   });
 
   test('testMinimalEncoder22', () {
     verifyMinimalEncoding(
-        "A12345678", "BYTE(A),NUMERIC(123,456,78),TERMINATOR()", false);
+        "A12345678", "BYTE(A),NUMERIC(12345678)", null, false);
   });
 
   test('testMinimalEncoder23', () {
     verifyMinimalEncoding(
-        "A123456789", "BYTE(A),NUMERIC(123,456,789),TERMINATOR()", false);
+        "A123456789", "BYTE(A),NUMERIC(123456789)", null, false);
   });
 
   test('testMinimalEncoder24', () {
-    verifyMinimalEncoding("A1234567890",
-        "ALPHANUMERIC(A1),NUMERIC(234,567,890),TERMINATOR()", false);
+    verifyMinimalEncoding(
+        "A1234567890", "ALPHANUMERIC(A1),NUMERIC(234567890)", null, false);
   });
 
   test('testMinimalEncoder25', () {
-    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB,1),TERMINATOR()", false);
+    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB1)", null, false);
   });
 
   test('testMinimalEncoder26', () {
-    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB,12),TERMINATOR()", false);
+    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB12)", null, false);
   });
 
   test('testMinimalEncoder27', () {
-    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB,12,3),TERMINATOR()", false);
+    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB123)", null, false);
   });
 
   test('testMinimalEncoder28', () {
-    verifyMinimalEncoding(
-        "AB1234", "ALPHANUMERIC(AB,12,34),TERMINATOR()", false);
+    verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB1234)", null, false);
   });
 
   test('testMinimalEncoder29', () {
-    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(AB,C1),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(ABC1)", null, false);
   });
 
   test('testMinimalEncoder30', () {
-    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(AB,C1,2),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(ABC12)", null, false);
   });
 
   test('testMinimalEncoder31', () {
-    verifyMinimalEncoding(
-        "ABC1234", "ALPHANUMERIC(AB,C1,23,4),TERMINA" "TOR()", false);
+    verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(ABC1234)", null, false);
   });
 
   test('testMinimalEncoder32', () {
-    verifyMinimalEncoding("http://foo.com",
-        "BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m)" ",TERMINATOR()", false);
+    verifyMinimalEncoding(
+        "http://foo.com", "BYTE(http://foo.com)", null, false);
   });
 
   test('testMinimalEncoder33', () {
-    verifyMinimalEncoding("HTTP://FOO.COM",
-        "ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM" "),TERMINATOR()", false);
+    verifyMinimalEncoding(
+        "HTTP://FOO.COM", "ALPHANUMERIC(HTTP://FOO.COM" ")", null, false);
   });
 
   test('testMinimalEncoder34', () {
     verifyMinimalEncoding(
         "1001114670010%01201220%107211220%140045003267781",
-        "NUMERIC(100,111,467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINA"
-            "TOR()",
+        "NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)",
+        null,
         false);
   });
 
   test('testMinimalEncoder35', () {
-    verifyMinimalEncoding(
-        "\u0150", "ECI(ISO-8859-2),BYTE(.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.)", null, false);
   });
 
   test('testMinimalEncoder36', () {
-    verifyMinimalEncoding(
-        "\u015C", "ECI(ISO-8859-3),BYTE(.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.)", null, false);
   });
 
   test('testMinimalEncoder37', () {
-    verifyMinimalEncoding(
-        "\u0150\u015C", "ECI(UTF-8),BYTE(.,.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(..)", null, false);
   });
 
   test('testMinimalEncoder38', () {
-    verifyMinimalEncoding(
-        "\u0150\u0150\u015C\u015C",
-        "ECI(ISO-8859-2),BYTE(.," ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()",
-        false);
+    verifyMinimalEncoding("\u0150\u0150\u015C\u015C",
+        "ECI(ISO-8859-2),BYTE(..),ECI(ISO-8859-3),BYTE(..)", null, false);
   });
 
   test('testMinimalEncoder39', () {
-    verifyMinimalEncoding("abcdef\u0150ghij",
-        "ECI(ISO-8859-2),BYTE(a,b,c,d,e," + "f,.,g,h,i,j),TERMINATOR()", false);
+    verifyMinimalEncoding(
+        "abcdef\u0150ghij", "ECI(latin-2),BYTE(abcdef.ghij)", null, false);
   });
 
   test('testMinimalEncoder40', () {
     verifyMinimalEncoding(
         "2938928329832983\u01502938928329832983\u015C2938928329832983",
-        "NUMERIC(293,892,832,983,298,3),ECI(ISO-8859-2),BYTE(.),NUMERIC(293,892,832,983,298,3),ECI(ISO-8"
-            "859-3),BYTE(.),NUMERIC(293,892,832,983,298,3),TERMINATOR()",
+        "NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8"
+            "859-3),BYTE(.),NUMERIC(2938928329832983)",
+        null,
         false);
   });
 
   test('testMinimalEncoder41', () {
     verifyMinimalEncoding(
         "1001114670010%01201220%107211220%140045003267781",
-        "FNC1_FIRST_POSITION(),NUMERIC(100,111"
-            ",467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINATOR()",
+        "FNC1_FIRST_POSITION(),NUMERIC(100111"
+            "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)",
+        null,
         true);
+  });
+
+  test('testMinimalEncoder42', () {
+    // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
+    verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66",
+        "ECI(shift-jis),BYTE(Katakana:......)", null, false);
+  });
+
+  test('testMinimalEncoder43', () {
+    // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
+    verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2",
+        "BYTE(Katakana:),KANJI(......)", null, false);
+  });
+
+  test('testMinimalEncoder44', () {
+    // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
+    // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
+    // that Shift_JIS encoding is more compact as in this example
+    verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2",
+        "ECI(shift-jis),BYTE(Katakana:.a.a.a" ".a.a.)", null, false);
   });
 }
 
@@ -862,9 +873,14 @@ Uint8List bytes(List<int> ints) {
   return Uint8List.fromList(ints);
 }
 
-void verifyMinimalEncoding(String input, String expectedResult, bool isGS1) {
-  ResultList result =
-      MinimalEncoder.encode(input, null, isGS1, isGS1, ErrorCorrectionLevel.L);
+void verifyMinimalEncoding(
+  String input,
+  String expectedResult,
+  Encoding? priorityCharset,
+  bool isGS1,
+) {
+  ResultList result = MinimalEncoder.encode(
+      input, null, priorityCharset, isGS1, ErrorCorrectionLevel.L);
   expect(result.toString(), expectedResult);
 }
 
