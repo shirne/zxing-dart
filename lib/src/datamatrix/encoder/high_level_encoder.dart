@@ -176,8 +176,8 @@ class HighLevelEncoder {
       }
     } else if (currentMode == EDIFACT_ENCODATION &&
         newMode == EDIFACT_ENCODATION) {
-      int endpos = math.min(startPos + 4, msg.length);
-      for (int i = startPos; i < endpos; i++) {
+      int endPos = math.min(startPos + 4, msg.length);
+      for (int i = startPos; i < endPos; i++) {
         if (!_isNativeEDIFACT(msg.codeUnitAt(i))) {
           return ASCII_ENCODATION;
         }
@@ -212,18 +212,22 @@ class HighLevelEncoder {
         if (intCharCounts[ASCII_ENCODATION] == min) {
           return ASCII_ENCODATION;
         }
-        if (minCount == 1 && mins[BASE256_ENCODATION] > 0) {
-          return BASE256_ENCODATION;
+        if (minCount == 1) {
+          return intCharCounts.indexOf(min);
         }
-        if (minCount == 1 && mins[EDIFACT_ENCODATION] > 0) {
-          return EDIFACT_ENCODATION;
+
+        // to fix result
+        double dmin = charCounts.fold(MathUtils.MAX_VALUE.toDouble(),
+            (previousValue, element) => math.min(previousValue, element));
+        minCount = charCounts.where((element) => element == dmin).length;
+
+        if (charCounts[ASCII_ENCODATION] == dmin) {
+          return ASCII_ENCODATION;
         }
-        if (minCount == 1 && mins[TEXT_ENCODATION] > 0) {
-          return TEXT_ENCODATION;
+        if (minCount == 1) {
+          return charCounts.indexOf(dmin);
         }
-        if (minCount == 1 && mins[X12_ENCODATION] > 0) {
-          return X12_ENCODATION;
-        }
+
         return C40_ENCODATION;
       }
 
@@ -381,6 +385,7 @@ class HighLevelEncoder {
       int min, Int8List mins) {
     mins.fillRange(0, mins.length, 0);
     for (int i = 0; i < 6; i++) {
+      // todo: different result from zxing java
       intCharCounts[i] = (charCounts[i]).ceil();
       int current = intCharCounts[i];
       if (min > current) {
@@ -440,30 +445,18 @@ class HighLevelEncoder {
         (ch >= 97 /* a */ && ch <= 122 /* z */);
   }
 
-  static bool _isNativeX12(dynamic chr) {
-    int ch = 0;
-    if (chr is String) {
-      ch = chr.codeUnitAt(0);
-    } else {
-      ch = chr as int;
-    }
-    return _isX12TermSep(ch) ||
-        (ch == 32 /*   */) ||
-        (ch >= 48 /* 0 */ && ch <= 57 /* 9 */) ||
-        (ch >= 65 /* A */ && ch <= 90 /* Z */);
+  static bool _isNativeX12(int chr) {
+    return _isX12TermSep(chr) ||
+        (chr == 32 /*   */) ||
+        (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) ||
+        (chr >= 65 /* A */ && chr <= 90 /* Z */);
   }
 
-  static bool _isX12TermSep(dynamic chr) {
-    int ch = 0;
-    if (chr is String) {
-      ch = chr.codeUnitAt(0);
-    } else {
-      ch = chr as int;
-    }
-    return (ch == 13) //CR
+  static bool _isX12TermSep(int chr) {
+    return (chr == 13) //CR
         ||
-        (ch == 42 /* * */) ||
-        (ch == 62 /* > */);
+        (chr == 42 /* * */) ||
+        (chr == 62 /* > */);
   }
 
   static bool _isNativeEDIFACT(int chr) {
@@ -480,7 +473,6 @@ class HighLevelEncoder {
   /// @param startPos the start position within the message
   /// @return the requested character count
   static int determineConsecutiveDigitCount(String msg, int startPos) {
-    //int count = 0;
     int len = msg.length;
     int idx = startPos;
     while (idx < len && isDigit(msg.codeUnitAt(idx))) {
@@ -491,7 +483,7 @@ class HighLevelEncoder {
 
   static void illegalCharacter(int c) {
     String hex = (c).toRadixString(16);
-    hex = "0000".substring(0, 4 - hex.length) + hex;
+    hex = hex.padLeft(4, '0');
     throw ArgumentError("Illegal character: chr($c) (0x$hex)");
   }
 }

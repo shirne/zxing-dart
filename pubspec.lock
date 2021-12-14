@@ -53,9 +53,9 @@ packages:
   charset:
     dependency: "direct main"
     description:
-      path: "../../flutter/codec/charset"
-      relative: true
-    source: path
+      name: charset
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.2.0"
   cli_util:
     dependency: transitive

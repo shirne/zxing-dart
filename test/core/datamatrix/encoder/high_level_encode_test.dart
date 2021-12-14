@@ -174,7 +174,7 @@ void main() {
     visualized = encodeHighLevel("aimaimaimB");
     expect("239 91 11 91 11 91 11 254 67 129", visualized);
 
-    visualized = encodeHighLevel(r"aimaimaim{txt}" "\u0004");
+    visualized = encodeHighLevel("aimaimaim{txt}\u0004");
     expect(
         "239 91 11 91 11 91 11 254 124 117 121 117 126 5 129 237", visualized);
   });
@@ -337,6 +337,7 @@ void main() {
 
   test('testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle', () {
     String visualized = encodeHighLevel("*MEMANT-1F-MESTECH");
+
     expect("240 168 209 77 4 229 45 196 107 77 21 53 5 12 135 192", visualized);
   });
 
