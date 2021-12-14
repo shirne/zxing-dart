@@ -236,7 +236,7 @@ class ResultList extends Context<MinimalEncoder> {
     // If there is no ECI at the beginning then we put an ECI to the default charset (ISO-8859-1)
     if (context.isGS1) {
       ResultNode first = list[0];
-      if (first != null && first.mode != Mode.ECI && containsECI) {
+      if (first.mode != Mode.ECI && containsECI) {
         // prepend a default character set ECI
         list.insert(0, ResultNode(Mode.ECI, 0, 0, 0, this));
       }
@@ -343,7 +343,7 @@ class ResultList extends Context<MinimalEncoder> {
 /// @author Alex Geller
 class MinimalEncoder {
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  static final List<Encoding> ENCODERS = [
+  static final List<Encoding> _encoders = [
     "ISO-8859-2",
     "ISO-8859-3",
     "ISO-8859-4",
@@ -407,7 +407,7 @@ class MinimalEncoder {
       }
 
       if (!canEncode) {
-        for (Encoding encoder in ENCODERS) {
+        for (Encoding encoder in _encoders) {
           if (StringUtils.canEncode(encoder, stringToEncode[i])) {
             neededEncoders.add(encoder);
             canEncode = true;

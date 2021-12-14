@@ -346,41 +346,41 @@ void main() {
     String visualized =
         encodeHighLevel("AAAAAAAAAAA**\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "230 89 191 89 191 89 191 89 178 56 114 10 243 177 63 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
-            "191 89 191 89 191 254 66 129",
+        "230 89 191 89 191 89 191 89 178 56 114 10 243 177 63 89 191 89 191 89 191 89 191 89 191 89 191 89 "
+        "191 89 191 89 191 254 66 129",
         visualized);
     //X12 encoding error with integer comparisons in lookAheadTest()
     visualized =
         encodeHighLevel("AAAAAAAAAAAA0+****AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "238 89 191 89 191 89 191 89 191 254 240 194 186 170 170 160 65 4 16 65 4 16 65 4 16 65 4 16 65 4 " +
-            "16 65 4 16 65 4 16 65 124 129 167 62 212 107",
+        "238 89 191 89 191 89 191 89 191 254 240 194 186 170 170 160 65 4 16 65 4 16 65 4 16 65 4 16 65 4 "
+        "16 65 4 16 65 4 16 65 124 129 167 62 212 107",
         visualized);
     //EDIFACT encoding error with spec conform float point comparisons in lookAheadTest()
     visualized =
         encodeHighLevel("AAAAAAAAAAA++++\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "230 89 191 89 191 89 191 254 66 66 44 44 44 44 235 125 230 89 191 89 191 89 191 89 191 89 191 89 " +
-            "191 89 191 89 191 89 191 89 191 254 129 17 167 62 212 107",
+        "230 89 191 89 191 89 191 254 66 66 44 44 44 44 235 125 230 89 191 89 191 89 191 89 191 89 191 89 "
+        "191 89 191 89 191 89 191 89 191 254 129 17 167 62 212 107",
         visualized);
     //EDIFACT encoding error with integer comparisons in lookAheadTest()
     visualized =
         encodeHighLevel("++++++++++AAa0 0++++++++++++++++++++++++++++++");
     expect(
-        "240 174 186 235 174 186 235 174 176 65 124 98 240 194 12 43 174 186 235 174 186 235 174 186 235 " +
-            "174 186 235 174 186 235 174 186 235 174 186 235 173 240 129 167 62 212 107",
+        "240 174 186 235 174 186 235 174 176 65 124 98 240 194 12 43 174 186 235 174 186 235 174 186 235 "
+        "174 186 235 174 186 235 174 186 235 174 186 235 173 240 129 167 62 212 107",
         visualized);
     visualized =
         encodeHighLevel("AAAAAAAAAAAA*+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "230 89 191 89 191 89 191 89 191 7 170 64 191 89 191 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
-            "191 89 191 66",
+        "230 89 191 89 191 89 191 89 191 7 170 64 191 89 191 89 191 89 191 89 191 89 191 89 191 89 191 89 "
+        "191 89 191 66",
         visualized);
     visualized =
         encodeHighLevel("AAAAAAAAAAA*0a0 *AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     expect(
-        "230 89 191 89 191 89 191 89 178 56 227 6 228 7 183 89 191 89 191 89 191 89 191 89 191 89 191 89 " +
-            "191 89 191 89 191 254 66 66",
+        "230 89 191 89 191 89 191 89 178 56 227 6 228 7 183 89 191 89 191 89 191 89 191 89 191 89 191 89 "
+        "191 89 191 89 191 254 66 66",
         visualized);
   });
 }

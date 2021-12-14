@@ -20,7 +20,6 @@ import 'dart:typed_data';
 
 import '../../common.dart';
 import '../barcode_format.dart';
-import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'encoder/compaction.dart';

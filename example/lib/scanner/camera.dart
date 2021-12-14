@@ -5,7 +5,6 @@ import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 
 import '../models/utils.dart';

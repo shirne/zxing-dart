@@ -42,8 +42,6 @@ class DataLength {
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class FieldParser {
-  static final Object _variableLength = Object();
-
   static final Map<String, DataLength> _twoDigitDataLength = {
     // "DIGITS", Integer(LENGTH)
     //    or
