@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import 'dart:convert';
 import 'dart:math' as math;
 
 import '../barcode_format.dart';
@@ -25,6 +26,7 @@ import '../writer.dart';
 import 'encoder/default_placement.dart';
 import 'encoder/error_correction.dart';
 import 'encoder/high_level_encoder.dart';
+import 'encoder/minimal_encoder.dart';
 import 'encoder/symbol_info.dart';
 import 'encoder/symbol_shape_hint.dart';
 
@@ -74,8 +76,31 @@ class DataMatrixWriter implements Writer {
     }
 
     //1. step: Data encodation
-    String encoded =
-        HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+    String encoded;
+
+    bool hasCompactionHint = hints != null &&
+        hints.containsKey(EncodeHintType.DATA_MATRIX_COMPACT) &&
+        (hints[EncodeHintType.DATA_MATRIX_COMPACT] as bool);
+    if (hasCompactionHint) {
+      bool hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+          (hints[EncodeHintType.GS1_FORMAT] as bool);
+
+      Encoding? charset;
+      bool hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
+      if (hasEncodingHint) {
+        charset = (hints[EncodeHintType.CHARACTER_SET] as Encoding?);
+      }
+      encoded = MinimalEncoder.encodeHighLevel(
+          contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
+    } else {
+      encoded =
+          HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+      bool hasForceC40Hint = hints != null &&
+          hints.containsKey(EncodeHintType.FORCE_C40) &&
+          (hints[EncodeHintType.FORCE_C40] as bool);
+      encoded = HighLevelEncoder.encodeHighLevel(
+          contents, shape, minSize, maxSize, hasForceC40Hint);
+    }
 
     SymbolInfo? symbolInfo =
         SymbolInfo.lookup(encoded.length, shape, minSize, maxSize, true);

@@ -282,7 +282,10 @@ class Detector {
   }
 
   bool _isValid(ResultPoint p) {
-    return p.x >= 0 && p.x < _image.width && p.y > 0 && p.y < _image.height;
+    return p.x >= 0 &&
+        p.x <= _image.width - 1 &&
+        p.y > 0 &&
+        p.y <= _image.height - 1;
   }
 
   static BitMatrix _sampleGrid(

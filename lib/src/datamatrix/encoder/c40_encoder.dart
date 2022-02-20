@@ -23,6 +23,41 @@ class C40Encoder implements Encoder {
   @override
   int get encodingMode => HighLevelEncoder.C40_ENCODATION;
 
+  void encodeMaximal(EncoderContext context) {
+    StringBuilder buffer = StringBuilder();
+    int lastCharSize = 0;
+    int backtrackStartPosition = context.pos;
+    int backtrackBufferLength = 0;
+    while (context.hasMoreCharacters) {
+      int c = context.currentChar;
+      context.pos++;
+      lastCharSize = encodeChar(c, buffer);
+      if (buffer.length % 3 == 0) {
+        backtrackStartPosition = context.pos;
+        backtrackBufferLength = buffer.length;
+      }
+    }
+    if (backtrackBufferLength != buffer.length) {
+      int unwritten = (buffer.length ~/ 3) * 2;
+
+      int curCodewordCount =
+          context.codewordCount + unwritten + 1; // +1 for the latch to C40
+      context.updateSymbolInfo(curCodewordCount);
+      int available = context.symbolInfo!.dataCapacity - curCodewordCount;
+      int rest = buffer.length % 3;
+      if ((rest == 2 && available != 2) ||
+          (rest == 1 && (lastCharSize > 3 || available != 1))) {
+        buffer.setLength(backtrackBufferLength);
+        context.pos = backtrackStartPosition;
+      }
+    }
+    if (buffer.length > 0) {
+      context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
+    }
+
+    handleEOD(context, buffer);
+  }
+
   @override
   void encode(EncoderContext context) {
     //step C

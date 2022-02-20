@@ -19,6 +19,7 @@ import 'dart:typed_data';
 
 import '../../common/bit_source.dart';
 import '../../common/decoder_result.dart';
+import '../../common/eci_string_builder.dart';
 import '../../common/string_builder.dart';
 import '../../formats_exception.dart';
 
@@ -76,7 +77,7 @@ class DecodedBitStreamParser {
 
   static DecoderResult decode(Uint8List bytes) {
     BitSource bits = BitSource(bytes);
-    StringBuffer result = StringBuffer();
+    ECIStringBuilder result = ECIStringBuilder();
     StringBuilder resultTrailer = StringBuilder();
     List<Uint8List> byteSegments = [];
     _Mode mode = _Mode.ASCII_ENCODE;
@@ -105,8 +106,9 @@ class DecodedBitStreamParser {
             _decodeBase256Segment(bits, result, byteSegments);
             break;
           case _Mode.ECI_ENCODE:
-            isECIencoded =
-                true; // ECI detection only, atm continue decoding as ASCII
+            _decodeECISegment(bits, result);
+            // ECI detection only, atm continue decoding as ASCII
+            isECIencoded = true;
             break;
           default:
             throw FormatsException.instance;
@@ -143,7 +145,7 @@ class DecodedBitStreamParser {
   }
 
   /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
-  static _Mode _decodeAsciiSegment(BitSource bits, StringBuffer result,
+  static _Mode _decodeAsciiSegment(BitSource bits, ECIStringBuilder result,
       StringBuilder resultTrailer, Set<int> fnc1positions) {
     bool upperShift = false;
     do {
@@ -218,7 +220,7 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
   static void _decodeC40Segment(
-      BitSource bits, StringBuffer result, Set<int> fnc1positions) {
+      BitSource bits, ECIStringBuilder result, Set<int> fnc1positions) {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -309,7 +311,7 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
   static void _decodeTextSegment(
-      BitSource bits, StringBuffer result, Set<int> fnc1positions) {
+      BitSource bits, ECIStringBuilder result, Set<int> fnc1positions) {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
@@ -404,7 +406,7 @@ class DecodedBitStreamParser {
   }
 
   /// See ISO 16022:2006, 5.2.7
-  static void _decodeAnsiX12Segment(BitSource bits, StringBuffer result) {
+  static void _decodeAnsiX12Segment(BitSource bits, ECIStringBuilder result) {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
 
@@ -464,7 +466,7 @@ class DecodedBitStreamParser {
   }
 
   /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
-  static void _decodeEdifactSegment(BitSource bits, StringBuffer result) {
+  static void _decodeEdifactSegment(BitSource bits, ECIStringBuilder result) {
     do {
       // If there is only two or less bytes left then it will be encoded as ASCII
       if (bits.available() <= 16) {
@@ -496,7 +498,7 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
   static void _decodeBase256Segment(
-      BitSource bits, StringBuffer result, List<Uint8List> byteSegments) {
+      BitSource bits, ECIStringBuilder result, List<Uint8List> byteSegments) {
     // Figure out how long the Base 256 Segment is.
     int codewordPosition = 1 + bits.byteOffset; // position is 1-indexed
     int d1 = _unrandomize255State(bits.readBits(8), codewordPosition++);
@@ -527,6 +529,31 @@ class DecodedBitStreamParser {
     }
     byteSegments.add(bytes);
     result.write(latin1.decode(Uint8List.fromList(bytes)));
+  }
+
+  /// See ISO 16022:2007, 5.4.1
+  static void _decodeECISegment(BitSource bits, ECIStringBuilder result) {
+    if (bits.available() < 8) {
+      throw FormatsException.instance;
+    }
+    int c1 = bits.readBits(8);
+    if (c1 <= 127) {
+      result.appendECI(c1 - 1);
+    }
+    //currently we only support character set ECIs
+    /*} else {
+      if (bits.available() < 8) {
+        throw FormatException.getFormatInstance();
+      }
+      int c2 = bits.readBits(8);
+      if (c1 >= 128 && c1 <= 191) {
+      } else {
+        if (bits.available() < 8) {
+          throw FormatException.getFormatInstance();
+        }
+        int c3 = bits.readBits(8);
+      }
+    }*/
   }
 
   /// See ISO 16022:2006, Annex B, B.2

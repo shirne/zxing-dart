@@ -19,6 +19,7 @@ import 'dart:typed_data';
 
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
+import '../../formats_exception.dart';
 
 /// MaxiCodes can encode text or structured information as bits in one of several modes,
 /// with multiple character sets in one code. This class decodes the bits back into text.
@@ -42,6 +43,26 @@ class DecodedBitStreamParser {
   static const String _fs = '\u001C';
   static const String _gs = '\u001D';
   static const String _rs = '\u001E';
+
+  static final List<int> _countryBytes = [
+    53, 54, 43, 44, 45, 46, 47, 48, 37, 38 //
+  ];
+  static final List<int> _serviceClassBytes = [
+    55, 56, 57, 58, 59, 60, 49, 50, 51, 52 //
+  ];
+  static final List<int> _postcode2LengthBytes = [39, 40, 41, 42, 31, 32];
+  static final List<int> _postcode2Bytes = [
+    33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19, //
+    20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2
+  ];
+  static final List<List<int>> _postcode3Bytes = [
+    [39, 40, 41, 42, 31, 32],
+    [33, 34, 35, 36, 25, 26],
+    [27, 28, 29, 30, 19, 20],
+    [21, 22, 23, 24, 13, 14],
+    [15, 16, 17, 18, 7, 8],
+    [9, 10, 11, 12, 1, 2]
+  ];
 
   static final List<String> _sets = [
     "\nABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -76,12 +97,11 @@ class DecodedBitStreamParser {
         String postcode;
         if (mode == 2) {
           int pc = _getPostCode2(bytes);
-          //NumberFormat df = DecimalFormat(
-          //    "0000000000".substring(0, getPostCode2Length(bytes)));
-          //postcode = df.format(pc);
-          postcode = pc
-              .toString()
-              .padLeft(math.min(10, _getPostCode2Length(bytes)), '0');
+          int ps2Length = _getPostCode2Length(bytes);
+          if (ps2Length > 10) {
+            throw FormatsException.instance;
+          }
+          postcode = pc.toString().padLeft(math.min(10, ps2Length), '0');
         } else {
           postcode = _getPostCode3(bytes);
         }
@@ -111,9 +131,6 @@ class DecodedBitStreamParser {
   }
 
   static int _getInt(Uint8List bytes, List x) {
-    if (x.isEmpty) {
-      throw ArgumentError();
-    }
     int val = 0;
     for (int i = 0; i < x.length; i++) {
       val += _getBit(x[i], bytes) << (x.length - i - 1);
@@ -122,34 +139,27 @@ class DecodedBitStreamParser {
   }
 
   static int _getCountry(Uint8List bytes) {
-    return _getInt(bytes, [53, 54, 43, 44, 45, 46, 47, 48, 37, 38]);
+    return _getInt(bytes, _countryBytes);
   }
 
   static int _getServiceClass(Uint8List bytes) {
-    return _getInt(bytes, [55, 56, 57, 58, 59, 60, 49, 50, 51, 52]);
+    return _getInt(bytes, _serviceClassBytes);
   }
 
   static int _getPostCode2Length(Uint8List bytes) {
-    return _getInt(bytes, [39, 40, 41, 42, 31, 32]);
+    return _getInt(bytes, _postcode2LengthBytes);
   }
 
   static int _getPostCode2(Uint8List bytes) {
-    return _getInt(bytes, [
-      33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19, //
-      20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18,
-      7, 8, 9, 10, 11, 12, 1, 2
-    ]);
+    return _getInt(bytes, _postcode2Bytes);
   }
 
   static String _getPostCode3(Uint8List bytes) {
-    return String.fromCharCodes([
-      _sets[0].codeUnitAt(_getInt(bytes, [39, 40, 41, 42, 31, 32])), //
-      _sets[0].codeUnitAt(_getInt(bytes, [33, 34, 35, 36, 25, 26])), //
-      _sets[0].codeUnitAt(_getInt(bytes, [27, 28, 29, 30, 19, 20])), //
-      _sets[0].codeUnitAt(_getInt(bytes, [21, 22, 23, 24, 13, 14])), //
-      _sets[0].codeUnitAt(_getInt(bytes, [15, 16, 17, 18, 7, 8])), //
-      _sets[0].codeUnitAt(_getInt(bytes, [9, 10, 11, 12, 1, 2])), //
-    ]);
+    StringBuilder sb = StringBuilder();
+    for (List<int> p3bytes in _postcode3Bytes) {
+      sb.write(_sets[0].codeUnitAt(_getInt(bytes, p3bytes)));
+    }
+    return sb.toString();
   }
 
   static String _getMessage(Uint8List bytes, int start, int len) {

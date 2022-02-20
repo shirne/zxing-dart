@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:charset/charset.dart';
-
 import '../../../common.dart';
 import '../../../qrcode.dart';
+import '../../common/eci_encoder_set.dart';
 import '../../writer_exception.dart';
 
 class VersionSize {
@@ -72,9 +71,11 @@ class Edge extends Context<MinimalEncoder> {
         break;
       case Mode.BYTE:
         size += 8 *
-            context.encoders[charsetEncoderIndex]
-                .encode(context.stringToEncode
-                    .substring(fromPosition, fromPosition + characterLength))
+            context.encoders
+                .encode(
+                    context.stringToEncode.substring(
+                        fromPosition, fromPosition + characterLength),
+                    charsetEncoderIndex)
                 .length;
         if (needECI) {
           size += 4 +
@@ -130,9 +131,11 @@ class ResultNode extends Context<ResultList> {
   //  for multi byte encoded characters)
   int getCharacterCountIndicator() {
     return mode == Mode.BYTE
-        ? context.context.encoders[charsetEncoderIndex]
-            .encode(context.context.stringToEncode
-                .substring(fromPosition, fromPosition + characterLength))
+        ? context.context.encoders
+            .encode(
+                context.context.stringToEncode
+                    .substring(fromPosition, fromPosition + characterLength),
+                charsetEncoderIndex)
             .length
         : characterLength;
   }
@@ -146,11 +149,7 @@ class ResultNode extends Context<ResultList> {
     }
     if (mode == Mode.ECI) {
       bits.appendBits(
-          CharacterSetECI.getCharacterSetECIByName(
-                      context.context.encoders[charsetEncoderIndex].name)
-                  ?.value ??
-              0,
-          8);
+          context.context.encoders.getECIValue(charsetEncoderIndex), 8);
     } else if (characterLength > 0) {
       // append data
       Encoder.appendBytes(
@@ -158,7 +157,7 @@ class ResultNode extends Context<ResultList> {
               .substring(fromPosition, fromPosition + characterLength),
           mode,
           bits,
-          context.context.encoders[charsetEncoderIndex]);
+          context.context.encoders.getCharset(charsetEncoderIndex));
     }
   }
 
@@ -168,7 +167,8 @@ class ResultNode extends Context<ResultList> {
     result.write(mode);
     result.write('(');
     if (mode == Mode.ECI) {
-      result.write(context.context.encoders[charsetEncoderIndex].name);
+      result
+          .write(context.context.encoders.getCharset(charsetEncoderIndex).name);
     } else {
       result.write(makePrintable(context.context.stringToEncode
           .substring(fromPosition, fromPosition + characterLength)));
@@ -342,42 +342,9 @@ class ResultList extends Context<MinimalEncoder> {
 ///
 /// @author Alex Geller
 class MinimalEncoder {
-  // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  static final List<Encoding> _encoders = [
-    "ISO-8859-2",
-    "ISO-8859-3",
-    "ISO-8859-4",
-    "ISO-8859-5",
-    "ISO-8859-6",
-    "ISO-8859-7",
-    "ISO-8859-8",
-    "ISO-8859-9",
-    "ISO-8859-10",
-    "ISO-8859-11",
-    "ISO-8859-13",
-    "ISO-8859-14",
-    "ISO-8859-15",
-    "ISO-8859-16",
-    "windows-1250",
-    "windows-1251",
-    "windows-1252",
-    "windows-1253",
-    "windows-1254",
-    "windows-1255",
-    "windows-1256",
-    "windows-1257",
-    "windows-1258",
-    "Shift_JIS"
-  ]
-      .map<Encoding?>(
-          (name) => CharacterSetECI.getCharacterSetECIByName(name)?.charset)
-      .whereType<Encoding>()
-      .toList();
-
   final String stringToEncode;
   final bool isGS1;
-  late List<Encoding> encoders;
-  late int priorityEncoderIndex;
+  final ECIEncoderSet encoders;
   final ErrorCorrectionLevel ecLevel;
 
   /// Creates a MinimalEncoder
@@ -390,58 +357,9 @@ class MinimalEncoder {
   /// @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
   /// @param ecLevel The error correction level.
   /// @see ResultList#getVersion
-  MinimalEncoder(this.stringToEncode, Encoding? priorityCharset, this.isGS1,
-      this.ecLevel) {
-    List<Encoding> neededEncoders = [CharacterSetECI.ISO8859_1.charset!];
-
-    bool needUnicodeEncoder =
-        priorityCharset != null && priorityCharset.name.startsWith("UTF");
-
-    for (int i = 0; i < stringToEncode.length; i++) {
-      bool canEncode = false;
-      for (Encoding encoder in neededEncoders) {
-        if (StringUtils.canEncode(encoder, stringToEncode[i])) {
-          canEncode = true;
-          break;
-        }
-      }
-
-      if (!canEncode) {
-        for (Encoding encoder in _encoders) {
-          if (StringUtils.canEncode(encoder, stringToEncode[i])) {
-            neededEncoders.add(encoder);
-            canEncode = true;
-            break;
-          }
-        }
-      }
-
-      if (!canEncode) {
-        needUnicodeEncoder = true;
-      }
-    }
-
-    if (neededEncoders.length == 1 && !needUnicodeEncoder) {
-      encoders = [neededEncoders[0]];
-    } else {
-      encoders = List.generate(
-          neededEncoders.length, (index) => neededEncoders[index]);
-
-      encoders.add(utf8);
-      encoders.add(utf32);
-    }
-
-    int priorityEncoderIndexValue = -1;
-    if (priorityCharset != null) {
-      for (int i = 0; i < encoders.length; i++) {
-        if (priorityCharset.name == encoders[i].name) {
-          priorityEncoderIndexValue = i;
-          break;
-        }
-      }
-    }
-    priorityEncoderIndex = priorityEncoderIndexValue;
-  }
+  MinimalEncoder(
+      this.stringToEncode, Encoding? priorityCharset, this.isGS1, this.ecLevel)
+      : encoders = ECIEncoderSet(stringToEncode, priorityCharset, -1);
 
   /// Encodes the string minimally
   ///
@@ -584,15 +502,16 @@ class MinimalEncoder {
       Edge? previous) {
     int start = 0;
     int end = encoders.length;
+    int priorityEncoderIndex = encoders.priorityEncoderIndex;
     if (priorityEncoderIndex >= 0 &&
-        StringUtils.canEncode(
-            encoders[priorityEncoderIndex], stringToEncode[from])) {
+        encoders.canEncode(
+            stringToEncode.codeUnitAt(from), priorityEncoderIndex)) {
       start = priorityEncoderIndex;
       end = priorityEncoderIndex + 1;
     }
 
     for (int i = start; i < end; i++) {
-      if (StringUtils.canEncode(encoders[i], stringToEncode[from])) {
+      if (encoders.canEncode(stringToEncode.codeUnitAt(from), i)) {
         addEdge(
             edges, from, Edge(Mode.BYTE, from, i, 1, previous, version, this));
       }

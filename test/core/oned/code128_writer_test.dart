@@ -47,16 +47,42 @@ void main() {
   //  reader = Code128Reader();
   //}
 
+  BitMatrix encode(String toEncode, bool compact, String? expectedLoopback) {
+    Map<EncodeHintType, Object> hints = {};
+    if (compact) {
+      hints[EncodeHintType.CODE128_COMPACT] = true;
+    }
+    BitMatrix encResult =
+        writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    if (expectedLoopback != null) {
+      BitArray row = encResult.getRow(0, null);
+      Result rtResult = reader.decodeRow(0, row, null);
+      String actual = rtResult.text;
+      expect(expectedLoopback, actual);
+    }
+    if (compact) {
+      //check that what is encoded compactly yields the same on loopback as what was encoded fast.
+      BitArray row = encResult.getRow(0, null);
+      Result rtResult = reader.decodeRow(0, row, null);
+      String actual = rtResult.text;
+      BitMatrix encResultFast =
+          writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+      row = encResultFast.getRow(0, null);
+      rtResult = reader.decodeRow(0, row, null);
+      expect(rtResult.text, actual);
+    }
+    return encResult;
+  }
+
   void testEncode(String toEncode, String expected) {
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, toEncode);
 
     String actual = matrixToString(result);
     expect(actual, expected, reason: toEncode);
 
-    BitArray row = result.getRow(0, null);
-    Result rtResult = reader.decodeRow(0, row, null);
-    String actualRoundtripResultText = rtResult.text;
-    expect(toEncode, actualRoundtripResultText);
+    int width = result.width;
+    result = encode(toEncode, true, toEncode);
+    assert(result.width <= width);
   }
 
   test('testEncodeWithFunc3', () {
@@ -71,10 +97,15 @@ void main() {
         STOP +
         QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = matrixToString(result);
     expect(actual, expected);
+
+    int width = result.width;
+    result = encode(toEncode, true, "123");
+
+    expect(result.width, width);
   });
 
   test('testEncodeWithFunc2', () {
@@ -89,10 +120,15 @@ void main() {
         STOP +
         QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = matrixToString(result);
     expect(actual, expected);
+
+    int width = result.width;
+    result = encode(toEncode, true, "123");
+
+    expect(width, result.width);
   });
 
   test('testEncodeWithFunc1', () {
@@ -107,21 +143,83 @@ void main() {
         STOP +
         QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = matrixToString(result);
     expect(actual, expected);
+
+    int width = result.width;
+    result = encode(toEncode, true, "123");
+
+    expect(width, result.width);
   });
 
   test('testRoundtrip', () {
     String toEncode = "\u00f1" "10958" "\u00f1" "17160526";
     String expected = "1095817160526";
 
-    BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
-    BitArray row = encResult.getRow(0, null);
-    Result rtResult = reader.decodeRow(0, row, null);
-    String actual = rtResult.text;
-    expect(actual, expected);
+    BitMatrix encResult = encode(toEncode, false, expected);
+
+    int width = encResult.width;
+    encResult = encode(toEncode, true, expected);
+    //Compact encoding has one latch less and encodes as STARTA,FNC1,1,CODEC,09,58,FNC1,17,16,05,26
+    expect(width, encResult.width + 11);
+  });
+
+  test('testLongCompact', () {
+    //test longest possible input
+    String toEncode =
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    encode(toEncode, true, toEncode);
+  });
+
+  test('testShift', () {
+    //compare fast to compact
+    String toEncode =
+        "a\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.width;
+    result = encode(toEncode, true, toEncode);
+
+    //big difference since the fast algoritm doesn't make use of SHIFT
+    expect(width, result.width + 253);
+  });
+
+  test('testDigitMixCompaction', () {
+    //compare fast to compact
+    String toEncode = "A1A12A123A1234A12345AA1AA12AA123AA1234AA1235";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.width;
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    expect(width, result.width);
+  });
+
+  test('testCompaction1', () {
+    //compare fast to compact
+    String toEncode = "AAAAAAAAAAA12AAAAAAAAA";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.width;
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    expect(width, result.width);
+  });
+
+  test('testCompaction2', () {
+    //compare fast to compact
+    String toEncode = "AAAAAAAAAAA1212aaaaaaaaa";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.width;
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    expect(width, result.width);
   });
 
   test('testEncodeWithFunc4', () {
@@ -136,10 +234,14 @@ void main() {
         STOP +
         QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, null);
 
     String actual = matrixToString(result);
     expect(actual, expected);
+
+    int width = result.width;
+    result = encode(toEncode, true, null);
+    expect(width, result.width);
   });
 
   test('testEncodeWithFncsAndNumberInCodesetA', () {
@@ -156,11 +258,15 @@ void main() {
         STOP +
         QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, null);
 
     String actual = matrixToString(result);
 
     expect(actual, expected);
+
+    int width = result.width;
+    result = encode(toEncode, true, null);
+    expect(width, result.width);
   });
 
   test('testEncodeSwitchBetweenCodesetsAAndB', () {
@@ -182,6 +288,7 @@ void main() {
             QUIET_SPACE);
 
     // start with B switch to A and back to B
+    // the compact encoder encodes this shorter as STARTB,a,b,SHIFT,NUL,a,b
     testEncode(
         "ab\x00ab",
         QUIET_SPACE +

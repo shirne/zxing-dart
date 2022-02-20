@@ -19,7 +19,7 @@ import 'dart:typed_data';
 
 import '../../common/detector/math_utils.dart';
 import '../../dimension.dart';
-import 'asciiencoder.dart';
+import 'ascii_encoder.dart';
 import 'base256_encoder.dart';
 import 'c40_encoder.dart';
 import 'edifact_encoder.dart';
@@ -75,13 +75,13 @@ class HighLevelEncoder {
   static const int X12_UNLATCH = 254;
 
   /// 05 Macro header
-  static const String _MACRO_05_HEADER = "[)>\u001E05\u001D";
+  static const String MACRO_05_HEADER = "[)>\u001E05\u001D";
 
   /// 06 Macro header
-  static const String _MACRO_06_HEADER = "[)>\u001E06\u001D";
+  static const String MACRO_06_HEADER = "[)>\u001E06\u001D";
 
   /// Macro trailer
-  static const String _MACRO_TRAILER = "\u001E\u0004";
+  static const String MACRO_TRAILER = "\u001E\u0004";
 
   static const int ASCII_ENCODATION = 0;
   static const int C40_ENCODATION = 1;
@@ -110,11 +110,13 @@ class HighLevelEncoder {
   static String encodeHighLevel(String msg,
       [SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
       Dimension? minSize,
-      Dimension? maxSize]) {
+      Dimension? maxSize,
+      bool forceC40 = false]) {
     //the codewords 0..255 are encoded as Unicode characters
+    C40Encoder c40Encoder = new C40Encoder();
     List<Encoder> encoders = [
       ASCIIEncoder(),
-      C40Encoder(),
+      c40Encoder,
       TextEncoder(),
       X12Encoder(),
       EdifactEncoder(),
@@ -125,18 +127,25 @@ class HighLevelEncoder {
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
 
-    if (msg.startsWith(_MACRO_05_HEADER) && msg.endsWith(_MACRO_TRAILER)) {
+    if (msg.startsWith(MACRO_05_HEADER) && msg.endsWith(MACRO_TRAILER)) {
       context.writeCodeword(_MACRO_05);
       context.setSkipAtEnd(2);
-      context.pos += _MACRO_05_HEADER.length;
-    } else if (msg.startsWith(_MACRO_06_HEADER) &&
-        msg.endsWith(_MACRO_TRAILER)) {
+      context.pos += MACRO_05_HEADER.length;
+    } else if (msg.startsWith(MACRO_06_HEADER) && msg.endsWith(MACRO_TRAILER)) {
       context.writeCodeword(_MACRO_06);
       context.setSkipAtEnd(2);
-      context.pos += _MACRO_06_HEADER.length;
+      context.pos += MACRO_06_HEADER.length;
     }
 
-    int encodingMode = ASCII_ENCODATION; //Default mode
+    //Default mode
+    int encodingMode = ASCII_ENCODATION;
+
+    if (forceC40) {
+      c40Encoder.encodeMaximal(context);
+      encodingMode = context.newEncoding;
+      context.resetEncoderSignal();
+    }
+
     while (context.hasMoreCharacters) {
       encoders[encodingMode].encode(context);
       if (context.newEncoding >= 0) {
@@ -170,7 +179,7 @@ class HighLevelEncoder {
     if (currentMode == X12_ENCODATION && newMode == X12_ENCODATION) {
       int endPos = math.min(startPos + 3, msg.length);
       for (int i = startPos; i < endPos; i++) {
-        if (!_isNativeX12(msg.codeUnitAt(i))) {
+        if (!isNativeX12(msg.codeUnitAt(i))) {
           return ASCII_ENCODATION;
         }
       }
@@ -178,7 +187,7 @@ class HighLevelEncoder {
         newMode == EDIFACT_ENCODATION) {
       int endPos = math.min(startPos + 4, msg.length);
       for (int i = startPos; i < endPos; i++) {
-        if (!_isNativeEDIFACT(msg.codeUnitAt(i))) {
+        if (!isNativeEDIFACT(msg.codeUnitAt(i))) {
           return ASCII_ENCODATION;
         }
       }
@@ -248,7 +257,7 @@ class HighLevelEncoder {
       }
 
       //step M
-      if (_isNativeC40(c)) {
+      if (isNativeC40(c)) {
         charCounts[C40_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[C40_ENCODATION] += 8.0 / 3.0;
@@ -257,7 +266,7 @@ class HighLevelEncoder {
       }
 
       //step N
-      if (_isNativeText(c)) {
+      if (isNativeText(c)) {
         charCounts[TEXT_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[TEXT_ENCODATION] += 8.0 / 3.0;
@@ -266,7 +275,7 @@ class HighLevelEncoder {
       }
 
       //step O
-      if (_isNativeX12(c)) {
+      if (isNativeX12(c)) {
         charCounts[X12_ENCODATION] += 2.0 / 3.0;
       } else if (isExtendedASCII(c)) {
         charCounts[X12_ENCODATION] += 13.0 / 3.0;
@@ -275,7 +284,7 @@ class HighLevelEncoder {
       }
 
       //step P
-      if (_isNativeEDIFACT(c)) {
+      if (isNativeEDIFACT(c)) {
         charCounts[EDIFACT_ENCODATION] += 3.0 / 4.0;
       } else if (isExtendedASCII(c)) {
         charCounts[EDIFACT_ENCODATION] += 17.0 / 4.0;
@@ -364,7 +373,7 @@ class HighLevelEncoder {
               if (_isX12TermSep(tc)) {
                 return X12_ENCODATION;
               }
-              if (!_isNativeX12(tc)) {
+              if (!isNativeX12(tc)) {
                 break;
               }
               p++;
@@ -421,7 +430,7 @@ class HighLevelEncoder {
     return ch >= 128 && ch <= 255;
   }
 
-  static bool _isNativeC40(dynamic chr) {
+  static bool isNativeC40(dynamic chr) {
     int ch = 0;
     if (chr is String) {
       ch = chr.codeUnitAt(0);
@@ -433,7 +442,7 @@ class HighLevelEncoder {
         (ch >= 65 /* A */ && ch <= 90 /* Z */);
   }
 
-  static bool _isNativeText(dynamic chr) {
+  static bool isNativeText(dynamic chr) {
     int ch = 0;
     if (chr is String) {
       ch = chr.codeUnitAt(0);
@@ -445,7 +454,7 @@ class HighLevelEncoder {
         (ch >= 97 /* a */ && ch <= 122 /* z */);
   }
 
-  static bool _isNativeX12(int chr) {
+  static bool isNativeX12(int chr) {
     return _isX12TermSep(chr) ||
         (chr == 32 /*   */) ||
         (chr >= 48 /* 0 */ && chr <= 57 /* 9 */) ||
@@ -459,7 +468,7 @@ class HighLevelEncoder {
         (chr == 62 /* > */);
   }
 
-  static bool _isNativeEDIFACT(int chr) {
+  static bool isNativeEDIFACT(int chr) {
     return chr >= 32 /*   */ && chr <= 94 /* ^ */;
   }
 

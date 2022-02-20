@@ -15,11 +15,237 @@
  */
 
 import '../barcode_format.dart';
+import '../common/detector/math_utils.dart';
 import '../encode_hint_type.dart';
 import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
 enum _CType { UNCODABLE, ONE_DIGIT, TWO_DIGITS, FNC_1 }
+enum Charset { A, B, C, NONE }
+enum Latch { A, B, C, SHIFT, NONE }
+
+/**
+ * Encodes minimally using Divide-And-Conquer with Memoization
+ **/
+class MinimalEncoder {
+  static final String A =
+      " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002"
+      "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011"
+      "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"
+      "\u00FF";
+  static final String B =
+      " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr"
+      "stuvwxyz{|}~\u007F\u00FF";
+
+  static final int CODE_SHIFT = 98;
+
+  List<List<int>>? memoizedCost;
+  List<List<Latch>>? minPath;
+
+  List<bool> encode(String contents) {
+    memoizedCost = List.generate(4, (index) => List.filled(contents.length, 0));
+    minPath =
+        List.generate(4, (index) => List.filled(contents.length, Latch.NONE));
+
+    encodeCharset(contents, Charset.NONE, 0);
+
+    List<List<int>> patterns = [];
+    List<int> checkSum = [0];
+    List<int> checkWeight = [1];
+    int length = contents.length;
+    Charset charset = Charset.NONE;
+    for (int i = 0; i < length; i++) {
+      Latch latch = minPath![charset.index][i];
+      switch (latch) {
+        case Latch.A:
+          charset = Charset.A;
+          addPattern(
+              patterns,
+              i == 0 ? Code128Writer._CODE_START_A : Code128Writer._CODE_CODE_A,
+              checkSum,
+              checkWeight,
+              i);
+          break;
+        case Latch.B:
+          charset = Charset.B;
+          addPattern(
+              patterns,
+              i == 0 ? Code128Writer._CODE_START_B : Code128Writer._CODE_CODE_B,
+              checkSum,
+              checkWeight,
+              i);
+          break;
+        case Latch.C:
+          charset = Charset.C;
+          addPattern(
+              patterns,
+              i == 0 ? Code128Writer._CODE_START_C : Code128Writer._CODE_CODE_C,
+              checkSum,
+              checkWeight,
+              i);
+          break;
+        case Latch.SHIFT:
+          addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i);
+          break;
+      }
+      if (charset == Charset.C) {
+        if (contents.codeUnitAt(i) == Code128Writer._ESCAPE_FNC_1) {
+          addPattern(
+              patterns, Code128Writer._CODE_FNC_1, checkSum, checkWeight, i);
+        } else {
+          addPattern(patterns, int.parse(contents.substring(i, i + 2)),
+              checkSum, checkWeight, i);
+          assert(i + 1 <
+              length); //the algorithm never leads to a single trailing digit in character set C
+          if (i + 1 < length) {
+            i++;
+          }
+        }
+      } else {
+        // charset A or B
+        int patternIndex;
+        switch (contents.codeUnitAt(i)) {
+          case Code128Writer._ESCAPE_FNC_1:
+            patternIndex = Code128Writer._CODE_FNC_1;
+            break;
+          case Code128Writer._ESCAPE_FNC_2:
+            patternIndex = Code128Writer._CODE_FNC_2;
+            break;
+          case Code128Writer._ESCAPE_FNC_3:
+            patternIndex = Code128Writer._CODE_FNC_3;
+            break;
+          case Code128Writer._ESCAPE_FNC_4:
+            if ((charset == Charset.A && latch != Latch.SHIFT) ||
+                (charset == Charset.B && latch == Latch.SHIFT)) {
+              patternIndex = Code128Writer._CODE_FNC_4_A;
+            } else {
+              patternIndex = Code128Writer._CODE_FNC_4_B;
+            }
+            break;
+          default:
+            patternIndex = contents.codeUnitAt(i) - ' '.codeUnitAt(0);
+        }
+        if ((charset == Charset.A && latch != Latch.SHIFT) ||
+            (charset == Charset.B && latch == Latch.SHIFT)) {
+          if (patternIndex < 0) {
+            patternIndex += '`'.codeUnitAt(0);
+          }
+        }
+        addPattern(patterns, patternIndex, checkSum, checkWeight, i);
+      }
+    }
+    memoizedCost = null;
+    minPath = null;
+    return Code128Writer.produceResult(patterns, checkSum[0]);
+  }
+
+  static void addPattern(List<List<int>> patterns, int patternIndex,
+      List<int> checkSum, List<int> checkWeight, int position) {
+    patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
+    if (position != 0) {
+      checkWeight[0]++;
+    }
+    checkSum[0] += patternIndex * checkWeight[0];
+  }
+
+  static bool isDigit(int c) {
+    return c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0);
+  }
+
+  bool canEncode(String contents, Charset charset, int position) {
+    int c = contents.codeUnitAt(position);
+    String cs = String.fromCharCode(c);
+    switch (charset) {
+      case Charset.A:
+        return c == Code128Writer._ESCAPE_FNC_1 ||
+            c == Code128Writer._ESCAPE_FNC_2 ||
+            c == Code128Writer._ESCAPE_FNC_3 ||
+            c == Code128Writer._ESCAPE_FNC_4 ||
+            A.contains(cs);
+      case Charset.B:
+        return c == Code128Writer._ESCAPE_FNC_1 ||
+            c == Code128Writer._ESCAPE_FNC_2 ||
+            c == Code128Writer._ESCAPE_FNC_3 ||
+            c == Code128Writer._ESCAPE_FNC_4 ||
+            B.contains(cs);
+      case Charset.C:
+        return c == Code128Writer._ESCAPE_FNC_1 ||
+            (position + 1 < contents.length &&
+                isDigit(c) &&
+                isDigit(contents.codeUnitAt(position + 1)));
+      default:
+        return false;
+    }
+  }
+
+  /// Encode the string starting at position position starting with the character set charset
+  int encodeCharset(String contents, Charset charset, int position) {
+    assert(position < contents.length);
+    int mCost = memoizedCost![charset.index][position];
+    if (mCost > 0) {
+      return mCost;
+    }
+
+    int minCost = MathUtils.MAX_VALUE;
+    Latch minLatch = Latch.NONE;
+    bool atEnd = position + 1 >= contents.length;
+
+    final List<Charset> sets = [Charset.A, Charset.B];
+    for (int i = 0; i <= 1; i++) {
+      if (canEncode(contents, sets[i], position)) {
+        int cost = 1;
+        Latch latch = Latch.NONE;
+        if (charset != sets[i]) {
+          cost++;
+          latch = Latch.values[sets[i].index];
+        }
+        if (!atEnd) {
+          cost += encodeCharset(contents, sets[i], position + 1);
+        }
+        if (cost < minCost) {
+          minCost = cost;
+          minLatch = latch;
+        }
+        cost = 1;
+        if (charset == sets[(i + 1) % 2]) {
+          cost++;
+          latch = Latch.SHIFT;
+          if (!atEnd) {
+            cost += encodeCharset(contents, charset, position + 1);
+          }
+          if (cost < minCost) {
+            minCost = cost;
+            minLatch = latch;
+          }
+        }
+      }
+    }
+    if (canEncode(contents, Charset.C, position)) {
+      int cost = 1;
+      Latch latch = Latch.NONE;
+      if (charset != Charset.C) {
+        cost++;
+        latch = Latch.C;
+      }
+      int advance =
+          contents.codeUnitAt(position) == Code128Writer._ESCAPE_FNC_1 ? 1 : 2;
+      if (position + advance < contents.length) {
+        cost += encodeCharset(contents, Charset.C, position + advance);
+      }
+      if (cost < minCost) {
+        minCost = cost;
+        minLatch = latch;
+      }
+    }
+    if (minCost == MathUtils.MAX_VALUE) {
+      throw ArgumentError(
+          "Bad character in input: ASCII value=${contents.codeUnitAt(position)}");
+    }
+    memoizedCost![charset.index][position] = minCost;
+    minPath![charset.index][position] = minLatch;
+    return minCost;
+  }
+}
 
 /// This object renders a CODE128 code as a [BitMatrix].
 ///
@@ -53,6 +279,18 @@ class Code128Writer extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
+    int forcedCodeSet = _check(contents, hints);
+
+    bool hasCompactionHint = hints != null &&
+        hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
+        (hints[EncodeHintType.CODE128_COMPACT] as bool);
+
+    return hasCompactionHint
+        ? MinimalEncoder().encode(contents)
+        : encodeFast(contents, hints, forcedCodeSet);
+  }
+
+  static int _check(String contents, Map<EncodeHintType, Object?>? hints) {
     int length = contents.length;
     // Check length
     if (length < 1 || length > 80) {
@@ -126,7 +364,12 @@ class Code128Writer extends OneDimensionalCodeWriter {
           break;
       }
     }
+    return forcedCodeSet;
+  }
 
+  static List<bool> encodeFast(
+      String contents, Map<EncodeHintType, Object?>? hints, int forcedCodeSet) {
+    int length = contents.length;
     List<List<int>> patterns = []; // temporary storage for patterns
     int checkSum = 0;
     int checkWeight = 1;
@@ -222,7 +465,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
         checkWeight++;
       }
     }
+    return produceResult(patterns, checkSum);
+  }
 
+  static List<bool> produceResult(List<List<int>> patterns, int checkSum) {
     // Compute and append checksum
     checkSum %= 103;
     patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);

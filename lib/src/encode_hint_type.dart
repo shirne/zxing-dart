@@ -33,6 +33,19 @@ enum EncodeHintType {
   /// Specifies the matrix shape for Data Matrix (type {@link com.google.zxing.datamatrix.encoder.SymbolShapeHint})
   DATA_MATRIX_SHAPE,
 
+  /// Specifies whether to use compact mode for Data Matrix (type [bool], or "true" or "false" [String] value)
+  /// The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1
+  /// character set via ECIs.
+  /// Please note that in that case, the most compact character encoding is chosen for characters in
+  /// the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
+  /// support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
+  /// means of the {@link #CHARACTER_SET} encoding hint.
+  /// Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
+  /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
+  /// for the purpose of delimiting AIs.
+  /// This option and [FORCE_C40] are mutually exclusive.
+  DATA_MATRIX_COMPACT,
+
   /// Specifies a minimum barcode size (type [Dimension]). Only applicable to Data Matrix now.
   ///
   /// @deprecated use width/height params in
@@ -81,7 +94,7 @@ enum EncodeHintType {
   /// (Type [Integer], or [String] representation of the integer value).
   QR_MASK_PATTERN,
 
-  /// Specifies whether to use compact mode for QR code (type [bool], or "true" or "false"
+  /// Specifies whether to use compact mode for QR code (type [bool], or "true" or "false" [String] value)
   /// Please note that when compaction is performed, the most compact character encoding is chosen
   /// for characters in the input that are not in the ISO-8859-1 character set. Based on experience,
   /// some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
@@ -93,5 +106,14 @@ enum EncodeHintType {
   GS1_FORMAT,
 
   /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type [String]). Valid values are "A", "B", "C".
+  /// This option and [CODE128_COMPACT] are mutually exclusive.
   FORCE_CODE_SET,
+
+  /// Forces C40 encoding for data-matrix (type [bool], or "true" or "false" [String] value). This
+  /// option and [DATA_MATRIX_COMPACT] are mutually exclusive.
+  FORCE_C40,
+
+  /// Specifies whether to use compact mode for Code-128 code (type [bool], or "true" or "false" [String] value)
+  /// This can yield slightly smaller bar codes. This option and [FORCE_CODE_SET] are mutually exclusive.
+  CODE128_COMPACT,
 }

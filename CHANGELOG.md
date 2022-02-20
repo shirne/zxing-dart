@@ -1,5 +1,8 @@
+## [0.6.1] - 2022-02-20
+* 同步zxing至2022-2-18(新增了datamatrix.minimal_encoder, eci_encoder_set)
+
 ## [0.6.0] - 2021-12-14
-* 同步zxing至12.13(新增了minimal_encoder)
+* 同步zxing至12.13(新增了qrcode.minimal_encoder)
 
 ## [0.5.0] - 2021-09-29
 * 更新版本依赖到dart2.14

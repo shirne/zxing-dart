@@ -20,10 +20,16 @@
 /// unable to locate finder timing patterns, and so on.
 /// @author Sean Owen
 abstract class ReaderException implements Exception {
+  static bool isStackTrace = true;
   // disable stack traces when not running inside test units
   final dynamic message;
 
   ReaderException([this.message]);
+
+  /// Not implemented
+  static void setStackTrace(bool enabled) {
+    isStackTrace = enabled;
+  }
 
   @override
   String toString() {
