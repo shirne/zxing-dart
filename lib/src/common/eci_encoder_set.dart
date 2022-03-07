@@ -35,7 +35,7 @@ import 'character_set_eci.dart';
 /// @author Alex Geller
 class ECIEncoderSet {
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  /* private */ static final List<Encoding> ENCODERS = [
+  static final List<Encoding> _encoders = [
     "IBM437",
     "ISO-8859-2",
     "ISO-8859-3",
@@ -57,8 +57,7 @@ class ECIEncoderSet {
     "windows-1256",
     "Shift_JIS"
   ]
-      .map<Encoding?>(
-          (name) => CharacterSetECI.getCharacterSetECIByName(name)?.charset)
+      .map<Encoding?>((name) => Charset.getByName(name))
       .whereType<Encoding>()
       .toList();
 
@@ -77,13 +76,13 @@ class ECIEncoderSet {
     //we always need the ISO-8859-1 encoder. It is the default encoding
     neededEncoders.add(Latin1Codec());
     bool needUnicodeEncoder =
-        priorityCharset != null && priorityCharset.name.startsWith("UTF");
+        priorityCharset != null && priorityCharset.name.startsWith("utf");
 
     //Walk over the input string and see if all characters can be encoded with the list of encoders
     for (int i = 0; i < stringToEncode.length; i++) {
       bool canEncode = false;
       for (Encoding encoder in neededEncoders) {
-        int c = stringToEncode.codeUnitAt(i);
+        int c = stringToEncode.runes.elementAt(i);
         if (c == fnc1 || Charset.canDecode(encoder, [c])) {
           canEncode = true;
           break;
@@ -92,7 +91,7 @@ class ECIEncoderSet {
 
       if (!canEncode) {
         //for the character at position i we don't yet have an encoder in the list
-        for (Encoding encoder in ENCODERS) {
+        for (Encoding encoder in _encoders) {
           if (Charset.canDecode(encoder, [stringToEncode.codeUnitAt(i)])) {
             //Good, we found an encoder that can encode the character. We add him to the list and continue scanning
             //the input

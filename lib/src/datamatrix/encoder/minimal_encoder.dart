@@ -27,68 +27,15 @@ enum Mode { ASCII, C40, TEXT, X12, EDF, B256 }
 
 class Edge {
   /* private */ static final List<int> allCodewordCapacities = [
-    3,
-    5,
-    8,
-    10,
-    12,
-    16,
-    18,
-    22,
-    30,
-    32,
-    36,
-    44,
-    49,
-    62,
-    86,
-    114,
-    144,
-    174,
-    204,
-    280,
-    368,
-    456,
-    576,
-    696,
-    816,
-    1050,
-    1304,
-    1558
+    3, 5, 8, 10, 12, 16, 18, 22, 30, 32, 36, 44, 49, 62, 86, 114, //
+    144, 174, 204, 280, 368, 456, 576, 696, 816, 1050, 1304, 1558
   ];
   /* private */ static final List<int> squareCodewordCapacities = [
-    3,
-    5,
-    8,
-    12,
-    18,
-    22,
-    30,
-    36,
-    44,
-    62,
-    86,
-    114,
-    144,
-    174,
-    204,
-    280,
-    368,
-    456,
-    576,
-    696,
-    816,
-    1050,
-    1304,
-    1558
+    3, 5, 8, 12, 18, 22, 30, 36, 44, 62, 86, 114, 144, 174, 204, //
+    280, 368, 456, 576, 696, 816, 1050, 1304, 1558
   ];
   /* private */ static final List<int> rectangularCodewordCapacities = [
-    5,
-    10,
-    16,
-    33,
-    32,
-    49
+    5, 10, 16, 33, 32, 49 //
   ];
   /* private */ final Input input;
   /* private */ final Mode mode; //the mode at the start of this edge.
@@ -199,7 +146,7 @@ class Edge {
   }
 
   Mode get previousMode {
-    return previous?.getEndMode() ?? Mode.ASCII;
+    return previous?.endMode ?? Mode.ASCII;
   }
 
   /// Returns Mode.ASCII in case that:
@@ -207,7 +154,7 @@ class Edge {
   ///   ASCII bytes.
   /// - Mode is C40, TEXT or X12 and the remaining characters can be encoded in at most 1 ASCII byte.
   /// Returns mode in all other cases.
-  Mode getEndMode() {
+  Mode get endMode {
     if (mode == Mode.EDF) {
       if (characterLength < 4) {
         return Mode.ASCII;
@@ -289,9 +236,8 @@ class Edge {
     return 0;
   }
 
-  /** Returns the capacity in codewords of the smallest symbol that has enough capacity to fit the given minimal
-   * number of codewords.
-   **/
+  /// Returns the capacity in codewords of the smallest symbol that has enough capacity to fit the given minimal
+  /// number of codewords.
   int getMinSymbolSize(int minimum) {
     switch (input.shapeHint) {
       case SymbolShapeHint.FORCE_SQUARE:
@@ -558,11 +504,10 @@ class Edge {
             input.charAt(fromPosition), input.fnc1Character)) {
           return getBytes(235, input.charAt(fromPosition) - 127);
         } else if (characterLength == 2) {
-          return getBytes(
-              (input.charAt(fromPosition) - '0'.codeUnitAt(0)) * 10 +
-                  input.charAt(fromPosition + 1) -
-                  '0'.codeUnitAt(0) +
-                  130);
+          return getBytes((input.charAt(fromPosition) - 48 /*'0'*/) * 10 +
+              input.charAt(fromPosition + 1) -
+              48 +
+              130);
         } else if (input.isFNC1(fromPosition)) {
           return getBytes(232);
         } else {
@@ -585,7 +530,7 @@ class Edge {
 }
 
 class Result {
-  /* private */ late Uint8List bytes;
+  /* private */ late Uint8List _bytes;
 
   Result(Edge solution) {
     Input input = solution.input;
@@ -596,7 +541,7 @@ class Result {
     if ((solution.mode == Mode.C40 ||
             solution.mode == Mode.TEXT ||
             solution.mode == Mode.X12) &&
-        solution.getEndMode() != Mode.ASCII) {
+        solution.endMode != Mode.ASCII) {
       size += prepend(Edge.getBytes(254), bytesAL);
     }
     Edge? current = solution;
@@ -645,7 +590,7 @@ class Result {
       bytesAL.add(randomize253State(bytesAL.length + 1));
     }
 
-    bytes = Uint8List.fromList(bytesAL);
+    _bytes = Uint8List.fromList(bytesAL);
   }
 
   static int prepend(Uint8List bytes, List<int> into) {
@@ -675,8 +620,8 @@ class Result {
     }
   }
 
-  /* public */ Uint8List getBytes() {
-    return bytes;
+  Uint8List get bytes {
+    return _bytes;
   }
 }
 
@@ -694,11 +639,15 @@ class Input {
         ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
     if (encoderSet.length == 1) {
       //optimization for the case when all can be encoded without ECI in ISO-8859-1
-      bytes = List.filled(stringToEncode.length, 0);
-      for (int i = 0; i < bytes.length; i++) {
-        int c = stringToEncode.codeUnitAt(i);
-        bytes[i] = c == fnc1 ? 1000 : c;
-      }
+      //bytes = List.filled(stringToEncode.length, 0);
+      //for (int i = 0; i < bytes.length; i++) {
+      //  int c = stringToEncode.codeUnitAt(i);
+      //  bytes[i] = c == fnc1 ? 1000 : c;
+      //}
+      bytes = stringToEncode.runes
+          .toList(growable: false)
+          .map<int>((i) => i == fnc1 ? 1000 : i)
+          .toList();
     } else {
       bytes = encodeMinimally(stringToEncode, encoderSet, fnc1);
     }
@@ -755,7 +704,7 @@ class Input {
 
   static void addEdges(String stringToEncode, ECIEncoderSet encoderSet,
       List<List<InputEdge?>> edges, int from, InputEdge? previous, int fnc1) {
-    int ch = stringToEncode.codeUnitAt(from);
+    int ch = stringToEncode.runes.elementAt(from);
 
     int start = 0;
     int end = encoderSet.length;
@@ -775,7 +724,7 @@ class Input {
 
   static List<int> encodeMinimally(
       String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
-    int inputLength = stringToEncode.length;
+    int inputLength = stringToEncode.runes.length;
 
     // Array that represents vertices. There is a vertex for every character and encoding.
     List<List<InputEdge?>> edges = List.generate(
@@ -805,8 +754,7 @@ class Input {
       }
     }
     if (minimalJ < 0) {
-      throw Exception(
-          "Internal error: failed to encode \"" + stringToEncode + "\"");
+      throw Exception("Internal error: failed to encode \"$stringToEncode\"");
     }
     List<int> intsAL = [];
     InputEdge? current = edges[inputLength][minimalJ];
@@ -948,14 +896,6 @@ class MinimalEncoder {
   /// Performs message encoding of a DataMatrix message
   ///
   /// @param msg the message
-  /// @return the encoded message (the char values range from 0 to 255)
-  /* public */ //static String encodeHighLevel(String msg) {
-  //  return encodeHighLevel(msg, null, -1, SymbolShapeHint.FORCE_NONE);
-  //}
-
-  /// Performs message encoding of a DataMatrix message
-  ///
-  /// @param msg the message
   /// @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
   ///   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
   ///   charset to encode any character in the input that can be encoded by it if the charset is among the
@@ -964,7 +904,7 @@ class MinimalEncoder {
   ///   bar code. If the value is not -1 then a FNC1 is also prepended.
   /// @param shape requested shape.
   /// @return the encoded message (the char values range from 0 to 255)
-  /* public */ static String encodeHighLevel(String msg,
+  static String encodeHighLevel(String msg,
       [Encoding? priorityCharset,
       int fnc1 = -1,
       SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE]) {
@@ -998,15 +938,15 @@ class MinimalEncoder {
   static Uint8List encode(String input, Encoding? priorityCharset, int fnc1,
       SymbolShapeHint shape, int macroId) {
     return encodeMinimally(Input(input, priorityCharset, fnc1, shape, macroId))
-        .getBytes();
+        .bytes;
   }
 
   static void addEdge(List<List<Edge?>> edges, Edge edge) {
     int vertexIndex = edge.fromPosition + edge.characterLength;
-    if (edges[vertexIndex][edge.getEndMode().index] == null ||
-        edges[vertexIndex][edge.getEndMode().index]!.cachedTotalSize >
+    if (edges[vertexIndex][edge.endMode.index] == null ||
+        edges[vertexIndex][edge.endMode.index]!.cachedTotalSize >
             edge.cachedTotalSize) {
-      edges[vertexIndex][edge.getEndMode().index] = edge;
+      edges[vertexIndex][edge.endMode.index] = edge;
     }
   }
 
@@ -1058,7 +998,7 @@ class MinimalEncoder {
     }
 
     int ch = input.charAt(from);
-    if (previous == null || previous.getEndMode() != Mode.EDF) {
+    if (previous == null || previous.endMode != Mode.EDF) {
       //not possible to unlatch a full EDF edge to something
       //else
       if (HighLevelEncoder.isDigit(ch) &&
@@ -1311,9 +1251,7 @@ class MinimalEncoder {
         }
       }
       //optimize memory by removing edges that have been passed.
-      for (int j = 0; j < 6; j++) {
-        edges[i - 1][j] = null;
-      }
+      edges[i - 1].fillRange(0, 6, null);
     }
 
     int minimalJ = -1;
@@ -1321,10 +1259,10 @@ class MinimalEncoder {
     for (int j = 0; j < 6; j++) {
       if (edges[inputLength][j] != null) {
         Edge edge = edges[inputLength][j]!;
-        int size = j >= 1 && j <= 3
+        //C40, TEXT and X12 need an extra unlatch at the end
+        int size = (j >= 1 && j <= 3)
             ? edge.cachedTotalSize + 1
-            : edge.cachedTotalSize; //C40, TEXT and X12 need an
-        // extra unlatch at the end
+            : edge.cachedTotalSize;
         if (size < minimalSize) {
           minimalSize = size;
           minimalJ = j;

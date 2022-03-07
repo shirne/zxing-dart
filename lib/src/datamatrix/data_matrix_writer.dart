@@ -95,11 +95,6 @@ class DataMatrixWriter implements Writer {
     } else {
       encoded =
           HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
-      bool hasForceC40Hint = hints != null &&
-          hints.containsKey(EncodeHintType.FORCE_C40) &&
-          (hints[EncodeHintType.FORCE_C40] as bool);
-      encoded = HighLevelEncoder.encodeHighLevel(
-          contents, shape, minSize, maxSize, hasForceC40Hint);
     }
 
     SymbolInfo? symbolInfo =

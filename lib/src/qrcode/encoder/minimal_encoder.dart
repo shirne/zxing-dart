@@ -78,8 +78,8 @@ class Edge extends Context<MinimalEncoder> {
                     charsetEncoderIndex)
                 .length;
         if (needECI) {
-          size += 4 +
-              8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+          // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+          size += 4 + 8;
         }
         break;
     }

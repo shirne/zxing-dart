@@ -123,12 +123,12 @@ class MinimalEncoder {
             }
             break;
           default:
-            patternIndex = contents.codeUnitAt(i) - ' '.codeUnitAt(0);
+            patternIndex = contents.codeUnitAt(i) - 32 /*' '*/;
         }
         if ((charset == Charset.A && latch != Latch.SHIFT) ||
             (charset == Charset.B && latch == Latch.SHIFT)) {
           if (patternIndex < 0) {
-            patternIndex += '`'.codeUnitAt(0);
+            patternIndex += 96 /*'`'*/;
           }
         }
         addPattern(patterns, patternIndex, checkSum, checkWeight, i);
@@ -149,7 +149,7 @@ class MinimalEncoder {
   }
 
   static bool isDigit(int c) {
-    return c >= '0'.codeUnitAt(0) && c <= '9'.codeUnitAt(0);
+    return c >= 48 /*'0'*/ && c <= 57 /*'9'*/;
   }
 
   bool canEncode(String contents, Charset charset, int position) {
@@ -238,8 +238,8 @@ class MinimalEncoder {
       }
     }
     if (minCost == MathUtils.MAX_VALUE) {
-      throw ArgumentError(
-          "Bad character in input: ASCII value=${contents.codeUnitAt(position)}");
+      throw ArgumentError("Bad character in input: "
+          "ASCII value=${contents.codeUnitAt(position)}");
     }
     memoizedCost![charset.index][position] = minCost;
     minPath![charset.index][position] = minLatch;
@@ -295,7 +295,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
     // Check length
     if (length < 1 || length > 80) {
       throw ArgumentError(
-          "Contents length should be between 1 and 80 characters, but got $length");
+          "Contents length should be between 1 and 80 characters,"
+          " but got $length");
     }
     // Check for forced code set hint.
     int forcedCodeSet = -1;
@@ -340,15 +341,15 @@ class Code128Writer extends OneDimensionalCodeWriter {
         case _CODE_CODE_A:
           // allows no ascii above 95 (no lower caps, no special symbols)
           if (c > 95 && c <= 127) {
-            throw ArgumentError(
-                "Bad character in input for forced code set A: ASCII value=$c");
+            throw ArgumentError("Bad character in input for forced code set A:"
+                " ASCII value=$c");
           }
           break;
         case _CODE_CODE_B:
           // allows no ascii below 32 (terminal symbols)
           if (c <= 32) {
-            throw ArgumentError(
-                "Bad character in input for forced code set B: ASCII value=$c");
+            throw ArgumentError("Bad character in input for forced code set B:"
+                " ASCII value=$c");
           }
           break;
         case _CODE_CODE_C:
@@ -358,8 +359,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
               c == _ESCAPE_FNC_2 ||
               c == _ESCAPE_FNC_3 ||
               c == _ESCAPE_FNC_4) {
-            throw ArgumentError(
-                "Bad character in input for forced code set C: ASCII value=$c");
+            throw ArgumentError("Bad character in input for forced code set C:"
+                " ASCII value=$c");
           }
           break;
       }

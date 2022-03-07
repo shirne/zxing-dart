@@ -113,7 +113,7 @@ class HighLevelEncoder {
       Dimension? maxSize,
       bool forceC40 = false]) {
     //the codewords 0..255 are encoded as Unicode characters
-    C40Encoder c40Encoder = new C40Encoder();
+    C40Encoder c40Encoder = C40Encoder();
     List<Encoder> encoders = [
       ASCIIEncoder(),
       c40Encoder,
