@@ -32,14 +32,14 @@ class Edge extends Context<MinimalEncoder> {
   late int cachedTotalSize;
 
   Edge(
-      this.mode,
-      this.fromPosition,
-      int charsetEncoderIndex,
-      this.characterLength,
-      this.previous,
-      Version version,
-      MinimalEncoder context)
-      : charsetEncoderIndex = mode == Mode.BYTE || previous == null
+    this.mode,
+    this.fromPosition,
+    int charsetEncoderIndex,
+    this.characterLength,
+    this.previous,
+    Version version,
+    MinimalEncoder context,
+  )   : charsetEncoderIndex = mode == Mode.BYTE || previous == null
             ? charsetEncoderIndex
             : previous.charsetEncoderIndex,
         super(context) {
@@ -73,9 +73,12 @@ class Edge extends Context<MinimalEncoder> {
         size += 8 *
             context.encoders
                 .encode(
-                    context.stringToEncode.substring(
-                        fromPosition, fromPosition + characterLength),
-                    charsetEncoderIndex)
+                  context.stringToEncode.substring(
+                    fromPosition,
+                    fromPosition + characterLength,
+                  ),
+                  charsetEncoderIndex,
+                )
                 .length;
         if (needECI) {
           // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
@@ -133,9 +136,12 @@ class ResultNode extends Context<ResultList> {
     return mode == Mode.BYTE
         ? context.context.encoders
             .encode(
-                context.context.stringToEncode
-                    .substring(fromPosition, fromPosition + characterLength),
-                charsetEncoderIndex)
+              context.context.stringToEncode.substring(
+                fromPosition,
+                fromPosition + characterLength,
+              ),
+              charsetEncoderIndex,
+            )
             .length
         : characterLength;
   }
@@ -149,15 +155,20 @@ class ResultNode extends Context<ResultList> {
     }
     if (mode == Mode.ECI) {
       bits.appendBits(
-          context.context.encoders.getECIValue(charsetEncoderIndex), 8);
+        context.context.encoders.getECIValue(charsetEncoderIndex),
+        8,
+      );
     } else if (characterLength > 0) {
       // append data
       Encoder.appendBytes(
-          context.context.stringToEncode
-              .substring(fromPosition, fromPosition + characterLength),
-          mode,
-          bits,
-          context.context.encoders.getCharset(charsetEncoderIndex));
+        context.context.stringToEncode.substring(
+          fromPosition,
+          fromPosition + characterLength,
+        ),
+        mode,
+        bits,
+        context.context.encoders.getCharset(charsetEncoderIndex),
+      );
     }
   }
 
@@ -168,10 +179,14 @@ class ResultNode extends Context<ResultList> {
     result.write('(');
     if (mode == Mode.ECI) {
       result
-          .write(context.context.encoders.getCharset(charsetEncoderIndex).name);
+          .write(context.context.encoders.getCharsetName(charsetEncoderIndex));
     } else {
-      result.write(makePrintable(context.context.stringToEncode
-          .substring(fromPosition, fromPosition + characterLength)));
+      result.write(makePrintable(
+        context.context.stringToEncode.substring(
+          fromPosition,
+          fromPosition + characterLength,
+        ),
+      ));
     }
     result.write(')');
     return result.toString();

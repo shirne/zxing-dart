@@ -30,37 +30,37 @@ class CharacterSetECI {
   // Enum name is a Java encoding valid for java.lang and java.io
   static final Cp437 = CharacterSetECI('cp437', [0, 2]);
   static final ISO8859_1 =
-      CharacterSetECI('iso8859_1', [1, 3], ['latin-1', 'iso-8859-1']);
+      CharacterSetECI('iso-8859-1', [1, 3], ['latin-1', 'iso8859_1']);
   static final ISO8859_2 =
-      CharacterSetECI('iso8859_2', 4, ['latin-2', 'iso-8859-2']);
+      CharacterSetECI('iso-8859-2', 4, ['latin-2', 'iso8859_2']);
   static final ISO8859_3 =
-      CharacterSetECI('iso8859_3', 5, ['latin-3', 'iso-8859-3']);
+      CharacterSetECI('iso-8859-3', 5, ['latin-3', 'iso8859_3']);
   static final ISO8859_4 =
-      CharacterSetECI('iso8859_4', 6, ['latin-4', 'iso-8859-4']);
+      CharacterSetECI('iso-8859-4', 6, ['latin-4', 'iso8859_4']);
   static final ISO8859_5 =
-      CharacterSetECI('iso8859_5', 7, ['cyrillic', 'iso-8859-5']);
+      CharacterSetECI('iso-8859-5', 7, ['cyrillic', 'iso8859_5']);
   //static final ISO8859_6 =
-  //    CharacterSetECI('iso8859_6', 8, ['arabic', 'iso-8859-6']);
+  //    CharacterSetECI('iso-8859-6', 8, ['arabic', 'iso8859_6']);
   static final ISO8859_7 =
-      CharacterSetECI('iso8859_7', 9, ['greek', 'iso-8859-7']);
+      CharacterSetECI('iso-8859-7', 9, ['greek', 'iso8859_7']);
   //static final ISO8859_8 =
-  //    CharacterSetECI('iso8859_8', 10, ['hebrew', 'iso-8859-8']);
+  //    CharacterSetECI('iso-8859-8', 10, ['hebrew', 'iso8859_8']);
   static final ISO8859_9 =
-      CharacterSetECI('iso8859_9', 11, ['latin-5', 'iso-8859-9']);
+      CharacterSetECI('iso-8859-9', 11, ['latin-5', 'iso8859_9']);
   //static final ISO8859_10 =
-  //    CharacterSetECI('iso8859_10', 12, ['latin-6', 'iso-8859-10']);
+  //    CharacterSetECI('iso-8859-10', 12, ['latin-6', 'iso8859_10']);
   //static final ISO8859_11 =
-  //    CharacterSetECI('iso8859_11', 13, ['tis620', 'iso-8859-11']);
+  //    CharacterSetECI('iso-8859-11', 13, ['tis620', 'iso8859_11']);
   static final ISO8859_13 =
-      CharacterSetECI('iso8859_13', 15, ['latin-7', 'iso-8859-13']);
+      CharacterSetECI('iso-8859-13', 15, ['latin-7', 'iso8859_13']);
   //static final ISO8859_14 =
-  //    CharacterSetECI('iso8859_14', 16, ['latin-8', 'iso-8859-14']);
+  //    CharacterSetECI('iso-8859-14', 16, ['latin-8', 'iso8859_14']);
   static final ISO8859_15 =
-      CharacterSetECI('iso8859_15', 17, ['latin-9', 'iso-8859-15']);
+      CharacterSetECI('iso-8859-15', 17, ['latin-9', 'iso8859_15']);
   static final ISO8859_16 =
-      CharacterSetECI('iso8859_16', 18, ['latin-10', 'iso-8859-16']);
+      CharacterSetECI('iso-8859-16', 18, ['latin-10', 'iso8859_16']);
   static final SJIS = CharacterSetECI(
-      'sjis', 20, ['shift-jis', 'shift_jis', 'ms932', 'iso-2022-jp', 'jis']);
+      'shift-jis', 20, ['sjis', 'shift_jis', 'ms932', 'iso-2022-jp', 'jis']);
   static final Cp1250 =
       CharacterSetECI('cp1250', 21, ['windows-1250', 'windows1250']);
   static final Cp1251 =
@@ -69,9 +69,9 @@ class CharacterSetECI {
       CharacterSetECI('cp1252', 23, ['windows-1252', 'windows1252']);
   static final Cp1256 =
       CharacterSetECI('cp1256', 24, ['windows-1256', 'windows1256']);
-  static final UnicodeBigUnmarked = CharacterSetECI('unicode-big-unmarked', 25,
-      ['utf-16be', 'utf-16', 'utf-16be', 'unicode-big']);
-  static final UTF8 = CharacterSetECI('utf8', 26, ['utf-8']);
+  static final UnicodeBigUnmarked = CharacterSetECI('utf-16', 25,
+      ['utf-16be', 'unicode-big-unmarked', 'utf-16be', 'unicode-big']);
+  static final UTF8 = CharacterSetECI('utf-8', 26, ['utf8']);
   static final ASCII =
       CharacterSetECI('ascii', [27, 170], ['us-ascii', 'ascii']);
   static final Big5 = CharacterSetECI('big5', 28);

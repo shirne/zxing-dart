@@ -827,7 +827,7 @@ void main() {
 
   test('testMinimalEncoder39', () {
     verifyMinimalEncoding(
-        "abcdef\u0150ghij", "ECI(latin-2),BYTE(abcdef.ghij)", null, false);
+        "abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(abcdef.ghij)", null, false);
   });
 
   test('testMinimalEncoder40', () {

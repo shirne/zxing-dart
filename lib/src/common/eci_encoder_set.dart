@@ -34,8 +34,27 @@ import 'character_set_eci.dart';
 ///
 /// @author Alex Geller
 class ECIEncoderSet {
-  // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  static final List<Encoding> _encoders = [
+  static final _encoderNameMap = {
+    cp437.name: "IBM437",
+    latin1.name: "ISO-8859-1",
+    latin2.name: "ISO-8859-2",
+    latin3.name: "ISO-8859-3",
+    latin4.name: "ISO-8859-4",
+    latinCyrillic.name: "ISO-8859-5",
+    latinArabic.name: "ISO-8859-6",
+    latinGreek.name: "ISO-8859-7",
+    latinHebrew.name: "ISO-8859-8",
+    latin5.name: "ISO-8859-9",
+    latin6.name: "ISO-8859-10",
+    latinThai.name: "ISO-8859-11",
+    latin7.name: "ISO-8859-13",
+    latin8.name: "ISO-8859-14",
+    latin9.name: "ISO-8859-15",
+    latin10.name: "ISO-8859-16",
+    utf8.name: "UTF-8",
+  };
+
+  static const _encoderNames = [
     "IBM437",
     "ISO-8859-2",
     "ISO-8859-3",
@@ -56,7 +75,9 @@ class ECIEncoderSet {
     "windows-1252",
     "windows-1256",
     "Shift_JIS"
-  ]
+  ];
+  // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
+  static final List<Encoding> _encoders = _encoderNames
       .map<Encoding?>((name) => Charset.getByName(name))
       .whereType<Encoding>()
       .toList();
@@ -142,7 +163,7 @@ class ECIEncoderSet {
 
   String getCharsetName(int index) {
     assert(index < length);
-    return encoders[index].name;
+    return _encoderNameMap[encoders[index].name] ?? encoders[index].name;
   }
 
   Encoding getCharset(int index) {
