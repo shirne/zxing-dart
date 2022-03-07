@@ -45,8 +45,11 @@ void main() {
     builder.write(0xA3, 8);
     builder.write(0xD0, 8);
     String result = DecodedBitStreamParser.decode(
-            builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .text;
+      builder.toByteArray(),
+      Version.getVersionForNumber(1),
+      null,
+      null,
+    ).text;
     expect("\uff61\uff62\uff63\uff90", result);
   });
 
@@ -60,8 +63,11 @@ void main() {
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
     String result = DecodedBitStreamParser.decode(
-            builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .text;
+      builder.toByteArray(),
+      Version.getVersionForNumber(1),
+      null,
+      null,
+    ).text;
     expect(result, "\u00ed\u00f3\u00fa");
   });
 
@@ -72,8 +78,11 @@ void main() {
     builder.write(0x01, 8); // 1 characters
     builder.write(0x03C1, 13);
     String result = DecodedBitStreamParser.decode(
-            builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .text;
+      builder.toByteArray(),
+      Version.getVersionForNumber(1),
+      null,
+      null,
+    ).text;
     expect("\u963f", result);
   });
 
@@ -85,8 +94,11 @@ void main() {
     // A5A2 (U+30A2) => A5A2 - A1A1 = 401, 4*60 + 01 = 0181
     builder.write(0x0181, 13);
     String result = DecodedBitStreamParser.decode(
-            builder.toByteArray(), Version.getVersionForNumber(1), null, null)
-        .text;
+      builder.toByteArray(),
+      Version.getVersionForNumber(1),
+      null,
+      null,
+    ).text;
     expect("\u30a2", result);
   });
 

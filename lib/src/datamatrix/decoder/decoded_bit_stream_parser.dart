@@ -139,14 +139,22 @@ class DecodedBitStreamParser {
       }
     }
 
-    return DecoderResult(bytes, result.toString(),
-        byteSegments.isEmpty ? null : byteSegments, null,
-        symbologyModifier: symbologyModifier);
+    return DecoderResult(
+      bytes,
+      result.toString(),
+      byteSegments.isEmpty ? null : byteSegments,
+      null,
+      symbologyModifier: symbologyModifier,
+    );
   }
 
   /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
-  static _Mode _decodeAsciiSegment(BitSource bits, ECIStringBuilder result,
-      StringBuilder resultTrailer, Set<int> fnc1positions) {
+  static _Mode _decodeAsciiSegment(
+    BitSource bits,
+    ECIStringBuilder result,
+    StringBuilder resultTrailer,
+    Set<int> fnc1positions,
+  ) {
     bool upperShift = false;
     do {
       int oneByte = bits.readBits(8);

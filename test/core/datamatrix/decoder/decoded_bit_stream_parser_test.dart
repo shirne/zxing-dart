@@ -37,8 +37,12 @@ void main() {
 
   test('testAsciiDoubleDigitDecode', () {
     // ASCII double digit (00 - 99) Numeric Value + 130
-    Uint8List bytes =
-        Uint8List.fromList([130, (1 + 130), (98 + 130), (99 + 130)]);
+    Uint8List bytes = Uint8List.fromList([
+      130,
+      (1 + 130),
+      (98 + 130),
+      (99 + 130),
+    ]);
     String decodedString = DecodedBitStreamParser.decode(bytes).text;
     expect("00019899", decodedString);
   });
