@@ -16,13 +16,11 @@ class ECIStringBuilder {
   }
 
   void write(dynamic value) {
-    if (value is String) {
-      _currentBytes.write(value);
-    } else if (value is int) {
-      _currentBytes.writeCharCode(value);
-    } else if (value is StringBuffer) {
+    if (value is StringBuffer) {
       _encodeCurrentBytesIfAny();
       _currentBytes.write(value.toString());
+    } else {
+      _currentBytes.write(value);
     }
   }
 

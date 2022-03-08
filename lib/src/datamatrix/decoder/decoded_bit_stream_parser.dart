@@ -228,7 +228,10 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
   static void _decodeC40Segment(
-      BitSource bits, ECIStringBuilder result, Set<int> fnc1positions) {
+    BitSource bits,
+    ECIStringBuilder result,
+    Set<int> fnc1positions,
+  ) {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -284,7 +287,7 @@ class DecodedBitStreamParser {
                 result.writeCharCode(c40char + 128);
                 upperShift = false;
               } else {
-                result.write(c40char);
+                result.writeCharCode(c40char);
               }
             } else {
               switch (cValue) {
@@ -375,7 +378,7 @@ class DecodedBitStreamParser {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
               } else {
-                result.write(textChar);
+                result.writeCharCode(textChar);
               }
             } else {
               switch (cValue) {
@@ -518,7 +521,10 @@ class DecodedBitStreamParser {
       count = d1;
     } else {
       count = 250 * (d1 - 249) +
-          _unrandomize255State(bits.readBits(8), codewordPosition++);
+          _unrandomize255State(
+            bits.readBits(8),
+            codewordPosition++,
+          );
     }
 
     // We're seeing NegativeArraySizeException errors from users.
