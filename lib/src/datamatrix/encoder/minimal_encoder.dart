@@ -491,7 +491,7 @@ class Edge {
         assert(mode == Mode.EDF);
         break;
     }
-    return getBytes(0);
+    return Uint8List(0);
   }
 
   // Important: The function does not return the length bytes (one or two) in case of B256 encoding
@@ -578,8 +578,11 @@ class Result {
       size += prepend(Edge.getBytes(232), bytesAL);
     }
     for (int i = 0; i < randomizePostfixLength.length; i++) {
-      applyRandomPattern(bytesAL, bytesAL.length - randomizePostfixLength[i],
-          randomizeLengths[i]);
+      applyRandomPattern(
+        bytesAL,
+        bytesAL.length - randomizePostfixLength[i],
+        randomizeLengths[i],
+      );
     }
     //add padding
     int capacity = solution.getMinSymbolSize(bytesAL.length);
@@ -607,22 +610,22 @@ class Result {
   }
 
   static void applyRandomPattern(
-      List<int> bytesAL, int startPosition, int length) {
+    List<int> bytesAL,
+    int startPosition,
+    int length,
+  ) {
     for (int i = 0; i < length; i++) {
       //See "B.1 253-state algorithm
-      int Pad_codeword_position = startPosition + i;
-      int Pad_codeword_value = bytesAL[Pad_codeword_position] & 0xff;
-      int pseudo_random_number =
-          ((149 * (Pad_codeword_position + 1)) % 255) + 1;
-      int temp_variable = Pad_codeword_value + pseudo_random_number;
-      bytesAL[Pad_codeword_position] =
-          (temp_variable <= 255 ? temp_variable : temp_variable - 256);
+      int padCodewordPosition = startPosition + i;
+      int padCodewordValue = bytesAL[padCodewordPosition] & 0xff;
+      int pseudoRandomNumber = ((149 * (padCodewordPosition + 1)) % 255) + 1;
+      int tempVariable = padCodewordValue + pseudoRandomNumber;
+      bytesAL[padCodewordPosition] =
+          (tempVariable <= 255 ? tempVariable : tempVariable - 256);
     }
   }
 
-  Uint8List get bytes {
-    return _bytes;
-  }
+  Uint8List get bytes => _bytes;
 }
 
 class Input {
@@ -653,17 +656,11 @@ class Input {
     }
   }
 
-  /* private */ int get fnc1Character {
-    return fnc1;
-  }
+  /* private */ int get fnc1Character => fnc1;
 
-  /* private */ SymbolShapeHint get shapeHint {
-    return shape;
-  }
+  /* private */ SymbolShapeHint get shapeHint => shape;
 
-  /* private */ int get length {
-    return bytes.length;
-  }
+  /* private */ int get length => bytes.length;
 
   bool haveNCharacters(int index, int n) {
     if (index + n - 1 >= bytes.length) {
@@ -904,23 +901,30 @@ class MinimalEncoder {
   ///   bar code. If the value is not -1 then a FNC1 is also prepended.
   /// @param shape requested shape.
   /// @return the encoded message (the char values range from 0 to 255)
-  static String encodeHighLevel(String msg,
-      [Encoding? priorityCharset,
-      int fnc1 = -1,
-      SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE]) {
+  static String encodeHighLevel(
+    String msg, [
+    Encoding? priorityCharset,
+    int fnc1 = -1,
+    SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
+  ]) {
     int macroId = 0;
     if (msg.startsWith(HighLevelEncoder.MACRO_05_HEADER) &&
         msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
       macroId = 5;
       msg = msg.substring(
-          HighLevelEncoder.MACRO_05_HEADER.length, msg.length - 2);
+        HighLevelEncoder.MACRO_05_HEADER.length,
+        msg.length - 2,
+      );
     } else if (msg.startsWith(HighLevelEncoder.MACRO_06_HEADER) &&
         msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
       macroId = 6;
       msg = msg.substring(
-          HighLevelEncoder.MACRO_06_HEADER.length, msg.length - 2);
+        HighLevelEncoder.MACRO_06_HEADER.length,
+        msg.length - 2,
+      );
     }
-    return latin1.decode(encode(msg, priorityCharset, fnc1, shape, macroId));
+    final rst = encode(msg, priorityCharset, fnc1, shape, macroId);
+    return latin1.decode(rst);
   }
 
   /// Encodes input minimally and returns an array of the codewords
@@ -935,10 +939,20 @@ class MinimalEncoder {
   /// @param shape requested shape.
   /// @param macroId Prepends the specified macro function in case that a value of 5 or 6 is specified.
   /// @return An array of bytes representing the codewords of a minimal encoding.
-  static Uint8List encode(String input, Encoding? priorityCharset, int fnc1,
-      SymbolShapeHint shape, int macroId) {
-    return encodeMinimally(Input(input, priorityCharset, fnc1, shape, macroId))
-        .bytes;
+  static Uint8List encode(
+    String input,
+    Encoding? priorityCharset,
+    int fnc1,
+    SymbolShapeHint shape,
+    int macroId,
+  ) {
+    return encodeMinimally(Input(
+      input,
+      priorityCharset,
+      fnc1,
+      shape,
+      macroId,
+    )).bytes;
   }
 
   static void addEdge(List<List<Edge?>> edges, Edge edge) {
@@ -1240,8 +1254,10 @@ class MinimalEncoder {
 
     // Array that represents vertices. There is a vertex for every character and mode.
     // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
-    List<List<Edge?>> edges =
-        List.generate(inputLength + 1, (index) => List.filled(6, null));
+    List<List<Edge?>> edges = List.generate(
+      inputLength + 1,
+      (index) => List.filled(6, null),
+    );
     addEdges(input, edges, 0, null);
 
     for (int i = 1; i <= inputLength; i++) {
