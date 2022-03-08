@@ -189,7 +189,9 @@ void main() {
 
     visualized = encodeHighLevel("aimaimaim{txt}\u0004");
     expect(
-        "239 91 11 91 11 91 11 254 124 117 121 117 126 5 129 237", visualized);
+      "239 91 11 91 11 91 11 254 124 117 121 117 126 5 129 237",
+      visualized,
+    );
   });
 
   test('testX12Encodation', () {
@@ -339,8 +341,10 @@ void main() {
     //of an encoding problem of the character 0x0060 in Java source code.
 
     String visualized = encodeHighLevel("fiykmj*Rh2`,e6");
-    expect("103 106 122 108 110 107 43 83 105 51 97 45 102 55 129 237",
-        visualized);
+    expect(
+      "103 106 122 108 110 107 43 83 105 51 97 45 102 55 129 237",
+      visualized,
+    );
   });
 
   test('testMacroCharacters', () {

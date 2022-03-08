@@ -224,7 +224,18 @@ class HighLevelEncoder {
           return ASCII_ENCODATION;
         }
         if (minCount == 1) {
-          return intCharCounts.indexOf(min);
+          if (mins[BASE256_ENCODATION] > 0) {
+            return BASE256_ENCODATION;
+          }
+          if (mins[EDIFACT_ENCODATION] > 0) {
+            return EDIFACT_ENCODATION;
+          }
+          if (mins[TEXT_ENCODATION] > 0) {
+            return TEXT_ENCODATION;
+          }
+          if (mins[X12_ENCODATION] > 0) {
+            return X12_ENCODATION;
+          }
         }
 
         // to fix result

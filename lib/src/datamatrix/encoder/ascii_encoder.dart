@@ -38,7 +38,10 @@ class ASCIIEncoder implements Encoder {
     } else {
       int c = context.currentChar;
       int newMode = HighLevelEncoder.lookAheadTest(
-          context.message, context.pos, encodingMode);
+        context.message,
+        context.pos,
+        encodingMode,
+      );
       if (newMode != encodingMode) {
         switch (newMode) {
           case HighLevelEncoder.BASE256_ENCODATION:
