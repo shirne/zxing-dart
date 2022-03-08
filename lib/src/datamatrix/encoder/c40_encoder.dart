@@ -40,8 +40,8 @@ class C40Encoder implements Encoder {
     if (backtrackBufferLength != buffer.length) {
       int unwritten = (buffer.length ~/ 3) * 2;
 
-      int curCodewordCount =
-          context.codewordCount + unwritten + 1; // +1 for the latch to C40
+      // +1 for the latch to C40
+      int curCodewordCount = context.codewordCount + unwritten + 1;
       context.updateSymbolInfo(curCodewordCount);
       int available = context.symbolInfo!.dataCapacity - curCodewordCount;
       int rest = buffer.length % 3;

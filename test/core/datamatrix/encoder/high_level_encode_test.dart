@@ -65,8 +65,10 @@ void main() {
     }
   }
 
-  String encodeHighLevel(String msg,
-      [bool compareSizeToMinimalEncoder = true]) {
+  String encodeHighLevel(
+    String msg, [
+    bool compareSizeToMinimalEncoder = true,
+  ]) {
     String encoded = HighLevelEncoder.encodeHighLevel(msg);
     String encoded2 = MinimalEncoder.encodeHighLevel(msg);
     if (compareSizeToMinimalEncoder) {
@@ -257,11 +259,12 @@ void main() {
     visualized = encodeHighLevel("\u00ABäöüéàá\u00BB");
     expect("231 44 108 59 226 126 1 141 36 147", visualized);
 
-    visualized = encodeHighLevel(" 23£"); //ASCII only (for reference)
+    //ASCII only (for reference)
+    visualized = encodeHighLevel(" 23£");
     expect("33 153 235 36 129", visualized);
 
-    visualized =
-        encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
+    //Mixed Base256 + ASCII
+    visualized = encodeHighLevel("\u00ABäöüé\u00BB 234");
     expect("231 50 108 59 226 126 1 104 33 153 53 129", visualized);
 
     visualized = encodeHighLevel("\u00ABäöüé\u00BB 23£ 1234567890123456789");
@@ -274,8 +277,9 @@ void main() {
     expect(
         "231 44 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 253 150",
         visualized);
-    visualized =
-        encodeHighLevel(createBinaryMessage(19)); //padding necessary at the end
+
+    //padding necessary at the end
+    visualized = encodeHighLevel(createBinaryMessage(19));
     expect(
         "231 63 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 1 129",
         visualized);

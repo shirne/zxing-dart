@@ -96,8 +96,7 @@ class ECIEncoderSet {
 
     //we always need the ISO-8859-1 encoder. It is the default encoding
     neededEncoders.add(Latin1Codec());
-    bool needUnicodeEncoder =
-        priorityCharset != null && priorityCharset.name.startsWith("utf");
+    bool needUnicodeEncoder = priorityCharset?.name.startsWith("utf") ?? true;
 
     //Walk over the input string and see if all characters can be encoded with the list of encoders
     for (int i = 0; i < stringToEncode.length; i++) {
@@ -157,9 +156,7 @@ class ECIEncoderSet {
     assert(encoders[0].name == latin1.name);
   }
 
-  int get length {
-    return encoders.length;
-  }
+  int get length => encoders.length;
 
   String getCharsetName(int index) {
     assert(index < length);

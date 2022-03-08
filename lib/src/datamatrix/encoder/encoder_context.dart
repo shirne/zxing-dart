@@ -41,7 +41,8 @@ class EncoderContext {
       int ch = msgBinary[i] & 0xff;
       if (ch == 63 /*'?'*/ && msg[i] != '?') {
         throw ArgumentError(
-            "Message contains characters outside ISO-8859-1 encoding.");
+          "Message contains characters outside ISO-8859-1 encoding.",
+        );
       }
       sb.writeCharCode(ch);
     }

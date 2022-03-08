@@ -26,11 +26,14 @@ class ASCIIEncoder implements Encoder {
   void encode(EncoderContext context) {
     //step B
     int n = HighLevelEncoder.determineConsecutiveDigitCount(
-        context.message, context.pos);
+      context.message,
+      context.pos,
+    );
     if (n >= 2) {
       context.writeCodeword(_encodeASCIIDigits(
-          context.message.codeUnitAt(context.pos),
-          context.message.codeUnitAt(context.pos + 1)));
+        context.message.codeUnitAt(context.pos),
+        context.message.codeUnitAt(context.pos + 1),
+      ));
       context.pos += 2;
     } else {
       int c = context.currentChar;

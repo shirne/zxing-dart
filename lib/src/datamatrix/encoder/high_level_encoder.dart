@@ -107,11 +107,13 @@ class HighLevelEncoder {
   /// @param minSize the minimum symbol size constraint or null for no constraint
   /// @param maxSize the maximum symbol size constraint or null for no constraint
   /// @return the encoded message (the char values range from 0 to 255)
-  static String encodeHighLevel(String msg,
-      [SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
-      Dimension? minSize,
-      Dimension? maxSize,
-      bool forceC40 = false]) {
+  static String encodeHighLevel(
+    String msg, [
+    SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
+    Dimension? minSize,
+    Dimension? maxSize,
+    bool forceC40 = false,
+  ]) {
     //the codewords 0..255 are encoded as Unicode characters
     C40Encoder c40Encoder = C40Encoder();
     List<Encoder> encoders = [
@@ -226,8 +228,10 @@ class HighLevelEncoder {
         }
 
         // to fix result
-        double dmin = charCounts.fold(MathUtils.MAX_VALUE.toDouble(),
-            (previousValue, element) => math.min(previousValue, element));
+        double dmin = charCounts.fold(
+          MathUtils.MAX_VALUE.toDouble(),
+          (previousValue, element) => math.min(previousValue, element),
+        );
         minCount = charCounts.where((element) => element == dmin).length;
 
         if (charCounts[ASCII_ENCODATION] == dmin) {
@@ -386,12 +390,18 @@ class HighLevelEncoder {
   }
 
   static int min(List<int> lists) {
-    return lists.fold(lists.first,
-        (previousValue, element) => math.min(previousValue, element));
+    return lists.fold(
+      lists.first,
+      (previousValue, element) => math.min(previousValue, element),
+    );
   }
 
-  static int _findMinimums(List<double> charCounts, List<int> intCharCounts,
-      int min, Int8List mins) {
+  static int _findMinimums(
+    List<double> charCounts,
+    List<int> intCharCounts,
+    int min,
+    Int8List mins,
+  ) {
     mins.fillRange(0, mins.length, 0);
     for (int i = 0; i < 6; i++) {
       // todo: different result from zxing java
