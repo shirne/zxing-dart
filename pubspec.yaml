@@ -3,7 +3,7 @@ description: A Dart port of zxing that encode and decode multiple 1D/2D barcodes
 version: 0.6.1
 homepage: https://www.shirne.com/
 repository: https://github.com/shirne/zxing-dart
-publish_to: https://dart.publang.org
+publish_to: https://pub.dartlang.org
 
 environment:
   sdk: ">=2.14.0 <3.0.0"

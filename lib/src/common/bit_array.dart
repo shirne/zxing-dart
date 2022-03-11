@@ -24,12 +24,15 @@ import 'utils.dart';
 ///
 /// @author Sean Owen
 class BitArray {
+  static final emptyBits = Uint32List(0);
+  static const loadFactor = 0.75; //0.75f
+
   late Uint32List _bits;
   int _size;
 
   BitArray([this._size = 0]) {
     if (_size == 0) {
-      _bits = Uint32List(1);
+      _bits = emptyBits;
     } else {
       _bits = _makeArray(_size);
     }
@@ -44,9 +47,9 @@ class BitArray {
 
   int get sizeInBytes => (_size + 7) ~/ 8;
 
-  void _ensureCapacity(int size) {
-    if (size > _bits.length * 32) {
-      Uint32List newBits = _makeArray(size);
+  void _ensureCapacity(int newSize) {
+    if (newSize > _bits.length * 32) {
+      Uint32List newBits = _makeArray((newSize / loadFactor).ceil());
       List.copyRange(newBits, 0, _bits, 0, _bits.length);
       _bits = newBits;
     }

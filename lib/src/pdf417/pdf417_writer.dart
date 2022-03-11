@@ -45,6 +45,7 @@ class PDF417Writer implements Writer {
     PDF417 encoder = PDF417();
     int margin = _WHITE_SPACE;
     int errorCorrectionLevel = _DEFAULT_ERROR_CORRECTION_LEVEL;
+    bool autoECI = false;
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
@@ -73,16 +74,31 @@ class PDF417Writer implements Writer {
             ?.charset;
         if (encoding != null) encoder.setEncoding(encoding);
       }
+      autoECI = (hints[EncodeHintType.PDF417_AUTO_ECI] as bool?) ?? false;
     }
 
     return _bitMatrixFromEncoder(
-        encoder, contents, errorCorrectionLevel, width, height, margin);
+      encoder,
+      contents,
+      errorCorrectionLevel,
+      width,
+      height,
+      margin,
+      autoECI,
+    );
   }
 
   /// Takes encoder, accounts for width/height, and retrieves bit matrix
-  static BitMatrix _bitMatrixFromEncoder(PDF417 encoder, String contents,
-      int errorCorrectionLevel, int width, int height, int margin) {
-    encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
+  static BitMatrix _bitMatrixFromEncoder(
+    PDF417 encoder,
+    String contents,
+    int errorCorrectionLevel,
+    int width,
+    int height,
+    int margin,
+    bool autoECI,
+  ) {
+    encoder.generateBarcodeLogic(contents, errorCorrectionLevel, autoECI);
 
     int aspectRatio = 4;
     List<Uint8List> originalScale =

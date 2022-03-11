@@ -22,10 +22,52 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import '../../common/character_set_eci.dart';
-import '../../common/string_builder.dart';
+import 'package:charset/charset.dart';
+
+import '../../../common.dart';
 import '../../writer_exception.dart';
 import 'compaction.dart';
+
+class NoECIInput implements ECIInput {
+  String input;
+
+  NoECIInput(this.input);
+
+  @override
+  int get length => input.length;
+
+  @override
+  int charAt(int index) {
+    return input.codeUnitAt(index);
+  }
+
+  @override
+  bool isECI(int index) {
+    return false;
+  }
+
+  @override
+  int getECIValue(int index) {
+    return -1;
+  }
+
+  bool haveNCharacters(int index, int n) {
+    return index + n <= input.length;
+  }
+
+  String subString(int start, int end) {
+    return input.substring(start, end);
+  }
+
+  @override
+  String subSequence(int start, int end) {
+    return input.substring(start, end);
+  }
+
+  // public String toString() {
+  //   return input;
+  // }
+}
 
 /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
 /// annex P.
@@ -108,48 +150,58 @@ class PDF417HighLevelEncoder {
   ///  or `null` for default / not applicable
   /// @return the encoded message (the char values range from 0 to 928)
   static String encodeHighLevel(
-      String msg, Compaction compaction, Encoding? encoding) {
+      String msg, Compaction compaction, Encoding? encoding, bool autoECI) {
     //the codewords 0..928 are encoded as Unicode characters
     StringBuffer sb = StringBuffer();
-
-    if (encoding == null) {
-      encoding = _defaultEncoding;
-    } else if (_defaultEncoding != encoding) {
-      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
-      if (eci != null) {
-        _encodingECI(eci.value, sb);
+    ECIInput input;
+    if (autoECI) {
+      input = MinimalECIInput(msg, encoding, -1);
+    } else {
+      input = NoECIInput(msg);
+      if (encoding == null) {
+        encoding = _defaultEncoding;
+      } else if (_defaultEncoding != encoding) {
+        CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
+        if (eci != null) {
+          _encodingECI(eci.value, sb);
+        }
       }
     }
 
-    int len = msg.length;
+    int len = input.length;
     int p = 0;
     int textSubMode = _SUBMODE_ALPHA;
 
     // User selected encoding mode
     switch (compaction) {
       case Compaction.TEXT:
-        _encodeText(msg, p, len, sb, textSubMode);
+        _encodeText(input, p, len, sb, textSubMode);
         break;
       case Compaction.BYTE:
-        Uint8List msgBytes = Uint8List.fromList(encoding.encode(msg));
-        _encodeBinary(msgBytes, p, msgBytes.length, _BYTE_COMPACTION, sb);
+        if (autoECI) {
+          _encodeMultiECIBinary(input, 0, input.length, _TEXT_COMPACTION, sb);
+        } else {
+          Uint8List msgBytes =
+              Uint8List.fromList(encoding!.encode(input.toString()));
+          _encodeBinary(msgBytes, p, msgBytes.length, _BYTE_COMPACTION, sb);
+        }
         break;
       case Compaction.NUMERIC:
         sb.writeCharCode(_LATCH_TO_NUMERIC);
-        _encodeNumeric(msg, p, len, sb);
+        _encodeNumeric(input, p, len, sb);
         break;
       default:
         int encodingMode = _TEXT_COMPACTION; //Default mode, see 4.4.2.1
         while (p < len) {
-          int n = _determineConsecutiveDigitCount(msg, p);
+          int n = _determineConsecutiveDigitCount(input, p);
           if (n >= 13) {
             sb.writeCharCode(_LATCH_TO_NUMERIC);
             encodingMode = _NUMERIC_COMPACTION;
             textSubMode = _SUBMODE_ALPHA; //Reset after latch
-            _encodeNumeric(msg, p, n, sb);
+            _encodeNumeric(input, p, n, sb);
             p += n;
           } else {
-            int t = _determineConsecutiveTextCount(msg, p);
+            int t = _determineConsecutiveTextCount(input, p);
             if (t >= 5 || n == len) {
               if (encodingMode != _TEXT_COMPACTION) {
                 sb.writeCharCode(_LATCH_TO_TEXT);
@@ -157,21 +209,33 @@ class PDF417HighLevelEncoder {
                 textSubMode =
                     _SUBMODE_ALPHA; //start with submode alpha after latch
               }
-              textSubMode = _encodeText(msg, p, t, sb, textSubMode);
+              textSubMode = _encodeText(input, p, t, sb, textSubMode);
               p += t;
             } else {
-              int b = _determineConsecutiveBinaryCount(msg, p, encoding);
+              int b = _determineConsecutiveBinaryCount(input, p, encoding);
               if (b == 0) {
                 b = 1;
               }
-              Uint8List bytes =
-                  Uint8List.fromList(encoding.encode(msg.substring(p, p + b)));
-              if (bytes.length == 1 && encodingMode == _TEXT_COMPACTION) {
+              Uint8List? bytes = (autoECI || encoding == null)
+                  ? null
+                  : Uint8List.fromList(
+                      encoding.encode(input.toString().substring(p, p + b)));
+              if ((bytes == null && b == 1) ||
+                  (bytes != null && bytes.length == 1) &&
+                      encodingMode == _TEXT_COMPACTION) {
                 //Switch for one byte (instead of latch)
-                _encodeBinary(bytes, 0, 1, _TEXT_COMPACTION, sb);
+                if (autoECI) {
+                  _encodeMultiECIBinary(input, p, 1, _TEXT_COMPACTION, sb);
+                } else {
+                  _encodeBinary(bytes!, 0, 1, _TEXT_COMPACTION, sb);
+                }
               } else {
                 //Mode latch performed by encodeBinary()
-                _encodeBinary(bytes, 0, bytes.length, encodingMode, sb);
+                if (autoECI) {
+                  _encodeMultiECIBinary(input, p, p + b, encodingMode, sb);
+                } else {
+                  _encodeBinary(bytes!, 0, bytes.length, encodingMode, sb);
+                }
                 encodingMode = _BYTE_COMPACTION;
                 textSubMode = _SUBMODE_ALPHA; //Reset after latch
               }
@@ -194,99 +258,104 @@ class PDF417HighLevelEncoder {
   /// @param sb             receives the encoded codewords
   /// @param initialSubmode should normally be SUBMODE_ALPHA
   /// @return the text submode in which this method ends
-  static int _encodeText(String msg, int startpos, int count, StringBuffer sb,
-      int initialSubmode) {
+  static int _encodeText(ECIInput input, int startpos, int count,
+      StringBuffer sb, int initialSubmode) {
     StringBuilder tmp = StringBuilder();
     int submode = initialSubmode;
     int idx = 0;
     while (true) {
-      int ch = msg.codeUnitAt(startpos + idx);
-      switch (submode) {
-        case _SUBMODE_ALPHA:
-          if (_isAlphaUpper(ch)) {
-            if (ch == _blankCode) {
-              tmp.writeCharCode(26); //space
-            } else {
-              tmp.writeCharCode(ch - 65);
-            }
-          } else {
-            if (_isAlphaLower(ch)) {
-              submode = _SUBMODE_LOWER;
-              tmp.writeCharCode(27); //ll
-              continue;
-            } else if (_isMixed(ch)) {
-              submode = _SUBMODE_MIXED;
-              tmp.writeCharCode(28); //ml
-              continue;
-            } else {
-              tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_punctuatuin[ch]);
-              break;
-            }
-          }
-          break;
-        case _SUBMODE_LOWER:
-          if (_isAlphaLower(ch)) {
-            if (ch == _blankCode) {
-              tmp.writeCharCode(26); //space
-            } else {
-              tmp.writeCharCode(ch - 97);
-            }
-          } else {
+      if (input.isECI(startpos + idx)) {
+        _encodingECI(input.getECIValue(startpos + idx), sb);
+        idx++;
+      } else {
+        int ch = input.charAt(startpos + idx);
+        switch (submode) {
+          case _SUBMODE_ALPHA:
             if (_isAlphaUpper(ch)) {
-              tmp.writeCharCode(27); //as
-              tmp.writeCharCode(ch - 65);
-              //space cannot happen here, it is also in "Lower"
-              break;
-            } else if (_isMixed(ch)) {
-              submode = _SUBMODE_MIXED;
-              tmp.writeCharCode(28); //ml
-              continue;
-            } else {
-              tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_punctuatuin[ch]);
-              break;
-            }
-          }
-          break;
-        case _SUBMODE_MIXED:
-          if (_isMixed(ch)) {
-            tmp.writeCharCode(_mixed[ch]);
-          } else {
-            if (_isAlphaUpper(ch)) {
-              submode = _SUBMODE_ALPHA;
-              tmp.writeCharCode(28); //al
-              continue;
-            } else if (_isAlphaLower(ch)) {
-              submode = _SUBMODE_LOWER;
-              tmp.writeCharCode(27); //ll
-              continue;
-            } else {
-              if (startpos + idx + 1 < count) {
-                int next = msg.codeUnitAt(startpos + idx + 1);
-                if (_isPunctuation(next)) {
-                  submode = _SUBMODE_PUNCTUATION;
-                  tmp.writeCharCode(25); //pl
-                  continue;
-                }
+              if (ch == _blankCode) {
+                tmp.writeCharCode(26); //space
+              } else {
+                tmp.writeCharCode(ch - 65);
               }
-              tmp.writeCharCode(29); //ps
-              tmp.writeCharCode(_punctuatuin[ch]);
+            } else {
+              if (_isAlphaLower(ch)) {
+                submode = _SUBMODE_LOWER;
+                tmp.writeCharCode(27); //ll
+                continue;
+              } else if (_isMixed(ch)) {
+                submode = _SUBMODE_MIXED;
+                tmp.writeCharCode(28); //ml
+                continue;
+              } else {
+                tmp.writeCharCode(29); //ps
+                tmp.writeCharCode(_punctuatuin[ch]);
+                break;
+              }
             }
-          }
+            break;
+          case _SUBMODE_LOWER:
+            if (_isAlphaLower(ch)) {
+              if (ch == _blankCode) {
+                tmp.writeCharCode(26); //space
+              } else {
+                tmp.writeCharCode(ch - 97);
+              }
+            } else {
+              if (_isAlphaUpper(ch)) {
+                tmp.writeCharCode(27); //as
+                tmp.writeCharCode(ch - 65);
+                //space cannot happen here, it is also in "Lower"
+                break;
+              } else if (_isMixed(ch)) {
+                submode = _SUBMODE_MIXED;
+                tmp.writeCharCode(28); //ml
+                continue;
+              } else {
+                tmp.writeCharCode(29); //ps
+                tmp.writeCharCode(_punctuatuin[ch]);
+                break;
+              }
+            }
+            break;
+          case _SUBMODE_MIXED:
+            if (_isMixed(ch)) {
+              tmp.writeCharCode(_mixed[ch]);
+            } else {
+              if (_isAlphaUpper(ch)) {
+                submode = _SUBMODE_ALPHA;
+                tmp.writeCharCode(28); //al
+                continue;
+              } else if (_isAlphaLower(ch)) {
+                submode = _SUBMODE_LOWER;
+                tmp.writeCharCode(27); //ll
+                continue;
+              } else {
+                if (startpos + idx + 1 < count) {
+                  if (!input.isECI(startpos + idx + 1) &&
+                      _isPunctuation(input.charAt(startpos + idx + 1))) {
+                    submode = _SUBMODE_PUNCTUATION;
+                    tmp.writeCharCode(25); //pl
+                    continue;
+                  }
+                }
+                tmp.writeCharCode(29); //ps
+                tmp.writeCharCode(_punctuatuin[ch]);
+              }
+            }
+            break;
+          default: //SUBMODE_PUNCTUATION
+            if (_isPunctuation(ch)) {
+              tmp.writeCharCode(_punctuatuin[ch]);
+            } else {
+              submode = _SUBMODE_ALPHA;
+              tmp.writeCharCode(29); //al
+              continue;
+            }
+        }
+        idx++;
+        if (idx >= count) {
           break;
-        default: //SUBMODE_PUNCTUATION
-          if (_isPunctuation(ch)) {
-            tmp.writeCharCode(_punctuatuin[ch]);
-          } else {
-            submode = _SUBMODE_ALPHA;
-            tmp.writeCharCode(29); //al
-            continue;
-          }
-      }
-      idx++;
-      if (idx >= count) {
-        break;
+        }
       }
     }
     int h = 0;
@@ -306,6 +375,44 @@ class PDF417HighLevelEncoder {
     return submode;
   }
 
+  static void _encodeMultiECIBinary(
+      ECIInput input, int startpos, int count, int startmode, StringBuffer sb) {
+    final int end = math.min(startpos + count, input.length);
+    int localStart = startpos;
+    while (true) {
+      //encode all leading ECIs and advance localStart
+      while (localStart < end && input.isECI(localStart)) {
+        _encodingECI(input.getECIValue(localStart), sb);
+        localStart++;
+      }
+      int localEnd = localStart;
+      //advance end until before the next ECI
+      while (localEnd < end && !input.isECI(localEnd)) {
+        localEnd++;
+      }
+
+      final int localCount = localEnd - localStart;
+      if (localCount <= 0) {
+        //done
+        break;
+      } else {
+        //encode the segment
+        _encodeBinary(subBytes(input, localStart, localEnd), 0, localCount,
+            localStart == startpos ? startmode : _BYTE_COMPACTION, sb);
+        localStart = localEnd;
+      }
+    }
+  }
+
+  static List<int> subBytes(ECIInput input, int start, int end) {
+    final int count = end - start;
+    List<int> result = List.filled(count, 0);
+    for (int i = start; i < end; i++) {
+      result[i - start] = (input.charAt(i) & 0xff);
+    }
+    return result;
+  }
+
   /// Encode parts of the message using Byte Compaction as described in ISO/IEC 15438:2001(E),
   /// chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
   /// codepage.
@@ -315,7 +422,7 @@ class PDF417HighLevelEncoder {
   /// @param count     the number of bytes to encode
   /// @param startmode the mode from which this method starts
   /// @param sb        receives the encoded codewords
-  static void _encodeBinary(Uint8List bytes, int startpos, int count,
+  static void _encodeBinary(List<int> bytes, int startpos, int count,
       int startmode, StringBuffer sb) {
     if (count == 1 && startmode == _TEXT_COMPACTION) {
       sb.writeCharCode(_SHIFT_TO_BYTE);
@@ -355,7 +462,7 @@ class PDF417HighLevelEncoder {
   }
 
   static void _encodeNumeric(
-      String msg, int startpos, int count, StringBuffer sb) {
+      ECIInput input, int startpos, int count, StringBuffer sb) {
     int idx = 0;
     StringBuilder tmp = StringBuilder();
     BigInt num900 = BigInt.from(900);
@@ -363,7 +470,8 @@ class PDF417HighLevelEncoder {
     while (idx < count) {
       tmp.clear();
       int len = math.min(44, count - idx);
-      String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
+      String part = '1' +
+          input.toString().substring(startpos + idx, startpos + idx + len);
       BigInt bigint = BigInt.parse(part);
       do {
         tmp.writeCharCode((bigint % num900).toInt());
@@ -410,18 +518,14 @@ class PDF417HighLevelEncoder {
   /// @param msg      the message
   /// @param startpos the start position within the message
   /// @return the requested character count
-  static int _determineConsecutiveDigitCount(String msg, int startpos) {
+  static int _determineConsecutiveDigitCount(ECIInput input, int startpos) {
     int count = 0;
-    int len = msg.length;
+    int len = input.length;
     int idx = startpos;
     if (idx < len) {
-      int ch = msg.codeUnitAt(idx);
-      while (_isDigit(ch) && idx < len) {
+      while (idx < len && !input.isECI(idx) && _isDigit(input.charAt(idx))) {
         count++;
         idx++;
-        if (idx < len) {
-          ch = msg.codeUnitAt(idx);
-        }
       }
     }
     return count;
@@ -432,18 +536,17 @@ class PDF417HighLevelEncoder {
   /// @param msg      the message
   /// @param startpos the start position within the message
   /// @return the requested character count
-  static int _determineConsecutiveTextCount(String msg, int startpos) {
-    int len = msg.length;
+  static int _determineConsecutiveTextCount(ECIInput input, int startpos) {
+    int len = input.length;
     int idx = startpos;
     while (idx < len) {
-      int ch = msg.codeUnitAt(idx);
       int numericCount = 0;
-      while (numericCount < 13 && _isDigit(ch) && idx < len) {
+      while (numericCount < 13 &&
+          idx < len &&
+          !input.isECI(idx) &&
+          _isDigit(input.charAt(idx))) {
         numericCount++;
         idx++;
-        if (idx < len) {
-          ch = msg.codeUnitAt(idx);
-        }
       }
       if (numericCount >= 13) {
         return idx - startpos - numericCount;
@@ -452,10 +555,9 @@ class PDF417HighLevelEncoder {
         //Heuristic: All text-encodable chars or digits are binary encodable
         continue;
       }
-      ch = msg.codeUnitAt(idx);
 
       //Check if character is encodable
-      if (!_isText(ch)) {
+      if (!input.isECI(idx) || !_isText(input.charAt(idx))) {
         break;
       }
       idx++;
@@ -470,32 +572,34 @@ class PDF417HighLevelEncoder {
   /// @param encoding the charset used to convert the message to a byte array
   /// @return the requested character count
   static int _determineConsecutiveBinaryCount(
-      String msg, int startpos, Encoding encoding) {
-    int len = msg.length;
+      ECIInput input, int startpos, Encoding? encoding) {
+    int len = input.length;
     int idx = startpos;
     while (idx < len) {
-      int ch = msg.codeUnitAt(idx);
       int numericCount = 0;
 
-      while (numericCount < 13 && _isDigit(ch)) {
+      int i = idx;
+      while (
+          numericCount < 13 && !input.isECI(i) && _isDigit(input.charAt(i))) {
         numericCount++;
         //textCount++;
-        int i = idx + numericCount;
+        i = idx + numericCount;
         if (i >= len) {
           break;
         }
-        ch = msg.codeUnitAt(i);
       }
       if (numericCount >= 13) {
         return idx - startpos;
       }
-      ch = msg.codeUnitAt(idx);
 
-      // todo 判断是否超出字符集
-      //if (!encoder.canEncode(ch)) {
-      //  throw WriterException(
-      //      "Non-encodable character detected: ${String.fromCharCode(ch)} (Unicode: $ch)");
-      //}
+      // 判断是否超出字符集
+      if (encoding != null &&
+          !Charset.canEncode(
+              encoding, String.fromCharCode(input.charAt(idx)))) {
+        int ch = input.charAt(idx);
+        throw WriterException(
+            "Non-encodable character detected: $ch (Unicode: $ch)");
+      }
       idx++;
     }
     return idx - startpos;

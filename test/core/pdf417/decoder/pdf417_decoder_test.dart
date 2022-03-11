@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import 'dart:convert';
+import 'dart:math' as math;
+
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
@@ -22,6 +25,129 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [DecodedBitStreamParser].
 void main() {
+  int encodeDecode(String input,
+      [Encoding? charset, bool autoECI = false, bool decode = false]) {
+    String s = PDF417HighLevelEncoder.encodeHighLevel(
+        input, Compaction.AUTO, charset, autoECI);
+    if (decode) {
+      List<int> codewords = List.filled(s.length + 1, 0);
+      codewords[0] = codewords.length;
+      for (int i = 1; i < codewords.length; i++) {
+        codewords[i] = s.codeUnitAt(i - 1);
+      }
+      DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+
+      expect(result.text, input);
+    }
+    return s.length + 1;
+  }
+
+  void encodeDecodeLen(String input, int expectedLength) {
+    expect(expectedLength, encodeDecode(input));
+  }
+
+  int getEndIndex(int length, List<int> chars) {
+    double decimalLength = math.log(chars.length) / math.ln10;
+    return (math.pow(10, decimalLength * length)).ceil();
+  }
+
+  String generatePermutation(int index, int length, List<int> chars) {
+    int N = chars.length;
+    String baseNNumber = index.toRadixString(N);
+    while (baseNNumber.length < length) {
+      baseNNumber = "0" + baseNNumber;
+    }
+    String prefix = "";
+    for (int i = 0; i < baseNNumber.length; i++) {
+      prefix += String.fromCharCode(
+          chars[baseNNumber.codeUnitAt(i) - '0'.codeUnitAt(0)]);
+    }
+    return prefix;
+  }
+
+  void performPermutationTest(List<int> chars, int length, int expectedTotal) {
+    int endIndex = getEndIndex(length, chars);
+    int total = 0;
+    for (int i = 0; i < endIndex; i++) {
+      total += encodeDecode(generatePermutation(i, length, chars));
+    }
+    expect(expectedTotal, total);
+  }
+
+  void performEncodeTest(int c, List<int> expectedLengths) {
+    for (int i = 0; i < expectedLengths.length; i++) {
+      StringBuffer sb = StringBuffer();
+      for (int j = 0; j <= i; j++) {
+        sb.writeCharCode(c);
+      }
+      encodeDecodeLen(sb.toString(), expectedLengths[i]);
+    }
+  }
+
+  void testUppercaseLowercaseNumericMix() {
+    performPermutationTest('Aa1'.codeUnits, 7, 15491);
+  }
+
+  String generateText(
+      math.Random random, int maxWidth, List<int> chars, List<double> weights) {
+    StringBuffer result = StringBuffer();
+    final int maxWordWidth = 7;
+    double total = 0;
+    for (int i = 0; i < weights.length; i++) {
+      total += weights[i];
+    }
+    for (int i = 0; i < weights.length; i++) {
+      weights[i] /= total;
+    }
+    int cnt = 0;
+    do {
+      double maxValue = 0;
+      int maxIndex = 0;
+      for (int j = 0; j < weights.length; j++) {
+        double value = random.nextDouble() * weights[j];
+        if (value > maxValue) {
+          maxValue = value;
+          maxIndex = j;
+        }
+      }
+      final double wordLength = maxWordWidth * random.nextDouble();
+      if (wordLength > 0 && result.length > 0) {
+        result.write(' ');
+      }
+      for (int j = 0; j < wordLength; j++) {
+        int c = chars[maxIndex];
+        if (j == 0 &&
+            c >= 'a'.codeUnitAt(0) &&
+            c <= 'z'.codeUnitAt(0) &&
+            random.nextBool()) {
+          c = (c - 'a'.codeUnitAt(0) + 'A'.codeUnitAt(0));
+        }
+        result.writeCharCode(c);
+      }
+      if (cnt % 2 != 0 && random.nextBool()) {
+        result.write('.');
+      }
+      cnt++;
+    } while (result.length < maxWidth - maxWordWidth);
+    return result.toString();
+  }
+
+  void performECITest(List<int> chars, List<double> weights,
+      int expectedMinLength, int expectedUTFLength) {
+    math.Random random = math.Random(0);
+    int minLength = 0;
+    int utfLength = 0;
+    for (int i = 0; i < 1000; i++) {
+      String s = generateText(random, 100, chars, weights);
+      minLength += encodeDecode(s, null, true, false);
+      // TODO: Use this instead when the decoder supports multi ECI input
+      //minLength += encodeDecode(s, null, true, true);
+      utfLength += encodeDecode(s, utf8, false, true);
+    }
+    expect(expectedMinLength, minLength);
+    expect(expectedUTFLength, utfLength);
+  }
+
   /// Tests the first sample given in ISO/IEC 15438:2015(E) - Annex H.4
   test('testStandardSample1', () {
     PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
@@ -188,5 +314,158 @@ void main() {
     } on FormatsException catch (_) {
       // continue
     }
+  });
+
+  test('testUppercase', () {
+    //encodeDecode("", 0);
+    performEncodeTest('A'.codeUnitAt(0), [3, 4, 5, 6, 4, 4, 5, 5]);
+  });
+
+  test('testNumeric', () {
+    performEncodeTest('1'.codeUnitAt(0),
+        [2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10]);
+  });
+
+  test('testByte', () {
+    performEncodeTest('\u00c4'.codeUnitAt(0), [3, 4, 5, 6, 7, 7, 8]);
+  });
+
+  test('testUppercaseLowercaseMix1', () {
+    encodeDecodeLen("aA", 4);
+    encodeDecodeLen("aAa", 5);
+    encodeDecodeLen("Aa", 4);
+    encodeDecodeLen("Aaa", 5);
+    encodeDecodeLen("AaA", 5);
+    encodeDecodeLen("AaaA", 6);
+    encodeDecodeLen("Aaaa", 6);
+    encodeDecodeLen("AaAaA", 5);
+    encodeDecodeLen("AaaAaaA", 6);
+    encodeDecodeLen("AaaAAaaA", 7);
+  });
+
+  test('testPunctuation', () {
+    performEncodeTest(';'.codeUnitAt(0), [3, 4, 5, 6, 6, 7, 8]);
+    encodeDecodeLen(";;;;;;;;;;;;;;;;", 17);
+  });
+
+  test('testUppercaseLowercaseMix2', () {
+    performPermutationTest(
+        ['A', 'a'].map((e) => e.codeUnitAt(0)).toList(), 10, 8972);
+  });
+
+  test('testUppercaseNumericMix', () {
+    performPermutationTest(
+        ['A', '1'].map((e) => e.codeUnitAt(0)).toList(), 14, 192510);
+  });
+
+  test('testUppercaseMixedMix', () {
+    performPermutationTest(
+        ['A', '1', ' ', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 106060);
+  });
+
+  test('testUppercasePunctuationMix', () {
+    performPermutationTest(
+        ['A', ';'].map((e) => e.codeUnitAt(0)).toList(), 10, 8967);
+  });
+
+  test('testUppercaseByteMix', () {
+    performPermutationTest(
+        ['A', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 10, 11222);
+  });
+
+  test('testLowercaseByteMix', () {
+    performPermutationTest(
+        ['a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 10, 11233);
+  });
+
+  test('testUppercaseLowercasePunctuationMix', () {
+    performPermutationTest(
+        ['A', 'a', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 15491);
+  });
+
+  test('testUppercaseLowercaseByteMix', () {
+    performPermutationTest(
+        ['A', 'a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 7, 17288);
+  });
+
+  test('testLowercasePunctuationByteMix', () {
+    performPermutationTest(
+        ['a', ';', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 7, 17427);
+  });
+
+  test('testUppercaseLowercaseNumericPunctuationMix', () {
+    performPermutationTest(
+        ['A', 'a', '1', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 120479);
+  });
+
+  test('testBinaryData', () {
+    List<int> bytes = List.filled(500, 0);
+    math.Random random = math.Random(0);
+    int total = 0;
+    for (int i = 0; i < 10000; i++) {
+      bytes.add(random.nextInt(255));
+      total += encodeDecode(latin1.decode(bytes));
+    }
+    expect(4190044, total);
+  });
+
+  test('testECIEnglishHiragana', () {
+    //multi ECI UTF-8, UTF-16 and ISO-8859-1
+    performECITest(['a', '1', '\u3040'].map((e) => e.codeUnitAt(0)).toList(),
+        [20.0, 1.0, 10.0], 102583, 110914);
+  });
+
+  test('testECIEnglishKatakana', () {
+    //multi ECI UTF-8, UTF-16 and ISO-8859-1
+    performECITest(['a', '1', '\u30a0'].map((e) => e.codeUnitAt(0)).toList(),
+        [20.0, 1.0, 10.0], 104691, 110914);
+  });
+
+  test('testECIEnglishHalfWidthKatakana', () {
+    //single ECI
+    performECITest(['a', '1', '\uff80'].map((e) => e.codeUnitAt(0)).toList(),
+        [20.0, 1.0, 10.0], 80463, 110914);
+  });
+
+  test('testECIEnglishChinese', () {
+    //single ECI
+    performECITest(['a', '1', '\u4e00'].map((e) => e.codeUnitAt(0)).toList(),
+        [20.0, 1.0, 10.0], 95643, 110914);
+  });
+
+  test('testECIGermanCyrillic', () {
+    //single ECI since the German Umlaut is in ISO-8859-1
+    performECITest(
+        ['a', '1', '\u00c4', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+        [20.0, 1.0, 1.0, 10.0],
+        80529,
+        96007);
+  });
+
+  test('testECIEnglishCzechCyrillic1', () {
+    //multi ECI between ISO-8859-2 and ISO-8859-5
+    performECITest(
+        ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+        [10.0, 1.0, 10.0, 10.0],
+        91482,
+        124525);
+  });
+
+  test('testECIEnglishCzechCyrillic2', () {
+    //multi ECI between ISO-8859-2 and ISO-8859-5
+    performECITest(
+        ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+        [40.0, 1.0, 10.0, 10.0],
+        79331,
+        88236);
+  });
+
+  test('testECIEnglishArabicCyrillic', () {
+    //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
+    performECITest(
+        ['a', '1', '\u0620', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+        [10.0, 1.0, 10.0, 10.0],
+        111508,
+        124525);
   });
 }

@@ -23,37 +23,38 @@ import 'package:zxing_lib/pdf417.dart';
 /// Tests [PDF417HighLevelEncoder].
 void main() {
   test('testEncodeAuto', () {
-    String encoded =
-        PDF417HighLevelEncoder.encodeHighLevel("ABCD", Compaction.AUTO, utf8);
+    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+        "ABCD", Compaction.AUTO, utf8, false);
     expect("\u039f\u001A\u0385ABCD", encoded);
   });
 
   test('testEncodeAutoWithSpecialChars', () {
     // Just check if this does not throw an exception
-    PDF417HighLevelEncoder.encodeHighLevel(r"1%§s ?aG$", Compaction.AUTO, utf8);
+    PDF417HighLevelEncoder.encodeHighLevel(
+        r"1%§s ?aG$", Compaction.AUTO, utf8, false);
   });
 
   test('testEncodeIso88591WithSpecialChars', () {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
-        "asdfg§asd", Compaction.AUTO, latin1);
+        "asdfg§asd", Compaction.AUTO, latin1, false);
   });
 
   test('testEncodeText', () {
-    String encoded =
-        PDF417HighLevelEncoder.encodeHighLevel("ABCD", Compaction.TEXT, utf8);
+    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+        "ABCD", Compaction.TEXT, utf8, false);
     expect("Ο\u001A\u0001?", encoded);
   });
 
   test('testEncodeNumeric', () {
     String encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        "1234", Compaction.NUMERIC, utf8);
+        "1234", Compaction.NUMERIC, utf8, false);
     expect("\u039f\u001A\u0386\f\u01b2", encoded);
   });
 
   test('testEncodeByte', () {
-    String encoded =
-        PDF417HighLevelEncoder.encodeHighLevel("abcd", Compaction.BYTE, utf8);
+    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+        "abcd", Compaction.BYTE, utf8, false);
     expect("\u039f\u001A\u0385abcd", encoded);
   });
 }

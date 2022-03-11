@@ -15,11 +15,11 @@
  */
 
 import 'dart:convert';
-import 'dart:math' as Math;
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import '../../common/detector/math_utils.dart';
-import '../../common/eci_encoder_set.dart';
+import '../../common/minimal_eci_input.dart';
 import 'high_level_encoder.dart';
 import 'symbol_shape_hint.dart';
 
@@ -428,7 +428,7 @@ class Edge {
     int numberOfThirds = (characterLength / 4.0).ceil();
     Uint8List result = Uint8List(numberOfThirds * 3);
     int pos = fromPosition;
-    int endPos = Math.min(fromPosition + characterLength - 1, input.length - 1);
+    int endPos = math.min(fromPosition + characterLength - 1, input.length - 1);
     for (int i = 0; i < numberOfThirds; i += 3) {
       List<int> edfValues = List.filled(4, 0);
       for (int j = 0; j < 4; j++) {
@@ -628,175 +628,15 @@ class Result {
   Uint8List get bytes => _bytes;
 }
 
-class Input {
-  // approximated (latch to ASCII + 2 codewords)
-  /* private */ static final int _COST_PER_ECI = 3;
-  /* private */ late List<int> bytes;
-  /* private */ final int fnc1;
+class Input extends MinimalECIInput {
   /* private */ final SymbolShapeHint shape;
   /* private */ final int macroId;
 
-  /* private */ Input(String stringToEncode, Encoding? priorityCharset,
-      this.fnc1, this.shape, this.macroId) {
-    ECIEncoderSet encoderSet =
-        ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
-    if (encoderSet.length == 1) {
-      //optimization for the case when all can be encoded without ECI in ISO-8859-1
-      //bytes = List.filled(stringToEncode.length, 0);
-      //for (int i = 0; i < bytes.length; i++) {
-      //  int c = stringToEncode.codeUnitAt(i);
-      //  bytes[i] = c == fnc1 ? 1000 : c;
-      //}
-      bytes = stringToEncode.runes
-          .toList(growable: false)
-          .map<int>((i) => i == fnc1 ? 1000 : i)
-          .toList();
-    } else {
-      bytes = encodeMinimally(stringToEncode, encoderSet, fnc1);
-    }
-  }
+  Input(String stringToEncode, Encoding? priorityCharset, int fnc1, this.shape,
+      this.macroId)
+      : super(stringToEncode, priorityCharset, fnc1);
 
-  /* private */ int get fnc1Character => fnc1;
-
-  /* private */ SymbolShapeHint get shapeHint => shape;
-
-  /* private */ int get length => bytes.length;
-
-  bool haveNCharacters(int index, int n) {
-    if (index + n - 1 >= bytes.length) {
-      return false;
-    }
-    for (int i = 0; i < n; i++) {
-      if (isECI(index + i)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /* private */ int charAt(int index) {
-    assert(!isECI(index));
-    return isFNC1(index) ? fnc1 : bytes[index];
-  }
-
-  /* private */ bool isECI(int index) {
-    return bytes[index] > 255 && bytes[index] <= 999;
-  }
-
-  /* private */ bool isFNC1(int index) {
-    return bytes[index] == 1000;
-  }
-
-  /* private */ int getECIValue(int index) {
-    assert(isECI(index));
-    return bytes[index] - 256;
-  }
-
-  static void addEdge(List<List<InputEdge?>> edges, int to, InputEdge edge) {
-    if (edges[to][edge.encoderIndex] == null ||
-        edges[to][edge.encoderIndex]!.cachedTotalSize > edge.cachedTotalSize) {
-      edges[to][edge.encoderIndex] = edge;
-    }
-  }
-
-  static void addEdges(String stringToEncode, ECIEncoderSet encoderSet,
-      List<List<InputEdge?>> edges, int from, InputEdge? previous, int fnc1) {
-    int ch = stringToEncode.runes.elementAt(from);
-
-    int start = 0;
-    int end = encoderSet.length;
-    if (encoderSet.priorityEncoderIndex >= 0 &&
-        (ch == fnc1 ||
-            encoderSet.canEncode(ch, encoderSet.priorityEncoderIndex))) {
-      start = encoderSet.priorityEncoderIndex;
-      end = start + 1;
-    }
-
-    for (int i = start; i < end; i++) {
-      if (ch == fnc1 || encoderSet.canEncode(ch, i)) {
-        addEdge(edges, from + 1, InputEdge(ch, encoderSet, i, previous, fnc1));
-      }
-    }
-  }
-
-  static List<int> encodeMinimally(
-      String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
-    int inputLength = stringToEncode.runes.length;
-
-    // Array that represents vertices. There is a vertex for every character and encoding.
-    List<List<InputEdge?>> edges = List.generate(
-        inputLength + 1, (index) => List.filled(encoderSet.length, null));
-    addEdges(stringToEncode, encoderSet, edges, 0, null, fnc1);
-
-    for (int i = 1; i <= inputLength; i++) {
-      for (int j = 0; j < encoderSet.length; j++) {
-        if (edges[i][j] != null && i < inputLength) {
-          addEdges(stringToEncode, encoderSet, edges, i, edges[i][j], fnc1);
-        }
-      }
-      //optimize memory by removing edges that have been passed.
-      for (int j = 0; j < encoderSet.length; j++) {
-        edges[i - 1][j] = null;
-      }
-    }
-    int minimalJ = -1;
-    int minimalSize = MathUtils.MAX_VALUE;
-    for (int j = 0; j < encoderSet.length; j++) {
-      if (edges[inputLength][j] != null) {
-        InputEdge edge = edges[inputLength][j]!;
-        if (edge.cachedTotalSize < minimalSize) {
-          minimalSize = edge.cachedTotalSize;
-          minimalJ = j;
-        }
-      }
-    }
-    if (minimalJ < 0) {
-      throw Exception("Internal error: failed to encode \"$stringToEncode\"");
-    }
-    List<int> intsAL = [];
-    InputEdge? current = edges[inputLength][minimalJ];
-    while (current != null) {
-      if (current.isFNC1()) {
-        intsAL.insert(0, 1000);
-      } else {
-        Uint8List bytes = encoderSet.encode(current.c, current.encoderIndex);
-        for (int i = bytes.length - 1; i >= 0; i--) {
-          intsAL.insert(0, (bytes[i] & 0xff));
-        }
-      }
-      int previousEncoderIndex = current.previous?.encoderIndex ?? 0;
-      if (previousEncoderIndex != current.encoderIndex) {
-        intsAL.insert(0, 256 + encoderSet.getECIValue(current.encoderIndex));
-      }
-      current = current.previous;
-    }
-    return intsAL;
-  }
-}
-
-class InputEdge {
-  /* private */ final int c;
-  /* private */ final int encoderIndex; //the encoding of this edge
-  /* private */ final InputEdge? previous;
-  /* private */ late int cachedTotalSize;
-
-  /* private */ InputEdge(int c, ECIEncoderSet encoderSet, this.encoderIndex,
-      this.previous, int fnc1)
-      : c = c == fnc1 ? 1000 : c {
-    int size = this.c == 1000 ? 1 : encoderSet.encode(c, encoderIndex).length;
-    int previousEncoderIndex = previous?.encoderIndex ?? 0;
-    if (previousEncoderIndex != encoderIndex) {
-      size += Input._COST_PER_ECI;
-    }
-    if (previous != null) {
-      size += previous!.cachedTotalSize;
-    }
-    cachedTotalSize = size;
-  }
-
-  bool isFNC1() {
-    return c == 1000;
-  }
+  SymbolShapeHint get shapeHint => shape;
 }
 
 /// Encoder that encodes minimally
