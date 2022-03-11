@@ -37,20 +37,15 @@ class NoECIInput implements ECIInput {
   int get length => input.length;
 
   @override
-  int charAt(int index) {
-    return input.codeUnitAt(index);
-  }
+  int charAt(int index) => input.codeUnitAt(index);
 
   @override
-  bool isECI(int index) {
-    return false;
-  }
+  bool isECI(int index) => false;
 
   @override
-  int getECIValue(int index) {
-    return -1;
-  }
+  int getECIValue(int index) => -1;
 
+  @override
   bool haveNCharacters(int index, int n) {
     return index + n <= input.length;
   }

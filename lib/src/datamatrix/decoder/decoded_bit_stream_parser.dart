@@ -542,7 +542,7 @@ class DecodedBitStreamParser {
       bytes[i] = _unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byteSegments.add(bytes);
-    result.write(latin1.decode(Uint8List.fromList(bytes)));
+    result.write(latin1.decode(bytes));
   }
 
   /// See ISO 16022:2007, 5.4.1

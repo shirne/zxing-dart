@@ -115,7 +115,7 @@ class MinimalECIInput implements ECIInput {
   /// @throws  IllegalArgumentException
   ///          if the value at the `index` argument is an ECI ([isECI])
   @override
-  /* public */ int charAt(int index) {
+  int charAt(int index) {
     if (index < 0 || index >= length) {
       //IndexOutOfBoundsException
       throw IndexError(index, length);
@@ -145,7 +145,8 @@ class MinimalECIInput implements ECIInput {
   ///          or if `start` is greater than `end`
   /// @throws  IllegalArgumentException
   ///          if a value in the range `start`-`end` is an ECI (@see #isECI)
-  /* public */ String subSequence(int start, int end) {
+  @override
+  String subSequence(int start, int end) {
     if (start < 0 || start > end || end > length) {
       //IndexOutOfBoundsException
       throw IndexError(start, length);
@@ -188,7 +189,7 @@ class MinimalECIInput implements ECIInput {
   /// @throws  IndexOutOfBoundsException
   ///          if the `index` argument is negative or not less than
   ///          `length`
-  /* public */ bool isFNC1(int index) {
+  bool isFNC1(int index) {
     if (index < 0 || index >= length) {
       // IndexOutOfBoundsException
       throw IndexError(index, length);
@@ -212,6 +213,7 @@ class MinimalECIInput implements ECIInput {
   ///          `length`
   /// @throws  IllegalArgumentException
   ///          if the value at the `index` argument is not an ECI (@see #isECI)
+  @override
   int getECIValue(int index) {
     if (index < 0 || index >= length) {
       // IndexOutOfBoundsException

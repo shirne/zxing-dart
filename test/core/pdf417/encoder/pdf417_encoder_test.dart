@@ -25,7 +25,7 @@ void main() {
   test('testEncodeAuto', () {
     String encoded = PDF417HighLevelEncoder.encodeHighLevel(
         "ABCD", Compaction.AUTO, utf8, false);
-    expect("\u039f\u001A\u0385ABCD", encoded);
+    expect(encoded, "\u039f\u001A\u0385ABCD");
   });
 
   test('testEncodeAutoWithSpecialChars', () {
