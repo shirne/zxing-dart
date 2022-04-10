@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:test/expect.dart';
@@ -34,7 +34,8 @@ void assertEqualOrNaN(double expected, double actual, [int eps = 1000]) {
   if (expected.isNaN) {
     assert(actual.isNaN);
   } else {
-    expect((expected * pow(10, eps)).round(), (actual * pow(10, eps)).round());
+    expect((expected * math.pow(10, eps)).round(),
+        (actual * math.pow(10, eps)).round());
   }
 }
 
@@ -63,4 +64,16 @@ String unVisualize(String visualized) {
     sb.writeCharCode(int.parse(token));
   }
   return sb.toString();
+}
+
+extension RandomBytes on math.Random {
+  void nextBytes(Uint8List bytes) {
+    for (int i = 0; i < bytes.length;) {
+      for (int rnd = nextInt(0xffffffff), n = math.min(bytes.length - i, 4);
+          n-- > 0;
+          rnd >>= 8) {
+        bytes[i++] = rnd & 0xff;
+      }
+    }
+  }
 }
