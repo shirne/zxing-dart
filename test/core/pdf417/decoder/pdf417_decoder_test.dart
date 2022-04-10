@@ -16,6 +16,7 @@
 
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
@@ -23,10 +24,17 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/pdf417.dart';
 import 'package:zxing_lib/zxing.dart';
 
+import '../../utils.dart';
+
 /// Tests [DecodedBitStreamParser].
 void main() {
+  void performDecodeTest(List<int> codewords, String expectedResult) {
+    DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+    expect(result.text, expectedResult);
+  }
+
   int encodeDecode(String input,
-      [Encoding? charset, bool autoECI = false, bool decode = false]) {
+      [Encoding? charset, bool autoECI = false, bool decode = true]) {
     String s = PDF417HighLevelEncoder.encodeHighLevel(
         input, Compaction.AUTO, charset, autoECI);
     if (decode) {
@@ -35,9 +43,7 @@ void main() {
       for (int i = 1; i < codewords.length; i++) {
         codewords[i] = s.codeUnitAt(i - 1);
       }
-      DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
-
-      expect(result.text, input);
+      performDecodeTest(codewords, input);
     }
     return s.length + 1;
   }
@@ -139,9 +145,8 @@ void main() {
     int utfLength = 0;
     for (int i = 0; i < 1000; i++) {
       String s = generateText(random, 100, chars, weights);
-      minLength += encodeDecode(s, null, true, false);
-      // TODO: Use this instead when the decoder supports multi ECI input
-      //minLength += encodeDecode(s, null, true, true);
+      minLength += encodeDecode(s, null, true, true);
+
       utfLength += encodeDecode(s, utf8, false, true);
     }
     expect(expectedMinLength, minLength);
@@ -399,12 +404,12 @@ void main() {
   });
 
   test('testBinaryData', () {
-    List<int> bytes = List.filled(500, 0);
+    Uint8List bytes = Uint8List(500);
     math.Random random = math.Random(0);
     int total = 0;
     for (int i = 0; i < 10000; i++) {
-      bytes.add(random.nextInt(255));
-      total += encodeDecode(latin1.decode(bytes));
+      random.nextBytes(bytes);
+      total += encodeDecode(latin1.decode(bytes, allowInvalid: false));
     }
     expect(4190044, total);
   });
@@ -412,25 +417,25 @@ void main() {
   test('testECIEnglishHiragana', () {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
     performECITest(['a', '1', '\u3040'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 102583, 110914);
+        [20.0, 1.0, 10.0], 105825, 110914);
   });
 
   test('testECIEnglishKatakana', () {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
     performECITest(['a', '1', '\u30a0'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 104691, 110914);
+        [20.0, 1.0, 10.0], 109177, 110914);
   });
 
   test('testECIEnglishHalfWidthKatakana', () {
     //single ECI
     performECITest(['a', '1', '\uff80'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 80463, 110914);
+        [20.0, 1.0, 10.0], 80617, 110914);
   });
 
   test('testECIEnglishChinese', () {
     //single ECI
     performECITest(['a', '1', '\u4e00'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 95643, 110914);
+        [20.0, 1.0, 10.0], 95797, 110914);
   });
 
   test('testECIGermanCyrillic', () {
@@ -438,7 +443,7 @@ void main() {
     performECITest(
         ['a', '1', '\u00c4', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
         [20.0, 1.0, 1.0, 10.0],
-        80529,
+        80755,
         96007);
   });
 
@@ -447,7 +452,7 @@ void main() {
     performECITest(
         ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
         [10.0, 1.0, 10.0, 10.0],
-        91482,
+        102824,
         124525);
   });
 
@@ -456,7 +461,7 @@ void main() {
     performECITest(
         ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
         [40.0, 1.0, 10.0, 10.0],
-        79331,
+        81321,
         88236);
   });
 
@@ -465,7 +470,36 @@ void main() {
     performECITest(
         ['a', '1', '\u0620', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
         [10.0, 1.0, 10.0, 10.0],
-        111508,
+        118510,
         124525);
+  });
+
+  test('testBinaryMultiECI', () {
+    //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
+    performDecodeTest([5, 927, 4, 913, 200], "\u010c");
+    performDecodeTest([9, 927, 4, 913, 200, 927, 7, 913, 207], "\u010c\u042f");
+    performDecodeTest([9, 927, 4, 901, 200, 927, 7, 901, 207], "\u010c\u042f");
+    performDecodeTest([8, 927, 4, 901, 200, 927, 7, 207], "\u010c\u042f");
+    performDecodeTest(
+        [14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207],
+        "\u010c\u042f\u010c\u042f");
+    performDecodeTest([
+      16,
+      927,
+      4,
+      924,
+      336,
+      432,
+      197,
+      51,
+      300,
+      927,
+      7,
+      348,
+      231,
+      311,
+      858,
+      567
+    ], "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f");
   });
 }
