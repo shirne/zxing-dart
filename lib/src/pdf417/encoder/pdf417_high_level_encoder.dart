@@ -43,7 +43,7 @@ class NoECIInput implements ECIInput {
   bool isECI(int index) => false;
 
   @override
-  int getECIValue(int index) => -1;
+  int getECIValue(int index) => 255;
 
   @override
   bool haveNCharacters(int index, int n) {
@@ -59,9 +59,10 @@ class NoECIInput implements ECIInput {
     return input.substring(start, end);
   }
 
-  // public String toString() {
-  //   return input;
-  // }
+  @override
+  String toString() {
+    return input;
+  }
 }
 
 /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
@@ -115,7 +116,7 @@ class PDF417HighLevelEncoder {
   static const int _ECI_CHARSET = 927;
 
   /// Raw code table for text compaction Mixed sub-mode
-  static const List<int> _TEXT_MIXED_RAW = [
+  static const List<int> _textMixedRaw = [
     48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58, //
     35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
   ];
@@ -126,10 +127,10 @@ class PDF417HighLevelEncoder {
     10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
   ];
 
-  static final Uint8List _mixed = Uint8List.fromList(
-      List.generate(128, (index) => _TEXT_MIXED_RAW.indexOf(index)));
-  static final Uint8List _punctuatuin = Uint8List.fromList(
-      List.generate(128, (index) => _textPunctuationRaw.indexOf(index)));
+  static final Uint8List _mixed = Uint8List.fromList(List.generate(
+      128, (index) => index == 0 ? 0xff : _textMixedRaw.indexOf(index)));
+  static final Uint8List _punctuatuin = Uint8List.fromList(List.generate(
+      128, (index) => index == 0 ? 0xff : _textPunctuationRaw.indexOf(index)));
 
   static final Encoding _defaultEncoding = latin1;
 
@@ -188,6 +189,13 @@ class PDF417HighLevelEncoder {
       default:
         int encodingMode = _TEXT_COMPACTION; //Default mode, see 4.4.2.1
         while (p < len) {
+          while (p < len && input.isECI(p)) {
+            _encodingECI(input.getECIValue(p), sb);
+            p++;
+          }
+          if (p >= len) {
+            break;
+          }
           int n = _determineConsecutiveDigitCount(input, p);
           if (n >= 13) {
             sb.writeCharCode(_LATCH_TO_NUMERIC);
@@ -201,20 +209,21 @@ class PDF417HighLevelEncoder {
               if (encodingMode != _TEXT_COMPACTION) {
                 sb.writeCharCode(_LATCH_TO_TEXT);
                 encodingMode = _TEXT_COMPACTION;
-                textSubMode =
-                    _SUBMODE_ALPHA; //start with submode alpha after latch
+                //start with submode alpha after latch
+                textSubMode = _SUBMODE_ALPHA;
               }
               textSubMode = _encodeText(input, p, t, sb, textSubMode);
               p += t;
             } else {
-              int b = _determineConsecutiveBinaryCount(input, p, encoding);
+              int b = _determineConsecutiveBinaryCount(
+                  input, p, autoECI ? null : encoding);
               if (b == 0) {
                 b = 1;
               }
-              Uint8List? bytes = (autoECI || encoding == null)
+              Uint8List? bytes = autoECI
                   ? null
                   : Uint8List.fromList(
-                      encoding.encode(input.toString().substring(p, p + b)));
+                      encoding!.encode(input.toString().substring(p, p + b)));
               if ((bytes == null && b == 1) ||
                   (bytes != null && bytes.length == 1) &&
                       encodingMode == _TEXT_COMPACTION) {
@@ -494,11 +503,11 @@ class PDF417HighLevelEncoder {
   }
 
   static bool _isMixed(int ch) {
-    return _mixed[ch] != -1;
+    return _mixed[ch] != 255;
   }
 
   static bool _isPunctuation(int ch) {
-    return _punctuatuin[ch] != -1;
+    return _punctuatuin[ch] != 255;
   }
 
   static bool _isText(int chr) {
@@ -552,7 +561,7 @@ class PDF417HighLevelEncoder {
       }
 
       //Check if character is encodable
-      if (!input.isECI(idx) || !_isText(input.charAt(idx))) {
+      if (input.isECI(idx) || !_isText(input.charAt(idx))) {
         break;
       }
       idx++;

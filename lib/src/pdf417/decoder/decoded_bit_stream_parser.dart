@@ -33,13 +33,13 @@ class ECIOutput {
   ECIOutput();
 
   void appendCharCode(int value) {
-    bytes.addByte(value);
+    bytes.addByte(value & 0xff);
     needFlush = true;
   }
 
   void append(String s) {
     for (int i = 0; i < s.length; i++) {
-      bytes.addByte(s.codeUnitAt(i));
+      bytes.addByte(s.codeUnitAt(i) & 0xff);
     }
     needFlush = true;
   }
