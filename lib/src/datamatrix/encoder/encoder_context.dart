@@ -29,9 +29,9 @@ class EncoderContext {
   late StringBuffer _codewords;
   late int _newEncoding;
   SymbolInfo? _symbolInfo;
-  late int _skipAtEnd = 0;
+  int _skipAtEnd = 0;
 
-  late int pos = 0;
+  int pos = 0;
 
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!
@@ -63,9 +63,7 @@ class EncoderContext {
 
   String get message => _msg;
 
-  void setSkipAtEnd(int count) {
-    _skipAtEnd = count;
-  }
+  set skipAtEnd(int count) => _skipAtEnd = count;
 
   int get currentChar => _msg.codeUnitAt(pos);
 
@@ -97,13 +95,11 @@ class EncoderContext {
     _newEncoding = -1;
   }
 
-  bool get hasMoreCharacters => pos < _getTotalMessageCharCount();
+  bool get hasMoreCharacters => pos < _totalMessageCharCount;
 
-  int _getTotalMessageCharCount() {
-    return _msg.length - _skipAtEnd;
-  }
+  int get _totalMessageCharCount => _msg.length - _skipAtEnd;
 
-  int get remainingCharacters => _getTotalMessageCharCount() - pos;
+  int get remainingCharacters => _totalMessageCharCount - pos;
 
   SymbolInfo? get symbolInfo => _symbolInfo;
 
