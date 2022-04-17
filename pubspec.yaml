@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   intl: ^0.17.0
-  charset: ^0.2.4
+  charset: ^1.0.1
 
 dev_dependencies:
   test:

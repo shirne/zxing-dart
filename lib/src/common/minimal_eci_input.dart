@@ -122,7 +122,8 @@ class MinimalECIInput implements ECIInput {
     }
     if (isECI(index)) {
       //IllegalArgumentException
-      throw ArgumentError("value at $index is not a character but an ECI");
+      throw ArgumentError(
+          "value at $index (${bytes[index]}) is not a character but an ECI");
     }
     return isFNC1(index) ? fnc1 : bytes[index];
   }
@@ -155,7 +156,8 @@ class MinimalECIInput implements ECIInput {
     for (int i = start; i < end; i++) {
       if (isECI(i)) {
         // IllegalArgumentException
-        throw ArgumentError("value at $i is not a character but an ECI");
+        throw ArgumentError(
+            "value at $i (${charAt(i)}) is not a character but an ECI");
       }
       result.writeCharCode(charAt(i));
     }

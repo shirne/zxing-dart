@@ -18,10 +18,12 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:charset/charset.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:charset/charset.dart';
 import 'package:zxing_lib/common.dart';
+
+import '../utils.dart';
 
 /// Tests [StringUtils].
 void main() {
@@ -55,8 +57,8 @@ void main() {
 
   test('testRandom', () {
     Random r = Random(1234);
-    Uint8List bytes =
-        Uint8List.fromList(List.generate(1000, (index) => r.nextInt(255)));
+    Uint8List bytes = Uint8List(1000);
+    r.nextBytes(bytes);
 
     expect(StringUtils.guessCharset(bytes, null), utf8);
   });
