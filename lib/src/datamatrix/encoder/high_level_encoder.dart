@@ -273,29 +273,29 @@ class HighLevelEncoder {
 
       //step M
       if (isNativeC40(c)) {
-        charCounts[C40_ENCODATION] += 0.6666667; //2.0 / 3.0;
+        charCounts[C40_ENCODATION] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[C40_ENCODATION] += 2.6666667; //8.0 / 3.0;
+        charCounts[C40_ENCODATION] += 8.0 / 3.0; //2.6666667;
       } else {
-        charCounts[C40_ENCODATION] += 1.3333334; //4.0 / 3.0;
+        charCounts[C40_ENCODATION] += 4.0 / 3.0; //1.3333334;
       }
 
       //step N
       if (isNativeText(c)) {
-        charCounts[TEXT_ENCODATION] += 0.6666667; //2.0 / 3.0;
+        charCounts[TEXT_ENCODATION] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[TEXT_ENCODATION] += 2.6666667; //8.0 / 3.0;
+        charCounts[TEXT_ENCODATION] += 8.0 / 3.0; //2.6666667;
       } else {
-        charCounts[TEXT_ENCODATION] += 1.3333334; //4.0 / 3.0;
+        charCounts[TEXT_ENCODATION] += 4.0 / 3.0; //1.3333334;
       }
 
       //step O
       if (isNativeX12(c)) {
-        charCounts[X12_ENCODATION] += 0.6666667; //2.0 / 3.0;
+        charCounts[X12_ENCODATION] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[X12_ENCODATION] += 4.3333335; //13.0 / 3.0;
+        charCounts[X12_ENCODATION] += 13.0 / 3.0; //4.3333335;
       } else {
-        charCounts[X12_ENCODATION] += 3.3333333; //10.0 / 3.0;
+        charCounts[X12_ENCODATION] += 10.0 / 3.0; //3.3333333;
       }
 
       //step P
