@@ -1,13 +1,9 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector/file_selector.dart';
-import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/zxing.dart';
@@ -47,12 +43,8 @@ class _BinarizerPageState extends State<BinarizerPage> {
   }
 
   loadFile() async {
-    Uint8List? fileData;
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      fileData = await _pickFile();
-    } else {
-      fileData = await _loadFileDesktop();
-    }
+    Uint8List? fileData = await _pickFile();
+
     if (fileData != null) {
       setState(() {
         imageLoadStatus = 1;
@@ -102,31 +94,15 @@ class _BinarizerPageState extends State<BinarizerPage> {
   }
 
   Future<Uint8List?> _pickFile() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.image, withData: true);
 
     if (result != null && result.count > 0) {
-      if (result.files.single.path != null) {
-        return File(result.files.single.path!).readAsBytesSync();
-      }
-      return result.files.single.bytes;
+      return result.files.first.bytes;
     } else {
       // User canceled the picker
       return null;
     }
-  }
-
-  Future<Uint8List?> _loadFileDesktop() async {
-    final typeGroup = XTypeGroup(
-      label: 'Image files',
-      extensions: ['jpg', 'jpeg', 'png'],
-    );
-    final files = await FileSelectorPlatform.instance
-        .openFiles(acceptedTypeGroups: [typeGroup]);
-    if (files.isNotEmpty) {
-      return await files.first.readAsBytes();
-    }
-    return null;
   }
 
   @override
