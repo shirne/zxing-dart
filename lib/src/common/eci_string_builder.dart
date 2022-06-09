@@ -1,22 +1,20 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import '../formats_exception.dart';
 import 'character_set_eci.dart';
+import 'string_builder.dart';
 
 class ECIStringBuilder {
   late StringBuffer _currentBytes;
-  late StringBuffer _currentChars;
+  late StringBuffer? _result;
   Encoding _currentCharset = latin1;
-  String? _result;
-  bool _hadECI = false;
 
   ECIStringBuilder() {
     _currentBytes = StringBuffer();
   }
 
   void write(dynamic value) {
-    if (value is StringBuffer) {
+    if (value is StringBuffer || value is StringBuilder) {
       _encodeCurrentBytesIfAny();
       _currentBytes.write(value.toString());
     } else {
@@ -28,6 +26,7 @@ class ECIStringBuilder {
     _currentBytes.writeCharCode(value);
   }
 
+  /// Appends ECI value to output.
   void appendECI(int value) {
     _encodeCurrentBytesIfAny();
     CharacterSetECI? characterSetECI =
@@ -39,33 +38,36 @@ class ECIStringBuilder {
   }
 
   void _encodeCurrentBytesIfAny() {
-    if (!_hadECI) {
-      _currentChars = _currentBytes;
-      _currentBytes = StringBuffer();
-      _hadECI = true;
-    } else if (_currentBytes.length > 0) {
-      Uint8List bytes = Uint8List(_currentBytes.length);
-      String currentString = _currentBytes.toString();
-      _currentBytes.clear();
-      for (int i = 0; i < bytes.length; i++) {
-        bytes[i] = (currentString.codeUnitAt(i) & 0xff);
+    if (_currentCharset.name == latin1.name) {
+      if (_currentBytes.isNotEmpty) {
+        if (_result == null) {
+          _result = _currentBytes;
+          _currentBytes = StringBuffer();
+        } else {
+          _result!.write(_currentBytes);
+          _currentBytes = StringBuffer();
+        }
       }
-      _currentChars.write(_currentCharset.decode(bytes));
+    } else if (_currentBytes.isNotEmpty) {
+      List<int> bytes = latin1.encode(_currentBytes.toString());
+      _currentBytes = StringBuffer();
+      if (_result == null) {
+        _result = StringBuffer(latin1.decode(bytes));
+      } else {
+        _result!.write(latin1.decode(bytes));
+      }
     }
   }
 
   /// returns the length of toString()
-  int get length {
-    return toString().length;
-  }
+  int get length => toString().length;
+
+  bool get isEmpty =>
+      _currentBytes.isEmpty && (_result == null || _result!.isEmpty);
 
   @override
   String toString() {
     _encodeCurrentBytesIfAny();
-    _result = _result == null
-        ? _currentChars.toString()
-        : _result! + _currentChars.toString();
-    _currentChars.clear();
-    return _result!;
+    return _result == null ? "" : _result.toString();
   }
 }

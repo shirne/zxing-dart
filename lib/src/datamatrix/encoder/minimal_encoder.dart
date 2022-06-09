@@ -524,7 +524,7 @@ class Edge {
       case Mode.EDF:
         return getEDFBytes();
     }
-    assert(false);
+
     return Uint8List(0);
   }
 }

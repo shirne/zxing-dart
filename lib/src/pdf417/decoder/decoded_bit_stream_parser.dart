@@ -14,70 +14,12 @@
  * limitations under the License.
  */
 
-import 'dart:convert';
-import 'dart:typed_data';
-
-import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
+import '../../common/eci_string_builder.dart';
 import '../../formats_exception.dart';
 import '../pdf417_result_metadata.dart';
 
 enum _Mode { ALPHA, LOWER, MIXED, PUNCT, ALPHA_SHIFT, PUNCT_SHIFT }
-
-class ECIOutput {
-  /*private*/ bool needFlush = false;
-  /*private*/ Encoding encoding = latin1;
-  /*private*/ BytesBuilder bytes = BytesBuilder(); //ByteArrayOutputStream
-  /*private*/ StringBuffer result = StringBuffer();
-
-  ECIOutput();
-
-  void appendCharCode(int value) {
-    bytes.addByte(value & 0xff);
-    needFlush = true;
-  }
-
-  void append(String s) {
-    for (int i = 0; i < s.length; i++) {
-      bytes.addByte(s.codeUnitAt(i) & 0xff);
-    }
-    needFlush = true;
-  }
-
-  void appendECI(int value) {
-    flush();
-    bytes.clear();
-    CharacterSetECI? charsetECI =
-        CharacterSetECI.getCharacterSetECIByValue(value);
-    if (charsetECI == null) {
-      throw FormatsException.instance;
-    }
-    encoding = charsetECI.charset!;
-  }
-
-  void flush() {
-    if (needFlush) {
-      needFlush = false;
-      try {
-        result.write(encoding.decode(bytes.takeBytes()));
-      } /*on UnsupportedEncodingException*/ catch (uee) {
-        // can't happen
-        //throw IllegalStateException(uee);
-        throw FormatsException.instance;
-      }
-    }
-  }
-
-  bool isEmpty() {
-    return !needFlush && result.length == 0;
-  }
-
-  @override
-  String toString() {
-    flush();
-    return result.toString();
-  }
-}
 
 /// This class contains the methods for decoding the PDF417 codewords.
 ///
@@ -129,7 +71,7 @@ class DecodedBitStreamParser {
   DecodedBitStreamParser._();
 
   static DecoderResult decode(List<int> codewords, String ecLevel) {
-    ECIOutput result = ECIOutput();
+    ECIStringBuilder result = ECIStringBuilder();
     // Get compaction mode
     int codeIndex = _textCompaction(codewords, 1, result);
     PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
@@ -144,7 +86,7 @@ class DecodedBitStreamParser {
           codeIndex = _byteCompaction(code, codewords, codeIndex, result);
           break;
         case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-          result.appendCharCode(codewords[codeIndex++]);
+          result.writeCharCode(codewords[codeIndex++]);
           break;
         case _NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = _numericCompaction(codewords, codeIndex, result);
@@ -176,7 +118,7 @@ class DecodedBitStreamParser {
           break;
       }
     }
-    if (result.isEmpty() && resultMetadata.fileId == null) {
+    if (result.isEmpty && resultMetadata.fileId == null) {
       throw FormatsException.instance;
     }
     DecoderResult decoderResult =
@@ -239,40 +181,40 @@ class DecodedBitStreamParser {
           codeIndex++;
           switch (codewords[codeIndex]) {
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-              ECIOutput fileName = ECIOutput();
+              ECIStringBuilder fileName = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, fileName);
               resultMetadata.fileName = fileName.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-              ECIOutput sender = ECIOutput();
+              ECIStringBuilder sender = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, sender);
               resultMetadata.sender = sender.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-              ECIOutput addressee = ECIOutput();
+              ECIStringBuilder addressee = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, addressee);
               resultMetadata.addressee = addressee.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
-              ECIOutput segmentCount = ECIOutput();
+              ECIStringBuilder segmentCount = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, segmentCount);
               resultMetadata.segmentCount = int.parse(segmentCount.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
-              ECIOutput timestamp = ECIOutput();
+              ECIStringBuilder timestamp = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, timestamp);
               resultMetadata.timestamp = int.parse(timestamp.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
-              ECIOutput checksum = ECIOutput();
+              ECIStringBuilder checksum = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.checksum = int.parse(checksum.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
-              ECIOutput fileSize = ECIOutput();
+              ECIStringBuilder fileSize = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.fileSize = int.parse(fileSize.toString());
@@ -315,7 +257,7 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _textCompaction(
-      List<int> codewords, int codeIndex, ECIOutput result) {
+      List<int> codewords, int codeIndex, ECIStringBuilder result) {
     // 2 character per codeword
     List<int> textCompactionData =
         List.filled((codewords[0] - codeIndex) * 2, 0);
@@ -398,7 +340,7 @@ class DecodedBitStreamParser {
       List<int> textCompactionData,
       List<int> byteCompactionData,
       int length,
-      ECIOutput result,
+      ECIStringBuilder result,
       _Mode startMode) {
     // Beginning from an initial state of the Alpha sub-mode
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
@@ -436,7 +378,7 @@ class DecodedBitStreamParser {
                 subMode = _Mode.PUNCT_SHIFT;
                 break;
               case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                result.appendCharCode(byteCompactionData[i]);
+                result.writeCharCode(byteCompactionData[i]);
                 break;
               case _TEXT_COMPACTION_MODE_LATCH:
                 subMode = _Mode.ALPHA;
@@ -470,7 +412,7 @@ class DecodedBitStreamParser {
                 subMode = _Mode.PUNCT_SHIFT;
                 break;
               case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                result.appendCharCode(byteCompactionData[i]);
+                result.writeCharCode(byteCompactionData[i]);
                 break;
               case _TEXT_COMPACTION_MODE_LATCH:
                 subMode = _Mode.ALPHA;
@@ -508,7 +450,7 @@ class DecodedBitStreamParser {
                 subMode = _Mode.PUNCT_SHIFT;
                 break;
               case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                result.appendCharCode(byteCompactionData[i]);
+                result.writeCharCode(byteCompactionData[i]);
                 break;
             }
           }
@@ -526,7 +468,7 @@ class DecodedBitStreamParser {
                 latchedMode = subMode;
                 break;
               case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                result.appendCharCode(byteCompactionData[i]);
+                result.writeCharCode(byteCompactionData[i]);
                 break;
             }
           }
@@ -563,7 +505,7 @@ class DecodedBitStreamParser {
               case _MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 // PS before Shift-to-Byte is used as a padding character,
                 // see 5.4.2.4 of the specification
-                result.appendCharCode(byteCompactionData[i]);
+                result.writeCharCode(byteCompactionData[i]);
                 break;
             }
           }
@@ -571,7 +513,7 @@ class DecodedBitStreamParser {
       }
       if (ch != 0) {
         // Append decoded character to result
-        result.appendCharCode(ch);
+        result.writeCharCode(ch);
       }
       i++;
     }
@@ -588,7 +530,7 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _byteCompaction(
-      int mode, List<int> codewords, int codeIndex, ECIOutput result) {
+      int mode, List<int> codewords, int codeIndex, ECIStringBuilder result) {
     bool end = false;
 
     while (codeIndex < codewords[0] && !end) {
@@ -616,14 +558,14 @@ class DecodedBitStreamParser {
                 codeIndex < codewords[0] &&
                     codewords[codeIndex] < _TEXT_COMPACTION_MODE_LATCH)) {
           for (int i = 0; i < 6; i++) {
-            result.appendCharCode((value >> (8 * (5 - i))));
+            result.writeCharCode((value >> (8 * (5 - i))));
           }
         } else {
           codeIndex -= count;
           while ((codeIndex < codewords[0]) && !end) {
             int code = codewords[codeIndex++];
             if (code < _TEXT_COMPACTION_MODE_LATCH) {
-              result.appendCharCode(code);
+              result.writeCharCode(code);
             } else if (code == _ECI_CHARSET) {
               result.appendECI(codewords[codeIndex++]);
             } else {
@@ -644,7 +586,7 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _numericCompaction(
-      List<int> codewords, int codeIndex, ECIOutput result) {
+      List<int> codewords, int codeIndex, ECIStringBuilder result) {
     int count = 0;
     bool end = false;
 
@@ -680,7 +622,7 @@ class DecodedBitStreamParser {
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        result.append(_decodeBase900toBase10(numericCodewords, count));
+        result.write(_decodeBase900toBase10(numericCodewords, count));
         count = 0;
       }
     }

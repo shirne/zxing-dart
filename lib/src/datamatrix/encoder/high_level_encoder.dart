@@ -211,13 +211,15 @@ class HighLevelEncoder {
     }
 
     int charsProcessed = 0;
+    Int8List mins = Int8List(6);
+    Int8List intCharCounts = Int8List(6);
     while (true) {
       //step K
       if ((startPos + charsProcessed) == msg.length) {
-        int min = MathUtils.MAX_VALUE;
-        Int8List mins = Int8List(6);
-        Int32List intCharCounts = Int32List(6);
-        min = _findMinimums(charCounts, intCharCounts, min, mins);
+        mins.fillRange(0, mins.length, 0);
+        intCharCounts.fillRange(0, mins.length, 0);
+        int min =
+            _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
         int minCount = _getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] == min) {
@@ -316,8 +318,8 @@ class HighLevelEncoder {
 
       //step R
       if (charsProcessed >= 4) {
-        List<int> intCharCounts = Int32List(6);
-        Int8List mins = Int8List(6);
+        mins.fillRange(0, mins.length, 0);
+        intCharCounts.fillRange(0, mins.length, 0);
         _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
 
         if (intCharCounts[ASCII_ENCODATION] <
@@ -413,11 +415,9 @@ class HighLevelEncoder {
     int min,
     Int8List mins,
   ) {
-    mins.fillRange(0, mins.length, 0);
     for (int i = 0; i < 6; i++) {
-      // todo: different result from zxing java
-      intCharCounts[i] = (charCounts[i]).ceil();
-      int current = intCharCounts[i];
+      int current = (intCharCounts[i] = charCounts[i].ceil());
+
       if (min > current) {
         min = current;
         mins.fillRange(0, mins.length, 0);

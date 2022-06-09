@@ -147,6 +147,18 @@ class PDF417HighLevelEncoder {
   /// @return the encoded message (the char values range from 0 to 928)
   static String encodeHighLevel(
       String msg, Compaction compaction, Encoding? encoding, bool autoECI) {
+    if (msg.isEmpty) {
+      throw WriterException("Empty message not allowed");
+    }
+    if (encoding == null && !autoECI) {
+      for (int i = 0; i < msg.length; i++) {
+        if (msg.codeUnitAt(i) > 255) {
+          throw WriterException(
+              "Non-encodable character detected: ${msg.codeUnitAt(i)} (Unicode: "
+              "${msg.codeUnitAt(i)}). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
+        }
+      }
+    }
     //the codewords 0..928 are encoded as Unicode characters
     StringBuffer sb = StringBuffer();
     ECIInput input;

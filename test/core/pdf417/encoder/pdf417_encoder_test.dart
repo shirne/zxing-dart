@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/pdf417.dart';
+import 'package:zxing_lib/src/writer_exception.dart';
 
 /// Tests [PDF417HighLevelEncoder].
 void main() {
@@ -56,5 +57,11 @@ void main() {
     String encoded = PDF417HighLevelEncoder.encodeHighLevel(
         "abcd", Compaction.BYTE, utf8, false);
     expect("\u039f\u001A\u0385abcd", encoded);
+  });
+
+  test('testEncodeEmptyString', () {
+    try {
+      PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
+    } on WriterException catch (e) {}
   });
 }

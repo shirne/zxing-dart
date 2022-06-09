@@ -16,6 +16,7 @@
 
 import 'dart:typed_data';
 
+import '../arguments_exception.dart';
 import 'bit_array.dart';
 import 'utils.dart';
 
@@ -264,6 +265,26 @@ class BitMatrix {
   /// @param row [BitArray] to copy from
   void setRow(int y, BitArray row) {
     List.copyRange(_bits, y * _rowSize, row.getBitArray(), 0, _rowSize);
+  }
+
+  /// Modifies this `BitMatrix` to represent the same but rotated the given degrees (multiple of 0, 90, 180, 270)
+  void rotate(int degrees) {
+    switch (degrees % 360) {
+      case 0:
+        return;
+      case 90:
+        rotate90();
+        return;
+      case 180:
+        rotate180();
+        return;
+      case 270:
+        rotate90();
+        rotate180();
+        return;
+    }
+    throw ArgumentsException(
+        "degrees must be a multiple of 0, 90, 180, or 270");
   }
 
   /// Modifies this `BitMatrix` to represent the same but rotated 180 degrees

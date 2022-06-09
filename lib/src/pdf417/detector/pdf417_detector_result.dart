@@ -15,17 +15,19 @@
  */
 
 import '../../common/bit_matrix.dart';
-
 import '../../result_point.dart';
 
 /// @author Guenther Grau
 class PDF417DetectorResult {
   final BitMatrix _bits;
   final List<List<ResultPoint?>> _points;
+  final int _rotation;
 
-  PDF417DetectorResult(this._bits, this._points);
+  PDF417DetectorResult(this._bits, this._points, [this._rotation = 0]);
 
   BitMatrix get bits => _bits;
 
   List<List<ResultPoint?>> get points => _points;
+
+  int get rotation => _rotation;
 }

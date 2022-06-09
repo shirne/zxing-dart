@@ -24,6 +24,9 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 * FormatException => FormatsException
 * IllegalStateException => StateError
 
+## Issue
+* Because there is no float type in dart, the results of some test cases are different from zxing
+
 ## Getting Started
 
 This project is a starting point for a Dart

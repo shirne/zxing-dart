@@ -36,19 +36,19 @@ class Detector {
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
-  static const List<int> _START_PATTERN = [8, 1, 1, 1, 1, 1, 1, 3];
+  static const _START_PATTERN = [8, 1, 1, 1, 1, 1, 1, 3];
   // 1111111 0 1 000 1 0 1 00 1
-  static const List<int> _STOP_PATTERN = [7, 1, 1, 3, 1, 1, 1, 2, 1];
-  static const int _MAX_PIXEL_DRIFT = 3;
-  static const int _MAX_PATTERN_DRIFT = 5;
+  static const _STOP_PATTERN = [7, 1, 1, 3, 1, 1, 1, 2, 1];
+  static const _MAX_PIXEL_DRIFT = 3;
+  static const _MAX_PATTERN_DRIFT = 5;
   // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
   // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
-  static const int _SKIPPED_ROW_COUNT_MAX = 25;
+  static const _SKIPPED_ROW_COUNT_MAX = 25;
   // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
   // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
-  static const int _ROW_STEP = 5;
-  static const int _BARCODE_MIN_HEIGHT = 10;
-
+  static const _ROW_STEP = 5;
+  static const _BARCODE_MIN_HEIGHT = 10;
+  static const _ROTATIONS = [0, 180, 270, 90];
   Detector._();
 
   /// <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
@@ -65,20 +65,29 @@ class Detector {
     // different binarizers
     //bool tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
-    BitMatrix bitMatrix = image.blackMatrix;
+    BitMatrix originalMatrix = image.blackMatrix;
 
-    List<List<ResultPoint?>> barcodeCoordinates = _detect(multiple, bitMatrix);
     // Try 180, 270, 90 degree rotations, in that order
-    for (int rotate = 0; barcodeCoordinates.isEmpty && rotate < 3; rotate++) {
-      bitMatrix = bitMatrix.clone();
-      if (rotate != 1) {
-        bitMatrix.rotate180();
-      } else {
-        bitMatrix.rotate90();
+    for (int rotation in _ROTATIONS) {
+      BitMatrix bitMatrix = _applyRotation(originalMatrix, rotation);
+      List<List<ResultPoint?>> barcodeCoordinates =
+          _detect(multiple, bitMatrix);
+      if (barcodeCoordinates.isNotEmpty) {
+        return PDF417DetectorResult(bitMatrix, barcodeCoordinates, rotation);
       }
-      barcodeCoordinates = _detect(multiple, bitMatrix);
     }
-    return PDF417DetectorResult(bitMatrix, barcodeCoordinates);
+    return PDF417DetectorResult(originalMatrix, [], 0);
+  }
+
+  /// Applies a rotation to the supplied BitMatrix.
+  static BitMatrix _applyRotation(BitMatrix matrix, int rotation) {
+    if (rotation % 360 == 0) {
+      return matrix;
+    }
+
+    BitMatrix newMatrix = matrix.clone();
+    newMatrix.rotate(rotation);
+    return newMatrix;
   }
 
   /// Detects PDF417 codes in an image. Only checks 0 degree rotation
