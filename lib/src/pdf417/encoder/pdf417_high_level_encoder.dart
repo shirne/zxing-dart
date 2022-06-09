@@ -168,7 +168,7 @@ class PDF417HighLevelEncoder {
       input = NoECIInput(msg);
       if (encoding == null) {
         encoding = _defaultEncoding;
-      } else if (_defaultEncoding != encoding) {
+      } else if (_defaultEncoding.name != encoding.name) {
         CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
         if (eci != null) {
           _encodingECI(eci.value, sb);

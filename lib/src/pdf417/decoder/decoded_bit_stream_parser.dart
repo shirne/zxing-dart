@@ -558,7 +558,7 @@ class DecodedBitStreamParser {
                 codeIndex < codewords[0] &&
                     codewords[codeIndex] < _TEXT_COMPACTION_MODE_LATCH)) {
           for (int i = 0; i < 6; i++) {
-            result.writeCharCode((value >> (8 * (5 - i))));
+            result.writeCharCode((value >> (8 * (5 - i))) & 0xff);
           }
         } else {
           codeIndex -= count;

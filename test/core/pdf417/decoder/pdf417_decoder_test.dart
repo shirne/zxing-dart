@@ -90,10 +90,6 @@ void main() {
     }
   }
 
-  void testUppercaseLowercaseNumericMix() {
-    performPermutationTest('Aa1'.codeUnits, 7, 15491);
-  }
-
   String generateText(
       math.Random random, int maxWidth, List<int> chars, List<double> weights) {
     StringBuffer result = StringBuffer();
@@ -383,6 +379,10 @@ void main() {
         ['a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 10, 11233);
   });
 
+  test('testUppercaseLowercaseNumericMix', () {
+    performPermutationTest('Aa1'.codeUnits, 7, 15491);
+  });
+
   test('testUppercaseLowercasePunctuationMix', () {
     performPermutationTest(
         ['A', 'a', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 15491);
@@ -483,23 +483,12 @@ void main() {
     performDecodeTest(
         [14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207],
         "\u010c\u042f\u010c\u042f");
-    performDecodeTest([
-      16,
-      927,
-      4,
-      924,
-      336,
-      432,
-      197,
-      51,
-      300,
-      927,
-      7,
-      348,
-      231,
-      311,
-      858,
-      567
-    ], "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f");
+    performDecodeTest(
+      [
+        16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858,
+        567 //
+      ],
+      "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f",
+    );
   });
 }

@@ -5,13 +5,11 @@ import 'character_set_eci.dart';
 import 'string_builder.dart';
 
 class ECIStringBuilder {
-  late StringBuffer _currentBytes;
-  late StringBuffer? _result;
+  StringBuffer _currentBytes;
+  StringBuffer? _result;
   Encoding _currentCharset = latin1;
 
-  ECIStringBuilder() {
-    _currentBytes = StringBuffer();
-  }
+  ECIStringBuilder() : _currentBytes = StringBuffer();
 
   void write(dynamic value) {
     if (value is StringBuffer || value is StringBuilder) {
@@ -52,9 +50,9 @@ class ECIStringBuilder {
       List<int> bytes = latin1.encode(_currentBytes.toString());
       _currentBytes = StringBuffer();
       if (_result == null) {
-        _result = StringBuffer(latin1.decode(bytes));
+        _result = StringBuffer(_currentCharset.decode(bytes));
       } else {
-        _result!.write(latin1.decode(bytes));
+        _result!.write(_currentCharset.decode(bytes));
       }
     }
   }
