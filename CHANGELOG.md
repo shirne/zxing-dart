@@ -1,3 +1,6 @@
+## [0.7.0] - 2022-06-09
+* 同步zxing至2022-05-16(zxing 3.5.0)
+
 ## [0.6.1] - 2022-02-20
 * 同步zxing至2022-2-18(新增了datamatrix.minimal_encoder, eci_encoder_set)
 
