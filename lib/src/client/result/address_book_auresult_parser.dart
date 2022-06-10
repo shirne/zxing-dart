@@ -68,8 +68,8 @@ class AddressBookAUResultParser extends ResultParser {
     List<String>? values;
     // For now, always 3, and always trim
     for (int i = 1; i <= 3; i++) {
-      String? value = matchSinglePrefixedField(
-          prefix + i.toString() + ':', rawText, '\r', true);
+      String? value =
+          matchSinglePrefixedField('$prefix$i:', rawText, '\r', true);
       if (value == null) continue;
       values ??= [];
       values.add(value);

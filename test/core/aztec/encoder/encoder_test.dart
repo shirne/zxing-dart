@@ -28,7 +28,7 @@ import 'package:zxing_lib/zxing.dart';
 void main() {
   final Encoding iso_8859_1 = latin1;
   final Encoding utf_8 = utf8;
-  final Encoding? shiftJis = StringUtils.shiftJisCharset;
+  final Encoding shiftJis = StringUtils.shiftJisCharset;
   final Encoding? iso_8859_15 = CharacterSetECI.ISO8859_15.charset;
   final Encoding? windows1252 = CharacterSetECI.Cp1252.charset;
 
@@ -517,13 +517,12 @@ void main() {
         // in those cases where adding another binary character only adds 8 or 9 bits to the result.
         // So we exclude the border cases i=1,32,2079
         // A lower case letter at the beginning will be merged into binary mode
-        testHighLevelEncodeString('a' + sb.substring(0, i - 1), expectedLength);
+        testHighLevelEncodeString('a${sb.substring(0, i - 1)}', expectedLength);
         // A lower case letter at the end will also be merged into binary mode
-        testHighLevelEncodeString(sb.substring(0, i - 1) + 'a', expectedLength);
+        testHighLevelEncodeString('${sb.substring(0, i - 1)}a', expectedLength);
       }
       // A lower case letter at both ends will enough to latch us into LOWER.
-      testHighLevelEncodeString(
-          'a' + sb.substring(0, i) + 'b', expectedLength + 15);
+      testHighLevelEncodeString('a${sb.substring(0, i)}b', expectedLength + 15);
     }
 
     sb = StringBuilder();

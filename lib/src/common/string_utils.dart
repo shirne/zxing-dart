@@ -28,9 +28,9 @@ import 'character_set_eci.dart';
 /// @author Alex Dupre
 class StringUtils {
   static final Encoding _platformDefaultEncoding = utf8;
-  static final Encoding? shiftJisCharset = shiftJis;
-  static final Encoding? gbkCharset = gbk;
-  static final Encoding? eucJpEncoding = eucJp;
+  static final Encoding shiftJisCharset = shiftJis;
+  static final Encoding gbkCharset = gbk;
+  static final Encoding eucJpEncoding = eucJp;
   static final bool _assumeShiftJis =
       shiftJisCharset == _platformDefaultEncoding ||
           eucJpEncoding == _platformDefaultEncoding;

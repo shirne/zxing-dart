@@ -125,9 +125,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
             extendedContent.writeCharCode((80 /* P */ + (c - 123)));
           } else {
             throw ArgumentError(
-                "Requested content contains a non-encodable character: '" +
-                    contents[i] +
-                    "'");
+                "Requested content contains a non-encodable character: '${contents[i]}'");
           }
           break;
       }

@@ -256,7 +256,7 @@ class Encoder {
   }
 
   static bool isOnlyDoubleByteKanji(String content) {
-    List<int> bytes = StringUtils.shiftJisCharset!.encode(content);
+    List<int> bytes = StringUtils.shiftJisCharset.encode(content);
     int length = bytes.length;
     if (length % 2 != 0) {
       return false;
@@ -578,7 +578,7 @@ class Encoder {
   }
 
   static void appendKanjiBytes(String content, BitArray bits) {
-    List<int> bytes = StringUtils.shiftJisCharset!.encode(content);
+    List<int> bytes = StringUtils.shiftJisCharset.encode(content);
     if (bytes.length % 2 != 0) {
       throw WriterException("Kanji byte size not even");
     }

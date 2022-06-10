@@ -192,14 +192,14 @@ class SymbolInfo {
 
   @override
   String toString() {
-    return (_rectangular ? "Rectangular Symbol:" : "Square Symbol:") +
+    return "${_rectangular ? "Rectangular Symbol:" : "Square Symbol:"}"
         " data region $matrixWidth"
-            'x$matrixHeight'
-            ", symbol size $symbolWidth"
-            'x$symbolHeight'
-            ", symbol data size $symbolDataWidth"
-            'x$symbolDataHeight'
-            ", codewords $_dataCapacity"
-            '+$_errorCodewords';
+        'x$matrixHeight'
+        ", symbol size $symbolWidth"
+        'x$symbolHeight'
+        ", symbol data size $symbolDataWidth"
+        'x$symbolDataHeight'
+        ", codewords $_dataCapacity"
+        '+$_errorCodewords';
   }
 }

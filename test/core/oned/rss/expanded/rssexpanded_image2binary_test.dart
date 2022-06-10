@@ -39,11 +39,8 @@ import '../../../common/abstract_black_box.dart';
 void main() {
   Future<void> assertCorrectImage2binary(
       String fileName, String expected) async {
-    String path = AbstractBlackBoxTestCase.buildTestBase(
-                "test/resources/blackbox/rssexpanded-1/")
-            .path +
-        '/' +
-        (fileName);
+    String path =
+        '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName';
 
     Image image = decodeImage(File(path).readAsBytesSync())!;
     BinaryBitmap binaryMap = BinaryBitmap(

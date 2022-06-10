@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import 'package:intl/intl.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:intl/intl.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -273,47 +273,39 @@ void main() {
   test('testVEvent', () {
     // UTC times
     doTestResult(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
-        "foo\n" +
-            formatTime(2008, 5, 4, 12, 34, 56) +
-            "\n" +
-            formatTime(2008, 5, 5, 23, 45, 55),
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"
+            "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
+        "foo\n${formatTime(2008, 5, 4, 12, 34, 56)}\n${formatTime(2008, 5, 5, 23, 45, 55)}",
         ParsedResultType.CALENDAR);
     doTestResult(
-        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" "DTEND:20080505T234555Z\r\nEND:VEVENT",
-        "foo\n" +
-            formatTime(2008, 5, 4, 12, 34, 56) +
-            "\n" +
-            formatTime(2008, 5, 5, 23, 45, 55),
+        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"
+            "DTEND:20080505T234555Z\r\nEND:VEVENT",
+        "foo\n${formatTime(2008, 5, 4, 12, 34, 56)}\n${formatTime(2008, 5, 5, 23, 45, 55)}",
         ParsedResultType.CALENDAR);
     // Local times
     doTestResult(
-        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" "DTEND:20080505T234555\r\nEND:VEVENT",
-        "foo\n" +
-            formatTime(2008, 5, 4, 12, 34, 56, true) +
-            "\n" +
-            formatTime(2008, 5, 5, 23, 45, 55, true),
+        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n"
+            "DTEND:20080505T234555\r\nEND:VEVENT",
+        "foo\n${formatTime(2008, 5, 4, 12, 34, 56, true)}\n${formatTime(2008, 5, 5, 23, 45, 55, true)}",
         ParsedResultType.CALENDAR);
     // Date only (all day event)
     doTestResult(
-        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" "DTEND:20080505\r\nEND:VEVENT",
-        "foo\n" +
-            formatDate(2008, 5, 4, true) +
-            "\n" +
-            formatDate(2008, 5, 5, true),
+        "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n"
+            "DTEND:20080505\r\nEND:VEVENT",
+        "foo\n${formatDate(2008, 5, 4, true)}\n${formatDate(2008, 5, 5, true)}",
         ParsedResultType.CALENDAR);
     // Start time only
     doTestResult(
         "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
-        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56),
+        "foo\n${formatTime(2008, 5, 4, 12, 34, 56)}",
         ParsedResultType.CALENDAR);
     doTestResult(
         "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56, true),
+        "foo\n${formatTime(2008, 5, 4, 12, 34, 56, true)}",
         ParsedResultType.CALENDAR);
     doTestResult(
         "BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-        "foo\n" + formatDate(2008, 5, 4, true),
+        "foo\n${formatDate(2008, 5, 4, true)}",
         ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
         "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);

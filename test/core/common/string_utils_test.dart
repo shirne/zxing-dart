@@ -67,7 +67,7 @@ void main() {
     // 金魚
     doTest([
       0x8b, 0xe0, 0x8b, 0x9b, //
-    ], StringUtils.shiftJisCharset!, "SJIS");
+    ], StringUtils.shiftJisCharset, "SJIS");
   });
 
   test('testShortISO885911', () {
@@ -86,7 +86,7 @@ void main() {
     // Hello 金!
     doTest([
       0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21, //
-    ], StringUtils.shiftJisCharset!, "SJIS");
+    ], StringUtils.shiftJisCharset, "SJIS");
   });
 
   test('testUTF16BE', () {

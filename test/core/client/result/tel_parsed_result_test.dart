@@ -29,7 +29,7 @@ void main() {
     TelParsedResult telResult = result as TelParsedResult;
     expect(number, telResult.number);
     expect(title, telResult.title);
-    expect("tel:" + number, telResult.telURI);
+    expect("tel:$number", telResult.telURI);
   }
 
   test('testTel', () {

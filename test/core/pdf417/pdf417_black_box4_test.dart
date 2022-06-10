@@ -69,11 +69,11 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
       String fileBaseName = testImageGroup.key;
       String expectedText;
-      File expectedTextFile = File(testBase.path + '/' + fileBaseName + ".txt");
+      File expectedTextFile = File("${testBase.path}/$fileBaseName.txt");
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
-        expectedTextFile = File(testBase.path + '/' + fileBaseName + ".bin");
+        expectedTextFile = File('${testBase.path}/$fileBaseName.bin');
         assert(expectedTextFile.existsSync());
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }

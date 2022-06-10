@@ -254,6 +254,8 @@ class Edge {
           }
         }
         break;
+      case SymbolShapeHint.FORCE_NONE:
+        break;
     }
     for (int capacity in allCodewordCapacities) {
       if (capacity >= minimum) {
@@ -464,6 +466,8 @@ class Edge {
             return getBytes(238);
           case Mode.EDF:
             return getBytes(240);
+          case Mode.ASCII:
+            break;
         }
         break;
       case Mode.C40:

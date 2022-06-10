@@ -88,7 +88,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     if (firstName == null) {
       return lastName;
     } else {
-      return lastName == null ? firstName : (firstName + ' ' + lastName);
+      return lastName == null ? firstName : ('$firstName $lastName');
     }
   }
 }

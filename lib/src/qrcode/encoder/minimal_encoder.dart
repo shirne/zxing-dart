@@ -728,7 +728,7 @@ class MinimalEncoder {
     }
     if (minimalJ < 0) {
       throw WriterException(
-          "Internal error: failed to encode \"" + stringToEncode + "\"");
+          "Internal error: failed to encode \"$stringToEncode\"");
     }
     return ResultList(version, edges[inputLength][minimalJ][minimalK], this);
   }

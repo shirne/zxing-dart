@@ -36,7 +36,7 @@ void main() {
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
         "test/resources/blackbox/multi-2");
 
-    File testImage = File(testBase.path + '/multi.jpg');
+    File testImage = File('${testBase.path}/multi.jpg');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     var scaleImage = copyResize(image,
         width: image.width ~/ 2,

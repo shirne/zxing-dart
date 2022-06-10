@@ -62,6 +62,6 @@ void main() {
   test('testEncodeEmptyString', () {
     try {
       PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
-    } on WriterException catch (e) {}
+    } on WriterException catch (_) {}
   });
 }

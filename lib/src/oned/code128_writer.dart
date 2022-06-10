@@ -21,12 +21,12 @@ import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
 enum _CType { UNCODABLE, ONE_DIGIT, TWO_DIGITS, FNC_1 }
+
 enum Charset { A, B, C, NONE }
+
 enum Latch { A, B, C, SHIFT, NONE }
 
-/**
- * Encodes minimally using Divide-And-Conquer with Memoization
- **/
+/// Encodes minimally using Divide-And-Conquer with Memoization
 class MinimalEncoder {
   static final String A =
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002"
@@ -86,6 +86,8 @@ class MinimalEncoder {
           break;
         case Latch.SHIFT:
           addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i);
+          break;
+        case Latch.NONE:
           break;
       }
       if (charset == Charset.C) {

@@ -38,11 +38,8 @@ import '../../../common/abstract_black_box.dart';
 
 void main() {
   Image readImage(String fileName) {
-    File path = File(AbstractBlackBoxTestCase.buildTestBase(
-                "test/resources/blackbox/rssexpanded-1/")
-            .path +
-        '/' +
-        fileName);
+    File path = File(
+        '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName');
     return decodeImage(path.readAsBytesSync())!;
   }
 

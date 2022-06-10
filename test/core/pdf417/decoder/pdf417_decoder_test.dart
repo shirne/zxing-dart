@@ -61,7 +61,7 @@ void main() {
     int N = chars.length;
     String baseNNumber = index.toRadixString(N);
     while (baseNNumber.length < length) {
-      baseNNumber = "0" + baseNNumber;
+      baseNNumber = "0$baseNNumber";
     }
     String prefix = "";
     for (int i = 0; i < baseNNumber.length; i++) {

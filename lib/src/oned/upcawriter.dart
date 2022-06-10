@@ -34,6 +34,6 @@ class UPCAWriter implements Writer {
     }
     // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
     return _subWriter.encode(
-        '0' + contents, BarcodeFormat.EAN_13, width, height, hints);
+        '0$contents', BarcodeFormat.EAN_13, width, height, hints);
   }
 }

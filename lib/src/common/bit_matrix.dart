@@ -115,8 +115,8 @@ class BitMatrix {
         bits[bitsPos] = false;
         bitsPos++;
       } else {
-        throw ArgumentError("illegal character encountered: " +
-            stringRepresentation.substring(pos));
+        throw ArgumentError(
+            "illegal character encountered: ${stringRepresentation.substring(pos)}");
       }
     }
 

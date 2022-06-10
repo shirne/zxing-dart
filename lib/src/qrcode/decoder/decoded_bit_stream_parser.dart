@@ -22,7 +22,6 @@ import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
 import '../../common/string_utils.dart';
-
 import '../../decode_hint_type.dart';
 import '../../formats_exception.dart';
 import 'error_correction_level.dart';
@@ -195,7 +194,7 @@ class DecodedBitStreamParser {
       count--;
     }
 
-    result.write(StringUtils.gbkCharset!.decode(buffer));
+    result.write(StringUtils.gbkCharset.decode(buffer));
   }
 
   static void _decodeKanjiSegment(
@@ -226,7 +225,7 @@ class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-    result.write(StringUtils.shiftJisCharset!.decode(buffer));
+    result.write(StringUtils.shiftJisCharset.decode(buffer));
   }
 
   static void _decodeByteSegment(BitSource bits, StringBuffer result, int count,

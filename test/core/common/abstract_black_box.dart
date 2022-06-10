@@ -79,19 +79,18 @@ class AbstractBlackBoxTestCase {
       String testImageFileName = testImage.uri.pathSegments.last;
       String fileBaseName =
           testImageFileName.substring(0, testImageFileName.indexOf('.'));
-      File expectedTextFile =
-          File(_testBase.path + '/' + fileBaseName + ".txt");
+      File expectedTextFile = File("${_testBase.path}/$fileBaseName.txt");
       String expectedText;
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
-        expectedTextFile = File(_testBase.path + '/' + fileBaseName + ".bin");
+        expectedTextFile = File("${_testBase.path}/$fileBaseName.bin");
         assert(expectedTextFile.existsSync());
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
 
       File expectedMetadataFile =
-          File(_testBase.path + '/' + fileBaseName + ".metadata.txt");
+          File("${_testBase.path}/$fileBaseName.metadata.txt");
       Properties expectedMetadata = Properties();
       if (expectedMetadataFile.existsSync()) {
         expectedMetadata.load(expectedMetadataFile.readAsStringSync());

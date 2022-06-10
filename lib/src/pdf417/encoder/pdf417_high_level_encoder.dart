@@ -486,8 +486,8 @@ class PDF417HighLevelEncoder {
     while (idx < count) {
       tmp.clear();
       int len = math.min(44, count - idx);
-      String part = '1' +
-          input.toString().substring(startpos + idx, startpos + idx + len);
+      String part =
+          '1${input.toString().substring(startpos + idx, startpos + idx + len)}';
       BigInt bigint = BigInt.parse(part);
       do {
         tmp.writeCharCode((bigint % num900).toInt());

@@ -258,6 +258,6 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
   @override
   String toString() {
-    return "IsLeft: $isLeft\n" + super.toString();
+    return "IsLeft: $isLeft\n${super.toString()}";
   }
 }

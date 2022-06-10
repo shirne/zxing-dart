@@ -33,7 +33,7 @@ void main() {
   test('test22png', () {
     Directory root = AbstractBlackBoxTestCase.buildTestBase(
         "test/resources/blackbox/pdf417-2");
-    File testImage = File(root.path + '/22.png');
+    File testImage = File('${root.path}/22.png');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));

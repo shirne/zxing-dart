@@ -18,7 +18,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import '../../common/character_set_eci.dart';
-
 import '../../result.dart';
 import 'address_book_parsed_result.dart';
 import 'result_parser.dart';
@@ -111,8 +110,7 @@ class VCardResultParser extends ResultParser {
     List<List<String>>? matches;
     int i = 0;
     int max = rawText.length;
-    var reg =
-        RegExp("(?:^|\n)" + prefix + "(?:;([^:]*))?:", caseSensitive: false);
+    var reg = RegExp("(?:^|\n)$prefix(?:;([^:]*))?:", caseSensitive: false);
     while (i < max) {
       // At start or after newline, match prefix, followed by optional metadata
       // (led by ;) ultimately ending in colon

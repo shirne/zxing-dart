@@ -33,7 +33,7 @@ void main() {
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
         "test/resources/blackbox/multi-1");
 
-    File testImage = File(testBase.path + '/1.png');
+    File testImage = File('${testBase.path}/1.png');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     LuminanceSource source = BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));

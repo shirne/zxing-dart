@@ -109,7 +109,7 @@ class DecodedBitStreamParser {
         String country = _getCountry(bytes).toString().padLeft(3, '0');
         String service = _getServiceClass(bytes).toString().padLeft(3, '0');
         result.write(_getMessage(bytes, 10, 84));
-        if (result.toString().startsWith("[)>" + _rs + "01" + _gs)) {
+        if (result.toString().startsWith("[)>${_rs}01$_gs")) {
           result.insert(9, postcode + _gs + country + _gs + service + _gs);
         } else {
           result.insert(0, postcode + _gs + country + _gs + service + _gs);

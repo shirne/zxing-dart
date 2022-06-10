@@ -87,15 +87,12 @@ void main() {
 
   test('testEncodeWithFunc3', () {
     String toEncode = "\u00f3" "123";
-    String expected = QUIET_SPACE +
-        START_CODE_B +
-        FNC3 +
-        "10011100110" + //"1"
-        "11001110010" + //"2"
-        "11001011100" + //"3"
-        "11101000110" + //check digit 51
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_B$FNC3"
+        "10011100110" //"1"
+        "11001110010" //"2"
+        "11001011100" //"3"
+        "11101000110" //check digit 51
+        "$STOP$QUIET_SPACE";
 
     BitMatrix result = encode(toEncode, false, "123");
 
@@ -110,15 +107,12 @@ void main() {
 
   test('testEncodeWithFunc2', () {
     String toEncode = "\u00f2" "123";
-    String expected = QUIET_SPACE +
-        START_CODE_B +
-        FNC2 +
-        "10011100110" + //"1"
-        "11001110010" + //"2"
-        "11001011100" + //"3"
-        "11100010110" + //check digit 56
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_B$FNC2"
+        "10011100110" //"1"
+        "11001110010" //"2"
+        "11001011100" //"3"
+        "11100010110" //check digit 56
+        "$STOP$QUIET_SPACE";
 
     BitMatrix result = encode(toEncode, false, "123");
 
@@ -133,15 +127,12 @@ void main() {
 
   test('testEncodeWithFunc1', () {
     String toEncode = "\u00f1" "123";
-    String expected = QUIET_SPACE +
-        START_CODE_C +
-        FNC1 +
-        "10110011100" + //"12"
-        SWITCH_CODE_B +
-        "11001011100" + //"3"
-        "10101111000" + //check digit 92
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_C$FNC1"
+        "10110011100" //"12"
+        "$SWITCH_CODE_B"
+        "11001011100" //"3"
+        "10101111000" //check digit 92
+        "$STOP$QUIET_SPACE";
 
     BitMatrix result = encode(toEncode, false, "123");
 
@@ -224,15 +215,12 @@ void main() {
 
   test('testEncodeWithFunc4', () {
     String toEncode = "\u00f4" "123";
-    String expected = QUIET_SPACE +
-        START_CODE_B +
-        FNC4B +
-        "10011100110" + //"1"
-        "11001110010" + //"2"
-        "11001011100" + //"3"
-        "11100011010" + //check digit 59
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_B$FNC4B"
+        "10011100110" //"1"
+        "11001110010" //"2"
+        "11001011100" //"3"
+        "11100011010" //check digit 59
+        "$STOP$QUIET_SPACE";
 
     BitMatrix result = encode(toEncode, false, null);
 
@@ -247,16 +235,11 @@ void main() {
   test('testEncodeWithFncsAndNumberInCodesetA', () {
     String toEncode = "\n" "\u00f1" "\u00f4" "1" "\n";
 
-    String expected = QUIET_SPACE +
-        START_CODE_A +
-        LF +
-        FNC1 +
-        FNC4A +
-        "10011100110" +
-        LF +
-        "10101111000" +
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_A"
+        "$LF$FNC1$FNC4A"
+        "10011100110$LF"
+        "10101111000"
+        "$STOP$QUIET_SPACE";
 
     BitMatrix result = encode(toEncode, false, null);
 
@@ -273,36 +256,30 @@ void main() {
     // start with A switch to B and back to A
     testEncode(
         "\x00ABab\u0010",
-        QUIET_SPACE +
-            START_CODE_A +
-            "10100001100" + //"\x00"
-            "10100011000" + //"A"
-            "10001011000" + //"B"
-            SWITCH_CODE_B + //Switch to B
-            "10010110000" + // "a"
-            "10010000110" + //"b"
-            SWITCH_CODE_A + //Switch to A
-            "10100111100" + //"\u0010"
-            "11001110100" + //check digit
-            STOP +
-            QUIET_SPACE);
+        "$QUIET_SPACE$START_CODE_A"
+            "10100001100" //"\x00"
+            "10100011000" //"A"
+            "10001011000$SWITCH_CODE_B" //"B" Switch to B
+            "10010110000" // "a"
+            "10010000110$SWITCH_CODE_A" //"b" Switch to A
+            "10100111100" //"\u0010"
+            "11001110100" //check digit
+            "$STOP$QUIET_SPACE");
 
     // start with B switch to A and back to B
     // the compact encoder encodes this shorter as STARTB,a,b,SHIFT,NUL,a,b
     testEncode(
         "ab\x00ab",
-        QUIET_SPACE +
-            START_CODE_B +
-            "10010110000" + // "a"
-            "10010000110" + // "b"
-            SWITCH_CODE_A + // Switch to A
-            "10100001100" + //"\x00             "
-            SWITCH_CODE_B + // Switch to B
-            "10010110000" + // "a"
-            "10010000110" + // "b"
-            "11010001110" + // check digit
-            STOP +
-            QUIET_SPACE);
+        "$QUIET_SPACE$START_CODE_B"
+            "10010110000" // "a"
+            "10010000110$SWITCH_CODE_A" // "b" Switch to A
+
+            "10100001100$SWITCH_CODE_B" //"\x00             " Switch to B
+
+            "10010110000" // "a"
+            "10010000110" // "b"
+            "11010001110" // check digit
+            "$STOP$QUIET_SPACE");
   });
 
   test('testEncodeWithForcedCodeSetFailureCodeSetABadCharacter', () {
@@ -377,16 +354,14 @@ void main() {
   test('testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits', () {
     String toEncode = "AB123";
     // would default to B
-    String expected = QUIET_SPACE +
-        START_CODE_A +
-        "10100011000" + //"A"
-        "10001011000" + //"B"
-        "10011100110" + //"1"
-        "11001110010" + //"2"
-        "11001011100" + //"3"
-        "11001000100" + //check digit 10
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_A"
+        "10100011000" //"A"
+        "10001011000" //"B"
+        "10011100110" //"1"
+        "11001110010" //"2"
+        "11001011100" //"3"
+        "11001000100" //check digit 10
+        "$STOP$QUIET_SPACE";
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "A"};
 
@@ -400,15 +375,13 @@ void main() {
   test('testEncodeWithForcedCodeSetFailureCodeSetB', () {
     String toEncode = "1234";
     //would default to C
-    String expected = QUIET_SPACE +
-        START_CODE_B +
-        "10011100110" + //"1"
-        "11001110010" + //"2"
-        "11001011100" + //"3"
-        "11001001110" + //"4"
-        "11110010010" + //check digit 88
-        STOP +
-        QUIET_SPACE;
+    String expected = "$QUIET_SPACE$START_CODE_B"
+        "10011100110" //"1"
+        "11001110010" //"2"
+        "11001011100" //"3"
+        "11001001110" //"4"
+        "11110010010" //check digit 88
+        "$STOP$QUIET_SPACE";
 
     Map<EncodeHintType, Object> hints = {EncodeHintType.FORCE_CODE_SET: "B"};
     BitMatrix result =

@@ -52,7 +52,7 @@ class URIParsedResult extends ParsedResult {
     if (protocolEnd < 0 || _isColonFollowedByPortNumber(uri, protocolEnd)) {
       // No protocol, or found a colon, but it looks like it is after the host, so the protocol is still missing,
       // so assume http
-      uri = "http://" + uri;
+      uri = "http://$uri";
     }
     return uri;
   }

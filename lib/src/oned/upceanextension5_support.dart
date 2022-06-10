@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import '../common/bit_array.dart';
-
 import '../barcode_format.dart';
+import '../common/bit_array.dart';
 import '../not_found_exception.dart';
+import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
-import '../result.dart';
 import 'upceanreader.dart';
 
 /// See [UPCEANExtension2Support]
@@ -165,6 +164,6 @@ class UPCEANExtension5Support {
     String unitsString = (rawAmount ~/ 100).toString();
     int hundredths = rawAmount % 100;
     String hundredthsString = hundredths.toString().padLeft(2, '0');
-    return currency + unitsString + '.' + hundredthsString;
+    return '$currency$unitsString.$hundredthsString';
   }
 }

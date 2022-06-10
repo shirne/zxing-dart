@@ -30,7 +30,7 @@ class TelResultParser extends ResultParser {
     }
     // Normalize "TEL:" to "tel:"
     String telURI =
-        rawText.startsWith("TEL:") ? "tel:" + rawText.substring(4) : rawText;
+        rawText.startsWith("TEL:") ? "tel:${rawText.substring(4)}" : rawText;
     // Drop tel, query portion
     int queryStart = rawText.indexOf('?', 4);
     String number = queryStart < 0

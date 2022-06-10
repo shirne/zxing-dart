@@ -953,5 +953,5 @@ void verifyNotGS1EncodedData(QRCode qrCode) {
 }
 
 String shiftJISString(Uint8List bytes) {
-  return StringUtils.shiftJisCharset!.decode(bytes);
+  return StringUtils.shiftJisCharset.decode(bytes);
 }

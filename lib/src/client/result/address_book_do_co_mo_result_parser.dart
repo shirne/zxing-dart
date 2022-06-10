@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import 'result_parser.dart';
 import '../../result.dart';
 import 'abstract_do_co_mo_result_parser.dart';
 import 'address_book_parsed_result.dart';
+import 'result_parser.dart';
 
 /// Implements the "MECARD" address book entry format.
 ///
@@ -83,7 +83,7 @@ class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     int comma = name.indexOf(',');
     if (comma >= 0) {
       // Format may be last,first; switch it around
-      return name.substring(comma + 1) + ' ' + name.substring(0, comma);
+      return '${name.substring(comma + 1)} ${name.substring(0, comma)}';
     }
     return name;
   }
