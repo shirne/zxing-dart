@@ -31,7 +31,7 @@ class _WebviewPageState extends State<WebviewPage> {
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (webview) {
           print(webview);
-          webview.evaluateJavascript("""
+          webview.runJavascript("""
             alert('aaa');
             """);
         },

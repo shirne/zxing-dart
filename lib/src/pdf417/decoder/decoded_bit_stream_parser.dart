@@ -240,7 +240,7 @@ class DecodedBitStreamParser {
         optionalFieldsLength--;
       }
 
-      // ignore: deprecated_consistency
+      // ignore: deprecated_consistency, deprecated_member_use_from_same_package
       resultMetadata.optionalData = codewords.sublist(
           optionalFieldsStart, optionalFieldsStart + optionalFieldsLength);
     }

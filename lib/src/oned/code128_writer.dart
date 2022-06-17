@@ -37,7 +37,7 @@ class MinimalEncoder {
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr"
       "stuvwxyz{|}~\u007F\u00FF";
 
-  static final int CODE_SHIFT = 98;
+  static final int codeShift = 98;
 
   List<List<int>>? memoizedCost;
   List<List<Latch>>? minPath;
@@ -85,7 +85,7 @@ class MinimalEncoder {
               i);
           break;
         case Latch.SHIFT:
-          addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i);
+          addPattern(patterns, codeShift, checkSum, checkWeight, i);
           break;
         case Latch.NONE:
           break;

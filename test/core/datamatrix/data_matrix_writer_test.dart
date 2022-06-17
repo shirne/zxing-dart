@@ -30,7 +30,7 @@ void main() {
         52, {
       EncodeHintType.DATA_MATRIX_SHAPE: SymbolShapeHint.FORCE_SQUARE,
 
-      // ignore: deprecated_consistency
+      // ignore: deprecated_consistency, deprecated_member_use_from_same_package
       EncodeHintType.MIN_SIZE: Dimension(52, 52)
     });
     expect(encode.get(0, 0), true);

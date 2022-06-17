@@ -111,7 +111,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   @override
   LuminanceSource rotateCounterClockwise() {
     int sourceWidth = image.width;
-    int sourceHeight = image.height;
+    //int sourceHeight = image.height;
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.

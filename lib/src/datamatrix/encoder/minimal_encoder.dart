@@ -528,8 +528,6 @@ class Edge {
       case Mode.EDF:
         return getEDFBytes();
     }
-
-    return Uint8List(0);
   }
 }
 
@@ -677,34 +675,10 @@ class Input extends MinimalECIInput {
 ///
 /// @author Alex Geller
 class MinimalEncoder {
-  static final List<int> C40_SHIFT2_CHARS = [
-    '!',
-    '"',
-    '#',
-    '\$',
-    '%',
-    '&',
-    '\'',
-    '(',
-    ')',
-    '*',
-    '+',
-    ',',
-    '-',
-    '.',
-    '/',
-    ':',
-    ';',
-    '<',
-    '=',
-    '>',
-    '?',
-    '@',
-    '[',
-    '\\',
-    ']',
-    '^',
-    '_'
+  static final c40Shift2Chars = [
+    '!', '"', '#', '\$', '%', '&', '\'', '(', ')', '*', //
+    '+', ',', '-', '.', '/', ':', ';', '<', '=', '>',
+    '?', '@', '[', '\\', ']', '^', '_'
   ].map((e) => e.codeUnitAt(0)).toList();
 
   /* private */ MinimalEncoder();
@@ -718,7 +692,7 @@ class MinimalEncoder {
   }
 
   /* private */ static bool isInC40Shift2Set(int ch, int fnc1) {
-    for (int c40Shift2Char in C40_SHIFT2_CHARS) {
+    for (int c40Shift2Char in c40Shift2Chars) {
       if (c40Shift2Char == ch) {
         return true;
       }
