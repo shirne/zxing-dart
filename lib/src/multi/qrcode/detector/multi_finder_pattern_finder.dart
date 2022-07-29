@@ -81,6 +81,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   ///         size differs from the average among those patterns the least
   /// @throws NotFoundException if 3 such finder patterns do not exist
   List<List<FinderPattern>> _selectMultipleBestPatterns() {
+    final possibleCenters =
+        this.possibleCenters.where((fp) => fp.count >= 2).toList();
     int size = possibleCenters.length;
 
     if (size < 3) {

@@ -25,6 +25,7 @@ class ECIStringBuilder {
   }
 
   /// Appends ECI value to output.
+  /// throws FormatsException on invalid ECI value
   void appendECI(int value) {
     _encodeCurrentBytesIfAny();
     CharacterSetECI? characterSetECI =

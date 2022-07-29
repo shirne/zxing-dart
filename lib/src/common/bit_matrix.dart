@@ -267,7 +267,7 @@ class BitMatrix {
     List.copyRange(_bits, y * _rowSize, row.getBitArray(), 0, _rowSize);
   }
 
-  /// Modifies this `BitMatrix` to represent the same but rotated the given degrees (multiple of 0, 90, 180, 270)
+  /// Modifies this `BitMatrix` to represent the same but rotated the given degrees (0, 90, 180, 270)
   void rotate(int degrees) {
     switch (degrees % 360) {
       case 0:

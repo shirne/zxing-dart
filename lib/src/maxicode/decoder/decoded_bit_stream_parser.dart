@@ -65,7 +65,7 @@ class DecodedBitStreamParser {
   ];
 
   static final List<String> _sets = [
-    "\nABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "\rABCDEFGHIJKLMNOPQRSTUVWXYZ"
         "$_eci$_fs$_gs$_rs$_ns $_pad\""
         r"#$%&'()*+,-./0123456789:"
         "$_shiftB$_shiftC$_shiftD$_shiftE$_latchB",
