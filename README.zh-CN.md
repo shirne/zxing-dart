@@ -11,7 +11,8 @@
 - [x] 核心库单元测试
 - [x] 演示APP生成二维码
 - [x] 演示APP扫描二维码
-- [ ] 针对dart的优化
+- [x] 针对dart的优化
+- [ ] zxing java 持续同步中...
 
 ## 预览
 
@@ -19,7 +20,7 @@
 |:---:|:---:|
 |![01](preview/01.png "01")|![02](preview/02.png "02")|
 
-## Getting Started
+## Flutter
 
 This project is a starting point for a Dart
 [package](https://flutter.dev/developing-packages/),

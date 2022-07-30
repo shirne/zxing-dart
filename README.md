@@ -11,7 +11,8 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 - [x] Core unit test(all passed)
 - [x] Demo Creator
 - [x] Demo Scanner
-- [ ] Code optimization
+- [x] Code optimization
+- [ ] Keep syncing from zxing java...
 
 ## Preview
 
@@ -27,7 +28,7 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 ## Issue
 * Because there is no float type in dart, the results of some test cases are different from zxing
 
-## Getting Started
+## Flutter
 
 This project is a starting point for a Dart
 [package](https://flutter.dev/developing-packages/),
