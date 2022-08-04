@@ -58,18 +58,19 @@ void main() {
     doTest('MECARD:N:Sean Owen;;', null, ['Sean Owen'], null, null, null, null,
         null, null, null, null, null);
     doTest(
-        'MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;',
-        null,
-        ['Sean Owen'],
-        null,
-        null,
-        ['srowen@example.org'],
-        null,
-        null,
-        null,
-        ['google.com'],
-        null,
-        'ZXing Team');
+      'MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;',
+      null,
+      ['Sean Owen'],
+      null,
+      null,
+      ['srowen@example.org'],
+      null,
+      null,
+      null,
+      ['google.com'],
+      null,
+      'ZXing Team',
+    );
   });
 
   test('testAddressBookAU', () {

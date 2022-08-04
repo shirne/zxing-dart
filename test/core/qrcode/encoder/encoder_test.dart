@@ -415,8 +415,8 @@ void main() {
   });
 
   test('testGetNumDataBytesAndNumECBytesForBlockID', () {
-    const numDataBytes = [0];
-    const numEcBytes = [0];
+    final numDataBytes = [0];
+    final numEcBytes = [0];
     // Version 1-H.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
         26, 9, 1, 0, numDataBytes, numEcBytes);

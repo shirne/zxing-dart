@@ -124,19 +124,23 @@ class AddressBookParsedResult extends ParsedResult {
     this.title,
     this._urls,
     this.geo,
-  )   : assert(
-            (_phoneNumbers == null && _phoneTypes == null) ||
-                _phoneNumbers!.length == _phoneTypes!.length,
-            'Phone numbers and types lengths differ'),
-        assert(
-            (_emails == null && _emailTypes == null) ||
-                _emails!.length == _emailTypes!.length,
-            'Emails and types lengths differ'),
-        assert(
-            (_addresses == null && _addressTypes == null) ||
-                _addresses!.length == _addressTypes!.length,
-            'Addresses and types lengths differ'),
-        super(ParsedResultType.ADDRESS_BOOK);
+  ) : super(ParsedResultType.ADDRESS_BOOK) {
+    if (_phoneNumbers != null &&
+        _phoneTypes != null &&
+        _phoneNumbers!.length != _phoneTypes!.length) {
+      throw ArgumentError('Phone numbers and types lengths differ');
+    }
+    if (_emails != null &&
+        _emailTypes != null &&
+        _emails!.length != _emailTypes!.length) {
+      throw ArgumentError('Emails and types lengths differ');
+    }
+    if (_addresses != null &&
+        _addressTypes != null &&
+        _addresses!.length != _addressTypes!.length) {
+      throw ArgumentError('Addresses and types lengths differ');
+    }
+  }
 
   List<String>? get names => _names;
 
