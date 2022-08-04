@@ -26,10 +26,10 @@ import '../../utils.dart';
 void main() {
   void doTest(String contents, List<String>? tos, List<String>? ccs,
       List<String>? bccs, String? subject, String? body) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.EMAIL_ADDRESS, result.type);
-    EmailAddressParsedResult emailResult = result as EmailAddressParsedResult;
+    final emailResult = result as EmailAddressParsedResult;
     assertArrayEquals(tos, emailResult.tos);
     assertArrayEquals(ccs, emailResult.ccs);
     assertArrayEquals(bccs, emailResult.bccs);

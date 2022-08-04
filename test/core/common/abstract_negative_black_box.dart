@@ -60,16 +60,16 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   void testBlackBox() {
     assert(testResults.isNotEmpty);
 
-    List<File> imageFiles = getImageFiles();
-    List<int> falsePositives = List.filled(testResults.length, 0);
+    final imageFiles = getImageFiles();
+    final falsePositives = List.filled(testResults.length, 0);
     for (File testImage in imageFiles) {
       log.info('Starting $testImage');
-      Image image = decodeImage(testImage.readAsBytesSync())!;
+      final Image image = decodeImage(testImage.readAsBytesSync())!;
       //if (image == null) {
       //  throw IOException("Could not read image: " + testImage);
       //}
       for (int x = 0; x < testResults.length; x++) {
-        TestResult testResult = testResults[x];
+        final testResult = testResults[x];
         if (!checkForFalsePositives(image, testResult.getRotation())) {
           falsePositives[x]++;
         }
@@ -80,7 +80,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     int totalAllowed = 0;
 
     for (int x = 0; x < testResults.length; x++) {
-      TestResult testResult = testResults[x];
+      final testResult = testResults[x];
       totalFalsePositives += falsePositives[x];
       totalAllowed += testResult.getFalsePositivesAllowed();
     }
@@ -94,7 +94,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     }
 
     for (int x = 0; x < testResults.length; x++) {
-      TestResult testResult = testResults[x];
+      final testResult = testResults[x];
       log.info(
           'Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)');
       assert(falsePositives[x] <= testResult.getFalsePositivesAllowed(),
@@ -108,10 +108,10 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
   /// @param rotationInDegrees The amount of rotation to apply
   /// @return true if nothing found, false if a non-existent barcode was detected
   bool checkForFalsePositives(Image image, double rotationInDegrees) {
-    Image rotatedImage =
+    final rotatedImage =
         AbstractBlackBoxTestCase.rotateImage(image, rotationInDegrees);
-    LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
-    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+    final source = BufferedImageLuminanceSource(rotatedImage);
+    final bitmap = BinaryBitmap(HybridBinarizer(source));
     Result? result;
     try {
       result = reader!.decode(bitmap);
@@ -123,7 +123,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     }
 
     // Try "try harder" getMode
-    Map<DecodeHintType, Object> hints = {};
+    final hints = <DecodeHintType, Object>{};
     hints[DecodeHintType.TRY_HARDER] = true;
     try {
       result = reader!.decode(bitmap, hints);

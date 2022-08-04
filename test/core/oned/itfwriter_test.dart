@@ -16,7 +16,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -25,7 +24,7 @@ import '../utils.dart';
 /// Tests [ITFWriter].
 void main() {
   void doTest(String input, String expected) {
-    BitMatrix result = ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
+    final result = ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
     expect(expected, matrixToString(result));
   }
 

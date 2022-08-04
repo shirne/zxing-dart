@@ -553,7 +553,7 @@ class PDF417 {
   /// @param r the number of rows in the symbol
   /// @return the number of pad codewords
   static int _getNumberOfPadCodewords(int m, int k, int c, int r) {
-    int n = c * r - k;
+    final n = c * r - k;
     return n > m + 1 ? n - m - 1 : 0;
   }
 
@@ -562,7 +562,7 @@ class PDF417 {
     bool last = (pattern & map) != 0; //Initialize to inverse of first bit
     int width = 0;
     for (int i = 0; i < len; i++) {
-      bool black = (pattern & map) != 0;
+      final black = (pattern & map) != 0;
       if (last == black) {
         width++;
       } else {
@@ -580,7 +580,7 @@ class PDF417 {
       int errorCorrectionLevel, BarcodeMatrix logic) {
     int idx = 0;
     for (int y = 0; y < r; y++) {
-      int cluster = y % 3;
+      final cluster = y % 3;
       logic.startRow();
       _encodeChar(_START_PATTERN, 17, logic.getCurrentRow());
 
@@ -627,26 +627,26 @@ class PDF417 {
     bool autoECI = false,
   ]) {
     //1. step: High-level encoding
-    int errorCorrectionCodeWords =
+    final errorCorrectionCodeWords =
         PDF417ErrorCorrection.getErrorCorrectionCodewordCount(
             errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(
+    final highLevel = PDF417HighLevelEncoder.encodeHighLevel(
       msg,
       _compaction,
       _encoding,
       autoECI,
     );
-    int sourceCodeWords = highLevel.length;
+    final sourceCodeWords = highLevel.length;
 
-    List<int> dimension = _determineDimensions(
+    final dimension = _determineDimensions(
       sourceCodeWords,
       errorCorrectionCodeWords,
     );
 
-    int cols = dimension[0];
-    int rows = dimension[1];
+    final cols = dimension[0];
+    final rows = dimension[1];
 
-    int pad = _getNumberOfPadCodewords(
+    final pad = _getNumberOfPadCodewords(
         sourceCodeWords, errorCorrectionCodeWords, cols, rows);
 
     //2. step: construct data codewords
@@ -657,17 +657,17 @@ class PDF417 {
         'message too big (${msg.length} bytes)',
       );
     }
-    int n = sourceCodeWords + pad + 1;
-    StringBuffer sb = StringBuffer();
+    final n = sourceCodeWords + pad + 1;
+    final sb = StringBuffer();
     sb.writeCharCode(n);
     sb.write(highLevel);
     for (int i = 0; i < pad; i++) {
       sb.writeCharCode(900); //PAD characters
     }
-    String dataCodewords = sb.toString();
+    final dataCodewords = sb.toString();
 
     //3. step: Error correction
-    String ec = PDF417ErrorCorrection.generateErrorCorrection(
+    final ec = PDF417ErrorCorrection.generateErrorCorrection(
         dataCodewords, errorCorrectionLevel);
 
     //4. step: low-level encoding
@@ -688,7 +688,7 @@ class PDF417 {
     List<int>? dimension;
 
     for (int cols = _minCols; cols <= _maxCols; cols++) {
-      int rows = _calculateNumberOfRows(
+      final rows = _calculateNumberOfRows(
           sourceCodeWords, errorCorrectionCodeWords, cols);
 
       if (rows < _minRows) {
@@ -699,7 +699,7 @@ class PDF417 {
         continue;
       }
 
-      double newRatio =
+      final newRatio =
           ((17 * cols + 69) * _DEFAULT_MODULE_WIDTH) / (rows * _HEIGHT);
 
       // ignore if previous ratio is closer to preferred ratio
@@ -715,7 +715,7 @@ class PDF417 {
 
     // Handle case when min values were larger than necessary
     if (dimension == null) {
-      int rows = _calculateNumberOfRows(
+      final rows = _calculateNumberOfRows(
           sourceCodeWords, errorCorrectionCodeWords, _minCols);
       if (rows < _minRows) {
         dimension = [_minCols, _minRows];

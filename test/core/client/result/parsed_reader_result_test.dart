@@ -30,7 +30,7 @@ void main() {
   //}
 
   String formatDate(int year, int month, int day, [bool isLocal = false]) {
-    DateFormat format = DateFormat.yMMMEd();
+    final format = DateFormat.yMMMEd();
     late DateTime date;
     if (isLocal) {
       date = DateTime(year, month, day);
@@ -42,7 +42,7 @@ void main() {
 
   String formatTime(int year, int month, int day, int hour, int min, int sec,
       [bool isLocal = false]) {
-    DateFormat format = DateFormat.yMMMEd()..add_jms();
+    final format = DateFormat.yMMMEd()..add_jms();
     late DateTime date;
     if (isLocal) {
       date = DateTime(year, month, day, hour, min, sec);
@@ -55,12 +55,12 @@ void main() {
   // QR code is arbitrary
   void doTestResult(String contents, String goldenResult, ParsedResultType type,
       [BarcodeFormat format = BarcodeFormat.QR_CODE]) {
-    Result fakeResult = Result(contents, null, null, format);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, format);
+    final result = ResultParser.parseResult(fakeResult);
     //assertNotNull(result);
     expect(type, result.type);
 
-    String displayResult = result.displayResult;
+    final String displayResult = result.displayResult;
     expect(goldenResult, displayResult);
   }
 

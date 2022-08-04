@@ -23,10 +23,10 @@ import 'package:zxing_lib/zxing.dart';
 ///
 void main() {
   void doTest(String contents) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.EAN_13);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.EAN_13);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.ISBN, result.type);
-    ISBNParsedResult isbnResult = result as ISBNParsedResult;
+    final isbnResult = result as ISBNParsedResult;
     expect(contents, isbnResult.isbn);
   }
 

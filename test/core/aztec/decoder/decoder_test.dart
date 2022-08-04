@@ -36,8 +36,8 @@ void main() {
   }
 
   BitArray toBitArray(String bits) {
-    BitArray inBit = BitArray();
-    List<String> str = bits.replaceAll(dotX, '').split('');
+    final inBit = BitArray();
+    final str = bits.replaceAll(dotX, '').split('');
     for (String aStr in str) {
       inBit.appendBit(aStr == 'X');
     }
@@ -45,7 +45,7 @@ void main() {
   }
 
   List<bool> toBooleanArray(BitArray bitArray) {
-    List<bool> result = List.filled(bitArray.size, false);
+    final List<bool> result = List.filled(bitArray.size, false);
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray[i];
     }
@@ -53,7 +53,7 @@ void main() {
   }
 
   void testHighLevelDecodeString(String expectedString, String b) {
-    BitArray bits = toBitArray(stripSpace(b));
+    final BitArray bits = toBitArray(stripSpace(b));
     expect(expectedString, Decoder.highLevelDecode(toBooleanArray(bits)),
         reason: 'highLevelDecode() failed for input bits: $b');
   }
@@ -86,7 +86,7 @@ void main() {
   });
 
   test('testAztecResult', () {
-    BitMatrix matrix = BitMatrix.parse(
+    final BitMatrix matrix = BitMatrix.parse(
         'X X X X X     X X X       X X X     X X X     \n'
             'X X X     X X X     X X X X     X X X     X X \n'
             '  X   X X       X   X   X X X X     X     X X \n'
@@ -112,8 +112,9 @@ void main() {
             '    X X X     X X X       X X X     X X X X   \n',
         'X ',
         '  ');
-    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, false, 30, 2);
-    DecoderResult result = Decoder().decode(r);
+    final AztecDetectorResult r =
+        AztecDetectorResult(matrix, noPoints, false, 30, 2);
+    final DecoderResult result = Decoder().decode(r);
     expect(result.text, '88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
     assertArrayEquals(
         Uint8List.fromList([
@@ -126,7 +127,7 @@ void main() {
   });
 
   test('testAztecResultECI', () {
-    BitMatrix matrix = BitMatrix.parse(
+    final BitMatrix matrix = BitMatrix.parse(
         '      X     X X X   X           X     \n'
             '    X X   X X   X X X X X X X   X     \n'
             '    X X                         X   X \n'
@@ -148,14 +149,15 @@ void main() {
             'X     X       X X   X X X       X     \n',
         'X ',
         '  ');
-    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, false, 15, 1);
-    DecoderResult result = Decoder().decode(r);
+    final AztecDetectorResult r =
+        AztecDetectorResult(matrix, noPoints, false, 15, 1);
+    final DecoderResult result = Decoder().decode(r);
     expect(result.text, 'Français');
   });
 
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors', () {
-    BitMatrix matrix = BitMatrix.parse(
+    final BitMatrix matrix = BitMatrix.parse(
         ''
             'X X . X . . . X X . . . X . . X X X . X . X X X X X . \n'
             'X X . . X X . . . . . X X . . . X X . . . X . X . . X \n'
@@ -186,7 +188,8 @@ void main() {
             'X X . X . X . . . X . X . . . . X X . X . . X X . . . \n',
         'X ',
         '. ');
-    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, true, 16, 4);
+    final AztecDetectorResult r =
+        AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
       Decoder().decode(r);
       fail('here should be FormatException');
@@ -197,7 +200,7 @@ void main() {
 
   //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors2', () {
-    BitMatrix matrix = BitMatrix.parse(
+    final BitMatrix matrix = BitMatrix.parse(
         ''
             '. X X . . X . X X . . . X . . X X X . . . X X . X X . \n'
             'X X . X X . . X . . . X X . . . X X . X X X . X . X X \n'
@@ -228,7 +231,8 @@ void main() {
             'X X . . . X X . . X . X . . . . X X . X . . X . X . X \n',
         'X ',
         '. ');
-    AztecDetectorResult r = AztecDetectorResult(matrix, noPoints, true, 16, 4);
+    final AztecDetectorResult r =
+        AztecDetectorResult(matrix, noPoints, true, 16, 4);
     try {
       Decoder().decode(r);
       fail('here should be FormatException');
@@ -238,23 +242,32 @@ void main() {
   });
 
   test('testRawBytes', () {
-    List<bool> bool0 = [];
-    List<bool> bool1 = [true];
-    List<bool> bool7 = [true, false, true, false, true, false, true];
-    List<bool> bool8 = [true, false, true, false, true, false, true, false];
-    List<bool> bool9 = [
+    final List<bool> bool0 = [];
+    final List<bool> bool1 = [true];
+    final List<bool> bool7 = [true, false, true, false, true, false, true];
+    final List<bool> bool8 = [
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ];
+    final List<bool> bool9 = [
       true, false, true, false, true, false, true, false, true //
     ];
-    List<bool> bool16 = [
+    final List<bool> bool16 = [
       false, true, true, false, false, false, true, true, true, //
       true, false, false, false, false, false, true
     ];
-    Uint8List byte0 = Uint8List.fromList([]);
-    Uint8List byte1 = Uint8List.fromList([-128]);
-    Uint8List byte7 = Uint8List.fromList([-86]);
-    Uint8List byte8 = Uint8List.fromList([-86]);
-    Uint8List byte9 = Uint8List.fromList([-86, -128]);
-    Uint8List byte16 = Uint8List.fromList([99, -63]);
+    final Uint8List byte0 = Uint8List.fromList([]);
+    final Uint8List byte1 = Uint8List.fromList([-128]);
+    final Uint8List byte7 = Uint8List.fromList([-86]);
+    final Uint8List byte8 = Uint8List.fromList([-86]);
+    final Uint8List byte9 = Uint8List.fromList([-86, -128]);
+    final Uint8List byte16 = Uint8List.fromList([99, -63]);
 
     assertArrayEquals(byte0, Decoder.convertBoolArrayToByteArray(bool0));
     assertArrayEquals(byte1, Decoder.convertBoolArrayToByteArray(bool1));

@@ -38,18 +38,18 @@ import '../../../common/abstract_black_box.dart';
 
 void main() {
   void assertCorrectImage2string(String fileName, String expected) async {
-    String path =
+    final path =
         '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName';
 
-    Image image = decodeImage(File(path).readAsBytesSync())!;
-    BinaryBitmap binaryMap = BinaryBitmap(
+    final image = decodeImage(File(path).readAsBytesSync())!;
+    final binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
-    int rowNumber = binaryMap.height ~/ 2;
-    BitArray row = binaryMap.getBlackRow(rowNumber, null);
+    final rowNumber = binaryMap.height ~/ 2;
+    final row = binaryMap.getBlackRow(rowNumber, null);
 
     Result result;
     try {
-      RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+      final rssExpandedReader = RSSExpandedReader();
       result = rssExpandedReader.decodeRow(rowNumber, row, null);
     } catch (re) {
       // ReaderException
@@ -86,7 +86,7 @@ void main() {
   });
 
   test('testDecodeRow2string10', () {
-    String expected =
+    final expected =
         '(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456(423)012345678901';
     assertCorrectImage2string('10.png', expected);
   });

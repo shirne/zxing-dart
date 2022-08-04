@@ -44,9 +44,9 @@ class DecodedBitStreamParser {
 
   static DecoderResult decode(Uint8List bytes, Version version,
       ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
-    BitSource bits = BitSource(bytes);
-    StringBuilder result = StringBuilder();
-    List<Uint8List> byteSegments = []; //new ArrayList<>(1);
+    final bits = BitSource(bytes);
+    final result = StringBuilder();
+    final byteSegments = <Uint8List>[]; //new ArrayList<>(1);
     int symbolSequence = -1;
     int parityData = -1;
     int symbologyModifier;
@@ -89,7 +89,7 @@ class DecodedBitStreamParser {
             break;
           case Mode.ECI:
             // Count doesn't apply to ECI
-            int value = _parseECIValue(bits);
+            final value = _parseECIValue(bits);
             currentCharacterSetECI =
                 CharacterSetECI.getCharacterSetECIByValue(value);
             if (currentCharacterSetECI == null) {
@@ -99,8 +99,9 @@ class DecodedBitStreamParser {
           case Mode.HANZI:
             // First handle Hanzi mode which does not start with character count
             // Chinese mode contains a sub set indicator right after mode indicator
-            int subset = bits.readBits(4);
-            int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+            final subset = bits.readBits(4);
+            final countHanzi =
+                bits.readBits(mode.getCharacterCountBits(version));
             if (subset == _gbkSubset) {
               _decodeHanziSegment(bits, result, countHanzi);
             }
@@ -108,7 +109,7 @@ class DecodedBitStreamParser {
           default:
             // "Normal" QR code modes:
             // How many characters will follow, encoded in this mode?
-            int count = bits.readBits(mode.getCharacterCountBits(version));
+            final count = bits.readBits(mode.getCharacterCountBits(version));
             switch (mode) {
               case Mode.NUMERIC:
                 _decodeNumericSegment(bits, result, count);
@@ -174,11 +175,11 @@ class DecodedBitStreamParser {
 
     // Each character will require 2 bytes. Read the characters as 2-byte pairs
     // and decode as GB2312 afterwards
-    Uint8List buffer = Uint8List(2 * count);
+    final buffer = Uint8List(2 * count);
     int offset = 0;
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
-      int twoBytes = bits.readBits(13);
+      final twoBytes = bits.readBits(13);
       int assembledTwoBytes =
           (((twoBytes ~/ 0x060) << 8) & 0xFFFFFFFF) | (twoBytes % 0x060);
       if (assembledTwoBytes < 0x00A00) {
@@ -206,11 +207,11 @@ class DecodedBitStreamParser {
 
     // Each character will require 2 bytes. Read the characters as 2-byte pairs
     // and decode as Shift_JIS afterwards
-    Uint8List buffer = Uint8List(2 * count);
+    final buffer = Uint8List(2 * count);
     int offset = 0;
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
-      int twoBytes = bits.readBits(13);
+      final twoBytes = bits.readBits(13);
       int assembledTwoBytes =
           (((twoBytes ~/ 0x0C0) << 8) & 0xFFFFFFFF) | (twoBytes % 0x0C0);
       if (assembledTwoBytes < 0x01F00) {
@@ -236,7 +237,7 @@ class DecodedBitStreamParser {
       throw FormatsException.instance;
     }
 
-    Uint8List readBytes = Uint8List(count);
+    final readBytes = Uint8List(count);
     for (int i = 0; i < count; i++) {
       readBytes[i] = bits.readBits(8);
     }
@@ -266,12 +267,12 @@ class DecodedBitStreamParser {
   static void _decodeAlphanumericSegment(
       BitSource bits, StringBuilder result, int count, bool fc1InEffect) {
     // Read two characters at a time
-    int start = result.length;
+    final start = result.length;
     while (count > 1) {
       if (bits.available() < 11) {
         throw FormatsException.instance;
       }
-      int nextTwoCharsBits = bits.readBits(11);
+      final nextTwoCharsBits = bits.readBits(11);
       result.write(_toAlphaNumericChar(nextTwoCharsBits ~/ 45));
       result.write(_toAlphaNumericChar(nextTwoCharsBits % 45));
       count -= 2;
@@ -308,7 +309,7 @@ class DecodedBitStreamParser {
       if (bits.available() < 10) {
         throw FormatsException.instance;
       }
-      int threeDigitsBits = bits.readBits(10);
+      final threeDigitsBits = bits.readBits(10);
       if (threeDigitsBits >= 1000) {
         throw FormatsException.instance;
       }
@@ -322,7 +323,7 @@ class DecodedBitStreamParser {
       if (bits.available() < 7) {
         throw FormatsException.instance;
       }
-      int twoDigitsBits = bits.readBits(7);
+      final twoDigitsBits = bits.readBits(7);
       if (twoDigitsBits >= 100) {
         throw FormatsException.instance;
       }
@@ -333,7 +334,7 @@ class DecodedBitStreamParser {
       if (bits.available() < 4) {
         throw FormatsException.instance;
       }
-      int digitBits = bits.readBits(4);
+      final digitBits = bits.readBits(4);
       if (digitBits >= 10) {
         throw FormatsException.instance;
       }
@@ -342,19 +343,19 @@ class DecodedBitStreamParser {
   }
 
   static int _parseECIValue(BitSource bits) {
-    int firstByte = bits.readBits(8);
+    final firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {
       // just one byte
       return firstByte & 0x7F;
     }
     if ((firstByte & 0xC0) == 0x80) {
       // two bytes
-      int secondByte = bits.readBits(8);
+      final secondByte = bits.readBits(8);
       return (((firstByte & 0x3F) << 8) & 0xFFFFFFFF) | secondByte;
     }
     if ((firstByte & 0xE0) == 0xC0) {
       // three bytes
-      int secondThirdBytes = bits.readBits(16);
+      final secondThirdBytes = bits.readBits(16);
       return (((firstByte & 0x1F) << 16) & 0xFFFFFFFF) | secondThirdBytes;
     }
     throw FormatsException.instance;

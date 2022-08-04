@@ -28,7 +28,7 @@ void main() {
   }
 
   void doTest(String input, String expected) {
-    BitMatrix result = encode(input);
+    final result = encode(input);
     expect(expected, matrixToString(result));
   }
 

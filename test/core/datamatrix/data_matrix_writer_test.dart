@@ -16,14 +16,13 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/datamatrix.dart';
 import 'package:zxing_lib/zxing.dart';
 
 void main() {
   test('testSpecial', () {
-    DataMatrixWriter writer = DataMatrixWriter();
-    var encode = writer.encode(
+    final writer = DataMatrixWriter();
+    final encode = writer.encode(
         'FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7',
         BarcodeFormat.DATA_MATRIX,
         52,
@@ -37,12 +36,12 @@ void main() {
   });
 
   test('testDataMatrixImageWriter', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE;
 
-    int bigEnough = 64;
-    DataMatrixWriter writer = DataMatrixWriter();
-    BitMatrix matrix = writer.encode(
+    final bigEnough = 64;
+    final writer = DataMatrixWriter();
+    final matrix = writer.encode(
         'Hello Google', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
 
     //assert(matrix != null);
@@ -51,12 +50,12 @@ void main() {
   });
 
   test('testDataMatrixWriter', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE;
 
-    int bigEnough = 14;
-    DataMatrixWriter writer = DataMatrixWriter();
-    BitMatrix matrix = writer.encode(
+    const bigEnough = 14;
+    final writer = DataMatrixWriter();
+    final matrix = writer.encode(
         'Hello Me', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
     //assertNotNull(matrix);
     expect(bigEnough, matrix.width);
@@ -65,9 +64,9 @@ void main() {
 
   test('testDataMatrixTooSmall', () {
     // The DataMatrix will not fit in this size, so the matrix should come back bigger
-    int tooSmall = 8;
-    DataMatrixWriter writer = DataMatrixWriter();
-    BitMatrix matrix = writer.encode('http://www.google.com/',
+    const tooSmall = 8;
+    final writer = DataMatrixWriter();
+    final matrix = writer.encode('http://www.google.com/',
         BarcodeFormat.DATA_MATRIX, tooSmall, tooSmall, null);
     //assertNotNull(matrix);
     assert(tooSmall < matrix.width);

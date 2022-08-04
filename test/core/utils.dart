@@ -41,7 +41,7 @@ void assertEqualOrNaN(double expected, double actual, [int eps = 1000]) {
 
 String matrixToString(BitMatrix result) {
   expect(result.height, 1);
-  StringBuilder builder = StringBuilder();
+  final builder = StringBuilder();
   for (int i = 0; i < result.width; i++) {
     builder.write(result.get(i, 0) ? '1' : '0');
   }
@@ -59,7 +59,7 @@ String visualize(String codewords) {
 
 final Pattern _space = ' ';
 String unVisualize(String visualized) {
-  StringBuffer sb = StringBuffer();
+  final sb = StringBuffer();
   for (String token in visualized.split(_space)) {
     sb.writeCharCode(int.parse(token));
   }

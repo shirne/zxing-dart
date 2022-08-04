@@ -16,7 +16,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -24,17 +23,17 @@ import '../utils.dart';
 
 void main() {
   test('testEncode', () {
-    String testStr =
+    final testStr =
         '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
-    BitMatrix result =
+    final result =
         EAN8Writer().encode('96385074', BarcodeFormat.EAN_8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
   test('testAddChecksumAndEncode', () {
-    String testStr =
+    final testStr =
         '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
-    BitMatrix result =
+    final result =
         EAN8Writer().encode('9638507', BarcodeFormat.EAN_8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });

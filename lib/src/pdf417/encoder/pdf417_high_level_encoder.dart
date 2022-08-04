@@ -160,7 +160,7 @@ class PDF417HighLevelEncoder {
       }
     }
     //the codewords 0..928 are encoded as Unicode characters
-    StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     ECIInput input;
     if (autoECI) {
       input = MinimalECIInput(msg, encoding, -1);
@@ -169,14 +169,14 @@ class PDF417HighLevelEncoder {
       if (encoding == null) {
         encoding = _defaultEncoding;
       } else if (_defaultEncoding.name != encoding.name) {
-        CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(encoding);
+        final eci = CharacterSetECI.getCharacterSetECI(encoding);
         if (eci != null) {
           _encodingECI(eci.value, sb);
         }
       }
     }
 
-    int len = input.length;
+    final len = input.length;
     int p = 0;
     int textSubMode = _SUBMODE_ALPHA;
 
@@ -189,7 +189,7 @@ class PDF417HighLevelEncoder {
         if (autoECI) {
           _encodeMultiECIBinary(input, 0, input.length, _TEXT_COMPACTION, sb);
         } else {
-          Uint8List msgBytes =
+          final msgBytes =
               Uint8List.fromList(encoding!.encode(input.toString()));
           _encodeBinary(msgBytes, p, msgBytes.length, _BYTE_COMPACTION, sb);
         }
@@ -208,7 +208,7 @@ class PDF417HighLevelEncoder {
           if (p >= len) {
             break;
           }
-          int n = _determineConsecutiveDigitCount(input, p);
+          final n = _determineConsecutiveDigitCount(input, p);
           if (n >= 13) {
             sb.writeCharCode(_LATCH_TO_NUMERIC);
             encodingMode = _NUMERIC_COMPACTION;
@@ -216,7 +216,7 @@ class PDF417HighLevelEncoder {
             _encodeNumeric(input, p, n, sb);
             p += n;
           } else {
-            int t = _determineConsecutiveTextCount(input, p);
+            final t = _determineConsecutiveTextCount(input, p);
             if (t >= 5 || n == len) {
               if (encodingMode != _TEXT_COMPACTION) {
                 sb.writeCharCode(_LATCH_TO_TEXT);
@@ -232,7 +232,7 @@ class PDF417HighLevelEncoder {
               if (b == 0) {
                 b = 1;
               }
-              Uint8List? bytes = autoECI
+              final bytes = autoECI
                   ? null
                   : Uint8List.fromList(
                       encoding!.encode(input.toString().substring(p, p + b)));
@@ -276,7 +276,7 @@ class PDF417HighLevelEncoder {
   /// @return the text submode in which this method ends
   static int _encodeText(ECIInput input, int startpos, int count,
       StringBuffer sb, int initialSubmode) {
-    StringBuilder tmp = StringBuilder();
+    final tmp = StringBuilder();
     int submode = initialSubmode;
     int idx = 0;
     while (true) {
@@ -284,7 +284,7 @@ class PDF417HighLevelEncoder {
         _encodingECI(input.getECIValue(startpos + idx), sb);
         idx++;
       } else {
-        int ch = input.charAt(startpos + idx);
+        final ch = input.charAt(startpos + idx);
         switch (submode) {
           case _SUBMODE_ALPHA:
             if (_isAlphaUpper(ch)) {
@@ -375,9 +375,9 @@ class PDF417HighLevelEncoder {
       }
     }
     int h = 0;
-    int len = tmp.length;
+    final len = tmp.length;
     for (int i = 0; i < len; i++) {
-      bool odd = (i % 2) != 0;
+      final odd = (i % 2) != 0;
       if (odd) {
         h = (h * 30) + tmp.codePointAt(i);
         sb.writeCharCode(h);
@@ -422,7 +422,7 @@ class PDF417HighLevelEncoder {
 
   static List<int> subBytes(ECIInput input, int start, int end) {
     final int count = end - start;
-    List<int> result = List.filled(count, 0);
+    final result = List.filled(count, 0);
     for (int i = start; i < end; i++) {
       result[i - start] = (input.charAt(i) & 0xff);
     }
@@ -453,7 +453,7 @@ class PDF417HighLevelEncoder {
     int idx = startpos;
     // Encode sixpacks
     if (count >= 6) {
-      List<int> chars = [0, 0, 0, 0, 0];
+      final chars = [0, 0, 0, 0, 0];
       while ((startpos + count - idx) >= 6) {
         int t = 0;
         for (int i = 0; i < 6; i++) {
@@ -472,7 +472,7 @@ class PDF417HighLevelEncoder {
     }
     //Encode rest (remaining n<5 bytes if any)
     for (int i = idx; i < startpos + count; i++) {
-      int ch = bytes[i] & 0xff;
+      final ch = bytes[i] & 0xff;
       sb.writeCharCode(ch);
     }
   }
@@ -480,13 +480,13 @@ class PDF417HighLevelEncoder {
   static void _encodeNumeric(
       ECIInput input, int startpos, int count, StringBuffer sb) {
     int idx = 0;
-    StringBuilder tmp = StringBuilder();
-    BigInt num900 = BigInt.from(900);
-    BigInt num0 = BigInt.from(0);
+    final tmp = StringBuilder();
+    final num900 = BigInt.from(900);
+    final num0 = BigInt.from(0);
     while (idx < count) {
       tmp.clear();
-      int len = math.min(44, count - idx);
-      String part =
+      final len = math.min(44, count - idx);
+      final part =
           '1${input.toString().substring(startpos + idx, startpos + idx + len)}';
       BigInt bigint = BigInt.parse(part);
       do {
@@ -502,32 +502,23 @@ class PDF417HighLevelEncoder {
     }
   }
 
-  static bool _isDigit(int ch) {
-    return ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
-  }
+  static bool _isDigit(int ch) => ch >= 48 /* 0 */ && ch <= 57 /* 9 */;
 
-  static bool _isAlphaUpper(int ch) {
-    return ch == _blankCode || (ch >= 65 /* A */ && ch <= 90 /* Z */);
-  }
+  static bool _isAlphaUpper(int ch) =>
+      ch == _blankCode || (ch >= 65 /* A */ && ch <= 90 /* Z */);
 
-  static bool _isAlphaLower(int ch) {
-    return ch == _blankCode || (ch >= 97 /* a */ && ch <= 122 /* z */);
-  }
+  static bool _isAlphaLower(int ch) =>
+      ch == _blankCode || (ch >= 97 /* a */ && ch <= 122 /* z */);
 
-  static bool _isMixed(int ch) {
-    return _mixed[ch] != 255;
-  }
+  static bool _isMixed(int ch) => _mixed[ch] != 255;
 
-  static bool _isPunctuation(int ch) {
-    return _punctuatuin[ch] != 255;
-  }
+  static bool _isPunctuation(int ch) => _punctuatuin[ch] != 255;
 
-  static bool _isText(int chr) {
-    return chr == 9 /*'\t'*/ ||
-        chr == 10 /*'\n'*/ ||
-        chr == 13 /*'\r'*/ ||
-        (chr >= 32 && chr <= 126);
-  }
+  static bool _isText(int chr) =>
+      chr == 9 /*'\t'*/ ||
+      chr == 10 /*'\n'*/ ||
+      chr == 13 /*'\r'*/ ||
+      (chr >= 32 && chr <= 126);
 
   /// Determines the number of consecutive characters that are encodable using numeric compaction.
   ///
@@ -536,7 +527,7 @@ class PDF417HighLevelEncoder {
   /// @return the requested character count
   static int _determineConsecutiveDigitCount(ECIInput input, int startpos) {
     int count = 0;
-    int len = input.length;
+    final len = input.length;
     int idx = startpos;
     if (idx < len) {
       while (idx < len && !input.isECI(idx) && _isDigit(input.charAt(idx))) {
@@ -553,7 +544,7 @@ class PDF417HighLevelEncoder {
   /// @param startpos the start position within the message
   /// @return the requested character count
   static int _determineConsecutiveTextCount(ECIInput input, int startpos) {
-    int len = input.length;
+    final len = input.length;
     int idx = startpos;
     while (idx < len) {
       int numericCount = 0;
@@ -589,7 +580,7 @@ class PDF417HighLevelEncoder {
   /// @return the requested character count
   static int _determineConsecutiveBinaryCount(
       ECIInput input, int startpos, Encoding? encoding) {
-    int len = input.length;
+    final len = input.length;
     int idx = startpos;
     while (idx < len) {
       int numericCount = 0;
@@ -612,7 +603,7 @@ class PDF417HighLevelEncoder {
       if (encoding != null &&
           !Charset.canEncode(
               encoding, String.fromCharCode(input.charAt(idx)))) {
-        int ch = input.charAt(idx);
+        final ch = input.charAt(idx);
         throw WriterException(
             'Non-encodable character detected: $ch (Unicode: $ch)');
       }

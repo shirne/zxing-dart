@@ -33,22 +33,20 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('testMulti', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+    final testBase = AbstractBlackBoxTestCase.buildTestBase(
         'test/resources/blackbox/multi-2');
 
-    File testImage = File('${testBase.path}/multi.jpg');
-    Image image = decodeImage(testImage.readAsBytesSync())!;
-    var scaleImage = copyResize(image,
+    final testImage = File('${testBase.path}/multi.jpg');
+    final image = decodeImage(testImage.readAsBytesSync())!;
+    final scaleImage = copyResize(image,
         width: image.width ~/ 2,
         height: image.height ~/ 2,
         interpolation: Interpolation.average);
-    BufferedImageLuminanceSource source =
-        BufferedImageLuminanceSource(scaleImage);
-    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+    final source = BufferedImageLuminanceSource(scaleImage);
+    final bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader =
-        GenericMultipleBarcodeReader(MultiFormatReader());
-    List<Result> results = reader.decodeMultiple(bitmap);
+    final reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    final results = reader.decodeMultiple(bitmap);
     //assertNotNull(results);
     expect(results.length, 2);
 
@@ -60,11 +58,11 @@ void main() {
   });
 
   testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}) {
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+    final testBase = AbstractBlackBoxTestCase.buildTestBase(
         'test/resources/blackbox/multi-2');
-    int startTimer = DateTime.now().millisecondsSinceEpoch;
+    final startTimer = DateTime.now().millisecondsSinceEpoch;
 
-    File testImage = File('${testBase.path}/$name');
+    final testImage = File('${testBase.path}/$name');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     if (down > 0) {
       //image.scaleDown(down.toDouble());
@@ -73,22 +71,21 @@ void main() {
           height: (image.height / down).ceil(),
           interpolation: Interpolation.average);
     }
-    List<int> pixels = [];
+    final pixels = <int>[];
     for (int y = 0; y < image.height; y++) {
       for (int x = 0; x < image.width; x++) {
-        int color = image.getPixel(x, y);
+        final color = image.getPixel(x, y);
         pixels.add(((color & 0xff) << 16) +
             ((color >> 8) & 0xff) +
             ((color >> 16) & 0xff));
       }
     }
 
-    LuminanceSource source =
-        RGBLuminanceSource(image.width, image.height, pixels);
+    final source = RGBLuminanceSource(image.width, image.height, pixels);
 
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
-    var reader = MultiFormatReader();
-    var hints = <DecodeHintType, Object>{
+    final reader = MultiFormatReader();
+    final hints = <DecodeHintType, Object>{
       DecodeHintType.TRY_HARDER: true,
       DecodeHintType.ALSO_INVERTED: true
     };

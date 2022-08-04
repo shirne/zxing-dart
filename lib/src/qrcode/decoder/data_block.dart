@@ -49,32 +49,33 @@ class DataBlock {
 
     // Figure out the number and size of data blocks used by this version and
     // error correction level
-    ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
+    final ecBlocks = version.getECBlocksForLevel(ecLevel);
 
     // First count the total number of data blocks
     //int totalBlocks = 0;
-    List<ECB> ecBlockArray = ecBlocks.ecBlocks;
+    final ecBlockArray = ecBlocks.ecBlocks;
     //for (ECB ecBlock in ecBlockArray) {
     //  totalBlocks += ecBlock.getCount();
     //}
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
-    List<DataBlock> result = [];
+    final result = <DataBlock>[];
     for (ECB ecBlock in ecBlockArray) {
       for (int i = 0; i < ecBlock.count; i++) {
-        int numDataCodewords = ecBlock.dataCodewords;
-        int numBlockCodewords = ecBlocks.ecCodewordsPerBlock + numDataCodewords;
+        final numDataCodewords = ecBlock.dataCodewords;
+        final numBlockCodewords =
+            ecBlocks.ecCodewordsPerBlock + numDataCodewords;
         result.add(DataBlock._(numDataCodewords, Uint8List(numBlockCodewords)));
       }
     }
-    int numResultBlocks = result.length;
+    final numResultBlocks = result.length;
 
     // All blocks have the same amount of data, except that the last n
     // (where n may be 0) have 1 more byte. Figure out where these start.
-    int shorterBlocksTotalCodewords = result[0]._codewords.length;
+    final shorterBlocksTotalCodewords = result[0]._codewords.length;
     int longerBlocksStartAt = result.length - 1;
     while (longerBlocksStartAt >= 0) {
-      int numCodewords = result[longerBlocksStartAt]._codewords.length;
+      final numCodewords = result[longerBlocksStartAt]._codewords.length;
       if (numCodewords == shorterBlocksTotalCodewords) {
         break;
       }
@@ -82,7 +83,7 @@ class DataBlock {
     }
     longerBlocksStartAt++;
 
-    int shorterBlocksNumDataCodewords =
+    final shorterBlocksNumDataCodewords =
         shorterBlocksTotalCodewords - ecBlocks.ecCodewordsPerBlock;
     // The last elements of result may be 1 element longer;
     // first fill out as many elements as all of them have
@@ -98,10 +99,10 @@ class DataBlock {
           rawCodewords[rawCodewordsOffset++];
     }
     // Now add in error correction blocks
-    int max = result[0]._codewords.length;
+    final max = result[0]._codewords.length;
     for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
-        int iOffset = j < longerBlocksStartAt ? i : i + 1;
+        final iOffset = j < longerBlocksStartAt ? i : i + 1;
         result[j]._codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
       }
     }

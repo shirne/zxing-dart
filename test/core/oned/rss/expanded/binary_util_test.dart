@@ -26,7 +26,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 
 import 'binary_util.dart';
 
@@ -34,13 +33,13 @@ void main() {
   const Pattern SPACE = ' ';
 
   void check(String data) {
-    BitArray binary = BinaryUtil.buildBitArrayFromString(data);
+    final binary = BinaryUtil.buildBitArrayFromString(data);
     expect(data, binary.toString());
   }
 
   void checkWithoutSpaces(String data) {
-    String dataWithoutSpaces = data.replaceAll(SPACE, '');
-    BitArray binary =
+    final dataWithoutSpaces = data.replaceAll(SPACE, '');
+    final binary =
         BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     expect(data, binary.toString());
   }

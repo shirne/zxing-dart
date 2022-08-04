@@ -87,8 +87,8 @@ class Version {
   Version._(
       this._versionNumber, this._alignmentPatternCenters, this._ecBlocks) {
     int total = 0;
-    int ecCodewords = _ecBlocks[0].ecCodewordsPerBlock;
-    List<ECB> ecbArray = _ecBlocks[0].ecBlocks;
+    final ecCodewords = _ecBlocks[0].ecCodewordsPerBlock;
+    final ecbArray = _ecBlocks[0].ecBlocks;
     for (ECB ecBlock in ecbArray) {
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }
@@ -135,14 +135,14 @@ class Version {
     int bestDifference = MathUtils.MAX_VALUE; // int.max
     int bestVersion = 0;
     for (int i = 0; i < _VERSION_DECODE_INFO.length; i++) {
-      int targetVersion = _VERSION_DECODE_INFO[i];
+      final targetVersion = _VERSION_DECODE_INFO[i];
       // Do the version info bits match exactly? done.
       if (targetVersion == versionBits) {
         return getVersionForNumber(i + 7);
       }
       // Otherwise see if this is the closest to a real version info bit string
       // we have seen so far
-      int bitsDifference =
+      final bitsDifference =
           FormatInformation.numBitsDiffering(versionBits, targetVersion);
       if (bitsDifference < bestDifference) {
         bestVersion = i + 7;
@@ -160,8 +160,8 @@ class Version {
 
   /// See ISO 18004:2006 Annex E
   BitMatrix buildFunctionPattern() {
-    int dimension = dimensionForVersion;
-    BitMatrix bitMatrix = BitMatrix(dimension);
+    final dimension = dimensionForVersion;
+    final bitMatrix = BitMatrix(dimension);
 
     // Top left finder pattern + separator + format
     bitMatrix.setRegion(0, 0, 9, 9);
@@ -171,9 +171,9 @@ class Version {
     bitMatrix.setRegion(0, dimension - 8, 9, 8);
 
     // Alignment patterns
-    int max = _alignmentPatternCenters.length;
+    final max = _alignmentPatternCenters.length;
     for (int x = 0; x < max; x++) {
-      int i = _alignmentPatternCenters[x] - 2;
+      final i = _alignmentPatternCenters[x] - 2;
       for (int y = 0; y < max; y++) {
         if ((x != 0 || (y != 0 && y != max - 1)) && (x != max - 1 || y != 0)) {
           bitMatrix.setRegion(_alignmentPatternCenters[y] - 2, i, 5, 5);

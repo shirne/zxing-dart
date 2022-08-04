@@ -39,91 +39,91 @@ void main() {
   final String header320x17 = '..XXXXXX';
 
   test('test01310X1XendDate', () {
-    String data = header310x11 +
+    final data = header310x11 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateEnd;
-    String expected = '(01)90012345678908(3100)001750';
+    final expected = '(01)90012345678908(3100)001750';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01310X111', () {
-    String data = header310x11 +
+    final data = header310x11 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3100)001750(11)100312';
+    final expected = '(01)90012345678908(3100)001750(11)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01320X111', () {
-    String data = header320x11 +
+    final data = header320x11 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3200)001750(11)100312';
+    final expected = '(01)90012345678908(3200)001750(11)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01310X131', () {
-    String data = header310x13 +
+    final data = header310x13 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3100)001750(13)100312';
+    final expected = '(01)90012345678908(3100)001750(13)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01320X131', () {
-    String data = header320x13 +
+    final data = header320x13 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3200)001750(13)100312';
+    final expected = '(01)90012345678908(3200)001750(13)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01310X151', () {
-    String data = header310x15 +
+    final data = header310x15 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3100)001750(15)100312';
+    final expected = '(01)90012345678908(3100)001750(15)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01320X151', () {
-    String data = header320x15 +
+    final data = header320x15 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3200)001750(15)100312';
+    final expected = '(01)90012345678908(3200)001750(15)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01310X171', () {
-    String data = header310x17 +
+    final data = header310x17 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3100)001750(17)100312';
+    final expected = '(01)90012345678908(3100)001750(17)100312';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('test01320X171', () {
-    String data = header320x17 +
+    final data = header320x17 +
         AbstractDecoderTest.compressedGtin900123456798908 +
         AbstractDecoderTest.compressed20bitWeight1750 +
         AbstractDecoderTest.compressedDateMarch12th2010;
-    String expected = '(01)90012345678908(3200)001750(17)100312';
+    final expected = '(01)90012345678908(3200)001750(17)100312';
 
     assertCorrectBinaryString(data, expected);
   });

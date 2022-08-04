@@ -55,15 +55,15 @@ void main() {
 
 void testMaskAcrossDimensions(
     int reference, bool Function(int, int) condition) {
-  DataMask mask = DataMask.values[reference];
+  final mask = DataMask.values[reference];
   for (int version = 1; version <= 40; version++) {
-    int dimension = 17 + 4 * version;
+    final dimension = 17 + 4 * version;
     testMask(mask, dimension, condition);
   }
 }
 
 void testMask(DataMask mask, int dimension, bool Function(int, int) condition) {
-  BitMatrix bits = BitMatrix(dimension);
+  final bits = BitMatrix(dimension);
   mask.unmaskBitMatrix(bits, dimension);
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {

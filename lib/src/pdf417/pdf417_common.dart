@@ -47,7 +47,7 @@ class PDF417Common {
     if (list == null || list.isEmpty) {
       return _EMPTY_INT_ARRAY;
     }
-    List<int> result = List.generate(list.length, (index) => list[index]);
+    final result = List.generate(list.length, (index) => list[index]);
 
     return result;
   }
@@ -56,7 +56,7 @@ class PDF417Common {
   /// @return the codeword corresponding to the symbol.
   static int getCodeword(int symbol) {
     //int i = SYMBOL_TABLE.indexOf(symbol);
-    int i = MathUtils.binarySearch(SYMBOL_TABLE, symbol & 0x3FFFF);
+    final i = MathUtils.binarySearch(SYMBOL_TABLE, symbol & 0x3FFFF);
     if (i < 0) {
       return -1;
     }

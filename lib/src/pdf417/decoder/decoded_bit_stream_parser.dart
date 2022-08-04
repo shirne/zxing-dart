@@ -71,12 +71,12 @@ class DecodedBitStreamParser {
   DecodedBitStreamParser._();
 
   static DecoderResult decode(List<int> codewords, String ecLevel) {
-    ECIStringBuilder result = ECIStringBuilder();
+    final result = ECIStringBuilder();
     // Get compaction mode
     int codeIndex = _textCompaction(codewords, 1, result);
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final resultMetadata = PDF417ResultMetadata();
     while (codeIndex < codewords[0]) {
-      int code = codewords[codeIndex++];
+      final code = codewords[codeIndex++];
       switch (code) {
         case _TEXT_COMPACTION_MODE_LATCH:
           codeIndex = _textCompaction(codewords, codeIndex, result);
@@ -121,8 +121,7 @@ class DecodedBitStreamParser {
     if (result.isEmpty && resultMetadata.fileId == null) {
       throw FormatsException.instance;
     }
-    DecoderResult decoderResult =
-        DecoderResult(null, result.toString(), null, ecLevel);
+    final decoderResult = DecoderResult(null, result.toString(), null, ecLevel);
     decoderResult.other = resultMetadata;
     return decoderResult;
   }
@@ -134,14 +133,14 @@ class DecodedBitStreamParser {
       // we must have at least two bytes left for the segment index
       throw FormatsException.instance;
     }
-    List<int> segmentIndexArray = List.generate(
+    final segmentIndexArray = List.generate(
         _NUMBER_OF_SEQUENCE_CODEWORDS, (_) => codewords[codeIndex++]);
     //List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
     //for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
     //  segmentIndexArray[i] = codewords[codeIndex];
     //}
 
-    String segmentIndexString = _decodeBase900toBase10(
+    final segmentIndexString = _decodeBase900toBase10(
         segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS);
     if (segmentIndexString.isEmpty) {
       resultMetadata.segmentIndex = 0;
@@ -156,7 +155,7 @@ class DecodedBitStreamParser {
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
-    StringBuffer fileId = StringBuffer();
+    final fileId = StringBuffer();
     while (codeIndex < codewords[0] &&
         codeIndex < codewords.length &&
         codewords[codeIndex] != _MACRO_PDF417_TERMINATOR &&
@@ -181,40 +180,40 @@ class DecodedBitStreamParser {
           codeIndex++;
           switch (codewords[codeIndex]) {
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-              ECIStringBuilder fileName = ECIStringBuilder();
+              final fileName = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, fileName);
               resultMetadata.fileName = fileName.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-              ECIStringBuilder sender = ECIStringBuilder();
+              final sender = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, sender);
               resultMetadata.sender = sender.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-              ECIStringBuilder addressee = ECIStringBuilder();
+              final addressee = ECIStringBuilder();
               codeIndex = _textCompaction(codewords, codeIndex + 1, addressee);
               resultMetadata.addressee = addressee.toString();
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
-              ECIStringBuilder segmentCount = ECIStringBuilder();
+              final segmentCount = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, segmentCount);
               resultMetadata.segmentCount = int.parse(segmentCount.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
-              ECIStringBuilder timestamp = ECIStringBuilder();
+              final timestamp = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, timestamp);
               resultMetadata.timestamp = int.parse(timestamp.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
-              ECIStringBuilder checksum = ECIStringBuilder();
+              final checksum = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.checksum = int.parse(checksum.toString());
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
-              ECIStringBuilder fileSize = ECIStringBuilder();
+              final fileSize = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.fileSize = int.parse(fileSize.toString());
@@ -351,7 +350,7 @@ class DecodedBitStreamParser {
     _Mode latchedMode = startMode;
     int i = 0;
     while (i < length) {
-      int subModeCh = textCompactionData[i];
+      final subModeCh = textCompactionData[i];
       int ch = 0;
       switch (subMode) {
         case _Mode.ALPHA:
@@ -563,7 +562,7 @@ class DecodedBitStreamParser {
         } else {
           codeIndex -= count;
           while ((codeIndex < codewords[0]) && !end) {
-            int code = codewords[codeIndex++];
+            final code = codewords[codeIndex++];
             if (code < _TEXT_COMPACTION_MODE_LATCH) {
               result.writeCharCode(code);
             } else if (code == _ECI_CHARSET) {
@@ -590,10 +589,10 @@ class DecodedBitStreamParser {
     int count = 0;
     bool end = false;
 
-    List<int> numericCodewords = List.filled(_MAX_NUMERIC_CODEWORDS, 0);
+    final numericCodewords = List.filled(_MAX_NUMERIC_CODEWORDS, 0);
 
     while (codeIndex < codewords[0] && !end) {
-      int code = codewords[codeIndex++];
+      final code = codewords[codeIndex++];
       if (codeIndex == codewords[0]) {
         end = true;
       }
@@ -675,7 +674,7 @@ class DecodedBitStreamParser {
     for (int i = 0; i < count; i++) {
       result = result + (exp900[count - i - 1] * (BigInt.from(codewords[i])));
     }
-    String resultString = result.toString();
+    final resultString = result.toString();
     if (resultString[0] != '1') {
       throw FormatsException.instance;
     }

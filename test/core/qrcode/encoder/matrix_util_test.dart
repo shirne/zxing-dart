@@ -21,7 +21,7 @@ import 'package:zxing_lib/qrcode.dart';
 
 void main() {
   test('testToString', () {
-    ByteMatrix array = ByteMatrix(3, 3);
+    final array = ByteMatrix(3, 3);
     array.set(0, 0, 0);
     array.set(1, 0, 1);
     array.set(2, 0, 0);
@@ -31,12 +31,12 @@ void main() {
     array.set(0, 2, -1);
     array.set(1, 2, -1);
     array.set(2, 2, -1);
-    String expected = ' 0 1 0\n' ' 1 0 1\n' '      \n';
+    final expected = ' 0 1 0\n' ' 1 0 1\n' '      \n';
     expect(expected, array.toString());
   });
 
   test('testClearMatrix', () {
-    ByteMatrix matrix = ByteMatrix(2, 2);
+    final matrix = ByteMatrix(2, 2);
     MatrixUtil.clearMatrix(matrix);
     expect(-1, matrix.get(0, 0));
     expect(-1, matrix.get(1, 0));
@@ -46,10 +46,10 @@ void main() {
 
   test('testEmbedBasicPatterns1', () {
     // Version 1.
-    ByteMatrix matrix = ByteMatrix(21, 21);
+    final matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
-    String expected = ' 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n'
+    final expected = ' 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n'
         ' 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n'
         ' 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n'
         ' 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n'
@@ -76,10 +76,10 @@ void main() {
   test('testEmbedBasicPatterns2', () {
     // Version 2.  Position adjustment pattern should apppear at right
     // bottom corner.
-    ByteMatrix matrix = ByteMatrix(25, 25);
+    final matrix = ByteMatrix(25, 25);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(2), matrix);
-    String expected = ' 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n'
+    final expected = ' 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n'
         ' 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n'
         ' 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n'
         ' 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n'
@@ -109,10 +109,10 @@ void main() {
 
   test('testEmbedTypeInfo', () {
     // Type info bits = 100000011001110.
-    ByteMatrix matrix = ByteMatrix(21, 21);
+    final matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedTypeInfo(ErrorCorrectionLevel.M, 5, matrix);
-    String expected = '                 0                        \n'
+    final expected = '                 0                        \n'
         '                 1                        \n'
         '                 1                        \n'
         '                 1                        \n'
@@ -140,10 +140,10 @@ void main() {
     // Version info bits = 000111 110010 010100
     // Actually, version 7 QR Code has 45x45 matrix but we use 21x21 here
     // since 45x45 matrix is too big to depict.
-    ByteMatrix matrix = ByteMatrix(21, 21);
+    final matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.maybeEmbedVersionInfo(Version.getVersionForNumber(7), matrix);
-    String expected = '                     0 0 1                \n'
+    final expected = '                     0 0 1                \n'
         '                     0 1 0                \n'
         '                     0 1 0                \n'
         '                     0 1 1                \n'
@@ -169,12 +169,12 @@ void main() {
 
   test('testEmbedDataBits', () {
     // Cells other than basic patterns should be filled with zero.
-    ByteMatrix matrix = ByteMatrix(21, 21);
+    final matrix = ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
-    BitArray bits = BitArray();
+    final bits = BitArray();
     MatrixUtil.embedDataBits(bits, -1, matrix);
-    String expected = ' 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n'
+    final expected = ' 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n'
         ' 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n'
         ' 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n'
         ' 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n'
@@ -200,23 +200,23 @@ void main() {
 
   test('testBuildMatrix', () {
     // From http://www.swetake.com/qr/qr7.html
-    List<int> bytes = [
+    final bytes = [
       32, 65, 205, 69, 41, 220, 46, 128, 236, //
       42, 159, 74, 221, 244, 169, 239, 150, 138,
       70, 237, 85, 224, 96, 74, 219, 61
     ];
-    BitArray bits = BitArray();
+    final bits = BitArray();
     for (int c in bytes) {
       bits.appendBits(c, 8);
     }
-    ByteMatrix matrix = ByteMatrix(21, 21);
+    final matrix = ByteMatrix(21, 21);
     MatrixUtil.buildMatrix(
         bits,
         ErrorCorrectionLevel.H,
         Version.getVersionForNumber(1), // Version 1
         3, // Mask pattern 3
         matrix);
-    String expected = ' 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n'
+    final expected = ' 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n'
         ' 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n'
         ' 1 0 1 1 1 0 1 0 0 0 0 1 0 0 1 0 1 1 1 0 1\n'
         ' 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n'
@@ -271,7 +271,7 @@ void main() {
   // tested them in TEST(calculateBCHCode).
   test('testMakeVersionInfoBits', () {
     // From Appendix D in JISX0510:2004 (p 68)
-    BitArray bits = BitArray();
+    final bits = BitArray();
     MatrixUtil.makeVersionInfoBits(Version.getVersionForNumber(7), bits);
     expect(' ...XXXXX ..X..X.X ..', bits.toString());
   });
@@ -280,7 +280,7 @@ void main() {
   // tested them in TEST(calculateBCHCode).
   test('testMakeTypeInfoInfoBits', () {
     // From Appendix C in JISX0510:2004 (p 65)
-    BitArray bits = BitArray();
+    final bits = BitArray();
     MatrixUtil.makeTypeInfoBits(ErrorCorrectionLevel.M, 5, bits);
     expect(' X......X X..XXX.', bits.toString());
   });

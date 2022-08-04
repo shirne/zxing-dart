@@ -1,11 +1,8 @@
-
-
-
 import 'package:test/scaffolding.dart';
 
 void main() {
   test('test zxing', () {
-    List<int> a = [];
+    final a = <int>[];
     a.addAll(List.generate(10, (index) => 0));
     a.fillRange(0, 10, 1);
     print(a);

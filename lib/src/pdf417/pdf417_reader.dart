@@ -19,7 +19,6 @@ import 'dart:math' as math;
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../checksum_exception.dart';
-import '../common/decoder_result.dart';
 import '../common/detector/math_utils.dart';
 import '../decode_hint_type.dart';
 import '../formats_exception.dart';
@@ -31,7 +30,6 @@ import '../result_metadata_type.dart';
 import '../result_point.dart';
 import 'decoder/pdf417_scanning_decoder.dart';
 import 'detector/detector.dart';
-import 'detector/pdf417_detector_result.dart';
 import 'pdf417_common.dart';
 import 'pdf417_result_metadata.dart';
 
@@ -48,7 +46,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   /// @throws FormatException if a PDF417 cannot be decoded
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
-    List<Result> result = _decodeStatic(image, hints, false);
+    final result = _decodeStatic(image, hints, false);
     if (result.isEmpty) {
       // || result[0] == null
       throw NotFoundException.instance;
@@ -70,11 +68,10 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   static List<Result> _decodeStatic(BinaryBitmap image,
       [Map<DecodeHintType, Object>? hints, bool multiple = true]) {
-    List<Result> results = [];
-    PDF417DetectorResult detectorResult =
-        Detector.detect(image, hints, multiple);
+    final results = <Result>[];
+    final detectorResult = Detector.detect(image, hints, multiple);
     for (List<ResultPoint?> points in detectorResult.points) {
-      DecoderResult decoderResult = PDF417ScanningDecoder.decode(
+      final decoderResult = PDF417ScanningDecoder.decode(
           detectorResult.bits,
           points[4],
           points[5],
@@ -82,12 +79,11 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
           points[7],
           _getMinCodewordWidth(points),
           _getMaxCodewordWidth(points));
-      Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+      final result = Result(decoderResult.text, decoderResult.rawBytes, points,
           BarcodeFormat.PDF_417);
       result.putMetadata(
           ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ecLevel!);
-      PDF417ResultMetadata? pdf417ResultMetadata =
-          decoderResult.other as PDF417ResultMetadata?;
+      final pdf417ResultMetadata = decoderResult.other as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {
         result.putMetadata(
             ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);

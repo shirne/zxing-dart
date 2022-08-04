@@ -61,16 +61,16 @@ class AlignmentPatternFinder {
   /// @return [AlignmentPattern] if found
   /// @throws NotFoundException if not found
   AlignmentPattern find() {
-    int startX = _startX;
-    int height = _height;
-    int maxJ = startX + _width;
-    int middleI = _startY + (height ~/ 2);
+    final startX = _startX;
+    final height = _height;
+    final maxJ = startX + _width;
+    final middleI = _startY + (height ~/ 2);
     // We are looking for black/white/black modules in 1:1:1 ratio;
     // this tracks the number of black/white/black modules seen so far
-    List<int> stateCount = [0, 0, 0];
+    final stateCount = [0, 0, 0];
     for (int iGen = 0; iGen < height; iGen++) {
       // Search from middle outwards
-      int i =
+      final i =
           middleI + ((iGen & 0x01) == 0 ? (iGen + 1) ~/ 2 : -((iGen + 1) ~/ 2));
       stateCount[0] = 0;
       stateCount[1] = 0;
@@ -95,8 +95,7 @@ class AlignmentPatternFinder {
               // A winner?
               if (_foundPatternCross(stateCount)) {
                 // Yes
-                AlignmentPattern? confirmed =
-                    _handlePossibleCenter(stateCount, i, j);
+                final confirmed = _handlePossibleCenter(stateCount, i, j);
                 if (confirmed != null) {
                   return confirmed;
                 }
@@ -120,8 +119,7 @@ class AlignmentPatternFinder {
         j++;
       }
       if (_foundPatternCross(stateCount)) {
-        AlignmentPattern? confirmed =
-            _handlePossibleCenter(stateCount, i, maxJ);
+        final confirmed = _handlePossibleCenter(stateCount, i, maxJ);
         if (confirmed != null) {
           return confirmed;
         }
@@ -147,8 +145,8 @@ class AlignmentPatternFinder {
   /// @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
   ///         used by alignment patterns to be considered a match
   bool _foundPatternCross(List<int> stateCount) {
-    double moduleSize = _moduleSize;
-    double maxVariance = moduleSize / 2.0;
+    final moduleSize = _moduleSize;
+    final maxVariance = moduleSize / 2.0;
     for (int i = 0; i < 3; i++) {
       if ((moduleSize - stateCount[i]).abs() >= maxVariance) {
         return false;
@@ -168,10 +166,10 @@ class AlignmentPatternFinder {
   /// @return vertical center of alignment pattern, or {@link double#NaN} if not found
   double _crossCheckVertical(
       int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    BitMatrix image = _image;
+    final image = _image;
 
-    int maxI = image.height;
-    List<int> stateCount = _crossCheckStateCount;
+    final maxI = image.height;
+    final stateCount = _crossCheckStateCount;
     stateCount[0] = 0;
     stateCount[1] = 0;
     stateCount[2] = 0;
@@ -211,7 +209,7 @@ class AlignmentPatternFinder {
       return double.nan;
     }
 
-    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
+    final stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     if (5 * (stateCountTotal - originalStateCountTotal).abs() >=
         2 * originalStateCountTotal) {
       return double.nan;
@@ -232,12 +230,12 @@ class AlignmentPatternFinder {
   /// @param j end of possible alignment pattern in row
   /// @return [AlignmentPattern] if we have found the same pattern twice, or null if not
   AlignmentPattern? _handlePossibleCenter(List<int> stateCount, int i, int j) {
-    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-    double centerJ = _centerFromEnd(stateCount, j);
-    double centerI = _crossCheckVertical(
+    final stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
+    final centerJ = _centerFromEnd(stateCount, j);
+    final centerI = _crossCheckVertical(
         i, centerJ.toInt(), 2 * stateCount[1], stateCountTotal);
     if (!(centerI).isNaN) {
-      double estimatedModuleSize =
+      final estimatedModuleSize =
           (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0;
       for (AlignmentPattern center in _possibleCenters) {
         // Look for about the same center and module size:
@@ -246,8 +244,7 @@ class AlignmentPatternFinder {
         }
       }
       // Hadn't found this before; save it
-      AlignmentPattern point =
-          AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+      final point = AlignmentPattern(centerJ, centerI, estimatedModuleSize);
       _possibleCenters.add(point);
       if (_resultPointCallback != null) {
         _resultPointCallback!.foundPossibleResultPoint(point);

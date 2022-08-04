@@ -30,7 +30,7 @@ class AlignmentPattern extends ResultPoint {
   /// position and size -- meaning, it is at nearly the same center with nearly the same size.
   bool aboutEquals(double moduleSize, double i, double j) {
     if ((i - y).abs() <= moduleSize && (j - x).abs() <= moduleSize) {
-      double moduleSizeDiff = (moduleSize - _estimatedModuleSize).abs();
+      final moduleSizeDiff = (moduleSize - _estimatedModuleSize).abs();
       return moduleSizeDiff <= 1.0 || moduleSizeDiff <= _estimatedModuleSize;
     }
     return false;
@@ -39,9 +39,9 @@ class AlignmentPattern extends ResultPoint {
   /// Combines this object's current estimate of a finder pattern position and module size
   /// with a new estimate. It returns a new [FinderPattern]` containing an average of the two.
   AlignmentPattern combineEstimate(double i, double j, double newModuleSize) {
-    double combinedX = (x + j) / 2.0;
-    double combinedY = (y + i) / 2.0;
-    double combinedModuleSize = (_estimatedModuleSize + newModuleSize) / 2.0;
+    final combinedX = (x + j) / 2.0;
+    final combinedY = (y + i) / 2.0;
+    final combinedModuleSize = (_estimatedModuleSize + newModuleSize) / 2.0;
     return AlignmentPattern(combinedX, combinedY, combinedModuleSize);
   }
 }

@@ -29,36 +29,36 @@ import 'package:test/scaffolding.dart';
 import 'abstract_decoder.dart';
 
 void main() {
-  final String header = '.....';
+  final header = '.....';
 
   test('testAnyAIDecoder1', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric12 +
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2numeric +
         AbstractDecoderTest.numeric12;
-    String expected = '(10)12A12';
+    final expected = '(10)12A12';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('testAnyAIDecoder2', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric12 +
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2isoiec646 +
         AbstractDecoderTest.i646B;
-    String expected = '(10)12AB';
+    final expected = '(10)12AB';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('testAnyAIDecoder3', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alpha2isoiec646 +
@@ -68,40 +68,40 @@ void main() {
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2numeric +
         AbstractDecoderTest.numeric10;
-    String expected = '(10)BCA10';
+    final expected = '(10)BCA10';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('testAnyAIDecodernumericFNC1secondDigit', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric1FNC1;
-    String expected = '(10)1';
+    final expected = '(10)1';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('testAnyAIDecoderalphaFNC1', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alphaFNC1;
-    String expected = '(10)A';
+    final expected = '(10)A';
 
     assertCorrectBinaryString(data, expected);
   });
 
   test('testAnyAIDecoder646FNC1', () {
-    String data = header +
+    final data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.isoiec6462alpha +
         AbstractDecoderTest.i646B +
         AbstractDecoderTest.i646FNC1;
-    String expected = '(10)AB';
+    final expected = '(10)AB';
 
     assertCorrectBinaryString(data, expected);
   });

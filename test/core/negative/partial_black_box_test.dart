@@ -39,7 +39,7 @@ void main() {
   // for UPCEANReader.decodeDigit bug (https://github.com/zxing/zxing/issues/1400)
   test('p11Test', () {
     Result? result;
-    var row = BitArray.test(
+    final row = BitArray.test(
         Uint32List.fromList([
           0,
           0,

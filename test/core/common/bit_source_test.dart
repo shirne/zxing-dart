@@ -22,8 +22,8 @@ import 'package:zxing_lib/common.dart';
 
 void main() {
   test('testSource', () {
-    Uint8List bytes = Uint8List.fromList([1, 2, 3, 4, 5]);
-    BitSource source = BitSource(bytes);
+    final bytes = Uint8List.fromList([1, 2, 3, 4, 5]);
+    final source = BitSource(bytes);
     expect(40, source.available());
     expect(0, source.readBits(1));
     expect(39, source.available());

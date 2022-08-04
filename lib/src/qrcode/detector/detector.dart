@@ -28,7 +28,6 @@ import '../../result_point.dart';
 import '../../result_point_callback.dart';
 import 'alignment_pattern.dart';
 import 'alignment_pattern_finder.dart';
-import 'finder_pattern.dart';
 import 'finder_pattern_finder.dart';
 import 'finder_pattern_info.dart';
 
@@ -56,42 +55,41 @@ class Detector {
     _resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
         as ResultPointCallback?;
 
-    FinderPatternFinder finder =
-        FinderPatternFinder(_image, _resultPointCallback);
-    FinderPatternInfo info = finder.find(hints);
+    final finder = FinderPatternFinder(_image, _resultPointCallback);
+    final info = finder.find(hints);
 
     return processFinderPatternInfo(info);
   }
 
   DetectorResult processFinderPatternInfo(FinderPatternInfo info) {
-    FinderPattern topLeft = info.topLeft;
-    FinderPattern topRight = info.topRight;
-    FinderPattern bottomLeft = info.bottomLeft;
+    final topLeft = info.topLeft;
+    final topRight = info.topRight;
+    final bottomLeft = info.bottomLeft;
 
-    double moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
+    final moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
     if (moduleSize < 1.0) {
       throw NotFoundException.instance;
     }
-    int dimension =
+    final dimension =
         _computeDimension(topLeft, topRight, bottomLeft, moduleSize);
-    Version provisionalVersion =
+    final provisionalVersion =
         Version.getProvisionalVersionForDimension(dimension);
-    int modulesBetweenFPCenters = provisionalVersion.dimensionForVersion - 7;
+    final modulesBetweenFPCenters = provisionalVersion.dimensionForVersion - 7;
 
     AlignmentPattern? alignmentPattern;
     // Anything above version 1 has an alignment pattern
     if (provisionalVersion.alignmentPatternCenters.isNotEmpty) {
       // Guess where a "bottom right" finder pattern would have been
-      double bottomRightX = topRight.x - topLeft.x + bottomLeft.x;
-      double bottomRightY = topRight.y - topLeft.y + bottomLeft.y;
+      final bottomRightX = topRight.x - topLeft.x + bottomLeft.x;
+      final bottomRightY = topRight.y - topLeft.y + bottomLeft.y;
 
       // Estimate that alignment pattern is closer by 3 modules
       // from "bottom right" to known top left location
-      double correctionToTopLeft = 1.0 - 3.0 / modulesBetweenFPCenters;
-      int estAlignmentX =
+      final correctionToTopLeft = 1.0 - 3.0 / modulesBetweenFPCenters;
+      final estAlignmentX =
           (topLeft.x + correctionToTopLeft * (bottomRightX - topLeft.x))
               .toInt();
-      int estAlignmentY =
+      final estAlignmentY =
           (topLeft.y + correctionToTopLeft * (bottomRightY - topLeft.y))
               .toInt();
 
@@ -108,10 +106,10 @@ class Detector {
       // If we didn't find alignment pattern... well try anyway without it
     }
 
-    PerspectiveTransform transform = _createTransform(
+    final transform = _createTransform(
         topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 
-    BitMatrix bits = _sampleGrid(_image, transform, dimension);
+    final bits = _sampleGrid(_image, transform, dimension);
 
     late List<ResultPoint> points;
     if (alignmentPattern == null) {
@@ -128,7 +126,7 @@ class Detector {
       ResultPoint bottomLeft,
       ResultPoint? alignmentPattern,
       int dimension) {
-    double dimMinusThree = dimension - 3.5;
+    final dimMinusThree = dimension - 3.5;
     double bottomRightX;
     double bottomRightY;
     double sourceBottomRightX;
@@ -167,7 +165,7 @@ class Detector {
 
   static BitMatrix _sampleGrid(
       BitMatrix image, PerspectiveTransform transform, int dimension) {
-    GridSampler sampler = GridSampler.getInstance();
+    final sampler = GridSampler.getInstance();
     return sampler.sampleGrid(image, dimension, dimension, transform);
   }
 
@@ -175,9 +173,9 @@ class Detector {
   /// of the finder patterns and estimated module size.</p>
   static int _computeDimension(ResultPoint topLeft, ResultPoint topRight,
       ResultPoint bottomLeft, double moduleSize) {
-    int tltrCentersDimension =
+    final tltrCentersDimension =
         MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
-    int tlblCentersDimension =
+    final tlblCentersDimension =
         MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) ~/ 2) + 7;
     switch (dimension & 0x03) {
@@ -216,13 +214,13 @@ class Detector {
   /// width of each, measuring along the axis between their centers.</p>
   double _calculateModuleSizeOneWay(
       ResultPoint pattern, ResultPoint otherPattern) {
-    double moduleSizeEst1 = _sizeOfBlackWhiteBlackRunBothWays(
+    final moduleSizeEst1 = _sizeOfBlackWhiteBlackRunBothWays(
       pattern.x.toInt(),
       pattern.y.toInt(),
       otherPattern.x.toInt(),
       otherPattern.y.toInt(),
     );
-    double moduleSizeEst2 = _sizeOfBlackWhiteBlackRunBothWays(
+    final moduleSizeEst2 = _sizeOfBlackWhiteBlackRunBothWays(
       otherPattern.x.toInt(),
       otherPattern.y.toInt(),
       pattern.x.toInt(),
@@ -283,7 +281,7 @@ class Detector {
   double _sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
     // Mild variant of Bresenham's algorithm;
     // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-    bool steep = (toY - fromY).abs() > (toX - fromX).abs();
+    final steep = (toY - fromY).abs() > (toX - fromX).abs();
     if (steep) {
       int temp = fromX;
       fromX = fromY;
@@ -293,19 +291,19 @@ class Detector {
       toY = temp;
     }
 
-    int dx = (toX - fromX).abs();
-    int dy = (toY - fromY).abs();
+    final dx = (toX - fromX).abs();
+    final dy = (toY - fromY).abs();
     int error = -dx ~/ 2;
-    int xstep = fromX < toX ? 1 : -1;
-    int ystep = fromY < toY ? 1 : -1;
+    final xstep = fromX < toX ? 1 : -1;
+    final ystep = fromY < toY ? 1 : -1;
 
     // In black pixels, looking for white, first or second time.
     int state = 0;
     // Loop up until x == toX, but not beyond
-    int xLimit = toX + xstep;
+    final xLimit = toX + xstep;
     for (int x = fromX, y = fromY; x != xLimit; x += xstep) {
-      int realX = steep ? y : x;
-      int realY = steep ? x : y;
+      final realX = steep ? y : x;
+      final realY = steep ? x : y;
 
       // Does current pixel mean we have moved white to black or vice versa?
       // Scanning black in state 0,2 and white in state 1, so if we find the wrong
@@ -352,22 +350,22 @@ class Detector {
       int estAlignmentX, int estAlignmentY, double allowanceFactor) {
     // Look for an alignment pattern (3 modules in size) around where it
     // should be
-    int allowance = (allowanceFactor * overallEstModuleSize).toInt();
-    int alignmentAreaLeftX = math.max(0, estAlignmentX - allowance);
-    int alignmentAreaRightX =
+    final allowance = (allowanceFactor * overallEstModuleSize).toInt();
+    final alignmentAreaLeftX = math.max(0, estAlignmentX - allowance);
+    final alignmentAreaRightX =
         math.min(_image.width - 1, estAlignmentX + allowance);
     if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
       throw NotFoundException.instance;
     }
 
-    int alignmentAreaTopY = math.max(0, estAlignmentY - allowance);
-    int alignmentAreaBottomY =
+    final alignmentAreaTopY = math.max(0, estAlignmentY - allowance);
+    final alignmentAreaBottomY =
         math.min(_image.height - 1, estAlignmentY + allowance);
     if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
       throw NotFoundException.instance;
     }
 
-    AlignmentPatternFinder alignmentFinder = AlignmentPatternFinder(
+    final alignmentFinder = AlignmentPatternFinder(
         _image,
         alignmentAreaLeftX,
         alignmentAreaTopY,

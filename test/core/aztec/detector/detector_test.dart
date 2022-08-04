@@ -26,8 +26,8 @@ import 'package:zxing_lib/common.dart';
 void main() {
   // Rotates a square BitMatrix to the right by 90 degrees
   BitMatrix rotateRight(BitMatrix input) {
-    int width = input.width;
-    BitMatrix result = BitMatrix(width);
+    final int width = input.width;
+    final result = BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
         if (input.get(x, y)) {
@@ -41,8 +41,8 @@ void main() {
   // Returns the transpose of a bit matrix, which is equivalent to rotating the
   // matrix to the right, and then flipping it left-to-right
   BitMatrix transpose(BitMatrix input) {
-    int width = input.width;
-    BitMatrix result = BitMatrix(width);
+    final int width = input.width;
+    final BitMatrix result = BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
         if (input.get(x, y)) {
@@ -54,8 +54,8 @@ void main() {
   }
 
   BitMatrix clone(BitMatrix input) {
-    int width = input.width;
-    BitMatrix result = BitMatrix(width);
+    final int width = input.width;
+    final BitMatrix result = BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
         if (input.get(x, y)) {
@@ -67,9 +67,9 @@ void main() {
   }
 
   List<Point> getOrientationPoints(AztecCode code) {
-    int center = code.matrix!.width ~/ 2;
-    int offset = code.isCompact ? 5 : 7;
-    List<Point> result = [];
+    final int center = code.matrix!.width ~/ 2;
+    final int offset = code.isCompact ? 5 : 7;
+    final List<Point> result = [];
     for (int xSign = -1; xSign <= 1; xSign += 2) {
       for (int ySign = -1; ySign <= 1; ySign += 2) {
         result.add(Point(center + xSign * offset, center + ySign * offset));
@@ -84,16 +84,16 @@ void main() {
 
   // Returns a list of the four rotations of the BitMatrix.
   Iterable<BitMatrix> getRotations(BitMatrix matrix0) {
-    BitMatrix matrix90 = rotateRight(matrix0);
-    BitMatrix matrix180 = rotateRight(matrix90);
-    BitMatrix matrix270 = rotateRight(matrix180);
+    final BitMatrix matrix90 = rotateRight(matrix0);
+    final BitMatrix matrix180 = rotateRight(matrix90);
+    final BitMatrix matrix270 = rotateRight(matrix180);
     return [matrix0, matrix90, matrix180, matrix270];
   }
 
   // Zooms a bit matrix so that each bit is factor x factor
   BitMatrix makeLarger(BitMatrix input, int factor) {
-    int width = input.width;
-    BitMatrix output = BitMatrix(width * factor);
+    final int width = input.width;
+    final BitMatrix output = BitMatrix(width * factor);
     for (int inputY = 0; inputY < width; inputY++) {
       for (int inputX = 0; inputX < width; inputX++) {
         if (input.get(inputX, inputY)) {
@@ -106,12 +106,13 @@ void main() {
 
   // Test that we can tolerate errors in the parameter locator bits
   void testErrorInParameterLocator(String data) {
-    AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
-    Random random =
+    final AztecCode aztec =
+        Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    final Random random =
         Random(aztec.matrix!.hashCode); // pseudo-random, but deterministic
-    int layers = aztec.layers;
-    bool compact = aztec.isCompact;
-    List<Point> orientationPoints = getOrientationPoints(aztec);
+    final int layers = aztec.layers;
+    final bool compact = aztec.isCompact;
+    final List<Point> orientationPoints = getOrientationPoints(aztec);
     for (bool isMirror in [false, true]) {
       for (BitMatrix matrix in getRotations(aztec.matrix!)) {
         // Systematically try every possible 1- and 2-bit error.
@@ -119,7 +120,7 @@ void main() {
           for (int error2 = error1;
               error2 < orientationPoints.length;
               error2++) {
-            BitMatrix copy = isMirror ? transpose(matrix) : clone(matrix);
+            final BitMatrix copy = isMirror ? transpose(matrix) : clone(matrix);
             copy.flip(orientationPoints[error1].x, orientationPoints[error1].y);
             if (error2 > error1) {
               // if error2 == error1, we only test a single error
@@ -127,19 +128,19 @@ void main() {
                   orientationPoints[error2].x, orientationPoints[error2].y);
             }
             // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
-            AztecDetectorResult r =
+            final AztecDetectorResult r =
                 Detector(makeLarger(copy, 3)).detect(isMirror);
             //assertNotNull(r);
             expect(r.nbLayers, layers);
             expect(r.isCompact, compact);
-            DecoderResult res = Decoder().decode(r);
+            final DecoderResult res = Decoder().decode(r);
             expect(res.text, data);
           }
         }
         // Try a few random three-bit errors;
         for (int i = 0; i < 5; i++) {
-          BitMatrix copy = clone(matrix);
-          List<int> errors = [];
+          final BitMatrix copy = clone(matrix);
+          final List<int> errors = [];
           while (errors.length < 3) {
             // Quick and dirty way of getting three distinct integers between 1 and n.
             errors.add(random.nextInt(orientationPoints.length));
@@ -171,7 +172,8 @@ void main() {
   });
 
   test('testErrorInParameterLocatorNotCompact', () {
-    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz';
+    final String alphabet =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz';
     testErrorInParameterLocator(alphabet + alphabet + alphabet);
   });
 }

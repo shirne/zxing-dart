@@ -30,26 +30,26 @@ import '../../common/abstract_black_box.dart';
 void main() {
   test('testMultiQRCodes', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
+    final testBase = AbstractBlackBoxTestCase.buildTestBase(
         'test/resources/blackbox/multi-qrcode-1');
 
-    File testImage = File('${testBase.path}/1.png');
-    Image image = decodeImage(testImage.readAsBytesSync())!;
-    LuminanceSource source = BufferedImageLuminanceSource(image);
-    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+    final testImage = File('${testBase.path}/1.png');
+    final image = decodeImage(testImage.readAsBytesSync())!;
+    final source = BufferedImageLuminanceSource(image);
+    final bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader = QRCodeMultiReader();
-    List<Result> results = reader.decodeMultiple(bitmap);
+    final reader = QRCodeMultiReader();
+    final results = reader.decodeMultiple(bitmap);
 
     expect(results.length, 4);
 
-    Set<String> barcodeContents = {};
+    final barcodeContents = <String>{};
     for (Result result in results) {
       barcodeContents.add(result.text);
       expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
       assert(result.resultMetadata != null);
     }
-    Set<String> expectedContents = {};
+    final expectedContents = <String>{};
     expectedContents.add(
         "You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
     expectedContents.add(
@@ -62,9 +62,9 @@ void main() {
   });
 
   test('testProcessStructuredAppend', () {
-    Result sa1 = Result('SA1', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa2 = Result('SA2', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    Result sa3 = Result('SA3', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    final sa1 = Result('SA1', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    final sa2 = Result('SA2', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    final sa3 = Result('SA3', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
     sa2.putMetadata(
@@ -74,20 +74,20 @@ void main() {
         ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
 
-    Result nsa = Result('NotSA', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
+    final nsa = Result('NotSA', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
     nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
 
-    List<Result> inputs = [sa3, sa1, nsa, sa2];
+    final inputs = [sa3, sa1, nsa, sa2];
 
-    List<Result> results = QRCodeMultiReader.processStructuredAppend(inputs);
+    final results = QRCodeMultiReader.processStructuredAppend(inputs);
     //assertNotNull(results);
     expect(2, results.length);
 
-    Set<String> barcodeContents = {};
+    final barcodeContents = <String>{};
     for (Result result in results) {
       barcodeContents.add(result.text);
     }
-    Set<String> expectedContents = {};
+    final expectedContents = <String>{};
     expectedContents.add('SA1SA2SA3');
     expectedContents.add('NotSA');
     expect(expectedContents, barcodeContents);

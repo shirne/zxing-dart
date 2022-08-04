@@ -24,11 +24,11 @@ abstract class AbstractErrorCorrectionTestCase {
   }
 
   static List<int> erase(List<int> received, int howMany, Random random) {
-    Set<int> erased = {};
-    List<int> erasures = List.filled(howMany, 0);
+    final erased = <int>{};
+    final erasures = List.filled(howMany, 0);
     int erasureOffset = 0;
     for (int j = 0; j < howMany; j++) {
-      int location = random.nextInt(received.length);
+      final location = random.nextInt(received.length);
       if (erased.contains(location)) {
         j--;
       } else {

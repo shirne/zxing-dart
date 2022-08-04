@@ -31,10 +31,10 @@ void main() {
       int year,
       int plant,
       String sequential) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.CODE_39);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.CODE_39);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.VIN, result.type);
-    VINParsedResult vinResult = result as VINParsedResult;
+    final vinResult = result as VINParsedResult;
     expect(wmi, vinResult.worldManufacturerID);
     expect(vds, vinResult.vehicleDescriptorSection);
     expect(vis, vinResult.vehicleIdentifierSection);

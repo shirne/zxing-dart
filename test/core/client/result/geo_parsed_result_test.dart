@@ -28,10 +28,10 @@ void main() {
 
   void doTest(String contents, double latitude, double longitude,
       double altitude, String? query, String? uri) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.GEO, result.type);
-    GeoParsedResult geoResult = result as GeoParsedResult;
+    final geoResult = result as GeoParsedResult;
     assertEqualOrNaN(latitude, geoResult.latitude, EPSILON);
     assertEqualOrNaN(longitude, geoResult.longitude, EPSILON);
     assertEqualOrNaN(altitude, geoResult.altitude, EPSILON);

@@ -28,7 +28,7 @@ class BarcodeValue {
   /// @return an array of int, containing the values with the highest occurrence, or null, if no value was set
   List<int> getValue() {
     int maxConfidence = -1;
-    List<int> result = [];
+    final result = <int>[];
     for (MapEntry<int, int> entry in _values.entries) {
       if (entry.value > maxConfidence) {
         maxConfidence = entry.value;

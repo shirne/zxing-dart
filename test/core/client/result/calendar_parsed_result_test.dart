@@ -26,7 +26,7 @@ import '../../utils.dart';
 void main() {
   dateEqual(String? date, int? timestamp) {
     if (date != null && timestamp != null) {
-      DateTime date1 = DateTime.parse(date).toLocal();
+      final date1 = DateTime.parse(date).toLocal();
       expect(date1.millisecondsSinceEpoch, timestamp, reason: '日期解析错误 $date');
     } else {
       assert(date == null && timestamp == null);
@@ -45,10 +45,11 @@ void main() {
       List<String>? attendees,
       double latitude = double.nan,
       double longitude = double.nan]) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final Result fakeResult =
+        Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.CALENDAR, result.type);
-    CalendarParsedResult calResult = result as CalendarParsedResult;
+    final CalendarParsedResult calResult = result as CalendarParsedResult;
     expect(calResult.description, description);
     expect(calResult.summary, summary);
     expect(calResult.location, location);
@@ -190,14 +191,14 @@ void main() {
 
   test('testBadGeo', () {
     // Not parsed as VEVENT
-    Result fakeResult = Result(
+    final Result fakeResult = Result(
         'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n'
         'GEO:-12.345\r\n'
         'END:VEVENT\r\nEND:VCALENDAR',
         null,
         null,
         BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(result.type, ParsedResultType.TEXT);
   });
 

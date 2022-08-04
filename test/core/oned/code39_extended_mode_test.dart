@@ -18,15 +18,14 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
-import 'package:zxing_lib/zxing.dart';
 
 void main() {
   void doTest(String expectedResult, String encodedResult) {
-    Code39Reader sut = Code39Reader(false, true);
-    BitMatrix matrix = BitMatrix.parse(encodedResult, '1', '0');
-    BitArray row = BitArray(matrix.width);
+    final sut = Code39Reader(false, true);
+    final matrix = BitMatrix.parse(encodedResult, '1', '0');
+    final row = BitArray(matrix.width);
     matrix.getRow(0, row);
-    Result result = sut.decodeRow(0, row, null);
+    final result = sut.decodeRow(0, row, null);
     expect(expectedResult, result.text);
   }
 

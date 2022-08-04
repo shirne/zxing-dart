@@ -182,7 +182,7 @@ void main() {
 
   // See mask patterns on the page 43 of JISX0510:2004.
   test('testGetDataMaskBit', () {
-    List<List<int>> mask0 = [
+    final mask0 = [
       [1, 0, 1, 0, 1, 0],
       [0, 1, 0, 1, 0, 1],
       [1, 0, 1, 0, 1, 0],
@@ -191,7 +191,7 @@ void main() {
       [0, 1, 0, 1, 0, 1],
     ];
     assert(testGetDataMaskBitInternal(0, mask0));
-    List<List<int>> mask1 = [
+    final mask1 = [
       [1, 1, 1, 1, 1, 1],
       [0, 0, 0, 0, 0, 0],
       [1, 1, 1, 1, 1, 1],
@@ -200,7 +200,7 @@ void main() {
       [0, 0, 0, 0, 0, 0],
     ];
     assert(testGetDataMaskBitInternal(1, mask1));
-    List<List<int>> mask2 = [
+    final mask2 = [
       [1, 0, 0, 1, 0, 0],
       [1, 0, 0, 1, 0, 0],
       [1, 0, 0, 1, 0, 0],
@@ -209,7 +209,7 @@ void main() {
       [1, 0, 0, 1, 0, 0],
     ];
     assert(testGetDataMaskBitInternal(2, mask2));
-    List<List<int>> mask3 = [
+    final mask3 = [
       [1, 0, 0, 1, 0, 0],
       [0, 0, 1, 0, 0, 1],
       [0, 1, 0, 0, 1, 0],
@@ -218,7 +218,7 @@ void main() {
       [0, 1, 0, 0, 1, 0],
     ];
     assert(testGetDataMaskBitInternal(3, mask3));
-    List<List<int>> mask4 = [
+    final mask4 = [
       [1, 1, 1, 0, 0, 0],
       [1, 1, 1, 0, 0, 0],
       [0, 0, 0, 1, 1, 1],
@@ -227,7 +227,7 @@ void main() {
       [1, 1, 1, 0, 0, 0],
     ];
     assert(testGetDataMaskBitInternal(4, mask4));
-    List<List<int>> mask5 = [
+    final mask5 = [
       [1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0],
       [1, 0, 0, 1, 0, 0],
@@ -236,7 +236,7 @@ void main() {
       [1, 0, 0, 0, 0, 0],
     ];
     assert(testGetDataMaskBitInternal(5, mask5));
-    List<List<int>> mask6 = [
+    final mask6 = [
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 0, 0, 0],
       [1, 1, 0, 1, 1, 0],
@@ -245,7 +245,7 @@ void main() {
       [1, 0, 0, 0, 1, 1],
     ];
     assert(testGetDataMaskBitInternal(6, mask6));
-    List<List<int>> mask7 = [
+    final mask7 = [
       [1, 0, 1, 0, 1, 0],
       [0, 0, 0, 1, 1, 1],
       [1, 0, 0, 0, 1, 1],

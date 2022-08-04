@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:math';
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/pdf417.dart';
@@ -43,7 +41,7 @@ void main() {
   final int eccBytes = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
   final int errorLimit = eccBytes;
   final int maxErrors = errorLimit ~/ 2;
-  final int maxErasures = errorLimit;
+  //final int maxErasures = errorLimit;
 
   final ErrorCorrection ec = ErrorCorrection();
 
@@ -55,33 +53,33 @@ void main() {
   }
 
   test('testNoError', () {
-    List<int> received = PDF417_TEST_WITH_EC.toList();
+    final received = PDF417_TEST_WITH_EC.toList();
     // no errors
     checkDecode(received);
   });
 
   test('testOneError', () {
-    Random random = AbstractErrorCorrectionTestCase.getRandom();
+    final random = AbstractErrorCorrectionTestCase.getRandom();
     for (int i = 0; i < PDF417_TEST_WITH_EC.length; i++) {
-      List<int> received = PDF417_TEST_WITH_EC.toList();
+      final received = PDF417_TEST_WITH_EC.toList();
       received[i] = random.nextInt(256);
       checkDecode(received);
     }
   });
 
   test('testMaxErrors', () {
-    Random random = AbstractErrorCorrectionTestCase.getRandom();
+    final random = AbstractErrorCorrectionTestCase.getRandom();
     for (int testIterations = 0; testIterations < 100; testIterations++) {
       // # iterations is kind of arbitrary
-      List<int> received = PDF417_TEST_WITH_EC.toList();
+      final received = PDF417_TEST_WITH_EC.toList();
       AbstractErrorCorrectionTestCase.corrupt(received, maxErrors, random);
       checkDecode(received);
     }
   });
 
   test('testTooManyErrors', () {
-    List<int> received = PDF417_TEST_WITH_EC.toList();
-    Random random = AbstractErrorCorrectionTestCase.getRandom();
+    final received = PDF417_TEST_WITH_EC.toList();
+    final random = AbstractErrorCorrectionTestCase.getRandom();
     AbstractErrorCorrectionTestCase.corrupt(received, maxErrors + 1, random);
     try {
       checkDecode(received);

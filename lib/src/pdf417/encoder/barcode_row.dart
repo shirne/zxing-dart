@@ -50,7 +50,7 @@ class BarcodeRow {
   /// @param scale How much you want the image to be scaled, must be greater than or equal to 1.
   /// @return the scaled row
   Uint8List getScaledRow(int scale) {
-    Uint8List output = Uint8List(_row.length * scale);
+    final output = Uint8List(_row.length * scale);
     for (int i = 0; i < output.length; i++) {
       output[i] = _row[i ~/ scale];
     }

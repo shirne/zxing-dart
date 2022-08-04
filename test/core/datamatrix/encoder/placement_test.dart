@@ -23,11 +23,11 @@ import 'debug_placement.dart';
 /// Tests the DataMatrix placement algorithm.
 void main() {
   test('testPlacement', () {
-    String codewords = unVisualize(
+    final codewords = unVisualize(
         '66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221'); //"AIMAIM" encoded
-    DebugPlacement placement = DebugPlacement(codewords, 12, 12);
+    final placement = DebugPlacement(codewords, 12, 12);
     placement.place();
-    List<String> expected = [
+    final expected = [
       '011100001111',
       '001010101000',
       '010001010100',
@@ -41,7 +41,7 @@ void main() {
       '011101011010',
       '001011001010'
     ];
-    List<String> actual = placement.toBitFieldStringArray();
+    final actual = placement.toBitFieldStringArray();
     for (int i = 0; i < actual.length; i++) {
       expect(expected[i], actual[i], reason: 'Row $i');
     }

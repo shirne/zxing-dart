@@ -30,8 +30,8 @@ import 'package:zxing_lib/oned.dart';
 
 void main() {
   void checkFields(String expected) {
-    String field = expected.replaceAll('(', '').replaceAll(')', '');
-    String actual = FieldParser.parseFieldsInGeneralPurpose(field)!;
+    final field = expected.replaceAll('(', '').replaceAll(')', '');
+    final actual = FieldParser.parseFieldsInGeneralPurpose(field)!;
     expect(expected, actual);
   }
 

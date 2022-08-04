@@ -37,8 +37,8 @@ class BinaryUtil {
   * Constructs a BitArray from a String like the one returned from BitArray.toString()
   */
   static BitArray buildBitArrayFromString(String data) {
-    String dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
-    BitArray binary = BitArray(dotsAndXs.replaceAll(SPACE, '').length);
+    final dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
+    final binary = BitArray(dotsAndXs.replaceAll(SPACE, '').length);
     int counter = 0;
 
     for (int i = 0; i < dotsAndXs.length; ++i) {
@@ -50,7 +50,7 @@ class BinaryUtil {
         continue;
       }
 
-      String currentChar = dotsAndXs[i];
+      final currentChar = dotsAndXs[i];
       if (currentChar == 'X' || currentChar == 'x') {
         binary.set(counter);
       }
@@ -60,8 +60,8 @@ class BinaryUtil {
   }
 
   static BitArray buildBitArrayFromStringWithoutSpaces(String data) {
-    StringBuilder sb = StringBuilder();
-    String dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
+    final sb = StringBuilder();
+    final dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
     int current = 0;
     while (current < dotsAndXs.length) {
       sb.write(' ');

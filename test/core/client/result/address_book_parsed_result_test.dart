@@ -37,10 +37,10 @@ void main() {
       List<String?>? urls,
       String? birthday,
       String? note) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.ADDRESS_BOOK, result.type);
-    AddressBookParsedResult addressResult = result as AddressBookParsedResult;
+    final addressResult = result as AddressBookParsedResult;
     expect(addressResult.title, title);
     assertArrayEquals(names, addressResult.names);
     expect(pronunciation, addressResult.pronunciation);

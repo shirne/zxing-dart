@@ -22,7 +22,7 @@ void main() {
   const List<int> BIT_MATRIX_POINTS = [1, 2, 2, 0, 3, 1];
 
   BitMatrix getExpected(int width, int height) {
-    BitMatrix result = BitMatrix(width, height);
+    final result = BitMatrix(width, height);
     for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
       result.set(width - 1 - BIT_MATRIX_POINTS[i],
           height - 1 - BIT_MATRIX_POINTS[i + 1]);
@@ -31,7 +31,7 @@ void main() {
   }
 
   BitMatrix getInput(int width, int height) {
-    BitMatrix result = BitMatrix(width, height);
+    final result = BitMatrix(width, height);
     for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
       result.set(BIT_MATRIX_POINTS[i], BIT_MATRIX_POINTS[i + 1]);
     }
@@ -40,15 +40,15 @@ void main() {
 
   void testXOR(
       BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {
-    BitMatrix matrix = dataMatrix.clone();
+    final matrix = dataMatrix.clone();
     matrix.xor(flipMatrix);
     assert(expectedMatrix == matrix);
   }
 
   void testRotate180(int width, int height) {
-    BitMatrix input = getInput(width, height);
+    final input = getInput(width, height);
     input.rotate180();
-    BitMatrix expected = getExpected(width, height);
+    final expected = getExpected(width, height);
 
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
@@ -58,7 +58,7 @@ void main() {
   }
 
   test('testGetSet', () {
-    BitMatrix matrix = BitMatrix(33);
+    final matrix = BitMatrix(33);
     expect(33, matrix.height);
     for (int y = 0; y < 33; y++) {
       for (int x = 0; x < 33; x++) {
@@ -75,7 +75,7 @@ void main() {
   });
 
   test('testSetRegion', () {
-    BitMatrix matrix = BitMatrix(5);
+    final matrix = BitMatrix(5);
     matrix.setRegion(1, 1, 3, 3);
     for (int y = 0; y < 5; y++) {
       for (int x = 0; x < 5; x++) {
@@ -85,7 +85,7 @@ void main() {
   });
 
   test('testEnclosing', () {
-    BitMatrix matrix = BitMatrix(5);
+    final matrix = BitMatrix(5);
     assert(matrix.getEnclosingRectangle() == null);
     matrix.setRegion(1, 1, 1, 1);
     print(matrix.data.toList().map((a) => a.toRadixString(2)));
@@ -97,7 +97,7 @@ void main() {
   });
 
   test('testOnBit', () {
-    BitMatrix matrix = BitMatrix(5);
+    final matrix = BitMatrix(5);
     assert(matrix.getTopLeftOnBit() == null);
     assert(matrix.getBottomRightOnBit() == null);
     matrix.setRegion(1, 1, 1, 1);
@@ -112,7 +112,7 @@ void main() {
   });
 
   test('testRectangularMatrix', () {
-    BitMatrix matrix = BitMatrix(75, 20);
+    final matrix = BitMatrix(75, 20);
     expect(75, matrix.width);
     expect(20, matrix.height);
     matrix.set(10, 0);
@@ -138,7 +138,7 @@ void main() {
   });
 
   test('testRectangularSetRegion', () {
-    BitMatrix matrix = BitMatrix(320, 240);
+    final matrix = BitMatrix(320, 240);
     expect(320, matrix.width);
     expect(240, matrix.height);
     matrix.setRegion(105, 22, 80, 12);
@@ -152,7 +152,7 @@ void main() {
   });
 
   test('testGetRow', () {
-    BitMatrix matrix = BitMatrix(102, 5);
+    final matrix = BitMatrix(102, 5);
     for (int x = 0; x < 102; x++) {
       if ((x & 0x03) == 0) {
         matrix.set(x, 2);
@@ -160,7 +160,7 @@ void main() {
     }
 
     // Should allocate
-    BitArray array = matrix.getRow(2, null);
+    final array = matrix.getRow(2, null);
     expect(102, array.size);
 
     // Should reallocate
@@ -174,15 +174,15 @@ void main() {
     expect(200, array3.size);
 
     for (int x = 0; x < 102; x++) {
-      bool on = (x & 0x03) == 0;
-      expect(on, array[x]);
-      expect(on, array2[x]);
-      expect(on, array3[x]);
+      final isOn = (x & 0x03) == 0;
+      expect(isOn, array[x]);
+      expect(isOn, array2[x]);
+      expect(isOn, array3[x]);
     }
   });
 
   test('testRotate90Simple', () {
-    BitMatrix matrix = BitMatrix(3, 3);
+    final matrix = BitMatrix(3, 3);
     matrix.set(0, 0);
     matrix.set(0, 1);
     matrix.set(1, 2);
@@ -197,7 +197,7 @@ void main() {
   });
 
   test('testRotate180Simple', () {
-    BitMatrix matrix = BitMatrix(3, 3);
+    final matrix = BitMatrix(3, 3);
     matrix.set(0, 0);
     matrix.set(0, 1);
     matrix.set(1, 2);
@@ -219,12 +219,12 @@ void main() {
   });
 
   test('testParse', () {
-    BitMatrix emptyMatrix = BitMatrix(3, 3);
-    BitMatrix fullMatrix = BitMatrix(3, 3);
+    final emptyMatrix = BitMatrix(3, 3);
+    final fullMatrix = BitMatrix(3, 3);
     fullMatrix.setRegion(0, 0, 3, 3);
-    BitMatrix centerMatrix = BitMatrix(3, 3);
+    final centerMatrix = BitMatrix(3, 3);
     centerMatrix.setRegion(1, 1, 1, 1);
-    BitMatrix emptyMatrix24 = BitMatrix(2, 4);
+    final emptyMatrix24 = BitMatrix(2, 4);
 
     assert(emptyMatrix == BitMatrix.parse('   \n   \n   \n', 'x', ' '));
     assert(emptyMatrix == BitMatrix.parse('   \n   \r\r\n   \n\r', 'x', ' '));
@@ -250,15 +250,14 @@ void main() {
   });
 
   test('testParseBoolean', () {
-    BitMatrix emptyMatrix = BitMatrix(3, 3);
-    BitMatrix fullMatrix = BitMatrix(3, 3);
+    final emptyMatrix = BitMatrix(3, 3);
+    final fullMatrix = BitMatrix(3, 3);
     fullMatrix.setRegion(0, 0, 3, 3);
-    BitMatrix centerMatrix = BitMatrix(3, 3);
+    final centerMatrix = BitMatrix(3, 3);
     centerMatrix.setRegion(1, 1, 1, 1);
     //BitMatrix emptyMatrix24 = BitMatrix(2, 4);
 
-    List<List<bool>> matrix =
-        List.generate(3, (index) => List.filled(3, false));
+    final matrix = List.generate(3, (index) => List.filled(3, false));
     assert(emptyMatrix == BitMatrix.parse(matrix));
     matrix[1][1] = true;
     assert(centerMatrix == BitMatrix.parse(matrix));
@@ -270,8 +269,8 @@ void main() {
   });
 
   test('testUnset', () {
-    BitMatrix emptyMatrix = BitMatrix(3, 3);
-    BitMatrix matrix = emptyMatrix.clone();
+    final emptyMatrix = BitMatrix(3, 3);
+    final matrix = emptyMatrix.clone();
     matrix.set(1, 1);
     assert(emptyMatrix != matrix);
     matrix.unset(1, 1);
@@ -281,14 +280,14 @@ void main() {
   });
 
   test('testXOR', () {
-    BitMatrix emptyMatrix = BitMatrix(3, 3);
-    BitMatrix fullMatrix = BitMatrix(3, 3);
+    final emptyMatrix = BitMatrix(3, 3);
+    final fullMatrix = BitMatrix(3, 3);
     fullMatrix.setRegion(0, 0, 3, 3);
-    BitMatrix centerMatrix = BitMatrix(3, 3);
+    final centerMatrix = BitMatrix(3, 3);
     centerMatrix.setRegion(1, 1, 1, 1);
-    BitMatrix invertedCenterMatrix = fullMatrix.clone();
+    final invertedCenterMatrix = fullMatrix.clone();
     invertedCenterMatrix.unset(1, 1);
-    BitMatrix badMatrix = BitMatrix(4, 4);
+    final badMatrix = BitMatrix(4, 4);
 
     testXOR(emptyMatrix, emptyMatrix, emptyMatrix);
     testXOR(emptyMatrix, centerMatrix, centerMatrix);

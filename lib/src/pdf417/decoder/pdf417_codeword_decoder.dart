@@ -49,7 +49,7 @@ class PDF417CodewordDecoder {
   PDF417CodewordDecoder._();
 
   static int getDecodedValue(List<int> moduleBitCount) {
-    int decodedValue =
+    final decodedValue =
         _getDecodedCodewordValue(_sampleBitCounts(moduleBitCount));
     if (decodedValue != -1) {
       return decodedValue;
@@ -58,14 +58,13 @@ class PDF417CodewordDecoder {
   }
 
   static List<int> _sampleBitCounts(List<int> moduleBitCount) {
-    double bitCountSum = MathUtils.sum(moduleBitCount).toDouble();
-    List<int> result = List.filled(PDF417Common.BARS_IN_MODULE, 0);
+    final bitCountSum = MathUtils.sum(moduleBitCount).toDouble();
+    final result = List.filled(PDF417Common.BARS_IN_MODULE, 0);
     int bitCountIndex = 0;
     int sumPreviousBits = 0;
     for (int i = 0; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
-      double sampleIndex =
-          bitCountSum / (2 * PDF417Common.MODULES_IN_CODEWORD) +
-              (i * bitCountSum) / PDF417Common.MODULES_IN_CODEWORD;
+      final sampleIndex = bitCountSum / (2 * PDF417Common.MODULES_IN_CODEWORD) +
+          (i * bitCountSum) / PDF417Common.MODULES_IN_CODEWORD;
       if (sumPreviousBits + moduleBitCount[bitCountIndex] <= sampleIndex) {
         sumPreviousBits += moduleBitCount[bitCountIndex];
         bitCountIndex++;
@@ -76,7 +75,7 @@ class PDF417CodewordDecoder {
   }
 
   static int _getDecodedCodewordValue(List<int> moduleBitCount) {
-    int decodedValue = _getBitValue(moduleBitCount);
+    final decodedValue = _getBitValue(moduleBitCount);
     return PDF417Common.getCodeword(decodedValue) == -1 ? -1 : decodedValue;
   }
 
@@ -92,8 +91,8 @@ class PDF417CodewordDecoder {
 
   static int _getClosestDecodedValue(List<int> moduleBitCount) {
     init();
-    int bitCountSum = MathUtils.sum(moduleBitCount);
-    List<double> bitCountRatios = List.filled(PDF417Common.BARS_IN_MODULE, 0);
+    final bitCountSum = MathUtils.sum(moduleBitCount);
+    final bitCountRatios = List.filled(PDF417Common.BARS_IN_MODULE, 0.0);
     if (bitCountSum > 1) {
       for (int i = 0; i < bitCountRatios.length; i++) {
         bitCountRatios[i] = moduleBitCount[i] / bitCountSum;
@@ -103,9 +102,9 @@ class PDF417CodewordDecoder {
     int bestMatch = -1;
     for (int j = 0; j < _ratiosTable.length; j++) {
       double error = 0.0;
-      List<double> ratioTableRow = _ratiosTable[j];
+      final ratioTableRow = _ratiosTable[j];
       for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
-        double diff = ratioTableRow[k] - bitCountRatios[k];
+        final diff = ratioTableRow[k] - bitCountRatios[k];
         error += diff * diff;
         if (error >= bestMatchError) {
           break;

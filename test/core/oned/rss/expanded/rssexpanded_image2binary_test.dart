@@ -39,24 +39,24 @@ import '../../../common/abstract_black_box.dart';
 void main() {
   Future<void> assertCorrectImage2binary(
       String fileName, String expected) async {
-    String path =
+    final path =
         '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName';
 
-    Image image = decodeImage(File(path).readAsBytesSync())!;
-    BinaryBitmap binaryMap = BinaryBitmap(
+    final image = decodeImage(File(path).readAsBytesSync())!;
+    final binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
-    int rowNumber = binaryMap.height ~/ 2;
-    BitArray row = binaryMap.getBlackRow(rowNumber, null);
+    final rowNumber = binaryMap.height ~/ 2;
+    final row = binaryMap.getBlackRow(rowNumber, null);
 
     List<ExpandedPair> pairs;
     try {
-      RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+      final rssExpandedReader = RSSExpandedReader();
       pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
     } on ReaderException catch (re) {
       //
       fail(re.toString());
     }
-    BitArray binary = BitArrayBuilder.buildBitArray(pairs);
+    final binary = BitArrayBuilder.buildBitArray(pairs);
     expect(expected, binary.toString());
   }
 

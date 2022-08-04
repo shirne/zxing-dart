@@ -21,10 +21,10 @@ class DebugPlacement extends DefaultPlacement {
       : super(codewords, numcols, numrows);
 
   List<String> toBitFieldStringArray() {
-    List<String> array = List.filled(numRows, '');
+    final array = List.filled(numRows, '');
     int startPos = 0;
     for (int row = 0; row < numRows; row++) {
-      StringBuffer sb = StringBuffer();
+      final sb = StringBuffer();
       for (int i = 0; i < numCols; i++) {
         sb.write(bits[startPos + i] == 1 ? '1' : '0');
       }

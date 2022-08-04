@@ -22,7 +22,7 @@ import 'package:zxing_lib/oned.dart';
 ///
 void main() {
   test('testLookup', () {
-    EANManufacturerOrgSupport support = EANManufacturerOrgSupport();
+    final support = EANManufacturerOrgSupport();
     assert(support.lookupCountryIdentifier('472000') == null);
     expect('US/CA', support.lookupCountryIdentifier('000000'));
     expect('MO', support.lookupCountryIdentifier('958000'));

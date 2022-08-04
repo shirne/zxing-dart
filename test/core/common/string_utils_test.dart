@@ -28,23 +28,23 @@ import '../utils.dart';
 /// Tests [StringUtils].
 void main() {
   void doTest(List<int> bytes, Encoding charset, String encoding) {
-    Encoding guessedCharset =
+    final guessedCharset =
         StringUtils.guessCharset(Uint8List.fromList(bytes), null)!;
-    String guessedEncoding =
+    final guessedEncoding =
         StringUtils.guessEncoding(Uint8List.fromList(bytes), null);
     expect(charset, guessedCharset);
     expect(encoding, guessedEncoding);
   }
 
-  List<String> args = [];
+  final args = <String>[];
   if (args.isNotEmpty) {
-    String text = args[0];
-    Encoding charset = Encoding.getByName(args[1])!;
-    StringBuilder declaration = StringBuilder();
+    final text = args[0];
+    final charset = Encoding.getByName(args[1])!;
+    final declaration = StringBuilder();
     declaration.write('Uint8List.fromList([ ');
     for (int b in charset.encode(text)) {
       declaration.write('0x');
-      int value = b & 0xFF;
+      final value = b & 0xFF;
       if (value < 0x10) {
         declaration.write('0');
       }
@@ -56,8 +56,8 @@ void main() {
   }
 
   test('testRandom', () {
-    Random r = Random(1234);
-    Uint8List bytes = Uint8List(1000);
+    final r = Random(1234);
+    final bytes = Uint8List(1000);
     r.nextBytes(bytes);
 
     expect(StringUtils.guessCharset(bytes, null), utf8);

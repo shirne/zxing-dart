@@ -36,7 +36,7 @@ void main() {
   }
 
   Uint32List reverseOriginal(Uint32List oldBits, int size) {
-    Uint32List newBits = Uint32List(oldBits.length);
+    final newBits = Uint32List(oldBits.length);
     for (int i = 0; i < size; i++) {
       if (bitSet(oldBits, size - i - 1)) {
         newBits[i ~/ 32] = (newBits[i ~/ 32] | 1 << (i & 0x1F)).toUnsigned(32);
@@ -46,7 +46,7 @@ void main() {
   }
 
   test('testGetSet', () {
-    BitArray array = BitArray(33);
+    final array = BitArray(33);
     for (int i = 0; i < 33; i++) {
       assert(!array[i]);
       array.set(i);
@@ -79,7 +79,7 @@ void main() {
   });
 
   test('testGetNextSet3', () {
-    BitArray array = BitArray(63);
+    final array = BitArray(63);
     array.set(31);
     array.set(32);
     for (int i = 0; i < array.size; i++) {
@@ -96,7 +96,7 @@ void main() {
   });
 
   test('testGetNextSet4', () {
-    BitArray array = BitArray(63);
+    final array = BitArray(63);
     array.set(33);
     array.set(40);
     for (int i = 0; i < array.size; i++) {
@@ -113,28 +113,28 @@ void main() {
   });
 
   test('testGetNextSet5', () {
-    Random r = Random(0xDEADBEEF);
+    final r = Random(0xDEADBEEF);
     for (int i = 0; i < 10; i++) {
-      BitArray array = BitArray(1 + r.nextInt(100));
-      int numSet = r.nextInt(20);
+      final BitArray array = BitArray(1 + r.nextInt(100));
+      final int numSet = r.nextInt(20);
       for (int j = 0; j < numSet; j++) {
         array.set(r.nextInt(array.size));
       }
-      int numQueries = r.nextInt(20);
+      final int numQueries = r.nextInt(20);
       for (int j = 0; j < numQueries; j++) {
-        int query = r.nextInt(array.size);
+        final int query = r.nextInt(array.size);
         int expected = query;
         while (expected < array.size && !array[expected]) {
           expected++;
         }
-        int actual = array.getNextSet(query);
+        final int actual = array.getNextSet(query);
         expect(expected, actual);
       }
     }
   });
 
   test('testSetBulk', () {
-    BitArray array = BitArray(64);
+    final array = BitArray(64);
     array.setBulk(32, 0xFFFF0000);
     for (int i = 0; i < 48; i++) {
       assert(!array[i]);
@@ -145,7 +145,7 @@ void main() {
   });
 
   test('testSetRange', () {
-    BitArray array = BitArray(64);
+    final array = BitArray(64);
     array.setRange(28, 36);
     assert(!array[27]);
     for (int i = 28; i < 36; i++) {
@@ -155,7 +155,7 @@ void main() {
   });
 
   test('testClear', () {
-    BitArray array = BitArray(32);
+    final array = BitArray(32);
     for (int i = 0; i < 32; i++) {
       array.set(i);
     }
@@ -166,7 +166,7 @@ void main() {
   });
 
   test('testFlip', () {
-    BitArray array = BitArray(32);
+    final array = BitArray(32);
     assert(!array[5]);
     array.flip(5);
     assert(array[5]);
@@ -175,16 +175,16 @@ void main() {
   });
 
   test('testGetArray', () {
-    BitArray array = BitArray(64);
+    final array = BitArray(64);
     array.set(0);
     array.set(63);
-    List<int> ints = array.getBitArray();
+    final ints = array.getBitArray();
     expect(1, ints[0]);
     expect(2147483648, ints[1]);
   });
 
   test('testIsRange', () {
-    BitArray array = BitArray(64);
+    final array = BitArray(64);
     assert(array.isRange(0, 64, false));
     assert(!array.isRange(0, 64, true));
     array.set(32);
@@ -205,27 +205,26 @@ void main() {
   });
 
   test('reverseAlgorithmTest', () {
-    Uint32List oldBits =
-        Uint32List.fromList([128, 256, 512, 6453324, 50934953]);
+    final oldBits = Uint32List.fromList([128, 256, 512, 6453324, 50934953]);
     for (int size = 1; size < 160; size++) {
-      Uint32List newBitsOriginal = reverseOriginal(oldBits, size);
-      BitArray newBitArray = BitArray.test(Uint32List.fromList(oldBits), size);
+      final newBitsOriginal = reverseOriginal(oldBits, size);
+      final newBitArray = BitArray.test(Uint32List.fromList(oldBits), size);
       newBitArray.reverse();
-      Uint32List newBitsNew = newBitArray.getBitArray();
+      final newBitsNew = newBitArray.getBitArray();
       expect(newBitsOriginal.join(','), newBitsNew.join(','));
       assert(arraysAreEqual(newBitsOriginal, newBitsNew, size ~/ 32 + 1));
     }
   });
 
   test('testClone', () {
-    BitArray array = BitArray(32);
+    final array = BitArray(32);
     array.clone().set(0);
     assert(!array[0]);
   });
 
   test('testEquals', () {
-    BitArray a = BitArray(32);
-    BitArray b = BitArray(32);
+    final a = BitArray(32);
+    final b = BitArray(32);
     expect(a, b);
     expect(a.hashCode, b.hashCode);
     assert(a != BitArray(31));

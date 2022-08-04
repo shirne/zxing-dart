@@ -86,8 +86,8 @@ void main() {
   });
 
   test('testEncodeDefault', () {
-    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H);
-    String expected = '<<\n'
+    final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H);
+    final expected = '<<\n'
         ' mode: ALPHANUMERIC\n'
         ' ecLevel: H\n'
         ' version: 1\n'
@@ -119,15 +119,15 @@ void main() {
   });
 
   test('testEncodeWithVersion', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.QR_VERSION] = 7;
-    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
+    final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     assert(qrCode.toString().contains(' version: 7\n'));
   });
 
   //@Test(expected = WriterException.class)
   test('testEncodeWithVersionTooSmall', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.QR_VERSION] = 3;
     try {
       Encoder.encode('THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
@@ -139,10 +139,10 @@ void main() {
   });
 
   test('testSimpleUTF8ECI', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
-    QRCode qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
-    String expected = '<<\n'
+    final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
+    final expected = '<<\n'
         ' mode: BYTE\n'
         ' ecLevel: H\n'
         ' version: 1\n'
@@ -174,12 +174,12 @@ void main() {
   });
 
   test('testEncodeKanjiMode', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
     // Nihon in Kanji
-    QRCode qrCode =
+    final qrCode =
         Encoder.encode('\u65e5\u672c', ErrorCorrectionLevel.M, hints);
-    String expected = '<<\n'
+    final expected = '<<\n'
         ' mode: KANJI\n'
         ' ecLevel: M\n'
         ' version: 1\n'
@@ -211,10 +211,10 @@ void main() {
   });
 
   test('testEncodeShiftjisNumeric', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
-    QRCode qrCode = Encoder.encode('0123', ErrorCorrectionLevel.M, hints);
-    String expected = '<<\n'
+    final qrCode = Encoder.encode('0123', ErrorCorrectionLevel.M, hints);
+    final expected = '<<\n'
         ' mode: NUMERIC\n'
         ' ecLevel: M\n'
         ' version: 1\n'
@@ -246,41 +246,41 @@ void main() {
   });
 
   test('testEncodeGS1WithStringTypeHint', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.GS1_FORMAT] = true;
-    QRCode qrCode =
+    final qrCode =
         Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
   });
 
   test('testEncodeGS1WithBooleanTypeHint', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.GS1_FORMAT] = true;
-    QRCode qrCode =
+    final qrCode =
         Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenBooleanTypeHintExplicitlyFalse', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.GS1_FORMAT] = false;
-    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
+    final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.GS1_FORMAT] = false;
-    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
+    final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testGS1ModeHeaderWithECI', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
     hints[EncodeHintType.GS1_FORMAT] = true;
-    QRCode qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
-    String expected = '<<\n'
+    final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
+    final expected = '<<\n'
         ' mode: BYTE\n'
         ' ecLevel: H\n'
         ' version: 1\n'
@@ -312,7 +312,7 @@ void main() {
   });
 
   test('testAppendModeInfo', () {
-    BitArray bits = BitArray();
+    final bits = BitArray();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
     expect(' ...X', bits.toString());
   });
@@ -415,8 +415,8 @@ void main() {
   });
 
   test('testGetNumDataBytesAndNumECBytesForBlockID', () {
-    List<int> numDataBytes = [0];
-    List<int> numEcBytes = [0];
+    const numDataBytes = [0];
+    const numEcBytes = [0];
     // Version 1-H.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
         26, 9, 1, 0, numDataBytes, numEcBytes);
@@ -582,7 +582,7 @@ void main() {
 
   // Numbers are from page 21 of JISX0510:2004
   test('testAppendKanjiBytes', () {
-    BitArray bits = BitArray();
+    final bits = BitArray();
     Encoder.appendKanjiBytes(shiftJISString(bytes([0x93, 0x5f])), bits);
     expect(' .XX.XX.. XXXXX', bits.toString());
     Encoder.appendKanjiBytes(shiftJISString(bytes([0xe4, 0xaa])), bits);
@@ -656,7 +656,7 @@ void main() {
     //   - To be precise, it needs 11727 + 4 (getMode info) + 14 (length info) =
     //     11745 bits = 1468.125 bytes are needed (i.e. cannot fit in 1468
     //     bytes).
-    StringBuilder builder = StringBuilder();
+    final builder = StringBuilder();
     for (int x = 0; x < 3518; x++) {
       builder.write('0');
     }
@@ -879,13 +879,13 @@ void verifyMinimalEncoding(
   Encoding? priorityCharset,
   bool isGS1,
 ) {
-  ResultList result = MinimalEncoder.encode(
+  final result = MinimalEncoder.encode(
       input, null, priorityCharset, isGS1, ErrorCorrectionLevel.L);
   expect(result.toString(), expectedResult);
 }
 
 void verifyGS1EncodedData(QRCode qrCode) {
-  String expected = '<<\n'
+  final expected = '<<\n'
       ' mode: ALPHANUMERIC\n'
       ' ecLevel: H\n'
       ' version: 2\n'
@@ -921,7 +921,7 @@ void verifyGS1EncodedData(QRCode qrCode) {
 }
 
 void verifyNotGS1EncodedData(QRCode qrCode) {
-  String expected = '<<\n'
+  final expected = '<<\n'
       ' mode: ALPHANUMERIC\n'
       ' ecLevel: H\n'
       ' version: 1\n'

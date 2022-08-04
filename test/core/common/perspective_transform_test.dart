@@ -22,7 +22,7 @@ void main() {
 
   void assertPointEquals(double expectedX, double expectedY, double sourceX,
       double sourceY, PerspectiveTransform pt) {
-    List<double> points = [sourceX, sourceY];
+    final List<double> points = [sourceX, sourceY];
     pt.transformPoints(points);
     assert((expectedX * accp).round() == (points[0] * accp).round(),
         '$expectedX ${points[0]},');
@@ -31,7 +31,7 @@ void main() {
   }
 
   test('testSquareToQuadrilateral', () {
-    PerspectiveTransform pt = PerspectiveTransform.squareToQuadrilateral(
+    final pt = PerspectiveTransform.squareToQuadrilateral(
         2.0, 3.0, 10.0, 4.0, 16.0, 15.0, 4.0, 9.0);
     assertPointEquals(2.0, 3.0, 0.0, 0.0, pt);
     assertPointEquals(10.0, 4.0, 1.0, 0.0, pt);
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('testQuadrilateralToQuadrilateral', () {
-    PerspectiveTransform pt = PerspectiveTransform.quadrilateralToQuadrilateral(
+    final pt = PerspectiveTransform.quadrilateralToQuadrilateral(
         2.0,
         3.0,
         10.0,

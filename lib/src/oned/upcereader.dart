@@ -71,18 +71,18 @@ class UPCEReader extends UPCEANReader {
   //@protected
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
-    List<int> counters = _decodeMiddleCounters;
+    final counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
     counters[3] = 0;
-    int end = row.size;
+    final end = row.size;
     int rowOffset = startRange[1];
 
     int lgPatternFound = 0;
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
@@ -133,12 +133,11 @@ class UPCEReader extends UPCEANReader {
   /// @param upce UPC-E code as string of digits
   /// @return equivalent UPC-A code as string of digits
   static String convertUPCEtoUPCA(String upce) {
-    List<int> upceChars =
-        List.generate(6, (index) => upce.codeUnitAt(index + 1));
+    final upceChars = List.generate(6, (index) => upce.codeUnitAt(index + 1));
     // upce.getChars(1, 7, upceChars, 0);
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     result.write(upce[0]);
-    int lastChar = upceChars[5];
+    final lastChar = upceChars[5];
     switch (lastChar) {
       case 48: //'0'
       case 49: //'1'

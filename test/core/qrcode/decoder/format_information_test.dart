@@ -31,7 +31,7 @@ void main() {
 
   test('testDecode', () {
     // Normal case
-    FormatInformation? expected = FormatInformation.decodeFormatInformation(
+    final expected = FormatInformation.decodeFormatInformation(
         MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
     assert(expected != null);
     expect(0x07, expected!.dataMask);
@@ -44,7 +44,7 @@ void main() {
   });
 
   test('testDecodeWithBitDifference', () {
-    FormatInformation? expected = FormatInformation.decodeFormatInformation(
+    final expected = FormatInformation.decodeFormatInformation(
         MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
     // 1,2,3,4 bits difference
     expect(
@@ -65,7 +65,7 @@ void main() {
   });
 
   test('testDecodeWithMisread', () {
-    FormatInformation? expected = FormatInformation.decodeFormatInformation(
+    final expected = FormatInformation.decodeFormatInformation(
         MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
     expect(
         expected,

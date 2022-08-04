@@ -16,7 +16,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -25,8 +24,7 @@ import '../utils.dart';
 /// Tests [Code93Writer].
 void main() {
   void doTest(String input, String expected) {
-    BitMatrix result =
-        Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
+    final result = Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
     expect(expected, matrixToString(result));
   }
 
@@ -93,8 +91,8 @@ void main() {
 
   test('testConvertToExtended', () {
     // non-extended chars are not changed.
-    String src = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. \$/+%';
-    String dst = Code93Writer.convertToExtended(src);
+    final src = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. \$/+%';
+    final dst = Code93Writer.convertToExtended(src);
     expect(src, dst);
   });
 }

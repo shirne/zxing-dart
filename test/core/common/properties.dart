@@ -6,13 +6,13 @@ class Properties {
   Properties([this._defaults]);
 
   load(String inString) {
-    List<String> lines = inString.split(RegExp('(\r\n|\r|\n)'));
+    final List<String> lines = inString.split(RegExp('(\r\n|\r|\n)'));
     for (var element in lines) {
       if (!element.startsWith('<')) {
-        int equalPos = element.indexOf('=');
+        final int equalPos = element.indexOf('=');
         if (equalPos > 0) {
-          String key = element.substring(0, equalPos).trim();
-          String value = element.substring(equalPos + 1).trim();
+          final String key = element.substring(0, equalPos).trim();
+          final String value = element.substring(equalPos + 1).trim();
           _properties[key] = value;
         }
       }

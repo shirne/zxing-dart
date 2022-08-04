@@ -111,7 +111,7 @@ class Mode {
   /// @return number of bits used, in this QR Code symbol [Version], to encode the
   ///         count of characters that will follow encoded in this Mode
   int getCharacterCountBits(Version version) {
-    int number = version.versionNumber;
+    final number = version.versionNumber;
     int offset;
     if (number <= 9) {
       offset = 0;

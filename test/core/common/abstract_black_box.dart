@@ -39,7 +39,7 @@ class AbstractBlackBoxTestCase {
 
   static Directory buildTestBase(String testBasePathSuffix) {
     // A little workaround to prevent aggravation in my IDE
-    Directory testBase = Directory(testBasePathSuffix);
+    final testBase = Directory(testBasePathSuffix);
 
     return testBase;
   }
@@ -60,13 +60,13 @@ class AbstractBlackBoxTestCase {
   void testBlackBox() {
     assert(_testResults.isNotEmpty);
 
-    List<File> imageFiles = getImageFiles();
-    int testCount = _testResults.length;
+    final imageFiles = getImageFiles();
+    final testCount = _testResults.length;
 
-    List<int> passedCounts = List.filled(testCount, 0);
-    List<int> misreadCounts = List.filled(testCount, 0);
-    List<int> tryHarderCounts = List.filled(testCount, 0);
-    List<int> tryHarderMisreadCounts = List.filled(testCount, 0);
+    final passedCounts = List.filled(testCount, 0);
+    final misreadCounts = List.filled(testCount, 0);
+    final tryHarderCounts = List.filled(testCount, 0);
+    final tryHarderMisreadCounts = List.filled(testCount, 0);
 
     for (File testImage in imageFiles) {
       _log.info('Starting ${testImage.path}');
@@ -76,8 +76,8 @@ class AbstractBlackBoxTestCase {
         image = _imageProcess!.call(image, testImage.absolute.path);
       }
 
-      String testImageFileName = testImage.uri.pathSegments.last;
-      String fileBaseName =
+      final testImageFileName = testImage.uri.pathSegments.last;
+      final fileBaseName =
           testImageFileName.substring(0, testImageFileName.indexOf('.'));
       File expectedTextFile = File('${_testBase.path}/$fileBaseName.txt');
       String expectedText;
@@ -89,18 +89,18 @@ class AbstractBlackBoxTestCase {
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
 
-      File expectedMetadataFile =
+      final expectedMetadataFile =
           File('${_testBase.path}/$fileBaseName.metadata.txt');
-      Properties expectedMetadata = Properties();
+      final expectedMetadata = Properties();
       if (expectedMetadataFile.existsSync()) {
         expectedMetadata.load(expectedMetadataFile.readAsStringSync());
       }
 
       for (int x = 0; x < testCount; x++) {
-        double rotation = _testResults[x].rotation;
-        Image rotatedImage = rotateImage(image, rotation);
-        LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
-        BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+        final rotation = _testResults[x].rotation;
+        final rotatedImage = rotateImage(image, rotation);
+        final source = BufferedImageLuminanceSource(rotatedImage);
+        final bitmap = BinaryBitmap(HybridBinarizer(source));
         try {
           if (_decode(
               bitmap, rotation, expectedText, expectedMetadata.properties,
@@ -133,7 +133,7 @@ class AbstractBlackBoxTestCase {
     int totalMaxMisread = 0;
 
     for (int x = 0; x < _testResults.length; x++) {
-      TestResult testResult = _testResults[x];
+      final testResult = _testResults[x];
       _log.info('Rotation ${testResult.rotation} degrees:');
       _log.info(
           ' ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)');
@@ -152,7 +152,7 @@ class AbstractBlackBoxTestCase {
           testResult.maxMisreads + testResult.maxTryHarderMisreads;
     }
 
-    int totalTests = imageFiles.length * testCount * 2;
+    final totalTests = imageFiles.length * testCount * 2;
     _log.info(
         'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
     if (totalFound > totalMustPass) {
@@ -172,7 +172,7 @@ class AbstractBlackBoxTestCase {
 
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
-      TestResult testResult = _testResults[x];
+      final testResult = _testResults[x];
       String label =
           'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
@@ -203,8 +203,8 @@ class AbstractBlackBoxTestCase {
   List<File> getImageFiles() {
     assert(_testBase.existsSync(),
         "Please download and install test images, and run from the 'test' directory");
-    List<File> paths = [];
-    var files = _testBase.listSync();
+    final paths = <File>[];
+    final files = _testBase.listSync();
     for (var element in files) {
       if (element is File && imageSuffix.hasMatch(element.path)) {
         // "*.{jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG}"
@@ -220,9 +220,9 @@ class AbstractBlackBoxTestCase {
   bool _decode(BinaryBitmap source, double rotation, String expectedText,
       Map<Object, Object> expectedMetadata,
       {bool tryHarder = false, filename = ''}) {
-    String suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
+    final suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
 
-    var hints = Map<DecodeHintType, Object>.from(_hints);
+    final hints = Map<DecodeHintType, Object>.from(_hints);
     if (tryHarder) {
       hints[DecodeHintType.TRY_HARDER] = true;
       hints[DecodeHintType.ALSO_INVERTED] = true;
@@ -232,7 +232,7 @@ class AbstractBlackBoxTestCase {
     // not expected to pass, generally
     Result? result;
     try {
-      var pureHints = Map<DecodeHintType, Object>.from(hints);
+      final pureHints = Map<DecodeHintType, Object>.from(hints);
       pureHints[DecodeHintType.PURE_BARCODE] = true;
       result = _barcodeReader!.decode(source, pureHints);
     } on ReaderException catch (_) {
@@ -247,18 +247,18 @@ class AbstractBlackBoxTestCase {
       return false;
     }
 
-    String resultText = result.text;
+    final resultText = result.text;
     if (expectedText != resultText) {
       _log.warning(
           "Content mismatch: $filename expected '$expectedText' but got '$resultText'$suffix");
       return false;
     }
 
-    Map<ResultMetadataType, Object>? resultMetadata = result.resultMetadata;
+    final resultMetadata = result.resultMetadata;
     for (MapEntry metadatum in expectedMetadata.entries) {
-      ResultMetadataType key = string2RMType(metadatum.key)!;
-      Object expectedValue = metadatum.value;
-      Object? actualValue = resultMetadata?[key];
+      final ResultMetadataType key = string2RMType(metadatum.key)!;
+      final Object expectedValue = metadatum.value;
+      final Object? actualValue = resultMetadata?[key];
       if (expectedValue != actualValue) {
         _log.warning(
             "Metadata mismatch $filename for key '${key.toString().replaceFirst('ResultMetadataType.', '')}': expected '$expectedValue' but got '$actualValue'");
@@ -279,7 +279,7 @@ class AbstractBlackBoxTestCase {
   }
 
   static String readFileAsString(File file, Encoding charset) {
-    String stringContents = file.readAsStringSync(encoding: charset);
+    final stringContents = file.readAsStringSync(encoding: charset);
     if (stringContents.endsWith('\n')) {
       _log.info('String contents of file $file end with a newline. '
           'This may not be intended and cause a test failure');

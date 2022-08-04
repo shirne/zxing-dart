@@ -55,19 +55,19 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   void testBlackBox() {
     assert(testResults.isNotEmpty);
 
-    Map<String, List<File>> imageFiles = getImageFileLists();
+    final imageFiles = getImageFileLists();
     assert(imageFiles.isNotEmpty);
-    int testCount = testResults.length;
+    final testCount = testResults.length;
 
-    List<int> passedCounts = List.filled(testCount, 0);
-    List<int> tryHarderCounts = List.filled(testCount, 0);
+    final passedCounts = List.filled(testCount, 0);
+    final tryHarderCounts = List.filled(testCount, 0);
 
-    Directory testBase = getTestBase();
+    final testBase = getTestBase();
 
     for (MapEntry<String, List<File>> testImageGroup in imageFiles.entries) {
       log.fine('Starting Image Group ${testImageGroup.key}');
 
-      String fileBaseName = testImageGroup.key;
+      final fileBaseName = testImageGroup.key;
       String expectedText;
       File expectedTextFile = File('${testBase.path}/$fileBaseName.txt');
       if (expectedTextFile.existsSync()) {
@@ -79,14 +79,14 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       }
 
       for (int x = 0; x < testCount; x++) {
-        List<Result> results = [];
+        final results = <Result>[];
         for (File imageFile in testImageGroup.value) {
-          Image image = decodeImage(imageFile.readAsBytesSync())!;
-          double rotation = testResults[x].rotation;
-          Image rotatedImage =
+          final image = decodeImage(imageFile.readAsBytesSync())!;
+          final rotation = testResults[x].rotation;
+          final rotatedImage =
               AbstractBlackBoxTestCase.rotateImage(image, rotation);
-          LuminanceSource source = BufferedImageLuminanceSource(rotatedImage);
-          BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+          final source = BufferedImageLuminanceSource(rotatedImage);
+          final bitmap = BinaryBitmap(HybridBinarizer(source));
 
           try {
             results.addAll(decode(bitmap, false));
@@ -96,10 +96,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         }
         results.sort((Result r, Result o) =>
             getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
-        var resultText = StringBuffer();
+        final resultText = StringBuffer();
         String? fileId;
         for (Result result in results) {
-          PDF417ResultMetadata resultMetadata = getMeta(result)!;
+          final resultMetadata = getMeta(result)!;
           //assertNotNull("resultMetadata", resultMetadata);
           fileId ??= resultMetadata.fileId;
           expect(fileId, resultMetadata.fileId, reason: 'FileId');
@@ -115,9 +115,9 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     int totalFound = 0;
     int totalMustPass = 0;
 
-    int numberOfTests = imageFiles.keys.length;
+    final numberOfTests = imageFiles.keys.length;
     for (int x = 0; x < testResults.length; x++) {
-      TestResult testResult = testResults[x];
+      final testResult = testResults[x];
       log.info(
         'Rotation ${testResult.rotation} degrees:',
       );
@@ -129,7 +129,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
     }
 
-    int totalTests = numberOfTests * testCount * 2;
+    final totalTests = numberOfTests * testCount * 2;
     log.info(
         'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
     if (totalFound > totalMustPass) {
@@ -140,8 +140,8 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
-      TestResult testResult = testResults[x];
-      String label =
+      final testResult = testResults[x];
+      final label =
           'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
       assert(tryHarderCounts[x] >= testResult.tryHarderCount,
@@ -157,7 +157,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   List<Result> decode(BinaryBitmap source, bool tryHarder) {
-    Map<DecodeHintType, Object> hints = {};
+    final hints = <DecodeHintType, Object>{};
     if (tryHarder) {
       hints[DecodeHintType.TRY_HARDER] = true;
     }
@@ -166,12 +166,12 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   Map<String, List<File>> getImageFileLists() {
-    Map<String, List<File>> result = {};
+    final result = <String, List<File>>{};
     for (File file in getImageFiles()) {
-      String testImageFileName = file.uri.pathSegments.last;
-      String fileBaseName =
+      final testImageFileName = file.uri.pathSegments.last;
+      final fileBaseName =
           testImageFileName.substring(0, testImageFileName.indexOf('-'));
-      List<File> files = result.putIfAbsent(fileBaseName, () => []);
+      final files = result.putIfAbsent(fileBaseName, () => []);
       files.add(file);
     }
     return result;

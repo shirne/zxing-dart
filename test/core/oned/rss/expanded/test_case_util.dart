@@ -36,15 +36,14 @@ class TestCaseUtil {
   TestCaseUtil();
 
   static Image getImage(String path) {
-    File file = File(path);
+    final file = File(path);
 
     return decodeImage(file.readAsBytesSync())!;
   }
 
   static BinaryBitmap getBinaryBitmap(String path) {
-    Image bufferedImage = getImage(path);
-    BufferedImageLuminanceSource luminanceSource =
-        BufferedImageLuminanceSource(bufferedImage);
+    final bufferedImage = getImage(path);
+    final luminanceSource = BufferedImageLuminanceSource(bufferedImage);
     return BinaryBitmap(GlobalHistogramBinarizer(luminanceSource));
   }
 }

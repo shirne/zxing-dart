@@ -16,7 +16,6 @@
 
 import 'dart:math' as math;
 
-import '../../result_point.dart';
 import '../pdf417_common.dart';
 import 'barcode_metadata.dart';
 import 'barcode_value.dart';
@@ -47,11 +46,10 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       BarcodeMetadata barcodeMetadata) {
     _setRowNumbers();
     _removeIncorrectCodewords(codewords, barcodeMetadata);
-    ResultPoint top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
-    ResultPoint bottom =
-        isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
-    int firstRow = imageRowToCodewordIndex(top.y.toInt());
-    int lastRow = imageRowToCodewordIndex(bottom.y.toInt());
+    final top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
+    final bottom = isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
+    final firstRow = imageRowToCodewordIndex(top.y.toInt());
+    final lastRow = imageRowToCodewordIndex(bottom.y.toInt());
     // We need to be careful using the average row height. Barcode could be skewed so that we have smaller and
     // taller rows
     //double averageRowHeight = (lastRow - firstRow) / (double) barcodeMetadata.getRowCount();
@@ -62,9 +60,9 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       if (codewords[codewordsRow] == null) {
         continue;
       }
-      Codeword codeword = codewords[codewordsRow]!;
+      final codeword = codewords[codewordsRow]!;
 
-      int rowDifference = codeword.rowNumber - barcodeRow;
+      final rowDifference = codeword.rowNumber - barcodeRow;
 
       // TODO improve handling with case where first row indicator doesn't start with 0
 
@@ -103,15 +101,15 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   }
 
   List<int>? getRowHeights() {
-    BarcodeMetadata? barcodeMetadata = getBarcodeMetadata();
+    final barcodeMetadata = getBarcodeMetadata();
     if (barcodeMetadata == null) {
       return null;
     }
     _adjustIncompleteIndicatorColumnRowNumbers(barcodeMetadata);
-    List<int> result = List.filled(barcodeMetadata.rowCount, 0);
+    final result = List.filled(barcodeMetadata.rowCount, 0);
     for (Codeword? codeword in codewords) {
       if (codeword != null) {
-        int rowNumber = codeword.rowNumber;
+        final rowNumber = codeword.rowNumber;
         if (rowNumber >= result.length) {
           // We have more rows than the barcode metadata allows for, ignore them.
           continue;
@@ -127,11 +125,10 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // use row height count to make detection of invalid row numbers more reliable
   void _adjustIncompleteIndicatorColumnRowNumbers(
       BarcodeMetadata barcodeMetadata) {
-    ResultPoint top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
-    ResultPoint bottom =
-        isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
-    int firstRow = imageRowToCodewordIndex(top.y.toInt());
-    int lastRow = imageRowToCodewordIndex(bottom.y.toInt());
+    final top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
+    final bottom = isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
+    final firstRow = imageRowToCodewordIndex(top.y.toInt());
+    final lastRow = imageRowToCodewordIndex(bottom.y.toInt());
 
     int barcodeRow = -1;
     int maxRowHeight = 1;
@@ -140,11 +137,11 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       if (codewords[codewordsRow] == null) {
         continue;
       }
-      Codeword codeword = codewords[codewordsRow]!;
+      final codeword = codewords[codewordsRow]!;
 
       codeword.setRowNumberAsRowIndicatorColumn();
 
-      int rowDifference = codeword.rowNumber - barcodeRow;
+      final rowDifference = codeword.rowNumber - barcodeRow;
 
       // TODO improve handling with case where first row indicator doesn't start with 0
 
@@ -165,17 +162,17 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   }
 
   BarcodeMetadata? getBarcodeMetadata() {
-    List<Codeword?> codewords = this.codewords;
-    BarcodeValue barcodeColumnCount = BarcodeValue();
-    BarcodeValue barcodeRowCountUpperPart = BarcodeValue();
-    BarcodeValue barcodeRowCountLowerPart = BarcodeValue();
-    BarcodeValue barcodeECLevel = BarcodeValue();
+    final codewords = this.codewords;
+    final barcodeColumnCount = BarcodeValue();
+    final barcodeRowCountUpperPart = BarcodeValue();
+    final barcodeRowCountLowerPart = BarcodeValue();
+    final barcodeECLevel = BarcodeValue();
     for (Codeword? codeword in codewords) {
       if (codeword == null) {
         continue;
       }
       codeword.setRowNumberAsRowIndicatorColumn();
-      int rowIndicatorValue = codeword.value % 30;
+      final rowIndicatorValue = codeword.value % 30;
       int codewordRowNumber = codeword.rowNumber;
       if (!isLeft) {
         codewordRowNumber += 2;
@@ -207,7 +204,7 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
             PDF417Common.MAX_ROWS_IN_BARCODE) {
       return null;
     }
-    BarcodeMetadata barcodeMetadata = BarcodeMetadata(
+    final barcodeMetadata = BarcodeMetadata(
         barcodeColumnCount.getValue()[0],
         barcodeRowCountUpperPart.getValue()[0],
         barcodeRowCountLowerPart.getValue()[0],
@@ -222,11 +219,11 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     // Remove codewords which do not match the metadata
     // TODO Maybe we should keep the incorrect codewords for the start and end positions?
     for (int codewordRow = 0; codewordRow < codewords.length; codewordRow++) {
-      Codeword? codeword = codewords[codewordRow];
+      final codeword = codewords[codewordRow];
       if (codewords[codewordRow] == null) {
         continue;
       }
-      int rowIndicatorValue = codeword!.value % 30;
+      final rowIndicatorValue = codeword!.value % 30;
       int codewordRowNumber = codeword.rowNumber;
       if (codewordRowNumber > barcodeMetadata.rowCount) {
         codewords[codewordRow] = null;
@@ -257,7 +254,5 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   }
 
   @override
-  String toString() {
-    return 'IsLeft: $isLeft\n${super.toString()}';
-  }
+  String toString() => 'IsLeft: $isLeft\n${super.toString()}';
 }

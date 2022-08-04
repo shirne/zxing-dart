@@ -16,7 +16,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -25,8 +24,7 @@ import '../utils.dart';
 /// Tests [Code39Writer].
 void main() {
   void doTest(String input, String expected) {
-    BitMatrix result =
-        Code39Writer().encode(input, BarcodeFormat.CODE_39, 0, 0);
+    final result = Code39Writer().encode(input, BarcodeFormat.CODE_39, 0, 0);
     expect(expected, matrixToString(result), reason: input);
   }
 

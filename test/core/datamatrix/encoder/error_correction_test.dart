@@ -25,7 +25,7 @@ void main() {
   test('testRS', () {
     //Sample from Annexe R in ISO/IEC 16022:2000(E)
     List<int> cw = [142, 164, 186];
-    SymbolInfo symbolInfo = SymbolInfo.lookup(3)!;
+    final symbolInfo = SymbolInfo.lookup(3)!;
     String s =
         ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
     expect('142 164 186 114 25 5 88 102', visualize(s));

@@ -36,10 +36,10 @@ class BitSourceBuilder {
         bitsLeftInNextByte = 8;
       }
     } else {
-      int bitsToWriteNow = bitsLeftInNextByte;
-      int numRestOfBits = numBits - bitsToWriteNow;
-      int mask = 0xFF >> (8 - bitsToWriteNow);
-      int valueToWriteNow = (value >> numRestOfBits) & mask;
+      final int bitsToWriteNow = bitsLeftInNextByte;
+      final int numRestOfBits = numBits - bitsToWriteNow;
+      final int mask = 0xFF >> (8 - bitsToWriteNow);
+      final int valueToWriteNow = (value >> numRestOfBits) & mask;
       write(valueToWriteNow, bitsToWriteNow);
       write(value, numRestOfBits);
     }

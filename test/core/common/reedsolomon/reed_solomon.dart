@@ -7,7 +7,7 @@ const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;
 
 String arrayToString(List<int> data) {
-  StringBuilder sb = StringBuilder('{');
+  final sb = StringBuilder('{');
   for (int i = 0; i < data.length; i++) {
     sb.write(
       i > 0 ? ',${data[i].toRadixString(16)}' : data[i].toRadixString(16),
@@ -29,10 +29,10 @@ void assertDataEquals(String message, List<int> expected, List<int> received) {
 }
 
 void corrupt(List<int> received, int howMany, Random random, int max) {
-  Set<int> corrupted = {};
+  final corrupted = <int>{};
   for (int j = 0; j < howMany; j++) {
-    int location = random.nextInt(received.length);
-    int value = random.nextInt(max);
+    final int location = random.nextInt(received.length);
+    final int value = random.nextInt(max);
     if (corrupted.contains(location) || received[location] == value) {
       j--;
     } else {
@@ -43,9 +43,9 @@ void corrupt(List<int> received, int howMany, Random random, int max) {
 }
 
 void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
-  ReedSolomonEncoder encoder = ReedSolomonEncoder(field);
-  Int32List messageExpected = Int32List(dataWords.length + ecWords.length);
-  Int32List message = Int32List(dataWords.length + ecWords.length);
+  final encoder = ReedSolomonEncoder(field);
+  final messageExpected = Int32List(dataWords.length + ecWords.length);
+  final message = Int32List(dataWords.length + ecWords.length);
   List.copyRange(messageExpected, 0, dataWords, 0, dataWords.length);
   //System.arraycopy(dataWords, 0, messageExpected, 0, dataWords.length);
   List.copyRange(messageExpected, dataWords.length, ecWords, 0, ecWords.length);
@@ -59,11 +59,11 @@ void testEncoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
 }
 
 void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
-  ReedSolomonDecoder decoder = ReedSolomonDecoder(field);
-  Int32List message = Int32List(dataWords.length + ecWords.length);
-  int maxErrors = ecWords.length ~/ 2;
-  Random random = getPseudoRandom();
-  int iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
+  final decoder = ReedSolomonDecoder(field);
+  final message = Int32List(dataWords.length + ecWords.length);
+  final maxErrors = ecWords.length ~/ 2;
+  final random = getPseudoRandom();
+  final iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWords.length; i++) {
       if (i > 10 && i < ecWords.length ~/ 2 - 10) {
@@ -105,12 +105,12 @@ void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
       'Invalid data size for $field');
   assert(ecSize > 0 && ecSize + dataSize <= field.size,
       'Invalid ECC size for $field');
-  ReedSolomonEncoder encoder = ReedSolomonEncoder(field);
-  Int32List message = Int32List(dataSize + ecSize);
-  Int32List dataWords = Int32List(dataSize);
-  Int32List ecWords = Int32List(ecSize);
-  Random random = getPseudoRandom();
-  int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
+  final encoder = ReedSolomonEncoder(field);
+  final message = Int32List(dataSize + ecSize);
+  final dataWords = Int32List(dataSize);
+  final ecWords = Int32List(ecSize);
+  final random = getPseudoRandom();
+  final int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
   for (int i = 0; i < iterations; i++) {
     // generate random data
     for (int k = 0; k < dataSize; k++) {

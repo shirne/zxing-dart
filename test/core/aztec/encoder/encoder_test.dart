@@ -47,20 +47,21 @@ void main() {
   }
 
   void testEncode(String data, bool compact, int layers, String expected) {
-    AztecCode aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
+    final aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
     expect(aztec.isCompact, compact,
         reason: 'Unexpected symbol format (compact)');
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
-    BitMatrix matrix = aztec.matrix!;
+    final matrix = aztec.matrix!;
     expect(matrix.toString(), expected, reason: 'encode() failed');
   }
 
   void testEncodeDecode(String data, bool compact, int layers) {
-    AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    final AztecCode aztec =
+        Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
     expect(aztec.isCompact, compact,
         reason: 'Unexpected symbol format (compact)');
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
-    BitMatrix matrix = aztec.matrix!;
+    final BitMatrix matrix = aztec.matrix!;
     AztecDetectorResult r = AztecDetectorResult(
         matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
     DecoderResult res = Decoder().decode(r);
@@ -69,7 +70,7 @@ void main() {
       data,
     );
     // Check error correction by introducing a few minor errors
-    Random random = getPseudoRandom();
+    final Random random = getPseudoRandom();
     matrix.flip(random.nextInt(matrix.width), random.nextInt(2));
     matrix.flip(
         random.nextInt(matrix.width), matrix.height - 2 + random.nextInt(2));
@@ -85,19 +86,20 @@ void main() {
   void testWriter(String data, Encoding? charset, int eccPercent, bool compact,
       int layers) {
     // Perform an encode-decode round-trip because it can be lossy.
-    Map<EncodeHintType, Object> hints = {};
+    final Map<EncodeHintType, Object> hints = {};
     if (null != charset) {
       hints[EncodeHintType.CHARACTER_SET] = charset.name;
     }
     hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
-    AztecWriter writer = AztecWriter();
-    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
-    AztecCode aztec =
+    final AztecWriter writer = AztecWriter();
+    final BitMatrix matrix =
+        writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
+    final AztecCode aztec =
         Encoder.encode(data, eccPercent, Encoder.DEFAULT_AZTEC_LAYERS, charset);
     expect(aztec.isCompact, compact,
         reason: 'Unexpected symbol format (compact)');
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
-    BitMatrix matrix2 = aztec.matrix!;
+    final BitMatrix matrix2 = aztec.matrix!;
     expect(matrix, matrix2);
     AztecDetectorResult r = AztecDetectorResult(
         matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
@@ -107,14 +109,14 @@ void main() {
       data,
     );
     // Check error correction by introducing up to eccPercent/2 errors
-    int ecWords = aztec.codeWords * eccPercent ~/ 100 ~/ 2;
-    Random random = getPseudoRandom();
+    final int ecWords = aztec.codeWords * eccPercent ~/ 100 ~/ 2;
+    final Random random = getPseudoRandom();
     for (int i = 0; i < ecWords; i++) {
       // don't touch the core
-      int x = random.nextBool()
+      final int x = random.nextBool()
           ? random.nextInt(aztec.layers * 2)
           : matrix.width - 1 - random.nextInt(aztec.layers * 2);
-      int y = random.nextBool()
+      final int y = random.nextBool()
           ? random.nextInt(aztec.layers * 2)
           : matrix.height - 1 - random.nextInt(aztec.layers * 2);
       matrix.flip(x, y);
@@ -126,14 +128,14 @@ void main() {
   }
 
   void testModeMessage(bool compact, int layers, int words, String expected) {
-    BitArray inBit = Encoder.generateModeMessage(compact, layers, words);
+    final BitArray inBit = Encoder.generateModeMessage(compact, layers, words);
     expect(stripSpace(expected), stripSpace(inBit.toString()),
         reason: 'generateModeMessage() failed');
   }
 
   BitArray toBitArray(String bits) {
-    BitArray inBit = BitArray();
-    List<String> str = bits.replaceAll(dotX, '').split('');
+    final BitArray inBit = BitArray();
+    final List<String> str = bits.replaceAll(dotX, '').split('');
     for (String aStr in str) {
       inBit.appendBit(aStr == 'X');
     }
@@ -141,14 +143,14 @@ void main() {
   }
 
   void testStuffBits(int wordSize, String bits, String expected) {
-    BitArray inBit = toBitArray(bits);
-    BitArray stuffed = Encoder.stuffBits(inBit, wordSize);
+    final BitArray inBit = toBitArray(bits);
+    final BitArray stuffed = Encoder.stuffBits(inBit, wordSize);
     expect(stripSpace(expected), stripSpace(stuffed.toString()),
         reason: 'stuffBits() failed for input string: $bits');
   }
 
   List<bool> toBooleanArray(BitArray bitArray) {
-    List<bool> result = List.filled(bitArray.size, false);
+    final List<bool> result = List.filled(bitArray.size, false);
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray[i];
     }
@@ -156,8 +158,8 @@ void main() {
   }
 
   void testHighLevelEncodeStringString(String s, String expectedBits) {
-    BitArray bits = HighLevelEncoder(latin1.encode(s)).encode();
-    String receivedBits = stripSpace(bits.toString());
+    final BitArray bits = HighLevelEncoder(latin1.encode(s)).encode();
+    final String receivedBits = stripSpace(bits.toString());
     expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
     expect(stripSpace(expectedBits), receivedBits,
         reason: 'highLevelEncode() failed for input string: $s');
@@ -165,8 +167,8 @@ void main() {
 
   // todo 加密串长度和预期不一致，但是能解密 ?
   void testHighLevelEncodeStringInt(String s, int expectedReceivedBits) {
-    BitArray bits = HighLevelEncoder(latin1.encode(s)).encode();
-    int receivedBitCount = stripSpace(bits.toString()).length;
+    final BitArray bits = HighLevelEncoder(latin1.encode(s)).encode();
+    final int receivedBitCount = stripSpace(bits.toString()).length;
     expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
     if (expectedReceivedBits != receivedBitCount) {
       print(
@@ -280,12 +282,12 @@ void main() {
     testWriter(
         'The capital of Japan is named \u6771\u4EAC.', shiftJis, 25, true, 3);
     // Test AztecWriter defaults
-    String data = 'In ut magna vel mauris malesuada';
-    AztecWriter writer = AztecWriter();
-    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-    AztecCode aztec = Encoder.encode(
+    final String data = 'In ut magna vel mauris malesuada';
+    final AztecWriter writer = AztecWriter();
+    final BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+    final AztecCode aztec = Encoder.encode(
         data, Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
-    BitMatrix expectedMatrix = aztec.matrix!;
+    final BitMatrix expectedMatrix = aztec.matrix!;
     expect(matrix, expectedMatrix);
   });
 
@@ -502,7 +504,7 @@ void main() {
       61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 2100
     ]) {
       // This is the expected length of a binary string of length "i"
-      int expectedLength = (8 * i) +
+      final int expectedLength = (8 * i) +
           ((i <= 31)
               ? 10
               : (i <= 62)
@@ -584,7 +586,7 @@ void main() {
   });
 
   void doTestUserSpecifiedLayers(int userSpecifiedLayers) {
-    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    final String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     expect(aztec.layers, 2);
     assert(aztec.isCompact);
@@ -613,9 +615,9 @@ void main() {
   test('testBorderCompact4CaseFailed', () {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
     // be error correction
-    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    final String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     // encodes as 26 * 5 * 4 = 520 bits of data
-    String alphabet4 = alphabet * 4;
+    final String alphabet4 = alphabet * 4;
     try {
       Encoder.encode(alphabet4, 0, -4);
       fail('Rest must be error correction');
@@ -627,9 +629,9 @@ void main() {
   test('testBorderCompact4Case', () {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
     // be error correction
-    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    final String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     // encodes as 26 * 5 * 4 = 520 bits of data
-    String alphabet4 = alphabet * 4;
+    final String alphabet4 = alphabet * 4;
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode =

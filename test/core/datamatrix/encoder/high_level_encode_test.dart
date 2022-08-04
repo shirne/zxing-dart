@@ -44,7 +44,7 @@ void main() {
   }
 
   String createBinaryMessage(int len) {
-    StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write('\u00ABäöüéàá-');
     for (int i = 0; i < len - 9; i++) {
       sb.write('\u00B7');
@@ -69,8 +69,8 @@ void main() {
     String msg, [
     bool compareSizeToMinimalEncoder = true,
   ]) {
-    String encoded = HighLevelEncoder.encodeHighLevel(msg);
-    String encoded2 = MinimalEncoder.encodeHighLevel(msg);
+    final encoded = HighLevelEncoder.encodeHighLevel(msg);
+    final encoded2 = MinimalEncoder.encodeHighLevel(msg);
     if (compareSizeToMinimalEncoder) {
       expect(encoded.length, greaterThanOrEqualTo(encoded2.length));
     }
@@ -94,7 +94,7 @@ void main() {
   });
 
   test('testC40EncodationBasic1', () {
-    String visualized = encodeHighLevel('AIMAIMAIM');
+    final visualized = encodeHighLevel('AIMAIMAIM');
 
     expect('230 91 11 91 11 91 11 254', visualized);
     //230 shifts to C40 encodation, 254 unlatches, "else" case
@@ -133,7 +133,7 @@ void main() {
 
   test('testC40EncodationSpecExample', () {
     //Example in Figure 1 in the spec
-    String visualized = encodeHighLevel('A1B2C3D4E5F6G7H8I9J0K1L2');
+    final visualized = encodeHighLevel('A1B2C3D4E5F6G7H8I9J0K1L2');
     expect('230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254',
         visualized);
   });
@@ -166,7 +166,7 @@ void main() {
   });
 
   test('testC40EncodationSpecialCases2', () {
-    String visualized = encodeHighLevel('AIMAIMAIMAIMAIMAIMAI');
+    final visualized = encodeHighLevel('AIMAIMAIMAIMAIMAIMAI');
     expect(visualized, '230 91 11 91 11 91 11 91 11 91 11 91 11 254 66 74');
     //available > 2, rest = 2 --> unlatch and encode as ASCII
   });
@@ -297,19 +297,19 @@ void main() {
   });
 
   test('testUnlatchingFromC40', () {
-    String visualized = encodeHighLevel('AIMAIMAIMAIMaimaimaim');
+    final visualized = encodeHighLevel('AIMAIMAIMAIMaimaimaim');
     expect(
         '230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11', visualized);
   });
 
   test('testUnlatchingFromText', () {
-    String visualized = encodeHighLevel('aimaimaimaim12345678');
+    final visualized = encodeHighLevel('aimaimaimaim12345678');
     expect(
         '239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237', visualized);
   });
 
   test('testHelloWorld', () {
-    String visualized = encodeHighLevel('Hello World!');
+    final visualized = encodeHighLevel('Hello World!');
     expect('73 239 116 130 175 123 148 64 158 233 254 34', visualized);
   });
 
@@ -328,12 +328,12 @@ void main() {
   });
 
   test('testX12Unlatch', () {
-    String visualized = encodeHighLevel('*DTCP01');
+    final visualized = encodeHighLevel('*DTCP01');
     expect('43 69 85 68 81 131 129 56', visualized);
   });
 
   test('testX12Unlatch2', () {
-    String visualized = encodeHighLevel('*DTCP0');
+    final visualized = encodeHighLevel('*DTCP0');
     expect('238 9 10 104 141', visualized);
   });
 
@@ -341,7 +341,7 @@ void main() {
     //There was an IllegalArgumentException for an illegal character here because
     //of an encoding problem of the character 0x0060 in Java source code.
 
-    String visualized = encodeHighLevel('fiykmj*Rh2`,e6');
+    final visualized = encodeHighLevel('fiykmj*Rh2`,e6');
     expect(
       //TODO java result:"103 106 122 108 110 107 43 83 105 51 97 45 102 55 129 237",
       '239 122 87 154 40 7 171 115 207 12 130 71 155 254 129 237',
@@ -350,14 +350,14 @@ void main() {
   });
 
   test('testMacroCharacters', () {
-    String visualized =
+    final visualized =
         encodeHighLevel('[)>\u001E05\u001D5555\u001C6666\u001E\u0004');
     //expect("92 42 63 31 135 30 185 185 29 196 196 31 5 129 87 237", visualized);
     expect('236 185 185 29 196 196 129 56', visualized);
   });
 
   test('testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle', () {
-    String visualized = encodeHighLevel('*MEMANT-1F-MESTECH');
+    final visualized = encodeHighLevel('*MEMANT-1F-MESTECH');
 
     expect('240 168 209 77 4 229 45 196 107 77 21 53 5 12 135 192', visualized);
   });
@@ -406,7 +406,7 @@ void main() {
   });
 
   test('testSizes', () {
-    List<int> sizes = List.filled(2, 0);
+    final sizes = List.filled(2, 0);
     encodeHighLevelSize('A', sizes);
     expect(3, sizes[0]);
     expect(3, sizes[1]);
@@ -551,7 +551,7 @@ void main() {
   });
 
   test('testPadding', () {
-    List<int> sizes = List.filled(2, 0);
+    final sizes = List.filled(2, 0);
     encodeHighLevelSize(
         'IS010000000000000000000000S1118058599124123S21.2.250.1.213.1.4.8 S3FIRST NAMETEST S5MS618-06'
         '-1985S713201S4LASTNAMETEST',

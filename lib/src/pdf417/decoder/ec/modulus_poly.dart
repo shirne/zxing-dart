@@ -25,7 +25,7 @@ class ModulusPoly {
     if (coefficients.isEmpty) {
       throw ArgumentError();
     }
-    int coefficientsLength = coefficients.length;
+    final coefficientsLength = coefficients.length;
     if (coefficientsLength > 1 && coefficients[0] == 0) {
       // Leading term must be non-zero for anything except the constant polynomial "0"
       int firstNonZero = 1;
@@ -73,7 +73,7 @@ class ModulusPoly {
       return result;
     }
     int result = _coefficients[0];
-    int size = _coefficients.length;
+    final size = _coefficients.length;
     for (int i = 1; i < size; i++) {
       result = _field.add(_field.multiply(a, result), _coefficients[i]);
     }
@@ -94,12 +94,12 @@ class ModulusPoly {
     List<int> smallerCoefficients = _coefficients;
     List<int> largerCoefficients = other._coefficients;
     if (smallerCoefficients.length > largerCoefficients.length) {
-      List<int> temp = smallerCoefficients;
+      final temp = smallerCoefficients;
       smallerCoefficients = largerCoefficients;
       largerCoefficients = temp;
     }
-    List<int> sumDiff = List.filled(largerCoefficients.length, 0);
-    int lengthDiff = largerCoefficients.length - smallerCoefficients.length;
+    final sumDiff = List.filled(largerCoefficients.length, 0);
+    final lengthDiff = largerCoefficients.length - smallerCoefficients.length;
     // Copy high-order terms only found in higher-degree polynomial's coefficients
     List.copyRange(sumDiff, 0, largerCoefficients, 0, lengthDiff);
 
@@ -128,13 +128,13 @@ class ModulusPoly {
     if (isZero || other.isZero) {
       return _field.zero;
     }
-    List<int> aCoefficients = _coefficients;
-    int aLength = aCoefficients.length;
-    List<int> bCoefficients = other._coefficients;
-    int bLength = bCoefficients.length;
-    List<int> product = List.filled(aLength + bLength - 1, 0);
+    final aCoefficients = _coefficients;
+    final aLength = aCoefficients.length;
+    final bCoefficients = other._coefficients;
+    final bLength = bCoefficients.length;
+    final product = List.filled(aLength + bLength - 1, 0);
     for (int i = 0; i < aLength; i++) {
-      int aCoeff = aCoefficients[i];
+      final aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
         product[i + j] = _field.add(
             product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
@@ -144,8 +144,8 @@ class ModulusPoly {
   }
 
   ModulusPoly negative() {
-    int size = _coefficients.length;
-    List<int> negativeCoefficients = [];
+    final size = _coefficients.length;
+    final negativeCoefficients = <int>[];
     for (int i = 0; i < size; i++) {
       negativeCoefficients.add(_field.subtract(0, _coefficients[i]));
     }
@@ -159,8 +159,8 @@ class ModulusPoly {
     if (scalar == 1) {
       return this;
     }
-    int size = _coefficients.length;
-    List<int> product = []; // size
+    final size = _coefficients.length;
+    final product = <int>[]; // size
     for (int i = 0; i < size; i++) {
       product.add(_field.multiply(_coefficients[i], scalar));
     }
@@ -174,8 +174,8 @@ class ModulusPoly {
     if (coefficient == 0) {
       return _field.zero;
     }
-    int size = _coefficients.length;
-    List<int> product = List.filled(size + degree, 0);
+    final size = _coefficients.length;
+    final product = List.filled(size + degree, 0);
     for (int i = 0; i < size; i++) {
       product[i] = _field.multiply(_coefficients[i], coefficient);
     }
@@ -184,7 +184,7 @@ class ModulusPoly {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int deg = degree; deg >= 0; deg--) {
       int coefficient = getCoefficient(deg);
       if (coefficient != 0) {

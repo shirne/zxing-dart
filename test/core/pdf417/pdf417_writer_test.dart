@@ -16,21 +16,20 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/pdf417.dart';
 import 'package:zxing_lib/zxing.dart';
 
 /// Tests [PDF417Writer].
 void main() {
   test('testDataMatrixImageWriter', () {
-    Map<EncodeHintType, Object> hints = {};
+    final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.MARGIN] = 0;
-    int size = 64;
-    PDF417Writer writer = PDF417Writer();
-    BitMatrix matrix =
+    const size = 64;
+    final writer = PDF417Writer();
+    final matrix =
         writer.encode('Hello Google', BarcodeFormat.PDF_417, size, size, hints);
     // assertNotNull(matrix);
-    String expected =
+    final expected =
         'X X X X X X X X   X   X   X       X X X X   X   X   X X X X         X X   X   X           X X         X X X X   X X     X     X X X     X X   X           X       X X     X X X X X   X   X   X X X X X     X X X X X X X   X       X   X     X \n'
         'X X X X X X X X   X   X   X       X X X X   X   X   X X X X         X X   X   X           X X         X X X X   X X     X     X X X     X X   X           X       X X     X X X X X   X   X   X X X X X     X X X X X X X   X       X   X     X \n'
         'X X X X X X X X   X   X   X       X X X X   X   X   X X X X         X X   X   X           X X         X X X X   X X     X     X X X     X X   X           X       X X     X X X X X   X   X   X X X X X     X X X X X X X   X       X   X     X \n'

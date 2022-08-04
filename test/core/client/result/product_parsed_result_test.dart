@@ -23,10 +23,10 @@ import 'package:zxing_lib/zxing.dart';
 ///
 void main() {
   void doTest(String contents, String normalized, BarcodeFormat format) {
-    Result fakeResult = Result(contents, null, null, format);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, format);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.PRODUCT, result.type);
-    ProductParsedResult productResult = result as ProductParsedResult;
+    final productResult = result as ProductParsedResult;
     expect(contents, productResult.productID);
     expect(normalized, productResult.normalizedProductID);
   }

@@ -26,22 +26,20 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
-import 'package:zxing_lib/zxing.dart';
 
 import 'test_case_util.dart';
 
 /// Tests [RSSExpandedReader] handling of stacked RSS barcodes.
 void main() {
   test('testDecodingRowByRow', () async {
-    RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+    final rssExpandedReader = RSSExpandedReader();
 
-    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
+    final binaryMap = TestCaseUtil.getBinaryBitmap(
         'test/resources/blackbox/rssexpandedstacked-2/1000.png');
 
-    int firstRowNumber = binaryMap.height ~/ 3;
-    BitArray firstRow = binaryMap.getBlackRow(firstRowNumber, null);
+    final firstRowNumber = binaryMap.height ~/ 3;
+    final firstRow = binaryMap.getBlackRow(firstRowNumber, null);
     try {
       rssExpandedReader.decodeRow2pairs(firstRowNumber, firstRow);
       fail('NotFoundException expected');
@@ -51,31 +49,31 @@ void main() {
     }
 
     expect(1, rssExpandedReader.rows.length);
-    ExpandedRow firstExpandedRow = rssExpandedReader.rows[0];
+    final firstExpandedRow = rssExpandedReader.rows[0];
     expect(firstRowNumber, firstExpandedRow.rowNumber);
 
     expect(2, firstExpandedRow.pairs.length);
 
     firstExpandedRow.pairs[1].finderPattern!.startEnd[1] = 0;
 
-    int secondRowNumber = 2 * binaryMap.height ~/ 3;
-    BitArray secondRow = binaryMap.getBlackRow(secondRowNumber, null);
+    final secondRowNumber = 2 * binaryMap.height ~/ 3;
+    final secondRow = binaryMap.getBlackRow(secondRowNumber, null);
     secondRow.reverse();
 
-    List<ExpandedPair> totalPairs =
+    final totalPairs =
         rssExpandedReader.decodeRow2pairs(secondRowNumber, secondRow);
 
-    Result result = RSSExpandedReader.constructResult(totalPairs);
+    final result = RSSExpandedReader.constructResult(totalPairs);
     expect('(01)98898765432106(3202)012345(15)991231', result.text);
   });
 
   test('testCompleteDecode', () async {
-    OneDReader rssExpandedReader = RSSExpandedReader();
+    final rssExpandedReader = RSSExpandedReader();
 
-    BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
+    final binaryMap = TestCaseUtil.getBinaryBitmap(
         'test/resources/blackbox/rssexpandedstacked-2/1000.png');
 
-    Result result = rssExpandedReader.decode(binaryMap);
+    final result = rssExpandedReader.decode(binaryMap);
     expect('(01)98898765432106(3202)012345(15)991231', result.text);
   });
 }

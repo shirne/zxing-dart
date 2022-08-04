@@ -99,18 +99,18 @@ abstract class UPCEANReader extends OneDReader {
     bool foundStart = false;
     late List<int> startRange;
     int nextStart = 0;
-    List<int> counters = List.filled(START_END_PATTERN.length, 0);
+    final counters = List.filled(START_END_PATTERN.length, 0);
     while (!foundStart) {
       counters.fillRange(0, START_END_PATTERN.length, 0);
 
       startRange =
           _findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
-      int start = startRange[0];
+      final start = startRange[0];
       nextStart = startRange[1];
       // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
       // If this check would run off the left edge of the image, do not accept this barcode,
       // as it is very likely to be a false positive.
-      int quietStart = start - (nextStart - start);
+      final quietStart = start - (nextStart - start);
       if (quietStart >= 0) {
         foundStart = row.isRange(quietStart, start, false);
       }
@@ -138,7 +138,7 @@ abstract class UPCEANReader extends OneDReader {
     List<int>? startGuardRange,
   ]) {
     startGuardRange ??= findStartGuardPattern(row);
-    ResultPointCallback? resultPointCallback =
+    final resultPointCallback =
         hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback?;
     int symbologyIdentifier = 0;
@@ -149,16 +149,16 @@ abstract class UPCEANReader extends OneDReader {
           rowNumber.toDouble()));
     }
 
-    StringBuilder result = _decodeRowStringBuffer;
+    final result = _decodeRowStringBuffer;
     result.clear();
-    int endStart = decodeMiddle(row, startGuardRange, result);
+    final endStart = decodeMiddle(row, startGuardRange, result);
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(
           ResultPoint(endStart.toDouble(), rowNumber.toDouble()));
     }
 
-    List<int> endRange = decodeEnd(row, endStart);
+    final endRange = decodeEnd(row, endStart);
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(
@@ -167,13 +167,13 @@ abstract class UPCEANReader extends OneDReader {
 
     // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
     // spec might want more whitespace, but in practice this is the maximum we can count on.
-    int end = endRange[1];
-    int quietEnd = end + (end - endRange[0]);
+    final end = endRange[1];
+    final quietEnd = end + (end - endRange[0]);
     if (quietEnd >= row.size || !row.isRange(end, quietEnd, false)) {
       throw NotFoundException.instance;
     }
 
-    String resultString = result.toString();
+    final resultString = result.toString();
     // UPC/EAN should never be less than 8 chars anyway
     if (resultString.length < 8) {
       throw FormatsException.instance;
@@ -182,10 +182,10 @@ abstract class UPCEANReader extends OneDReader {
       throw ChecksumException.getChecksumInstance();
     }
 
-    double left = (startGuardRange[1] + startGuardRange[0]) / 2.0;
-    double right = (endRange[1] + endRange[0]) / 2.0;
-    BarcodeFormat format = barcodeFormat;
-    Result decodeResult = Result(
+    final left = (startGuardRange[1] + startGuardRange[0]) / 2.0;
+    final right = (endRange[1] + endRange[0]) / 2.0;
+    final format = barcodeFormat;
+    final decodeResult = Result(
         resultString,
         null, // no natural byte representation for these barcodes
         [
@@ -197,7 +197,7 @@ abstract class UPCEANReader extends OneDReader {
     int extensionLength = 0;
 
     try {
-      Result extensionResult =
+      final extensionResult =
           _extensionReader.decodeRow(rowNumber, row, endRange[1]);
       decodeResult.putMetadata(
           ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.text);
@@ -208,7 +208,7 @@ abstract class UPCEANReader extends OneDReader {
       // continue
     }
 
-    List<int>? allowedExtensions =
+    final allowedExtensions =
         hints?[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>?;
     if (allowedExtensions != null) {
       bool valid = false;
@@ -224,7 +224,7 @@ abstract class UPCEANReader extends OneDReader {
     }
 
     if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
-      String? countryID = _eanManSupport.lookupCountryIdentifier(resultString);
+      final countryID = _eanManSupport.lookupCountryIdentifier(resultString);
       if (countryID != null) {
         decodeResult.putMetadata(
             ResultMetadataType.POSSIBLE_COUNTRY, countryID);
@@ -254,12 +254,12 @@ abstract class UPCEANReader extends OneDReader {
   /// @return true iff string of digits passes the UPC/EAN checksum algorithm
   /// @throws FormatException if the string does not contain only digits
   static bool checkStandardUPCEANChecksum(String s) {
-    int length = s.length;
+    final length = s.length;
     if (length == 0) {
       return false;
     }
     try {
-      int check = int.parse(s[length - 1]);
+      final check = int.parse(s[length - 1]);
 
       return getStandardUPCEANChecksum(s.substring(0, length - 1)) == check;
     } on FormatException catch (_) {
@@ -268,10 +268,10 @@ abstract class UPCEANReader extends OneDReader {
   }
 
   static int getStandardUPCEANChecksum(String s) {
-    int length = s.length;
+    final length = s.length;
     int sum = 0;
     for (int i = length - 1; i >= 0; i -= 2) {
-      int digit = s.codeUnitAt(i) - 48 /* 0 */;
+      final digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
         throw FormatsException.instance;
       }
@@ -279,7 +279,7 @@ abstract class UPCEANReader extends OneDReader {
     }
     sum *= 3;
     for (int i = length - 2; i >= 0; i -= 2) {
-      int digit = s.codeUnitAt(i) - 48 /* 0 */;
+      final digit = s.codeUnitAt(i) - 48 /* 0 */;
       if (digit < 0 || digit > 9) {
         throw FormatsException.instance;
       }
@@ -311,12 +311,12 @@ abstract class UPCEANReader extends OneDReader {
       BitArray row, int rowOffset, bool whiteFirst, List<int> pattern,
       [List<int>? counters]) {
     counters ??= List.filled(pattern.length, 0);
-    int width = row.size;
+    final width = row.size;
     rowOffset =
         whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
     int counterPosition = 0;
     int patternStart = rowOffset;
-    int patternLength = pattern.length;
+    final patternLength = pattern.length;
     bool isWhite = whiteFirst;
     for (int x = rowOffset; x < width; x++) {
       if (row.get(x) != isWhite) {
@@ -358,10 +358,10 @@ abstract class UPCEANReader extends OneDReader {
     OneDReader.recordPattern(row, rowOffset, counters);
     double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
-    int max = patterns.length;
+    final max = patterns.length;
     for (int i = 0; i < max; i++) {
-      List<int> pattern = patterns[i];
-      double variance = OneDReader.patternMatchVariance(
+      final pattern = patterns[i];
+      final variance = OneDReader.patternMatchVariance(
           counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
 
       // todo in zxing java float compare may return true between the same float number

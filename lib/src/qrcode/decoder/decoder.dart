@@ -16,22 +16,18 @@
 
 import 'dart:typed_data';
 
+import '../../checksum_exception.dart';
 import '../../common/bit_matrix.dart';
 import '../../common/decoder_result.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
-
-import '../../checksum_exception.dart';
 import '../../common/reedsolomon/generic_gf.dart';
-
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../decode_hint_type.dart';
 import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'data_block.dart';
 import 'decoded_bit_stream_parser.dart';
-import 'error_correction_level.dart';
 import 'qrcode_decoder_meta_data.dart';
-import 'version.dart';
 
 /// The main class which implements QR Code decoding -- as opposed to locating and extracting
 /// the QR Code from an image.
@@ -65,7 +61,7 @@ class Decoder {
   DecoderResult decodeMatrix(BitMatrix bits,
       [Map<DecodeHintType, Object>? hints]) {
     // Construct a parser and read version, error-correction level
-    BitMatrixParser parser = BitMatrixParser(bits);
+    final parser = BitMatrixParser(bits);
     FormatsException? fe;
     ChecksumException? ce;
     try {
@@ -98,7 +94,7 @@ class Decoder {
       // Prepare for a mirrored reading.
       parser.mirror();
 
-      DecoderResult result = _decodeParser(parser, hints);
+      final result = _decodeParser(parser, hints);
 
       // Success! Notify the caller that the code was mirrored.
       result.other = QRCodeDecoderMetaData(true);
@@ -121,28 +117,26 @@ class Decoder {
 
   DecoderResult _decodeParser(BitMatrixParser parser,
       [Map<DecodeHintType, Object>? hints]) {
-    Version version = parser.readVersion();
-    ErrorCorrectionLevel ecLevel =
-        parser.readFormatInformation().errorCorrectionLevel;
+    final version = parser.readVersion();
+    final ecLevel = parser.readFormatInformation().errorCorrectionLevel;
 
     // Read codewords
-    Uint8List codewords = parser.readCodewords();
+    final codewords = parser.readCodewords();
     // Separate into data blocks
-    List<DataBlock> dataBlocks =
-        DataBlock.getDataBlocks(codewords, version, ecLevel);
+    final dataBlocks = DataBlock.getDataBlocks(codewords, version, ecLevel);
 
     // Count total number of data bytes
     int totalBytes = 0;
     for (DataBlock dataBlock in dataBlocks) {
       totalBytes += dataBlock.numDataCodewords;
     }
-    Uint8List resultBytes = Uint8List(totalBytes);
+    final resultBytes = Uint8List(totalBytes);
     int resultOffset = 0;
 
     // Error-correct and copy data blocks together into a stream of bytes
     for (DataBlock dataBlock in dataBlocks) {
-      Uint8List codewordBytes = dataBlock.codewords;
-      int numDataCodewords = dataBlock.numDataCodewords;
+      final codewordBytes = dataBlock.codewords;
+      final numDataCodewords = dataBlock.numDataCodewords;
       _correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
         resultBytes[resultOffset++] = codewordBytes[i];
@@ -160,9 +154,9 @@ class Decoder {
   /// @param numDataCodewords number of codewords that are data bytes
   /// @throws ChecksumException if error correction fails
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
-    int numCodewords = codewordBytes.length;
+    final numCodewords = codewordBytes.length;
     // First read into an array of ints
-    Int32List codewordsInts = Int32List(numCodewords);
+    final codewordsInts = Int32List(numCodewords);
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }

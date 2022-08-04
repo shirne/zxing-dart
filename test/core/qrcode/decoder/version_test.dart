@@ -69,7 +69,7 @@ void checkVersion(Version? version, int number, int dimension) {
 }
 
 void doTestVersion(int expectedVersion, int mask) {
-  Version? version = Version.decodeVersionInformation(mask);
+  final version = Version.decodeVersionInformation(mask);
   assert(version != null);
   expect(expectedVersion, version!.versionNumber);
 }

@@ -31,7 +31,6 @@ import '../../../decode_hint_type.dart';
 import '../../../not_found_exception.dart';
 import '../../../result.dart';
 import '../../../result_metadata_type.dart';
-import '../../../result_point.dart';
 import '../../one_dreader.dart';
 import '../abstract_rssreader.dart';
 import '../data_character.dart';

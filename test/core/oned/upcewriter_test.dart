@@ -16,7 +16,6 @@
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -25,7 +24,7 @@ import '../utils.dart';
 /// Tests [UPCEWriter].
 void main() {
   void doTest(String content, String encoding) {
-    BitMatrix result =
+    final result =
         UPCEWriter().encode(content, BarcodeFormat.UPC_E, encoding.length, 0);
     expect(encoding, matrixToString(result));
   }

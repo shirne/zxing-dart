@@ -67,7 +67,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     if (row == null || row.length < width) {
       row = Int8List(width);
     }
-    int offset = (y + _top) * _dataWidth + _left;
+    final offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _yuvData, offset, offset + width);
     return row;
   }
@@ -80,8 +80,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
       return _yuvData;
     }
 
-    int area = width * height;
-    Int8List matrix = Int8List(area);
+    final area = width * height;
+    final matrix = Int8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
@@ -92,7 +92,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
-      int outputOffset = y * width;
+      final outputOffset = y * width;
       List.copyRange(
           matrix, outputOffset, _yuvData, inputOffset, inputOffset + width);
       inputOffset += _dataWidth;
@@ -117,16 +117,16 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   List<int> renderThumbnail() {
-    int tWidth = width ~/ _THUMBNAIL_SCALE_FACTOR;
-    int tHeight = height ~/ _THUMBNAIL_SCALE_FACTOR;
-    List<int> pixels = List.filled(tWidth * tHeight, 0);
-    Int8List yuv = _yuvData;
+    final tWidth = width ~/ _THUMBNAIL_SCALE_FACTOR;
+    final tHeight = height ~/ _THUMBNAIL_SCALE_FACTOR;
+    final pixels = List.filled(tWidth * tHeight, 0);
+    final yuv = _yuvData;
     int inputOffset = _top * _dataWidth + _left;
 
     for (int y = 0; y < tHeight; y++) {
-      int outputOffset = y * tWidth;
+      final outputOffset = y * tWidth;
       for (int x = 0; x < tWidth; x++) {
-        int grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR] & 0xff;
+        final grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR] & 0xff;
         pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
       }
       inputOffset += _dataWidth * _THUMBNAIL_SCALE_FACTOR;
@@ -141,15 +141,15 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   int get getThumbnailHeight => height ~/ _THUMBNAIL_SCALE_FACTOR;
 
   void _reverseHorizontal(int width, int height) {
-    Int8List yuvData = _yuvData;
+    final yuvData = _yuvData;
     for (int y = 0, rowStart = _top * _dataWidth + _left;
         y < height;
         y++, rowStart += _dataWidth) {
-      int middle = rowStart + width ~/ 2;
+      final middle = rowStart + width ~/ 2;
       for (int x1 = rowStart, x2 = rowStart + width - 1;
           x1 < middle;
           x1++, x2--) {
-        int temp = yuvData[x1];
+        final temp = yuvData[x1];
         yuvData[x1] = yuvData[x2];
         yuvData[x2] = temp;
       }

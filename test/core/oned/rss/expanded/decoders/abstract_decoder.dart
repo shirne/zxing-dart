@@ -25,7 +25,6 @@
  */
 
 import 'package:test/expect.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
 
 import '../binary_util.dart';
@@ -64,11 +63,10 @@ abstract class AbstractDecoderTest {
 
   static void assertCorrectBinaryString(
       String binaryString, String expectedNumber) {
-    BitArray binary =
+    final binary =
         BinaryUtil.buildBitArrayFromStringWithoutSpaces(binaryString);
-    AbstractExpandedDecoder decoder =
-        AbstractExpandedDecoder.createDecoder(binary);
-    String result = decoder.parseInformation();
+    final decoder = AbstractExpandedDecoder.createDecoder(binary);
+    final result = decoder.parseInformation();
     expect(expectedNumber, result);
   }
 }

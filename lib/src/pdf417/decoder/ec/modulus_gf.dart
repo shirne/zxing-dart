@@ -59,22 +59,16 @@ class ModulusGF {
     if (coefficient == 0) {
       return _zero;
     }
-    List<int> coefficients = List.filled(degree + 1, 0);
+    final coefficients = List.filled(degree + 1, 0);
     coefficients[0] = coefficient;
     return ModulusPoly(this, coefficients);
   }
 
-  int add(int a, int b) {
-    return (a + b) % _modulus;
-  }
+  int add(int a, int b) => (a + b) % _modulus;
 
-  int subtract(int a, int b) {
-    return (_modulus + a - b) % _modulus;
-  }
+  int subtract(int a, int b) => (_modulus + a - b) % _modulus;
 
-  int exp(int a) {
-    return _expTable[a];
-  }
+  int exp(int a) => _expTable[a];
 
   int log(int a) {
     if (a == 0) {

@@ -23,24 +23,24 @@ import 'package:zxing_lib/zxing.dart';
 ///
 void main() {
   void doTest(String contents, String uri, String? title) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.URI, result.type);
-    URIParsedResult uriResult = result as URIParsedResult;
+    final uriResult = result as URIParsedResult;
     expect(uri, uriResult.uri);
     expect(title, uriResult.title);
   }
 
   void doTestNotUri(String text) {
-    Result fakeResult = Result(text, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(text, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEXT, result.type);
     expect(text, result.displayResult);
   }
 
   void doTestIsPossiblyMalicious(String uri, bool malicious) {
-    Result fakeResult = Result(uri, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(uri, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(
         malicious ? ParsedResultType.TEXT : ParsedResultType.URI, result.type);
   }

@@ -85,7 +85,7 @@ class FormatInformation {
   ///  if doesn't seem to match any known pattern
   static FormatInformation? decodeFormatInformation(
       int maskedFormatInfo1, int maskedFormatInfo2) {
-    FormatInformation? formatInfo =
+    final formatInfo =
         _doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
     if (formatInfo != null) {
       return formatInfo;
@@ -103,7 +103,7 @@ class FormatInformation {
     int bestDifference = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;
     int bestFormatInfo = 0;
     for (List<int> decodeInfo in _FORMAT_INFO_DECODE_LOOKUP) {
-      int targetInfo = decodeInfo[0];
+      final targetInfo = decodeInfo[0];
       if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match
         return FormatInformation._(decodeInfo[1]);

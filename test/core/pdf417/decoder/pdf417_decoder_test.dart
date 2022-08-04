@@ -20,7 +20,6 @@ import 'dart:typed_data';
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/pdf417.dart';
 import 'package:zxing_lib/zxing.dart';
 
@@ -29,16 +28,16 @@ import '../../utils.dart';
 /// Tests [DecodedBitStreamParser].
 void main() {
   void performDecodeTest(List<int> codewords, String expectedResult) {
-    DecoderResult result = DecodedBitStreamParser.decode(codewords, '0');
+    final result = DecodedBitStreamParser.decode(codewords, '0');
     expect(result.text, expectedResult);
   }
 
   int encodeDecode(String input,
       [Encoding? charset, bool autoECI = false, bool decode = true]) {
-    String s = PDF417HighLevelEncoder.encodeHighLevel(
+    final s = PDF417HighLevelEncoder.encodeHighLevel(
         input, Compaction.AUTO, charset, autoECI);
     if (decode) {
-      List<int> codewords = List.filled(s.length + 1, 0);
+      final codewords = List.filled(s.length + 1, 0);
       codewords[0] = codewords.length;
       for (int i = 1; i < codewords.length; i++) {
         codewords[i] = s.codeUnitAt(i - 1);
@@ -53,13 +52,13 @@ void main() {
   }
 
   int getEndIndex(int length, List<int> chars) {
-    double decimalLength = math.log(chars.length) / math.ln10;
+    final decimalLength = math.log(chars.length) / math.ln10;
     return (math.pow(10, decimalLength * length)).ceil();
   }
 
   String generatePermutation(int index, int length, List<int> chars) {
-    int N = chars.length;
-    String baseNNumber = index.toRadixString(N);
+    final n = chars.length;
+    String baseNNumber = index.toRadixString(n);
     while (baseNNumber.length < length) {
       baseNNumber = '0$baseNNumber';
     }
@@ -72,7 +71,7 @@ void main() {
   }
 
   void performPermutationTest(List<int> chars, int length, int expectedTotal) {
-    int endIndex = getEndIndex(length, chars);
+    final endIndex = getEndIndex(length, chars);
     int total = 0;
     for (int i = 0; i < endIndex; i++) {
       total += encodeDecode(generatePermutation(i, length, chars));
@@ -82,7 +81,7 @@ void main() {
 
   void performEncodeTest(int c, List<int> expectedLengths) {
     for (int i = 0; i < expectedLengths.length; i++) {
-      StringBuffer sb = StringBuffer();
+      final sb = StringBuffer();
       for (int j = 0; j <= i; j++) {
         sb.writeCharCode(c);
       }
@@ -92,8 +91,8 @@ void main() {
 
   String generateText(
       math.Random random, int maxWidth, List<int> chars, List<double> weights) {
-    StringBuffer result = StringBuffer();
-    final int maxWordWidth = 7;
+    final result = StringBuffer();
+    const maxWordWidth = 7;
     double total = 0;
     for (int i = 0; i < weights.length; i++) {
       total += weights[i];
@@ -106,13 +105,13 @@ void main() {
       double maxValue = 0;
       int maxIndex = 0;
       for (int j = 0; j < weights.length; j++) {
-        double value = random.nextDouble() * weights[j];
+        final value = random.nextDouble() * weights[j];
         if (value > maxValue) {
           maxValue = value;
           maxIndex = j;
         }
       }
-      final double wordLength = maxWordWidth * random.nextDouble();
+      final wordLength = maxWordWidth * random.nextDouble();
       if (wordLength > 0 && result.length > 0) {
         result.write(' ');
       }
@@ -136,11 +135,11 @@ void main() {
 
   void performECITest(List<int> chars, List<double> weights,
       int expectedMinLength, int expectedUTFLength) {
-    math.Random random = math.Random(0);
+    final random = math.Random(0);
     int minLength = 0;
     int utfLength = 0;
     for (int i = 0; i < 1000; i++) {
-      String s = generateText(random, 100, chars, weights);
+      final s = generateText(random, 100, chars, weights);
       minLength += encodeDecode(s, null, true, true);
 
       utfLength += encodeDecode(s, utf8, false, true);
@@ -151,8 +150,8 @@ void main() {
 
   /// Tests the first sample given in ISO/IEC 15438:2015(E) - Annex H.4
   test('testStandardSample1', () {
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
-    List<int> sampleCodes = [
+    final resultMetadata = PDF417ResultMetadata();
+    final sampleCodes = [
       20, 928, 111, 100, 17, 53, 923, 1, 111, 104, 923, 3, 64, 416, 34,
       923, 4, 258, 446, 67,
       // we should never reach these
@@ -169,7 +168,7 @@ void main() {
     expect(resultMetadata.addressee, 'ISO CH');
 
     // ignore: deprecated_consistency, deprecated_member_use_from_same_package
-    List<int> optionalData = resultMetadata.optionalData!;
+    final optionalData = resultMetadata.optionalData!;
     expect(optionalData[0], 1,
         reason:
             'first element of optional array should be the first field identifier');
@@ -180,8 +179,8 @@ void main() {
 
   /// Tests the second given in ISO/IEC 15438:2015(E) - Annex H.4
   test('testStandardSample2', () {
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
-    List<int> sampleCodes = [
+    final resultMetadata = PDF417ResultMetadata();
+    final sampleCodes = [
       11, 928, 111, 103, 17, 53, 923, 1, 111, 104, 922,
       // we should never reach these
       1000, 1000, 1000
@@ -197,7 +196,7 @@ void main() {
     assert(resultMetadata.sender == null);
 
     // ignore: deprecated_consistency, deprecated_member_use_from_same_package
-    List<int> optionalData = resultMetadata.optionalData!;
+    final optionalData = resultMetadata.optionalData!;
     expect(1, optionalData[0],
         reason:
             'first element of optional array should be the first field identifier');
@@ -208,10 +207,10 @@ void main() {
 
   /// Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
   test('testStandardSample3', () {
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final resultMetadata = PDF417ResultMetadata();
 
     // Final dummy ECC codeword required to avoid ArrayIndexOutOfBounds
-    List<int> sampleCodes = [7, 928, 111, 100, 100, 200, 300, 0];
+    final sampleCodes = [7, 928, 111, 100, 100, 200, 300, 0];
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
@@ -226,20 +225,19 @@ void main() {
     assert(resultMetadata.optionalData == null);
 
     // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
-    DecoderResult decoderResult =
-        DecodedBitStreamParser.decode(sampleCodes, '0');
+    final decoderResult = DecodedBitStreamParser.decode(sampleCodes, '0');
     expect('', decoderResult.text);
     assert(decoderResult.other != null);
   });
 
   test('testSampleWithFilename', () {
-    List<int> sampleCodes = [
+    final sampleCodes = [
       23, 477, 928, 111, 100, 0, 252, 21, 86, 923, 0, 815, 251, 133, 12, //
       148, 537, 593, 599, 923, 1, 111, 102, 98, 311, 355, 522, 920, 779,
       40, 628, 33, 749, 267, 506, 213, 928, 465, 248, 493, 72, 780, 699,
       780, 493, 755, 84, 198, 628, 368, 156, 198, 809, 19, 113
     ];
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final resultMetadata = PDF417ResultMetadata();
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
@@ -253,11 +251,11 @@ void main() {
   });
 
   test('testSampleWithNumericValues', () {
-    List<int> sampleCodes = [
+    final sampleCodes = [
       25, 477, 928, 111, 100, 0, 252, 21, 86, 923, 2, 2, 0, 1, 0, 0, 0, //
       923, 5, 130, 923, 6, 1, 500, 13, 0
     ];
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final resultMetadata = PDF417ResultMetadata();
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
@@ -271,8 +269,8 @@ void main() {
   });
 
   test('testSampleWithMacroTerminatorOnly', () {
-    List<int> sampleCodes = [7, 477, 928, 222, 198, 0, 922];
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final sampleCodes = [7, 477, 928, 222, 198, 0, 922];
+    final resultMetadata = PDF417ResultMetadata();
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
@@ -286,8 +284,8 @@ void main() {
   });
 
   test('testSampleWithBadSequenceIndexMacro', () {
-    List<int> sampleCodes = [3, 928, 222, 0];
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final sampleCodes = [3, 928, 222, 0];
+    final resultMetadata = PDF417ResultMetadata();
 
     try {
       DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
@@ -297,8 +295,8 @@ void main() {
   });
 
   test('testSampleWithNoFileIdMacro', () {
-    List<int> sampleCodes = [4, 928, 222, 198, 0];
-    PDF417ResultMetadata resultMetadata = PDF417ResultMetadata();
+    final sampleCodes = [4, 928, 222, 198, 0];
+    final resultMetadata = PDF417ResultMetadata();
 
     try {
       DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
@@ -308,7 +306,7 @@ void main() {
   });
 
   test('testSampleWithNoDataNoMacro', () {
-    List<int> sampleCodes = [3, 899, 899, 0];
+    final sampleCodes = [3, 899, 899, 0];
 
     try {
       DecodedBitStreamParser.decode(sampleCodes, '0');
@@ -408,8 +406,8 @@ void main() {
   });
 
   test('testBinaryData', () {
-    Uint8List bytes = Uint8List(500);
-    math.Random random = math.Random(0);
+    final bytes = Uint8List(500);
+    final random = math.Random(0);
     int total = 0;
     for (int i = 0; i < 10000; i++) {
       random.nextBytes(bytes);

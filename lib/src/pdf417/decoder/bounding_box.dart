@@ -34,8 +34,8 @@ class BoundingBox {
 
   BoundingBox(this._image, ResultPoint? topLeft, ResultPoint? bottomLeft,
       ResultPoint? topRight, ResultPoint? bottomRight) {
-    bool leftUnspecified = topLeft == null || bottomLeft == null;
-    bool rightUnspecified = topRight == null || bottomRight == null;
+    final leftUnspecified = topLeft == null || bottomLeft == null;
+    final rightUnspecified = topRight == null || bottomRight == null;
     if (leftUnspecified && rightUnspecified) {
       throw NotFoundException.instance;
     }
@@ -86,12 +86,12 @@ class BoundingBox {
     ResultPoint newBottomRight = _bottomRight;
 
     if (missingStartRows > 0) {
-      ResultPoint top = isLeft ? _topLeft : _topRight;
+      final top = isLeft ? _topLeft : _topRight;
       int newMinY = top.y.toInt() - missingStartRows;
       if (newMinY < 0) {
         newMinY = 0;
       }
-      ResultPoint newTop = ResultPoint(top.x, newMinY.toDouble());
+      final newTop = ResultPoint(top.x, newMinY.toDouble());
       if (isLeft) {
         newTopLeft = newTop;
       } else {
@@ -100,12 +100,12 @@ class BoundingBox {
     }
 
     if (missingEndRows > 0) {
-      ResultPoint bottom = isLeft ? _bottomLeft : _bottomRight;
+      final bottom = isLeft ? _bottomLeft : _bottomRight;
       int newMaxY = bottom.y.toInt() + missingEndRows;
       if (newMaxY >= _image.height) {
         newMaxY = _image.height - 1;
       }
-      ResultPoint newBottom = ResultPoint(bottom.x, newMaxY.toDouble());
+      final newBottom = ResultPoint(bottom.x, newMaxY.toDouble());
       if (isLeft) {
         newBottomLeft = newBottom;
       } else {

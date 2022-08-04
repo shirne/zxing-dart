@@ -33,7 +33,7 @@ class BitMatrixParser {
   /// @param bitMatrix [BitMatrix] to parse
   /// @throws FormatException if dimension is not >= 21 and 1 mod 4
   BitMatrixParser(this._bitMatrix) {
-    int dimension = _bitMatrix.height;
+    final dimension = _bitMatrix.height;
     if (dimension < 21 || (dimension & 0x03) != 1) {
       throw FormatsException.instance;
     }
@@ -64,9 +64,9 @@ class BitMatrixParser {
     }
 
     // Read the top-right/bottom-left pattern too
-    int dimension = _bitMatrix.height;
+    final dimension = _bitMatrix.height;
     int formatInfoBits2 = 0;
-    int jMin = dimension - 7;
+    final jMin = dimension - 7;
     for (int j = dimension - 1; j >= jMin; j--) {
       formatInfoBits2 = _copyBit(8, j, formatInfoBits2);
     }
@@ -92,16 +92,16 @@ class BitMatrixParser {
       return _parsedVersion!;
     }
 
-    int dimension = _bitMatrix.height;
+    final dimension = _bitMatrix.height;
 
-    int provisionalVersion = (dimension - 17) ~/ 4;
+    final provisionalVersion = (dimension - 17) ~/ 4;
     if (provisionalVersion <= 6) {
       return Version.getVersionForNumber(provisionalVersion);
     }
 
     // Read top-right version info: 3 wide by 6 tall
     int versionBits = 0;
-    int ijMin = dimension - 11;
+    final ijMin = dimension - 11;
     for (int j = 5; j >= 0; j--) {
       for (int i = dimension - 9; i >= ijMin; i--) {
         versionBits = _copyBit(i, j, versionBits);
@@ -133,7 +133,7 @@ class BitMatrixParser {
   }
 
   int _copyBit(int i, int j, int versionBits) {
-    bool bit = _isMirror ? _bitMatrix.get(j, i) : _bitMatrix.get(i, j);
+    final bit = _isMirror ? _bitMatrix.get(j, i) : _bitMatrix.get(i, j);
     return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
@@ -144,19 +144,19 @@ class BitMatrixParser {
   /// @return bytes encoded within the QR Code
   /// @throws FormatException if the exact number of bytes expected is not read
   Uint8List readCodewords() {
-    FormatInformation formatInfo = readFormatInformation();
-    Version version = readVersion();
+    final formatInfo = readFormatInformation();
+    final version = readVersion();
 
     // Get the data mask for the format used in this QR Code. This will exclude
     // some bits from reading as we wind through the bit matrix.
-    DataMask dataMask = DataMask.values[formatInfo.dataMask];
-    int dimension = _bitMatrix.height;
+    final dataMask = DataMask.values[formatInfo.dataMask];
+    final dimension = _bitMatrix.height;
     dataMask.unmaskBitMatrix(_bitMatrix, dimension);
 
-    BitMatrix functionPattern = version.buildFunctionPattern();
+    final functionPattern = version.buildFunctionPattern();
 
     bool readingUp = true;
-    Uint8List result = Uint8List(version.totalCodewords);
+    final result = Uint8List(version.totalCodewords);
     int resultOffset = 0;
     int currentByte = 0;
     int bitsRead = 0;
@@ -169,7 +169,7 @@ class BitMatrixParser {
       }
       // Read alternatingly from bottom to top then top to bottom
       for (int count = 0; count < dimension; count++) {
-        int i = readingUp ? dimension - 1 - count : count;
+        final i = readingUp ? dimension - 1 - count : count;
         for (int col = 0; col < 2; col++) {
           // Ignore bits covered by the function pattern
           if (!functionPattern.get(j - col, i)) {
@@ -201,8 +201,8 @@ class BitMatrixParser {
     if (_parsedFormatInfo == null) {
       return; // We have no format information, and have no data mask
     }
-    DataMask dataMask = DataMask.values[_parsedFormatInfo!.dataMask];
-    int dimension = _bitMatrix.height;
+    final dataMask = DataMask.values[_parsedFormatInfo!.dataMask];
+    final dimension = _bitMatrix.height;
     dataMask.unmaskBitMatrix(_bitMatrix, dimension);
   }
 

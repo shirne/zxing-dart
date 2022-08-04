@@ -23,7 +23,6 @@ import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../checksum_exception.dart';
-import 'version.dart';
 import 'bit_matrix_parser.dart';
 import 'data_block.dart';
 import 'decoded_bit_stream_parser.dart';

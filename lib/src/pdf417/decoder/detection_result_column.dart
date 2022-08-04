@@ -70,7 +70,7 @@ class DetectionResultColumn {
 
   @override
   String toString() {
-    StringBuffer formatter = StringBuffer();
+    final formatter = StringBuffer();
     int row = 0;
     for (Codeword? codeword in _codewords) {
       if (codeword == null) {

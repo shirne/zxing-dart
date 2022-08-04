@@ -28,9 +28,9 @@ import '../common/abstract_black_box.dart';
 void main() {
   Image dispatcher(Image image, String path) {
     path = path.replaceAll('\\', '/');
-    String filename = path.substring(path.lastIndexOf('/') + 1);
+    final filename = path.substring(path.lastIndexOf('/') + 1);
     Uint8List data;
-    Uint8List origData = image.getBytes(format: Format.luminance);
+    final origData = image.getBytes(format: Format.luminance);
     switch (filename) {
       case 'over_dark.png':
         data = OverDarkScale().dispatch(origData, image.width, image.height);
@@ -51,7 +51,7 @@ void main() {
       default:
         data = origData;
     }
-    Image result = Image.fromBytes(image.width, image.height, data,
+    final result = Image.fromBytes(image.width, image.height, data,
         format: Format.luminance);
     // File(path.replaceAll('.png', '-p.png')).writeAsBytes(encodePng(result));
     return result;

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
@@ -42,7 +41,7 @@ class PDF417Writer implements Writer {
       throw ArgumentError('Can only encode PDF_417, but got $format');
     }
 
-    PDF417 encoder = PDF417();
+    final encoder = PDF417();
     int margin = _WHITE_SPACE;
     int errorCorrectionLevel = _DEFAULT_ERROR_CORRECTION_LEVEL;
     bool autoECI = false;
@@ -56,7 +55,7 @@ class PDF417Writer implements Writer {
             hints[EncodeHintType.PDF417_COMPACTION] as Compaction);
       }
       if (hints.containsKey(EncodeHintType.PDF417_DIMENSIONS)) {
-        Dimensions dimensions =
+        final dimensions =
             hints[EncodeHintType.PDF417_DIMENSIONS] as Dimensions;
         encoder.setDimensions(dimensions.maxCols, dimensions.minCols,
             dimensions.maxRows, dimensions.minRows);
@@ -69,7 +68,7 @@ class PDF417Writer implements Writer {
             int.parse(hints[EncodeHintType.ERROR_CORRECTION].toString());
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-        Encoding? encoding = CharacterSetECI.getCharacterSetECIByName(
+        final encoding = CharacterSetECI.getCharacterSetECIByName(
                 hints[EncodeHintType.CHARACTER_SET].toString())
             ?.charset;
         if (encoding != null) encoder.setEncoding(encoding);
@@ -100,7 +99,7 @@ class PDF417Writer implements Writer {
   ) {
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel, autoECI);
 
-    int aspectRatio = 4;
+    final aspectRatio = 4;
     List<Uint8List> originalScale =
         encoder.barcodeMatrix!.getScaledMatrix(1, aspectRatio);
     bool rotated = false;
@@ -109,9 +108,9 @@ class PDF417Writer implements Writer {
       rotated = true;
     }
 
-    int scaleX = width ~/ originalScale[0].length;
-    int scaleY = height ~/ originalScale.length;
-    int scale = math.min(scaleX, scaleY);
+    final scaleX = width ~/ originalScale[0].length;
+    final scaleY = height ~/ originalScale.length;
+    final scale = math.min(scaleX, scaleY);
 
     if (scale > 1) {
       List<Uint8List> scaledMatrix =
@@ -131,13 +130,13 @@ class PDF417Writer implements Writer {
   /// @return BitMatrix of the input
   static BitMatrix _bitMatrixFromBitArray(List<Uint8List> input, int margin) {
     // Creates the bit matrix with extra space for whitespace
-    BitMatrix output =
+    final output =
         BitMatrix(input[0].length + 2 * margin, input.length + 2 * margin);
     output.clear();
     for (int y = 0, yOutput = output.height - margin - 1;
         y < input.length;
         y++, yOutput--) {
-      Uint8List inputY = input[y];
+      final inputY = input[y];
       for (int x = 0; x < input[0].length; x++) {
         // Zero is white in the byte matrix
         if (inputY[x] == 1) {
@@ -150,12 +149,12 @@ class PDF417Writer implements Writer {
 
   /// Takes and rotates the it 90 degrees
   static List<Uint8List> _rotateArray(List<Uint8List> bitarray) {
-    List<Uint8List> temp = List.generate(
+    final temp = List.generate(
         bitarray[0].length, (index) => Uint8List(bitarray.length));
     for (int ii = 0; ii < bitarray.length; ii++) {
       // This makes the direction consistent on screen when rotating the
       // screen;
-      int inverseii = bitarray.length - ii - 1;
+      final inverseii = bitarray.length - ii - 1;
       for (int jj = 0; jj < bitarray[0].length; jj++) {
         temp[jj][inverseii] = bitarray[ii][jj];
       }

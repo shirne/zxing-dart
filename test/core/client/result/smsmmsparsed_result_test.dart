@@ -26,10 +26,10 @@ import '../../utils.dart';
 void main() {
   void doTest(String contents, String number, String? subject, String? body,
       String? via, String parsedURI) {
-    Result fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.SMS, result.type);
-    SMSParsedResult smsResult = result as SMSParsedResult;
+    final smsResult = result as SMSParsedResult;
     assertArrayEquals(<String>[number], smsResult.numbers);
     expect(subject, smsResult.subject);
     expect(body, smsResult.body);

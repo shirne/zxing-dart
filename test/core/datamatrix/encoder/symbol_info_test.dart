@@ -69,7 +69,7 @@ void main() {
     expect(24, info.symbolWidth);
     expect(24, info.symbolHeight);
 
-    Dimension fixedSize = Dimension(26, 26);
+    final fixedSize = Dimension(26, 26);
     info = SymbolInfo.lookup(
         35, SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false)!;
     expect(26, info.symbolWidth);
@@ -79,8 +79,8 @@ void main() {
         45, SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
     assert(info == null);
 
-    Dimension minSize = fixedSize;
-    Dimension maxSize = Dimension(32, 32);
+    final minSize = fixedSize;
+    final maxSize = Dimension(32, 32);
 
     info = SymbolInfo.lookup(
         35, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;

@@ -176,11 +176,11 @@ class PDF417ErrorCorrection {
   /// @return the String representing the error correction codewords
   static String generateErrorCorrection(
       String dataCodewords, int errorCorrectionLevel) {
-    int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    List<int> e = List.filled(k, 0);
-    int sld = dataCodewords.length;
+    final k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
+    final e = List.filled(k, 0);
+    final sld = dataCodewords.length;
     for (int i = 0; i < sld; i++) {
-      int t1 = (dataCodewords.codeUnitAt(i) + e[e.length - 1]) % 929;
+      final t1 = (dataCodewords.codeUnitAt(i) + e[e.length - 1]) % 929;
       int t2;
       int t3;
       for (int j = k - 1; j >= 1; j--) {
@@ -192,7 +192,7 @@ class PDF417ErrorCorrection {
       t3 = 929 - t2;
       e[0] = (t3 % 929);
     }
-    StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     for (int j = k - 1; j >= 0; j--) {
       if (e[j] != 0) {
         e[j] = (929 - e[j]);

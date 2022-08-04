@@ -67,7 +67,7 @@ void main() {
   });
 
   test('numberOfTrailingZeros', () {
-    Map<int, int> tZeros = {
+    final tZeros = {
       0: 32,
       1: 0,
       7: 0,

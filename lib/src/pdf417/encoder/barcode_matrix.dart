@@ -51,9 +51,9 @@ class BarcodeMatrix {
   }
 
   List<Uint8List> getScaledMatrix(int xScale, int yScale) {
-    List<Uint8List> matrixOut =
+    final matrixOut =
         List.generate(_height * yScale, (index) => Uint8List(_width * xScale));
-    int yMax = _height * yScale;
+    final yMax = _height * yScale;
     for (int i = 0; i < yMax; i++) {
       matrixOut[yMax - i - 1] = _matrix[i ~/ yScale].getScaledRow(xScale);
     }

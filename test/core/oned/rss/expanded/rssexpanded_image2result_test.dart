@@ -45,18 +45,18 @@ import '../../../common/abstract_black_box.dart';
 void main() {
   void assertCorrectImage2result(
       String fileName, ExpandedProductParsedResult expected) async {
-    String path =
+    final path =
         '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName';
 
-    Image image = decodeImage(File(path).readAsBytesSync())!;
-    BinaryBitmap binaryMap = BinaryBitmap(
+    final image = decodeImage(File(path).readAsBytesSync())!;
+    final binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
-    int rowNumber = binaryMap.height ~/ 2;
-    BitArray row = binaryMap.getBlackRow(rowNumber, null);
+    final rowNumber = binaryMap.height ~/ 2;
+    final row = binaryMap.getBlackRow(rowNumber, null);
 
     Result theResult;
     try {
-      RSSExpandedReader rssExpandedReader = RSSExpandedReader();
+      final rssExpandedReader = RSSExpandedReader();
       theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
     } on ReaderException catch (re) {
       fail(re.toString());
@@ -64,14 +64,14 @@ void main() {
 
     expect(BarcodeFormat.RSS_EXPANDED, theResult.barcodeFormat);
 
-    ParsedResult result = ResultParser.parseResult(theResult);
+    final result = ResultParser.parseResult(theResult);
 
     expect(expected, result);
   }
 
   test('testDecodeRow2result2', () {
     // (01)90012345678908(3103)001750
-    ExpandedProductParsedResult expected = ExpandedProductParsedResult(
+    final expected = ExpandedProductParsedResult(
         '(01)90012345678908(3103)001750',
         '90012345678908',
         null,

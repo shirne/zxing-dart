@@ -37,8 +37,8 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     width ??= image.width - left;
     height ??= image.height - top;
 
-    int sourceWidth = image.width;
-    int sourceHeight = image.height;
+    final int sourceWidth = image.width;
+    final int sourceHeight = image.height;
     if (left + width > sourceWidth || top + height > sourceHeight) {
       throw ArgumentError('Crop rectangle does not fit within image data.');
     }
@@ -46,8 +46,8 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     buffer = Uint8List(width * height);
     for (int y = top; y < top + height; y++) {
       for (int x = 0; x < width; x++) {
-        int color = image.getPixel(x + left, y);
-        int alpha = getAlpha(color);
+        final int color = image.getPixel(x + left, y);
+        final int alpha = getAlpha(color);
 
         // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
         // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
@@ -88,7 +88,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   Int8List get matrix {
     // The underlying raster of image consists of area bytes with the luminance values
     //image.getDataElements(left, top, width, height, matrix);
-    Int8List matrix = Int8List.fromList(buffer);
+    final Int8List matrix = Int8List.fromList(buffer);
 
     return matrix;
   }
@@ -110,12 +110,12 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource rotateCounterClockwise() {
-    int sourceWidth = image.width;
+    final int sourceWidth = image.width;
     //int sourceHeight = image.height;
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.
-    var newImage = copyRotate(image, 90);
+    final newImage = copyRotate(image, 90);
 
     // Maintain the cropped region, but rotate it too.
     return BufferedImageLuminanceSource(
@@ -124,21 +124,23 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource rotateCounterClockwise45() {
-    int oldCenterX = left + width ~/ 2;
-    int oldCenterY = top + height ~/ 2;
+    final int oldCenterX = left + width ~/ 2;
+    final int oldCenterY = top + height ~/ 2;
 
     // Rotate 45 degrees counterclockwise.
     //AffineTransform transform = AffineTransform.getRotateInstance(MINUS_45_IN_RADIANS, oldCenterX, oldCenterY);
 
-    int sourceDimension = math.max(image.width, image.height);
+    final int sourceDimension = math.max(image.width, image.height);
     //BufferedImage rotatedImage = BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
-    var newImage = copyRotate(image, 45);
+    final newImage = copyRotate(image, 45);
 
-    int halfDimension = math.max(width, height) ~/ 2;
-    int newLeft = math.max(0, oldCenterX - halfDimension);
-    int newTop = math.max(0, oldCenterY - halfDimension);
-    int newRight = math.min(sourceDimension - 1, oldCenterX + halfDimension);
-    int newBottom = math.min(sourceDimension - 1, oldCenterY + halfDimension);
+    final int halfDimension = math.max(width, height) ~/ 2;
+    final int newLeft = math.max(0, oldCenterX - halfDimension);
+    final int newTop = math.max(0, oldCenterY - halfDimension);
+    final int newRight =
+        math.min(sourceDimension - 1, oldCenterX + halfDimension);
+    final int newBottom =
+        math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
     return BufferedImageLuminanceSource(
         newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);

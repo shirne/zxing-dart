@@ -5,7 +5,7 @@ import 'package:zxing_lib/common.dart';
 void main() {
   void sbTest(Function(StringBuilder) actions, String result,
       [String reason = '']) {
-    StringBuilder sb = StringBuilder();
+    final sb = StringBuilder();
     actions(sb);
     expect(sb.toString(), result, reason: reason);
   }

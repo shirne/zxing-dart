@@ -24,7 +24,7 @@ import 'package:zxing_lib/src/writer_exception.dart';
 /// Tests [PDF417HighLevelEncoder].
 void main() {
   test('testEncodeAuto', () {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+    final encoded = PDF417HighLevelEncoder.encodeHighLevel(
         'ABCD', Compaction.AUTO, utf8, false);
     expect(encoded, '\u039f\u001A\u0385ABCD');
   });
@@ -42,19 +42,19 @@ void main() {
   });
 
   test('testEncodeText', () {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+    final encoded = PDF417HighLevelEncoder.encodeHighLevel(
         'ABCD', Compaction.TEXT, utf8, false);
     expect('Ο\u001A\u0001?', encoded);
   });
 
   test('testEncodeNumeric', () {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+    final encoded = PDF417HighLevelEncoder.encodeHighLevel(
         '1234', Compaction.NUMERIC, utf8, false);
     expect('\u039f\u001A\u0386\f\u01b2', encoded);
   });
 
   test('testEncodeByte', () {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
+    final encoded = PDF417HighLevelEncoder.encodeHighLevel(
         'abcd', Compaction.BYTE, utf8, false);
     expect('\u039f\u001A\u0385abcd', encoded);
   });

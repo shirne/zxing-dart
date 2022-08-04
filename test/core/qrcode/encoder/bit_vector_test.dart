@@ -21,7 +21,8 @@ import 'package:zxing_lib/common.dart';
 void main() {
   int getUnsignedInt(BitArray v) {
     int result = 0;
-    for (int i = 0, offset = 0; i < 32; i++) {
+    final offset = 0;
+    for (int i = 0; i < 32; i++) {
       if (v[offset + i]) {
         result |= 1 << (31 - i);
       }
@@ -30,7 +31,7 @@ void main() {
   }
 
   test('testAppendBit', () {
-    BitArray v = BitArray();
+    final v = BitArray();
     expect(0, v.sizeInBytes);
     // 1
     v.appendBit(true);
@@ -90,7 +91,7 @@ void main() {
   });
 
   test('testNumBytes', () {
-    BitArray v = BitArray();
+    final v = BitArray();
     expect(0, v.sizeInBytes);
     v.appendBit(false);
     // 1 bit was added in the vector, so 1 byte should be consumed.
@@ -105,9 +106,9 @@ void main() {
   });
 
   test('testAppendBitVector', () {
-    BitArray v1 = BitArray();
+    final v1 = BitArray();
     v1.appendBits(0xbe, 8);
-    BitArray v2 = BitArray();
+    final v2 = BitArray();
     v2.appendBits(0xef, 8);
     v1.appendBitArray(v2);
     // beef = 1011 1110 1110 1111
@@ -115,25 +116,25 @@ void main() {
   });
 
   test('testXOR', () {
-    BitArray v1 = BitArray();
+    final v1 = BitArray();
     v1.appendBits(0x5555aaaa, 32);
-    BitArray v2 = BitArray();
+    final v2 = BitArray();
     v2.appendBits(0xaaaa5555, 32);
     v1.xor(v2);
     expect(0xffffffff, getUnsignedInt(v1));
   });
 
   test('testXOR2', () {
-    BitArray v1 = BitArray();
+    final v1 = BitArray();
     v1.appendBits(0x2a, 7); // 010 1010
-    BitArray v2 = BitArray();
+    final v2 = BitArray();
     v2.appendBits(0x55, 7); // 101 0101
     v1.xor(v2);
     expect(0xfe000000, getUnsignedInt(v1)); // 1111 1110
   });
 
   test('testAt', () {
-    BitArray v = BitArray();
+    final v = BitArray();
     v.appendBits(0xdead, 16); // 1101 1110 1010 1101
     assert(v[0]);
     assert(v[1]);
@@ -157,7 +158,7 @@ void main() {
   });
 
   test('testToString', () {
-    BitArray v = BitArray();
+    final v = BitArray();
     v.appendBits(0xdead, 16); // 1101 1110 1010 1101
     expect(' XX.XXXX. X.X.XX.X', v.toString());
   });

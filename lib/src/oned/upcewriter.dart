@@ -36,7 +36,7 @@ class UPCEWriter extends UPCEANWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
-    int length = contents.length;
+    final length = contents.length;
     switch (length) {
       case 7:
         // No check digit present, calculate it and add it
@@ -68,15 +68,15 @@ class UPCEWriter extends UPCEANWriter {
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
-    int firstDigit = int.parse(contents[0]);
+    final firstDigit = int.parse(contents[0]);
     if (firstDigit != 0 && firstDigit != 1) {
       throw ArgumentError('Number system must be 0 or 1');
     }
 
-    int checkDigit = int.parse(contents[7]);
-    int parities =
+    final checkDigit = int.parse(contents[7]);
+    final parities =
         UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
-    List<bool> result = List.filled(_CODE_WIDTH, false);
+    final result = List.filled(_CODE_WIDTH, false);
 
     int pos = OneDimensionalCodeWriter.appendPattern(
         result, 0, UPCEANReader.START_END_PATTERN, true);
