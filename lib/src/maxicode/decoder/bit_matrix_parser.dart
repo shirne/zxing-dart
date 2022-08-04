@@ -65,13 +65,13 @@ class BitMatrixParser {
   BitMatrixParser(this._bitMatrix);
 
   Uint8List readCodewords() {
-    Uint8List result = Uint8List(144);
-    int height = _bitMatrix.height;
-    int width = _bitMatrix.width;
+    final result = Uint8List(144);
+    final height = _bitMatrix.height;
+    final width = _bitMatrix.width;
     for (int y = 0; y < height; y++) {
-      List<int> bitNRRow = _bitNR[y];
+      final bitNRRow = _bitNR[y];
       for (int x = 0; x < width; x++) {
-        int bit = bitNRRow[x];
+        final bit = bitNRRow[x];
         if (bit >= 0 && _bitMatrix.get(x, y)) {
           result[bit ~/ 6] |= (1 << (5 - (bit % 6)));
         }

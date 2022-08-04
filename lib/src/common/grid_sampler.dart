@@ -117,14 +117,14 @@ abstract class GridSampler {
   /// @throws NotFoundException if an endpoint is lies outside the image boundaries
   //@protected
   static checkAndNudgePoints(BitMatrix image, List<double> points) {
-    int width = image.width;
-    int height = image.height;
+    final width = image.width;
+    final height = image.height;
     // Check and nudge points from start until we see some that are OK:
     bool nudged = true;
-    int maxOffset = points.length - 1; // points.length must be even
+    final maxOffset = points.length - 1; // points.length must be even
     for (int offset = 0; offset < maxOffset && nudged; offset += 2) {
-      int x = points[offset].toInt();
-      int y = points[offset + 1].toInt();
+      final x = points[offset].toInt();
+      final y = points[offset + 1].toInt();
       if (x < -1 || x > width || y < -1 || y > height) {
         throw NotFoundException.instance;
       }
@@ -147,8 +147,8 @@ abstract class GridSampler {
     // Check and nudge points from end:
     nudged = true;
     for (int offset = points.length - 2; offset >= 0 && nudged; offset -= 2) {
-      int x = points[offset].toInt();
-      int y = points[offset + 1].toInt();
+      final x = points[offset].toInt();
+      final y = points[offset + 1].toInt();
       if (x < -1 || x > width || y < -1 || y > height) {
         throw NotFoundException.instance;
       }

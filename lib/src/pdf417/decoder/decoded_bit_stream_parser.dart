@@ -58,7 +58,7 @@ class DecodedBitStreamParser {
   static final List<int> _punctChars =
       ";<>@[\\]_`~!\r\t,:\n-.\$/\"|*()?{}'".codeUnits;
 
-  static final List<int> _mixedChars = "0123456789&\r\t,:#-.\$/+%*=^".codeUnits;
+  static final List<int> _mixedChars = '0123456789&\r\t,:#-.\$/+%*=^'.codeUnits;
 
   /// Table containing values for the exponent of 900.
   /// This is used in the numeric compaction decode algorithm.

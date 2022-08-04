@@ -21,7 +21,7 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('EAN13BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/ean13-1",
+    AbstractBlackBoxTestCase('test/resources/blackbox/ean13-1',
         MultiFormatReader(), BarcodeFormat.EAN_13)
       ..addTest(30, 32, 0.0)
       ..addTest(27, 32, 180.0)

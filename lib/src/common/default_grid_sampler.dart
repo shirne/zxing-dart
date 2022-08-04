@@ -23,45 +23,49 @@ import 'perspective_transform.dart';
 class DefaultGridSampler extends GridSampler {
   @override
   BitMatrix sampleGridBulk(
-      BitMatrix image,
-      int dimensionX,
-      int dimensionY,
-      double p1ToX,
-      double p1ToY,
-      double p2ToX,
-      double p2ToY,
-      double p3ToX,
-      double p3ToY,
-      double p4ToX,
-      double p4ToY,
-      double p1FromX,
-      double p1FromY,
-      double p2FromX,
-      double p2FromY,
-      double p3FromX,
-      double p3FromY,
-      double p4FromX,
-      double p4FromY) {
-    PerspectiveTransform transform =
-        PerspectiveTransform.quadrilateralToQuadrilateral(
-            p1ToX,
-            p1ToY,
-            p2ToX,
-            p2ToY,
-            p3ToX,
-            p3ToY,
-            p4ToX,
-            p4ToY,
-            p1FromX,
-            p1FromY,
-            p2FromX,
-            p2FromY,
-            p3FromX,
-            p3FromY,
-            p4FromX,
-            p4FromY);
-
-    return sampleGrid(image, dimensionX, dimensionY, transform);
+    BitMatrix image,
+    int dimensionX,
+    int dimensionY,
+    double p1ToX,
+    double p1ToY,
+    double p2ToX,
+    double p2ToY,
+    double p3ToX,
+    double p3ToY,
+    double p4ToX,
+    double p4ToY,
+    double p1FromX,
+    double p1FromY,
+    double p2FromX,
+    double p2FromY,
+    double p3FromX,
+    double p3FromY,
+    double p4FromX,
+    double p4FromY,
+  ) {
+    return sampleGrid(
+      image,
+      dimensionX,
+      dimensionY,
+      PerspectiveTransform.quadrilateralToQuadrilateral(
+        p1ToX,
+        p1ToY,
+        p2ToX,
+        p2ToY,
+        p3ToX,
+        p3ToY,
+        p4ToX,
+        p4ToY,
+        p1FromX,
+        p1FromY,
+        p2FromX,
+        p2FromY,
+        p3FromX,
+        p3FromY,
+        p4FromX,
+        p4FromY,
+      ),
+    );
   }
 
   @override
@@ -70,11 +74,11 @@ class DefaultGridSampler extends GridSampler {
     if (dimensionX <= 0 || dimensionY <= 0) {
       throw NotFoundException.instance;
     }
-    BitMatrix bits = BitMatrix(dimensionX, dimensionY);
-    List<double> points = List.filled(2 * dimensionX, 0);
+    final bits = BitMatrix(dimensionX, dimensionY);
+    final points = List.filled(2 * dimensionX, 0.0);
     for (int y = 0; y < dimensionY; y++) {
-      int max = points.length;
-      double iValue = y + 0.5;
+      final max = points.length;
+      final iValue = y + 0.5;
       for (int x = 0; x < max; x += 2) {
         points[x] = (x / 2) + 0.5;
         points[x + 1] = iValue;

@@ -41,15 +41,15 @@ void main() {
     String text = args[0];
     Encoding charset = Encoding.getByName(args[1])!;
     StringBuilder declaration = StringBuilder();
-    declaration.write("Uint8List.fromList([ ");
+    declaration.write('Uint8List.fromList([ ');
     for (int b in charset.encode(text)) {
-      declaration.write("0x");
+      declaration.write('0x');
       int value = b & 0xFF;
       if (value < 0x10) {
         declaration.write('0');
       }
       declaration.write(value.toRadixString(16));
-      declaration.write(", ");
+      declaration.write(', ');
     }
     declaration.write('])');
     print(declaration);
@@ -67,26 +67,26 @@ void main() {
     // 金魚
     doTest([
       0x8b, 0xe0, 0x8b, 0x9b, //
-    ], StringUtils.shiftJisCharset, "SJIS");
+    ], StringUtils.shiftJisCharset, 'SJIS');
   });
 
   test('testShortISO885911', () {
     // båd
     doTest([
       0x62, 0xe5, 0x64, //
-    ], latin1, "ISO8859_1");
+    ], latin1, 'ISO8859_1');
   });
 
   test('testShortUTF81', () {
     // Español
-    doTest([0x45, 0x73, 0x70, 0x61, 0xc3, 0xb1, 0x6f, 0x6c], utf8, "UTF8");
+    doTest([0x45, 0x73, 0x70, 0x61, 0xc3, 0xb1, 0x6f, 0x6c], utf8, 'UTF8');
   });
 
   test('testMixedShiftJIS1', () {
     // Hello 金!
     doTest([
       0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21, //
-    ], StringUtils.shiftJisCharset, "SJIS");
+    ], StringUtils.shiftJisCharset, 'SJIS');
   });
 
   test('testUTF16BE', () {

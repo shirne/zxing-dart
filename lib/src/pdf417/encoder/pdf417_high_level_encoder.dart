@@ -148,14 +148,14 @@ class PDF417HighLevelEncoder {
   static String encodeHighLevel(
       String msg, Compaction compaction, Encoding? encoding, bool autoECI) {
     if (msg.isEmpty) {
-      throw WriterException("Empty message not allowed");
+      throw WriterException('Empty message not allowed');
     }
     if (encoding == null && !autoECI) {
       for (int i = 0; i < msg.length; i++) {
         if (msg.codeUnitAt(i) > 255) {
           throw WriterException(
-              "Non-encodable character detected: ${msg.codeUnitAt(i)} (Unicode: "
-              "${msg.codeUnitAt(i)}). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
+              'Non-encodable character detected: ${msg.codeUnitAt(i)} (Unicode: '
+              '${msg.codeUnitAt(i)}). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.');
         }
       }
     }
@@ -614,7 +614,7 @@ class PDF417HighLevelEncoder {
               encoding, String.fromCharCode(input.charAt(idx)))) {
         int ch = input.charAt(idx);
         throw WriterException(
-            "Non-encodable character detected: $ch (Unicode: $ch)");
+            'Non-encodable character detected: $ch (Unicode: $ch)');
       }
       idx++;
     }
@@ -634,7 +634,7 @@ class PDF417HighLevelEncoder {
       sb.writeCharCode((810900 - eci));
     } else {
       throw WriterException(
-          "ECI number not in valid range from 0..811799, but was $eci");
+          'ECI number not in valid range from 0..811799, but was $eci');
     }
   }
 }

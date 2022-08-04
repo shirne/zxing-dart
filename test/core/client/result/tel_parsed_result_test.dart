@@ -29,11 +29,11 @@ void main() {
     TelParsedResult telResult = result as TelParsedResult;
     expect(number, telResult.number);
     expect(title, telResult.title);
-    expect("tel:$number", telResult.telURI);
+    expect('tel:$number', telResult.telURI);
   }
 
   test('testTel', () {
-    doTest("tel:+15551212", "+15551212", null);
-    doTest("tel:2125551212", "2125551212", null);
+    doTest('tel:+15551212', '+15551212', null);
+    doTest('tel:2125551212', '2125551212', null);
   });
 }

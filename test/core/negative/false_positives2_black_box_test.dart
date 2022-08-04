@@ -22,7 +22,7 @@ import '../common/abstract_negative_black_box.dart';
 ///
 void main() {
   test('FalsePositives2BlackBoxTestCase', () {
-    AbstractNegativeBlackBoxTestCase("test/resources/blackbox/falsepositives-2")
+    AbstractNegativeBlackBoxTestCase('test/resources/blackbox/falsepositives-2')
       ..addNegativeTest(4, 0.0)
       ..addNegativeTest(4, 90.0)
       ..addNegativeTest(4, 180.0)

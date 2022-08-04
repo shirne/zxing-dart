@@ -44,12 +44,12 @@ class MonochromeRectangleDetector {
   ///  third, the rightmost
   /// @throws NotFoundException if no Data Matrix Code can be found
   List<ResultPoint> detect() {
-    int height = _image.height;
-    int width = _image.width;
-    int halfHeight = height ~/ 2;
-    int halfWidth = width ~/ 2;
-    int deltaY = math.max(1, height ~/ (_MAX_MODULES * 8));
-    int deltaX = math.max(1, width ~/ (_MAX_MODULES * 8));
+    final height = _image.height;
+    final width = _image.width;
+    final halfHeight = height ~/ 2;
+    final halfWidth = width ~/ 2;
+    final deltaY = math.max(1, height ~/ (_MAX_MODULES * 8));
+    final deltaX = math.max(1, width ~/ (_MAX_MODULES * 8));
 
     int top = 0;
     int bottom = height;
@@ -58,14 +58,14 @@ class MonochromeRectangleDetector {
     ResultPoint pointA = findCornerFromCenter(halfWidth, 0, left, right,
         halfHeight, -deltaY, top, bottom, halfWidth ~/ 2);
     top = pointA.y.toInt() - 1;
-    ResultPoint pointB = findCornerFromCenter(halfWidth, -deltaX, left, right,
+    final pointB = findCornerFromCenter(halfWidth, -deltaX, left, right,
         halfHeight, 0, top, bottom, halfHeight ~/ 2);
     left = pointB.x.toInt() - 1;
-    ResultPoint pointC = findCornerFromCenter(halfWidth, deltaX, left, right,
+    final pointC = findCornerFromCenter(halfWidth, deltaX, left, right,
         halfHeight, 0, top, bottom, halfHeight ~/ 2);
     right = pointC.x.toInt() + 1;
-    ResultPoint pointD = findCornerFromCenter(halfWidth, 0, left, right,
-        halfHeight, deltaY, top, bottom, halfWidth ~/ 2);
+    final pointD = findCornerFromCenter(halfWidth, 0, left, right, halfHeight,
+        deltaY, top, bottom, halfWidth ~/ 2);
     bottom = pointD.y.toInt() + 1;
 
     // Go try to find point A again with better information -- might have been off at first.
@@ -111,7 +111,7 @@ class MonochromeRectangleDetector {
         }
         // lastRange was found
         if (deltaX == 0) {
-          int lastY = y - deltaY;
+          final lastY = y - deltaY;
           if (lastRange[0] < centerX) {
             if (lastRange[1] > centerX) {
               // straddle, choose one or the other based on direction
@@ -123,7 +123,7 @@ class MonochromeRectangleDetector {
             return ResultPoint(lastRange[1].toDouble(), lastY.toDouble());
           }
         } else {
-          int lastX = x - deltaX;
+          final lastX = x - deltaX;
           if (lastRange[0] < centerY) {
             if (lastRange[1] > centerY) {
               return ResultPoint(
@@ -154,7 +154,7 @@ class MonochromeRectangleDetector {
   ///  (e.g. only white was found)
   List<int>? blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim,
       int maxDim, bool horizontal) {
-    int center = (minDim + maxDim) ~/ 2;
+    final center = (minDim + maxDim) ~/ 2;
 
     // Scan left/up first
     int start = center;
@@ -164,14 +164,14 @@ class MonochromeRectangleDetector {
           : _image.get(fixedDimension, start)) {
         start--;
       } else {
-        int whiteRunStart = start;
+        final whiteRunStart = start;
         do {
           start--;
         } while (start >= minDim &&
             !(horizontal
                 ? _image.get(start, fixedDimension)
                 : _image.get(fixedDimension, start)));
-        int whiteRunSize = whiteRunStart - start;
+        final whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
           start = whiteRunStart;
           break;
@@ -188,14 +188,14 @@ class MonochromeRectangleDetector {
           : _image.get(fixedDimension, end)) {
         end++;
       } else {
-        int whiteRunStart = end;
+        final whiteRunStart = end;
         do {
           end++;
         } while (end < maxDim &&
             !(horizontal
                 ? _image.get(end, fixedDimension)
                 : _image.get(fixedDimension, end)));
-        int whiteRunSize = end - whiteRunStart;
+        final whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
           end = whiteRunStart;
           break;

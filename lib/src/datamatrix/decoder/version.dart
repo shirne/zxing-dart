@@ -67,8 +67,8 @@ class Version {
       this._dataRegionSizeRows, this._dataRegionSizeColumns, this._ecBlocks) {
     // Calculate the total number of codewords
     int total = 0;
-    int ecCodewords = _ecBlocks.ecCodewords;
-    List<ECB> ecbArray = _ecBlocks.ecBlocks;
+    final ecCodewords = _ecBlocks.ecCodewords;
+    final ecbArray = _ecBlocks.ecBlocks;
     for (ECB ecBlock in ecbArray) {
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }

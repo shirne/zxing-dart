@@ -50,7 +50,7 @@ class Edge {
 
     int size = previous?.cachedTotalSize ?? 0;
 
-    Mode previousMode = this.previousMode;
+    final previousMode = this.previousMode;
 
     /*
     * Switching modes
@@ -101,7 +101,7 @@ class Edge {
         if (mode == Mode.X12) {
           size += 2;
         } else {
-          List<int> charLen = [0];
+          final charLen = [0];
           size += MinimalEncoder.getNumberOfC40Words(
                   input, fromPosition, mode == Mode.C40, charLen) *
               2;
@@ -159,7 +159,7 @@ class Edge {
       if (characterLength < 4) {
         return Mode.ASCII;
       }
-      int lastASCII = getLastASCII(); // see 5.2.8.2 EDIFACT encodation Rules
+      final lastASCII = getLastASCII(); // see 5.2.8.2 EDIFACT encodation Rules
       if (lastASCII > 0 &&
           getCodewordsRemaining(cachedTotalSize + lastASCII) <= 2 - lastASCII) {
         return Mode.ASCII;
@@ -171,7 +171,7 @@ class Edge {
           getCodewordsRemaining(cachedTotalSize) == 0) {
         return Mode.ASCII;
       }
-      int lastASCII = getLastASCII();
+      final lastASCII = getLastASCII();
       if (lastASCII == 1 && getCodewordsRemaining(cachedTotalSize + 1) == 0) {
         return Mode.ASCII;
       }
@@ -187,8 +187,8 @@ class Edge {
   /// two consecutive digits and a non extended character or of 4 digits.
   /// Returns 0 in any other case
   int getLastASCII() {
-    int length = input.length;
-    int from = fromPosition + characterLength;
+    final length = input.length;
+    final from = fromPosition + characterLength;
     if (length - from > 4 || from >= length) {
       return 0;
     }
@@ -272,9 +272,9 @@ class Edge {
   }
 
   static Uint8List getBytes(int c, [int? c2]) {
-    bool isNull = c2 == null;
+    final isNull = c2 == null;
 
-    Uint8List result = Uint8List(isNull ? 1 : 2);
+    final result = Uint8List(isNull ? 1 : 2);
     result[0] = c;
     if (!isNull) {
       result[1] = c2;
@@ -283,7 +283,7 @@ class Edge {
   }
 
   static void setC40Word(Uint8List bytes, int offset, int c1, int c2, int c3) {
-    int val16 = (1600 * (c1 & 0xff)) + (40 * (c2 & 0xff)) + (c3 & 0xff) + 1;
+    final val16 = (1600 * (c1 & 0xff)) + (40 * (c2 & 0xff)) + (c3 & 0xff) + 1;
     bytes[offset] = (val16 ~/ 256);
     bytes[offset + 1] = (val16 % 256);
   }
@@ -306,7 +306,7 @@ class Edge {
 
   Uint8List getX12Words() {
     assert(characterLength % 3 == 0);
-    Uint8List result = Uint8List(characterLength ~/ 3 * 2);
+    final result = Uint8List(characterLength ~/ 3 * 2);
     for (int i = 0; i < result.length; i += 2) {
       setC40Word(
           result,
@@ -383,18 +383,18 @@ class Edge {
   }
 
   Uint8List getC40Words(bool c40, int fnc1) {
-    List<int> c40Values = [];
+    final c40Values = <int>[];
     for (int i = 0; i < characterLength; i++) {
-      int ci = input.charAt(fromPosition + i);
+      final ci = input.charAt(fromPosition + i);
       if (c40 && HighLevelEncoder.isNativeC40(ci) ||
           !c40 && HighLevelEncoder.isNativeText(ci)) {
         c40Values.add(getC40Value(c40, 0, ci, fnc1));
       } else if (!MinimalEncoder.isExtendedASCII(ci, fnc1)) {
-        int shiftValue = getShiftValue(ci, c40, fnc1);
+        final shiftValue = getShiftValue(ci, c40, fnc1);
         c40Values.add(shiftValue); //Shift[123]
         c40Values.add(getC40Value(c40, shiftValue, ci, fnc1));
       } else {
-        int asciiValue = ((ci & 0xff) - 128);
+        final asciiValue = ((ci & 0xff) - 128);
         if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
             !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
           c40Values.add(1); //Shift 2
@@ -403,7 +403,7 @@ class Edge {
         } else {
           c40Values.add(1); //Shift 2
           c40Values.add(30); //Upper Shift
-          int shiftValue = getShiftValue(asciiValue, c40, fnc1);
+          final shiftValue = getShiftValue(asciiValue, c40, fnc1);
           c40Values.add(shiftValue); // Shift[123]
           c40Values.add(getC40Value(c40, shiftValue, asciiValue, fnc1));
         }
@@ -416,7 +416,7 @@ class Edge {
       c40Values.add(0); // pad with 0 (Shift 1)
     }
 
-    Uint8List result = Uint8List(c40Values.length ~/ 3 * 2);
+    final result = Uint8List(c40Values.length ~/ 3 * 2);
     int byteIndex = 0;
     for (int i = 0; i < c40Values.length; i += 3) {
       setC40Word(result, byteIndex, c40Values[i] & 0xff,
@@ -427,12 +427,13 @@ class Edge {
   }
 
   Uint8List getEDFBytes() {
-    int numberOfThirds = (characterLength / 4.0).ceil();
-    Uint8List result = Uint8List(numberOfThirds * 3);
+    final numberOfThirds = (characterLength / 4.0).ceil();
+    final result = Uint8List(numberOfThirds * 3);
     int pos = fromPosition;
-    int endPos = math.min(fromPosition + characterLength - 1, input.length - 1);
+    final endPos =
+        math.min(fromPosition + characterLength - 1, input.length - 1);
     for (int i = 0; i < numberOfThirds; i += 3) {
-      List<int> edfValues = List.filled(4, 0);
+      final edfValues = List.filled(4, 0);
       for (int j = 0; j < 4; j++) {
         if (pos <= endPos) {
           edfValues[j] = input.charAt(pos++) & 0x3f;
@@ -535,11 +536,11 @@ class Result {
   /* private */ late Uint8List _bytes;
 
   Result(Edge solution) {
-    Input input = solution.input;
+    final input = solution.input;
     int size = 0;
-    List<int> bytesAL = [];
-    List<int> randomizePostfixLength = [];
-    List<int> randomizeLengths = [];
+    final bytesAL = <int>[];
+    final randomizePostfixLength = <int>[];
+    final randomizeLengths = <int>[];
     if ((solution.mode == Mode.C40 ||
             solution.mode == Mode.TEXT ||
             solution.mode == Mode.X12) &&
@@ -587,7 +588,7 @@ class Result {
       );
     }
     //add padding
-    int capacity = solution.getMinSymbolSize(bytesAL.length);
+    final capacity = solution.getMinSymbolSize(bytesAL.length);
     if (bytesAL.length < capacity) {
       bytesAL.add(129);
     }
@@ -606,8 +607,8 @@ class Result {
   }
 
   static int randomize253State(int codewordPosition) {
-    int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
-    int tempVariable = 129 + pseudoRandom;
+    final pseudoRandom = ((149 * codewordPosition) % 253) + 1;
+    final tempVariable = 129 + pseudoRandom;
     return tempVariable <= 254 ? tempVariable : tempVariable - 254;
   }
 
@@ -618,10 +619,10 @@ class Result {
   ) {
     for (int i = 0; i < length; i++) {
       //See "B.1 253-state algorithm
-      int padCodewordPosition = startPosition + i;
-      int padCodewordValue = bytesAL[padCodewordPosition] & 0xff;
-      int pseudoRandomNumber = ((149 * (padCodewordPosition + 1)) % 255) + 1;
-      int tempVariable = padCodewordValue + pseudoRandomNumber;
+      final padCodewordPosition = startPosition + i;
+      final padCodewordValue = bytesAL[padCodewordPosition] & 0xff;
+      final pseudoRandomNumber = ((149 * (padCodewordPosition + 1)) % 255) + 1;
+      final tempVariable = padCodewordValue + pseudoRandomNumber;
       bytesAL[padCodewordPosition] =
           (tempVariable <= 255 ? tempVariable : tempVariable - 256);
     }
@@ -774,7 +775,7 @@ class MinimalEncoder {
   }
 
   static void addEdge(List<List<Edge?>> edges, Edge edge) {
-    int vertexIndex = edge.fromPosition + edge.characterLength;
+    final vertexIndex = edge.fromPosition + edge.characterLength;
     if (edges[vertexIndex][edge.endMode.index] == null ||
         edges[vertexIndex][edge.endMode.index]!.cachedTotalSize >
             edge.cachedTotalSize) {
@@ -795,14 +796,14 @@ class MinimalEncoder {
         characterLength[0] = 0;
         return 0;
       }
-      int ci = input.charAt(i);
+      final ci = input.charAt(i);
       if (c40 && HighLevelEncoder.isNativeC40(ci) ||
           !c40 && HighLevelEncoder.isNativeText(ci)) {
         thirdsCount++; //native
       } else if (!MinimalEncoder.isExtendedASCII(ci, input.fnc1Character)) {
         thirdsCount += 2; //shift
       } else {
-        int asciiValue = ci & 0xff;
+        final asciiValue = ci & 0xff;
         if (asciiValue >= 128 &&
             (c40 && HighLevelEncoder.isNativeC40((asciiValue - 128)) ||
                 !c40 && HighLevelEncoder.isNativeText((asciiValue - 128)))) {
@@ -829,7 +830,7 @@ class MinimalEncoder {
       return;
     }
 
-    int ch = input.charAt(from);
+    final ch = input.charAt(from);
     if (previous == null || previous.endMode != Mode.EDF) {
       //not possible to unlatch a full EDF edge to something
       //else
@@ -843,9 +844,9 @@ class MinimalEncoder {
         addEdge(edges, Edge(input, Mode.ASCII, from, 1, previous));
       }
 
-      final List<Mode> modes = [Mode.C40, Mode.TEXT];
+      final modes = [Mode.C40, Mode.TEXT];
       for (Mode mode in modes) {
-        List<int> characterLength = [0];
+        final characterLength = [0];
         if (getNumberOfC40Words(
                 input, from, mode == Mode.C40, characterLength) >
             0) {
@@ -867,7 +868,7 @@ class MinimalEncoder {
     //unless it is 2 characters away from the end of the input.
     int i;
     for (i = 0; i < 3; i++) {
-      int pos = from + i;
+      final pos = from + i;
       if (input.haveNCharacters(pos, 1) &&
           HighLevelEncoder.isNativeEDIFACT(input.charAt(pos))) {
         addEdge(edges, Edge(input, Mode.EDF, from, i + 1, previous));
@@ -1068,11 +1069,11 @@ class MinimalEncoder {
      * Hence a minimal encoding of "ABCDEFG" is either ASCII(A),C40(BCDEFG) or ASCII(A), X12(BCDEFG) with a size of 5 bytes.
      */
 
-    int inputLength = input.length;
+    final inputLength = input.length;
 
     // Array that represents vertices. There is a vertex for every character and mode.
     // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
-    List<List<Edge?>> edges = List.generate(
+    final List<List<Edge?>> edges = List.generate(
       inputLength + 1,
       (index) => List.filled(6, null),
     );
@@ -1092,9 +1093,9 @@ class MinimalEncoder {
     int minimalSize = MathUtils.MAX_VALUE;
     for (int j = 0; j < 6; j++) {
       if (edges[inputLength][j] != null) {
-        Edge edge = edges[inputLength][j]!;
+        final edge = edges[inputLength][j]!;
         //C40, TEXT and X12 need an extra unlatch at the end
-        int size = (j >= 1 && j <= 3)
+        final size = (j >= 1 && j <= 3)
             ? edge.cachedTotalSize + 1
             : edge.cachedTotalSize;
         if (size < minimalSize) {
@@ -1105,7 +1106,7 @@ class MinimalEncoder {
     }
 
     if (minimalJ < 0) {
-      throw Exception("Internal error: failed to encode \"$input\"");
+      throw Exception('Internal error: failed to encode "$input"');
     }
     return Result(edges[inputLength][minimalJ]!);
   }

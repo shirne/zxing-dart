@@ -50,6 +50,6 @@ void main() {
   });
 
   test('testToString', () {
-    expect(source.toString(), "#+ \n#+#\n#+#\n");
+    expect(source.toString(), '#+ \n#+#\n#+#\n');
   });
 }

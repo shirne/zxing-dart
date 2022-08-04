@@ -672,18 +672,18 @@ class PDF417ScanningDecoder {
     StringBuffer formatter = StringBuffer();
     for (int row = 0; row < barcodeMatrix.length; row++) {
       formatter.write(
-        "Row $row: ",
+        'Row $row: ',
       );
       for (int column = 0; column < barcodeMatrix[row].length; column++) {
         BarcodeValue barcodeValue = barcodeMatrix[row][column];
         if (barcodeValue.getValue().isEmpty) {
-          formatter.write("        ");
+          formatter.write('        ');
         } else {
           formatter.write(
-              "${barcodeValue.getValue()[0]}(${barcodeValue.getConfidence(barcodeValue.getValue()[0])})");
+              '${barcodeValue.getValue()[0]}(${barcodeValue.getConfidence(barcodeValue.getValue()[0])})');
         }
       }
-      formatter.write("\n");
+      formatter.write('\n');
     }
     return formatter.toString();
   }

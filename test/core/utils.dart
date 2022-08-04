@@ -25,7 +25,7 @@ void assertArrayEquals(List<dynamic>? a, List<dynamic>? b) {
     if (a[i] is List) {
       assertArrayEquals(a[i], b[i]);
     } else {
-      expect(a[i], b[i], reason: "at $i");
+      expect(a[i], b[i], reason: 'at $i');
     }
   }
 }
@@ -57,7 +57,7 @@ String visualize(String codewords) {
   return codewords.codeUnits.join(' ');
 }
 
-final Pattern _space = " ";
+final Pattern _space = ' ';
 String unVisualize(String visualized) {
   StringBuffer sb = StringBuffer();
   for (String token in visualized.split(_space)) {

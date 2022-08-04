@@ -30,12 +30,12 @@ enum Latch { A, B, C, SHIFT, NONE }
 class MinimalEncoder {
   static final String A =
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002"
-      "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011"
-      "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F"
-      "\u00FF";
+      '\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011'
+      '\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F'
+      '\u00FF';
   static final String B =
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr"
-      "stuvwxyz{|}~\u007F\u00FF";
+      'stuvwxyz{|}~\u007F\u00FF';
 
   static final int codeShift = 98;
 
@@ -49,13 +49,13 @@ class MinimalEncoder {
 
     encodeCharset(contents, Charset.NONE, 0);
 
-    List<List<int>> patterns = [];
-    List<int> checkSum = [0];
-    List<int> checkWeight = [1];
-    int length = contents.length;
+    final patterns = <List<int>>[];
+    final checkSum = [0];
+    final checkWeight = [1];
+    final length = contents.length;
     Charset charset = Charset.NONE;
     for (int i = 0; i < length; i++) {
-      Latch latch = minPath![charset.index][i];
+      final latch = minPath![charset.index][i];
       switch (latch) {
         case Latch.A:
           charset = Charset.A;
@@ -155,8 +155,8 @@ class MinimalEncoder {
   }
 
   bool canEncode(String contents, Charset charset, int position) {
-    int c = contents.codeUnitAt(position);
-    String cs = String.fromCharCode(c);
+    final c = contents.codeUnitAt(position);
+    final cs = String.fromCharCode(c);
     switch (charset) {
       case Charset.A:
         return c == Code128Writer._ESCAPE_FNC_1 ||
@@ -183,16 +183,16 @@ class MinimalEncoder {
   /// Encode the string starting at position position starting with the character set charset
   int encodeCharset(String contents, Charset charset, int position) {
     assert(position < contents.length);
-    int mCost = memoizedCost![charset.index][position];
+    final mCost = memoizedCost![charset.index][position];
     if (mCost > 0) {
       return mCost;
     }
 
     int minCost = MathUtils.MAX_VALUE;
     Latch minLatch = Latch.NONE;
-    bool atEnd = position + 1 >= contents.length;
+    final atEnd = position + 1 >= contents.length;
 
-    final List<Charset> sets = [Charset.A, Charset.B];
+    final sets = [Charset.A, Charset.B];
     for (int i = 0; i <= 1; i++) {
       if (canEncode(contents, sets[i], position)) {
         int cost = 1;
@@ -229,7 +229,7 @@ class MinimalEncoder {
         cost++;
         latch = Latch.C;
       }
-      int advance =
+      final advance =
           contents.codeUnitAt(position) == Code128Writer._ESCAPE_FNC_1 ? 1 : 2;
       if (position + advance < contents.length) {
         cost += encodeCharset(contents, Charset.C, position + advance);
@@ -240,8 +240,8 @@ class MinimalEncoder {
       }
     }
     if (minCost == MathUtils.MAX_VALUE) {
-      throw ArgumentError("Bad character in input: "
-          "ASCII value=${contents.codeUnitAt(position)}");
+      throw ArgumentError('Bad character in input: '
+          'ASCII value=${contents.codeUnitAt(position)}');
     }
     memoizedCost![charset.index][position] = minCost;
     minPath![charset.index][position] = minLatch;
@@ -281,9 +281,9 @@ class Code128Writer extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
-    int forcedCodeSet = _check(contents, hints);
+    final forcedCodeSet = _check(contents, hints);
 
-    bool hasCompactionHint = hints != null &&
+    final hasCompactionHint = hints != null &&
         hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
         (hints[EncodeHintType.CODE128_COMPACT] as bool);
 
@@ -293,35 +293,35 @@ class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   static int _check(String contents, Map<EncodeHintType, Object?>? hints) {
-    int length = contents.length;
+    final length = contents.length;
     // Check length
     if (length < 1 || length > 80) {
       throw ArgumentError(
-          "Contents length should be between 1 and 80 characters,"
-          " but got $length");
+          'Contents length should be between 1 and 80 characters,'
+          ' but got $length');
     }
     // Check for forced code set hint.
     int forcedCodeSet = -1;
     if (hints != null && hints.containsKey(EncodeHintType.FORCE_CODE_SET)) {
-      String codeSetHint = hints[EncodeHintType.FORCE_CODE_SET] as String;
+      final codeSetHint = hints[EncodeHintType.FORCE_CODE_SET] as String;
       switch (codeSetHint) {
-        case "A":
+        case 'A':
           forcedCodeSet = _CODE_CODE_A;
           break;
-        case "B":
+        case 'B':
           forcedCodeSet = _CODE_CODE_B;
           break;
-        case "C":
+        case 'C':
           forcedCodeSet = _CODE_CODE_C;
           break;
         default:
-          throw ArgumentError("Unsupported code set hint: $codeSetHint");
+          throw ArgumentError('Unsupported code set hint: $codeSetHint');
       }
     }
 
     // Check content
     for (int i = 0; i < length; i++) {
-      int c = contents.codeUnitAt(i);
+      final c = contents.codeUnitAt(i);
       // check for non ascii characters that are not special GS1 characters
       switch (c) {
         // special function characters
@@ -335,7 +335,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
           if (c > 127) {
             // no full Latin-1 character set available at the moment
             // shift and manual code change are not supported
-            throw ArgumentError("Bad character in input: ASCII value=: $c");
+            throw ArgumentError('Bad character in input: ASCII value=: $c');
           }
       }
       // check characters for compatibility with forced code set
@@ -343,15 +343,15 @@ class Code128Writer extends OneDimensionalCodeWriter {
         case _CODE_CODE_A:
           // allows no ascii above 95 (no lower caps, no special symbols)
           if (c > 95 && c <= 127) {
-            throw ArgumentError("Bad character in input for forced code set A:"
-                " ASCII value=$c");
+            throw ArgumentError('Bad character in input for forced code set A:'
+                ' ASCII value=$c');
           }
           break;
         case _CODE_CODE_B:
           // allows no ascii below 32 (terminal symbols)
           if (c <= 32) {
-            throw ArgumentError("Bad character in input for forced code set B:"
-                " ASCII value=$c");
+            throw ArgumentError('Bad character in input for forced code set B:'
+                ' ASCII value=$c');
           }
           break;
         case _CODE_CODE_C:
@@ -361,8 +361,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
               c == _ESCAPE_FNC_2 ||
               c == _ESCAPE_FNC_3 ||
               c == _ESCAPE_FNC_4) {
-            throw ArgumentError("Bad character in input for forced code set C:"
-                " ASCII value=$c");
+            throw ArgumentError('Bad character in input for forced code set C:'
+                ' ASCII value=$c');
           }
           break;
       }
@@ -372,8 +372,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
 
   static List<bool> encodeFast(
       String contents, Map<EncodeHintType, Object?>? hints, int forcedCodeSet) {
-    int length = contents.length;
-    List<List<int>> patterns = []; // temporary storage for patterns
+    final length = contents.length;
+    final patterns = <List<int>>[]; // temporary storage for patterns
     int checkSum = 0;
     int checkWeight = 1;
     int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
@@ -427,7 +427,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
                 if (position + 1 == length) {
                   // this is the last character, but the encoding is C, which always encodes two characers
                   throw ArgumentError(
-                      "Bad number of characters for digit only encoding.");
+                      'Bad number of characters for digit only encoding.');
                 }
                 patternIndex =
                     int.parse(contents.substring(position, position + 2));
@@ -488,7 +488,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
     }
 
     // Compute result
-    List<bool> result = List.filled(codeWidth, false);
+    final result = List.filled(codeWidth, false);
     int pos = 0;
     for (List<int> pattern in patterns) {
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, pattern, true);
@@ -498,7 +498,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   static _CType _findCType(String value, int start) {
-    int last = value.length;
+    final last = value.length;
     if (start >= last) {
       return _CType.UNCODABLE;
     }
@@ -529,7 +529,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
     }
     if (lookahead == _CType.UNCODABLE) {
       if (start < value.length) {
-        int c = value.codeUnitAt(start);
+        final c = value.codeUnitAt(start);
         if (c < 32 /*   */ ||
             (oldCode == _CODE_CODE_A &&
                 (c < 96 /* ` */ ||

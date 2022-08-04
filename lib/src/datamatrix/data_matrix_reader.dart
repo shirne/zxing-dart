@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-import 'dart:typed_data';
-
 import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
 import '../common/decoder_result.dart';
-import '../common/detector_result.dart';
 
 import '../binary_bitmap.dart';
 import '../decode_hint_type.dart';
@@ -44,26 +41,26 @@ class DataMatrixReader implements Reader {
     DecoderResult decoderResult;
     List<ResultPoint> points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = _extractPureBits(image.blackMatrix);
+      final bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits);
       points = _NO_POINTS;
     } else {
-      DetectorResult detectorResult = Detector(image.blackMatrix).detect();
+      final detectorResult = Detector(image.blackMatrix).detect();
       decoderResult = _decoder.decodeMatrix(detectorResult.bits);
       points = detectorResult.points;
     }
-    Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+    final result = Result(decoderResult.text, decoderResult.rawBytes, points,
         BarcodeFormat.DATA_MATRIX);
-    List<Uint8List>? byteSegments = decoderResult.byteSegments;
+    final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    String? ecLevel = decoderResult.ecLevel;
+    final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-        "]d${decoderResult.symbologyModifier}");
+        ']d${decoderResult.symbologyModifier}');
     return result;
   }
 
@@ -77,21 +74,21 @@ class DataMatrixReader implements Reader {
   /// around it. This is a specialized method that works exceptionally fast in this special
   /// case.
   static BitMatrix _extractPureBits(BitMatrix image) {
-    List<int>? leftTopBlack = image.getTopLeftOnBit();
-    List<int>? rightBottomBlack = image.getBottomRightOnBit();
+    final leftTopBlack = image.getTopLeftOnBit();
+    final rightBottomBlack = image.getBottomRightOnBit();
     if (leftTopBlack == null || rightBottomBlack == null) {
       throw NotFoundException.instance;
     }
 
-    int calModuleSize = _moduleSize(leftTopBlack, image);
+    final calModuleSize = _moduleSize(leftTopBlack, image);
 
     int top = leftTopBlack[1];
-    int bottom = rightBottomBlack[1];
+    final bottom = rightBottomBlack[1];
     int left = leftTopBlack[0];
-    int right = rightBottomBlack[0];
+    final right = rightBottomBlack[0];
 
-    int matrixWidth = (right - left + 1) ~/ calModuleSize;
-    int matrixHeight = (bottom - top + 1) ~/ calModuleSize;
+    final matrixWidth = (right - left + 1) ~/ calModuleSize;
+    final matrixHeight = (bottom - top + 1) ~/ calModuleSize;
     if (matrixWidth <= 0 || matrixHeight <= 0) {
       throw NotFoundException.instance;
     }
@@ -99,14 +96,14 @@ class DataMatrixReader implements Reader {
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    int nudge = calModuleSize ~/ 2;
+    final nudge = calModuleSize ~/ 2;
     top += nudge;
     left += nudge;
 
     // Now just read off the bits
-    BitMatrix bits = BitMatrix(matrixWidth, matrixHeight);
+    final bits = BitMatrix(matrixWidth, matrixHeight);
     for (int y = 0; y < matrixHeight; y++) {
-      int iOffset = top + y * calModuleSize;
+      final iOffset = top + y * calModuleSize;
       for (int x = 0; x < matrixWidth; x++) {
         if (image.get(left + x * calModuleSize, iOffset)) {
           bits.set(x, y);
@@ -117,9 +114,9 @@ class DataMatrixReader implements Reader {
   }
 
   static int _moduleSize(List<int> leftTopBlack, BitMatrix image) {
-    int width = image.width;
+    final width = image.width;
     int x = leftTopBlack[0];
-    int y = leftTopBlack[1];
+    final y = leftTopBlack[1];
     while (x < width && image.get(x, y)) {
       x++;
     }
@@ -127,7 +124,7 @@ class DataMatrixReader implements Reader {
       throw NotFoundException.instance;
     }
 
-    int moduleSize = x - leftTopBlack[0];
+    final moduleSize = x - leftTopBlack[0];
     if (moduleSize == 0) {
       throw NotFoundException.instance;
     }

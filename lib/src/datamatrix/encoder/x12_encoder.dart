@@ -27,18 +27,18 @@ class X12Encoder extends C40Encoder {
   @override
   void encode(EncoderContext context) {
     //step C
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     while (context.hasMoreCharacters) {
-      int c = context.currentChar;
+      final c = context.currentChar;
       context.pos++;
 
       encodeChar(c, buffer);
 
-      int count = buffer.length;
+      final count = buffer.length;
       if ((count % 3) == 0) {
         C40Encoder.writeNextTriplet(context, buffer);
 
-        int newMode = HighLevelEncoder.lookAheadTest(
+        final newMode = HighLevelEncoder.lookAheadTest(
             context.message, context.pos, encodingMode);
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
@@ -81,8 +81,8 @@ class X12Encoder extends C40Encoder {
   @override
   void handleEOD(EncoderContext context, StringBuffer buffer) {
     context.updateSymbolInfo();
-    int available = context.symbolInfo!.dataCapacity - context.codewordCount;
-    int count = buffer.length;
+    final available = context.symbolInfo!.dataCapacity - context.codewordCount;
+    final count = buffer.length;
     context.pos -= count;
     if (context.remainingCharacters > 1 ||
         available > 1 ||

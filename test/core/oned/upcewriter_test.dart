@@ -31,24 +31,24 @@ void main() {
   }
 
   test('testEncode', () {
-    doTest("05096893",
-        "0000000000010101110010100111000101101011110110111001011101010100000000000");
+    doTest('05096893',
+        '0000000000010101110010100111000101101011110110111001011101010100000000000');
   });
 
   test('testEncodeSystem1', () {
-    doTest("12345670",
-        "0000000000010100100110111101010001101110010000101001000101010100000000000");
+    doTest('12345670',
+        '0000000000010100100110111101010001101110010000101001000101010100000000000');
   });
 
   test('testAddChecksumAndEncode', () {
-    doTest("0509689",
-        "0000000000010101110010100111000101101011110110111001011101010100000000000");
+    doTest('0509689',
+        '0000000000010101110010100111000101101011110110111001011101010100000000000');
   });
 
   //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
     try {
-      UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
+      UPCEWriter().encode('05096abc', BarcodeFormat.UPC_E, 0, 0);
       fail('should thrown ArgumentError');
     } catch (_) {
       // passed
@@ -56,8 +56,8 @@ void main() {
   });
 
   test('testUPCEConvert', () {
-    expect(UPCEReader.convertUPCEtoUPCA("0509689"), "05096800009");
-    expect(UPCEReader.convertUPCEtoUPCA("12345670"), "123456000070");
-    expect(UPCEReader.convertUPCEtoUPCA("05096893"), "050968000093");
+    expect(UPCEReader.convertUPCEtoUPCA('0509689'), '05096800009');
+    expect(UPCEReader.convertUPCEtoUPCA('12345670'), '123456000070');
+    expect(UPCEReader.convertUPCEtoUPCA('05096893'), '050968000093');
   });
 }

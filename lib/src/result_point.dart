@@ -33,7 +33,7 @@ class ResultPoint {
   @override
   operator ==(Object other) {
     if (other is ResultPoint) {
-      ResultPoint otherPoint = other;
+      final otherPoint = other;
       return _x == otherPoint._x && _y == otherPoint._y;
     }
     return false;
@@ -46,7 +46,7 @@ class ResultPoint {
 
   @override
   String toString() {
-    return "($_x,$_y)";
+    return '($_x,$_y)';
   }
 
   /// Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
@@ -55,9 +55,9 @@ class ResultPoint {
   /// @param patterns array of three [ResultPoint] to order
   static void orderBestPatterns(List<ResultPoint> patterns) {
     // Find distances between pattern centers
-    double zeroOneDistance = distance(patterns[0], patterns[1]);
-    double oneTwoDistance = distance(patterns[1], patterns[2]);
-    double zeroTwoDistance = distance(patterns[0], patterns[2]);
+    final zeroOneDistance = distance(patterns[0], patterns[1]);
+    final oneTwoDistance = distance(patterns[1], patterns[2]);
+    final zeroTwoDistance = distance(patterns[0], patterns[2]);
 
     ResultPoint pointA;
     ResultPoint pointB;
@@ -84,7 +84,7 @@ class ResultPoint {
     // we want for A, B, C. If it's negative, then we've got it flipped around and
     // should swap A and C.
     if (crossProductZ(pointA, pointB, pointC) < 0.0) {
-      ResultPoint temp = pointA;
+      final temp = pointA;
       pointA = pointC;
       pointC = temp;
     }
@@ -104,8 +104,8 @@ class ResultPoint {
   /// Returns the z component of the cross product between vectors BC and BA.
   static double crossProductZ(
       ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
-    double bX = pointB.x;
-    double bY = pointB.y;
+    final bX = pointB.x;
+    final bY = pointB.y;
     return ((pointC.x - bX) * (pointA.y - bY)) -
         ((pointC.y - bY) * (pointA.x - bX));
   }

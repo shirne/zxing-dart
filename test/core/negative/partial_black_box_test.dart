@@ -28,7 +28,7 @@ import '../common/abstract_negative_black_box.dart';
 void main() {
   // todo 11.png may pass because of https://github.com/zxing/zxing/issues/1400
   test('PartialBlackBoxTestCase', () {
-    AbstractNegativeBlackBoxTestCase("test/resources/blackbox/partial")
+    AbstractNegativeBlackBoxTestCase('test/resources/blackbox/partial')
       ..addNegativeTest(2, 0.0)
       ..addNegativeTest(2, 90.0)
       ..addNegativeTest(2, 180.0)

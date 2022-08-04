@@ -29,15 +29,14 @@ class UPCEANExtension2Support {
   final StringBuffer _decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange) {
-    StringBuffer result = _decodeRowStringBuffer;
+    final result = _decodeRowStringBuffer;
     result.clear();
-    int end = _decodeMiddle(row, extensionStartRange, result);
+    final end = _decodeMiddle(row, extensionStartRange, result);
 
-    String resultString = result.toString();
-    Map<ResultMetadataType, Object>? extensionData =
-        _parseExtensionString(resultString);
+    final resultString = result.toString();
+    final extensionData = _parseExtensionString(resultString);
 
-    Result? extensionResult = Result(
+    final extensionResult = Result(
         resultString,
         null,
         [
@@ -54,18 +53,19 @@ class UPCEANExtension2Support {
 
   int _decodeMiddle(
       BitArray row, List<int> startRange, StringBuffer resultString) {
-    List<int> counters = _decodeMiddleCounters;
+    // TODO is need ?
+    final counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
     counters[3] = 0;
-    int end = row.size;
+    final end = row.size;
     int rowOffset = startRange[1];
 
     int checkParity = 0;
 
     for (int x = 0; x < 2 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
@@ -99,7 +99,7 @@ class UPCEANExtension2Support {
     if (raw.length != 2) {
       return null;
     }
-    Map<ResultMetadataType, Object> result = {};
+    final result = <ResultMetadataType, Object>{};
     result[ResultMetadataType.ISSUE_NUMBER] = raw.toString();
     return result;
   }

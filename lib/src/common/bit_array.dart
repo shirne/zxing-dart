@@ -49,7 +49,7 @@ class BitArray {
 
   void _ensureCapacity(int newSize) {
     if (newSize > _bits.length * 32) {
-      Uint32List newBits = _makeArray((newSize / loadFactor).ceil());
+      final newBits = _makeArray((newSize / loadFactor).ceil());
       List.copyRange(newBits, 0, _bits, 0, _bits.length);
       _bits = newBits;
     }
@@ -97,7 +97,7 @@ class BitArray {
       }
       currentBits = _bits[bitsOffset];
     }
-    int result =
+    final result =
         (bitsOffset * 32) + MathUtils.numberOfTrailingZeros(currentBits);
     return math.min(result, _size);
   }
@@ -119,7 +119,7 @@ class BitArray {
       }
       currentBits = (~_bits[bitsOffset]).toUnsigned(32);
     }
-    int result =
+    final result =
         (bitsOffset * 32) + MathUtils.numberOfTrailingZeros(currentBits);
     return math.min(result, _size);
   }
@@ -145,13 +145,13 @@ class BitArray {
       return;
     }
     end--; // will be easier to treat this as the last actually set bit -- inclusive
-    int firstInt = start ~/ 32;
-    int lastInt = end ~/ 32;
+    final firstInt = start ~/ 32;
+    final lastInt = end ~/ 32;
     for (int i = firstInt; i <= lastInt; i++) {
-      int firstBit = i > firstInt ? 0 : start & 0x1F;
-      int lastBit = i < lastInt ? 31 : end & 0x1F;
+      final firstBit = i > firstInt ? 0 : start & 0x1F;
+      final lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
-      int mask = (2 << lastBit) - (1 << firstBit);
+      final mask = (2 << lastBit) - (1 << firstBit);
       _bits[i] |= mask;
     }
   }
@@ -180,13 +180,13 @@ class BitArray {
       return true; // empty range matches
     }
     end--; // will be easier to treat this as the last actually set bit -- inclusive
-    int firstInt = start ~/ 32;
-    int lastInt = end ~/ 32;
+    final firstInt = start ~/ 32;
+    final lastInt = end ~/ 32;
     for (int i = firstInt; i <= lastInt; i++) {
-      int firstBit = i > firstInt ? 0 : start & 0x1F;
-      int lastBit = i < lastInt ? 31 : end & 0x1F;
+      final firstBit = i > firstInt ? 0 : start & 0x1F;
+      final lastBit = i < lastInt ? 31 : end & 0x1F;
       // Ones from firstBit to lastBit, inclusive
-      int mask = (2 << lastBit) - (1 << firstBit);
+      final mask = (2 << lastBit) - (1 << firstBit);
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
@@ -228,7 +228,7 @@ class BitArray {
   }
 
   void appendBitArray(BitArray other) {
-    int otherSize = other._size;
+    final otherSize = other._size;
     _ensureCapacity(_size + otherSize);
     for (int i = 0; i < otherSize; i++) {
       appendBit(other.get(i));
@@ -273,19 +273,19 @@ class BitArray {
 
   /// Reverses all bits in the array.
   void reverse() {
-    Uint32List newBits = Uint32List(_bits.length);
+    final newBits = Uint32List(_bits.length);
     // reverse all int's first
-    int len = (_size - 1) ~/ 32;
-    int oldBitsLen = len + 1;
+    final len = (_size - 1) ~/ 32;
+    final oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
       newBits[len - i] = Utils.reverseSign32(_bits[i]);
     }
     // now correct the int's if the bit size isn't a multiple of 32
     if (_size != oldBitsLen * 32) {
-      int leftOffset = oldBitsLen * 32 - _size;
+      final leftOffset = oldBitsLen * 32 - _size;
       var currentInt = newBits[0] >>> leftOffset;
       for (int i = 1; i < oldBitsLen; i++) {
-        var nextInt = newBits[i];
+        final nextInt = newBits[i];
         currentInt |= (nextInt << (32 - leftOffset)).toUnsigned(32);
         newBits[i - 1] = currentInt.toInt();
         currentInt = nextInt >>> leftOffset;
@@ -314,7 +314,7 @@ class BitArray {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int i = 0; i < _size; i++) {
       if ((i & 0x07) == 0) {
         result.write(' ');
@@ -324,7 +324,5 @@ class BitArray {
     return result.toString();
   }
 
-  BitArray clone() {
-    return BitArray.test(Uint32List.fromList(_bits.toList()), _size);
-  }
+  BitArray clone() => BitArray.test(Uint32List.fromList(_bits.toList()), _size);
 }

@@ -6,9 +6,9 @@ import '../../common/eci_encoder_set.dart';
 import '../../writer_exception.dart';
 
 class VersionSize {
-  static const SMALL = VersionSize("version 1-9");
-  static const MEDIUM = VersionSize("version 10-26");
-  static const LARGE = VersionSize("version 27-40");
+  static const SMALL = VersionSize('version 1-9');
+  static const MEDIUM = VersionSize('version 10-26');
+  static const LARGE = VersionSize('version 27-40');
 
   final String description;
 
@@ -45,7 +45,7 @@ class Edge extends Context<MinimalEncoder> {
         super(context) {
     int size = previous?.cachedTotalSize ?? 0;
 
-    bool needECI = mode == Mode.BYTE &&
+    final needECI = mode == Mode.BYTE &&
             (previous == null &&
                 this.charsetEncoderIndex !=
                     0) || // at the beginning and charset is not ISO-8859-1
@@ -113,7 +113,7 @@ class ResultNode extends Context<ResultList> {
         break;
       case Mode.NUMERIC:
         size += (characterLength ~/ 3) * 10;
-        int rest = characterLength % 3;
+        final rest = characterLength % 3;
         size += rest == 1
             ? 4
             : rest == 2
@@ -150,7 +150,7 @@ class ResultNode extends Context<ResultList> {
   void getBits(BitArray bits) {
     bits.appendBits(mode.bits, 4);
     if (characterLength > 0) {
-      int length = getCharacterCountIndicator();
+      final length = getCharacterCountIndicator();
       bits.appendBits(length, mode.getCharacterCountBits(context.version));
     }
     if (mode == Mode.ECI) {
@@ -174,7 +174,7 @@ class ResultNode extends Context<ResultList> {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     result.write(mode);
     result.write('(');
     if (mode == Mode.ECI) {
@@ -193,7 +193,7 @@ class ResultNode extends Context<ResultList> {
   }
 
   String makePrintable(String s) {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int i = 0; i < s.length; i++) {
       if (s.codeUnitAt(i) < 32 || s.codeUnitAt(i) > 126) {
         result.write('.');
@@ -217,9 +217,9 @@ class ResultList extends Context<MinimalEncoder> {
 
     while (current != null) {
       length += current.characterLength;
-      Edge? previous = current.previous;
+      final previous = current.previous;
 
-      bool needECI = current.mode == Mode.BYTE &&
+      final needECI = current.mode == Mode.BYTE &&
               (previous == null &&
                   current.charsetEncoderIndex !=
                       0) || // at the beginning and charset is not ISO-8859-1
@@ -280,7 +280,7 @@ class ResultList extends Context<MinimalEncoder> {
         upperLimit = 40;
         break;
     }
-    int size = getSize(version);
+    final size = getSize(version);
     // increase version if needed
     while (versionNumber < upperLimit &&
         !Encoder.willFit(size, Version.getVersionForNumber(versionNumber),
@@ -318,11 +318,11 @@ class ResultList extends Context<MinimalEncoder> {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     ResultNode? previous;
     for (ResultNode current in list) {
       if (previous != null) {
-        result.write(",");
+        result.write(',');
       }
       result.write(current.toString());
       previous = current;
@@ -400,12 +400,12 @@ class MinimalEncoder {
   ResultList doEncode(Version? version) {
     if (version == null) {
       // compute minimal encoding trying the three version sizes.
-      final List<Version> versions = [
+      final versions = [
         getVersion(VersionSize.SMALL),
         getVersion(VersionSize.MEDIUM),
         getVersion(VersionSize.LARGE)
       ];
-      List<ResultList> results = [
+      final results = [
         encodeSpecificVersion(versions[0]),
         encodeSpecificVersion(versions[1]),
         encodeSpecificVersion(versions[2])
@@ -413,7 +413,7 @@ class MinimalEncoder {
       int smallestSize = MathUtils.MAX_VALUE;
       int smallestResult = -1;
       for (int i = 0; i < 3; i++) {
-        int size = results[i].getSize();
+        final size = results[i].getSize();
         if (Encoder.willFit(size, versions[i], ecLevel) &&
             size < smallestSize) {
           smallestSize = size;
@@ -421,15 +421,15 @@ class MinimalEncoder {
         }
       }
       if (smallestResult < 0) {
-        throw WriterException("Data too big for any version");
+        throw WriterException('Data too big for any version');
       }
       return results[smallestResult];
     } else {
       // compute minimal encoding for a given version
-      ResultList result = encodeSpecificVersion(version);
+      final result = encodeSpecificVersion(version);
       if (!Encoder.willFit(result.getSize(),
           getVersion(getVersionSize(result.getVersion())), ecLevel)) {
-        throw WriterException("Data too big for version $version");
+        throw WriterException('Data too big for version $version');
       }
       return result;
     }
@@ -499,14 +499,14 @@ class MinimalEncoder {
       case Mode.BYTE:
         return 3;
       default:
-        throw StateError("Illegal mode $mode");
+        throw StateError('Illegal mode $mode');
     }
   }
 
   void addEdge(List<List<List<Edge?>>> edges, int position, Edge edge) {
-    int vertexIndex = position + edge.characterLength;
-    List<Edge?> modeEdges = edges[vertexIndex][edge.charsetEncoderIndex];
-    int modeOrdinal = getCompactedOrdinal(edge.mode);
+    final vertexIndex = position + edge.characterLength;
+    final modeEdges = edges[vertexIndex][edge.charsetEncoderIndex];
+    final modeOrdinal = getCompactedOrdinal(edge.mode);
     if (modeEdges[modeOrdinal] == null ||
         modeEdges[modeOrdinal]!.cachedTotalSize > edge.cachedTotalSize) {
       modeEdges[modeOrdinal] = edge;
@@ -517,7 +517,7 @@ class MinimalEncoder {
       Edge? previous) {
     int start = 0;
     int end = encoders.length;
-    int priorityEncoderIndex = encoders.priorityEncoderIndex;
+    final priorityEncoderIndex = encoders.priorityEncoderIndex;
     if (priorityEncoderIndex >= 0 &&
         encoders.canEncode(
             stringToEncode.codeUnitAt(from), priorityEncoderIndex)) {
@@ -537,7 +537,7 @@ class MinimalEncoder {
           edges, from, Edge(Mode.KANJI, from, 0, 1, previous, version, this));
     }
 
-    int inputLength = stringToEncode.length;
+    final inputLength = stringToEncode.length;
     if (canEncode(Mode.ALPHANUMERIC, stringToEncode.codeUnitAt(from))) {
       addEdge(
           edges,
@@ -688,7 +688,7 @@ class MinimalEncoder {
     /// Encoding as ECI(ISO-8859-2),BYTE(XX),ECI(ISO-8859-3),BYTE(YY) has the smallest size of 80 and is hence chosen.
     /// The encodation ECI(UTF-8),BYTE(XXYY) is longer with a size of 88.
 
-    int inputLength = stringToEncode.length;
+    final inputLength = stringToEncode.length;
 
     // Array that represents vertices. There is a vertex for every character, encoding and mode. The vertex contains
     // a list of all edges that lead to it that have the same encoding and mode.
@@ -696,7 +696,7 @@ class MinimalEncoder {
 
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
-    List<List<List<Edge?>>> edges = List.generate(
+    final List<List<List<Edge?>>> edges = List.generate(
         inputLength + 1,
         (idx) =>
             List.generate(encoders.length, (idx2) => List.filled(4, null)));
@@ -717,7 +717,7 @@ class MinimalEncoder {
     for (int j = 0; j < encoders.length; j++) {
       for (int k = 0; k < 4; k++) {
         if (edges[inputLength][j][k] != null) {
-          Edge? edge = edges[inputLength][j][k];
+          final edge = edges[inputLength][j][k];
           if (edge != null && edge.cachedTotalSize < minimalSize) {
             minimalSize = edge.cachedTotalSize;
             minimalJ = j;
@@ -728,7 +728,7 @@ class MinimalEncoder {
     }
     if (minimalJ < 0) {
       throw WriterException(
-          "Internal error: failed to encode \"$stringToEncode\"");
+          'Internal error: failed to encode "$stringToEncode"');
     }
     return ResultList(version, edges[inputLength][minimalJ][minimalK], this);
   }

@@ -27,22 +27,22 @@ abstract class AbstractDoCoMoResultParser extends ResultParser {
   static final RegExp _aTextAlphaNumeric =
       RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
 
-  List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) {
-    return matchPrefixedField(prefix, rawText, ';', true);
-  }
+  List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) =>
+      matchPrefixedField(prefix, rawText, ';', true);
 
   String? matchSingleDoCoMoPrefixedField(
-      String prefix, String rawText, bool trim) {
-    return matchSinglePrefixedField(prefix, rawText, ';', trim);
-  }
+    String prefix,
+    String rawText,
+    bool trim,
+  ) =>
+      matchSinglePrefixedField(prefix, rawText, ';', trim);
 
   /// This implements only the most basic checking for an email address's validity -- that it contains
   /// an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
   /// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
   /// in a barcode, not "judge" it.
-  bool isBasicallyValidEmailAddress(String? email) {
-    return email != null &&
-        _aTextAlphaNumeric.hasMatch(email) &&
-        email.contains('@');
-  }
+  bool isBasicallyValidEmailAddress(String? email) =>
+      email != null &&
+      _aTextAlphaNumeric.hasMatch(email) &&
+      email.contains('@');
 }

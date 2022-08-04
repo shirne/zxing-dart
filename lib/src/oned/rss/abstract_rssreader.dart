@@ -111,9 +111,9 @@ abstract class AbstractRSSReader extends OneDReader {
 
   // @protected
   static bool isFinderPattern(List<int> counters) {
-    int firstTwoSum = counters[0] + counters[1];
-    int sum = firstTwoSum + counters[2] + counters[3];
-    double ratio = firstTwoSum / sum;
+    final firstTwoSum = counters[0] + counters[1];
+    final sum = firstTwoSum + counters[2] + counters[3];
+    final ratio = firstTwoSum / sum;
     if (ratio >= _MIN_FINDER_PATTERN_RATIO &&
         ratio <= _MAX_FINDER_PATTERN_RATIO) {
       // passes ratio test in spec, but see if the counts are unreasonable

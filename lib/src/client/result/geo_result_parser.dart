@@ -25,19 +25,20 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class GeoResultParser extends ResultParser {
-  static final RegExp _geoUrlPattern = RegExp(
-      r"^geo:([\-0-9.]+),([\-0-9.]+)(?:,([\-0-9.]+))?(?:\?(.*))?$",
-      caseSensitive: false);
+  static final _geoUrlPattern = RegExp(
+    r'^geo:([\-0-9.]+),([\-0-9.]+)(?:,([\-0-9.]+))?(?:\?(.*))?$',
+    caseSensitive: false,
+  );
 
   @override
   GeoParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    RegExpMatch? matcher = _geoUrlPattern.firstMatch(rawText);
+    final rawText = ResultParser.getMassagedText(result);
+    final matcher = _geoUrlPattern.firstMatch(rawText);
     if (matcher == null) {
       return null;
     }
 
-    String? query = matcher.group(4);
+    final query = matcher.group(4);
 
     double latitude;
     double longitude;

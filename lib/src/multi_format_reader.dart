@@ -74,13 +74,13 @@ class MultiFormatReader implements Reader {
   void setHints(Map<DecodeHintType, Object>? hints) {
     _hints = hints;
 
-    bool tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
+    final tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
     // @SuppressWarnings("unchecked")
-    List<BarcodeFormat>? formats =
+    final formats =
         hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-    List<Reader> readers = [];
+    final readers = <Reader>[];
     if (formats != null) {
-      bool addOneDReader = formats.contains(BarcodeFormat.UPC_A) ||
+      final addOneDReader = formats.contains(BarcodeFormat.UPC_A) ||
           formats.contains(BarcodeFormat.UPC_E) ||
           formats.contains(BarcodeFormat.EAN_13) ||
           formats.contains(BarcodeFormat.EAN_8) ||

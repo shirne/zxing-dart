@@ -33,9 +33,8 @@ abstract class ReaderException implements Exception {
 
   @override
   String toString() {
-    Object? message = this.message;
-    if (message == null) return "Exception";
-    return "Exception: $message";
+    if (message == null) return 'Exception';
+    return 'Exception: $message';
   }
 }
 
@@ -47,8 +46,7 @@ class ParseException implements Exception {
 
   @override
   String toString() {
-    Object? message = this.message;
-    if (message == null) return "Exception";
-    return "Exception: $message";
+    if (message == null) return 'Exception';
+    return 'Exception: $message';
   }
 }

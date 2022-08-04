@@ -33,7 +33,7 @@ void main() {
     String result = DecodedBitStreamParser.decode(
             builder.toByteArray(), Version.getVersionForNumber(1), null, null)
         .text;
-    expect(result, "\u00f1\u00f2\u00f3");
+    expect(result, '\u00f1\u00f2\u00f3');
   });
 
   test('testSimpleSJIS', () {
@@ -50,7 +50,7 @@ void main() {
       null,
       null,
     ).text;
-    expect("\uff61\uff62\uff63\uff90", result);
+    expect('\uff61\uff62\uff63\uff90', result);
   });
 
   test('testECI', () {
@@ -68,7 +68,7 @@ void main() {
       null,
       null,
     ).text;
-    expect(result, "\u00ed\u00f3\u00fa");
+    expect(result, '\u00ed\u00f3\u00fa');
   });
 
   test('testHanzi', () {
@@ -83,7 +83,7 @@ void main() {
       null,
       null,
     ).text;
-    expect("\u963f", result);
+    expect('\u963f', result);
   });
 
   test('testHanziLevel1', () {
@@ -99,7 +99,7 @@ void main() {
       null,
       null,
     ).text;
-    expect("\u30a2", result);
+    expect('\u30a2', result);
   });
 
   // TODO definitely need more tests here

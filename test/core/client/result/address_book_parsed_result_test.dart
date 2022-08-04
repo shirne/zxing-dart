@@ -55,35 +55,35 @@ void main() {
   }
 
   test('testAddressBookDocomo', () {
-    doTest("MECARD:N:Sean Owen;;", null, ["Sean Owen"], null, null, null, null,
+    doTest('MECARD:N:Sean Owen;;', null, ['Sean Owen'], null, null, null, null,
         null, null, null, null, null);
     doTest(
-        "MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;",
+        'MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;',
         null,
-        ["Sean Owen"],
-        null,
-        null,
-        ["srowen@example.org"],
+        ['Sean Owen'],
         null,
         null,
+        ['srowen@example.org'],
         null,
-        ["google.com"],
         null,
-        "ZXing Team");
+        null,
+        ['google.com'],
+        null,
+        'ZXing Team');
   });
 
   test('testAddressBookAU', () {
-    doTest("MEMORY:foo\r\nNAME1:Sean\r\nTEL1:+12125551212\r\n", null, ["Sean"],
-        null, null, null, ["+12125551212"], null, null, null, null, "foo");
+    doTest('MEMORY:foo\r\nNAME1:Sean\r\nTEL1:+12125551212\r\n', null, ['Sean'],
+        null, null, null, ['+12125551212'], null, null, null, null, 'foo');
   });
 
   test('testVCard', () {
     doTest(
-        "BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD',
         null,
-        ["Sean Owen"],
+        ['Sean Owen'],
         null,
-        ["123 Main St"],
+        ['123 Main St'],
         null,
         null,
         null,
@@ -95,9 +95,9 @@ void main() {
 
   test('testVCardFullN', () {
     doTest(
-        "BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;T;Mr.;Esq.\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;T;Mr.;Esq.\r\nEND:VCARD',
         null,
-        ["Mr. Sean T Owen Esq."],
+        ['Mr. Sean T Owen Esq.'],
         null,
         null,
         null,
@@ -110,22 +110,22 @@ void main() {
   });
 
   test('testVCardFullN2', () {
-    doTest("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;;;\r\nEND:VCARD", null,
-        ["Sean Owen"], null, null, null, null, null, null, null, null, null);
+    doTest('BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;;;\r\nEND:VCARD', null,
+        ['Sean Owen'], null, null, null, null, null, null, null, null, null);
   });
 
   test('testVCardFullN3', () {
-    doTest("BEGIN:VCARD\r\nVERSION:2.1\r\nN:;Sean;;;\r\nEND:VCARD", null,
-        ["Sean"], null, null, null, null, null, null, null, null, null);
+    doTest('BEGIN:VCARD\r\nVERSION:2.1\r\nN:;Sean;;;\r\nEND:VCARD', null,
+        ['Sean'], null, null, null, null, null, null, null, null, null);
   });
 
   test('testVCardCaseInsensitive', () {
     doTest(
-        "begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD",
+        'begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD',
         null,
-        ["Sean Owen"],
+        ['Sean Owen'],
         null,
-        ["123 Main St"],
+        ['123 Main St'],
         null,
         null,
         null,
@@ -137,11 +137,11 @@ void main() {
 
   test('testEscapedVCard', () {
     doTest(
-        "BEGIN:VCARD\r\nADR;HOME:123\\;\\\\ Main\\, St\\nHome\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nADR;HOME:123\\;\\\\ Main\\, St\\nHome\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD',
         null,
-        ["Sean Owen"],
+        ['Sean Owen'],
         null,
-        ["123;\\ Main, St\nHome"],
+        ['123;\\ Main, St\nHome'],
         null,
         null,
         null,
@@ -153,15 +153,15 @@ void main() {
 
   test('testBizcard', () {
     doTest(
-        "BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;",
+        'BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;',
         null,
-        ["Sean Owen"],
+        ['Sean Owen'],
         null,
-        ["123 Main St"],
-        ["srowen@example.org"],
-        ["+12125551212"],
+        ['123 Main St'],
+        ['srowen@example.org'],
+        ['+12125551212'],
         null,
-        "Google",
+        'Google',
         null,
         null,
         null);
@@ -169,31 +169,31 @@ void main() {
 
   test('testSeveralAddresses', () {
     doTest(
-        "MECARD:N:Foo Bar;ORG:Company;TEL:5555555555;EMAIL:foo.bar@xyz.com;ADR:City, 10001;"
-            "ADR:City, 10001;NOTE:This is the memo.;;",
+        'MECARD:N:Foo Bar;ORG:Company;TEL:5555555555;EMAIL:foo.bar@xyz.com;ADR:City, 10001;'
+            'ADR:City, 10001;NOTE:This is the memo.;;',
         null,
-        ["Foo Bar"],
+        ['Foo Bar'],
         null,
-        ["City, 10001", "City, 10001"],
-        ["foo.bar@xyz.com"],
-        ["5555555555"],
+        ['City, 10001', 'City, 10001'],
+        ['foo.bar@xyz.com'],
+        ['5555555555'],
         null,
-        "Company",
+        'Company',
         null,
         null,
-        "This is the memo.");
+        'This is the memo.');
   });
 
   test('testQuotedPrintable', () {
     doTest(
-        "BEGIN:VCARD\r\nADR;HOME;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:;;"
-        "=38=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n"
-        "=4F=20=36=39=39=\r\n"
-        "=39=39;;;\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nADR;HOME;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:;;'
+        '=38=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n'
+        '=4F=20=36=39=39=\r\n'
+        '=39=39;;;\r\nEND:VCARD',
         null,
         null,
         null,
-        ["88 Lynbrook\r\nCO 69999"],
+        ['88 Lynbrook\r\nCO 69999'],
         null,
         null,
         null,
@@ -204,45 +204,45 @@ void main() {
   });
 
   test('testVCardEscape', () {
-    doTest("BEGIN:VCARD\r\nNOTE:foo\\nbar\r\nEND:VCARD", null, null, null, null,
-        null, null, null, null, null, null, "foo\nbar");
-    doTest("BEGIN:VCARD\r\nNOTE:foo\\;bar\r\nEND:VCARD", null, null, null, null,
-        null, null, null, null, null, null, "foo;bar");
-    doTest("BEGIN:VCARD\r\nNOTE:foo\\\\bar\r\nEND:VCARD", null, null, null,
-        null, null, null, null, null, null, null, "foo\\bar");
-    doTest("BEGIN:VCARD\r\nNOTE:foo\\,bar\r\nEND:VCARD", null, null, null, null,
-        null, null, null, null, null, null, "foo,bar");
+    doTest('BEGIN:VCARD\r\nNOTE:foo\\nbar\r\nEND:VCARD', null, null, null, null,
+        null, null, null, null, null, null, 'foo\nbar');
+    doTest('BEGIN:VCARD\r\nNOTE:foo\\;bar\r\nEND:VCARD', null, null, null, null,
+        null, null, null, null, null, null, 'foo;bar');
+    doTest('BEGIN:VCARD\r\nNOTE:foo\\\\bar\r\nEND:VCARD', null, null, null,
+        null, null, null, null, null, null, null, 'foo\\bar');
+    doTest('BEGIN:VCARD\r\nNOTE:foo\\,bar\r\nEND:VCARD', null, null, null, null,
+        null, null, null, null, null, null, 'foo,bar');
   });
 
   test('testVCardValueURI', () {
     doTest(
-        "BEGIN:VCARD\r\nTEL;VALUE=uri:tel:+1-555-555-1212\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nTEL;VALUE=uri:tel:+1-555-555-1212\r\nEND:VCARD',
         null,
         null,
         null,
         null,
         null,
-        ["+1-555-555-1212"],
+        ['+1-555-555-1212'],
         <String?>[null],
         null,
         null,
         null,
         null);
 
-    doTest("BEGIN:VCARD\r\nN;VALUE=text:Owen;Sean\r\nEND:VCARD", null,
-        ["Sean Owen"], null, null, null, null, null, null, null, null, null);
+    doTest('BEGIN:VCARD\r\nN;VALUE=text:Owen;Sean\r\nEND:VCARD', null,
+        ['Sean Owen'], null, null, null, null, null, null, null, null, null);
   });
 
   test('testVCardTypes', () {
     doTest(
-        "BEGIN:VCARD\r\nTEL;HOME:\r\nTEL;WORK:10\r\nTEL:20\r\nTEL;CELL:30\r\nEND:VCARD",
+        'BEGIN:VCARD\r\nTEL;HOME:\r\nTEL;WORK:10\r\nTEL:20\r\nTEL;CELL:30\r\nEND:VCARD',
         null,
         null,
         null,
         null,
         null,
-        ["10", "20", "30"],
-        <String?>["WORK", null, "CELL"],
+        ['10', '20', '30'],
+        <String?>['WORK', null, 'CELL'],
         null,
         null,
         null,

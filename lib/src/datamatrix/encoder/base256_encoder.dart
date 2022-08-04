@@ -25,15 +25,15 @@ class Base256Encoder implements Encoder {
 
   @override
   void encode(EncoderContext context) {
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     buffer.write('\x00'); //Initialize length field
     while (context.hasMoreCharacters) {
-      int c = context.currentChar;
+      final c = context.currentChar;
       buffer.writeCharCode(c);
 
       context.pos++;
 
-      int newMode = HighLevelEncoder.lookAheadTest(
+      final newMode = HighLevelEncoder.lookAheadTest(
           context.message, context.pos, encodingMode);
       if (newMode != encodingMode) {
         // Return to ASCII encodation, which will actually handle latch to new mode
@@ -41,11 +41,11 @@ class Base256Encoder implements Encoder {
         break;
       }
     }
-    int dataCount = buffer.length - 1;
-    int lengthFieldSize = 1;
-    int currentSize = context.codewordCount + dataCount + lengthFieldSize;
+    final dataCount = buffer.length - 1;
+    final lengthFieldSize = 1;
+    final currentSize = context.codewordCount + dataCount + lengthFieldSize;
     context.updateSymbolInfo(currentSize);
-    bool mustPad = (context.symbolInfo!.dataCapacity - currentSize) > 0;
+    final mustPad = (context.symbolInfo!.dataCapacity - currentSize) > 0;
     if (context.hasMoreCharacters || mustPad) {
       if (dataCount <= 249) {
         buffer.setCharAt(0, dataCount);
@@ -53,18 +53,19 @@ class Base256Encoder implements Encoder {
         buffer.setCharAt(0, (dataCount ~/ 250) + 249);
         buffer.insert(1, dataCount % 250);
       } else {
-        throw StateError("Message length not in valid ranges: $dataCount");
+        throw StateError('Message length not in valid ranges: $dataCount');
       }
     }
-    for (int i = 0, l = buffer.length; i < l; i++) {
+    final l = buffer.length;
+    for (int i = 0; i < l; i++) {
       context.writeCodeword(
           _randomize255State(buffer.charAt(i), context.codewordCount + 1));
     }
   }
 
   static int _randomize255State(String ch, int codewordPosition) {
-    int pseudoRandom = ((149 * codewordPosition) % 255) + 1;
-    int tempVariable = ch.codeUnitAt(0) + pseudoRandom;
+    final pseudoRandom = ((149 * codewordPosition) % 255) + 1;
+    final tempVariable = ch.codeUnitAt(0) + pseudoRandom;
     if (tempVariable <= 255) {
       return tempVariable;
     } else {

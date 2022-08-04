@@ -8,7 +8,7 @@ class OverBrightScale extends Dispatch {
   @override
   Uint8List dispatchFull(Uint8List data, int width, int height) {
     final random = math.Random();
-    double rand = (random.nextDouble() * 10) + 2;
+    final rand = (random.nextDouble() * 10) + 2;
     for (int i = 0; i < width * height; i++) {
       data[i] = (255 * math.pow((data[i] & 0xff) / 255, rand)).toInt();
     }
@@ -17,12 +17,12 @@ class OverBrightScale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
+    final newByte = Uint8List.fromList(data);
     final random = math.Random();
-    double rand = (random.nextDouble() * 10) + 2;
+    final rand = (random.nextDouble() * 10) + 2;
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
-        int index = startH * width + startW;
+        final index = startH * width + startW;
         newByte[index] =
             (255 * math.pow((newByte[index] & 0xff) / 255, rand)).toInt();
       }

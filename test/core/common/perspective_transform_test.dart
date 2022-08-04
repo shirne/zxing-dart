@@ -25,9 +25,9 @@ void main() {
     List<double> points = [sourceX, sourceY];
     pt.transformPoints(points);
     assert((expectedX * accp).round() == (points[0] * accp).round(),
-        "$expectedX ${points[0]},");
+        '$expectedX ${points[0]},');
     assert((expectedY * accp).round() == (points[1] * accp).round(),
-        "$expectedY ${points[1]},");
+        '$expectedY ${points[1]},');
   }
 
   test('testSquareToQuadrilateral', () {

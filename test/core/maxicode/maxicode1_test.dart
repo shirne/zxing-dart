@@ -22,7 +22,7 @@ import '../common/abstract_black_box.dart';
 /// Tests [MaxiCodeReader] against a fixed set of test images.
 void main() {
   test('Maxicode1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/maxicode-1",
+    AbstractBlackBoxTestCase('test/resources/blackbox/maxicode-1',
         MultiFormatReader(), BarcodeFormat.MAXICODE)
       ..addTest(6, 6, 0.0)
       ..testBlackBox();

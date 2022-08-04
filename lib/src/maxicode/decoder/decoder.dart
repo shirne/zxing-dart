@@ -42,11 +42,11 @@ class Decoder {
   Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.maxicodeField64);
 
   DecoderResult decode(BitMatrix bits, [Map<DecodeHintType, Object>? hints]) {
-    BitMatrixParser parser = BitMatrixParser(bits);
-    Uint8List codewords = parser.readCodewords();
+    final parser = BitMatrixParser(bits);
+    final codewords = parser.readCodewords();
 
     _correctErrors(codewords, 0, 10, 10, _ALL);
-    int mode = codewords[0] & 0x0F;
+    final mode = codewords[0] & 0x0F;
     late Uint8List datawords;
     switch (mode) {
       case 2:
@@ -73,13 +73,13 @@ class Decoder {
 
   void _correctErrors(Uint8List codewordBytes, int start, int dataCodewords,
       int ecCodewords, int mode) {
-    int codewords = dataCodewords + ecCodewords;
+    final codewords = dataCodewords + ecCodewords;
 
     // in EVEN or ODD mode only half the codewords
-    int divisor = mode == _ALL ? 1 : 2;
+    final divisor = mode == _ALL ? 1 : 2;
 
     // First read into an array of ints
-    Int32List codewordsInts = Int32List(codewords ~/ divisor);
+    final codewordsInts = Int32List(codewords ~/ divisor);
     for (int i = 0; i < codewords; i++) {
       if ((mode == _ALL) || (i % 2 == (mode - 1))) {
         codewordsInts[i ~/ divisor] = codewordBytes[i + start] & 0xFF;

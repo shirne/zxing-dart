@@ -42,13 +42,13 @@ class MaskUtil {
   /// penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
   static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
-    List<Int8List> array = matrix.bytes;
-    int width = matrix.width;
-    int height = matrix.height;
+    final array = matrix.bytes;
+    final width = matrix.width;
+    final height = matrix.height;
     for (int y = 0; y < height - 1; y++) {
-      Int8List arrayY = array[y];
+      final arrayY = array[y];
       for (int x = 0; x < width - 1; x++) {
-        int value = arrayY[x];
+        final value = arrayY[x];
         if (value == arrayY[x + 1] &&
             value == array[y + 1][x] &&
             value == array[y + 1][x + 1]) {
@@ -64,12 +64,12 @@ class MaskUtil {
   /// find patterns like 000010111010000, we give penalty once.
   static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int numPenalties = 0;
-    List<Int8List> array = matrix.bytes;
-    int width = matrix.width;
-    int height = matrix.height;
+    final array = matrix.bytes;
+    final width = matrix.width;
+    final height = matrix.height;
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        Int8List arrayY = array[y]; // We can at least optimize this access
+        final arrayY = array[y]; // We can at least optimize this access
         if (x + 6 < width &&
             arrayY[x] == 1 &&
             arrayY[x + 1] == 0 &&
@@ -128,19 +128,19 @@ class MaskUtil {
   /// penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
   static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;
-    List<Int8List> array = matrix.bytes;
-    int width = matrix.width;
-    int height = matrix.height;
+    final array = matrix.bytes;
+    final width = matrix.width;
+    final height = matrix.height;
     for (int y = 0; y < height; y++) {
-      Int8List arrayY = array[y];
+      final arrayY = array[y];
       for (int x = 0; x < width; x++) {
         if (arrayY[x] == 1) {
           numDarkCells++;
         }
       }
     }
-    int numTotalCells = matrix.height * matrix.width;
-    int fivePercentVariances =
+    final numTotalCells = matrix.height * matrix.width;
+    final fivePercentVariances =
         (numDarkCells * 2 - numTotalCells).abs() * 10 ~/ numTotalCells;
     return fivePercentVariances * _N4;
   }
@@ -179,7 +179,7 @@ class MaskUtil {
         intermediate = ((temp % 3) + ((y + x) & 0x1)) & 0x1;
         break;
       default:
-        throw ArgumentError("Invalid mask pattern: $maskPattern");
+        throw ArgumentError('Invalid mask pattern: $maskPattern');
     }
     return intermediate == 0;
   }
@@ -189,14 +189,14 @@ class MaskUtil {
   static int _applyMaskPenaltyRule1Internal(
       ByteMatrix matrix, bool isHorizontal) {
     int penalty = 0;
-    int iLimit = isHorizontal ? matrix.height : matrix.width;
-    int jLimit = isHorizontal ? matrix.width : matrix.height;
-    List<Int8List> array = matrix.bytes;
+    final iLimit = isHorizontal ? matrix.height : matrix.width;
+    final jLimit = isHorizontal ? matrix.width : matrix.height;
+    final array = matrix.bytes;
     for (int i = 0; i < iLimit; i++) {
       int numSameBitCells = 0;
       int prevBit = -1;
       for (int j = 0; j < jLimit; j++) {
-        int bit = isHorizontal ? array[i][j] : array[j][i];
+        final bit = isHorizontal ? array[i][j] : array[j][i];
         if (bit == prevBit) {
           numSameBitCells++;
         } else {

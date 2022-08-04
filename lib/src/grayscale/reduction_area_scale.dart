@@ -14,11 +14,11 @@ class ReductionAreaScale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
-    Uint8List emptyByte = Uint8List(rect.width * rect.height);
+    final newByte = Uint8List.fromList(data);
+    final emptyByte = Uint8List(rect.width * rect.height);
     final random = math.Random();
     int areaSize = 0;
-    double step = random.nextDouble() * 2 + 1;
+    final step = random.nextDouble() * 2 + 1;
 
     int reductWidth, reductHeight = 0;
 
@@ -29,7 +29,7 @@ class ReductionAreaScale extends Dispatch {
       for (double startW = rect.left.toDouble();
           startW < rect.right;
           startW += step) {
-        int index = (startH.toInt()) * width + startW.toInt();
+        final index = (startH.toInt()) * width + startW.toInt();
         emptyByte[areaSize] = newByte[index];
         areaSize++;
       }
@@ -38,11 +38,11 @@ class ReductionAreaScale extends Dispatch {
     areaSize = 0;
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
-        int index = startH * width + startW;
-        int lefW = (rect.width - reductWidth) ~/ 2 + rect.left;
-        int rigW = lefW + reductWidth;
-        int topH = (rect.height - reductHeight) ~/ 2 + rect.top;
-        int botH = topH + reductHeight;
+        final index = startH * width + startW;
+        final lefW = (rect.width - reductWidth) ~/ 2 + rect.left;
+        final rigW = lefW + reductWidth;
+        final topH = (rect.height - reductHeight) ~/ 2 + rect.top;
+        final botH = topH + reductHeight;
 
         if (startH >= topH &&
             startH < botH &&

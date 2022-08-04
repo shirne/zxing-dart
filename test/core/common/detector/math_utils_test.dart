@@ -89,7 +89,7 @@ void main() {
     };
     tZeros.forEach((key, value) {
       expect(MathUtils.numberOfTrailingZeros(key), value,
-          reason: "$key => $value");
+          reason: '$key => $value');
     });
   });
 }

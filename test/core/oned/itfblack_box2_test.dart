@@ -22,7 +22,10 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('ITFBlackBox2TestCase', () {
     AbstractBlackBoxTestCase(
-        "test/resources/blackbox/itf-2", MultiFormatReader(), BarcodeFormat.ITF)
+      'test/resources/blackbox/itf-2',
+      MultiFormatReader(),
+      BarcodeFormat.ITF,
+    )
       ..addTest(13, 13, 0.0)
       ..addTest(13, 13, 180.0)
       ..testBlackBox();

@@ -37,10 +37,10 @@ class ByQuadrantReader implements Reader {
 
   @override
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
-    int width = image.width;
-    int height = image.height;
-    int halfWidth = width ~/ 2;
-    int halfHeight = height ~/ 2;
+    final width = image.width;
+    final height = image.height;
+    final halfWidth = width ~/ 2;
+    final halfHeight = height ~/ 2;
 
     try {
       // No need to call makeAbsolute as results will be relative to original top left here
@@ -50,7 +50,7 @@ class ByQuadrantReader implements Reader {
     }
 
     try {
-      Result result = _delegate.decode(
+      final result = _delegate.decode(
           image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
       _makeAbsolute(result.resultPoints, halfWidth, 0);
       return result;
@@ -59,7 +59,7 @@ class ByQuadrantReader implements Reader {
     }
 
     try {
-      Result result = _delegate.decode(
+      final result = _delegate.decode(
           image.crop(0, halfHeight, halfWidth, halfHeight), hints);
       _makeAbsolute(result.resultPoints, 0, halfHeight);
       return result;
@@ -68,7 +68,7 @@ class ByQuadrantReader implements Reader {
     }
 
     try {
-      Result result = _delegate.decode(
+      final result = _delegate.decode(
           image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
       _makeAbsolute(result.resultPoints, halfWidth, halfHeight);
       return result;
@@ -76,11 +76,11 @@ class ByQuadrantReader implements Reader {
       // continue
     }
 
-    int quarterWidth = halfWidth ~/ 2;
-    int quarterHeight = halfHeight ~/ 2;
-    BinaryBitmap center =
+    final quarterWidth = halfWidth ~/ 2;
+    final quarterHeight = halfHeight ~/ 2;
+    final center =
         image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
-    Result result = _delegate.decode(center, hints);
+    final result = _delegate.decode(center, hints);
     _makeAbsolute(result.resultPoints, quarterWidth, quarterHeight);
     return result;
   }
@@ -94,7 +94,7 @@ class ByQuadrantReader implements Reader {
       List<ResultPoint?>? points, int leftOffset, int topOffset) {
     if (points != null) {
       for (int i = 0; i < points.length; i++) {
-        ResultPoint? relative = points[i];
+        final relative = points[i];
         if (relative != null) {
           points[i] =
               ResultPoint(relative.x + leftOffset, relative.y + topOffset);

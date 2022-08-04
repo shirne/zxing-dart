@@ -30,7 +30,7 @@ class TelParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     maybeAppend(number, result);
     maybeAppend(title, result);
     return result.toString();

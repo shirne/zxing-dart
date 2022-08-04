@@ -78,7 +78,7 @@ class _CameraPageState extends State<CameraPage> {
       if (results != null) {
         Navigator.of(context).pushNamed('/result', arguments: results);
       } else {
-        MyDialog.of(context).toast('detected nothing');
+        MyDialog.toast('detected nothing');
         if (!kIsWeb) {
           onCameraView();
         }

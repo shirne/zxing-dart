@@ -35,54 +35,54 @@ import 'character_set_eci.dart';
 /// @author Alex Geller
 class ECIEncoderSet {
   static final _encoderNameMap = {
-    cp437.name: "IBM437",
-    latin1.name: "ISO-8859-1",
-    latin2.name: "ISO-8859-2",
-    latin3.name: "ISO-8859-3",
-    latin4.name: "ISO-8859-4",
-    latinCyrillic.name: "ISO-8859-5",
-    latinArabic.name: "ISO-8859-6",
-    latinGreek.name: "ISO-8859-7",
-    latinHebrew.name: "ISO-8859-8",
-    latin5.name: "ISO-8859-9",
-    latin6.name: "ISO-8859-10",
-    latinThai.name: "ISO-8859-11",
-    latin7.name: "ISO-8859-13",
-    latin8.name: "ISO-8859-14",
-    latin9.name: "ISO-8859-15",
-    latin10.name: "ISO-8859-16",
-    utf8.name: "UTF-8",
+    cp437.name: 'IBM437',
+    latin1.name: 'ISO-8859-1',
+    latin2.name: 'ISO-8859-2',
+    latin3.name: 'ISO-8859-3',
+    latin4.name: 'ISO-8859-4',
+    latinCyrillic.name: 'ISO-8859-5',
+    latinArabic.name: 'ISO-8859-6',
+    latinGreek.name: 'ISO-8859-7',
+    latinHebrew.name: 'ISO-8859-8',
+    latin5.name: 'ISO-8859-9',
+    latin6.name: 'ISO-8859-10',
+    latinThai.name: 'ISO-8859-11',
+    latin7.name: 'ISO-8859-13',
+    latin8.name: 'ISO-8859-14',
+    latin9.name: 'ISO-8859-15',
+    latin10.name: 'ISO-8859-16',
+    utf8.name: 'UTF-8',
   };
 
   static const _encoderNames = [
-    "IBM437",
-    "ISO-8859-2",
-    "ISO-8859-3",
-    "ISO-8859-4",
-    "ISO-8859-5",
+    'IBM437',
+    'ISO-8859-2',
+    'ISO-8859-3',
+    'ISO-8859-4',
+    'ISO-8859-5',
     //"ISO-8859-6",
-    "ISO-8859-7",
+    'ISO-8859-7',
     //"ISO-8859-8",
-    "ISO-8859-9",
+    'ISO-8859-9',
     //"ISO-8859-10",
     //"ISO-8859-11",
-    "ISO-8859-13",
+    'ISO-8859-13',
     //"ISO-8859-14",
-    "ISO-8859-15",
-    "ISO-8859-16",
-    "windows-1250",
-    "windows-1251",
-    "windows-1252",
-    "windows-1256",
-    "Shift_JIS"
+    'ISO-8859-15',
+    'ISO-8859-16',
+    'windows-1250',
+    'windows-1251',
+    'windows-1252',
+    'windows-1256',
+    'Shift_JIS'
   ];
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  static final List<Encoding> _encoders = _encoderNames
+  static final _encoders = _encoderNames
       .map<Encoding?>((name) => Charset.getByName(name))
       .whereType<Encoding>()
       .toList();
 
-  final List<Encoding> encoders = [];
+  final encoders = <Encoding>[];
   late int _priorityEncoderIndex;
 
   /// Constructs an encoder set
@@ -92,17 +92,17 @@ class ECIEncoderSet {
   /// @param fnc1 fnc1 denotes the character in the input that represents the FNC1 character or -1 for a non-GS1 bar
   /// code. When specified, it is considered an error to pass it as argument to the methods canEncode() or encode().
   ECIEncoderSet(String stringToEncode, Encoding? priorityCharset, int fnc1) {
-    List<Encoding> neededEncoders = [];
+    final neededEncoders = <Encoding>[];
 
     //we always need the ISO-8859-1 encoder. It is the default encoding
     neededEncoders.add(Latin1Codec());
-    bool needUnicodeEncoder = priorityCharset?.name.startsWith("utf") ?? true;
+    bool needUnicodeEncoder = priorityCharset?.name.startsWith('utf') ?? true;
 
     //Walk over the input string and see if all characters can be encoded with the list of encoders
     for (int i = 0; i < stringToEncode.length; i++) {
       bool canEncode = false;
-      int c = stringToEncode.runes.elementAt(i);
-      String char = String.fromCharCode(c);
+      final c = stringToEncode.runes.elementAt(i);
+      final char = String.fromCharCode(c);
       for (Encoding encoder in neededEncoders) {
         if (c == fnc1 || Charset.canEncode(encoder, char)) {
           canEncode = true;
@@ -180,13 +180,13 @@ class ECIEncoderSet {
 
   bool canEncode(int c, int encoderIndex) {
     assert(encoderIndex < length);
-    Encoding encoder = encoders[encoderIndex];
+    final encoder = encoders[encoderIndex];
     return Charset.canEncode(encoder, String.fromCharCode(c));
   }
 
   Uint8List encode(dynamic s, int encoderIndex) {
     assert(encoderIndex < length);
-    Encoding encoder = encoders[encoderIndex];
+    final encoder = encoders[encoderIndex];
     if (s is int) {
       assert(Charset.canEncode(encoder, String.fromCharCode(s)));
       return Uint8List.fromList(encoder.encode(String.fromCharCode(s)));

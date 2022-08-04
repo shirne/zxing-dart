@@ -159,18 +159,18 @@ class MatrixUtil {
   // Embed type information. On success, modify the matrix.
   static void embedTypeInfo(
       ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix) {
-    BitArray typeInfoBits = BitArray();
+    final typeInfoBits = BitArray();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
     for (int i = 0; i < typeInfoBits.size; ++i) {
       // Place bits in LSB to MSB order.  LSB (least significant bit) is the last value in
       // "typeInfoBits".
-      bool bit = typeInfoBits.get(typeInfoBits.size - 1 - i);
+      final bit = typeInfoBits.get(typeInfoBits.size - 1 - i);
 
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
-      List<int> coordinates = _TYPE_INFO_COORDINATES[i];
-      int x1 = coordinates[0];
-      int y1 = coordinates[1];
+      final coordinates = _TYPE_INFO_COORDINATES[i];
+      final x1 = coordinates[0];
+      final y1 = coordinates[1];
       matrix.set(x1, y1, bit ? 1 : 0);
 
       int x2;
@@ -195,14 +195,14 @@ class MatrixUtil {
       // Version info is necessary if version >= 7.
       return; // Don't need version info.
     }
-    BitArray versionInfoBits = BitArray();
+    final versionInfoBits = BitArray();
     makeVersionInfoBits(version, versionInfoBits);
 
     int bitIndex = 6 * 3 - 1; // It will decrease from 17 to 0.
     for (int i = 0; i < 6; ++i) {
       for (int j = 0; j < 3; ++j) {
         // Place bits in LSB (least significant bit) to MSB order.
-        bool bit = versionInfoBits.get(bitIndex);
+        final bit = versionInfoBits.get(bitIndex);
         bitIndex--;
         // Left bottom corner.
         matrix.set(i, matrix.height - 11 + j, bit ? 1 : 0);
@@ -229,7 +229,7 @@ class MatrixUtil {
       }
       while (y >= 0 && y < matrix.height) {
         for (int i = 0; i < 2; ++i) {
-          int xx = x - i;
+          final xx = x - i;
           // Skip the cell if it's not empty.
           if (!_isEmpty(matrix.get(xx, y))) {
             continue;
@@ -260,7 +260,7 @@ class MatrixUtil {
     // All bits should be consumed.
     if (bitIndex != dataBits.size) {
       throw WriterException(
-          "Not all bits consumed: $bitIndex" '/${dataBits.size}');
+          'Not all bits consumed: $bitIndex' '/${dataBits.size}');
     }
   }
 
@@ -300,11 +300,11 @@ class MatrixUtil {
   // operations. We don't care if coefficients are positive or negative.
   static int calculateBCHCode(int value, int poly) {
     if (poly == 0) {
-      throw ArgumentError("0 polynomial");
+      throw ArgumentError('0 polynomial');
     }
     // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
     // from 13 to make it 12.
-    int msbSetInPoly = findMSBSet(poly);
+    final msbSetInPoly = findMSBSet(poly);
     value <<= msbSetInPoly - 1;
     // Do the division business using exclusive-or operations.
     while (findMSBSet(value) >= msbSetInPoly) {
@@ -320,21 +320,21 @@ class MatrixUtil {
   static void makeTypeInfoBits(
       ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits) {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
-      throw WriterException("Invalid mask pattern");
+      throw WriterException('Invalid mask pattern');
     }
-    int typeInfo = (ecLevel.index << 3) | maskPattern;
+    final typeInfo = (ecLevel.index << 3) | maskPattern;
     bits.appendBits(typeInfo, 5);
 
-    int bchCode = calculateBCHCode(typeInfo, _TYPE_INFO_POLY);
+    final bchCode = calculateBCHCode(typeInfo, _TYPE_INFO_POLY);
     bits.appendBits(bchCode, 10);
 
-    BitArray maskBits = BitArray();
+    final maskBits = BitArray();
     maskBits.appendBits(_TYPE_INFO_MASK_PATTERN, 15);
     bits.xor(maskBits);
 
     if (bits.size != 15) {
       // Just in case.
-      throw WriterException("should not happen but we got: ${bits.size}");
+      throw WriterException('should not happen but we got: ${bits.size}');
     }
   }
 
@@ -342,12 +342,12 @@ class MatrixUtil {
   // See 8.10 of JISX0510:2004 (p.45) for details.
   static void makeVersionInfoBits(Version version, BitArray bits) {
     bits.appendBits(version.versionNumber, 6);
-    int bchCode = calculateBCHCode(version.versionNumber, _VERSION_INFO_POLY);
+    final bchCode = calculateBCHCode(version.versionNumber, _VERSION_INFO_POLY);
     bits.appendBits(bchCode, 12);
 
     if (bits.size != 18) {
       // Just in case.
-      throw WriterException("should not happen but we got: ${bits.size}");
+      throw WriterException('should not happen but we got: ${bits.size}');
     }
   }
 
@@ -360,7 +360,7 @@ class MatrixUtil {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.width - 8; ++i) {
-      int bit = (i + 1) % 2;
+      final bit = (i + 1) % 2;
       // Horizontal line.
       if (_isEmpty(matrix.get(i, 6))) {
         matrix.set(i, 6, bit);
@@ -403,7 +403,7 @@ class MatrixUtil {
   static void _embedPositionAdjustmentPattern(
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 5; ++y) {
-      List<int> patternY = _POSITION_ADJUSTMENT_PATTERN[y];
+      final patternY = _POSITION_ADJUSTMENT_PATTERN[y];
       for (int x = 0; x < 5; ++x) {
         matrix.set(xStart + x, yStart + y, patternY[x]);
       }
@@ -413,7 +413,7 @@ class MatrixUtil {
   static void _embedPositionDetectionPattern(
       int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
-      List<int> patternY = _POSITION_DETECTION_PATTERN[y];
+      final patternY = _POSITION_DETECTION_PATTERN[y];
       for (int x = 0; x < 7; ++x) {
         matrix.set(xStart + x, yStart + y, patternY[x]);
       }
@@ -423,7 +423,7 @@ class MatrixUtil {
   // Embed position detection patterns and surrounding vertical/horizontal separators.
   static void _embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) {
     // Embed three big squares at corners.
-    int pdpWidth = _POSITION_DETECTION_PATTERN[0].length;
+    final pdpWidth = _POSITION_DETECTION_PATTERN[0].length;
     // Left top corner.
     _embedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
@@ -432,7 +432,7 @@ class MatrixUtil {
     _embedPositionDetectionPattern(0, matrix.width - pdpWidth, matrix);
 
     // Embed horizontal separation patterns around the squares.
-    int hspWidth = 8;
+    const hspWidth = 8;
     // Left top corner.
     _embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
     // Right top corner.
@@ -442,7 +442,7 @@ class MatrixUtil {
     _embedHorizontalSeparationPattern(0, matrix.width - hspWidth, matrix);
 
     // Embed vertical separation patterns around the squares.
-    int vspSize = 7;
+    const vspSize = 7;
     // Left top corner.
     _embedVerticalSeparationPattern(vspSize, 0, matrix);
     // Right top corner.
@@ -458,9 +458,8 @@ class MatrixUtil {
       // The patterns appear if version >= 2
       return;
     }
-    int index = version.versionNumber - 1;
-    List<int> coordinates =
-        _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
+    final index = version.versionNumber - 1;
+    final coordinates = _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
     for (int y in coordinates) {
       if (y >= 0) {
         for (int x in coordinates) {

@@ -54,16 +54,16 @@ void main() {
 
   test('testChooseMode', () {
     // Numeric mode.
-    expect(Mode.NUMERIC, Encoder.chooseMode("0"));
-    expect(Mode.NUMERIC, Encoder.chooseMode("0123456789"));
+    expect(Mode.NUMERIC, Encoder.chooseMode('0'));
+    expect(Mode.NUMERIC, Encoder.chooseMode('0123456789'));
     // Alphanumeric mode.
-    expect(Mode.ALPHANUMERIC, Encoder.chooseMode("A"));
+    expect(Mode.ALPHANUMERIC, Encoder.chooseMode('A'));
     expect(Mode.ALPHANUMERIC,
-        Encoder.chooseMode(r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"));
+        Encoder.chooseMode(r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'));
     // 8-bit byte mode.
-    expect(Mode.BYTE, Encoder.chooseMode("a"));
-    expect(Mode.BYTE, Encoder.chooseMode("#"));
-    expect(Mode.BYTE, Encoder.chooseMode(""));
+    expect(Mode.BYTE, Encoder.chooseMode('a'));
+    expect(Mode.BYTE, Encoder.chooseMode('#'));
+    expect(Mode.BYTE, Encoder.chooseMode(''));
     // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
     // doing that as we cannot distinguish Shift_JIS from other encodings
     // from data bytes alone.  See also comments in qrcode_encoder.h.
@@ -86,43 +86,43 @@ void main() {
   });
 
   test('testEncodeDefault', () {
-    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
-    String expected = "<<\n"
-        " mode: ALPHANUMERIC\n"
-        " ecLevel: H\n"
-        " version: 1\n"
-        " maskPattern: 0\n"
-        " matrix:\n"
-        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-        " 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n"
-        " 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n"
-        " 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n"
-        " 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n"
-        " 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n"
-        " 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n"
-        " 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n"
-        " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n"
-        " 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n"
-        " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n"
-        " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n"
-        ">>\n";
+    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H);
+    String expected = '<<\n'
+        ' mode: ALPHANUMERIC\n'
+        ' ecLevel: H\n'
+        ' version: 1\n'
+        ' maskPattern: 0\n'
+        ' matrix:\n'
+        ' 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+        ' 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n'
+        ' 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n'
+        ' 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n'
+        ' 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n'
+        ' 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n'
+        ' 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n'
+        ' 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n'
+        ' 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n'
+        ' 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n'
+        ' 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n'
+        ' 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n'
+        '>>\n';
     expect(expected, qrCode.toString());
   });
 
   test('testEncodeWithVersion', () {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.QR_VERSION] = 7;
-    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
-    assert(qrCode.toString().contains(" version: 7\n"));
+    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
+    assert(qrCode.toString().contains(' version: 7\n'));
   });
 
   //@Test(expected = WriterException.class)
@@ -130,7 +130,7 @@ void main() {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.QR_VERSION] = 3;
     try {
-      Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3",
+      Encoder.encode('THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
           ErrorCorrectionLevel.H, hints);
       fail('Data too big for requested version');
     } on WriterException catch (_) {
@@ -140,108 +140,108 @@ void main() {
 
   test('testSimpleUTF8ECI', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.CHARACTER_SET] = "UTF8";
-    QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
-    String expected = "<<\n"
-        " mode: BYTE\n"
-        " ecLevel: H\n"
-        " version: 1\n"
-        " maskPattern: 3\n"
-        " matrix:\n"
-        " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-        " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n"
-        " 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n"
-        " 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n"
-        " 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n"
-        " 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n"
-        " 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n"
-        " 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n"
-        " 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n"
-        " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n"
-        " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n"
-        " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n"
-        ">>\n";
+    hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
+    QRCode qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
+    String expected = '<<\n'
+        ' mode: BYTE\n'
+        ' ecLevel: H\n'
+        ' version: 1\n'
+        ' maskPattern: 3\n'
+        ' matrix:\n'
+        ' 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+        ' 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n'
+        ' 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n'
+        ' 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n'
+        ' 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n'
+        ' 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n'
+        ' 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n'
+        ' 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n'
+        ' 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n'
+        ' 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n'
+        ' 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n'
+        ' 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n'
+        '>>\n';
     expect(expected, qrCode.toString());
   });
 
   test('testEncodeKanjiMode', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.CHARACTER_SET] = "Shift_JIS";
+    hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
     // Nihon in Kanji
     QRCode qrCode =
-        Encoder.encode("\u65e5\u672c", ErrorCorrectionLevel.M, hints);
-    String expected = "<<\n"
-        " mode: KANJI\n"
-        " ecLevel: M\n"
-        " version: 1\n"
-        " maskPattern: 4\n"
-        " matrix:\n"
-        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-        " 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0\n"
-        " 1 0 0 0 1 0 1 1 1 0 0 0 1 1 1 1 1 1 0 0 1\n"
-        " 0 1 1 0 0 1 0 1 1 0 1 0 1 1 1 0 0 0 1 0 1\n"
-        " 1 1 1 1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1\n"
-        " 1 0 1 0 1 1 0 0 0 0 1 1 1 0 0 1 0 0 1 1 0\n"
-        " 0 0 1 0 1 1 1 1 1 1 1 1 0 0 1 1 1 1 0 1 1\n"
-        " 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 1 0 1 0 0 0\n"
-        " 1 1 1 1 1 1 1 0 1 1 0 1 0 0 1 1 1 1 1 1 0\n"
-        " 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 1 0 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 0 0 1 1 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 0 0 1 1 1 0 0 0 1 1 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 0 0 0 1 0 0 0\n"
-        " 1 0 0 0 0 0 1 0 0 0 1 1 1 0 0 1 0 1 0 0 0\n"
-        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 0 1 1 0\n"
-        ">>\n";
+        Encoder.encode('\u65e5\u672c', ErrorCorrectionLevel.M, hints);
+    String expected = '<<\n'
+        ' mode: KANJI\n'
+        ' ecLevel: M\n'
+        ' version: 1\n'
+        ' maskPattern: 4\n'
+        ' matrix:\n'
+        ' 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 1 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+        ' 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0\n'
+        ' 1 0 0 0 1 0 1 1 1 0 0 0 1 1 1 1 1 1 0 0 1\n'
+        ' 0 1 1 0 0 1 0 1 1 0 1 0 1 1 1 0 0 0 1 0 1\n'
+        ' 1 1 1 1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1\n'
+        ' 1 0 1 0 1 1 0 0 0 0 1 1 1 0 0 1 0 0 1 1 0\n'
+        ' 0 0 1 0 1 1 1 1 1 1 1 1 0 0 1 1 1 1 0 1 1\n'
+        ' 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 1 0 1 0 0 0\n'
+        ' 1 1 1 1 1 1 1 0 1 1 0 1 0 0 1 1 1 1 1 1 0\n'
+        ' 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 1 0 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 0 0 1 1 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 0 0 1 1 1 0 0 0 1 1 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 0 1 1 0 0 0 1 0 0 0\n'
+        ' 1 0 0 0 0 0 1 0 0 0 1 1 1 0 0 1 0 1 0 0 0\n'
+        ' 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 0 1 1 0\n'
+        '>>\n';
     expect(expected, qrCode.toString());
   });
 
   test('testEncodeShiftjisNumeric', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.CHARACTER_SET] = "Shift_JIS";
-    QRCode qrCode = Encoder.encode("0123", ErrorCorrectionLevel.M, hints);
-    String expected = "<<\n"
-        " mode: NUMERIC\n"
-        " ecLevel: M\n"
-        " version: 1\n"
-        " maskPattern: 0\n"
-        " matrix:\n"
-        " 1 1 1 1 1 1 1 0 0 0 0 0 1 0 1 1 1 1 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 1 1 0 1 0 0 1 0 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 1 0 0 1 0 0 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-        " 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0\n"
-        " 1 0 1 0 1 0 1 0 0 0 0 0 1 0 0 0 1 0 0 1 0\n"
-        " 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 1 0 1 0 1 0\n"
-        " 0 1 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0\n"
-        " 0 1 1 1 0 0 0 0 0 0 1 1 1 1 0 1 1 1 0 1 0\n"
-        " 0 0 0 1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 1 0 1\n"
-        " 0 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0 0 0 1 1 0\n"
-        " 1 1 1 1 1 1 1 0 0 1 0 0 1 0 0 0 1 0 0 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 1 0 0\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 0 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 1 1 1 0 1 0 1 0 1 0 1 0\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 0 0 0\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n"
-        ">>\n";
+    hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
+    QRCode qrCode = Encoder.encode('0123', ErrorCorrectionLevel.M, hints);
+    String expected = '<<\n'
+        ' mode: NUMERIC\n'
+        ' ecLevel: M\n'
+        ' version: 1\n'
+        ' maskPattern: 0\n'
+        ' matrix:\n'
+        ' 1 1 1 1 1 1 1 0 0 0 0 0 1 0 1 1 1 1 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 1 1 0 1 0 0 1 0 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 1 0 0 1 0 0 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+        ' 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0\n'
+        ' 1 0 1 0 1 0 1 0 0 0 0 0 1 0 0 0 1 0 0 1 0\n'
+        ' 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 1 0 1 0 1 0\n'
+        ' 0 1 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0\n'
+        ' 0 1 1 1 0 0 0 0 0 0 1 1 1 1 0 1 1 1 0 1 0\n'
+        ' 0 0 0 1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 1 0 1\n'
+        ' 0 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0 0 0 1 1 0\n'
+        ' 1 1 1 1 1 1 1 0 0 1 0 0 1 0 0 0 1 0 0 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 1 0 0\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 0 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 1 1 1 0 1 0 1 0 1 0 1 0\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 0 0 0\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n'
+        '>>\n';
     expect(expected, qrCode.toString());
   });
 
@@ -249,7 +249,7 @@ void main() {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.GS1_FORMAT] = true;
     QRCode qrCode =
-        Encoder.encode("100001%11171218", ErrorCorrectionLevel.H, hints);
+        Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
   });
 
@@ -257,64 +257,64 @@ void main() {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.GS1_FORMAT] = true;
     QRCode qrCode =
-        Encoder.encode("100001%11171218", ErrorCorrectionLevel.H, hints);
+        Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenBooleanTypeHintExplicitlyFalse', () {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.GS1_FORMAT] = false;
-    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse', () {
     Map<EncodeHintType, Object> hints = {};
     hints[EncodeHintType.GS1_FORMAT] = false;
-    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    QRCode qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testGS1ModeHeaderWithECI', () {
     Map<EncodeHintType, Object> hints = {};
-    hints[EncodeHintType.CHARACTER_SET] = "UTF8";
+    hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
     hints[EncodeHintType.GS1_FORMAT] = true;
-    QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
-    String expected = "<<\n"
-        " mode: BYTE\n"
-        " ecLevel: H\n"
-        " version: 1\n"
-        " maskPattern: 6\n"
-        " matrix:\n"
-        " 1 1 1 1 1 1 1 0 0 0 1 1 0 0 1 1 1 1 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 1 0 0 0 1 0 0 0 0 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 1 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 1 1 1 0 1 0 0 0 1 1 0 0 1 0 1 1 1 0 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-        " 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n"
-        " 0 0 0 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 0\n"
-        " 0 1 0 1 1 0 0 1 0 1 1 1 1 1 1 0 1 1 1 0 1\n"
-        " 0 1 1 1 1 0 1 0 0 1 0 1 0 1 1 1 0 0 1 0 1\n"
-        " 1 1 1 1 1 0 0 1 0 0 0 1 1 0 0 1 0 0 1 0 0\n"
-        " 1 0 0 1 0 0 1 1 0 1 1 0 1 0 1 0 0 1 0 0 1\n"
-        " 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 1 0 0 0 1\n"
-        " 1 1 1 1 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 0 0\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 1 1 1 0 0\n"
-        " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 0\n"
-        " 1 0 1 1 1 0 1 0 1 0 1 1 1 1 1 0 0 0 1 1 0\n"
-        " 1 0 1 1 1 0 1 0 0 0 1 0 0 1 0 0 1 0 1 1 1\n"
-        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1 1 0 0\n"
-        " 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 0 0 0 0 0 0\n"
-        ">>\n";
+    QRCode qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
+    String expected = '<<\n'
+        ' mode: BYTE\n'
+        ' ecLevel: H\n'
+        ' version: 1\n'
+        ' maskPattern: 6\n'
+        ' matrix:\n'
+        ' 1 1 1 1 1 1 1 0 0 0 1 1 0 0 1 1 1 1 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 1 0 0 0 1 0 0 0 0 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 1 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 1 1 1 0 1 0 0 0 1 1 0 0 1 0 1 1 1 0 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+        ' 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n'
+        ' 0 0 0 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 0\n'
+        ' 0 1 0 1 1 0 0 1 0 1 1 1 1 1 1 0 1 1 1 0 1\n'
+        ' 0 1 1 1 1 0 1 0 0 1 0 1 0 1 1 1 0 0 1 0 1\n'
+        ' 1 1 1 1 1 0 0 1 0 0 0 1 1 0 0 1 0 0 1 0 0\n'
+        ' 1 0 0 1 0 0 1 1 0 1 1 0 1 0 1 0 0 1 0 0 1\n'
+        ' 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 1 0 0 0 1\n'
+        ' 1 1 1 1 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 0 0\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 1 1 1 0 0\n'
+        ' 1 0 1 1 1 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 0\n'
+        ' 1 0 1 1 1 0 1 0 1 0 1 1 1 1 1 0 0 0 1 1 0\n'
+        ' 1 0 1 1 1 0 1 0 0 0 1 0 0 1 0 0 1 0 1 1 1\n'
+        ' 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1 1 0 0\n'
+        ' 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 0 0 0 0 0 0\n'
+        '>>\n';
     expect(expected, qrCode.toString());
   });
 
   test('testAppendModeInfo', () {
     BitArray bits = BitArray();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
-    expect(" ...X", bits.toString());
+    expect(' ...X', bits.toString());
   });
 
   test('testAppendLengthInfo', () {
@@ -324,28 +324,28 @@ void main() {
         Version.getVersionForNumber(1),
         Mode.NUMERIC,
         bits);
-    expect(" ........ .X", bits.toString()); // 10 bits.
+    expect(' ........ .X', bits.toString()); // 10 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
         2, // 2 letters (2/1).
         Version.getVersionForNumber(10),
         Mode.ALPHANUMERIC,
         bits);
-    expect(" ........ .X.", bits.toString()); // 11 bits.
+    expect(' ........ .X.', bits.toString()); // 11 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
         255, // 255 letter (255/1).
         Version.getVersionForNumber(27),
         Mode.BYTE,
         bits);
-    expect(" ........ XXXXXXXX", bits.toString()); // 16 bits.
+    expect(' ........ XXXXXXXX', bits.toString()); // 16 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
         512, // 512 letters (1024/2).
         Version.getVersionForNumber(40),
         Mode.KANJI,
         bits);
-    expect(" ..X..... ....", bits.toString()); // 12 bits.
+    expect(' ..X..... ....', bits.toString()); // 12 bits.
   });
 
   test('testAppendBytes', () {
@@ -353,18 +353,18 @@ void main() {
     // 1 = 01 = 0001 in 4 bits.
     BitArray bits = BitArray();
     Encoder.appendBytes(
-        "1", Mode.NUMERIC, bits, Encoder.defaultByteModeEncoding);
-    expect(" ...X", bits.toString());
+        '1', Mode.NUMERIC, bits, Encoder.defaultByteModeEncoding);
+    expect(' ...X', bits.toString());
     // Should use appendAlphanumericBytes.
     // A = 10 = 0xa = 001010 in 6 bits
     bits = BitArray();
     Encoder.appendBytes(
-        "A", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
-    expect(" ..X.X.", bits.toString());
+        'A', Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
+    expect(' ..X.X.', bits.toString());
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
     try {
       Encoder.appendBytes(
-          "a", Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
+          'a', Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
     } on WriterException catch (_) {
       //
       // good
@@ -373,45 +373,45 @@ void main() {
     // 0x61, 0x62, 0x63
     bits = BitArray();
     Encoder.appendBytes(
-        "abc", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
-    expect(" .XX....X .XX...X. .XX...XX", bits.toString());
+        'abc', Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
+    expect(' .XX....X .XX...X. .XX...XX', bits.toString());
     // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
     Encoder.appendBytes(
-        "\x00", Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
+        '\x00', Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = BitArray();
     Encoder.appendBytes(shiftJISString(bytes([0x93, 0x5f])), Mode.KANJI, bits,
         Encoder.defaultByteModeEncoding);
-    expect(" .XX.XX.. XXXXX", bits.toString());
+    expect(' .XX.XX.. XXXXX', bits.toString());
   });
 
   test('testTerminateBits', () {
     BitArray v = BitArray();
     Encoder.terminateBits(0, v);
-    expect("", v.toString());
+    expect('', v.toString());
     v = BitArray();
     Encoder.terminateBits(1, v);
-    expect(" ........", v.toString());
+    expect(' ........', v.toString());
     v = BitArray();
     v.appendBits(0, 3); // Append 000
     Encoder.terminateBits(1, v);
-    expect(" ........", v.toString());
+    expect(' ........', v.toString());
     v = BitArray();
     v.appendBits(0, 5); // Append 00000
     Encoder.terminateBits(1, v);
-    expect(" ........", v.toString());
+    expect(' ........', v.toString());
     v = BitArray();
     v.appendBits(0, 8); // Append 00000000
     Encoder.terminateBits(1, v);
-    expect(" ........", v.toString());
+    expect(' ........', v.toString());
     v = BitArray();
     Encoder.terminateBits(2, v);
-    expect(" ........ XXX.XX..", v.toString());
+    expect(' ........ XXX.XX..', v.toString());
     v = BitArray();
     v.appendBits(0, 1); // Append 0
     Encoder.terminateBits(3, v);
-    expect(" ........ XXX.XX.. ...X...X", v.toString());
+    expect(' ........ XXX.XX.. ...X...X', v.toString());
   });
 
   test('testGetNumDataBytesAndNumECBytesForBlockID', () {
@@ -523,46 +523,46 @@ void main() {
   test('testAppendNumericBytes', () {
     // 1 = 01 = 0001 in 4 bits.
     BitArray bits = BitArray();
-    Encoder.appendNumericBytes("1", bits);
-    expect(" ...X", bits.toString());
+    Encoder.appendNumericBytes('1', bits);
+    expect(' ...X', bits.toString());
     // 12 = 0xc = 0001100 in 7 bits.
     bits = BitArray();
-    Encoder.appendNumericBytes("12", bits);
-    expect(" ...XX..", bits.toString());
+    Encoder.appendNumericBytes('12', bits);
+    expect(' ...XX..', bits.toString());
     // 123 = 0x7b = 0001111011 in 10 bits.
     bits = BitArray();
-    Encoder.appendNumericBytes("123", bits);
-    expect(" ...XXXX. XX", bits.toString());
+    Encoder.appendNumericBytes('123', bits);
+    expect(' ...XXXX. XX', bits.toString());
     // 1234 = "123" + "4" = 0001111011 + 0100
     bits = BitArray();
-    Encoder.appendNumericBytes("1234", bits);
-    expect(" ...XXXX. XX.X..", bits.toString());
+    Encoder.appendNumericBytes('1234', bits);
+    expect(' ...XXXX. XX.X..', bits.toString());
     // Empty.
     bits = BitArray();
-    Encoder.appendNumericBytes("", bits);
-    expect("", bits.toString());
+    Encoder.appendNumericBytes('', bits);
+    expect('', bits.toString());
   });
 
   test('testAppendAlphanumericBytes', () {
     // A = 10 = 0xa = 001010 in 6 bits
     BitArray bits = BitArray();
-    Encoder.appendAlphanumericBytes("A", bits);
-    expect(" ..X.X.", bits.toString());
+    Encoder.appendAlphanumericBytes('A', bits);
+    expect(' ..X.X.', bits.toString());
     // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
     bits = BitArray();
-    Encoder.appendAlphanumericBytes("AB", bits);
-    expect(" ..XXX..X X.X", bits.toString());
+    Encoder.appendAlphanumericBytes('AB', bits);
+    expect(' ..XXX..X X.X', bits.toString());
     // ABC = "AB" + "C" = 00111001101 + 001100
     bits = BitArray();
-    Encoder.appendAlphanumericBytes("ABC", bits);
-    expect(" ..XXX..X X.X..XX. .", bits.toString());
+    Encoder.appendAlphanumericBytes('ABC', bits);
+    expect(' ..XXX..X X.X..XX. .', bits.toString());
     // Empty.
     bits = BitArray();
-    Encoder.appendAlphanumericBytes("", bits);
-    expect("", bits.toString());
+    Encoder.appendAlphanumericBytes('', bits);
+    expect('', bits.toString());
     // Invalid data.
     try {
-      Encoder.appendAlphanumericBytes("abc", BitArray());
+      Encoder.appendAlphanumericBytes('abc', BitArray());
     } catch (_) {
       // WriterException
       // good
@@ -572,21 +572,21 @@ void main() {
   test('testAppend8BitBytes', () {
     // 0x61, 0x62, 0x63
     BitArray bits = BitArray();
-    Encoder.append8BitBytes("abc", bits, Encoder.defaultByteModeEncoding);
-    expect(" .XX....X .XX...X. .XX...XX", bits.toString());
+    Encoder.append8BitBytes('abc', bits, Encoder.defaultByteModeEncoding);
+    expect(' .XX....X .XX...X. .XX...XX', bits.toString());
     // Empty.
     bits = BitArray();
-    Encoder.append8BitBytes("", bits, Encoder.defaultByteModeEncoding);
-    expect("", bits.toString());
+    Encoder.append8BitBytes('', bits, Encoder.defaultByteModeEncoding);
+    expect('', bits.toString());
   });
 
   // Numbers are from page 21 of JISX0510:2004
   test('testAppendKanjiBytes', () {
     BitArray bits = BitArray();
     Encoder.appendKanjiBytes(shiftJISString(bytes([0x93, 0x5f])), bits);
-    expect(" .XX.XX.. XXXXX", bits.toString());
+    expect(' .XX.XX.. XXXXX', bits.toString());
     Encoder.appendKanjiBytes(shiftJISString(bytes([0xe4, 0xaa])), bits);
-    expect(" .XX.XX.. XXXXXXX. X.X.X.X. X.", bits.toString());
+    expect(' .XX.XX.. XXXXXXX. X.X.X.X. X.', bits.toString());
   });
 
   // Numbers are from http://www.swetake.com/qr/qr3.html and
@@ -664,208 +664,208 @@ void main() {
   });
 
   test('testMinimalEncoder1', () {
-    verifyMinimalEncoding("A", "ALPHANUMERIC(A)", null, false);
+    verifyMinimalEncoding('A', 'ALPHANUMERIC(A)', null, false);
   });
 
   test('testMinimalEncoder2', () {
-    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB)", null, false);
+    verifyMinimalEncoding('AB', 'ALPHANUMERIC(AB)', null, false);
   });
 
   test('testMinimalEncoder3', () {
-    verifyMinimalEncoding("ABC", "ALPHANUMERIC(ABC)", null, false);
+    verifyMinimalEncoding('ABC', 'ALPHANUMERIC(ABC)', null, false);
   });
 
   test('testMinimalEncoder4', () {
-    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(ABCD)", null, false);
+    verifyMinimalEncoding('ABCD', 'ALPHANUMERIC(ABCD)', null, false);
   });
 
   test('testMinimalEncoder5', () {
-    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(ABCDE)", null, false);
+    verifyMinimalEncoding('ABCDE', 'ALPHANUMERIC(ABCDE)', null, false);
   });
 
   test('testMinimalEncoder6', () {
-    verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(ABCDEF)", null, false);
+    verifyMinimalEncoding('ABCDEF', 'ALPHANUMERIC(ABCDEF)', null, false);
   });
 
   test('testMinimalEncoder7', () {
-    verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(ABCDEFG)", null, false);
+    verifyMinimalEncoding('ABCDEFG', 'ALPHANUMERIC(ABCDEFG)', null, false);
   });
 
   test('testMinimalEncoder8', () {
-    verifyMinimalEncoding("1", "NUMERIC(1)", null, false);
+    verifyMinimalEncoding('1', 'NUMERIC(1)', null, false);
   });
 
   test('testMinimalEncoder9', () {
-    verifyMinimalEncoding("12", "NUMERIC(12)", null, false);
+    verifyMinimalEncoding('12', 'NUMERIC(12)', null, false);
   });
 
   test('testMinimalEncoder10', () {
-    verifyMinimalEncoding("123", "NUMERIC(123)", null, false);
+    verifyMinimalEncoding('123', 'NUMERIC(123)', null, false);
   });
 
   test('testMinimalEncoder11', () {
-    verifyMinimalEncoding("1234", "NUMERIC(1234)", null, false);
+    verifyMinimalEncoding('1234', 'NUMERIC(1234)', null, false);
   });
 
   test('testMinimalEncoder12', () {
-    verifyMinimalEncoding("12345", "NUMERIC(12345)", null, false);
+    verifyMinimalEncoding('12345', 'NUMERIC(12345)', null, false);
   });
 
   test('testMinimalEncoder13', () {
-    verifyMinimalEncoding("123456", "NUMERIC(123456)", null, false);
+    verifyMinimalEncoding('123456', 'NUMERIC(123456)', null, false);
   });
 
   test('testMinimalEncoder14', () {
-    verifyMinimalEncoding("123A", "ALPHANUMERIC(123A)", null, false);
+    verifyMinimalEncoding('123A', 'ALPHANUMERIC(123A)', null, false);
   });
 
   test('testMinimalEncoder15', () {
-    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1)", null, false);
+    verifyMinimalEncoding('A1', 'ALPHANUMERIC(A1)', null, false);
   });
 
   test('testMinimalEncoder16', () {
-    verifyMinimalEncoding("A12", "ALPHANUMERIC(A12)", null, false);
+    verifyMinimalEncoding('A12', 'ALPHANUMERIC(A12)', null, false);
   });
 
   test('testMinimalEncoder17', () {
-    verifyMinimalEncoding("A123", "ALPHANUMERIC(A123)", null, false);
+    verifyMinimalEncoding('A123', 'ALPHANUMERIC(A123)', null, false);
   });
 
   test('testMinimalEncoder18', () {
-    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1234)", null, false);
+    verifyMinimalEncoding('A1234', 'ALPHANUMERIC(A1234)', null, false);
   });
 
   test('testMinimalEncoder19', () {
-    verifyMinimalEncoding("A12345", "ALPHANUMERIC(A12345)", null, false);
+    verifyMinimalEncoding('A12345', 'ALPHANUMERIC(A12345)', null, false);
   });
 
   test('testMinimalEncoder20', () {
-    verifyMinimalEncoding("A123456", "ALPHANUMERIC(A123456)", null, false);
+    verifyMinimalEncoding('A123456', 'ALPHANUMERIC(A123456)', null, false);
   });
 
   test('testMinimalEncoder21', () {
-    verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1234567)", null, false);
+    verifyMinimalEncoding('A1234567', 'ALPHANUMERIC(A1234567)', null, false);
   });
 
   test('testMinimalEncoder22', () {
     verifyMinimalEncoding(
-        "A12345678", "BYTE(A),NUMERIC(12345678)", null, false);
+        'A12345678', 'BYTE(A),NUMERIC(12345678)', null, false);
   });
 
   test('testMinimalEncoder23', () {
     verifyMinimalEncoding(
-        "A123456789", "BYTE(A),NUMERIC(123456789)", null, false);
+        'A123456789', 'BYTE(A),NUMERIC(123456789)', null, false);
   });
 
   test('testMinimalEncoder24', () {
     verifyMinimalEncoding(
-        "A1234567890", "ALPHANUMERIC(A1),NUMERIC(234567890)", null, false);
+        'A1234567890', 'ALPHANUMERIC(A1),NUMERIC(234567890)', null, false);
   });
 
   test('testMinimalEncoder25', () {
-    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB1)", null, false);
+    verifyMinimalEncoding('AB1', 'ALPHANUMERIC(AB1)', null, false);
   });
 
   test('testMinimalEncoder26', () {
-    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB12)", null, false);
+    verifyMinimalEncoding('AB12', 'ALPHANUMERIC(AB12)', null, false);
   });
 
   test('testMinimalEncoder27', () {
-    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB123)", null, false);
+    verifyMinimalEncoding('AB123', 'ALPHANUMERIC(AB123)', null, false);
   });
 
   test('testMinimalEncoder28', () {
-    verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB1234)", null, false);
+    verifyMinimalEncoding('AB1234', 'ALPHANUMERIC(AB1234)', null, false);
   });
 
   test('testMinimalEncoder29', () {
-    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(ABC1)", null, false);
+    verifyMinimalEncoding('ABC1', 'ALPHANUMERIC(ABC1)', null, false);
   });
 
   test('testMinimalEncoder30', () {
-    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(ABC12)", null, false);
+    verifyMinimalEncoding('ABC12', 'ALPHANUMERIC(ABC12)', null, false);
   });
 
   test('testMinimalEncoder31', () {
-    verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(ABC1234)", null, false);
+    verifyMinimalEncoding('ABC1234', 'ALPHANUMERIC(ABC1234)', null, false);
   });
 
   test('testMinimalEncoder32', () {
     verifyMinimalEncoding(
-        "http://foo.com", "BYTE(http://foo.com)", null, false);
+        'http://foo.com', 'BYTE(http://foo.com)', null, false);
   });
 
   test('testMinimalEncoder33', () {
     verifyMinimalEncoding(
-        "HTTP://FOO.COM", "ALPHANUMERIC(HTTP://FOO.COM" ")", null, false);
+        'HTTP://FOO.COM', 'ALPHANUMERIC(HTTP://FOO.COM' ')', null, false);
   });
 
   test('testMinimalEncoder34', () {
     verifyMinimalEncoding(
-        "1001114670010%01201220%107211220%140045003267781",
-        "NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)",
+        '1001114670010%01201220%107211220%140045003267781',
+        'NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
         null,
         false);
   });
 
   test('testMinimalEncoder35', () {
-    verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.)", null, false);
+    verifyMinimalEncoding('\u0150', 'ECI(ISO-8859-2),BYTE(.)', null, false);
   });
 
   test('testMinimalEncoder36', () {
-    verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.)", null, false);
+    verifyMinimalEncoding('\u015C', 'ECI(ISO-8859-3),BYTE(.)', null, false);
   });
 
   test('testMinimalEncoder37', () {
-    verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(..)", null, false);
+    verifyMinimalEncoding('\u0150\u015C', 'ECI(UTF-8),BYTE(..)', null, false);
   });
 
   test('testMinimalEncoder38', () {
-    verifyMinimalEncoding("\u0150\u0150\u015C\u015C",
-        "ECI(ISO-8859-2),BYTE(..),ECI(ISO-8859-3),BYTE(..)", null, false);
+    verifyMinimalEncoding('\u0150\u0150\u015C\u015C',
+        'ECI(ISO-8859-2),BYTE(..),ECI(ISO-8859-3),BYTE(..)', null, false);
   });
 
   test('testMinimalEncoder39', () {
     verifyMinimalEncoding(
-        "abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(abcdef.ghij)", null, false);
+        'abcdef\u0150ghij', 'ECI(ISO-8859-2),BYTE(abcdef.ghij)', null, false);
   });
 
   test('testMinimalEncoder40', () {
     verifyMinimalEncoding(
-        "2938928329832983\u01502938928329832983\u015C2938928329832983",
-        "NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8"
-            "859-3),BYTE(.),NUMERIC(2938928329832983)",
+        '2938928329832983\u01502938928329832983\u015C2938928329832983',
+        'NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8'
+            '859-3),BYTE(.),NUMERIC(2938928329832983)',
         null,
         false);
   });
 
   test('testMinimalEncoder41', () {
     verifyMinimalEncoding(
-        "1001114670010%01201220%107211220%140045003267781",
-        "FNC1_FIRST_POSITION(),NUMERIC(100111"
-            "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)",
+        '1001114670010%01201220%107211220%140045003267781',
+        'FNC1_FIRST_POSITION(),NUMERIC(100111'
+            '4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
         null,
         true);
   });
 
   test('testMinimalEncoder42', () {
     // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
-    verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66",
-        "ECI(shift-jis),BYTE(Katakana:......)", null, false);
+    verifyMinimalEncoding('Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66',
+        'ECI(shift-jis),BYTE(Katakana:......)', null, false);
   });
 
   test('testMinimalEncoder43', () {
     // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
-    verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2",
-        "BYTE(Katakana:),KANJI(......)", null, false);
+    verifyMinimalEncoding('Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2',
+        'BYTE(Katakana:),KANJI(......)', null, false);
   });
 
   test('testMinimalEncoder44', () {
     // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
     // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
     // that Shift_JIS encoding is more compact as in this example
-    verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2",
-        "ECI(shift-jis),BYTE(Katakana:.a.a.a" ".a.a.)", null, false);
+    verifyMinimalEncoding('Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2',
+        'ECI(shift-jis),BYTE(Katakana:.a.a.a' '.a.a.)', null, false);
   });
 }
 
@@ -885,70 +885,70 @@ void verifyMinimalEncoding(
 }
 
 void verifyGS1EncodedData(QRCode qrCode) {
-  String expected = "<<\n"
-      " mode: ALPHANUMERIC\n"
-      " ecLevel: H\n"
-      " version: 2\n"
-      " maskPattern: 2\n"
-      " matrix:\n"
-      " 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 1 1 1\n"
-      " 1 0 0 0 0 0 1 0 1 0 0 0 0 1 1 0 1 0 1 0 0 0 0 0 1\n"
-      " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 0 0 0 1 0 1 1 1 0 1\n"
-      " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n"
-      " 1 0 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 0 1 0 1 1 1 0 1\n"
-      " 1 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 0 0 1 0 0 0 0 0 1\n"
-      " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-      " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n"
-      " 0 0 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 0 0 1 1 1\n"
-      " 0 0 0 1 1 1 0 1 0 0 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1\n"
-      " 1 0 1 1 0 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1\n"
-      " 0 0 1 1 0 1 0 1 1 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 1\n"
-      " 0 0 1 0 0 0 1 0 0 0 1 1 0 1 0 0 0 1 0 1 1 1 0 1 0\n"
-      " 1 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 0 0\n"
-      " 1 0 1 0 1 0 1 1 0 1 0 1 0 1 1 0 0 0 0 0 1 1 0 0 1\n"
-      " 1 0 0 1 0 1 0 1 0 0 0 1 1 1 1 0 1 0 1 0 0 1 0 0 1\n"
-      " 1 0 1 0 0 1 1 1 0 1 1 0 0 1 0 0 1 1 1 1 1 1 0 0 0\n"
-      " 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 0 1 0 0 0 1 0 0 1 0\n"
-      " 1 1 1 1 1 1 1 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 1 1 1\n"
-      " 1 0 0 0 0 0 1 0 0 1 1 1 1 1 0 1 1 0 0 0 1 0 0 0 1\n"
-      " 1 0 1 1 1 0 1 0 1 0 1 0 0 1 1 1 1 1 1 1 1 0 0 0 1\n"
-      " 1 0 1 1 1 0 1 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0\n"
-      " 1 0 1 1 1 0 1 0 1 0 0 0 1 1 0 1 0 0 1 1 1 0 1 0 1\n"
-      " 1 0 0 0 0 0 1 0 0 1 0 1 0 1 1 1 0 1 0 0 1 1 1 1 1\n"
-      " 1 1 1 1 1 1 1 0 0 1 1 0 0 1 1 0 1 0 0 0 0 1 0 1 1\n"
-      ">>\n";
+  String expected = '<<\n'
+      ' mode: ALPHANUMERIC\n'
+      ' ecLevel: H\n'
+      ' version: 2\n'
+      ' maskPattern: 2\n'
+      ' matrix:\n'
+      ' 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 1 1 1\n'
+      ' 1 0 0 0 0 0 1 0 1 0 0 0 0 1 1 0 1 0 1 0 0 0 0 0 1\n'
+      ' 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 0 0 0 1 0 1 1 1 0 1\n'
+      ' 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n'
+      ' 1 0 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 0 1 0 1 1 1 0 1\n'
+      ' 1 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 0 0 1 0 0 0 0 0 1\n'
+      ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+      ' 0 0 0 0 0 0 0 0 1 1 1 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n'
+      ' 0 0 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 0 0 1 1 1\n'
+      ' 0 0 0 1 1 1 0 1 0 0 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1\n'
+      ' 1 0 1 1 0 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1\n'
+      ' 0 0 1 1 0 1 0 1 1 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 1\n'
+      ' 0 0 1 0 0 0 1 0 0 0 1 1 0 1 0 0 0 1 0 1 1 1 0 1 0\n'
+      ' 1 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 0 0\n'
+      ' 1 0 1 0 1 0 1 1 0 1 0 1 0 1 1 0 0 0 0 0 1 1 0 0 1\n'
+      ' 1 0 0 1 0 1 0 1 0 0 0 1 1 1 1 0 1 0 1 0 0 1 0 0 1\n'
+      ' 1 0 1 0 0 1 1 1 0 1 1 0 0 1 0 0 1 1 1 1 1 1 0 0 0\n'
+      ' 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 0 1 0 0 0 1 0 0 1 0\n'
+      ' 1 1 1 1 1 1 1 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 1 1 1\n'
+      ' 1 0 0 0 0 0 1 0 0 1 1 1 1 1 0 1 1 0 0 0 1 0 0 0 1\n'
+      ' 1 0 1 1 1 0 1 0 1 0 1 0 0 1 1 1 1 1 1 1 1 0 0 0 1\n'
+      ' 1 0 1 1 1 0 1 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0\n'
+      ' 1 0 1 1 1 0 1 0 1 0 0 0 1 1 0 1 0 0 1 1 1 0 1 0 1\n'
+      ' 1 0 0 0 0 0 1 0 0 1 0 1 0 1 1 1 0 1 0 0 1 1 1 1 1\n'
+      ' 1 1 1 1 1 1 1 0 0 1 1 0 0 1 1 0 1 0 0 0 0 1 0 1 1\n'
+      '>>\n';
   expect(expected, qrCode.toString());
 }
 
 void verifyNotGS1EncodedData(QRCode qrCode) {
-  String expected = "<<\n"
-      " mode: ALPHANUMERIC\n"
-      " ecLevel: H\n"
-      " version: 1\n"
-      " maskPattern: 0\n"
-      " matrix:\n"
-      " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n"
-      " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n"
-      " 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n"
-      " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n"
-      " 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n"
-      " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n"
-      " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-      " 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n"
-      " 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n"
-      " 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n"
-      " 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n"
-      " 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n"
-      " 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n"
-      " 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n"
-      " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n"
-      " 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n"
-      " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n"
-      " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n"
-      " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n"
-      " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n"
-      " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n"
-      ">>\n";
+  String expected = '<<\n'
+      ' mode: ALPHANUMERIC\n'
+      ' ecLevel: H\n'
+      ' version: 1\n'
+      ' maskPattern: 0\n'
+      ' matrix:\n'
+      ' 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n'
+      ' 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n'
+      ' 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n'
+      ' 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n'
+      ' 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n'
+      ' 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n'
+      ' 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n'
+      ' 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n'
+      ' 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n'
+      ' 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n'
+      ' 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n'
+      ' 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n'
+      ' 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n'
+      ' 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n'
+      ' 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n'
+      ' 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n'
+      ' 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n'
+      ' 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n'
+      ' 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n'
+      ' 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n'
+      ' 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n'
+      '>>\n';
   expect(expected, qrCode.toString());
 }
 

@@ -32,15 +32,14 @@ class UPCEANExtension5Support {
   final StringBuffer _decodeRowStringBuffer = StringBuffer();
 
   Result decodeRow(int rowNumber, BitArray row, List<int> extensionStartRange) {
-    StringBuffer result = _decodeRowStringBuffer;
+    final result = _decodeRowStringBuffer;
     result.clear();
-    int end = _decodeMiddle(row, extensionStartRange, result);
+    final end = _decodeMiddle(row, extensionStartRange, result);
 
-    String resultString = result.toString();
-    Map<ResultMetadataType, Object>? extensionData =
-        _parseExtensionString(resultString);
+    final resultString = result.toString();
+    final extensionData = _parseExtensionString(resultString);
 
-    Result extensionResult = Result(
+    final extensionResult = Result(
         resultString,
         null,
         [
@@ -57,15 +56,15 @@ class UPCEANExtension5Support {
 
   int _decodeMiddle(
       BitArray row, List<int> startRange, StringBuffer resultString) {
-    List<int> counters = _decodeMiddleCounters;
+    final counters = _decodeMiddleCounters;
     counters.fillRange(0, 4, 0);
-    int end = row.size;
+    final end = row.size;
     int rowOffset = startRange[1];
 
     int lgPatternFound = 0;
 
     for (int x = 0; x < 5 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
@@ -85,7 +84,7 @@ class UPCEANExtension5Support {
       throw NotFoundException.instance;
     }
 
-    int checkDigit = _determineCheckDigit(lgPatternFound);
+    final checkDigit = _determineCheckDigit(lgPatternFound);
     if (_extensionChecksum(resultString.toString()) != checkDigit) {
       throw NotFoundException.instance;
     }
@@ -94,7 +93,7 @@ class UPCEANExtension5Support {
   }
 
   static int _extensionChecksum(String s) {
-    int length = s.length;
+    final length = s.length;
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
       sum += s.codeUnitAt(i) - 48 /* 0 */;
@@ -123,11 +122,11 @@ class UPCEANExtension5Support {
     if (raw.length != 5) {
       return null;
     }
-    Object? value = _parseExtension5String(raw);
+    final value = _parseExtension5String(raw);
     if (value == null) {
       return null;
     }
-    Map<ResultMetadataType, Object> result = {};
+    final result = <ResultMetadataType, Object>{};
     result[ResultMetadataType.SUGGESTED_PRICE] = value;
     return result;
   }
@@ -136,34 +135,34 @@ class UPCEANExtension5Support {
     String currency;
     switch (raw[0]) {
       case '0':
-        currency = "£";
+        currency = '£';
         break;
       case '5':
-        currency = r"$";
+        currency = r'$';
         break;
       case '9':
         // Reference: http://www.jollytech.com
         switch (raw) {
-          case "90000":
+          case '90000':
             // No suggested retail price
             return null;
-          case "99991":
+          case '99991':
             // Complementary
-            return "0.00";
-          case "99990":
-            return "Used";
+            return '0.00';
+          case '99990':
+            return 'Used';
         }
         // Otherwise... unknown currency?
-        currency = "";
+        currency = '';
         break;
       default:
-        currency = "";
+        currency = '';
         break;
     }
-    int rawAmount = int.parse(raw.substring(1));
-    String unitsString = (rawAmount ~/ 100).toString();
-    int hundredths = rawAmount % 100;
-    String hundredthsString = hundredths.toString().padLeft(2, '0');
+    final rawAmount = int.parse(raw.substring(1));
+    final unitsString = (rawAmount ~/ 100).toString();
+    final hundredths = rawAmount % 100;
+    final hundredthsString = hundredths.toString().padLeft(2, '0');
     return '$currency$unitsString.$hundredthsString';
   }
 }

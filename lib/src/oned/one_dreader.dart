@@ -38,26 +38,26 @@ abstract class OneDReader implements Reader {
     try {
       return _doDecode(image, hints);
     } on NotFoundException catch (_) {
-      bool tryHarder =
+      final tryHarder =
           hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported) {
-        BinaryBitmap rotatedImage = image.rotateCounterClockwise();
-        Result result = _doDecode(rotatedImage, hints);
+        final rotatedImage = image.rotateCounterClockwise();
+        final result = _doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
-        Map<ResultMetadataType, dynamic>? metadata = result.resultMetadata;
+        final metadata = result.resultMetadata;
         int orientation = 270;
         if (metadata != null &&
             metadata.containsKey(ResultMetadataType.ORIENTATION)) {
           // But if we found it reversed in doDecode(), add in that result here:
-          orientation =
-              (orientation + metadata[ResultMetadataType.ORIENTATION] as int) %
-                  360;
+          orientation = (orientation +
+                  (metadata[ResultMetadataType.ORIENTATION] as int)) %
+              360;
         }
         result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
         // Update result points
-        List<ResultPoint?>? points = result.resultPoints;
+        final points = result.resultPoints;
         if (points != null) {
-          int height = rotatedImage.height;
+          final height = rotatedImage.height;
           for (int i = 0; i < points.length; i++) {
             points[i] = ResultPoint(height - points[i]!.y - 1, points[i]!.x);
           }
@@ -87,13 +87,13 @@ abstract class OneDReader implements Reader {
   /// @return The contents of the decoded barcode
   /// @throws NotFoundException Any spontaneous errors which occur
   Result _doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
-    int width = image.width;
-    int height = image.height;
+    final width = image.width;
+    final height = image.height;
     BitArray row = BitArray(width);
 
-    bool tryHarder =
+    final tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    int rowStep = math.max(1, height >> (tryHarder ? 8 : 5));
+    final rowStep = math.max(1, height >> (tryHarder ? 8 : 5));
     late int maxLines;
     if (tryHarder) {
       maxLines = height; // Look at the whole image, not just the center
@@ -102,12 +102,12 @@ abstract class OneDReader implements Reader {
       maxLines = 15;
     }
 
-    int middle = height ~/ 2;
+    final middle = height ~/ 2;
     for (int x = 0; x < maxLines; x++) {
       // Scanning from the middle out. Determine which row we're looking at next:
-      int rowStepsAboveOrBelow = (x + 1) ~/ 2;
-      bool isAbove = (x & 0x01) == 0; // i.e. is x even?
-      int rowNumber = middle +
+      final rowStepsAboveOrBelow = (x + 1) ~/ 2;
+      final isAbove = (x & 0x01) == 0; // i.e. is x even?
+      final rowNumber = middle +
           rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
       if (rowNumber < 0 || rowNumber >= height) {
         // Oops, if we run off the top or bottom, stop
@@ -133,7 +133,7 @@ abstract class OneDReader implements Reader {
           // that start on the center line.
           if (hints != null &&
               hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-            Map<DecodeHintType, Object> newHints = {};
+            final newHints = <DecodeHintType, Object>{};
             newHints.addAll(hints);
             newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             hints = newHints;
@@ -141,13 +141,13 @@ abstract class OneDReader implements Reader {
         }
         try {
           // Look for a barcode
-          Result result = decodeRow(rowNumber, row, hints);
+          final result = decodeRow(rowNumber, row, hints);
           // We found our barcode
           if (attempt == 1) {
             // But it was upside down, so note that
             result.putMetadata(ResultMetadataType.ORIENTATION, 180);
             // And remember to flip the result points horizontally.
-            List<ResultPoint?>? points = result.resultPoints;
+            final points = result.resultPoints;
             if (points != null) {
               points[0] = ResultPoint(width - points[0]!.x - 1, points[0]!.y);
               points[1] = ResultPoint(width - points[1]!.x - 1, points[1]!.y);
@@ -175,9 +175,9 @@ abstract class OneDReader implements Reader {
   /// @throws NotFoundException if counters cannot be filled entirely from row before running out
   ///  of pixels
   static void recordPattern(BitArray row, int start, List<int> counters) {
-    int numCounters = counters.length;
+    final numCounters = counters.length;
     counters.fillRange(0, numCounters, 0);
-    int end = row.size;
+    final end = row.size;
     if (start >= end) {
       throw NotFoundException.instance;
     }
@@ -232,7 +232,7 @@ abstract class OneDReader implements Reader {
   /// @return ratio of total variance between counters and pattern compared to total pattern size
   static double patternMatchVariance(
       List<int> counters, List<int> pattern, double maxIndividualVariance) {
-    int numCounters = counters.length;
+    final numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
     for (int i = 0; i < numCounters; i++) {
@@ -245,14 +245,14 @@ abstract class OneDReader implements Reader {
       return double.infinity;
     }
 
-    double unitBarWidth = total / patternLength;
+    final unitBarWidth = total / patternLength;
     maxIndividualVariance *= unitBarWidth;
 
     double totalVariance = 0.0;
     for (int x = 0; x < numCounters; x++) {
-      int counter = counters[x];
-      double scaledPattern = pattern[x] * unitBarWidth;
-      double variance = counter > scaledPattern
+      final counter = counters[x];
+      final scaledPattern = pattern[x] * unitBarWidth;
+      final variance = counter > scaledPattern
           ? counter - scaledPattern
           : scaledPattern - counter;
       if (variance > maxIndividualVariance) {

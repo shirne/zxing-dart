@@ -32,11 +32,11 @@ import 'state.dart';
 /// @author Rustam Abdullaev
 class HighLevelEncoder {
   static const List<String> MODE_NAMES = [
-    "UPPER",
-    "LOWER",
-    "DIGIT",
-    "MIXED",
-    "PUNCT"
+    'UPPER',
+    'LOWER',
+    'DIGIT',
+    'MIXED',
+    'PUNCT'
   ];
 
   static const int MODE_UPPER = 0; // 5 bits
@@ -153,16 +153,17 @@ class HighLevelEncoder {
   BitArray encode() {
     State initialState = State.initialState;
     if (_charset != null) {
-      CharacterSetECI? eci = CharacterSetECI.getCharacterSetECI(_charset!);
+      final CharacterSetECI? eci =
+          CharacterSetECI.getCharacterSetECI(_charset!);
       if (null == eci) {
-        throw ArgumentError("No ECI code for character set ${_charset!.name}");
+        throw ArgumentError('No ECI code for character set ${_charset!.name}');
       }
       initialState = initialState.appendFLGn(eci.value);
     }
     List<State> states = [initialState];
     for (int index = 0; index < _text.length; index++) {
       int pairCode;
-      int nextChar = index + 1 < _text.length ? _text[index + 1] : 0;
+      final int nextChar = index + 1 < _text.length ? _text[index + 1] : 0;
       switch (_text[index]) {
         case 13: //'\r':
           pairCode = nextChar == 10 /*'\n'*/ ? 2 : 0;
@@ -189,7 +190,7 @@ class HighLevelEncoder {
         states = _updateStateListForChar(states, index);
       }
     }
-    State minState = states.singleWhere((element) {
+    final State minState = states.singleWhere((element) {
       return states.every((ele) => element.bitCount <= ele.bitCount);
     });
     // We are left with a set of states.  Find the shortest one.
@@ -207,7 +208,7 @@ class HighLevelEncoder {
   // for the new character, merging the results, and then removing the
   // non-optimal states.
   List<State> _updateStateListForChar(Iterable<State> states, int index) {
-    List<State> result = [];
+    final List<State> result = [];
     for (State state in states) {
       _updateStateForChar(state, index, result);
     }
@@ -218,11 +219,11 @@ class HighLevelEncoder {
   // state for the next character.  The resulting set of states are added to
   // the "result" list.
   void _updateStateForChar(State state, int index, List<State> result) {
-    int ch = _text[index] & 0xFF;
-    bool charInCurrentTable = _charMap[state.mode].containsKey(ch);
+    final int ch = _text[index] & 0xFF;
+    final bool charInCurrentTable = _charMap[state.mode].containsKey(ch);
     State? stateNoBinary;
     for (int mode = 0; mode <= MODE_PUNCT; mode++) {
-      int charInMode = _charMap[mode][ch] ?? 0;
+      final int charInMode = _charMap[mode][ch] ?? 0;
       if (charInMode > 0) {
         // Only create stateNoBinary the first time it's required.
         stateNoBinary ??= state.endBinaryShift(index);
@@ -232,14 +233,16 @@ class HighLevelEncoder {
           // any other mode except possibly digit (which uses only 4 bits).  Any
           // other latch would be equally successful *after* this character, and
           // so wouldn't save any bits.
-          State latchState = stateNoBinary.latchAndAppend(mode, charInMode);
+          final State latchState =
+              stateNoBinary.latchAndAppend(mode, charInMode);
           result.add(latchState);
         }
         // Try generating the character by switching to its mode.
         if (!charInCurrentTable && shiftTable[state.mode][mode] >= 0) {
           // It never makes sense to temporarily shift to another mode if the
           // character exists in the current mode.  That can never save bits.
-          State shiftState = stateNoBinary.shiftAndAppend(mode, charInMode);
+          final State shiftState =
+              stateNoBinary.shiftAndAppend(mode, charInMode);
           result.add(shiftState);
         }
       }
@@ -249,14 +252,14 @@ class HighLevelEncoder {
       // It's never worthwhile to go into binary shift mode if you're not already
       // in binary shift mode, and the character exists in your current mode.
       // That can never save bits over just outputting the char in the current mode.
-      State binaryState = state.addBinaryShiftChar(index);
+      final State binaryState = state.addBinaryShiftChar(index);
       result.add(binaryState);
     }
   }
 
   static List<State> _updateStateListForPair(
       Iterable<State> states, int index, int pairCode) {
-    List<State> result = [];
+    final List<State> result = [];
     for (State state in states) {
       _updateStateForPair(state, index, pairCode, result);
     }
@@ -265,7 +268,7 @@ class HighLevelEncoder {
 
   static void _updateStateForPair(
       State state, int index, int pairCode, List<State> result) {
-    State stateNoBinary = state.endBinaryShift(index);
+    final State stateNoBinary = state.endBinaryShift(index);
     // Possibility 1.  Latch to MODE_PUNCT, and then append this code
     result.add(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode));
     if (state.mode != MODE_PUNCT) {
@@ -275,7 +278,7 @@ class HighLevelEncoder {
     }
     if (pairCode == 3 || pairCode == 4) {
       // both characters are in DIGITS.  Sometimes better to just add two digits
-      State digitState = stateNoBinary
+      final State digitState = stateNoBinary
           .latchAndAppend(MODE_DIGIT, 16 - pairCode) // period or comma in DIGIT
           .latchAndAppend(MODE_DIGIT, 1); // space in DIGIT
       result.add(digitState);
@@ -283,7 +286,7 @@ class HighLevelEncoder {
     if (state.binaryShiftByteCount > 0) {
       // It only makes sense to do the characters as binary if we're already
       // in binary mode.
-      State binaryState =
+      final State binaryState =
           state.addBinaryShiftChar(index).addBinaryShiftChar(index + 1);
       result.add(binaryState);
     }
@@ -294,12 +297,13 @@ class HighLevelEncoder {
     //    .where((newEle) =>
     //        states.every((oldEle) => newEle.isBetterThanOrEqualTo(oldEle)))
     //    .toList();
-    List<State> result = [];
-    List<State> removedState = [];
+    final List<State> result = [];
+    final List<State> removedState = [];
     for (State newState in states) {
       bool add = true;
-      for (Iterator<State> iterator = result.iterator; iterator.moveNext();) {
-        State oldState = iterator.current;
+      for (final Iterator<State> iterator = result.iterator;
+          iterator.moveNext();) {
+        final State oldState = iterator.current;
         if (oldState.isBetterThanOrEqualTo(newState)) {
           add = false;
           break;

@@ -40,7 +40,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     int sourceWidth = image.width;
     int sourceHeight = image.height;
     if (left + width > sourceWidth || top + height > sourceHeight) {
-      throw ArgumentError("Crop rectangle does not fit within image data.");
+      throw ArgumentError('Crop rectangle does not fit within image data.');
     }
 
     buffer = Uint8List(width * height);
@@ -72,7 +72,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   @override
   Int8List getRow(int y, Int8List? row) {
     if (y < 0 || y >= height) {
-      throw ArgumentError("Requested row is outside the image: $y");
+      throw ArgumentError('Requested row is outside the image: $y');
     }
     if (row == null || row.length < width) {
       row = Int8List(width);

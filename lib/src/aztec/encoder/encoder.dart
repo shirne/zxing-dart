@@ -55,7 +55,7 @@ class Encoder {
       [int minECCPercent = DEFAULT_AZTEC_LAYERS,
       int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
       Encoding? charset]) {
-    List<int> bytes = (charset ?? latin1).encode(data);
+    final List<int> bytes = (charset ?? latin1).encode(data);
     return encodeData(
         Uint8List.fromList(bytes), minECCPercent, userSpecifiedLayers, charset);
   }
@@ -74,11 +74,11 @@ class Encoder {
       int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
       Encoding? charset]) {
     // High-level encode
-    BitArray bits = HighLevelEncoder(data, charset).encode();
+    final BitArray bits = HighLevelEncoder(data, charset).encode();
 
     // stuff bits and choose symbol size
-    int eccBits = bits.size * minECCPercent ~/ 100 + 11;
-    int totalSizeBits = bits.size + eccBits;
+    final int eccBits = bits.size * minECCPercent ~/ 100 + 11;
+    final int totalSizeBits = bits.size + eccBits;
     bool compact;
     int layers;
     int totalBitsLayer;
@@ -88,18 +88,19 @@ class Encoder {
       compact = userSpecifiedLayers < 0;
       layers = (userSpecifiedLayers).abs();
       if (layers > (compact ? _MAX_NB_BITS_COMPACT : _MAX_NB_BITS)) {
-        throw ArgumentError("Illegal value $userSpecifiedLayers for layers");
+        throw ArgumentError('Illegal value $userSpecifiedLayers for layers');
       }
       totalBitsLayer = _totalBitsInLayer(layers, compact);
       wordSize = _WORD_SIZE[layers];
-      int usableBitsInLayers = totalBitsLayer - (totalBitsLayer % wordSize);
+      final int usableBitsInLayers =
+          totalBitsLayer - (totalBitsLayer % wordSize);
       stuffedBits = stuffBits(bits, wordSize);
       if (stuffedBits.size + eccBits > usableBitsInLayers) {
-        throw ArgumentError("Data to large for user specified layer");
+        throw ArgumentError('Data to large for user specified layer');
       }
       if (compact && stuffedBits.size > wordSize * 64) {
         // Compact format only allows 64 data words, though C4 can hold more words than that
-        throw ArgumentError("Data to large for user specified layer");
+        throw ArgumentError('Data to large for user specified layer');
       }
     } else {
       wordSize = 0;
@@ -109,7 +110,7 @@ class Encoder {
       // is the same size, but has more data.
       for (int i = 0;; i++) {
         if (i > _MAX_NB_BITS) {
-          throw ArgumentError("Data too large for an Aztec code");
+          throw ArgumentError('Data too large for an Aztec code');
         }
         compact = i <= 3;
         layers = compact ? i + 1 : i;
@@ -123,7 +124,8 @@ class Encoder {
           wordSize = _WORD_SIZE[layers];
           stuffedBits = stuffBits(bits, wordSize);
         }
-        int usableBitsInLayers = totalBitsLayer - (totalBitsLayer % wordSize);
+        final int usableBitsInLayers =
+            totalBitsLayer - (totalBitsLayer % wordSize);
         if (compact && stuffedBits.size > wordSize * 64) {
           // Compact format only allows 64 data words, though C4 can hold more words than that
           continue;
@@ -133,18 +135,18 @@ class Encoder {
         }
       }
     }
-    BitArray messageBits =
+    final BitArray messageBits =
         _generateCheckWords(stuffedBits, totalBitsLayer, wordSize);
 
     // generate mode message
-    int messageSizeInWords = stuffedBits.size ~/ wordSize;
-    BitArray modeMessage =
+    final int messageSizeInWords = stuffedBits.size ~/ wordSize;
+    final BitArray modeMessage =
         generateModeMessage(compact, layers, messageSizeInWords);
 
     // allocate symbol
-    int baseMatrixSize =
+    final int baseMatrixSize =
         (compact ? 11 : 14) + layers * 4; // not including alignment lines
-    List<int> alignmentMap = List.filled(baseMatrixSize, 0);
+    final List<int> alignmentMap = List.filled(baseMatrixSize, 0);
     int matrixSize;
     if (compact) {
       // no alignment marks in compact mode, alignmentMap is a no-op
@@ -154,21 +156,21 @@ class Encoder {
       }
     } else {
       matrixSize = baseMatrixSize + 1 + 2 * ((baseMatrixSize ~/ 2 - 1) ~/ 15);
-      int origCenter = baseMatrixSize ~/ 2;
-      int center = matrixSize ~/ 2;
+      final int origCenter = baseMatrixSize ~/ 2;
+      final int center = matrixSize ~/ 2;
       for (int i = 0; i < origCenter; i++) {
-        int newOffset = i + i ~/ 15;
+        final int newOffset = i + i ~/ 15;
         alignmentMap[origCenter - i - 1] = center - newOffset - 1;
         alignmentMap[origCenter + i] = center + newOffset + 1;
       }
     }
-    BitMatrix matrix = BitMatrix(matrixSize);
+    final BitMatrix matrix = BitMatrix(matrixSize);
 
     // draw data bits
     for (int i = 0, rowOffset = 0; i < layers; i++) {
-      int rowSize = (layers - i) * 4 + (compact ? 9 : 12);
+      final int rowSize = (layers - i) * 4 + (compact ? 9 : 12);
       for (int j = 0; j < rowSize; j++) {
-        int columnOffset = j * 2;
+        final int columnOffset = j * 2;
         for (int k = 0; k < 2; k++) {
           if (messageBits.get(rowOffset + columnOffset + k)) {
             matrix.set(alignmentMap[i * 2 + k], alignmentMap[i * 2 + j]);
@@ -251,10 +253,10 @@ class Encoder {
 
   static void _drawModeMessage(
       BitMatrix matrix, bool compact, int matrixSize, BitArray modeMessage) {
-    int center = matrixSize ~/ 2;
+    final int center = matrixSize ~/ 2;
     if (compact) {
       for (int i = 0; i < 7; i++) {
-        int offset = center - 3 + i;
+        final int offset = center - 3 + i;
         if (modeMessage.get(i)) {
           matrix.set(offset, center - 5);
         }
@@ -270,7 +272,7 @@ class Encoder {
       }
     } else {
       for (int i = 0; i < 10; i++) {
-        int offset = center - 5 + i + i ~/ 5;
+        final int offset = center - 5 + i + i ~/ 5;
         if (modeMessage.get(i)) {
           matrix.set(offset, center - 7);
         }
@@ -290,13 +292,13 @@ class Encoder {
   static BitArray _generateCheckWords(
       BitArray bitArray, int totalBits, int wordSize) {
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
-    int messageSizeInWords = bitArray.size ~/ wordSize;
-    ReedSolomonEncoder rs = ReedSolomonEncoder(_getGF(wordSize));
-    int totalWords = totalBits ~/ wordSize;
-    List<int> messageWords = _bitsToWords(bitArray, wordSize, totalWords);
+    final int messageSizeInWords = bitArray.size ~/ wordSize;
+    final ReedSolomonEncoder rs = ReedSolomonEncoder(_getGF(wordSize));
+    final int totalWords = totalBits ~/ wordSize;
+    final List<int> messageWords = _bitsToWords(bitArray, wordSize, totalWords);
     rs.encode(messageWords, totalWords - messageSizeInWords);
-    int startPad = totalBits % wordSize;
-    BitArray messageBits = BitArray();
+    final int startPad = totalBits % wordSize;
+    final BitArray messageBits = BitArray();
     messageBits.appendBits(0, startPad);
     for (int messageWord in messageWords) {
       messageBits.appendBits(messageWord, wordSize);
@@ -306,9 +308,9 @@ class Encoder {
 
   static List<int> _bitsToWords(
       BitArray stuffedBits, int wordSize, int totalWords) {
-    List<int> message = List.filled(totalWords, 0);
+    final List<int> message = List.filled(totalWords, 0);
     int i = 0;
-    int n = stuffedBits.size ~/ wordSize;
+    final int n = stuffedBits.size ~/ wordSize;
     for (; i < n; i++) {
       int value = 0;
       for (int j = 0; j < wordSize; j++) {
@@ -333,15 +335,15 @@ class Encoder {
       case 12:
         return GenericGF.aztecData12;
       default:
-        throw ArgumentError("Unsupported word size $wordSize");
+        throw ArgumentError('Unsupported word size $wordSize');
     }
   }
 
   static BitArray stuffBits(BitArray bits, int wordSize) {
-    BitArray out = BitArray();
+    final BitArray out = BitArray();
 
-    int n = bits.size;
-    int mask = (1 << wordSize) - 2;
+    final int n = bits.size;
+    final int mask = (1 << wordSize) - 2;
     for (int i = 0; i < n; i += wordSize) {
       int word = 0;
       for (int j = 0; j < wordSize; j++) {

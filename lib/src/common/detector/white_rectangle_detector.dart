@@ -173,7 +173,7 @@ class WhiteRectangleDetector {
     }
 
     if (!sizeExceeded) {
-      int maxSize = right - left;
+      final maxSize = right - left;
 
       ResultPoint? z;
       for (int i = 1; z == null && i < maxSize; i++) {
@@ -226,13 +226,13 @@ class WhiteRectangleDetector {
 
   ResultPoint? getBlackPointOnSegment(
       double aX, double aY, double bX, double bY) {
-    int dist = MathUtils.round(MathUtils.distance(aX, aY, bX, bY));
-    double xStep = (bX - aX) / dist;
-    double yStep = (bY - aY) / dist;
+    final dist = MathUtils.round(MathUtils.distance(aX, aY, bX, bY));
+    final xStep = (bX - aX) / dist;
+    final yStep = (bY - aY) / dist;
 
     for (int i = 0; i < dist; i++) {
-      int x = MathUtils.round(aX + i * xStep);
-      int y = MathUtils.round(aY + i * yStep);
+      final x = MathUtils.round(aX + i * xStep);
+      final y = MathUtils.round(aY + i * yStep);
       if (_image.get(x, y)) {
         return ResultPoint(x.toDouble(), y.toDouble());
       }
@@ -260,14 +260,14 @@ class WhiteRectangleDetector {
     //   y                    y
     //
 
-    double yi = y.x;
-    double yj = y.y;
-    double zi = z.x;
-    double zj = z.y;
-    double xi = x.x;
-    double xj = x.y;
-    double ti = t.x;
-    double tj = t.y;
+    final yi = y.x;
+    final yj = y.y;
+    final zi = z.x;
+    final zj = z.y;
+    final xi = x.x;
+    final xj = x.y;
+    final ti = t.x;
+    final tj = t.y;
 
     if (yi < _width / 2.0) {
       return [

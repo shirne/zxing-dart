@@ -82,7 +82,7 @@ class ModulusPoly {
 
   ModulusPoly add(ModulusPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError('ModulusPolys do not have same ModulusGF field');
     }
     if (isZero) {
       return other;
@@ -113,7 +113,7 @@ class ModulusPoly {
 
   ModulusPoly subtract(ModulusPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError('ModulusPolys do not have same ModulusGF field');
     }
     if (other.isZero) {
       return this;
@@ -123,7 +123,7 @@ class ModulusPoly {
 
   ModulusPoly multiplyPoly(ModulusPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("ModulusPolys do not have same ModulusGF field");
+      throw ArgumentError('ModulusPolys do not have same ModulusGF field');
     }
     if (isZero || other.isZero) {
       return _field.zero;
@@ -189,11 +189,11 @@ class ModulusPoly {
       int coefficient = getCoefficient(deg);
       if (coefficient != 0) {
         if (coefficient < 0) {
-          result.write(" - ");
+          result.write(' - ');
           coefficient = -coefficient;
         } else {
           if (result.length > 0) {
-            result.write(" + ");
+            result.write(' + ');
           }
         }
         if (deg == 0 || coefficient != 1) {
@@ -203,7 +203,7 @@ class ModulusPoly {
           if (deg == 1) {
             result.write('x');
           } else {
-            result.write("x^");
+            result.write('x^');
             result.write(deg);
           }
         }

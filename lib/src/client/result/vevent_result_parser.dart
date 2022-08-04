@@ -26,40 +26,39 @@ import 'vcard_result_parser.dart';
 class VEventResultParser extends ResultParser {
   @override
   CalendarParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    int vEventStart = rawText.indexOf("BEGIN:VEVENT");
+    final rawText = ResultParser.getMassagedText(result);
+    final vEventStart = rawText.indexOf('BEGIN:VEVENT');
     if (vEventStart < 0) {
       return null;
     }
 
-    String? summary = _matchSingleVCardPrefixedField("SUMMARY", rawText);
-    String? start = _matchSingleVCardPrefixedField("DTSTART", rawText);
+    final summary = _matchSingleVCardPrefixedField('SUMMARY', rawText);
+    final start = _matchSingleVCardPrefixedField('DTSTART', rawText);
     if (start == null) {
       return null;
     }
-    String? end = _matchSingleVCardPrefixedField("DTEND", rawText);
-    String? duration = _matchSingleVCardPrefixedField("DURATION", rawText);
-    String? location = _matchSingleVCardPrefixedField("LOCATION", rawText);
-    String? organizer =
-        _stripMailto(_matchSingleVCardPrefixedField("ORGANIZER", rawText));
+    final end = _matchSingleVCardPrefixedField('DTEND', rawText);
+    final duration = _matchSingleVCardPrefixedField('DURATION', rawText);
+    final location = _matchSingleVCardPrefixedField('LOCATION', rawText);
+    final organizer =
+        _stripMailto(_matchSingleVCardPrefixedField('ORGANIZER', rawText));
 
-    List<String>? attendees = _matchVCardPrefixedField("ATTENDEE", rawText);
+    final attendees = _matchVCardPrefixedField('ATTENDEE', rawText);
     if (attendees != null) {
       for (int i = 0; i < attendees.length; i++) {
         attendees[i] = _stripMailto(attendees[i])!;
       }
     }
-    String? description =
-        _matchSingleVCardPrefixedField("DESCRIPTION", rawText);
+    final description = _matchSingleVCardPrefixedField('DESCRIPTION', rawText);
 
-    String? geoString = _matchSingleVCardPrefixedField("GEO", rawText);
+    final geoString = _matchSingleVCardPrefixedField('GEO', rawText);
     double latitude;
     double longitude;
     if (geoString == null) {
       latitude = double.nan;
       longitude = double.nan;
     } else {
-      int semicolon = geoString.indexOf(';');
+      final semicolon = geoString.indexOf(';');
       if (semicolon < 0) {
         return null;
       }
@@ -82,25 +81,25 @@ class VEventResultParser extends ResultParser {
   }
 
   static String? _matchSingleVCardPrefixedField(String prefix, String rawText) {
-    List<String>? values = VCardResultParser.matchSingleVCardPrefixedField(
+    final values = VCardResultParser.matchSingleVCardPrefixedField(
         prefix, rawText, true, false);
     return values == null || values.isEmpty ? null : values[0];
   }
 
   static List<String>? _matchVCardPrefixedField(String prefix, String rawText) {
-    List<List<String>>? values =
+    final values =
         VCardResultParser.matchVCardPrefixedField(prefix, rawText, true, false);
     if (values == null || values.isEmpty) {
       return null;
     }
-    int size = values.length;
-    List<String> result = List.generate(size, (index) => values[index][0]);
+    final size = values.length;
+    final result = List.generate(size, (index) => values[index][0]);
 
     return result;
   }
 
   static String? _stripMailto(String? s) {
-    if (s != null && (s.startsWith("mailto:") || s.startsWith("MAILTO:"))) {
+    if (s != null && (s.startsWith('mailto:') || s.startsWith('MAILTO:'))) {
       s = s.substring(7);
     }
     return s;

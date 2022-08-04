@@ -32,25 +32,25 @@ import 'package:zxing_lib/zxing.dart';
 void main() {
   test('testRSSExpanded', () {
     Map<String, String> uncommonAIs = {};
-    uncommonAIs["123"] = "544654";
-    Result result = Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654",
+    uncommonAIs['123'] = '544654';
+    Result result = Result('(01)66546(13)001205(3932)4455(3102)6544(123)544654',
         null, null, BarcodeFormat.RSS_EXPANDED);
     ExpandedProductParsedResult o =
         ExpandedProductResultParser().parse(result)!;
     //assertNotNull(o);
-    expect("66546", o.productID);
+    expect('66546', o.productID);
     assert(o.sscc == null);
     assert(o.lotNumber == null);
     assert(o.productionDate == null);
-    expect("001205", o.packagingDate);
+    expect('001205', o.packagingDate);
     assert(o.bestBeforeDate == null);
     assert(o.expirationDate == null);
-    expect("6544", o.weight);
-    expect("KG", o.weightType);
-    expect("2", o.weightIncrement);
-    expect("5", o.price);
-    expect("2", o.priceIncrement);
-    expect("445", o.priceCurrency);
+    expect('6544', o.weight);
+    expect('KG', o.weightType);
+    expect('2', o.weightIncrement);
+    expect('5', o.price);
+    expect('2', o.priceIncrement);
+    expect('445', o.priceCurrency);
     expect(uncommonAIs, o.uncommonAIs);
   });
 }

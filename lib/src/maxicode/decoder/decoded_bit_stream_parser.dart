@@ -27,35 +27,35 @@ import '../../formats_exception.dart';
 /// @author mike32767
 /// @author Manuel Kasten
 class DecodedBitStreamParser {
-  static const String _shiftA = '\uFFF0';
-  static const String _shiftB = '\uFFF1';
-  static const String _shiftC = '\uFFF2';
-  static const String _shiftD = '\uFFF3';
-  static const String _shiftE = '\uFFF4';
-  static const String _twoShiftA = '\uFFF5';
-  static const String _threeShiftA = '\uFFF6';
-  static const String _latchA = '\uFFF7';
-  static const String _latchB = '\uFFF8';
-  static const String _lock = '\uFFF9';
-  static const String _eci = '\uFFFA';
-  static const String _ns = '\uFFFB';
-  static const String _pad = '\uFFFC';
-  static const String _fs = '\u001C';
-  static const String _gs = '\u001D';
-  static const String _rs = '\u001E';
+  static const _shiftA = '\uFFF0';
+  static const _shiftB = '\uFFF1';
+  static const _shiftC = '\uFFF2';
+  static const _shiftD = '\uFFF3';
+  static const _shiftE = '\uFFF4';
+  static const _twoShiftA = '\uFFF5';
+  static const _threeShiftA = '\uFFF6';
+  static const _latchA = '\uFFF7';
+  static const _latchB = '\uFFF8';
+  static const _lock = '\uFFF9';
+  static const _eci = '\uFFFA';
+  static const _ns = '\uFFFB';
+  static const _pad = '\uFFFC';
+  static const _fs = '\u001C';
+  static const _gs = '\u001D';
+  static const _rs = '\u001E';
 
-  static final List<int> _countryBytes = [
+  static final _countryBytes = [
     53, 54, 43, 44, 45, 46, 47, 48, 37, 38 //
   ];
-  static final List<int> _serviceClassBytes = [
+  static final _serviceClassBytes = [
     55, 56, 57, 58, 59, 60, 49, 50, 51, 52 //
   ];
-  static final List<int> _postcode2LengthBytes = [39, 40, 41, 42, 31, 32];
-  static final List<int> _postcode2Bytes = [
+  static final _postcode2LengthBytes = [39, 40, 41, 42, 31, 32];
+  static final _postcode2Bytes = [
     33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19, //
     20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2
   ];
-  static final List<List<int>> _postcode3Bytes = [
+  static final _postcode3Bytes = [
     [39, 40, 41, 42, 31, 32],
     [33, 34, 35, 36, 25, 26],
     [27, 28, 29, 30, 19, 20],
@@ -64,40 +64,52 @@ class DecodedBitStreamParser {
     [9, 10, 11, 12, 1, 2]
   ];
 
-  static final List<String> _sets = [
-    "\rABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "$_eci$_fs$_gs$_rs$_ns $_pad\""
+  static final _sets = [
+    '\rABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        '$_eci$_fs$_gs$_rs$_ns $_pad"'
         r"#$%&'()*+,-./0123456789:"
-        "$_shiftB$_shiftC$_shiftD$_shiftE$_latchB",
-    "`abcdefghijklmnopqrstuvwxyz"
-        "$_eci$_fs$_gs$_rs$_ns"
-        "{$_pad}~\u007F;<=>?[\\]^_ ,./:@!|"
-        "$_pad$_twoShiftA$_threeShiftA$_pad$_shiftA$_shiftC$_shiftD$_shiftE$_latchA",
-    "\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u00D0\u00D1\u00D2\u00D3\u00D4\u00D5\u00D6\u00D7\u00D8\u00D9\u00DA"
-        "$_eci$_fs$_gs$_rs$_ns"
-        "\u00DB\u00DC\u00DD\u00DE\u00DF\u00AA\u00AC\u00B1\u00B2\u00B3\u00B5\u00B9\u00BA\u00BC\u00BD\u00BE\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089"
-        "$_latchA $_lock$_shiftD$_shiftE$_latchB",
-    "\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5\u00E6\u00E7\u00E8\u00E9\u00EA\u00EB\u00EC\u00ED\u00EE\u00EF\u00F0\u00F1\u00F2\u00F3\u00F4\u00F5\u00F6\u00F7\u00F8\u00F9\u00FA"
-        "$_eci$_fs$_gs$_rs$_ns"
-        "\u00FB\u00FC\u00FD\u00FE\u00FF\u00A1\u00A8\u00AB\u00AF\u00B0\u00B4\u00B7\u00B8\u00BB\u00BF\u008A\u008B\u008C\u008D\u008E\u008F\u0090\u0091\u0092\u0093\u0094"
-        "$_latchA $_shiftC$_lock$_shiftE$_latchB",
-    "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A"
-        "$_eci$_pad$_pad\u001B$_ns$_fs$_gs$_rs"
-        "\u001F\u009F\u00A0\u00A2\u00A3\u00A4\u00A5\u00A6\u00A7\u00A9\u00AD\u00AE\u00B6\u0095\u0096\u0097\u0098\u0099\u009A\u009B\u009C\u009D\u009E"
-        "$_latchA $_shiftC$_shiftD$_lock$_latchB",
+        '$_shiftB$_shiftC$_shiftD$_shiftE$_latchB',
+    '`abcdefghijklmnopqrstuvwxyz'
+        '$_eci$_fs$_gs$_rs$_ns'
+        '{$_pad}~\u007F;<=>?[\\]^_ ,./:@!|'
+        '$_pad$_twoShiftA$_threeShiftA$_pad$_shiftA$_shiftC$_shiftD$_shiftE$_latchA',
+    '\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9'
+        '\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u00D0\u00D1\u00D2'
+        '\u00D3\u00D4\u00D5\u00D6\u00D7\u00D8\u00D9\u00DA'
+        '$_eci$_fs$_gs$_rs$_ns'
+        '\u00DB\u00DC\u00DD\u00DE\u00DF\u00AA\u00AC\u00B1\u00B2'
+        '\u00B3\u00B5\u00B9\u00BA\u00BC\u00BD\u00BE\u0080\u0081'
+        '\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089'
+        '$_latchA $_lock$_shiftD$_shiftE$_latchB',
+    '\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5\u00E6\u00E7\u00E8'
+        '\u00E9\u00EA\u00EB\u00EC\u00ED\u00EE\u00EF\u00F0\u00F1'
+        '\u00F2\u00F3\u00F4\u00F5\u00F6\u00F7\u00F8\u00F9\u00FA'
+        '$_eci$_fs$_gs$_rs$_ns'
+        '\u00FB\u00FC\u00FD\u00FE\u00FF\u00A1\u00A8\u00AB\u00AF'
+        '\u00B0\u00B4\u00B7\u00B8\u00BB\u00BF\u008A\u008B\u008C'
+        '\u008D\u008E\u008F\u0090\u0091\u0092\u0093\u0094'
+        '$_latchA $_shiftC$_lock$_shiftE$_latchB',
+    '\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009'
+        '\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014'
+        '\u0015\u0016\u0017\u0018\u0019\u001A'
+        '$_eci$_pad$_pad\u001B$_ns$_fs$_gs$_rs'
+        '\u001F\u009F\u00A0\u00A2\u00A3\u00A4\u00A5\u00A6\u00A7'
+        '\u00A9\u00AD\u00AE\u00B6\u0095\u0096\u0097\u0098\u0099'
+        '\u009A\u009B\u009C\u009D\u009E'
+        '$_latchA $_shiftC$_shiftD$_lock$_latchB',
   ];
 
   DecodedBitStreamParser._();
 
   static DecoderResult decode(Uint8List bytes, int mode) {
-    StringBuilder result = StringBuilder();
+    final result = StringBuilder();
     switch (mode) {
       case 2:
       case 3:
         String postcode;
         if (mode == 2) {
-          int pc = _getPostCode2(bytes);
-          int ps2Length = _getPostCode2Length(bytes);
+          final pc = _getPostCode2(bytes);
+          final ps2Length = _getPostCode2Length(bytes);
           if (ps2Length > 10) {
             throw FormatsException.instance;
           }
@@ -106,10 +118,10 @@ class DecodedBitStreamParser {
           postcode = _getPostCode3(bytes);
         }
         // NumberFormat threeDigits = DecimalFormat("000");
-        String country = _getCountry(bytes).toString().padLeft(3, '0');
-        String service = _getServiceClass(bytes).toString().padLeft(3, '0');
+        final country = _getCountry(bytes).toString().padLeft(3, '0');
+        final service = _getServiceClass(bytes).toString().padLeft(3, '0');
         result.write(_getMessage(bytes, 10, 84));
-        if (result.toString().startsWith("[)>${_rs}01$_gs")) {
+        if (result.toString().startsWith('[)>${_rs}01$_gs')) {
           result.insert(9, postcode + _gs + country + _gs + service + _gs);
         } else {
           result.insert(0, postcode + _gs + country + _gs + service + _gs);
@@ -155,7 +167,7 @@ class DecodedBitStreamParser {
   }
 
   static String _getPostCode3(Uint8List bytes) {
-    StringBuilder sb = StringBuilder();
+    final sb = StringBuilder();
     for (List<int> p3bytes in _postcode3Bytes) {
       sb.write(_sets[0].codeUnitAt(_getInt(bytes, p3bytes)));
     }
@@ -163,12 +175,12 @@ class DecodedBitStreamParser {
   }
 
   static String _getMessage(Uint8List bytes, int start, int len) {
-    StringBuilder sb = StringBuilder();
+    final sb = StringBuilder();
     int shift = -1;
     int set = 0;
     int lastSet = 0;
     for (int i = start; i < start + len; i++) {
-      String c = _sets[set][bytes[i]];
+      final c = _sets[set][bytes[i]];
       switch (c) {
         case _latchA:
           set = 0;
@@ -198,7 +210,7 @@ class DecodedBitStreamParser {
           shift = 3;
           break;
         case _ns:
-          int nsval = (bytes[++i] << 24) +
+          final nsval = (bytes[++i] << 24) +
               (bytes[++i] << 18) +
               (bytes[++i] << 12) +
               (bytes[++i] << 6) +

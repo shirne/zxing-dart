@@ -69,7 +69,7 @@ class AbstractBlackBoxTestCase {
     List<int> tryHarderMisreadCounts = List.filled(testCount, 0);
 
     for (File testImage in imageFiles) {
-      _log.info("Starting ${testImage.path}");
+      _log.info('Starting ${testImage.path}');
 
       Image image = decodeImage(testImage.readAsBytesSync())!;
       if (_imageProcess != null) {
@@ -79,18 +79,18 @@ class AbstractBlackBoxTestCase {
       String testImageFileName = testImage.uri.pathSegments.last;
       String fileBaseName =
           testImageFileName.substring(0, testImageFileName.indexOf('.'));
-      File expectedTextFile = File("${_testBase.path}/$fileBaseName.txt");
+      File expectedTextFile = File('${_testBase.path}/$fileBaseName.txt');
       String expectedText;
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
-        expectedTextFile = File("${_testBase.path}/$fileBaseName.bin");
+        expectedTextFile = File('${_testBase.path}/$fileBaseName.bin');
         assert(expectedTextFile.existsSync());
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
 
       File expectedMetadataFile =
-          File("${_testBase.path}/$fileBaseName.metadata.txt");
+          File('${_testBase.path}/$fileBaseName.metadata.txt');
       Properties expectedMetadata = Properties();
       if (expectedMetadataFile.existsSync()) {
         expectedMetadata.load(expectedMetadataFile.readAsStringSync());
@@ -110,7 +110,7 @@ class AbstractBlackBoxTestCase {
             misreadCounts[x]++;
           }
         } on ReaderException catch (_) {
-          _log.fine("could not read $fileBaseName at rotation $rotation");
+          _log.fine('could not read $fileBaseName at rotation $rotation');
         }
         try {
           if (_decode(
@@ -121,7 +121,7 @@ class AbstractBlackBoxTestCase {
             tryHarderMisreadCounts[x]++;
           }
         } on ReaderException catch (_) {
-          _log.fine("could not read $fileBaseName at rotation $rotation w/TH");
+          _log.fine('could not read $fileBaseName at rotation $rotation w/TH');
         }
       }
     }
@@ -134,17 +134,17 @@ class AbstractBlackBoxTestCase {
 
     for (int x = 0; x < _testResults.length; x++) {
       TestResult testResult = _testResults[x];
-      _log.info("Rotation ${testResult.rotation} degrees:");
+      _log.info('Rotation ${testResult.rotation} degrees:');
       _log.info(
-          " ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)");
+          ' ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)');
       int failed = imageFiles.length - passedCounts[x];
       _log.info(
-          " ${misreadCounts[x]} failed due to misreads, ${failed - misreadCounts[x]} not detected");
+          ' ${misreadCounts[x]} failed due to misreads, ${failed - misreadCounts[x]} not detected');
       _log.info(
-          " ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.tryHarderCount} required)");
+          ' ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.tryHarderCount} required)');
       failed = imageFiles.length - tryHarderCounts[x];
       _log.info(
-          " ${tryHarderMisreadCounts[x]} failed due to misreads, ${failed - tryHarderMisreadCounts[x]} not detected");
+          ' ${tryHarderMisreadCounts[x]} failed due to misreads, ${failed - tryHarderMisreadCounts[x]} not detected');
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
       totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
@@ -154,35 +154,35 @@ class AbstractBlackBoxTestCase {
 
     int totalTests = imageFiles.length * testCount * 2;
     _log.info(
-        "Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)");
+        'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
     if (totalFound > totalMustPass) {
-      _log.warning("+++ Test too lax by ${totalFound - totalMustPass} images");
+      _log.warning('+++ Test too lax by ${totalFound - totalMustPass} images');
     } else if (totalFound < totalMustPass) {
-      _log.warning("--- Test failed by ${totalMustPass - totalFound} images");
+      _log.warning('--- Test failed by ${totalMustPass - totalFound} images');
     }
 
     if (totalMisread < totalMaxMisread) {
       _log.warning(
-        "+++ Test expects too many misreads by ${totalMaxMisread - totalMisread} images",
+        '+++ Test expects too many misreads by ${totalMaxMisread - totalMisread} images',
       );
     } else if (totalMisread > totalMaxMisread) {
       _log.warning(
-          "--- Test had too many misreads by ${totalMisread - totalMaxMisread} images");
+          '--- Test had too many misreads by ${totalMisread - totalMaxMisread} images');
     }
 
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
       TestResult testResult = _testResults[x];
       String label =
-          "Rotation ${testResult.rotation} degrees: Too many images failed";
+          'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
       assert(tryHarderCounts[x] >= testResult.tryHarderCount,
-          "Try harder, $label");
+          'Try harder, $label');
       label =
-          "Rotation ${testResult.rotation} degrees: Too many images misread";
+          'Rotation ${testResult.rotation} degrees: Too many images misread';
       assert(misreadCounts[x] <= testResult.maxMisreads, label);
       assert(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads,
-          "Try harder, $label");
+          'Try harder, $label');
     }
   }
 
@@ -280,9 +280,9 @@ class AbstractBlackBoxTestCase {
 
   static String readFileAsString(File file, Encoding charset) {
     String stringContents = file.readAsStringSync(encoding: charset);
-    if (stringContents.endsWith("\n")) {
-      _log.info("String contents of file $file end with a newline. "
-          "This may not be intended and cause a test failure");
+    if (stringContents.endsWith('\n')) {
+      _log.info('String contents of file $file end with a newline. '
+          'This may not be intended and cause a test failure');
     }
     return stringContents;
   }

@@ -48,7 +48,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   @override
   List<Result> decodeMultiple(BinaryBitmap image,
       [Map<DecodeHintType, Object>? hints]) {
-    List<Result> results = [];
+    final results = <Result>[];
     _doDecodeMultiple(image, hints, results, 0, 0, 0);
     if (results.isEmpty) {
       throw NotFoundException.instance;
@@ -78,12 +78,12 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     if (!alreadyFound) {
       results.add(_translateResultPoints(result, xOffset, yOffset));
     }
-    List<ResultPoint?>? resultPoints = result.resultPoints;
+    final resultPoints = result.resultPoints;
     if (resultPoints == null || resultPoints.isEmpty) {
       return;
     }
-    int width = image.width;
-    int height = image.height;
+    final width = image.width;
+    final height = image.height;
     double minX = width.toDouble();
     double minY = height.toDouble();
     double maxX = 0.0;
@@ -92,8 +92,8 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       if (point == null) {
         continue;
       }
-      double x = point.x;
-      double y = point.y;
+      final x = point.x;
+      final y = point.y;
       if (x < minX) {
         minX = x;
       }
@@ -143,19 +143,19 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
 
   static Result _translateResultPoints(
       Result result, int xOffset, int yOffset) {
-    List<ResultPoint?>? oldResultPoints = result.resultPoints;
+    final oldResultPoints = result.resultPoints;
     if (oldResultPoints == null) {
       return result;
     }
-    List<ResultPoint> newResultPoints = [];
+    final newResultPoints = <ResultPoint>[];
     for (int i = 0; i < oldResultPoints.length; i++) {
-      ResultPoint? oldPoint = oldResultPoints[i];
+      final oldPoint = oldResultPoints[i];
       if (oldPoint != null) {
         newResultPoints
             .add(ResultPoint(oldPoint.x + xOffset, oldPoint.y + yOffset));
       }
     }
-    Result newResult = Result.full(
+    final newResult = Result.full(
       result.text,
       result.rawBytes,
       result.numBits,

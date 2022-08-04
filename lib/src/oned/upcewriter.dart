@@ -54,23 +54,23 @@ class UPCEWriter extends UPCEANWriter {
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(
               UPCEReader.convertUPCEtoUPCA(contents))) {
-            throw ArgumentError("Contents do not pass checksum");
+            throw ArgumentError('Contents do not pass checksum');
           }
         } on FormatsException catch (_) {
           //
-          throw ArgumentError("Illegal contents");
+          throw ArgumentError('Illegal contents');
         }
         break;
       default:
         throw ArgumentError(
-            "Requested contents should be 7 or 8 digits long, but got $length");
+            'Requested contents should be 7 or 8 digits long, but got $length');
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
     int firstDigit = int.parse(contents[0]);
     if (firstDigit != 0 && firstDigit != 1) {
-      throw ArgumentError("Number system must be 0 or 1");
+      throw ArgumentError('Number system must be 0 or 1');
     }
 
     int checkDigit = int.parse(contents[7]);

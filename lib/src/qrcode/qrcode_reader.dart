@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-import 'dart:typed_data';
-
 import '../common/bit_matrix.dart';
 import '../common/decoder_result.dart';
-import '../common/detector_result.dart';
 
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
@@ -47,11 +44,11 @@ class QRCodeReader implements Reader {
     late DecoderResult decoderResult;
     late List<ResultPoint> points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = _extractPureBits(image.blackMatrix);
+      final bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits, hints);
       points = _noPoints;
     } else {
-      DetectorResult detectorResult = Detector(image.blackMatrix).detect(hints);
+      final detectorResult = Detector(image.blackMatrix).detect(hints);
       decoderResult = _decoder.decodeMatrix(detectorResult.bits, hints);
       points = detectorResult.points;
     }
@@ -62,13 +59,13 @@ class QRCodeReader implements Reader {
           .applyMirroredCorrection(points);
     }
 
-    Result result = Result(decoderResult.text, decoderResult.rawBytes, points,
+    final result = Result(decoderResult.text, decoderResult.rawBytes, points,
         BarcodeFormat.QR_CODE);
-    List<Uint8List>? byteSegments = decoderResult.byteSegments;
+    final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    String? ecLevel = decoderResult.ecLevel;
+    final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
@@ -79,7 +76,7 @@ class QRCodeReader implements Reader {
           decoderResult.structuredAppendParity);
     }
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-        "]Q${decoderResult.symbologyModifier}");
+        ']Q${decoderResult.symbologyModifier}');
     return result;
   }
 
@@ -93,16 +90,16 @@ class QRCodeReader implements Reader {
   /// around it. This is a specialized method that works exceptionally fast in this special
   /// case.
   static BitMatrix _extractPureBits(BitMatrix image) {
-    List<int>? leftTopBlack = image.getTopLeftOnBit();
-    List<int>? rightBottomBlack = image.getBottomRightOnBit();
+    final leftTopBlack = image.getTopLeftOnBit();
+    final rightBottomBlack = image.getBottomRightOnBit();
     if (leftTopBlack == null || rightBottomBlack == null) {
       throw NotFoundException.instance;
     }
 
-    double calModuleSize = _moduleSize(leftTopBlack, image);
+    final calModuleSize = _moduleSize(leftTopBlack, image);
 
     int top = leftTopBlack[1];
-    int bottom = rightBottomBlack[1];
+    final bottom = rightBottomBlack[1];
     int left = leftTopBlack[0];
     int right = rightBottomBlack[0];
 
@@ -121,8 +118,8 @@ class QRCodeReader implements Reader {
       }
     }
 
-    int matrixWidth = ((right - left + 1) / calModuleSize).round();
-    int matrixHeight = ((bottom - top + 1) / calModuleSize).round();
+    final matrixWidth = ((right - left + 1) / calModuleSize).round();
+    final matrixHeight = ((bottom - top + 1) / calModuleSize).round();
     if (matrixWidth <= 0 || matrixHeight <= 0) {
       throw NotFoundException.instance;
     }
@@ -134,14 +131,14 @@ class QRCodeReader implements Reader {
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    int nudge = (calModuleSize ~/ 2.0);
+    final nudge = (calModuleSize ~/ 2.0);
     top += nudge;
     left += nudge;
 
     // But careful that this does not sample off the edge
     // "right" is the farthest-right valid pixel location -- right+1 is not necessarily
     // This is positive by how much the inner x loop below would be too large
-    int nudgedTooFarRight =
+    final nudgedTooFarRight =
         left + ((matrixWidth - 1) * calModuleSize).toInt() - right;
     if (nudgedTooFarRight > 0) {
       if (nudgedTooFarRight > nudge) {
@@ -151,7 +148,7 @@ class QRCodeReader implements Reader {
       left -= nudgedTooFarRight;
     }
     // See logic above
-    int nudgedTooFarDown =
+    final nudgedTooFarDown =
         top + ((matrixHeight - 1) * calModuleSize).toInt() - bottom;
     if (nudgedTooFarDown > 0) {
       if (nudgedTooFarDown > nudge) {
@@ -162,9 +159,9 @@ class QRCodeReader implements Reader {
     }
 
     // Now just read off the bits
-    BitMatrix bits = BitMatrix(matrixWidth, matrixHeight);
+    final bits = BitMatrix(matrixWidth, matrixHeight);
     for (int y = 0; y < matrixHeight; y++) {
-      int iOffset = top + (y * calModuleSize).toInt();
+      final iOffset = top + (y * calModuleSize).toInt();
       for (int x = 0; x < matrixWidth; x++) {
         if (image.get(left + (x * calModuleSize).toInt(), iOffset)) {
           bits.set(x, y);
@@ -175,8 +172,8 @@ class QRCodeReader implements Reader {
   }
 
   static double _moduleSize(List<int> leftTopBlack, BitMatrix image) {
-    int height = image.height;
-    int width = image.width;
+    final height = image.height;
+    final width = image.width;
     int x = leftTopBlack[0];
     int y = leftTopBlack[1];
     bool inBlack = true;

@@ -24,12 +24,12 @@ class C40Encoder implements Encoder {
   int get encodingMode => HighLevelEncoder.C40_ENCODATION;
 
   void encodeMaximal(EncoderContext context) {
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     int lastCharSize = 0;
     int backtrackStartPosition = context.pos;
     int backtrackBufferLength = 0;
     while (context.hasMoreCharacters) {
-      int c = context.currentChar;
+      final c = context.currentChar;
       context.pos++;
       lastCharSize = encodeChar(c, buffer);
       if (buffer.length % 3 == 0) {
@@ -38,13 +38,13 @@ class C40Encoder implements Encoder {
       }
     }
     if (backtrackBufferLength != buffer.length) {
-      int unwritten = (buffer.length ~/ 3) * 2;
+      final unwritten = (buffer.length ~/ 3) * 2;
 
       // +1 for the latch to C40
-      int curCodewordCount = context.codewordCount + unwritten + 1;
+      final curCodewordCount = context.codewordCount + unwritten + 1;
       context.updateSymbolInfo(curCodewordCount);
-      int available = context.symbolInfo!.dataCapacity - curCodewordCount;
-      int rest = buffer.length % 3;
+      final available = context.symbolInfo!.dataCapacity - curCodewordCount;
+      final rest = buffer.length % 3;
       if ((rest == 2 && available != 2) ||
           (rest == 1 && (lastCharSize > 3 || available != 1))) {
         buffer.setLength(backtrackBufferLength);
@@ -61,22 +61,22 @@ class C40Encoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     //step C
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     while (context.hasMoreCharacters) {
-      int c = context.currentChar;
+      final c = context.currentChar;
       context.pos++;
 
       int lastCharSize = encodeChar(c, buffer);
 
-      int unwritten = (buffer.length ~/ 3) * 2;
+      final unwritten = (buffer.length ~/ 3) * 2;
 
-      int curCodewordCount = context.codewordCount + unwritten;
+      final curCodewordCount = context.codewordCount + unwritten;
       context.updateSymbolInfo(curCodewordCount);
-      int available = context.symbolInfo!.dataCapacity - curCodewordCount;
+      final available = context.symbolInfo!.dataCapacity - curCodewordCount;
 
       if (!context.hasMoreCharacters) {
         //Avoid having a single C40 value in the last triplet
-        StringBuffer removed = StringBuffer();
+        final removed = StringBuffer();
         if ((buffer.length % 3) == 2 && available != 2) {
           lastCharSize =
               _backtrackOneCharacter(context, buffer, removed, lastCharSize);
@@ -89,9 +89,9 @@ class C40Encoder implements Encoder {
         break;
       }
 
-      int count = buffer.length;
+      final count = buffer.length;
       if ((count % 3) == 0) {
-        int newMode = HighLevelEncoder.lookAheadTest(
+        final newMode = HighLevelEncoder.lookAheadTest(
             context.message, context.pos, encodingMode);
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
@@ -105,10 +105,10 @@ class C40Encoder implements Encoder {
 
   int _backtrackOneCharacter(EncoderContext context, StringBuilder buffer,
       StringBuffer removed, int lastCharSize) {
-    int count = buffer.length;
+    final count = buffer.length;
     buffer.delete(count - lastCharSize, count);
     context.pos--;
-    int c = context.currentChar;
+    final c = context.currentChar;
     lastCharSize = encodeChar(c, removed);
     context.resetSymbolInfo(); //Deal with possible reduction in symbol size
     return lastCharSize;
@@ -124,12 +124,12 @@ class C40Encoder implements Encoder {
   /// @param context the encoder context
   /// @param buffer  the buffer with the remaining encoded characters
   void handleEOD(EncoderContext context, StringBuilder buffer) {
-    int unwritten = (buffer.length ~/ 3) * 2;
-    int rest = buffer.length % 3;
+    final unwritten = (buffer.length ~/ 3) * 2;
+    final rest = buffer.length % 3;
 
-    int curCodewordCount = context.codewordCount + unwritten;
+    final curCodewordCount = context.codewordCount + unwritten;
     context.updateSymbolInfo(curCodewordCount);
-    int available = context.symbolInfo!.dataCapacity - curCodewordCount;
+    final available = context.symbolInfo!.dataCapacity - curCodewordCount;
 
     if (rest == 2) {
       buffer.write('\x00'); //Shift 1
@@ -156,7 +156,7 @@ class C40Encoder implements Encoder {
         context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
       }
     } else {
-      throw StateError("Unexpected case. Please report!");
+      throw StateError('Unexpected case. Please report!');
     }
     context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
   }
@@ -201,19 +201,19 @@ class C40Encoder implements Encoder {
       sb.writeCharCode(chr - 96);
       return 2;
     }
-    sb.write("\x01\u001e"); //Shift 2, Upper Shift
+    sb.write('\x01\u001e'); //Shift 2, Upper Shift
     int len = 2;
     len += encodeChar(chr - 128, sb);
     return len;
   }
 
   static String _encodeToCodewords(String sb) {
-    int v = (1600 * sb.codeUnitAt(0)) +
+    final v = (1600 * sb.codeUnitAt(0)) +
         (40 * sb.codeUnitAt(1)) +
         sb.codeUnitAt(2) +
         1;
-    int cw1 = (v ~/ 256);
-    int cw2 = (v % 256);
+    final cw1 = (v ~/ 256);
+    final cw2 = (v % 256);
     return String.fromCharCodes([cw1, cw2]);
   }
 }

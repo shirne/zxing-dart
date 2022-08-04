@@ -15,7 +15,6 @@
  */
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import '../../dimension.dart';
 import 'symbol_info.dart';
@@ -35,13 +34,14 @@ class EncoderContext {
 
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!
-    Uint8List msgBinary = latin1.encode(msg);
-    StringBuffer sb = StringBuffer();
-    for (int i = 0, c = msgBinary.length; i < c; i++) {
-      int ch = msgBinary[i] & 0xff;
+    final msgBinary = latin1.encode(msg);
+    final sb = StringBuffer();
+    final c = msgBinary.length;
+    for (int i = 0; i < c; i++) {
+      final ch = msgBinary[i] & 0xff;
       if (ch == 63 /*'?'*/ && msg[i] != '?') {
         throw ArgumentError(
-          "Message contains characters outside ISO-8859-1 encoding.",
+          'Message contains characters outside ISO-8859-1 encoding.',
         );
       }
       sb.writeCharCode(ch);

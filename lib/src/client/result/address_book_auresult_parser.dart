@@ -28,55 +28,54 @@ import 'result_parser.dart';
 class AddressBookAUResultParser extends ResultParser {
   @override
   AddressBookParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
+    final rawText = ResultParser.getMassagedText(result);
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
-    if (!rawText.contains("MEMORY") || !rawText.contains("\r\n")) {
+    if (!rawText.contains('MEMORY') || !rawText.contains('\r\n')) {
       return null;
     }
 
     // NAME1 and NAME2 have specific uses, namely written name and pronunciation, respectively.
     // Therefore we treat them specially instead of as an array of names.
-    String? name = matchSinglePrefixedField("NAME1:", rawText, '\r', true);
-    String? pronunciation =
-        matchSinglePrefixedField("NAME2:", rawText, '\r', true);
+    final name = matchSinglePrefixedField('NAME1:', rawText, '\r', true);
+    final pronunciation =
+        matchSinglePrefixedField('NAME2:', rawText, '\r', true);
 
-    List<String>? phoneNumbers = _matchMultipleValuePrefix("TEL", rawText);
-    List<String>? emails = _matchMultipleValuePrefix("MAIL", rawText);
-    String? note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
-    String? address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
-    List<String>? addresses = address == null ? null : [address];
+    final phoneNumbers = _matchMultipleValuePrefix('TEL', rawText);
+    final emails = _matchMultipleValuePrefix('MAIL', rawText);
+    final note = matchSinglePrefixedField('MEMORY:', rawText, '\r', false);
+    final address = matchSinglePrefixedField('ADD:', rawText, '\r', true);
+    final addresses = address == null ? null : [address];
     return AddressBookParsedResult.full(
-        maybeWrap(name),
-        null,
-        pronunciation,
-        phoneNumbers,
-        null,
-        emails,
-        null,
-        null,
-        note,
-        addresses,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null);
+      maybeWrap(name),
+      null,
+      pronunciation,
+      phoneNumbers,
+      null,
+      emails,
+      null,
+      null,
+      note,
+      addresses,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   }
 
   List<String>? _matchMultipleValuePrefix(String prefix, String rawText) {
     List<String>? values;
     // For now, always 3, and always trim
     for (int i = 1; i <= 3; i++) {
-      String? value =
+      final String? value =
           matchSinglePrefixedField('$prefix$i:', rawText, '\r', true);
       if (value == null) continue;
       values ??= [];
       values.add(value);
     }
-    if (values == null) {
-      return null;
-    }
-    return values.map<String>((item) => item.toString()).toList();
+
+    return values?.map<String>((item) => item.toString()).toList();
   }
 }

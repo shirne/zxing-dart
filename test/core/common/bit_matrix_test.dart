@@ -52,7 +52,7 @@ void main() {
 
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        expect(expected.get(x, y), input.get(x, y), reason: "($x,$y)");
+        expect(expected.get(x, y), input.get(x, y), reason: '($x,$y)');
       }
     }
   }
@@ -226,27 +226,27 @@ void main() {
     centerMatrix.setRegion(1, 1, 1, 1);
     BitMatrix emptyMatrix24 = BitMatrix(2, 4);
 
-    assert(emptyMatrix == BitMatrix.parse("   \n   \n   \n", "x", " "));
-    assert(emptyMatrix == BitMatrix.parse("   \n   \r\r\n   \n\r", "x", " "));
-    assert(emptyMatrix == BitMatrix.parse("   \n   \n   ", "x", " "));
+    assert(emptyMatrix == BitMatrix.parse('   \n   \n   \n', 'x', ' '));
+    assert(emptyMatrix == BitMatrix.parse('   \n   \r\r\n   \n\r', 'x', ' '));
+    assert(emptyMatrix == BitMatrix.parse('   \n   \n   ', 'x', ' '));
 
-    assert(fullMatrix == BitMatrix.parse("xxx\nxxx\nxxx\n", "x", " "));
+    assert(fullMatrix == BitMatrix.parse('xxx\nxxx\nxxx\n', 'x', ' '));
 
-    assert(centerMatrix == BitMatrix.parse("   \n x \n   \n", "x", " "));
+    assert(centerMatrix == BitMatrix.parse('   \n x \n   \n', 'x', ' '));
     assert(centerMatrix ==
-        BitMatrix.parse("      \n  x   \n      \n", "x ", "  "));
+        BitMatrix.parse('      \n  x   \n      \n', 'x ', '  '));
     try {
-      assert(centerMatrix == BitMatrix.parse("   \n xy\n   \n", "x", " "));
+      assert(centerMatrix == BitMatrix.parse('   \n xy\n   \n', 'x', ' '));
       assert(false);
     } catch (_) {
       // IllegalArgumentException
       // good
     }
 
-    assert(emptyMatrix24 == BitMatrix.parse("  \n  \n  \n  \n", "x", " "));
+    assert(emptyMatrix24 == BitMatrix.parse('  \n  \n  \n  \n', 'x', ' '));
 
     assert(centerMatrix ==
-        BitMatrix.parse(centerMatrix.toString("x", "."), "x", "."));
+        BitMatrix.parse(centerMatrix.toString('x', '.'), 'x', '.'));
   });
 
   test('testParseBoolean', () {

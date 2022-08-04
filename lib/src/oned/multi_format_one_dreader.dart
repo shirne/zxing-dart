@@ -41,11 +41,11 @@ class MultiFormatOneDReader extends OneDReader {
 
   MultiFormatOneDReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
-    List<BarcodeFormat>? possibleFormats =
+    final possibleFormats =
         hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-    bool useCode39CheckDigit = hints != null &&
+    final useCode39CheckDigit = hints != null &&
         hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-    List<OneDReader> readers = [];
+    final readers = <OneDReader>[];
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
           possibleFormats.contains(BarcodeFormat.UPC_A) ||

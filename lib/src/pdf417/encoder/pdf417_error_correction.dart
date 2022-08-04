@@ -140,7 +140,7 @@ class PDF417ErrorCorrection {
   /// @return the number of codewords generated for error correction
   static int getErrorCorrectionCodewordCount(int errorCorrectionLevel) {
     if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8) {
-      throw ArgumentError("Error correction level must be between 0 and 8!");
+      throw ArgumentError('Error correction level must be between 0 and 8!');
     }
     return 1 << (errorCorrectionLevel + 1);
   }
@@ -152,7 +152,7 @@ class PDF417ErrorCorrection {
   /// @return the recommended minimum error correction level
   static int getRecommendedMinimumErrorCorrectionLevel(int n) {
     if (n <= 0) {
-      throw ArgumentError("n must be > 0");
+      throw ArgumentError('n must be > 0');
     }
     if (n <= 40) {
       return 2;
@@ -166,7 +166,7 @@ class PDF417ErrorCorrection {
     if (n <= 863) {
       return 5;
     }
-    throw WriterException("No recommendation possible");
+    throw WriterException('No recommendation possible');
   }
 
   /// Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).

@@ -31,43 +31,44 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
 
   @override
   AddressBookParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!rawText.startsWith("BIZCARD:")) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!rawText.startsWith('BIZCARD:')) {
       return null;
     }
-    String? firstName = matchSingleDoCoMoPrefixedField("N:", rawText, true);
-    String? lastName = matchSingleDoCoMoPrefixedField("X:", rawText, true);
-    String? fullName = _buildName(firstName, lastName);
-    String? title = matchSingleDoCoMoPrefixedField("T:", rawText, true);
-    String? org = matchSingleDoCoMoPrefixedField("C:", rawText, true);
-    List<String>? addresses = matchDoCoMoPrefixedField("A:", rawText);
-    String? phoneNumber1 = matchSingleDoCoMoPrefixedField("B:", rawText, true);
-    String? phoneNumber2 = matchSingleDoCoMoPrefixedField("M:", rawText, true);
-    String? phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText, true);
-    String? email = matchSingleDoCoMoPrefixedField("E:", rawText, true);
+    final firstName = matchSingleDoCoMoPrefixedField('N:', rawText, true);
+    final lastName = matchSingleDoCoMoPrefixedField('X:', rawText, true);
+    final fullName = _buildName(firstName, lastName);
+    final title = matchSingleDoCoMoPrefixedField('T:', rawText, true);
+    final org = matchSingleDoCoMoPrefixedField('C:', rawText, true);
+    final addresses = matchDoCoMoPrefixedField('A:', rawText);
+    final phoneNumber1 = matchSingleDoCoMoPrefixedField('B:', rawText, true);
+    final phoneNumber2 = matchSingleDoCoMoPrefixedField('M:', rawText, true);
+    final phoneNumber3 = matchSingleDoCoMoPrefixedField('F:', rawText, true);
+    final email = matchSingleDoCoMoPrefixedField('E:', rawText, true);
 
     return AddressBookParsedResult.full(
-        maybeWrap(fullName),
-        null,
-        null,
-        _buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
-        null,
-        maybeWrap(email),
-        null,
-        null,
-        null,
-        addresses,
-        null,
-        org,
-        null,
-        title,
-        null,
-        null);
+      maybeWrap(fullName),
+      null,
+      null,
+      _buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
+      null,
+      maybeWrap(email),
+      null,
+      null,
+      null,
+      addresses,
+      null,
+      org,
+      null,
+      title,
+      null,
+      null,
+    );
   }
 
   static List<String>? _buildPhoneNumbers(
       String? number1, String? number2, String? number3) {
-    List<String> numbers = [];
+    final List<String> numbers = [];
     if (number1 != null) {
       numbers.add(number1);
     }
@@ -77,7 +78,7 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
     if (number3 != null) {
       numbers.add(number3);
     }
-    int size = numbers.length;
+    final int size = numbers.length;
     if (size == 0) {
       return null;
     }

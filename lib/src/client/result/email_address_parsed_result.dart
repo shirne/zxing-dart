@@ -62,11 +62,11 @@ class EmailAddressParsedResult extends ParsedResult {
   /// @return "mailto:"
   /// @deprecated without replacement
   @Deprecated('no replacement')
-  String get mailtoURI => "mailto:";
+  String get mailtoURI => 'mailto:';
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     maybeAppendList(_tos, result);
     maybeAppendList(_ccs, result);
     maybeAppendList(_bccs, result);

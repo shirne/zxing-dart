@@ -30,7 +30,7 @@ class UPCAWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (format != BarcodeFormat.UPC_A) {
-      throw ArgumentError("Can only encode UPC-A, but got $format");
+      throw ArgumentError('Can only encode UPC-A, but got $format');
     }
     // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
     return _subWriter.encode(

@@ -29,7 +29,6 @@ import '../../../../common/string_builder.dart';
 
 import '../../../../not_found_exception.dart';
 import 'ai01decoder.dart';
-import 'decoded_information.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01393xDecoder extends AI01decoder {
@@ -45,18 +44,18 @@ class AI01393xDecoder extends AI01decoder {
       throw NotFoundException.instance;
     }
 
-    StringBuilder buf = StringBuilder();
+    final buf = StringBuilder();
 
     encodeCompressedGtin(buf, _HEADER_SIZE);
 
-    int lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
+    final lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
         _HEADER_SIZE + AI01decoder.GTIN_SIZE, _LAST_DIGIT_SIZE);
 
-    buf.write("(393");
+    buf.write('(393');
     buf.write(lastAIdigit);
     buf.write(')');
 
-    int firstThreeDigits = generalDecoder.extractNumericValueFromBitArray(
+    final firstThreeDigits = generalDecoder.extractNumericValueFromBitArray(
         _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE,
         _FIRST_THREE_DIGITS_SIZE);
     if (firstThreeDigits ~/ 100 == 0) {
@@ -67,13 +66,12 @@ class AI01393xDecoder extends AI01decoder {
     }
     buf.write(firstThreeDigits);
 
-    DecodedInformation generalInformation =
-        generalDecoder.decodeGeneralPurposeField(
-            _HEADER_SIZE +
-                AI01decoder.GTIN_SIZE +
-                _LAST_DIGIT_SIZE +
-                _FIRST_THREE_DIGITS_SIZE,
-            null);
+    final generalInformation = generalDecoder.decodeGeneralPurposeField(
+        _HEADER_SIZE +
+            AI01decoder.GTIN_SIZE +
+            _LAST_DIGIT_SIZE +
+            _FIRST_THREE_DIGITS_SIZE,
+        null);
     buf.write(generalInformation.newString);
 
     return buf.toString();

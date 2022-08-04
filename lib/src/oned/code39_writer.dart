@@ -32,33 +32,35 @@ class Code39Writer extends OneDimensionalCodeWriter {
     int length = contents.length;
     if (length > 80) {
       throw ArgumentError(
-          "Requested contents should be less than 80 digits long, but got $length");
+          'Requested contents should be less than 80 digits long, but got $length');
     }
 
     for (int i = 0; i < length; i++) {
-      int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
       if (indexInString < 0) {
         contents = _tryToConvertToExtendedMode(contents);
         length = contents.length;
         if (length > 80) {
           throw ArgumentError(
-              "Requested contents should be less than 80 digits long, but got $length (extended full ASCII mode)");
+            'Requested contents should be less than 80 digits long, '
+            'but got $length (extended full ASCII mode)',
+          );
         }
         break;
       }
     }
 
-    List<int> widths = List.filled(9, 0);
-    int codeWidth = 24 + 1 + (13 * length);
-    List<bool> result = List.filled(codeWidth, false);
+    final widths = List.filled(9, 0);
+    final codeWidth = 24 + 1 + (13 * length);
+    final result = List.filled(codeWidth, false);
     _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     int pos = OneDimensionalCodeWriter.appendPattern(result, 0, widths, true);
-    List<int> narrowWhite = [1];
+    final narrowWhite = <int>[1];
     pos +=
         OneDimensionalCodeWriter.appendPattern(result, pos, narrowWhite, false);
     //append next character to byte matrix
     for (int i = 0; i < length; i++) {
-      int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
       _toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
       pos += OneDimensionalCodeWriter.appendPattern(
@@ -71,19 +73,19 @@ class Code39Writer extends OneDimensionalCodeWriter {
 
   static void _toIntArray(int a, List<int> toReturn) {
     for (int i = 0; i < 9; i++) {
-      int temp = a & (1 << (8 - i));
+      final temp = a & (1 << (8 - i));
       toReturn[i] = temp == 0 ? 1 : 2;
     }
   }
 
   static String _tryToConvertToExtendedMode(String contents) {
-    int length = contents.length;
-    StringBuffer extendedContent = StringBuffer();
+    final length = contents.length;
+    final extendedContent = StringBuffer();
     for (int i = 0; i < length; i++) {
-      String character = contents[i];
+      final character = contents[i];
       switch (character) {
         case '\u0000':
-          extendedContent.write("%U");
+          extendedContent.write('%U');
           break;
         case ' ':
         case '-':
@@ -91,13 +93,13 @@ class Code39Writer extends OneDimensionalCodeWriter {
           extendedContent.write(character);
           break;
         case '@':
-          extendedContent.write("%V");
+          extendedContent.write('%V');
           break;
         case '`':
-          extendedContent.write("%W");
+          extendedContent.write('%W');
           break;
         default:
-          int c = character.codeUnitAt(0);
+          final c = character.codeUnitAt(0);
           if (c <= 26) {
             extendedContent.write(r'$');
             extendedContent.writeCharCode((65 /* A */ + (c - 1)));

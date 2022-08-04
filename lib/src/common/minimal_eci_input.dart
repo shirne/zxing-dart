@@ -15,7 +15,6 @@
  */
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'detector/math_utils.dart';
 import 'eci_encoder_set.dart';
@@ -31,7 +30,7 @@ class InputEdge {
       this.previous, int fnc1)
       : c = c == fnc1 ? 1000 : c {
     int size = this.c == 1000 ? 1 : encoderSet.encode(c, encoderIndex).length;
-    int previousEncoderIndex = previous?.encoderIndex ?? 0;
+    final previousEncoderIndex = previous?.encoderIndex ?? 0;
     if (previousEncoderIndex != encoderIndex) {
       size += MinimalECIInput.costPerECI;
     }
@@ -64,13 +63,12 @@ class MinimalECIInput implements ECIInput {
   /// @param fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not GS1
   ///   input.
   MinimalECIInput(String stringToEncode, Encoding? priorityCharset, this.fnc1) {
-    ECIEncoderSet encoderSet =
-        ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
+    final encoderSet = ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
     //optimization for the case when all can be encoded without ECI in ISO-8859-1
     if (encoderSet.length == 1) {
       bytes = List.filled(stringToEncode.length, 0);
       for (int i = 0; i < bytes.length; i++) {
-        int c = stringToEncode.codeUnitAt(i);
+        final c = stringToEncode.codeUnitAt(i);
         bytes[i] = c == fnc1 ? 1000 : c;
       }
     } else {
@@ -123,7 +121,7 @@ class MinimalECIInput implements ECIInput {
     if (isECI(index)) {
       //IllegalArgumentException
       throw ArgumentError(
-          "value at $index (${bytes[index]}) is not a character but an ECI");
+          'value at $index (${bytes[index]}) is not a character but an ECI');
     }
     return isFNC1(index) ? fnc1 : bytes[index];
   }
@@ -152,12 +150,12 @@ class MinimalECIInput implements ECIInput {
       //IndexOutOfBoundsException
       throw IndexError(start, length);
     }
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int i = start; i < end; i++) {
       if (isECI(i)) {
         // IllegalArgumentException
         throw ArgumentError(
-            "value at $i (${charAt(i)}) is not a character but an ECI");
+            'value at $i (${charAt(i)}) is not a character but an ECI');
       }
       result.writeCharCode(charAt(i));
     }
@@ -223,20 +221,20 @@ class MinimalECIInput implements ECIInput {
     }
     if (!isECI(index)) {
       //IllegalArgumentException
-      throw ArgumentError("value at $index is not an ECI but a character");
+      throw ArgumentError('value at $index is not an ECI but a character');
     }
     return bytes[index] - 256;
   }
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int i = 0; i < length; i++) {
       if (i > 0) {
-        result.write(", ");
+        result.write(', ');
       }
       if (isECI(i)) {
-        result.write("ECI(");
+        result.write('ECI(');
         result.write(getECIValue(i));
         result.write(')');
       } else if (charAt(i) < 128) {
@@ -260,7 +258,7 @@ class MinimalECIInput implements ECIInput {
   static void addEdges(String stringToEncode, ECIEncoderSet encoderSet,
       List<List<InputEdge?>> edges, int from, InputEdge? previous, int fnc1) {
     // chr
-    int ch = stringToEncode.codeUnitAt(from);
+    final ch = stringToEncode.codeUnitAt(from);
 
     int start = 0;
     int end = encoderSet.length;
@@ -280,10 +278,10 @@ class MinimalECIInput implements ECIInput {
 
   static List<int> encodeMinimally(
       String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
-    int inputLength = stringToEncode.length;
+    final inputLength = stringToEncode.length;
 
     // Array that represents vertices. There is a vertex for every character and encoding.
-    List<List<InputEdge?>> edges = List.generate(
+    final List<List<InputEdge?>> edges = List.generate(
         inputLength + 1, (index) => List.filled(encoderSet.length, null));
     addEdges(stringToEncode, encoderSet, edges, 0, null, fnc1);
 
@@ -302,7 +300,7 @@ class MinimalECIInput implements ECIInput {
     int minimalSize = MathUtils.MAX_VALUE;
     for (int j = 0; j < encoderSet.length; j++) {
       if (edges[inputLength][j] != null) {
-        InputEdge edge = edges[inputLength][j]!;
+        final edge = edges[inputLength][j]!;
         if (edge.cachedTotalSize < minimalSize) {
           minimalSize = edge.cachedTotalSize;
           minimalJ = j;
@@ -312,20 +310,20 @@ class MinimalECIInput implements ECIInput {
     if (minimalJ < 0) {
       // RuntimeException
       throw AssertionError(
-          "Internal error: failed to encode \"$stringToEncode\"");
+          'Internal error: failed to encode "$stringToEncode"');
     }
-    List<int> intsAL = [];
+    final intsAL = <int>[];
     InputEdge? current = edges[inputLength][minimalJ];
     while (current != null) {
       if (current.isFNC1) {
         intsAL.insert(0, 1000);
       } else {
-        Uint8List bytes = encoderSet.encode(current.c, current.encoderIndex);
+        final bytes = encoderSet.encode(current.c, current.encoderIndex);
         for (int i = bytes.length - 1; i >= 0; i--) {
           intsAL.insert(0, (bytes[i] & 0xFF));
         }
       }
-      int previousEncoderIndex = current.previous?.encoderIndex ?? 0;
+      final previousEncoderIndex = current.previous?.encoderIndex ?? 0;
       if (previousEncoderIndex != current.encoderIndex) {
         intsAL.insert(0, 256 + encoderSet.getECIValue(current.encoderIndex));
       }

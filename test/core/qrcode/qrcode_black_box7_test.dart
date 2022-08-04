@@ -59,7 +59,7 @@ void main() {
 
   test('QRCodeBlackBox7TestCase', () {
     AbstractBlackBoxTestCase(
-      "test/resources/blackbox/qrcode-7",
+      'test/resources/blackbox/qrcode-7',
       MultiFormatReader(),
       BarcodeFormat.QR_CODE,
       dispatcher,

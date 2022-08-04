@@ -44,7 +44,7 @@ void main() {
   }
 
   test('testFindFinderPatterns', () async {
-    Image image = readImage("2.png");
+    Image image = readImage('2.png');
     BinaryBitmap binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
@@ -76,14 +76,14 @@ void main() {
     try {
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
-      fail("NotFoundException expected");
+      fail('NotFoundException expected');
     } on NotFoundException catch (_) {
       // ok
     }
   });
 
   test('testRetrieveNextPairPatterns', () async {
-    Image image = readImage("3.png");
+    Image image = readImage('3.png');
     BinaryBitmap binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.height ~/ 2;
@@ -107,7 +107,7 @@ void main() {
   });
 
   test('testDecodeCheckCharacter', () async {
-    Image image = readImage("3.png");
+    Image image = readImage('3.png');
     BinaryBitmap binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
@@ -126,7 +126,7 @@ void main() {
   });
 
   test('testDecodeDataCharacter', () async {
-    Image image = readImage("3.png");
+    Image image = readImage('3.png');
     BinaryBitmap binaryMap = BinaryBitmap(
         GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);

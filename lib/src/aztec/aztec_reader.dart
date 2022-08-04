@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:typed_data';
-
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../common/decoder_result.dart';
@@ -27,7 +25,6 @@ import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
 import '../result_point_callback.dart';
-import 'aztec_detector_result.dart';
 import 'decoder/decoder.dart';
 import 'detector/detector.dart';
 
@@ -39,11 +36,11 @@ class AztecReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     NotFoundException? notFoundException;
     FormatsException? formatException;
-    Detector detector = Detector(image.blackMatrix);
+    final detector = Detector(image.blackMatrix);
     List<ResultPoint>? points;
     DecoderResult? decoderResult;
     try {
-      AztecDetectorResult detectorResult = detector.detect(false);
+      final detectorResult = detector.detect(false);
       points = detectorResult.points;
       decoderResult = Decoder().decode(detectorResult);
     } on NotFoundException catch (e) {
@@ -53,7 +50,7 @@ class AztecReader implements Reader {
     }
     if (decoderResult == null) {
       try {
-        AztecDetectorResult detectorResult = detector.detect(true);
+        final detectorResult = detector.detect(true);
         points = detectorResult.points;
         decoderResult = Decoder().decode(detectorResult);
       } on NotFoundException catch (_) {
@@ -70,9 +67,8 @@ class AztecReader implements Reader {
     }
 
     if (hints != null) {
-      ResultPointCallback? rpcb =
-          hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-              as ResultPointCallback?;
+      final rpcb = hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+          as ResultPointCallback?;
       if (rpcb != null) {
         for (ResultPoint point in points!) {
           rpcb.foundPossibleResultPoint(point);
@@ -80,24 +76,27 @@ class AztecReader implements Reader {
       }
     }
 
-    Result result = Result.full(
-        decoderResult.text,
-        decoderResult.rawBytes,
-        decoderResult.numBits,
-        points!,
-        BarcodeFormat.AZTEC,
-        DateTime.now().millisecondsSinceEpoch);
+    final result = Result.full(
+      decoderResult.text,
+      decoderResult.rawBytes,
+      decoderResult.numBits,
+      points!,
+      BarcodeFormat.AZTEC,
+      DateTime.now().millisecondsSinceEpoch,
+    );
 
-    List<Uint8List>? byteSegments = decoderResult.byteSegments;
+    final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    String? ecLevel = decoderResult.ecLevel;
+    final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-        "]z${decoderResult.symbologyModifier}");
+    result.putMetadata(
+      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ']z${decoderResult.symbologyModifier}',
+    );
 
     return result;
   }

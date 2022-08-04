@@ -129,7 +129,7 @@ class SymbolInfo {
     if (fail) {
       throw ArgumentError(
           "Can't find a symbol arrangement that matches the message."
-          " Data codewords: $dataCodewords");
+          ' Data codewords: $dataCodewords');
     }
     return null;
   }
@@ -146,7 +146,7 @@ class SymbolInfo {
       case 36:
         return 6;
       default:
-        throw StateError("Cannot handle this number of data regions");
+        throw StateError('Cannot handle this number of data regions');
     }
   }
 
@@ -162,7 +162,7 @@ class SymbolInfo {
       case 36:
         return 6;
       default:
-        throw StateError("Cannot handle this number of data regions");
+        throw StateError('Cannot handle this number of data regions');
     }
   }
 
@@ -193,13 +193,13 @@ class SymbolInfo {
   @override
   String toString() {
     return "${_rectangular ? "Rectangular Symbol:" : "Square Symbol:"}"
-        " data region $matrixWidth"
+        ' data region $matrixWidth'
         'x$matrixHeight'
-        ", symbol size $symbolWidth"
+        ', symbol size $symbolWidth'
         'x$symbolHeight'
-        ", symbol data size $symbolDataWidth"
+        ', symbol data size $symbolDataWidth'
         'x$symbolDataHeight'
-        ", codewords $_dataCapacity"
+        ', codewords $_dataCapacity'
         '+$_errorCodewords';
   }
 }

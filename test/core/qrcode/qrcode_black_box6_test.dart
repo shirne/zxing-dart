@@ -23,7 +23,7 @@ import '../common/abstract_black_box.dart';
 /// rotation, which was a weak spot.
 void main() {
   test('QRCodeBlackBox6TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/qrcode-6",
+    AbstractBlackBoxTestCase('test/resources/blackbox/qrcode-6',
         MultiFormatReader(), BarcodeFormat.QR_CODE)
       ..addTest(15, 15, 0.0)
       ..addTest(14, 14, 90.0)

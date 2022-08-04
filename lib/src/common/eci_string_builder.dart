@@ -28,10 +28,9 @@ class ECIStringBuilder {
   /// throws FormatsException on invalid ECI value
   void appendECI(int value) {
     _encodeCurrentBytesIfAny();
-    CharacterSetECI? characterSetECI =
-        CharacterSetECI.getCharacterSetECIByValue(value);
+    final characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
     if (characterSetECI == null) {
-      throw FormatsException("Unsupported ECI value $value");
+      throw FormatsException('Unsupported ECI value $value');
     }
     _currentCharset = characterSetECI.charset!;
   }
@@ -48,7 +47,7 @@ class ECIStringBuilder {
         }
       }
     } else if (_currentBytes.isNotEmpty) {
-      List<int> bytes = latin1.encode(_currentBytes.toString());
+      final bytes = latin1.encode(_currentBytes.toString());
       _currentBytes = StringBuffer();
       if (_result == null) {
         _result = StringBuffer(_currentCharset.decode(bytes));
@@ -67,6 +66,6 @@ class ECIStringBuilder {
   @override
   String toString() {
     _encodeCurrentBytesIfAny();
-    return _result == null ? "" : _result.toString();
+    return _result == null ? '' : _result.toString();
   }
 }

@@ -43,7 +43,7 @@ void main() {
     int bigEnough = 64;
     DataMatrixWriter writer = DataMatrixWriter();
     BitMatrix matrix = writer.encode(
-        "Hello Google", BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
+        'Hello Google', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
 
     //assert(matrix != null);
     assert(bigEnough >= matrix.width);
@@ -57,7 +57,7 @@ void main() {
     int bigEnough = 14;
     DataMatrixWriter writer = DataMatrixWriter();
     BitMatrix matrix = writer.encode(
-        "Hello Me", BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
+        'Hello Me', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
     //assertNotNull(matrix);
     expect(bigEnough, matrix.width);
     expect(bigEnough, matrix.height);
@@ -67,7 +67,7 @@ void main() {
     // The DataMatrix will not fit in this size, so the matrix should come back bigger
     int tooSmall = 8;
     DataMatrixWriter writer = DataMatrixWriter();
-    BitMatrix matrix = writer.encode("http://www.google.com/",
+    BitMatrix matrix = writer.encode('http://www.google.com/',
         BarcodeFormat.DATA_MATRIX, tooSmall, tooSmall, null);
     //assertNotNull(matrix);
     assert(tooSmall < matrix.width);

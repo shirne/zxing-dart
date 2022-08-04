@@ -31,6 +31,6 @@ void main() {
   }
 
   test('testISBN', () {
-    doTest("9784567890123");
+    doTest('9784567890123');
   });
 }

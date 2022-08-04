@@ -42,36 +42,36 @@ class DataBlock {
   static List<DataBlock> getDataBlocks(
       Uint8List rawCodewords, Version version) {
     // Figure out the number and size of data blocks used by this version
-    ECBlocks ecBlocks = version.ecBlocks;
+    final ecBlocks = version.ecBlocks;
 
     // First count the total number of data blocks
     //int totalBlocks = 0;
-    List<ECB> ecBlockArray = ecBlocks.ecBlocks;
+    final ecBlockArray = ecBlocks.ecBlocks;
     //for (ECB ecBlock in ecBlockArray) {
     //  totalBlocks += ecBlock.getCount();
     //}
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
-    List<DataBlock> result = [];
+    final result = <DataBlock>[];
     //int numResultBlocks = 0;
     for (ECB ecBlock in ecBlockArray) {
       for (int i = 0; i < ecBlock.count; i++) {
-        int numDataCodewords = ecBlock.dataCodewords;
-        int numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;
+        final numDataCodewords = ecBlock.dataCodewords;
+        final numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;
         result.add(DataBlock._(numDataCodewords, Uint8List(numBlockCodewords)));
       }
     }
-    int numResultBlocks = result.length;
+    final numResultBlocks = result.length;
 
     // All blocks have the same amount of data, except that the last n
     // (where n may be 0) have 1 less byte. Figure out where these start.
     // TODO(bbrown): There is only one case where there is a difference for Data Matrix for size 144
-    int longerBlocksTotalCodewords = result[0]._codewords.length;
+    final longerBlocksTotalCodewords = result[0]._codewords.length;
     //int shorterBlocksTotalCodewords = longerBlocksTotalCodewords - 1;
 
-    int longerBlocksNumDataCodewords =
+    final longerBlocksNumDataCodewords =
         longerBlocksTotalCodewords - ecBlocks.ecCodewords;
-    int shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
+    final shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
     // The last elements of result may be 1 element shorter for 144 matrix
     // first fill out as many elements as all of them have minus 1
     int rawCodewordsOffset = 0;
@@ -82,19 +82,19 @@ class DataBlock {
     }
 
     // Fill out the last data block in the longer ones
-    bool specialVersion = version.versionNumber == 24;
-    int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
+    final specialVersion = version.versionNumber == 24;
+    final numLongerBlocks = specialVersion ? 8 : numResultBlocks;
     for (int j = 0; j < numLongerBlocks; j++) {
       result[j]._codewords[longerBlocksNumDataCodewords - 1] =
           rawCodewords[rawCodewordsOffset++];
     }
 
     // Now add in error correction blocks
-    int max = result[0]._codewords.length;
+    final max = result[0]._codewords.length;
     for (int i = longerBlocksNumDataCodewords; i < max; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
-        int jOffset = specialVersion ? (j + 8) % numResultBlocks : j;
-        int iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
+        final jOffset = specialVersion ? (j + 8) % numResultBlocks : j;
+        final iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
         result[jOffset]._codewords[iOffset] =
             rawCodewords[rawCodewordsOffset++];
       }

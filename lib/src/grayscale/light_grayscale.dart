@@ -8,7 +8,7 @@ class LightGrayscale extends Dispatch {
   @override
   Uint8List dispatchFull(Uint8List data, int width, int height) {
     final random = math.Random();
-    int rand = random.nextInt(5) + 2;
+    final rand = random.nextInt(5) + 2;
     for (int i = 0; i < width * height; i++) {
       data[i] = (data[i] * rand);
     }
@@ -17,12 +17,12 @@ class LightGrayscale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
+    final newByte = Uint8List.fromList(data);
     final random = math.Random();
-    int rand = random.nextInt(4) + 3;
+    final rand = random.nextInt(4) + 3;
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
-        int index = startH * width + startW;
+        final index = startH * width + startW;
         newByte[index] = (newByte[index] * rand);
       }
     }

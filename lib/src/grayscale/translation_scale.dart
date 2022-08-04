@@ -16,7 +16,7 @@ class TranslationScale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
+    final newByte = Uint8List.fromList(data);
 
     int offsetX, offsetY;
     final random = math.Random();

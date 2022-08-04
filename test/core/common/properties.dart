@@ -6,7 +6,7 @@ class Properties {
   Properties([this._defaults]);
 
   load(String inString) {
-    List<String> lines = inString.split(RegExp("(\r\n|\r|\n)"));
+    List<String> lines = inString.split(RegExp('(\r\n|\r|\n)'));
     for (var element in lines) {
       if (!element.startsWith('<')) {
         int equalPos = element.indexOf('=');

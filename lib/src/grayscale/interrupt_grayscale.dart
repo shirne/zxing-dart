@@ -12,8 +12,8 @@ class InterruptGrayscale extends Dispatch {
   @override
   Uint8List dispatchFull(Uint8List data, int width, int height) {
     final random = math.Random();
-    int offset = random.nextInt(3) + 1;
-    Rect rect = Rect(0, 0, width, height);
+    final offset = random.nextInt(3) + 1;
+    final rect = Rect(0, 0, width, height);
     for (int i = 0; i < offset; i++) {
       openOp(data, width, rect, i);
       closeOp(data, width, rect, i);
@@ -23,9 +23,9 @@ class InterruptGrayscale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
+    final newByte = Uint8List.fromList(data);
     final random = math.Random();
-    int offset = random.nextInt(5) + 1;
+    final offset = random.nextInt(5) + 1;
     for (int i = 0; i < offset; i++) {
       openOp(newByte, width, rect, i);
       closeOp(newByte, width, rect, i);

@@ -46,8 +46,8 @@ class SMSParsedResult extends ParsedResult {
   }
 
   String get smsURI {
-    StringBuffer result = StringBuffer();
-    result.write("sms:");
+    final result = StringBuffer();
+    result.write('sms:');
     bool first = true;
     for (int i = 0; i < _numbers.length; i++) {
       if (first) {
@@ -57,23 +57,23 @@ class SMSParsedResult extends ParsedResult {
       }
       result.write(_numbers[i]);
       if (_vias != null && _vias!.length > i) {
-        result.write(";via=");
+        result.write(';via=');
         result.write(_vias![i]);
       }
     }
-    bool hasBody = body != null;
-    bool hasSubject = subject != null;
+    final hasBody = body != null;
+    final hasSubject = subject != null;
     if (hasBody || hasSubject) {
       result.write('?');
       if (hasBody) {
-        result.write("body=");
+        result.write('body=');
         result.write(body);
       }
       if (hasSubject) {
         if (hasBody) {
           result.write('&');
         }
-        result.write("subject=");
+        result.write('subject=');
         result.write(subject);
       }
     }
@@ -86,7 +86,7 @@ class SMSParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     maybeAppendList(_numbers, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);

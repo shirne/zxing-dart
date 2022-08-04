@@ -34,7 +34,7 @@ void main() {
   test('testMulti', () async {
     // Very basic test for now
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
-        "test/resources/blackbox/multi-2");
+        'test/resources/blackbox/multi-2');
 
     File testImage = File('${testBase.path}/multi.jpg');
     Image image = decodeImage(testImage.readAsBytesSync())!;
@@ -52,16 +52,16 @@ void main() {
     //assertNotNull(results);
     expect(results.length, 2);
 
-    expect("031415926531", results[0].text);
+    expect('031415926531', results[0].text);
     expect(BarcodeFormat.UPC_A, results[0].barcodeFormat);
 
-    expect("www.airtable.com/jobs", results[1].text);
+    expect('www.airtable.com/jobs', results[1].text);
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 
   testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}) {
     Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
-        "test/resources/blackbox/multi-2");
+        'test/resources/blackbox/multi-2');
     int startTimer = DateTime.now().millisecondsSinceEpoch;
 
     File testImage = File('${testBase.path}/$name');

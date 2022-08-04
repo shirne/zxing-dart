@@ -34,53 +34,51 @@ import 'result_parser.dart';
 class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
   @override
   AddressBookParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!rawText.startsWith("MECARD:")) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!rawText.startsWith('MECARD:')) {
       return null;
     }
-    List<String>? rawName = matchDoCoMoPrefixedField("N:", rawText);
+    final rawName = matchDoCoMoPrefixedField('N:', rawText);
     if (rawName == null) {
       return null;
     }
-    String name = _parseName(rawName[0]);
-    String? pronunciation =
-        matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
-    List<String>? phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText);
-    List<String>? emails = matchDoCoMoPrefixedField("EMAIL:", rawText);
-    String? note = matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
-    List<String>? addresses = matchDoCoMoPrefixedField("ADR:", rawText);
-    String? birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
-    if (!isStringOfDigits(birthday, 8)) {
-      // No reason to throw out the whole card because the birthday is formatted wrong.
-      birthday = null;
-    }
-    List<String>? urls = matchDoCoMoPrefixedField("URL:", rawText);
+    final name = _parseName(rawName[0]);
+    final pronunciation =
+        matchSingleDoCoMoPrefixedField('SOUND:', rawText, true);
+    final phoneNumbers = matchDoCoMoPrefixedField('TEL:', rawText);
+    final emails = matchDoCoMoPrefixedField('EMAIL:', rawText);
+    final note = matchSingleDoCoMoPrefixedField('NOTE:', rawText, false);
+    final addresses = matchDoCoMoPrefixedField('ADR:', rawText);
+    final birthday = matchSingleDoCoMoPrefixedField('BDAY:', rawText, true);
+    final urls = matchDoCoMoPrefixedField('URL:', rawText);
 
     // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
     // honor it when found in the wild.
-    String? org = matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
+    final org = matchSingleDoCoMoPrefixedField('ORG:', rawText, true);
 
     return AddressBookParsedResult.full(
-        maybeWrap(name),
-        null,
-        pronunciation,
-        phoneNumbers,
-        null,
-        emails,
-        null,
-        null,
-        note,
-        addresses,
-        null,
-        org,
-        birthday,
-        null,
-        urls,
-        null);
+      maybeWrap(name),
+      null,
+      pronunciation,
+      phoneNumbers,
+      null,
+      emails,
+      null,
+      null,
+      note,
+      addresses,
+      null,
+      org,
+      // No reason to throw out the whole card because the birthday is formatted wrong.
+      !isStringOfDigits(birthday, 8) ? null : birthday,
+      null,
+      urls,
+      null,
+    );
   }
 
   static String _parseName(String name) {
-    int comma = name.indexOf(',');
+    final comma = name.indexOf(',');
     if (comma >= 0) {
       // Format may be last,first; switch it around
       return '${name.substring(comma + 1)} ${name.substring(0, comma)}';

@@ -63,7 +63,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     List<File> imageFiles = getImageFiles();
     List<int> falsePositives = List.filled(testResults.length, 0);
     for (File testImage in imageFiles) {
-      log.info("Starting $testImage");
+      log.info('Starting $testImage');
       Image image = decodeImage(testImage.readAsBytesSync())!;
       //if (image == null) {
       //  throw IOException("Could not read image: " + testImage);
@@ -87,18 +87,18 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
     if (totalFalsePositives < totalAllowed) {
       log.warning(
-          "+++ Test too lax by ${totalAllowed - totalFalsePositives} images");
+          '+++ Test too lax by ${totalAllowed - totalFalsePositives} images');
     } else if (totalFalsePositives > totalAllowed) {
       log.warning(
-          "--- Test failed by ${totalFalsePositives - totalAllowed} images");
+          '--- Test failed by ${totalFalsePositives - totalAllowed} images');
     }
 
     for (int x = 0; x < testResults.length; x++) {
       TestResult testResult = testResults[x];
       log.info(
-          "Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)");
+          'Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)');
       assert(falsePositives[x] <= testResult.getFalsePositivesAllowed(),
-          "Rotation ${testResult.getRotation()} degrees: Too many false positives found");
+          'Rotation ${testResult.getRotation()} degrees: Too many false positives found');
     }
   }
 

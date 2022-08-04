@@ -29,7 +29,6 @@ import '../../../../common/string_builder.dart';
 
 import '../../../../not_found_exception.dart';
 import 'ai01decoder.dart';
-import 'decoded_information.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01392xDecoder extends AI01decoder {
@@ -44,19 +43,18 @@ class AI01392xDecoder extends AI01decoder {
       throw NotFoundException.instance;
     }
 
-    StringBuilder buf = StringBuilder();
+    final buf = StringBuilder();
 
     encodeCompressedGtin(buf, _HEADER_SIZE);
 
-    int lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
+    final lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
         _HEADER_SIZE + AI01decoder.GTIN_SIZE, _LAST_DIGIT_SIZE);
-    buf.write("(392");
+    buf.write('(392');
     buf.write(lastAIdigit);
     buf.write(')');
 
-    DecodedInformation decodedInformation =
-        generalDecoder.decodeGeneralPurposeField(
-            _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE, null);
+    final decodedInformation = generalDecoder.decodeGeneralPurposeField(
+        _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE, null);
     buf.write(decodedInformation.newString);
 
     return buf.toString();

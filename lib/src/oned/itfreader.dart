@@ -41,15 +41,15 @@ import 'one_dreader.dart';
 ///
 /// @author kevin.osullivan@sita.aero, SITA Lab.
 class ITFReader extends OneDReader {
-  static const double _MAX_AVG_VARIANCE = 0.38;
-  static const double _MAX_INDIVIDUAL_VARIANCE = 0.5;
+  static const _MAX_AVG_VARIANCE = 0.38;
+  static const _MAX_INDIVIDUAL_VARIANCE = 0.5;
 
   static const int _W = 3; // Pixel width of a 3x wide line
   static const int _w = 2; // Pixel width of a 2x wide line
   static const int _N = 1; // Pixed width of a narrow line
 
   /// Valid ITF lengths. Anything longer than the largest value is also allowed.
-  static const List<int> _DEFAULT_ALLOWED_LENGTHS = [6, 8, 10, 12, 14];
+  static const _DEFAULT_ALLOWED_LENGTHS = [6, 8, 10, 12, 14];
 
   // Stores the actual narrow line width of the image being decoded.
   int _narrowLineWidth = -1;
@@ -58,8 +58,8 @@ class ITFReader extends OneDReader {
   ///
   /// Note: The end pattern is reversed because the row is reversed before
   /// searching for the END_PATTERN
-  static const List<int> _START_PATTERN = [_N, _N, _N, _N];
-  static const List<List<int>> _END_PATTERN_REVERSED = [
+  static const _START_PATTERN = [_N, _N, _N, _N];
+  static const _END_PATTERN_REVERSED = [
     [_N, _N, _w], // 2x
     [_N, _N, _W] // 3x
   ];
@@ -67,7 +67,7 @@ class ITFReader extends OneDReader {
   // See ITFWriter.PATTERNS
 
   /// Patterns of Wide / Narrow lines to indicate each digit
-  static const List<List<int>> _PATTERNS = [
+  static const _PATTERNS = [
     [_N, _N, _w, _w, _N], // 0
     [_w, _N, _N, _N, _w], // 1
     [_N, _w, _N, _N, _w], // 2
@@ -94,12 +94,12 @@ class ITFReader extends OneDReader {
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     // Find out where the Middle section (payload) starts & ends
-    List<int> startRange = _decodeStart(row);
-    List<int> endRange = _decodeEnd(row);
+    final startRange = _decodeStart(row);
+    final endRange = _decodeEnd(row);
 
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     _decodeMiddle(row, startRange[1], endRange[0], result);
-    String resultString = result.toString();
+    final resultString = result.toString();
 
     List<int>? allowedLengths =
         hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
@@ -108,7 +108,7 @@ class ITFReader extends OneDReader {
 
     // To avoid false positives with 2D barcodes (and other patterns), make
     // an assumption that the decoded string must be a 'standard' length if it's short
-    int length = resultString.length;
+    final length = resultString.length;
     bool lengthOK = false;
     int maxAllowedLength = 0;
     for (int allowedLength in allowedLengths) {
@@ -135,7 +135,7 @@ class ITFReader extends OneDReader {
           ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())
         ],
         BarcodeFormat.ITF);
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0");
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']I0');
     return resultObject;
   }
 
@@ -150,16 +150,16 @@ class ITFReader extends OneDReader {
     // interleaved white lines for the second digit.
     // Therefore, need to scan 10 lines and then
     // split these into two arrays
-    List<int> counterDigitPair = List.filled(10, 0);
-    List<int> counterBlack = List.filled(5, 0);
-    List<int> counterWhite = List.filled(5, 0);
+    final counterDigitPair = List.filled(10, 0);
+    final counterBlack = List.filled(5, 0);
+    final counterWhite = List.filled(5, 0);
 
     while (payloadStart < payloadEnd) {
       // Get 10 runs of black/white.
       OneDReader.recordPattern(row, payloadStart, counterDigitPair);
       // Split them into each array
       for (int k = 0; k < 5; k++) {
-        int twoK = 2 * k;
+        final twoK = 2 * k;
         counterBlack[k] = counterDigitPair[twoK];
         counterWhite[k] = counterDigitPair[twoK + 1];
       }
@@ -181,8 +181,8 @@ class ITFReader extends OneDReader {
   /// @return Array, containing index of start of 'start block' and end of
   ///         'start block'
   List<int> _decodeStart(BitArray row) {
-    int endStart = _skipWhiteSpace(row);
-    List<int> startPattern = _findGuardPattern(row, endStart, _START_PATTERN);
+    final endStart = _skipWhiteSpace(row);
+    final startPattern = _findGuardPattern(row, endStart, _START_PATTERN);
 
     // Determine the width of a narrow line in pixels. We can do this by
     // getting the width of the start pattern and dividing by 4 because its
@@ -232,8 +232,8 @@ class ITFReader extends OneDReader {
   /// @return index of the first black line.
   /// @throws NotFoundException
   static int _skipWhiteSpace(BitArray row) {
-    int width = row.size;
-    int endStart = row.getNextSet(0);
+    final width = row.size;
+    final endStart = row.getNextSet(0);
     if (endStart == width) {
       throw NotFoundException.instance;
     }
@@ -251,7 +251,7 @@ class ITFReader extends OneDReader {
     // search from 'the start' for the end block
     row.reverse();
     try {
-      int endStart = _skipWhiteSpace(row);
+      final endStart = _skipWhiteSpace(row);
       List<int> endPattern;
       try {
         endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[0]);
@@ -267,7 +267,7 @@ class ITFReader extends OneDReader {
       // Now recalculate the indices of where the 'endblock' starts & stops to
       // accommodate
       // the reversed nature of the search
-      int temp = endPattern[0];
+      final temp = endPattern[0];
       endPattern[0] = row.size - endPattern[1];
       endPattern[1] = row.size - temp;
 
@@ -287,9 +287,9 @@ class ITFReader extends OneDReader {
   /// @throws NotFoundException if pattern is not found
   static List<int> _findGuardPattern(
       BitArray row, int rowOffset, List<int> pattern) {
-    int patternLength = pattern.length;
-    List<int> counters = List.filled(patternLength, 0);
-    int width = row.size;
+    final patternLength = pattern.length;
+    final counters = List.filled(patternLength, 0);
+    final width = row.size;
     bool isWhite = false;
 
     int counterPosition = 0;
@@ -328,10 +328,10 @@ class ITFReader extends OneDReader {
   static int _decodeDigit(List<int> counters) {
     double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
-    int max = _PATTERNS.length;
+    final max = _PATTERNS.length;
     for (int i = 0; i < max; i++) {
-      List<int> pattern = _PATTERNS[i];
-      double variance = OneDReader.patternMatchVariance(
+      final pattern = _PATTERNS[i];
+      final variance = OneDReader.patternMatchVariance(
           counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;

@@ -85,7 +85,7 @@ void main() {
     AbstractErrorCorrectionTestCase.corrupt(received, maxErrors + 1, random);
     try {
       checkDecode(received);
-      fail("Should not have decoded");
+      fail('Should not have decoded');
     } on ChecksumException catch (_) {
       // good
     }

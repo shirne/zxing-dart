@@ -26,15 +26,15 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 class EmailAddressResultParser extends AbstractDoCoMoResultParser {
-  static final Pattern _comma = ",";
+  static final Pattern _comma = ',';
 
   @override
   EmailAddressParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (rawText.startsWith("mailto:") || rawText.startsWith("MAILTO:")) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (rawText.startsWith('mailto:') || rawText.startsWith('MAILTO:')) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
       String hostEmail = rawText.substring(7);
-      int queryStart = hostEmail.indexOf('?');
+      final queryStart = hostEmail.indexOf('?');
       if (queryStart >= 0) {
         hostEmail = hostEmail.substring(0, queryStart);
       }
@@ -48,28 +48,28 @@ class EmailAddressResultParser extends AbstractDoCoMoResultParser {
       if (hostEmail.isNotEmpty) {
         tos = hostEmail.split(_comma);
       }
-      Map<String, String>? nameValues = parseNameValuePairs(rawText);
+      final nameValues = parseNameValuePairs(rawText);
       List<String>? ccs;
       List<String>? bccs;
       String? subject;
       String? body;
       if (nameValues != null) {
         if (tos == null) {
-          String? tosString = nameValues["to"];
+          final tosString = nameValues['to'];
           if (tosString != null) {
             tos = tosString.split(_comma);
           }
         }
-        String? ccString = nameValues["cc"];
+        final ccString = nameValues['cc'];
         if (ccString != null) {
           ccs = ccString.split(_comma);
         }
-        String? bccString = nameValues["bcc"];
+        final bccString = nameValues['bcc'];
         if (bccString != null) {
           bccs = bccString.split(_comma);
         }
-        subject = nameValues["subject"];
-        body = nameValues["body"];
+        subject = nameValues['subject'];
+        body = nameValues['body'];
       }
       return EmailAddressParsedResult(tos, ccs, bccs, subject, body);
     } else {

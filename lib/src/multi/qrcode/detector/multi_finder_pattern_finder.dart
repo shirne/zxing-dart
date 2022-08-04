@@ -68,7 +68,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   int _compare(FinderPattern? center1, FinderPattern? center2) {
     if (center1 == null) return center2 == null ? 0 : -1;
     if (center2 == null) return 1;
-    double value = center2.estimatedModuleSize - center1.estimatedModuleSize;
+    final value = center2.estimatedModuleSize - center1.estimatedModuleSize;
     return value < 0.0
         ? -1
         : value > 0.0
@@ -83,7 +83,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   List<List<FinderPattern>> _selectMultipleBestPatterns() {
     final possibleCenters =
         this.possibleCenters.where((fp) => fp.count >= 2).toList();
-    int size = possibleCenters.length;
+    final size = possibleCenters.length;
 
     if (size < 3) {
       // Couldn't find enough finder patterns
@@ -116,24 +116,24 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
      * So, if the layout seems right, lets have the decoder try to decode.
      */
 
-    List<List<FinderPattern>> results = []; // holder for the results
+    final results = <List<FinderPattern>>[]; // holder for the results
 
     for (int i1 = 0; i1 < (size - 2); i1++) {
-      FinderPattern? p1 = possibleCenters[i1];
+      final p1 = possibleCenters[i1];
       //if (p1 == null) {
       //  continue;
       //}
 
       for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
-        FinderPattern? p2 = possibleCenters[i2];
+        final p2 = possibleCenters[i2];
         //if (p2 == null) {
         //  continue;
         //}
 
         // Compare the expected module sizes; if they are really off, skip
-        double vModSize12 = (p1.estimatedModuleSize - p2.estimatedModuleSize) /
+        final vModSize12 = (p1.estimatedModuleSize - p2.estimatedModuleSize) /
             math.min(p1.estimatedModuleSize, p2.estimatedModuleSize);
-        double vModSize12A =
+        final vModSize12A =
             (p1.estimatedModuleSize - p2.estimatedModuleSize).abs();
         if (vModSize12A > _DIFF_MODSIZE_CUTOFF &&
             vModSize12 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
@@ -143,16 +143,15 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
         }
 
         for (int i3 = i2 + 1; i3 < size; i3++) {
-          FinderPattern? p3 = possibleCenters[i3];
+          final p3 = possibleCenters[i3];
           //if (p3 == null) {
           //  continue;
           //}
 
           // Compare the expected module sizes; if they are really off, skip
-          double vModSize23 =
-              (p2.estimatedModuleSize - p3.estimatedModuleSize) /
-                  math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
-          double vModSize23A =
+          final vModSize23 = (p2.estimatedModuleSize - p3.estimatedModuleSize) /
+              math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
+          final vModSize23A =
               (p2.estimatedModuleSize - p3.estimatedModuleSize).abs();
           if (vModSize23A > _DIFF_MODSIZE_CUTOFF &&
               vModSize23 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
@@ -161,17 +160,17 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
             break;
           }
 
-          List<FinderPattern> test = [p1, p2, p3];
+          final test = [p1, p2, p3];
           ResultPoint.orderBestPatterns(test);
 
           // Calculate the distances: a = topleft-bottomleft, b=topleft-topright, c = diagonal
-          FinderPatternInfo info = FinderPatternInfo(test);
-          double dA = ResultPoint.distance(info.topLeft, info.bottomLeft);
-          double dC = ResultPoint.distance(info.topRight, info.bottomLeft);
-          double dB = ResultPoint.distance(info.topLeft, info.topRight);
+          final info = FinderPatternInfo(test);
+          final dA = ResultPoint.distance(info.topLeft, info.bottomLeft);
+          final dC = ResultPoint.distance(info.topRight, info.bottomLeft);
+          final dB = ResultPoint.distance(info.topLeft, info.topRight);
 
           // Check the sizes
-          double estimatedModuleCount =
+          final estimatedModuleCount =
               (dA + dB) / (p1.estimatedModuleSize * 2.0);
           if (estimatedModuleCount > _MAX_MODULE_COUNT_PER_EDGE ||
               estimatedModuleCount < _MIN_MODULE_COUNT_PER_EDGE) {
@@ -179,15 +178,15 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           }
 
           // Calculate the difference of the edge lengths in percent
-          double vABBC = ((dA - dB) / math.min(dA, dB)).abs();
+          final vABBC = ((dA - dB) / math.min(dA, dB)).abs();
           if (vABBC >= 0.1) {
             continue;
           }
 
           // Calculate the diagonal length by assuming a 90° angle at topleft
-          double dCpy = math.sqrt(dA * dA + dB * dB);
+          final dCpy = math.sqrt(dA * dA + dB * dB);
           // Compare to the real distance in %
-          double vPyC = ((dC - dCpy) / math.min(dC, dCpy)).abs();
+          final vPyC = ((dC - dCpy) / math.min(dC, dCpy)).abs();
 
           if (vPyC >= 0.1) {
             continue;
@@ -208,10 +207,10 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   }
 
   List<FinderPatternInfo> findMulti(Map<DecodeHintType, Object>? hints) {
-    bool tryHarder =
+    final tryHarder =
         hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    int maxI = image.height;
-    int maxJ = image.width;
+    final maxI = image.height;
+    final maxJ = image.width;
     // We are looking for black/white/black/white/black modules in
     // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
 
@@ -224,7 +223,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
       iSkip = FinderPatternFinder.MIN_SKIP;
     }
 
-    List<int> stateCount = [0, 0, 0, 0, 0];
+    final stateCount = [0, 0, 0, 0, 0];
     for (int i = iSkip - 1; i < maxI; i += iSkip) {
       // Get a row of black/white values
       FinderPatternFinder.doClearCounts(stateCount);
@@ -268,8 +267,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
         handlePossibleCenter(stateCount, i, maxJ);
       }
     } // for i=iSkip-1 ...
-    List<List<FinderPattern>> patternInfo = _selectMultipleBestPatterns();
-    List<FinderPatternInfo> result = [];
+    final patternInfo = _selectMultipleBestPatterns();
+    final result = <FinderPatternInfo>[];
     for (List<FinderPattern> pattern in patternInfo) {
       ResultPoint.orderBestPatterns(pattern);
       result.add(FinderPatternInfo(pattern));

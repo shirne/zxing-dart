@@ -29,18 +29,18 @@ import 'smsparsed_result.dart';
 class SMSTOMMSTOResultParser extends ResultParser {
   @override
   SMSParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!(rawText.startsWith("smsto:") ||
-        rawText.startsWith("SMSTO:") ||
-        rawText.startsWith("mmsto:") ||
-        rawText.startsWith("MMSTO:"))) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!(rawText.startsWith('smsto:') ||
+        rawText.startsWith('SMSTO:') ||
+        rawText.startsWith('mmsto:') ||
+        rawText.startsWith('MMSTO:'))) {
       return null;
     }
     // Thanks to dominik.wild for suggesting this enhancement to support
     // smsto:number:body URIs
     String number = rawText.substring(6);
     String? body;
-    int bodyStart = number.indexOf(':');
+    final bodyStart = number.indexOf(':');
     if (bodyStart >= 0) {
       body = number.substring(bodyStart + 1);
       number = number.substring(0, bodyStart);

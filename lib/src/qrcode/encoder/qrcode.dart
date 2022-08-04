@@ -40,23 +40,23 @@ class QRCode {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
-    result.write("<<\n");
-    result.write(" mode: ");
+    final result = StringBuffer();
+    result.write('<<\n');
+    result.write(' mode: ');
     result.write(mode);
-    result.write("\n ecLevel: ");
+    result.write('\n ecLevel: ');
     result.write(ecLevel.toString().replaceFirst('ErrorCorrectionLevel.', ''));
-    result.write("\n version: ");
+    result.write('\n version: ');
     result.write(version);
-    result.write("\n maskPattern: ");
+    result.write('\n maskPattern: ');
     result.write(maskPattern);
     if (matrix == null) {
-      result.write("\n matrix: null\n");
+      result.write('\n matrix: null\n');
     } else {
-      result.write("\n matrix:\n");
+      result.write('\n matrix:\n');
       result.write(matrix);
     }
-    result.write(">>\n");
+    result.write('>>\n');
     return result.toString();
   }
 

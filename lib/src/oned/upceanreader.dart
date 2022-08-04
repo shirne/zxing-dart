@@ -235,7 +235,7 @@ abstract class UPCEANReader extends OneDReader {
     }
 
     decodeResult.putMetadata(
-        ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E$symbologyIdentifier");
+        ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']E$symbologyIdentifier');
 
     return decodeResult;
   }

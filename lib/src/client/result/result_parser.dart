@@ -72,12 +72,12 @@ abstract class ResultParser {
     VINResultParser(),
   ];
 
-  static final RegExp _digits = RegExp(r"^\d+$");
-  static final Pattern _ampersand = "&";
-  static final Pattern _equals = "=";
-  static final String _byteOrderMark = "\ufeff";
+  static final _digits = RegExp(r'^\d+$');
+  static final _ampersand = '&';
+  static final _equals = '=';
+  static final _byteOrderMark = '\ufeff';
 
-  static final List<String> emptyStrArray = [];
+  static final emptyStrArray = <String>[];
 
   /// Attempts to parse the raw [Result]'s contents as a particular type
   /// of information (email, URL, etc.) and return a [ParsedResult] encapsulating
@@ -89,7 +89,7 @@ abstract class ResultParser {
 
   static ParsedResult parseResult(Result result) {
     for (ResultParser parser in _parsers) {
-      ParsedResult? theResult = parser.parse(result);
+      final theResult = parser.parse(result);
       if (theResult != null) {
         return theResult;
       }
@@ -112,16 +112,16 @@ abstract class ResultParser {
 
   //@protected
   String unescapeBackslash(String escaped) {
-    int backslash = escaped.indexOf('\\');
+    final backslash = escaped.indexOf('\\');
     if (backslash < 0) {
       return escaped;
     }
-    int max = escaped.length;
-    StringBuffer unescaped = StringBuffer();
+    final max = escaped.length;
+    final unescaped = StringBuffer();
     unescaped.write(escaped.substring(0, backslash));
     bool nextIsEscaped = false;
     for (int i = backslash; i < max; i++) {
-      String c = escaped[i];
+      final c = escaped[i];
       if (nextIsEscaped || c != '\\') {
         unescaped.write(c);
         nextIsEscaped = false;
@@ -134,7 +134,7 @@ abstract class ResultParser {
 
   //@protected
   static int parseHexDigit(String chr) {
-    int c = chr.codeUnitAt(0);
+    final c = chr.codeUnitAt(0);
     if (c >= 48 /*'0'*/ && c <= 57 /*'9'*/) {
       return c - 48;
     }
@@ -160,17 +160,17 @@ abstract class ResultParser {
     if (value == null || length <= 0) {
       return false;
     }
-    int max = offset + length;
+    final max = offset + length;
     return value.length >= max &&
         _digits.hasMatch(value.substring(offset, max));
   }
 
   Map<String, String>? parseNameValuePairs(String uri) {
-    int paramStart = uri.indexOf('?');
+    final paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;
     }
-    Map<String, String> result = {};
+    final result = <String, String>{};
     for (String keyValue in uri.substring(paramStart + 1).split(_ampersand)) {
       _appendKeyValue(keyValue, result);
     }
@@ -178,9 +178,9 @@ abstract class ResultParser {
   }
 
   void _appendKeyValue(String keyValue, Map<String, String> result) {
-    List<String> keyValueTokens = keyValue.split(_equals); // todo 2
+    final keyValueTokens = keyValue.split(_equals); // todo 2
     if (keyValueTokens.length == 2) {
-      String key = keyValueTokens[0];
+      final key = keyValueTokens[0];
       String value = keyValueTokens[1];
       try {
         value = urlDecode(value);
@@ -206,14 +206,14 @@ abstract class ResultParser {
       String prefix, String rawText, String endChar, bool trim) {
     List<String>? matches;
     int i = 0;
-    int max = rawText.length;
+    final int max = rawText.length;
     while (i < max) {
       i = rawText.indexOf(prefix, i);
       if (i < 0) {
         break;
       }
       i += prefix.length; // Skip past this prefix we found to start
-      int start = i; // Found the start of a match here
+      final int start = i; // Found the start of a match here
       bool more = true;
       while (more) {
         i = rawText.indexOf(endChar, i);
@@ -259,7 +259,8 @@ abstract class ResultParser {
 
   String? matchSinglePrefixedField(
       String prefix, String rawText, String endChar, bool trim) {
-    List<String>? matches = matchPrefixedField(prefix, rawText, endChar, trim);
+    final List<String>? matches =
+        matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];
   }
 }

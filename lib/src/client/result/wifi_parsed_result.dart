@@ -40,7 +40,7 @@ class WifiParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     maybeAppend(ssid, result);
     maybeAppend(networkEncryption, result);
     maybeAppend(password, result);

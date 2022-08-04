@@ -27,7 +27,7 @@ class Logger {
   }
 
   void record(Object message, [LoggerType type = LoggerType.info]) {
-    print("[${_logTypes[type]}] $prefix $message");
+    print('[${_logTypes[type]}] $prefix $message');
   }
 
   static final _loggers = <Type, Logger>{};

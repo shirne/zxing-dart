@@ -39,7 +39,7 @@ class EAN8Writer extends UPCEANWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
-    int length = contents.length;
+    final length = contents.length;
     switch (length) {
       case 7:
         // No check digit present, calculate it and add it
@@ -54,28 +54,30 @@ class EAN8Writer extends UPCEANWriter {
       case 8:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
-            throw ArgumentError("Contents do not pass checksum");
+            throw ArgumentError('Contents do not pass checksum');
           }
         } on FormatsException catch (_) {
-          throw ArgumentError("Illegal contents");
+          throw ArgumentError('Illegal contents');
         }
         break;
       default:
         // IllegalArgumentException
         throw ArgumentError(
-            "Requested contents should be 7 or 8 digits long, but got $length");
+          'Requested contents should be 7 or 8 '
+          'digits long, but got $length',
+        );
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
-    List<bool> result = List.filled(_CODE_WIDTH, false);
+    final result = List.filled(_CODE_WIDTH, false);
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(
         result, pos, UPCEANReader.START_END_PATTERN, true);
 
     for (int i = 0; i <= 3; i++) {
-      int digit = int.parse(contents[i]);
+      final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
           result, pos, UPCEANReader.L_PATTERNS[digit], false);
     }
@@ -84,7 +86,7 @@ class EAN8Writer extends UPCEANWriter {
         result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
     for (int i = 4; i <= 7; i++) {
-      int digit = int.parse(contents[i]);
+      final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
           result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }

@@ -21,7 +21,6 @@ import '../common/bit_matrix.dart';
 import '../encode_hint_type.dart';
 import '../writer.dart';
 import 'decoder/error_correction_level.dart';
-import 'encoder/byte_matrix.dart';
 import 'encoder/encoder.dart';
 import 'encoder/qrcode.dart';
 
@@ -35,16 +34,16 @@ class QRCodeWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw ArgumentError("Found empty contents");
+      throw ArgumentError('Found empty contents');
     }
 
     if (format != BarcodeFormat.QR_CODE) {
-      throw ArgumentError("Can only encode QR_CODE, but got $format");
+      throw ArgumentError('Can only encode QR_CODE, but got $format');
     }
 
     if (width < 0 || height < 0) {
       throw ArgumentError(
-          "Requested dimensions are too small: $width x $height");
+          'Requested dimensions are too small: $width x $height');
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
@@ -59,7 +58,7 @@ class QRCodeWriter implements Writer {
       }
     }
 
-    QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
+    final code = Encoder.encode(contents, errorCorrectionLevel, hints);
     return _renderResult(code, width, height, quietZone);
   }
 
@@ -67,26 +66,26 @@ class QRCodeWriter implements Writer {
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
   static BitMatrix _renderResult(
       QRCode code, int width, int height, int quietZone) {
-    ByteMatrix? input = code.matrix;
+    final input = code.matrix;
     if (input == null) {
       throw StateError('ByteMatrix input is null');
     }
-    int inputWidth = input.width;
-    int inputHeight = input.height;
-    int qrWidth = inputWidth + (quietZone * 2);
-    int qrHeight = inputHeight + (quietZone * 2);
-    int outputWidth = math.max(width, qrWidth);
-    int outputHeight = math.max(height, qrHeight);
+    final inputWidth = input.width;
+    final inputHeight = input.height;
+    final qrWidth = inputWidth + (quietZone * 2);
+    final qrHeight = inputHeight + (quietZone * 2);
+    final outputWidth = math.max(width, qrWidth);
+    final outputHeight = math.max(height, qrHeight);
 
-    int multiple = math.min(outputWidth ~/ qrWidth, outputHeight ~/ qrHeight);
+    final multiple = math.min(outputWidth ~/ qrWidth, outputHeight ~/ qrHeight);
     // Padding includes both the quiet zone and the extra white pixels to accommodate the requested
     // dimensions. For example, if input is 25x25 the QR will be 33x33 including the quiet zone.
     // If the requested size is 200x160, the multiple will be 4, for a QR of 132x132. These will
     // handle all the padding from 100x100 (the actual QR) up to 200x160.
-    int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
-    int topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
+    final leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
+    final topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
 
-    BitMatrix output = BitMatrix(outputWidth, outputHeight);
+    final output = BitMatrix(outputWidth, outputHeight);
 
     for (int inputY = 0, outputY = topPadding;
         inputY < inputHeight;

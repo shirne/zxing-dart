@@ -30,24 +30,23 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('testMulti', () async {
     // Very basic test for now
-    Directory testBase = AbstractBlackBoxTestCase.buildTestBase(
-        "test/resources/blackbox/multi-1");
+    final testBase = AbstractBlackBoxTestCase.buildTestBase(
+        'test/resources/blackbox/multi-1');
 
-    File testImage = File('${testBase.path}/1.png');
-    Image image = decodeImage(testImage.readAsBytesSync())!;
-    LuminanceSource source = BufferedImageLuminanceSource(image);
-    BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(source));
+    final testImage = File('${testBase.path}/1.png');
+    final image = decodeImage(testImage.readAsBytesSync())!;
+    final source = BufferedImageLuminanceSource(image);
+    final bitmap = BinaryBitmap(HybridBinarizer(source));
 
-    MultipleBarcodeReader reader =
-        GenericMultipleBarcodeReader(MultiFormatReader());
-    List<Result> results = reader.decodeMultiple(bitmap);
+    final reader = GenericMultipleBarcodeReader(MultiFormatReader());
+    final results = reader.decodeMultiple(bitmap);
     //assertNotNull(results);
     expect(results.length, 2);
 
-    expect("031415926531", results[0].text);
+    expect('031415926531', results[0].text);
     expect(BarcodeFormat.UPC_A, results[0].barcodeFormat);
 
-    expect("www.airtable.com/jobs", results[1].text);
+    expect('www.airtable.com/jobs', results[1].text);
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 }

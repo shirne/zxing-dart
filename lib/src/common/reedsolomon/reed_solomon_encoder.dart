@@ -36,8 +36,7 @@ class ReedSolomonEncoder {
       GenericGFPoly lastGenerator =
           _cachedGenerators[_cachedGenerators.length - 1];
       for (int d = _cachedGenerators.length; d <= degree; d++) {
-        GenericGFPoly nextGenerator = lastGenerator.multiply(GenericGFPoly(
-            _field,
+        final nextGenerator = lastGenerator.multiply(GenericGFPoly(_field,
             Int32List.fromList([1, _field.exp(d - 1 + _field.generatorBase)])));
         _cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
@@ -48,20 +47,20 @@ class ReedSolomonEncoder {
 
   void encode(List<int> toEncode, int ecBytes) {
     if (ecBytes == 0) {
-      throw ArgumentError("No error correction bytes");
+      throw ArgumentError('No error correction bytes');
     }
-    int dataBytes = toEncode.length - ecBytes;
+    final dataBytes = toEncode.length - ecBytes;
     if (dataBytes <= 0) {
-      throw ArgumentError("No data bytes provided");
+      throw ArgumentError('No data bytes provided');
     }
-    GenericGFPoly generator = _buildGenerator(ecBytes);
-    Int32List infoCoefficients = Int32List(dataBytes);
+    final generator = _buildGenerator(ecBytes);
+    final infoCoefficients = Int32List(dataBytes);
     List.copyRange(infoCoefficients, 0, toEncode, 0, dataBytes);
     GenericGFPoly info = GenericGFPoly(_field, infoCoefficients);
     info = info.multiplyByMonomial(ecBytes, 1);
-    GenericGFPoly remainder = info.divide(generator)[1];
-    List<int> coefficients = remainder.coefficients;
-    int numZeroCoefficients = ecBytes - coefficients.length;
+    final remainder = info.divide(generator)[1];
+    final coefficients = remainder.coefficients;
+    final numZeroCoefficients = ecBytes - coefficients.length;
     for (int i = 0; i < numZeroCoefficients; i++) {
       toEncode[dataBytes + i] = 0;
     }

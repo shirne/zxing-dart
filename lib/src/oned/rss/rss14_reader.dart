@@ -61,10 +61,10 @@ class RSS14Reader extends AbstractRSSReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    Pair? leftPair = _decodePair(row, false, rowNumber, hints);
+    final leftPair = _decodePair(row, false, rowNumber, hints);
     _addOrTally(_possibleLeftPairs, leftPair);
     row.reverse();
-    Pair? rightPair = _decodePair(row, true, rowNumber, hints);
+    final rightPair = _decodePair(row, true, rowNumber, hints);
     _addOrTally(_possibleRightPairs, rightPair);
     row.reverse();
     for (Pair left in _possibleLeftPairs) {
@@ -103,10 +103,10 @@ class RSS14Reader extends AbstractRSSReader {
   }
 
   static Result _constructResult(Pair leftPair, Pair rightPair) {
-    int symbolValue = 4537077 * leftPair.value + rightPair.value;
-    String text = symbolValue.toString();
+    final symbolValue = 4537077 * leftPair.value + rightPair.value;
+    final text = symbolValue.toString();
 
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     for (int i = 13 - text.length; i > 0; i--) {
       buffer.write('0');
     }
@@ -114,7 +114,7 @@ class RSS14Reader extends AbstractRSSReader {
 
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
-      int digit = buffer.codePointAt(i) - 48 /* 0 */;
+      final digit = buffer.codePointAt(i) - 48 /* 0 */;
       checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
     }
     checkDigit = 10 - (checkDigit % 10);
@@ -123,9 +123,9 @@ class RSS14Reader extends AbstractRSSReader {
     }
     buffer.write(checkDigit);
 
-    List<ResultPoint> leftPoints = leftPair.finderPattern.resultPoints;
-    List<ResultPoint> rightPoints = rightPair.finderPattern.resultPoints;
-    Result result = Result(
+    final leftPoints = leftPair.finderPattern.resultPoints;
+    final rightPoints = rightPair.finderPattern.resultPoints;
+    final result = Result(
         buffer.toString(),
         null,
         [
@@ -135,12 +135,12 @@ class RSS14Reader extends AbstractRSSReader {
           rightPoints[1],
         ],
         BarcodeFormat.RSS_14);
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]e0");
+    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']e0');
     return result;
   }
 
   static bool _checkChecksum(Pair leftPair, Pair rightPair) {
-    int checkValue =
+    final checkValue =
         (leftPair.checksumPortion + 16 * rightPair.checksumPortion) % 79;
     int targetCheckValue =
         9 * leftPair.finderPattern.value + rightPair.finderPattern.value;
@@ -157,10 +157,9 @@ class RSS14Reader extends AbstractRSSReader {
       Map<DecodeHintType, Object>? hints) {
     try {
       List<int> startEnd = _findFinderPattern(row, right);
-      FinderPattern pattern =
-          _parseFoundFinderPattern(row, rowNumber, right, startEnd);
+      final pattern = _parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-      ResultPointCallback? resultPointCallback =
+      final resultPointCallback =
           hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
               as ResultPointCallback?;
 
@@ -175,8 +174,8 @@ class RSS14Reader extends AbstractRSSReader {
             ResultPoint(center, rowNumber.toDouble()));
       }
 
-      DataCharacter outside = _decodeDataCharacter(row, pattern, true);
-      DataCharacter inside = _decodeDataCharacter(row, pattern, false);
+      final outside = _decodeDataCharacter(row, pattern, true);
+      final inside = _decodeDataCharacter(row, pattern, false);
       return Pair(1597 * outside.value + inside.value,
           outside.checksumPortion + 4 * inside.checksumPortion, pattern);
     } on NotFoundException catch (_) {
@@ -186,7 +185,7 @@ class RSS14Reader extends AbstractRSSReader {
 
   DataCharacter _decodeDataCharacter(
       BitArray row, FinderPattern pattern, bool outsideChar) {
-    List<int> counters = dataCharacterCounters;
+    final counters = dataCharacterCounters;
     counters.fillRange(0, counters.length, 0);
 
     if (outsideChar) {
@@ -195,29 +194,30 @@ class RSS14Reader extends AbstractRSSReader {
       OneDReader.recordPattern(row, pattern.startEnd[1], counters);
       // reverse it
       for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
-        int temp = counters[i];
+        final temp = counters[i];
         counters[i] = counters[j];
         counters[j] = temp;
       }
     }
 
-    int numModules = outsideChar ? 16 : 15;
-    double elementWidth = MathUtils.sum(counters) / numModules;
+    final numModules = outsideChar ? 16 : 15;
+    final elementWidth = MathUtils.sum(counters) / numModules;
 
-    List<int> oddCounts = this.oddCounts;
-    List<int> evenCounts = this.evenCounts;
-    List<double> oddRoundingErrors = this.oddRoundingErrors;
-    List<double> evenRoundingErrors = this.evenRoundingErrors;
+    // TODO is need ?
+    // List<int> oddCounts = this.oddCounts;
+    // List<int> evenCounts = this.evenCounts;
+    // List<double> oddRoundingErrors = this.oddRoundingErrors;
+    // List<double> evenRoundingErrors = this.evenRoundingErrors;
 
     for (int i = 0; i < counters.length; i++) {
-      double value = counters[i] / elementWidth;
+      final value = counters[i] / elementWidth;
       int count = (value + 0.5).toInt(); // Round
       if (count < 1) {
         count = 1;
       } else if (count > 8) {
         count = 8;
       }
-      int offset = i ~/ 2;
+      final offset = i ~/ 2;
       if ((i & 0x01) == 0) {
         oddCounts[offset] = count;
         oddRoundingErrors[offset] = value - count;
@@ -243,40 +243,40 @@ class RSS14Reader extends AbstractRSSReader {
       evenChecksumPortion += evenCounts[i];
       evenSum += evenCounts[i];
     }
-    int checksumPortion = oddChecksumPortion + 3 * evenChecksumPortion;
+    final checksumPortion = oddChecksumPortion + 3 * evenChecksumPortion;
 
     if (outsideChar) {
       if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
         throw NotFoundException.instance;
       }
-      int group = (12 - oddSum) ~/ 2;
-      int oddWidest = _OUTSIDE_ODD_WIDEST[group];
-      int evenWidest = 9 - oddWidest;
-      int vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, false);
-      int vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, true);
-      int tEven = _OUTSIDE_EVEN_TOTAL_SUBSET[group];
-      int gSum = _OUTSIDE_GSUM[group];
+      final group = (12 - oddSum) ~/ 2;
+      final oddWidest = _OUTSIDE_ODD_WIDEST[group];
+      final evenWidest = 9 - oddWidest;
+      final vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, false);
+      final vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, true);
+      final tEven = _OUTSIDE_EVEN_TOTAL_SUBSET[group];
+      final gSum = _OUTSIDE_GSUM[group];
       return DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
     } else {
       if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
         throw NotFoundException.instance;
       }
-      int group = (10 - evenSum) ~/ 2;
-      int oddWidest = _INSIDE_ODD_WIDEST[group];
-      int evenWidest = 9 - oddWidest;
-      int vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, true);
-      int vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
-      int tOdd = _INSIDE_ODD_TOTAL_SUBSET[group];
-      int gSum = _INSIDE_GSUM[group];
+      final group = (10 - evenSum) ~/ 2;
+      final oddWidest = _INSIDE_ODD_WIDEST[group];
+      final evenWidest = 9 - oddWidest;
+      final vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, true);
+      final vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
+      final tOdd = _INSIDE_ODD_TOTAL_SUBSET[group];
+      final gSum = _INSIDE_GSUM[group];
       return DataCharacter(vEven * tOdd + vOdd + gSum, checksumPortion);
     }
   }
 
   List<int> _findFinderPattern(BitArray row, bool rightFinderPattern) {
-    List<int> counters = decodeFinderCounters;
+    final counters = decodeFinderCounters;
     counters.fillRange(0, counters.length, 0);
 
-    int width = row.size;
+    final width = row.size;
     bool isWhite = false;
     int rowOffset = 0;
     while (rowOffset < width) {
@@ -317,7 +317,7 @@ class RSS14Reader extends AbstractRSSReader {
   FinderPattern _parseFoundFinderPattern(
       BitArray row, int rowNumber, bool right, List<int> startEnd) {
     // Actually we found elements 2-5
-    bool firstIsBlack = row.get(startEnd[0]);
+    final firstIsBlack = row.get(startEnd[0]);
     int firstElementStart = startEnd[0] - 1;
     // Locate element 1
     while (
@@ -325,13 +325,14 @@ class RSS14Reader extends AbstractRSSReader {
       firstElementStart--;
     }
     firstElementStart++;
-    int firstCounter = startEnd[0] - firstElementStart;
+    final firstCounter = startEnd[0] - firstElementStart;
     // Make 'counters' hold 1-4
-    List<int> counters = decodeFinderCounters;
+    final counters = decodeFinderCounters;
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
 
     counters[0] = firstCounter;
-    int value = AbstractRSSReader.parseFinderValue(counters, _FINDER_PATTERNS);
+    final value =
+        AbstractRSSReader.parseFinderValue(counters, _FINDER_PATTERNS);
     int start = firstElementStart;
     int end = startEnd[1];
     if (right) {
@@ -344,8 +345,8 @@ class RSS14Reader extends AbstractRSSReader {
   }
 
   void _adjustOddEvenCounts(bool outsideChar, int numModules) {
-    int oddSum = MathUtils.sum(oddCounts);
-    int evenSum = MathUtils.sum(evenCounts);
+    final oddSum = MathUtils.sum(oddCounts);
+    final evenSum = MathUtils.sum(evenCounts);
 
     bool incrementOdd = false;
     bool decrementOdd = false;
@@ -376,9 +377,9 @@ class RSS14Reader extends AbstractRSSReader {
       }
     }
 
-    int mismatch = oddSum + evenSum - numModules;
-    bool oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
-    bool evenParityBad = (evenSum & 0x01) == 1;
+    final mismatch = oddSum + evenSum - numModules;
+    final oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
+    final evenParityBad = (evenSum & 0x01) == 1;
 
     switch (mismatch) {
       case 1:

@@ -48,8 +48,8 @@ class MathUtils {
   /// @param bY point B y coordinate
   /// @return Euclidean distance between points A and B
   static double distance(double aX, double aY, double bX, double bY) {
-    double xDiff = aX - bX;
-    double yDiff = aY - bY;
+    final xDiff = aX - bX;
+    final yDiff = aY - bY;
     return math.sqrt(xDiff * xDiff + yDiff * yDiff);
   }
 

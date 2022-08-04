@@ -212,7 +212,7 @@ void main() {
       BitArray newBitArray = BitArray.test(Uint32List.fromList(oldBits), size);
       newBitArray.reverse();
       Uint32List newBitsNew = newBitArray.getBitArray();
-      expect(newBitsOriginal.join(","), newBitsNew.join(","));
+      expect(newBitsOriginal.join(','), newBitsNew.join(','));
       assert(arraysAreEqual(newBitsOriginal, newBitsNew, size ~/ 32 + 1));
     }
   });

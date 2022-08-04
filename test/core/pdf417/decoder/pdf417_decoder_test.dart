@@ -29,7 +29,7 @@ import '../../utils.dart';
 /// Tests [DecodedBitStreamParser].
 void main() {
   void performDecodeTest(List<int> codewords, String expectedResult) {
-    DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+    DecoderResult result = DecodedBitStreamParser.decode(codewords, '0');
     expect(result.text, expectedResult);
   }
 
@@ -61,9 +61,9 @@ void main() {
     int N = chars.length;
     String baseNNumber = index.toRadixString(N);
     while (baseNNumber.length < length) {
-      baseNNumber = "0$baseNNumber";
+      baseNNumber = '0$baseNNumber';
     }
-    String prefix = "";
+    String prefix = '';
     for (int i = 0; i < baseNNumber.length; i++) {
       prefix += String.fromCharCode(
           chars[baseNNumber.codeUnitAt(i) - '0'.codeUnitAt(0)]);
@@ -162,20 +162,20 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
     expect(resultMetadata.segmentIndex, 0);
-    expect(resultMetadata.fileId, "017053");
+    expect(resultMetadata.fileId, '017053');
     assert(!resultMetadata.isLastSegment);
     expect(resultMetadata.segmentCount, 4);
-    expect(resultMetadata.sender, "CEN BE");
-    expect(resultMetadata.addressee, "ISO CH");
+    expect(resultMetadata.sender, 'CEN BE');
+    expect(resultMetadata.addressee, 'ISO CH');
 
     // ignore: deprecated_consistency, deprecated_member_use_from_same_package
     List<int> optionalData = resultMetadata.optionalData!;
     expect(optionalData[0], 1,
         reason:
-            "first element of optional array should be the first field identifier");
+            'first element of optional array should be the first field identifier');
     expect(optionalData[optionalData.length - 1], 67,
         reason:
-            "last element of optional array should be the last codeword of the last field");
+            'last element of optional array should be the last codeword of the last field');
   });
 
   /// Tests the second given in ISO/IEC 15438:2015(E) - Annex H.4
@@ -190,7 +190,7 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
     expect(3, resultMetadata.segmentIndex);
-    expect("017053", resultMetadata.fileId);
+    expect('017053', resultMetadata.fileId);
     assert(resultMetadata.isLastSegment);
     expect(4, resultMetadata.segmentCount);
     assert(resultMetadata.addressee == null);
@@ -200,10 +200,10 @@ void main() {
     List<int> optionalData = resultMetadata.optionalData!;
     expect(1, optionalData[0],
         reason:
-            "first element of optional array should be the first field identifier");
+            'first element of optional array should be the first field identifier');
     expect(104, optionalData[optionalData.length - 1],
         reason:
-            "last element of optional array should be the last codeword of the last field");
+            'last element of optional array should be the last codeword of the last field');
   });
 
   /// Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
@@ -216,7 +216,7 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
     expect(0, resultMetadata.segmentIndex);
-    expect("100200300", resultMetadata.fileId);
+    expect('100200300', resultMetadata.fileId);
     assert(!resultMetadata.isLastSegment);
     expect(-1, resultMetadata.segmentCount);
     assert(resultMetadata.addressee == null);
@@ -227,8 +227,8 @@ void main() {
 
     // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
     DecoderResult decoderResult =
-        DecodedBitStreamParser.decode(sampleCodes, "0");
-    expect("", decoderResult.text);
+        DecodedBitStreamParser.decode(sampleCodes, '0');
+    expect('', decoderResult.text);
     assert(decoderResult.other != null);
   });
 
@@ -244,12 +244,12 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
     expect(0, resultMetadata.segmentIndex);
-    expect("000252021086", resultMetadata.fileId);
+    expect('000252021086', resultMetadata.fileId);
     assert(!resultMetadata.isLastSegment);
     expect(2, resultMetadata.segmentCount);
     assert(resultMetadata.addressee == null);
     assert(resultMetadata.sender == null);
-    expect("filename.txt", resultMetadata.fileName);
+    expect('filename.txt', resultMetadata.fileName);
   });
 
   test('testSampleWithNumericValues', () {
@@ -262,7 +262,7 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
     expect(0, resultMetadata.segmentIndex);
-    expect("000252021086", resultMetadata.fileId);
+    expect('000252021086', resultMetadata.fileId);
     assert(!resultMetadata.isLastSegment);
 
     expect(180980729000000, resultMetadata.timestamp);
@@ -277,7 +277,7 @@ void main() {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
     expect(99998, resultMetadata.segmentIndex);
-    expect("000", resultMetadata.fileId);
+    expect('000', resultMetadata.fileId);
     assert(resultMetadata.isLastSegment);
     expect(-1, resultMetadata.segmentCount);
 
@@ -311,7 +311,7 @@ void main() {
     List<int> sampleCodes = [3, 899, 899, 0];
 
     try {
-      DecodedBitStreamParser.decode(sampleCodes, "0");
+      DecodedBitStreamParser.decode(sampleCodes, '0');
     } on FormatsException catch (_) {
       // continue
     }
@@ -332,21 +332,21 @@ void main() {
   });
 
   test('testUppercaseLowercaseMix1', () {
-    encodeDecodeLen("aA", 4);
-    encodeDecodeLen("aAa", 5);
-    encodeDecodeLen("Aa", 4);
-    encodeDecodeLen("Aaa", 5);
-    encodeDecodeLen("AaA", 5);
-    encodeDecodeLen("AaaA", 6);
-    encodeDecodeLen("Aaaa", 6);
-    encodeDecodeLen("AaAaA", 5);
-    encodeDecodeLen("AaaAaaA", 6);
-    encodeDecodeLen("AaaAAaaA", 7);
+    encodeDecodeLen('aA', 4);
+    encodeDecodeLen('aAa', 5);
+    encodeDecodeLen('Aa', 4);
+    encodeDecodeLen('Aaa', 5);
+    encodeDecodeLen('AaA', 5);
+    encodeDecodeLen('AaaA', 6);
+    encodeDecodeLen('Aaaa', 6);
+    encodeDecodeLen('AaAaA', 5);
+    encodeDecodeLen('AaaAaaA', 6);
+    encodeDecodeLen('AaaAAaaA', 7);
   });
 
   test('testPunctuation', () {
     performEncodeTest(';'.codeUnitAt(0), [3, 4, 5, 6, 6, 7, 8]);
-    encodeDecodeLen(";;;;;;;;;;;;;;;;", 17);
+    encodeDecodeLen(';;;;;;;;;;;;;;;;', 17);
   });
 
   test('testUppercaseLowercaseMix2', () {
@@ -487,19 +487,19 @@ void main() {
 
   test('testBinaryMultiECI', () {
     //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
-    performDecodeTest([5, 927, 4, 913, 200], "\u010c");
-    performDecodeTest([9, 927, 4, 913, 200, 927, 7, 913, 207], "\u010c\u042f");
-    performDecodeTest([9, 927, 4, 901, 200, 927, 7, 901, 207], "\u010c\u042f");
-    performDecodeTest([8, 927, 4, 901, 200, 927, 7, 207], "\u010c\u042f");
+    performDecodeTest([5, 927, 4, 913, 200], '\u010c');
+    performDecodeTest([9, 927, 4, 913, 200, 927, 7, 913, 207], '\u010c\u042f');
+    performDecodeTest([9, 927, 4, 901, 200, 927, 7, 901, 207], '\u010c\u042f');
+    performDecodeTest([8, 927, 4, 901, 200, 927, 7, 207], '\u010c\u042f');
     performDecodeTest(
         [14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207],
-        "\u010c\u042f\u010c\u042f");
+        '\u010c\u042f\u010c\u042f');
     performDecodeTest(
       [
         16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858,
         567 //
       ],
-      "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f",
+      '\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f',
     );
   });
 }

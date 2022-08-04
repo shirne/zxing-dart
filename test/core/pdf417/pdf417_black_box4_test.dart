@@ -47,7 +47,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   final List<TestResult> testResults = [];
 
   PDF417BlackBox4TestCase()
-      : super("test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417) {
+      : super('test/resources/blackbox/pdf417-4', null, BarcodeFormat.PDF_417) {
     testResults.add(TestResult(3, 3, 0, 0, 0.0));
   }
 
@@ -65,11 +65,11 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     Directory testBase = getTestBase();
 
     for (MapEntry<String, List<File>> testImageGroup in imageFiles.entries) {
-      log.fine("Starting Image Group ${testImageGroup.key}");
+      log.fine('Starting Image Group ${testImageGroup.key}');
 
       String fileBaseName = testImageGroup.key;
       String expectedText;
-      File expectedTextFile = File("${testBase.path}/$fileBaseName.txt");
+      File expectedTextFile = File('${testBase.path}/$fileBaseName.txt');
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
@@ -102,10 +102,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
           PDF417ResultMetadata resultMetadata = getMeta(result)!;
           //assertNotNull("resultMetadata", resultMetadata);
           fileId ??= resultMetadata.fileId;
-          expect(fileId, resultMetadata.fileId, reason: "FileId");
+          expect(fileId, resultMetadata.fileId, reason: 'FileId');
           resultText.write(result.text);
         }
-        expect(resultText.toString(), expectedText, reason: "ExpectedText");
+        expect(resultText.toString(), expectedText, reason: 'ExpectedText');
         passedCounts[x]++;
         tryHarderCounts[x]++;
       }
@@ -119,33 +119,33 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     for (int x = 0; x < testResults.length; x++) {
       TestResult testResult = testResults[x];
       log.info(
-        "Rotation ${testResult.rotation} degrees:",
+        'Rotation ${testResult.rotation} degrees:',
       );
       log.info(
-          " ${passedCounts[x]} of $numberOfTests images passed (${testResult.mustPassCount} required)");
+          ' ${passedCounts[x]} of $numberOfTests images passed (${testResult.mustPassCount} required)');
       log.info(
-          " ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.tryHarderCount} required)");
+          ' ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.tryHarderCount} required)');
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
     }
 
     int totalTests = numberOfTests * testCount * 2;
     log.info(
-        "Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)");
+        'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
     if (totalFound > totalMustPass) {
-      log.warning("+++ Test too lax by ${totalFound - totalMustPass} images");
+      log.warning('+++ Test too lax by ${totalFound - totalMustPass} images');
     } else if (totalFound < totalMustPass) {
-      log.warning("--- Test failed by ${totalMustPass - totalFound} images");
+      log.warning('--- Test failed by ${totalMustPass - totalFound} images');
     }
 
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
       TestResult testResult = testResults[x];
       String label =
-          "Rotation ${testResult.rotation} degrees: Too many images failed";
+          'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
       assert(tryHarderCounts[x] >= testResult.tryHarderCount,
-          "Try harder, $label");
+          'Try harder, $label');
     }
   }
 

@@ -72,7 +72,7 @@ class TextEncoder extends C40Encoder {
       sb.writeCharCode(chr - 123 + 27);
       return 2;
     }
-    sb.write("\x01\u001e"); //Shift 2, Upper Shift
+    sb.write('\x01\u001e'); //Shift 2, Upper Shift
     int len = 2;
     len += encodeChar(chr - 128, sb);
     return len;

@@ -22,26 +22,25 @@ import 'uriparsed_result.dart';
 ///
 /// @author Sean Owen
 class URIResultParser extends ResultParser {
-  static final RegExp _allowedUrlCharsPattern =
+  static final _allowedUrlCharsPattern =
       RegExp(r"^[-._~:/?#\[\]@!$&'()*+,;=%A-Za-z0-9]+$");
-  static final RegExp _userInHost = RegExp(":/*([^/@]+)@[^/]+");
+  static final _userInHost = RegExp(':/*([^/@]+)@[^/]+');
   // See http://www.ietf.org/rfc/rfc2396.txt
-  static final RegExp _urlWithProtocolPattern =
-      RegExp(r"[a-zA-Z][a-zA-Z0-9+-.]+:");
-  static final RegExp _urlWithoutProtocolPattern = RegExp(
+  static final _urlWithProtocolPattern = RegExp(r'[a-zA-Z][a-zA-Z0-9+-.]+:');
+  static final _urlWithoutProtocolPattern = RegExp(
       // host name elements; allow up to say 6 domain elements
-      "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}"
+      '([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}'
       // maybe port
-      "(:\\d{1,5})?"
+      '(:\\d{1,5})?'
       // query, path or nothing
-      r"(/|\?|$)");
+      r'(/|\?|$)');
 
   @override
   URIParsedResult? parse(Result result) {
     String rawText = ResultParser.getMassagedText(result);
     // We specifically handle the odd "URL" scheme here for simplicity and add "URI" for fun
     // Assume anything starting this way really means to be a URI
-    if (rawText.startsWith("URL:") || rawText.startsWith("URI:")) {
+    if (rawText.startsWith('URL:') || rawText.startsWith('URI:')) {
       return URIParsedResult(rawText.substring(4).trim(), null);
     }
     rawText = rawText.trim();
@@ -62,7 +61,7 @@ class URIResultParser extends ResultParser {
   }
 
   static bool isBasicallyValidURI(String uri) {
-    if (uri.contains(" ")) {
+    if (uri.contains(' ')) {
       // Quick hack check for a common case
       return false;
     }

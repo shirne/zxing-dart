@@ -35,27 +35,27 @@ import 'smsparsed_result.dart';
 class SMSMMSResultParser extends ResultParser {
   @override
   SMSParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!(rawText.startsWith("sms:") ||
-        rawText.startsWith("SMS:") ||
-        rawText.startsWith("mms:") ||
-        rawText.startsWith("MMS:"))) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!(rawText.startsWith('sms:') ||
+        rawText.startsWith('SMS:') ||
+        rawText.startsWith('mms:') ||
+        rawText.startsWith('MMS:'))) {
       return null;
     }
 
     // Check up front if this is a URI syntax string with query arguments
-    Map<String, String>? nameValuePairs = parseNameValuePairs(rawText);
+    final nameValuePairs = parseNameValuePairs(rawText);
     String? subject;
     String? body;
     bool querySyntax = false;
     if (nameValuePairs != null && nameValuePairs.isNotEmpty) {
-      subject = nameValuePairs["subject"];
-      body = nameValuePairs["body"];
+      subject = nameValuePairs['subject'];
+      body = nameValuePairs['body'];
       querySyntax = true;
     }
 
     // Drop sms, query portion
-    int queryStart = rawText.indexOf('?', 4);
+    final queryStart = rawText.indexOf('?', 4);
     String smsURIWithoutQuery;
     // If it's not query syntax, the question mark is part of the subject or message
     if (queryStart < 0 || !querySyntax) {
@@ -66,11 +66,11 @@ class SMSMMSResultParser extends ResultParser {
 
     int lastComma = -1;
     int comma;
-    List<String> numbers = [];
-    List<String> vias = [];
+    final numbers = <String>[];
+    final vias = <String>[];
     while (
         (comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
-      String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
+      final numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
       _addNumberVia(numbers, vias, numberPart);
       lastComma = comma;
     }
@@ -81,15 +81,15 @@ class SMSMMSResultParser extends ResultParser {
 
   static void _addNumberVia(
       List<String> numbers, List<String> vias, String numberPart) {
-    int numberEnd = numberPart.indexOf(';');
+    final numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
       numbers.add(numberPart);
       //vias.add(''); //todo null
     } else {
       numbers.add(numberPart.substring(0, numberEnd));
-      String maybeVia = numberPart.substring(numberEnd + 1);
+      final maybeVia = numberPart.substring(numberEnd + 1);
       String via;
-      if (maybeVia.startsWith("via=")) {
+      if (maybeVia.startsWith('via=')) {
         via = maybeVia.substring(4);
         vias.add(via);
       } //else {

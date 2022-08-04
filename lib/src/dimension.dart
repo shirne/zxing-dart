@@ -34,8 +34,7 @@ class Dimension {
   @override
   operator ==(Object other) {
     if (other is Dimension) {
-      Dimension d = other;
-      return _width == d._width && _height == d._height;
+      return _width == other._width && _height == other._height;
     }
     return false;
   }
@@ -47,6 +46,6 @@ class Dimension {
 
   @override
   String toString() {
-    return "$_width x $_height";
+    return '$_width x $_height';
   }
 }

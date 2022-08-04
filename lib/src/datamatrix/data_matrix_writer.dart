@@ -39,11 +39,11 @@ class DataMatrixWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw ArgumentError("Found empty contents");
+      throw ArgumentError('Found empty contents');
     }
 
     if (format != BarcodeFormat.DATA_MATRIX) {
-      throw ArgumentError("Can only encode DATA_MATRIX, but got $format");
+      throw ArgumentError('Can only encode DATA_MATRIX, but got $format');
     }
 
     if (width < 0 || height < 0) {
@@ -56,7 +56,7 @@ class DataMatrixWriter implements Writer {
     Dimension? minSize;
     Dimension? maxSize;
     if (hints != null) {
-      SymbolShapeHint? requestedShape =
+      final requestedShape =
           hints[EncodeHintType.DATA_MATRIX_SHAPE] as SymbolShapeHint?;
       if (requestedShape != null) {
         shape = requestedShape;
@@ -78,15 +78,15 @@ class DataMatrixWriter implements Writer {
     //1. step: Data encodation
     String encoded;
 
-    bool hasCompactionHint = hints != null &&
+    final hasCompactionHint = hints != null &&
         hints.containsKey(EncodeHintType.DATA_MATRIX_COMPACT) &&
         (hints[EncodeHintType.DATA_MATRIX_COMPACT] as bool);
     if (hasCompactionHint) {
-      bool hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+      final hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
           (hints[EncodeHintType.GS1_FORMAT] as bool);
 
       Encoding? charset;
-      bool hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
+      final hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
       if (hasEncodingHint) {
         charset = (hints[EncodeHintType.CHARACTER_SET] as Encoding?);
       }
@@ -97,14 +97,14 @@ class DataMatrixWriter implements Writer {
           HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
     }
 
-    SymbolInfo? symbolInfo =
+    final symbolInfo =
         SymbolInfo.lookup(encoded.length, shape, minSize, maxSize, true);
 
     //2. step: ECC generation
-    String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);
+    final codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);
 
     //3. step: Module placement in Matrix
-    DefaultPlacement placement = DefaultPlacement(
+    final placement = DefaultPlacement(
         codewords, symbolInfo.symbolDataWidth, symbolInfo.symbolDataHeight);
     placement.place();
 
@@ -119,11 +119,10 @@ class DataMatrixWriter implements Writer {
   /// @return The bit matrix generated.
   static BitMatrix _encodeLowLevel(DefaultPlacement placement,
       SymbolInfo symbolInfo, int width, int height) {
-    int symbolWidth = symbolInfo.symbolDataWidth;
-    int symbolHeight = symbolInfo.symbolDataHeight;
+    final symbolWidth = symbolInfo.symbolDataWidth;
+    final symbolHeight = symbolInfo.symbolDataHeight;
 
-    ByteMatrix matrix =
-        ByteMatrix(symbolInfo.symbolWidth, symbolInfo.symbolHeight);
+    final matrix = ByteMatrix(symbolInfo.symbolWidth, symbolInfo.symbolHeight);
 
     int matrixY = 0;
 
@@ -176,12 +175,12 @@ class DataMatrixWriter implements Writer {
   /// @return The output matrix.
   static BitMatrix _convertByteMatrixToBitMatrix(
       ByteMatrix matrix, int reqWidth, int reqHeight) {
-    int matrixWidth = matrix.width;
-    int matrixHeight = matrix.height;
-    int outputWidth = math.max(reqWidth, matrixWidth);
-    int outputHeight = math.max(reqHeight, matrixHeight);
+    final matrixWidth = matrix.width;
+    final matrixHeight = matrix.height;
+    final outputWidth = math.max(reqWidth, matrixWidth);
+    final outputHeight = math.max(reqHeight, matrixHeight);
 
-    int multiple =
+    final multiple =
         math.min(outputWidth ~/ matrixWidth, outputHeight ~/ matrixHeight);
 
     int leftPadding = (outputWidth - (matrixWidth * multiple)) ~/ 2;

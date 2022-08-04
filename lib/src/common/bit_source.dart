@@ -52,10 +52,10 @@ class BitSource {
 
     // First, read remainder from current byte
     if (_bitOffset > 0) {
-      int bitsLeft = 8 - _bitOffset;
-      int toRead = math.min(numBits, bitsLeft);
-      int bitsToNotRead = bitsLeft - toRead;
-      int mask = (0xFF >> (8 - toRead)) << bitsToNotRead;
+      final bitsLeft = 8 - _bitOffset;
+      final toRead = math.min(numBits, bitsLeft);
+      final bitsToNotRead = bitsLeft - toRead;
+      final mask = (0xFF >> (8 - toRead)) << bitsToNotRead;
       result = (_bytes[_byteOffset] & mask) >> bitsToNotRead;
       numBits -= toRead;
       _bitOffset += toRead;
@@ -75,8 +75,8 @@ class BitSource {
 
       // Finally read a partial byte
       if (numBits > 0) {
-        int bitsToNotRead = 8 - numBits;
-        int mask = (0xFF >> bitsToNotRead) << bitsToNotRead;
+        final int bitsToNotRead = 8 - numBits;
+        final int mask = (0xFF >> bitsToNotRead) << bitsToNotRead;
         result = (result << numBits) |
             ((_bytes[_byteOffset] & mask) >> bitsToNotRead);
         _bitOffset += numBits;

@@ -39,11 +39,11 @@ class AI01AndOtherAIs extends AI01decoder {
 
   @override
   String parseInformation() {
-    StringBuilder buff = StringBuilder();
+    final buff = StringBuilder();
 
-    buff.write("(01)");
-    int initialGtinPosition = buff.length;
-    int firstGtinDigit =
+    buff.write('(01)');
+    final initialGtinPosition = buff.length;
+    final firstGtinDigit =
         generalDecoder.extractNumericValueFromBitArray(_HEADER_SIZE, 4);
     buff.write(firstGtinDigit);
 

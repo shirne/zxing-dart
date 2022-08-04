@@ -23,16 +23,16 @@ import 'uriresult_parser.dart';
 class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
   @override
   URIParsedResult? parse(Result result) {
-    String rawText = result.text;
-    if (!rawText.startsWith("MEBKM:")) {
+    final rawText = result.text;
+    if (!rawText.startsWith('MEBKM:')) {
       return null;
     }
-    String? title = matchSingleDoCoMoPrefixedField("TITLE:", rawText, true);
-    List<String>? rawUri = matchDoCoMoPrefixedField("URL:", rawText);
+    final title = matchSingleDoCoMoPrefixedField('TITLE:', rawText, true);
+    final rawUri = matchDoCoMoPrefixedField('URL:', rawText);
     if (rawUri == null) {
       return null;
     }
-    String uri = rawUri[0];
+    final uri = rawUri[0];
     return URIResultParser.isBasicallyValidURI(uri)
         ? URIParsedResult(uri, title)
         : null;

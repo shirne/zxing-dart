@@ -52,24 +52,24 @@ class AddressBookParsedResult extends ParsedResult {
   /// A location as a latitude/longitude pair
   List<String>? geo;
 
-  AddressBookParsedResult(
-      {List<String>? names,
-      List<String>? nicknames,
-      this.pronunciation,
-      List<String>? phoneNumbers,
-      List<String?>? phoneTypes,
-      List<String>? emails,
-      List<String?>? emailTypes,
-      this.instantMessenger,
-      this.note,
-      List<String>? addresses,
-      List<String?>? addressTypes,
-      this.org,
-      this.birthday,
-      this.title,
-      List<String>? urls,
-      this.geo})
-      : _names = names,
+  AddressBookParsedResult({
+    List<String>? names,
+    List<String>? nicknames,
+    this.pronunciation,
+    List<String>? phoneNumbers,
+    List<String?>? phoneTypes,
+    List<String>? emails,
+    List<String?>? emailTypes,
+    this.instantMessenger,
+    this.note,
+    List<String>? addresses,
+    List<String?>? addressTypes,
+    this.org,
+    this.birthday,
+    this.title,
+    List<String>? urls,
+    this.geo,
+  })  : _names = names,
         _nicknames = nicknames,
         _phoneNumbers = phoneNumbers,
         _phoneTypes = phoneTypes,
@@ -81,65 +81,62 @@ class AddressBookParsedResult extends ParsedResult {
         super(ParsedResultType.ADDRESS_BOOK);
 
   AddressBookParsedResult.quick(
-      List<String>? names,
-      List<String>? phoneNumbers,
-      List<String?>? phoneTypes,
-      List<String>? emails,
-      List<String?>? emailTypes,
-      List<String>? addresses,
-      List<String>? addressTypes)
-      : this.full(
-            names,
-            null,
-            null,
-            phoneNumbers,
-            phoneTypes,
-            emails,
-            emailTypes,
-            null,
-            null,
-            addresses,
-            addressTypes,
-            null,
-            null,
-            null,
-            null,
-            null);
+    List<String>? names,
+    List<String>? phoneNumbers,
+    List<String?>? phoneTypes,
+    List<String>? emails,
+    List<String?>? emailTypes,
+    List<String>? addresses,
+    List<String>? addressTypes,
+  ) : this.full(
+          names,
+          null,
+          null,
+          phoneNumbers,
+          phoneTypes,
+          emails,
+          emailTypes,
+          null,
+          null,
+          addresses,
+          addressTypes,
+          null,
+          null,
+          null,
+          null,
+          null,
+        );
 
   AddressBookParsedResult.full(
-      this._names,
-      this._nicknames,
-      this.pronunciation,
-      this._phoneNumbers,
-      this._phoneTypes,
-      this._emails,
-      this._emailTypes,
-      this.instantMessenger,
-      this.note,
-      this._addresses,
-      this._addressTypes,
-      this.org,
-      this.birthday,
-      this.title,
-      this._urls,
-      this.geo)
-      : super(ParsedResultType.ADDRESS_BOOK) {
-    if (_phoneNumbers != null &&
-        _phoneTypes != null &&
-        _phoneNumbers!.length != _phoneTypes!.length) {
-      throw ArgumentError("Phone numbers and types lengths differ");
-    }
-    if (_emails != null &&
-        _emailTypes != null &&
-        _emails!.length != _emailTypes!.length) {
-      throw ArgumentError("Emails and types lengths differ");
-    }
-    if (_addresses != null &&
-        _addressTypes != null &&
-        _addresses!.length != _addressTypes!.length) {
-      throw ArgumentError("Addresses and types lengths differ");
-    }
-  }
+    this._names,
+    this._nicknames,
+    this.pronunciation,
+    this._phoneNumbers,
+    this._phoneTypes,
+    this._emails,
+    this._emailTypes,
+    this.instantMessenger,
+    this.note,
+    this._addresses,
+    this._addressTypes,
+    this.org,
+    this.birthday,
+    this.title,
+    this._urls,
+    this.geo,
+  )   : assert(
+            (_phoneNumbers == null && _phoneTypes == null) ||
+                _phoneNumbers!.length == _phoneTypes!.length,
+            'Phone numbers and types lengths differ'),
+        assert(
+            (_emails == null && _emailTypes == null) ||
+                _emails!.length == _emailTypes!.length,
+            'Emails and types lengths differ'),
+        assert(
+            (_addresses == null && _addressTypes == null) ||
+                _addresses!.length == _addressTypes!.length,
+            'Addresses and types lengths differ'),
+        super(ParsedResultType.ADDRESS_BOOK);
 
   List<String>? get names => _names;
 
@@ -198,7 +195,7 @@ class AddressBookParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     maybeAppendList(_names, result);
     maybeAppendList(_nicknames, result);
     maybeAppend(pronunciation, result);

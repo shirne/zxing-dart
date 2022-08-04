@@ -54,28 +54,29 @@ class AztecWriter implements Writer {
   static BitMatrix _encodeStatic(String contents, BarcodeFormat format,
       int width, int height, Encoding? charset, int eccPercent, int layers) {
     if (format != BarcodeFormat.AZTEC) {
-      throw ArgumentError("Can only encode AZTEC, but got $format");
+      throw ArgumentError('Can only encode AZTEC, but got $format');
     }
-    AztecCode aztec = Encoder.encode(contents, eccPercent, layers, charset);
+    final AztecCode aztec =
+        Encoder.encode(contents, eccPercent, layers, charset);
     return _renderResult(aztec, width, height);
   }
 
   static BitMatrix _renderResult(AztecCode code, int width, int height) {
-    BitMatrix? input = code.matrix;
+    final BitMatrix? input = code.matrix;
     if (input == null) {
       throw ArgumentError();
     }
-    int inputWidth = input.width;
-    int inputHeight = input.height;
-    int outputWidth = math.max(width, inputWidth);
-    int outputHeight = math.max(height, inputHeight);
+    final int inputWidth = input.width;
+    final int inputHeight = input.height;
+    final int outputWidth = math.max(width, inputWidth);
+    final int outputHeight = math.max(height, inputHeight);
 
-    int multiple =
+    final int multiple =
         math.min(outputWidth ~/ inputWidth, outputHeight ~/ inputHeight);
-    int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
-    int topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
+    final int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
+    final int topPadding = (outputHeight - (inputHeight * multiple)) ~/ 2;
 
-    BitMatrix output = BitMatrix(outputWidth, outputHeight);
+    final BitMatrix output = BitMatrix(outputWidth, outputHeight);
 
     for (int inputY = 0, outputY = topPadding;
         inputY < inputHeight;

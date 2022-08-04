@@ -59,11 +59,11 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     if (_matrix != null) {
       return _matrix!;
     }
-    LuminanceSource source = luminanceSource;
-    int width = source.width;
-    int height = source.height;
+    final source = luminanceSource;
+    final width = source.width;
+    final height = source.height;
     if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-      Int8List luminances = source.matrix;
+      final luminances = source.matrix;
       int subWidth = width >> BLOCK_SIZE_POWER;
       if ((width & BLOCK_SIZE_MASK) != 0) {
         subWidth++;
@@ -72,10 +72,10 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
       if ((height & BLOCK_SIZE_MASK) != 0) {
         subHeight++;
       }
-      List<List<int>> blackPoints =
+      final blackPoints =
           _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
-      BitMatrix newMatrix = BitMatrix(width, height);
+      final newMatrix = BitMatrix(width, height);
       _calculateThresholdForBlock(luminances, subWidth, subHeight, width,
           height, blackPoints, newMatrix);
       _matrix = newMatrix;
@@ -102,30 +102,30 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
       int height,
       List<List<int>> blackPoints,
       BitMatrix matrix) {
-    int maxYOffset = height - BLOCK_SIZE;
-    int maxXOffset = width - BLOCK_SIZE;
+    final maxYOffset = height - BLOCK_SIZE;
+    final maxXOffset = width - BLOCK_SIZE;
     for (int y = 0; y < subHeight; y++) {
       int yOffset = y << BLOCK_SIZE_POWER;
       if (yOffset > maxYOffset) {
         yOffset = maxYOffset;
       }
-      int top = _cap(y, subHeight - 3);
+      final top = _cap(y, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
         int xOffset = x << BLOCK_SIZE_POWER;
         if (xOffset > maxXOffset) {
           xOffset = maxXOffset;
         }
-        int left = _cap(x, subWidth - 3);
+        final left = _cap(x, subWidth - 3);
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
-          List<int> blackRow = blackPoints[top + z];
+          final blackRow = blackPoints[top + z];
           sum += blackRow[left - 2] +
               blackRow[left - 1] +
               blackRow[left] +
               blackRow[left + 1] +
               blackRow[left + 2];
         }
-        int average = sum ~/ 25;
+        final average = sum ~/ 25;
         _thresholdBlock(luminances, xOffset, yOffset, average, width, matrix);
       }
     }
@@ -155,9 +155,9 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
   static List<List<int>> _calculateBlackPoints(
       Int8List luminances, int subWidth, int subHeight, int width, int height) {
-    int maxYOffset = height - BLOCK_SIZE;
-    int maxXOffset = width - BLOCK_SIZE;
-    List<List<int>> blackPoints =
+    final maxYOffset = height - BLOCK_SIZE;
+    final maxXOffset = width - BLOCK_SIZE;
+    final blackPoints =
         List.generate(subHeight, (index) => List.filled(subWidth, 0));
     for (int y = 0; y < subHeight; y++) {
       int yOffset = y << BLOCK_SIZE_POWER;
@@ -176,7 +176,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
             yy < BLOCK_SIZE;
             yy++, offset += width) {
           for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-            int pixel = luminances[offset + xx] & 0xFF;
+            final pixel = luminances[offset + xx] & 0xFF;
             sum += pixel;
             // still looking for good contrast
             if (pixel < min) {
@@ -218,7 +218,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
             // the boundaries is used for the interior.
 
             // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-            int averageNeighborBlackPoint = (blackPoints[y - 1][x] +
+            final averageNeighborBlackPoint = (blackPoints[y - 1][x] +
                     (2 * blackPoints[y][x - 1]) +
                     blackPoints[y - 1][x - 1]) ~/
                 4;

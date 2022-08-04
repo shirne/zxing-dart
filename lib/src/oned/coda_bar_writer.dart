@@ -44,26 +44,26 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
       contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;
     } else {
       // Verify input and calculate decoded length.
-      String firstChar = contents[0].toUpperCase();
-      String lastChar = contents[contents.length - 1].toUpperCase();
-      bool startsNormal = _START_END_CHARS.contains(firstChar);
-      bool endsNormal = _START_END_CHARS.contains(lastChar);
-      bool startsAlt = _ALT_START_END_CHARS.contains(firstChar);
-      bool endsAlt = _ALT_START_END_CHARS.contains(lastChar);
+      final firstChar = contents[0].toUpperCase();
+      final lastChar = contents[contents.length - 1].toUpperCase();
+      final startsNormal = _START_END_CHARS.contains(firstChar);
+      final endsNormal = _START_END_CHARS.contains(lastChar);
+      final startsAlt = _ALT_START_END_CHARS.contains(firstChar);
+      final endsAlt = _ALT_START_END_CHARS.contains(lastChar);
       if (startsNormal) {
         if (!endsNormal) {
-          throw ArgumentError("Invalid start/end guards: $contents");
+          throw ArgumentError('Invalid start/end guards: $contents');
         }
         // else already has valid start/end
       } else if (startsAlt) {
         if (!endsAlt) {
-          throw ArgumentError("Invalid start/end guards: $contents");
+          throw ArgumentError('Invalid start/end guards: $contents');
         }
         // else already has valid start/end
       } else {
         // Doesn't start with a guard
         if (endsNormal || endsAlt) {
-          throw ArgumentError("Invalid start/end guards: $contents");
+          throw ArgumentError('Invalid start/end guards: $contents');
         }
         // else doesn't end with guard either, so add a default
         contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;
@@ -87,7 +87,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
     // A blank is placed between each character.
     resultLength += contents.length - 1;
 
-    List<bool> result = List.generate(resultLength, (index) => false);
+    final result = List.generate(resultLength, (index) => false);
     int position = 0;
     for (int index = 0; index < contents.length; index++) {
       String c = contents[index].toUpperCase();

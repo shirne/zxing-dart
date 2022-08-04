@@ -70,7 +70,7 @@ abstract class LuminanceSource {
   /// @return A cropped version of this object.
   LuminanceSource crop(int left, int top, int width, int height) {
     throw UnimplementedError(
-        "This luminance source does not support cropping.");
+        'This luminance source does not support cropping.');
   }
 
   /// Get whether this subclass supports counter-clockwise rotation.
@@ -88,7 +88,7 @@ abstract class LuminanceSource {
   /// Only callable if [isRotateSupported] is true.
   LuminanceSource rotateCounterClockwise() {
     throw UnimplementedError(
-        "This luminance source does not support rotation by 90 degrees.");
+        'This luminance source does not support rotation by 90 degrees.');
   }
 
   /// Get a rotated version of this object.
@@ -97,17 +97,17 @@ abstract class LuminanceSource {
   /// Only callable if [isRotateSupported] is true.
   LuminanceSource rotateCounterClockwise45() {
     throw UnimplementedError(
-        "This luminance source does not support rotation by 45 degrees.");
+        'This luminance source does not support rotation by 45 degrees.');
   }
 
   @override
   String toString() {
     late Int8List row = Int8List(_width);
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int y = 0; y < _height; y++) {
       row = getRow(y, row);
       for (int x = 0; x < _width; x++) {
-        int luminance = row[x] & 0xFF;
+        final luminance = row[x] & 0xFF;
         String c;
         if (luminance < 0x40) {
           c = '#';

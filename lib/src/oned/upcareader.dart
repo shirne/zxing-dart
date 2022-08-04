@@ -53,9 +53,9 @@ class UPCAReader extends UPCEANReader {
   }
 
   static Result _maybeReturnResult(Result result) {
-    String text = result.text;
+    final text = result.text;
     if (text[0] == '0') {
-      Result upcaResult = Result(
+      final upcaResult = Result(
           text.substring(1), null, result.resultPoints, BarcodeFormat.UPC_A);
       if (result.resultMetadata != null) {
         upcaResult.putAllMetadata(result.resultMetadata);

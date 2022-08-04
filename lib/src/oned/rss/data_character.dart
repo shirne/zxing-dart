@@ -27,7 +27,7 @@ class DataCharacter {
 
   @override
   String toString() {
-    return "$_value($_checksumPortion)";
+    return '$_value($_checksumPortion)';
   }
 
   @override

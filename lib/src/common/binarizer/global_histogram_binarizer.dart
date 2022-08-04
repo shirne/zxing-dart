@@ -49,8 +49,8 @@ class GlobalHistogramBinarizer extends Binarizer {
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
   @override
   BitArray getBlackRow(int y, BitArray? row) {
-    LuminanceSource source = luminanceSource;
-    int width = source.width;
+    final source = luminanceSource;
+    final width = source.width;
     if (row == null || row.size < width) {
       row = BitArray(width);
     } else {
@@ -58,12 +58,12 @@ class GlobalHistogramBinarizer extends Binarizer {
     }
 
     _initArrays(width);
-    Int8List localLuminances = source.getRow(y, _luminances);
-    List<int> localBuckets = _buckets;
+    final localLuminances = source.getRow(y, _luminances);
+    final localBuckets = _buckets;
     for (int x = 0; x < width; x++) {
       localBuckets[(localLuminances[x] & 0xff) >> _luminanceShift]++;
     }
-    int blackPoint = _estimateBlackPoint(localBuckets);
+    final blackPoint = _estimateBlackPoint(localBuckets);
 
     if (width < 3) {
       // Special case for very small images
@@ -76,7 +76,7 @@ class GlobalHistogramBinarizer extends Binarizer {
       int left = localLuminances[0] & 0xff;
       int center = localLuminances[1] & 0xff;
       for (int x = 1; x < width - 1; x++) {
-        int right = localLuminances[x + 1] & 0xff;
+        final right = localLuminances[x + 1] & 0xff;
         // A simple -1 4 -1 box filter with a weight of 2.
         if (((center * 4) - left - right) ~/ 2 < blackPoint) {
           row.set(x);
@@ -91,34 +91,34 @@ class GlobalHistogramBinarizer extends Binarizer {
   // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
   @override
   BitMatrix get blackMatrix {
-    LuminanceSource source = luminanceSource;
-    int width = source.width;
-    int height = source.height;
-    BitMatrix matrix = BitMatrix(width, height);
+    final source = luminanceSource;
+    final width = source.width;
+    final height = source.height;
+    final matrix = BitMatrix(width, height);
 
     // Quickly calculates the histogram by sampling four rows from the image. This proved to be
     // more robust on the blackbox tests than sampling a diagonal as we used to do.
     _initArrays(width);
-    List<int> localBuckets = _buckets;
+    final localBuckets = _buckets;
     for (int y = 1; y < 5; y++) {
-      int row = height * y ~/ 5;
-      Int8List localLuminances = source.getRow(row, _luminances);
-      int right = (width * 4) ~/ 5;
+      final row = height * y ~/ 5;
+      final localLuminances = source.getRow(row, _luminances);
+      final right = (width * 4) ~/ 5;
       for (int x = width ~/ 5; x < right; x++) {
-        int pixel = localLuminances[x] & 0xff;
+        final pixel = localLuminances[x] & 0xff;
         localBuckets[pixel >> _luminanceShift]++;
       }
     }
-    int blackPoint = _estimateBlackPoint(localBuckets);
+    final blackPoint = _estimateBlackPoint(localBuckets);
 
     // We delay reading the entire image luminance until the black point estimation succeeds.
     // Although we end up reading four rows twice, it is consistent with our motto of
     // "fail quickly" which is necessary for continuous scanning.
-    Int8List localLuminances = source.matrix;
+    final localLuminances = source.matrix;
     for (int y = 0; y < height; y++) {
-      int offset = y * width;
+      final offset = y * width;
       for (int x = 0; x < width; x++) {
-        int pixel = localLuminances[offset + x] & 0xff;
+        final pixel = localLuminances[offset + x] & 0xff;
         if (pixel < blackPoint) {
           matrix.set(x, y);
         }
@@ -145,7 +145,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   static int _estimateBlackPoint(List<int> buckets) {
     // Find the tallest peak in the histogram.
-    int numBuckets = buckets.length;
+    final numBuckets = buckets.length;
     int maxBucketCount = 0;
     int firstPeak = 0;
     int firstPeakSize = 0;
@@ -163,9 +163,9 @@ class GlobalHistogramBinarizer extends Binarizer {
     int secondPeak = 0;
     int secondPeakScore = 0;
     for (int x = 0; x < numBuckets; x++) {
-      int distanceToBiggest = x - firstPeak;
+      final distanceToBiggest = x - firstPeak;
       // Encourage more distant second peaks by multiplying by square of distance.
-      int score = buckets[x] * distanceToBiggest * distanceToBiggest;
+      final score = buckets[x] * distanceToBiggest * distanceToBiggest;
       if (score > secondPeakScore) {
         secondPeak = x;
         secondPeakScore = score;
@@ -174,7 +174,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
     // Make sure firstPeak corresponds to the black peak.
     if (firstPeak > secondPeak) {
-      int temp = firstPeak;
+      final temp = firstPeak;
       firstPeak = secondPeak;
       secondPeak = temp;
     }
@@ -189,8 +189,8 @@ class GlobalHistogramBinarizer extends Binarizer {
     int bestValley = secondPeak - 1;
     int bestValleyScore = -1;
     for (int x = secondPeak - 1; x > firstPeak; x--) {
-      int fromFirst = x - firstPeak;
-      int score = fromFirst *
+      final fromFirst = x - firstPeak;
+      final score = fromFirst *
           fromFirst *
           (secondPeak - x) *
           (maxBucketCount - buckets[x]);

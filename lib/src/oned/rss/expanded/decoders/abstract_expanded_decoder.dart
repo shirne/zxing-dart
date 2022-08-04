@@ -57,7 +57,7 @@ abstract class AbstractExpandedDecoder {
       return AnyAIDecoder(information);
     }
 
-    int fourBitEncodationMethod =
+    final fourBitEncodationMethod =
         GeneralAppIdDecoder.extractNumericFromBitArray(information, 1, 4);
 
     switch (fourBitEncodationMethod) {
@@ -67,7 +67,7 @@ abstract class AbstractExpandedDecoder {
         return AI01320xDecoder(information);
     }
 
-    int fiveBitEncodationMethod =
+    final fiveBitEncodationMethod =
         GeneralAppIdDecoder.extractNumericFromBitArray(information, 1, 5);
     switch (fiveBitEncodationMethod) {
       case 12:
@@ -76,27 +76,27 @@ abstract class AbstractExpandedDecoder {
         return AI01393xDecoder(information);
     }
 
-    int sevenBitEncodationMethod =
+    final sevenBitEncodationMethod =
         GeneralAppIdDecoder.extractNumericFromBitArray(information, 1, 7);
     switch (sevenBitEncodationMethod) {
       case 56:
-        return AI013x0x1xDecoder(information, "310", "11");
+        return AI013x0x1xDecoder(information, '310', '11');
       case 57:
-        return AI013x0x1xDecoder(information, "320", "11");
+        return AI013x0x1xDecoder(information, '320', '11');
       case 58:
-        return AI013x0x1xDecoder(information, "310", "13");
+        return AI013x0x1xDecoder(information, '310', '13');
       case 59:
-        return AI013x0x1xDecoder(information, "320", "13");
+        return AI013x0x1xDecoder(information, '320', '13');
       case 60:
-        return AI013x0x1xDecoder(information, "310", "15");
+        return AI013x0x1xDecoder(information, '310', '15');
       case 61:
-        return AI013x0x1xDecoder(information, "320", "15");
+        return AI013x0x1xDecoder(information, '320', '15');
       case 62:
-        return AI013x0x1xDecoder(information, "310", "17");
+        return AI013x0x1xDecoder(information, '310', '17');
       case 63:
-        return AI013x0x1xDecoder(information, "320", "17");
+        return AI013x0x1xDecoder(information, '320', '17');
     }
 
-    throw StateError("unknown decoder: $information");
+    throw StateError('unknown decoder: $information');
   }
 }

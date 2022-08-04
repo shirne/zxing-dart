@@ -288,24 +288,24 @@ class DetectionResult {
     for (int codewordsRow = 0;
         codewordsRow < rowIndicatorColumn!.codewords.length;
         codewordsRow++) {
-      formatter.write("CW ${codewordsRow.toString().padLeft(3)}:");
+      formatter.write('CW ${codewordsRow.toString().padLeft(3)}:');
       for (int barcodeColumn = 0;
           barcodeColumn < _barcodeColumnCount + 2;
           barcodeColumn++) {
         if (_detectionResultColumns[barcodeColumn] == null) {
-          formatter.write("    |   ");
+          formatter.write('    |   ');
           continue;
         }
         Codeword? codeword =
             _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword == null) {
-          formatter.write("    |   ");
+          formatter.write('    |   ');
           continue;
         }
         formatter.write(
-            " ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}");
+            ' ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}');
       }
-      formatter.write("\n");
+      formatter.write('\n');
     }
     return formatter.toString();
   }

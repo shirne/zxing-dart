@@ -31,35 +31,37 @@ class Code93Writer extends OneDimensionalCodeWriter {
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
     contents = convertToExtended(contents);
-    int length = contents.length;
+    final length = contents.length;
     if (length > 80) {
       throw ArgumentError(
-          "Requested contents should be less than 80 digits long after converting to extended encoding, but got $length");
+        'Requested contents should be less than 80 digits long '
+        'after converting to extended encoding, but got $length',
+      );
     }
 
     //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
-    int codeWidth = (contents.length + 2 + 2) * 9 + 1;
+    final codeWidth = (contents.length + 2 + 2) * 9 + 1;
 
-    List<bool> result = List.filled(codeWidth, false);
+    final result = List.filled(codeWidth, false);
 
     //start character (*)
     int pos = _appendPattern(result, 0, Code93Reader.asteriskEncoding);
 
     for (int i = 0; i < length; i++) {
-      int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
       pos += _appendPattern(
           result, pos, Code93Reader.CHARACTER_ENCODINGS[indexInString]);
     }
 
     //add two checksums
-    int check1 = _computeChecksumIndex(contents, 20);
+    final check1 = _computeChecksumIndex(contents, 20);
     pos +=
         _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
 
     //append the contents to reflect the first checksum added
     contents += Code93Reader.ALPHABET_STRING[check1];
 
-    int check2 = _computeChecksumIndex(contents, 15);
+    final check2 = _computeChecksumIndex(contents, 15);
     pos +=
         _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
 
@@ -89,7 +91,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
 
   static int _appendPattern(List<bool> target, int pos, int a) {
     for (int i = 0; i < 9; i++) {
-      int temp = a & (1 << (8 - i));
+      final temp = a & (1 << (8 - i));
       target[pos + i] = temp != 0;
     }
     return 9;
@@ -100,7 +102,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     int total = 0;
 
     for (int i = contents.length - 1; i >= 0; i--) {
-      int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
       total += indexInString * weight;
       if (++weight > maxWeight) {
         weight = 1;
@@ -110,14 +112,14 @@ class Code93Writer extends OneDimensionalCodeWriter {
   }
 
   static String convertToExtended(String contents) {
-    int length = contents.length;
-    StringBuffer extCont = StringBuffer();
+    final length = contents.length;
+    final extCont = StringBuffer();
     for (int i = 0; i < length; i++) {
-      int character = contents.codeUnitAt(i);
+      final character = contents.codeUnitAt(i);
       // ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING
       if (character == 0) {
         // NUL: (%)U
-        extCont.write("bU");
+        extCont.write('bU');
       } else if (character <= 26) {
         // SOH - SUB: ($)A - ($)Z
         extCont.write('a');
@@ -140,14 +142,14 @@ class Code93Writer extends OneDimensionalCodeWriter {
         extCont.writeCharCode(character);
       } else if (character == 58 /* : */) {
         // :: (/)Z
-        extCont.write("cZ");
+        extCont.write('cZ');
       } else if (character <= 63 /* ? */) {
         // ; - ?: (%)F - (%)J
         extCont.write('b');
         extCont.writeCharCode(70 /* F */ + character - 59 /* ; */);
       } else if (character == 64 /* @ */) {
         // @: (%)V
-        extCont.write("bV");
+        extCont.write('bV');
       } else if (character <= 90 /* Z */) {
         // A - Z
         extCont.writeCharCode(character);
@@ -157,7 +159,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
         extCont.writeCharCode(75 /* K */ + character - 91 /* [ */);
       } else if (character == 96 /* ` */) {
         // `: (%)W
-        extCont.write("bW");
+        extCont.write('bW');
       } else if (character <= 122 /* z */) {
         // a - z: (*)A - (*)Z
         extCont.writeCharCode(100 /* d */);

@@ -39,7 +39,7 @@ class PDF417Writer implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (format != BarcodeFormat.PDF_417) {
-      throw ArgumentError("Can only encode PDF_417, but got $format");
+      throw ArgumentError('Can only encode PDF_417, but got $format');
     }
 
     PDF417 encoder = PDF417();

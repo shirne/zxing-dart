@@ -31,7 +31,7 @@ import 'package:zxing_lib/common.dart';
 import 'binary_util.dart';
 
 void main() {
-  const Pattern SPACE = " ";
+  const Pattern SPACE = ' ';
 
   void check(String data) {
     BitArray binary = BinaryUtil.buildBitArrayFromString(data);
@@ -39,43 +39,43 @@ void main() {
   }
 
   void checkWithoutSpaces(String data) {
-    String dataWithoutSpaces = data.replaceAll(SPACE, "");
+    String dataWithoutSpaces = data.replaceAll(SPACE, '');
     BitArray binary =
         BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     expect(data, binary.toString());
   }
 
   test('testBuildBitArrayFromString', () {
-    String data = " ..X..X.. ..XXX... XXXXXXXX ........";
+    String data = ' ..X..X.. ..XXX... XXXXXXXX ........';
     check(data);
 
-    data = " XXX..X..";
+    data = ' XXX..X..';
     check(data);
 
-    data = " XX";
+    data = ' XX';
     check(data);
 
-    data = " ....XX.. ..XX";
+    data = ' ....XX.. ..XX';
     check(data);
 
-    data = " ....XX.. ..XX..XX ....X.X. ........";
+    data = ' ....XX.. ..XX..XX ....X.X. ........';
     check(data);
   });
 
   test('testBuildBitArrayFromStringWithoutSpaces', () {
-    String data = " ..X..X.. ..XXX... XXXXXXXX ........";
+    String data = ' ..X..X.. ..XXX... XXXXXXXX ........';
     checkWithoutSpaces(data);
 
-    data = " XXX..X..";
+    data = ' XXX..X..';
     checkWithoutSpaces(data);
 
-    data = " XX";
+    data = ' XX';
     checkWithoutSpaces(data);
 
-    data = " ....XX.. ..XX";
+    data = ' ....XX.. ..XX';
     checkWithoutSpaces(data);
 
-    data = " ....XX.. ..XX..XX ....X.X. ........";
+    data = ' ....XX.. ..XX..XX ....X.X. ........';
     checkWithoutSpaces(data);
   });
 }

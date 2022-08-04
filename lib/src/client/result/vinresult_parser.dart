@@ -23,8 +23,8 @@ import 'vinparsed_result.dart';
 ///
 /// @author Sean Owen
 class VINResultParser extends ResultParser {
-  static final RegExp _ioq = RegExp("[IOQ]");
-  static final RegExp _az09 = RegExp(r"^[A-Z0-9]{17}$");
+  static final RegExp _ioq = RegExp('[IOQ]');
+  static final RegExp _az09 = RegExp(r'^[A-Z0-9]{17}$');
 
   @override
   VINParsedResult? parse(Result result) {
@@ -32,7 +32,7 @@ class VINResultParser extends ResultParser {
       return null;
     }
     String rawText = result.text;
-    rawText = rawText.replaceAll(_ioq, "").trim();
+    rawText = rawText.replaceAll(_ioq, '').trim();
     if (!_az09.hasMatch(rawText)) {
       return null;
     }
@@ -40,7 +40,7 @@ class VINResultParser extends ResultParser {
       if (!_checkChecksum(rawText)) {
         return null;
       }
-      String wmi = rawText.substring(0, 3);
+      final wmi = rawText.substring(0, 3);
       return VINParsedResult(
         vin: rawText,
         worldManufacturerID: wmi,
@@ -63,8 +63,8 @@ class VINResultParser extends ResultParser {
     for (int i = 0; i < vin.length; i++) {
       sum += _vinPositionWeight(i + 1) * _vinCharValue(vin.codeUnitAt(i));
     }
-    String checkedChar = vin[8];
-    String expectedCheckChar = _checkChar(sum % 11);
+    final checkedChar = vin[8];
+    final expectedCheckChar = _checkChar(sum % 11);
     return checkedChar == expectedCheckChar;
   }
 
@@ -136,69 +136,69 @@ class VINResultParser extends ResultParser {
   }
 
   static String? _countryCode(String wmi) {
-    String c1 = wmi[0];
-    int c2 = wmi.codeUnitAt(1);
+    final c1 = wmi[0];
+    final c2 = wmi.codeUnitAt(1);
     switch (c1) {
       case '1':
       case '4':
       case '5':
-        return "US";
+        return 'US';
       case '2':
-        return "CA";
+        return 'CA';
       case '3':
         if (c2 >= 65 /*'A'*/ && c2 <= 8 /*'W'*/) {
-          return "MX";
+          return 'MX';
         }
         break;
       case '9':
         if ((c2 >= 65 /* A */ && c2 <= 69 /* E */) ||
             (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
-          return "BR";
+          return 'BR';
         }
         break;
       case 'J':
         if (c2 >= 65 /* A */ && c2 <= 84 /* T */) {
-          return "JP";
+          return 'JP';
         }
         break;
       case 'K':
         if (c2 >= 76 /* L */ && c2 <= 82 /* R */) {
-          return "KO";
+          return 'KO';
         }
         break;
       case 'L':
-        return "CN";
+        return 'CN';
       case 'M':
         if (c2 >= 65 /* A */ && c2 <= 69 /* E */) {
-          return "IN";
+          return 'IN';
         }
         break;
       case 'S':
         if (c2 >= 65 /* A */ && c2 <= 77 /* M */) {
-          return "UK";
+          return 'UK';
         }
         if (c2 >= 78 /* N */ && c2 <= 84 /* T */) {
-          return "DE";
+          return 'DE';
         }
         break;
       case 'V':
         if (c2 >= 70 /* F */ && c2 <= 82 /* R */) {
-          return "FR";
+          return 'FR';
         }
         if (c2 >= 83 /* S */ && c2 <= 87 /* W */) {
-          return "ES";
+          return 'ES';
         }
         break;
       case 'W':
-        return "DE";
+        return 'DE';
       case 'X':
         if (c2 == 48 /* 0 */ || (c2 >= 51 /* 3 */ && c2 <= 57 /* 9 */)) {
-          return "RU";
+          return 'RU';
         }
         break;
       case 'Z':
         if (c2 >= 65 /* A */ && c2 <= 82 /* R */) {
-          return "IT";
+          return 'IT';
         }
         break;
     }

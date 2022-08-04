@@ -57,27 +57,27 @@ class Decoder {
   /// @throws ChecksumException if error correction fails
   DecoderResult decodeMatrix(BitMatrix bits) {
     // Construct a parser and read version, error-correction level
-    BitMatrixParser parser = BitMatrixParser(bits);
-    Version version = parser.version;
+    final parser = BitMatrixParser(bits);
+    final version = parser.version;
 
     // Read codewords
-    Uint8List codewords = parser.readCodewords();
+    final codewords = parser.readCodewords();
     // Separate into data blocks
-    List<DataBlock> dataBlocks = DataBlock.getDataBlocks(codewords, version);
+    final dataBlocks = DataBlock.getDataBlocks(codewords, version);
 
     // Count total number of data bytes
     int totalBytes = 0;
     for (DataBlock db in dataBlocks) {
       totalBytes += db.numDataCodewords;
     }
-    Uint8List resultBytes = Uint8List(totalBytes);
+    final resultBytes = Uint8List(totalBytes);
 
-    int dataBlocksCount = dataBlocks.length;
+    final dataBlocksCount = dataBlocks.length;
     // Error-correct and copy data blocks together into a stream of bytes
     for (int j = 0; j < dataBlocksCount; j++) {
-      DataBlock dataBlock = dataBlocks[j];
-      Uint8List codewordBytes = dataBlock.codewords;
-      int numDataCodewords = dataBlock.numDataCodewords;
+      final dataBlock = dataBlocks[j];
+      final codewordBytes = dataBlock.codewords;
+      final numDataCodewords = dataBlock.numDataCodewords;
       _correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
         // De-interlace data blocks.
@@ -96,9 +96,9 @@ class Decoder {
   /// @param numDataCodewords number of codewords that are data bytes
   /// @throws ChecksumException if error correction fails
   void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
-    int numCodewords = codewordBytes.length;
+    final numCodewords = codewordBytes.length;
     // First read into an array of ints
-    Int32List codewordsInts = Int32List.fromList(
+    final codewordsInts = Int32List.fromList(
         List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF));
 
     try {

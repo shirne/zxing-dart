@@ -38,7 +38,7 @@ class Detector {
   /// @return [DetectorResult] encapsulating results of detecting a Data Matrix Code
   /// @throws NotFoundException if no Data Matrix Code can be found
   DetectorResult detect() {
-    List<ResultPoint> cornerPoints = _rectangleDetector.detect();
+    final cornerPoints = _rectangleDetector.detect();
 
     List<ResultPoint> points = _detectSolid1(cornerPoints);
     points = _detectSolid2(points);
@@ -48,10 +48,10 @@ class Detector {
     //}
     points = _shiftToModuleCenter(points);
 
-    ResultPoint topLeft = points[0];
-    ResultPoint bottomLeft = points[1];
-    ResultPoint bottomRight = points[2];
-    ResultPoint topRight = points[3];
+    final topLeft = points[0];
+    final bottomLeft = points[1];
+    final bottomRight = points[2];
+    final topRight = points[3];
 
     int dimensionTop = _transitionsBetween(topLeft, topRight) + 1;
     int dimensionRight = _transitionsBetween(bottomRight, topRight) + 1;
@@ -68,15 +68,15 @@ class Detector {
       dimensionTop = dimensionRight = math.max(dimensionTop, dimensionRight);
     }
 
-    BitMatrix bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight,
-        topRight, dimensionTop, dimensionRight);
+    final bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight, topRight,
+        dimensionTop, dimensionRight);
 
     return DetectorResult(bits, [topLeft, bottomLeft, bottomRight, topRight]);
   }
 
   static ResultPoint _shiftPoint(ResultPoint point, ResultPoint to, int div) {
-    double x = (to.x - point.x) / (div + 1);
-    double y = (to.y - point.y) / (div + 1);
+    final x = (to.x - point.x) / (div + 1);
+    final y = (to.y - point.y) / (div + 1);
     return ResultPoint(point.x + x, point.y + y);
   }
 
@@ -103,21 +103,21 @@ class Detector {
   List<ResultPoint> _detectSolid1(List<ResultPoint> cornerPoints) {
     // 0  2
     // 1  3
-    ResultPoint pointA = cornerPoints[0];
-    ResultPoint pointB = cornerPoints[1];
-    ResultPoint pointC = cornerPoints[3];
-    ResultPoint pointD = cornerPoints[2];
+    final pointA = cornerPoints[0];
+    final pointB = cornerPoints[1];
+    final pointC = cornerPoints[3];
+    final pointD = cornerPoints[2];
 
-    int trAB = _transitionsBetween(pointA, pointB);
-    int trBC = _transitionsBetween(pointB, pointC);
-    int trCD = _transitionsBetween(pointC, pointD);
-    int trDA = _transitionsBetween(pointD, pointA);
+    final trAB = _transitionsBetween(pointA, pointB);
+    final trBC = _transitionsBetween(pointB, pointC);
+    final trCD = _transitionsBetween(pointC, pointD);
+    final trDA = _transitionsBetween(pointD, pointA);
 
     // 0..3
     // :  :
     // 1--2
     int min = trAB;
-    List<ResultPoint> points = [pointD, pointA, pointB, pointC];
+    final points = [pointD, pointA, pointB, pointC];
     if (min > trBC) {
       min = trBC;
       points[0] = pointA;
@@ -147,18 +147,18 @@ class Detector {
     // A..D
     // :  :
     // B--C
-    ResultPoint pointA = points[0];
-    ResultPoint pointB = points[1];
-    ResultPoint pointC = points[2];
-    ResultPoint pointD = points[3];
+    final pointA = points[0];
+    final pointB = points[1];
+    final pointC = points[2];
+    final pointD = points[3];
 
     // Transition detection on the edge is not stable.
     // To safely detect, shift the points to the module center.
-    int tr = _transitionsBetween(pointA, pointD);
-    ResultPoint pointBs = _shiftPoint(pointB, pointC, (tr + 1) * 4);
-    ResultPoint pointCs = _shiftPoint(pointC, pointB, (tr + 1) * 4);
-    int trBA = _transitionsBetween(pointBs, pointA);
-    int trCD = _transitionsBetween(pointCs, pointD);
+    final tr = _transitionsBetween(pointA, pointD);
+    final pointBs = _shiftPoint(pointB, pointC, (tr + 1) * 4);
+    final pointCs = _shiftPoint(pointC, pointB, (tr + 1) * 4);
+    final trBA = _transitionsBetween(pointBs, pointA);
+    final trCD = _transitionsBetween(pointCs, pointD);
 
     // 0..3
     // |  :
@@ -185,24 +185,24 @@ class Detector {
     // A..D
     // |  :
     // B--C
-    ResultPoint pointA = points[0];
-    ResultPoint pointB = points[1];
-    ResultPoint pointC = points[2];
-    ResultPoint pointD = points[3];
+    final pointA = points[0];
+    final pointB = points[1];
+    final pointC = points[2];
+    final pointD = points[3];
 
     // shift points for safe transition detection.
     int trTop = _transitionsBetween(pointA, pointD);
     int trRight = _transitionsBetween(pointB, pointD);
-    ResultPoint pointAs = _shiftPoint(pointA, pointB, (trRight + 1) * 4);
-    ResultPoint pointCs = _shiftPoint(pointC, pointB, (trTop + 1) * 4);
+    final pointAs = _shiftPoint(pointA, pointB, (trRight + 1) * 4);
+    final pointCs = _shiftPoint(pointC, pointB, (trTop + 1) * 4);
 
     trTop = _transitionsBetween(pointAs, pointD);
     trRight = _transitionsBetween(pointCs, pointD);
 
-    ResultPoint candidate1 = ResultPoint(
+    final candidate1 = ResultPoint(
         pointD.x + (pointC.x - pointB.x) / (trTop + 1),
         pointD.y + (pointC.y - pointB.y) / (trTop + 1));
-    ResultPoint candidate2 = ResultPoint(
+    final candidate2 = ResultPoint(
         pointD.x + (pointA.x - pointB.x) / (trRight + 1),
         pointD.y + (pointA.y - pointB.y) / (trRight + 1));
 
@@ -216,9 +216,9 @@ class Detector {
       return candidate1;
     }
 
-    int sumc1 = _transitionsBetween(pointAs, candidate1) +
+    final sumc1 = _transitionsBetween(pointAs, candidate1) +
         _transitionsBetween(pointCs, candidate1);
-    int sumc2 = _transitionsBetween(pointAs, candidate2) +
+    final sumc2 = _transitionsBetween(pointAs, candidate2) +
         _transitionsBetween(pointCs, candidate2);
 
     if (sumc1 > sumc2) {
@@ -258,8 +258,8 @@ class Detector {
 
     // WhiteRectangleDetector returns points inside of the rectangle.
     // I want points on the edges.
-    double centerX = (pointA.x + pointB.x + pointC.x + pointD.x) / 4;
-    double centerY = (pointA.y + pointB.y + pointC.y + pointD.y) / 4;
+    final centerX = (pointA.x + pointB.x + pointC.x + pointD.x) / 4;
+    final centerY = (pointA.y + pointB.y + pointC.y + pointD.y) / 4;
     pointA = _moveAway(pointA, centerX, centerY);
     pointB = _moveAway(pointB, centerX, centerY);
     pointC = _moveAway(pointC, centerX, centerY);
@@ -296,7 +296,7 @@ class Detector {
       ResultPoint topRight,
       int dimensionX,
       int dimensionY) {
-    GridSampler sampler = GridSampler.getInstance();
+    final sampler = GridSampler.getInstance();
 
     return sampler.sampleGridBulk(
         image,
@@ -327,7 +327,7 @@ class Detector {
     int fromY = from.y.toInt();
     int toX = to.x.toInt();
     int toY = math.min(_image.height - 1, to.y.toInt());
-    bool steep = (toY - fromY).abs() > (toX - fromX).abs();
+    final steep = (toY - fromY).abs() > (toX - fromX).abs();
     if (steep) {
       int temp = fromX;
       fromX = fromY;
@@ -337,15 +337,15 @@ class Detector {
       toY = temp;
     }
 
-    int dx = (toX - fromX).abs();
-    int dy = (toY - fromY).abs();
+    final dx = (toX - fromX).abs();
+    final dy = (toY - fromY).abs();
     int error = -dx ~/ 2;
-    int ystep = fromY < toY ? 1 : -1;
-    int xstep = fromX < toX ? 1 : -1;
+    final ystep = fromY < toY ? 1 : -1;
+    final xstep = fromX < toX ? 1 : -1;
     int transitions = 0;
     bool inBlack = _image.get(steep ? fromY : fromX, steep ? fromX : fromY);
     for (int x = fromX, y = fromY; x != toX; x += xstep) {
-      bool isBlack = _image.get(steep ? y : x, steep ? x : y);
+      final isBlack = _image.get(steep ? y : x, steep ? x : y);
       if (isBlack != inBlack) {
         transitions++;
         inBlack = isBlack;

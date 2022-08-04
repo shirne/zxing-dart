@@ -26,16 +26,16 @@ import 'result_parser.dart';
 class URLTOResultParser extends ResultParser {
   @override
   URIParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!rawText.startsWith("urlto:") && !rawText.startsWith("URLTO:")) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!rawText.startsWith('urlto:') && !rawText.startsWith('URLTO:')) {
       return null;
     }
-    int titleEnd = rawText.indexOf(':', 6);
+    final titleEnd = rawText.indexOf(':', 6);
     if (titleEnd < 0) {
       return null;
     }
-    String? title = titleEnd <= 6 ? null : rawText.substring(6, titleEnd);
-    String uri = rawText.substring(titleEnd + 1);
+    final title = titleEnd <= 6 ? null : rawText.substring(6, titleEnd);
+    final uri = rawText.substring(titleEnd + 1);
     return URIParsedResult(uri, title);
   }
 }

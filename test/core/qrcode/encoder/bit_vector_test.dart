@@ -111,7 +111,7 @@ void main() {
     v2.appendBits(0xef, 8);
     v1.appendBitArray(v2);
     // beef = 1011 1110 1110 1111
-    expect(" X.XXXXX. XXX.XXXX", v1.toString());
+    expect(' X.XXXXX. XXX.XXXX', v1.toString());
   });
 
   test('testXOR', () {
@@ -159,6 +159,6 @@ void main() {
   test('testToString', () {
     BitArray v = BitArray();
     v.appendBits(0xdead, 16); // 1101 1110 1010 1101
-    expect(" XX.XXXX. X.X.XX.X", v.toString());
+    expect(' XX.XXXX. X.X.XX.X', v.toString());
   });
 }

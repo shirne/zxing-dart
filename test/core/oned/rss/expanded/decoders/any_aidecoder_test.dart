@@ -29,7 +29,7 @@ import 'package:test/scaffolding.dart';
 import 'abstract_decoder.dart';
 
 void main() {
-  final String header = ".....";
+  final String header = '.....';
 
   test('testAnyAIDecoder1', () {
     String data = header +
@@ -39,7 +39,7 @@ void main() {
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2numeric +
         AbstractDecoderTest.numeric12;
-    String expected = "(10)12A12";
+    String expected = '(10)12A12';
 
     assertCorrectBinaryString(data, expected);
   });
@@ -52,7 +52,7 @@ void main() {
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2isoiec646 +
         AbstractDecoderTest.i646B;
-    String expected = "(10)12AB";
+    String expected = '(10)12AB';
 
     assertCorrectBinaryString(data, expected);
   });
@@ -68,7 +68,7 @@ void main() {
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alpha2numeric +
         AbstractDecoderTest.numeric10;
-    String expected = "(10)BCA10";
+    String expected = '(10)BCA10';
 
     assertCorrectBinaryString(data, expected);
   });
@@ -77,7 +77,7 @@ void main() {
     String data = header +
         AbstractDecoderTest.numeric10 +
         AbstractDecoderTest.numeric1FNC1;
-    String expected = "(10)1";
+    String expected = '(10)1';
 
     assertCorrectBinaryString(data, expected);
   });
@@ -88,7 +88,7 @@ void main() {
         AbstractDecoderTest.numeric2alpha +
         AbstractDecoderTest.alphaA +
         AbstractDecoderTest.alphaFNC1;
-    String expected = "(10)A";
+    String expected = '(10)A';
 
     assertCorrectBinaryString(data, expected);
   });
@@ -101,7 +101,7 @@ void main() {
         AbstractDecoderTest.isoiec6462alpha +
         AbstractDecoderTest.i646B +
         AbstractDecoderTest.i646FNC1;
-    String expected = "(10)AB";
+    String expected = '(10)AB';
 
     assertCorrectBinaryString(data, expected);
   });

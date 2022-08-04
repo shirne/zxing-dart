@@ -25,24 +25,24 @@ import '../utils.dart';
 void main() {
   test('testEncode', () {
     String testStr =
-        "0000001010001011010111101111010110111010101001110111001010001001011100101000000";
+        '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
     BitMatrix result =
-        EAN8Writer().encode("96385074", BarcodeFormat.EAN_8, testStr.length, 0);
+        EAN8Writer().encode('96385074', BarcodeFormat.EAN_8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
   test('testAddChecksumAndEncode', () {
     String testStr =
-        "0000001010001011010111101111010110111010101001110111001010001001011100101000000";
+        '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
     BitMatrix result =
-        EAN8Writer().encode("9638507", BarcodeFormat.EAN_8, testStr.length, 0);
+        EAN8Writer().encode('9638507', BarcodeFormat.EAN_8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
   //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
     try {
-      EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+      EAN8Writer().encode('96385abc', BarcodeFormat.EAN_8, 0, 0);
       fail('Should throw ArgumentError');
     } on ArgumentError catch (_) {
       // passed

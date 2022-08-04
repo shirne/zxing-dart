@@ -75,7 +75,7 @@ class GenericGFPoly {
       return result;
     }
     int result = _coefficients[0];
-    int size = _coefficients.length;
+    final size = _coefficients.length;
     for (int i = 1; i < size; i++) {
       result =
           GenericGF.addOrSubtract(_field.multiply(a, result), _coefficients[i]);
@@ -85,7 +85,7 @@ class GenericGFPoly {
 
   GenericGFPoly addOrSubtract(GenericGFPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError('GenericGFPolys do not have same GenericGF field');
     }
     if (isZero) {
       return other;
@@ -97,12 +97,12 @@ class GenericGFPoly {
     List<int> smallerCoefficients = _coefficients;
     List<int> largerCoefficients = other._coefficients;
     if (smallerCoefficients.length > largerCoefficients.length) {
-      List<int> temp = smallerCoefficients;
+      final temp = smallerCoefficients;
       smallerCoefficients = largerCoefficients;
       largerCoefficients = temp;
     }
-    Int32List sumDiff = Int32List(largerCoefficients.length);
-    int lengthDiff = largerCoefficients.length - smallerCoefficients.length;
+    final sumDiff = Int32List(largerCoefficients.length);
+    final lengthDiff = largerCoefficients.length - smallerCoefficients.length;
     // Copy high-order terms only found in higher-degree polynomial's coefficients
     List.copyRange(sumDiff, 0, largerCoefficients, 0, lengthDiff);
 
@@ -116,18 +116,18 @@ class GenericGFPoly {
 
   GenericGFPoly multiply(GenericGFPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError('GenericGFPolys do not have same GenericGF field');
     }
     if (isZero || other.isZero) {
       return _field.zero;
     }
-    Int32List aCoefficients = _coefficients;
-    int aLength = aCoefficients.length;
-    Int32List bCoefficients = other._coefficients;
-    int bLength = bCoefficients.length;
-    Int32List product = Int32List(aLength + bLength - 1);
+    final aCoefficients = _coefficients;
+    final aLength = aCoefficients.length;
+    final bCoefficients = other._coefficients;
+    final bLength = bCoefficients.length;
+    final product = Int32List(aLength + bLength - 1);
     for (int i = 0; i < aLength; i++) {
-      int aCoeff = aCoefficients[i];
+      final aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
         product[i + j] = GenericGF.addOrSubtract(
             product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
@@ -143,8 +143,8 @@ class GenericGFPoly {
     if (scalar == 1) {
       return this;
     }
-    int size = _coefficients.length;
-    Int32List product = Int32List(size);
+    final size = _coefficients.length;
+    final product = Int32List(size);
     for (int i = 0; i < size; i++) {
       product[i] = _field.multiply(_coefficients[i], scalar);
     }
@@ -158,8 +158,8 @@ class GenericGFPoly {
     if (coefficient == 0) {
       return _field.zero;
     }
-    int size = _coefficients.length;
-    Int32List product = Int32List(size + degree);
+    final size = _coefficients.length;
+    final product = Int32List(size + degree);
     for (int i = 0; i < size; i++) {
       product[i] = _field.multiply(_coefficients[i], coefficient);
     }
@@ -168,25 +168,25 @@ class GenericGFPoly {
 
   List<GenericGFPoly> divide(GenericGFPoly other) {
     if (_field != other._field) {
-      throw ArgumentError("GenericGFPolys do not have same GenericGF field");
+      throw ArgumentError('GenericGFPolys do not have same GenericGF field');
     }
     if (other.isZero) {
-      throw ArgumentError("Divide by 0");
+      throw ArgumentError('Divide by 0');
     }
 
     GenericGFPoly quotient = _field.zero;
     GenericGFPoly remainder = this;
 
-    int denominatorLeadingTerm = other.getCoefficient(other.degree);
-    int inverseDenominatorLeadingTerm = _field.inverse(denominatorLeadingTerm);
+    final denominatorLeadingTerm = other.getCoefficient(other.degree);
+    final inverseDenominatorLeadingTerm =
+        _field.inverse(denominatorLeadingTerm);
 
     while (remainder.degree >= other.degree && !remainder.isZero) {
-      int degreeDifference = remainder.degree - other.degree;
-      int scale = _field.multiply(remainder.getCoefficient(remainder.degree),
+      final degreeDifference = remainder.degree - other.degree;
+      final scale = _field.multiply(remainder.getCoefficient(remainder.degree),
           inverseDenominatorLeadingTerm);
-      GenericGFPoly term = other.multiplyByMonomial(degreeDifference, scale);
-      GenericGFPoly iterationQuotient =
-          _field.buildMonomial(degreeDifference, scale);
+      final term = other.multiplyByMonomial(degreeDifference, scale);
+      final iterationQuotient = _field.buildMonomial(degreeDifference, scale);
       quotient = quotient.addOrSubtract(iterationQuotient);
       remainder = remainder.addOrSubtract(term);
     }
@@ -197,32 +197,32 @@ class GenericGFPoly {
   @override
   String toString() {
     if (isZero) {
-      return "0";
+      return '0';
     }
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int deg = degree; deg >= 0; deg--) {
       int coefficient = getCoefficient(deg);
       if (coefficient != 0) {
         if (coefficient < 0) {
           if (deg == degree) {
-            result.write("-");
+            result.write('-');
           } else {
-            result.write(" - ");
+            result.write(' - ');
           }
           coefficient = -coefficient;
         } else {
           if (result.length > 0) {
-            result.write(" + ");
+            result.write(' + ');
           }
         }
         if (deg == 0 || coefficient != 1) {
-          int alphaPower = _field.log(coefficient);
+          final alphaPower = _field.log(coefficient);
           if (alphaPower == 0) {
             result.write('1');
           } else if (alphaPower == 1) {
             result.write('a');
           } else {
-            result.write("a^");
+            result.write('a^');
             result.write(alphaPower);
           }
         }
@@ -230,7 +230,7 @@ class GenericGFPoly {
           if (deg == 1) {
             result.write('x');
           } else {
-            result.write("x^");
+            result.write('x^');
             result.write(deg);
           }
         }

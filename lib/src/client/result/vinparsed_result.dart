@@ -43,7 +43,7 @@ class VINParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     result.write(worldManufacturerID);
     result.write(' ');
     result.write(vehicleDescriptorSection);

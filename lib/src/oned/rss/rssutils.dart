@@ -25,7 +25,7 @@ class RSSUtils {
     }
     int val = 0;
     int narrowMask = 0;
-    int elements = widths.length;
+    final elements = widths.length;
     for (int bar = 0; bar < elements - 1; bar++) {
       int elmWidth = 1;
       for (narrowMask |= 1 << bar;

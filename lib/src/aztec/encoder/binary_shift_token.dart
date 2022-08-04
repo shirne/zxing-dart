@@ -49,7 +49,6 @@ class BinaryShiftToken extends Token {
   }
 
   @override
-  String toString() {
-    return "<$_binaryShiftStart::${_binaryShiftStart + _binaryShiftByteCount - 1}>";
-  }
+  String toString() =>
+      '<$_binaryShiftStart::${_binaryShiftStart + _binaryShiftByteCount - 1}>';
 }

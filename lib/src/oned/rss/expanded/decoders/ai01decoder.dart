@@ -37,8 +37,8 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
   AI01decoder(BitArray information) : super(information);
 
   void encodeCompressedGtin(StringBuilder buf, int currentPos) {
-    buf.write("(01)");
-    int initialPosition = buf.length;
+    buf.write('(01)');
+    final initialPosition = buf.length;
     buf.write('9');
 
     encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
@@ -47,7 +47,7 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
   void encodeCompressedGtinWithoutAI(
       StringBuilder buf, int currentPos, int initialBufferPosition) {
     for (int i = 0; i < 4; ++i) {
-      int currentBlock = generalDecoder.extractNumericValueFromBitArray(
+      final currentBlock = generalDecoder.extractNumericValueFromBitArray(
           currentPos + 10 * i, 10);
       if (currentBlock ~/ 100 == 0) {
         buf.write('0');
@@ -64,7 +64,7 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
   static void _appendCheckDigit(StringBuilder buf, int currentPos) {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
-      int digit = buf.codePointAt(i + currentPos) - 48 /* 0 */;
+      final digit = buf.codePointAt(i + currentPos) - 48 /* 0 */;
       checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
     }
 

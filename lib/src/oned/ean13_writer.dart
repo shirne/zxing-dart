@@ -39,7 +39,7 @@ class EAN13Writer extends UPCEANWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
-    int length = contents.length;
+    final length = contents.length;
     switch (length) {
       case 12:
         // No check digit present, calculate it and add it
@@ -54,22 +54,24 @@ class EAN13Writer extends UPCEANWriter {
       case 13:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
-            throw ArgumentError("Contents do not pass checksum");
+            throw ArgumentError('Contents do not pass checksum');
           }
         } on FormatsException catch (_) {
-          throw ArgumentError("Illegal contents");
+          throw ArgumentError('Illegal contents');
         }
         break;
       default:
         throw ArgumentError(
-            "Requested contents should be 12 or 13 digits long, but got $length");
+          'Requested contents should be 12 or 13 '
+          'digits long, but got $length',
+        );
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
-    int firstDigit = int.parse(contents[0]);
-    int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
-    List<bool> result = List.filled(_CODE_WIDTH, false);
+    final firstDigit = int.parse(contents[0]);
+    final parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
+    final result = List.filled(_CODE_WIDTH, false);
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(
@@ -89,7 +91,7 @@ class EAN13Writer extends UPCEANWriter {
         result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
     for (int i = 7; i <= 12; i++) {
-      int digit = int.parse(contents[i]);
+      final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
           result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }

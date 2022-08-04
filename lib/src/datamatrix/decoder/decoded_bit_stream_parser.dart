@@ -76,13 +76,13 @@ class DecodedBitStreamParser {
   DecodedBitStreamParser._();
 
   static DecoderResult decode(Uint8List bytes) {
-    BitSource bits = BitSource(bytes);
-    ECIStringBuilder result = ECIStringBuilder();
-    StringBuilder resultTrailer = StringBuilder();
-    List<Uint8List> byteSegments = [];
+    final bits = BitSource(bytes);
+    final result = ECIStringBuilder();
+    final resultTrailer = StringBuilder();
+    final byteSegments = <Uint8List>[];
     _Mode mode = _Mode.ASCII_ENCODE;
     // Could be replaceable by looking directly at 'bytes', if we're sure of not having to account for multi byte values.
-    Set<int> fnc1Positions = {};
+    final fnc1Positions = <int>{};
     int symbologyModifier = 0;
     bool isECIencoded = false;
     do {
@@ -173,7 +173,7 @@ class DecodedBitStreamParser {
         return _Mode.PAD_ENCODE;
       } else if (oneByte <= 229) {
         // 2-digit data 00-99 (Numeric Value + 130)
-        int value = oneByte - 130;
+        final value = oneByte - 130;
         if (value < 10) {
           // pad with '0' for single digit values
           result.write('0');
@@ -198,12 +198,12 @@ class DecodedBitStreamParser {
             upperShift = true;
             break;
           case 236: // 05 Macro
-            result.write("[)>\u001E05\u001D");
-            resultTrailer.insert(0, "\u001E\u0004");
+            result.write('[)>\u001E05\u001D');
+            resultTrailer.insert(0, '\u001E\u0004');
             break;
           case 237: // 06 Macro
-            result.write("[)>\u001E06\u001D");
-            resultTrailer.insert(0, "\u001E\u0004");
+            result.write('[)>\u001E06\u001D');
+            resultTrailer.insert(0, '\u001E\u0004');
             break;
           case 238: // Latch to ANSI X12 encodation
             return _Mode.ANSIX12_ENCODE;
@@ -237,7 +237,7 @@ class DecodedBitStreamParser {
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
     bool upperShift = false;
 
-    List<int> cValues = [0, 0, 0];
+    final cValues = <int>[0, 0, 0];
     int shift = 0;
 
     do {
@@ -245,7 +245,7 @@ class DecodedBitStreamParser {
       if (bits.available() == 8) {
         return;
       }
-      int firstByte = bits.readBits(8);
+      final firstByte = bits.readBits(8);
       if (firstByte == 254) {
         // Unlatch codeword
         return;
@@ -254,13 +254,13 @@ class DecodedBitStreamParser {
       _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
-        int cValue = cValues[i];
+        final cValue = cValues[i];
         switch (shift) {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
             } else if (cValue < _C40_BASIC_SET_CHARS.length) {
-              int c40char = _C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+              final c40char = _C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(c40char + 128);
                 upperShift = false;
@@ -282,7 +282,7 @@ class DecodedBitStreamParser {
             break;
           case 2:
             if (cValue < _C40_SHIFT2_SET_CHARS.length) {
-              int c40char = _C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+              final c40char = _C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(c40char + 128);
                 upperShift = false;
@@ -328,14 +328,14 @@ class DecodedBitStreamParser {
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
     bool upperShift = false;
 
-    List<int> cValues = [0, 0, 0];
+    final cValues = [0, 0, 0];
     int shift = 0;
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
         return;
       }
-      int firstByte = bits.readBits(8);
+      final firstByte = bits.readBits(8);
       if (firstByte == 254) {
         // Unlatch codeword
         return;
@@ -344,13 +344,13 @@ class DecodedBitStreamParser {
       _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
-        int cValue = cValues[i];
+        final cValue = cValues[i];
         switch (shift) {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
             } else if (cValue < _TEXT_BASIC_SET_CHARS.length) {
-              int textChar = _TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+              final textChar = _TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
@@ -373,7 +373,7 @@ class DecodedBitStreamParser {
           case 2:
             // Shift 2 for Text is the same encoding as C40
             if (cValue < _TEXT_SHIFT2_SET_CHARS.length) {
-              int textChar = _TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+              final textChar = _TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
@@ -397,7 +397,7 @@ class DecodedBitStreamParser {
             break;
           case 3:
             if (cValue < _TEXT_SHIFT3_SET_CHARS.length) {
-              int textChar = _TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
+              final textChar = _TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
@@ -421,13 +421,13 @@ class DecodedBitStreamParser {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
 
-    List<int> cValues = [0, 0, 0];
+    final cValues = [0, 0, 0];
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
         return;
       }
-      int firstByte = bits.readBits(8);
+      final firstByte = bits.readBits(8);
       if (firstByte == 254) {
         // Unlatch codeword
         return;
@@ -436,7 +436,7 @@ class DecodedBitStreamParser {
       _parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
-        int cValue = cValues[i];
+        final cValue = cValues[i];
         switch (cValue) {
           case 0: // X12 segment terminator <CR>
             result.write('\r');
@@ -491,7 +491,7 @@ class DecodedBitStreamParser {
         if (edifactValue == 0x1F) {
           // 011111
           // Read rest of byte, which should be 0, and stop
-          int bitsLeft = 8 - bits.bitOffset;
+          final bitsLeft = 8 - bits.bitOffset;
           if (bitsLeft != 8) {
             bits.readBits(bitsLeft);
           }
@@ -512,7 +512,7 @@ class DecodedBitStreamParser {
       BitSource bits, ECIStringBuilder result, List<Uint8List> byteSegments) {
     // Figure out how long the Base 256 Segment is.
     int codewordPosition = 1 + bits.byteOffset; // position is 1-indexed
-    int d1 = _unrandomize255State(bits.readBits(8), codewordPosition++);
+    final d1 = _unrandomize255State(bits.readBits(8), codewordPosition++);
     int count;
     if (d1 == 0) {
       // Read the remainder of the symbol
@@ -532,7 +532,7 @@ class DecodedBitStreamParser {
       throw FormatsException.instance;
     }
 
-    Uint8List bytes = Uint8List(count);
+    final bytes = Uint8List(count);
     for (int i = 0; i < count; i++) {
       // Have seen this particular error in the wild, such as at
       // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
@@ -550,7 +550,7 @@ class DecodedBitStreamParser {
     if (bits.available() < 8) {
       throw FormatsException.instance;
     }
-    int c1 = bits.readBits(8);
+    final c1 = bits.readBits(8);
     if (c1 <= 127) {
       result.appendECI(c1 - 1);
     }
@@ -573,8 +573,8 @@ class DecodedBitStreamParser {
   /// See ISO 16022:2006, Annex B, B.2
   static int _unrandomize255State(
       int randomizedBase256Codeword, int base256CodewordPosition) {
-    int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
-    int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
+    final pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
+    final tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
     return tempVariable >= 0 ? tempVariable : tempVariable + 256;
   }
 }

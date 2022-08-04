@@ -653,7 +653,9 @@ class PDF417 {
     if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) {
       // +1 for symbol length CW
       throw WriterException(
-          "Encoded message contains too many code words, message too big (${msg.length} bytes)");
+        'Encoded message contains too many code words, '
+        'message too big (${msg.length} bytes)',
+      );
     }
     int n = sourceCodeWords + pad + 1;
     StringBuffer sb = StringBuffer();
@@ -721,7 +723,7 @@ class PDF417 {
     }
 
     if (dimension == null) {
-      throw WriterException("Unable to fit message in columns");
+      throw WriterException('Unable to fit message in columns');
     }
 
     return dimension;

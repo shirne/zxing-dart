@@ -35,18 +35,17 @@ class MultiDetector extends Detector {
   MultiDetector(BitMatrix image) : super(image);
 
   List<DetectorResult> detectMulti(Map<DecodeHintType, Object>? hints) {
-    ResultPointCallback? resultPointCallback =
+    final resultPointCallback =
         hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
             as ResultPointCallback?;
-    MultiFinderPatternFinder finder =
-        MultiFinderPatternFinder(image, resultPointCallback);
-    List<FinderPatternInfo> infos = finder.findMulti(hints);
+    final finder = MultiFinderPatternFinder(image, resultPointCallback);
+    final infos = finder.findMulti(hints);
 
     if (infos.isEmpty) {
       throw NotFoundException.instance;
     }
 
-    List<DetectorResult> result = [];
+    final result = <DetectorResult>[];
     for (FinderPatternInfo info in infos) {
       try {
         result.add(processFinderPatternInfo(info));

@@ -40,42 +40,50 @@ class WifiResultParser extends ResultParser {
   @override
   WifiParsedResult? parse(Result result) {
     String rawText = ResultParser.getMassagedText(result);
-    if (!rawText.startsWith("WIFI:")) {
+    if (!rawText.startsWith('WIFI:')) {
       return null;
     }
-    rawText = rawText.substring("WIFI:".length);
-    String? ssid = matchSinglePrefixedField("S:", rawText, ';', false);
+    rawText = rawText.substring('WIFI:'.length);
+    final ssid = matchSinglePrefixedField('S:', rawText, ';', false);
     if (ssid == null || ssid.isEmpty) {
       return null;
     }
-    String? pass = matchSinglePrefixedField("P:", rawText, ';', false);
-    String? type = matchSinglePrefixedField("T:", rawText, ';', false);
-    type ??= "nopass";
+    final pass = matchSinglePrefixedField('P:', rawText, ';', false);
+    String? type = matchSinglePrefixedField('T:', rawText, ';', false);
+    type ??= 'nopass';
 
     // Unfortunately, in the past, H: was not just used for bool 'hidden', but 'phase 2 method'.
     // To try to retain backwards compatibility, we set one or the other based on whether the string
     // is 'true' or 'false':
     bool hidden = false;
     String? phase2Method =
-        matchSinglePrefixedField("PH2:", rawText, ';', false);
-    String? hValue = matchSinglePrefixedField("H:", rawText, ';', false);
+        matchSinglePrefixedField('PH2:', rawText, ';', false);
+    final hValue = matchSinglePrefixedField('H:', rawText, ';', false);
     if (hValue != null) {
       // If PH2 was specified separately, or if the value is clearly bool, interpret it as 'hidden'
       if (phase2Method != null ||
-          "true" == hValue.toLowerCase() ||
-          "false" == hValue.toLowerCase()) {
-        hidden = "true" == hValue.toLowerCase();
+          'true' == hValue.toLowerCase() ||
+          'false' == hValue.toLowerCase()) {
+        hidden = 'true' == hValue.toLowerCase();
       } else {
         phase2Method = hValue;
       }
     }
 
-    String? identity = matchSinglePrefixedField("I:", rawText, ';', false);
-    String? anonymousIdentity =
-        matchSinglePrefixedField("A:", rawText, ';', false);
-    String? eapMethod = matchSinglePrefixedField("E:", rawText, ';', false);
+    final identity = matchSinglePrefixedField('I:', rawText, ';', false);
+    final anonymousIdentity =
+        matchSinglePrefixedField('A:', rawText, ';', false);
+    final eapMethod = matchSinglePrefixedField('E:', rawText, ';', false);
 
-    return WifiParsedResult(type, ssid, pass, hidden, identity,
-        anonymousIdentity, eapMethod, phase2Method);
+    return WifiParsedResult(
+      type,
+      ssid,
+      pass,
+      hidden,
+      identity,
+      anonymousIdentity,
+      eapMethod,
+      phase2Method,
+    );
   }
 }

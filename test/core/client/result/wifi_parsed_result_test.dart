@@ -37,52 +37,51 @@ void main() {
   }
 
   test('testNoPassword', () {
-    doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", null, "nopass");
-    doTest("WIFI:S:No Password;P:;T:;;", "No Password", null, "nopass");
+    doTest('WIFI:S:NoPassword;P:;T:;;', 'NoPassword', null, 'nopass');
+    doTest('WIFI:S:No Password;P:;T:;;', 'No Password', null, 'nopass');
   });
 
   test('testWep', () {
-    doTest("WIFI:S:TenChars;P:0123456789;T:WEP;;", "TenChars", "0123456789",
-        "WEP");
-    doTest("WIFI:S:TenChars;P:abcde56789;T:WEP;;", "TenChars", "abcde56789",
-        "WEP");
+    doTest('WIFI:S:TenChars;P:0123456789;T:WEP;;', 'TenChars', '0123456789',
+        'WEP');
+    doTest('WIFI:S:TenChars;P:abcde56789;T:WEP;;', 'TenChars', 'abcde56789',
+        'WEP');
     // Non hex should not fail at this level
-    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere",
-        "WEP");
+    doTest('WIFI:S:TenChars;P:hellothere;T:WEP;;', 'TenChars', 'hellothere',
+        'WEP');
 
     // Escaped semicolons
-    doTest("WIFI:S:Ten\\;\\;Chars;P:0123456789;T:WEP;;", "Ten;;Chars",
-        "0123456789", "WEP");
+    doTest('WIFI:S:Ten\\;\\;Chars;P:0123456789;T:WEP;;', 'Ten;;Chars',
+        '0123456789', 'WEP');
     // Escaped colons
-    doTest("WIFI:S:Ten\\:\\:Chars;P:0123456789;T:WEP;;", "Ten::Chars",
-        "0123456789", "WEP");
+    doTest('WIFI:S:Ten\\:\\:Chars;P:0123456789;T:WEP;;', 'Ten::Chars',
+        '0123456789', 'WEP');
 
     // TODO(vikrama) Need a test for SB as well.
   });
 
   /// Put in checks for the length of the password for wep.
   test('testWpa', () {
-    doTest("WIFI:S:TenChars;P:wow;T:WPA;;", "TenChars", "wow", "WPA");
-    doTest("WIFI:S:TenChars;P:space is silent;T:WPA;;", "TenChars",
-        "space is silent", "WPA");
-    doTest("WIFI:S:TenChars;P:hellothere;T:WEP;;", "TenChars", "hellothere",
-        "WEP");
+    doTest('WIFI:S:TenChars;P:wow;T:WPA;;', 'TenChars', 'wow', 'WPA');
+    doTest('WIFI:S:TenChars;P:space is silent;T:WPA;;', 'TenChars',
+        'space is silent', 'WPA');
+    doTest('WIFI:S:TenChars;P:hellothere;T:WEP;;', 'TenChars', 'hellothere',
+        'WEP');
 
     // Escaped semicolons
-    doTest("WIFI:S:TenChars;P:hello\\;there;T:WEP;;", "TenChars", "hello;there",
-        "WEP");
+    doTest('WIFI:S:TenChars;P:hello\\;there;T:WEP;;', 'TenChars', 'hello;there',
+        'WEP');
     // Escaped colons
-    doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there",
-        "WEP");
+    doTest('WIFI:S:TenChars;P:hello\\:there;T:WEP;;', 'TenChars', 'hello:there',
+        'WEP');
   });
 
   test('testEscape', () {
-    doTest("WIFI:T:WPA;S:test;P:my_password\\\\;;", "test", "my_password\\",
-        "WPA");
-    doTest("WIFI:T:WPA;S:My_WiFi_SSID;P:abc123/;;", "My_WiFi_SSID", "abc123/",
-        "WPA");
-    doTest(
-        "WIFI:T:WPA;S:\"foo\\;bar\\\\baz\";;", "\"foo;bar\\baz\"", null, "WPA");
-    doTest("WIFI:T:WPA;S:test;P:\\\"abcd\\\";;", "test", "\"abcd\"", "WPA");
+    doTest('WIFI:T:WPA;S:test;P:my_password\\\\;;', 'test', 'my_password\\',
+        'WPA');
+    doTest('WIFI:T:WPA;S:My_WiFi_SSID;P:abc123/;;', 'My_WiFi_SSID', 'abc123/',
+        'WPA');
+    doTest('WIFI:T:WPA;S:"foo\\;bar\\\\baz";;', '"foo;bar\\baz"', null, 'WPA');
+    doTest('WIFI:T:WPA;S:test;P:\\"abcd\\";;', 'test', '"abcd"', 'WPA');
   });
 }

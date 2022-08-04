@@ -28,7 +28,7 @@ class UPCEANExtensionSupport {
   final UPCEANExtension5Support _fiveSupport = UPCEANExtension5Support();
 
   Result decodeRow(int rowNumber, BitArray row, int rowOffset) {
-    List<int> extensionStartRange = UPCEANReader.findGuardPattern(
+    final extensionStartRange = UPCEANReader.findGuardPattern(
         row, rowOffset, false, _EXTENSION_START_PATTERN);
     try {
       return _fiveSupport.decodeRow(rowNumber, row, extensionStartRange);

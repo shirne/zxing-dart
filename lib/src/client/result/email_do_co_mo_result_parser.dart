@@ -27,11 +27,11 @@ import 'result_parser.dart';
 class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
   @override
   EmailAddressParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!rawText.startsWith("MATMSG:")) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!rawText.startsWith('MATMSG:')) {
       return null;
     }
-    List<String>? tos = matchDoCoMoPrefixedField("TO:", rawText);
+    final tos = matchDoCoMoPrefixedField('TO:', rawText);
     if (tos == null) {
       return null;
     }
@@ -40,8 +40,8 @@ class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
         return null;
       }
     }
-    String? subject = matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
-    String? body = matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
+    final subject = matchSingleDoCoMoPrefixedField('SUB:', rawText, false);
+    final body = matchSingleDoCoMoPrefixedField('BODY:', rawText, false);
     return EmailAddressParsedResult(tos, null, null, subject, body);
   }
 }

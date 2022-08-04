@@ -25,7 +25,7 @@ import '../writer.dart';
 ///
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)
 abstract class OneDimensionalCodeWriter implements Writer {
-  static final RegExp _numeric = RegExp(r"^[0-9]+$");
+  static final _numeric = RegExp(r'^[0-9]+$');
 
   /// Encode the contents following specified format.
   /// `width` and `height` are required size. This method may return bigger size
@@ -36,16 +36,16 @@ abstract class OneDimensionalCodeWriter implements Writer {
   BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       [Map<EncodeHintType, Object>? hints]) {
     if (contents.isEmpty) {
-      throw ArgumentError("Found empty contents");
+      throw ArgumentError('Found empty contents');
     }
 
     if (width < 0 || height < 0) {
       throw ArgumentError(
-          "Negative size is not allowed. Input: $width" 'x$height');
+          'Negative size is not allowed. Input: $width' 'x$height');
     }
-    List<BarcodeFormat>? supportedFormats = supportedWriteFormats;
+    final supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {
-      throw ArgumentError("Can only encode $supportedFormats, but got $format");
+      throw ArgumentError('Can only encode $supportedFormats, but got $format');
     }
 
     int sidesMargin = defaultMargin;
@@ -53,7 +53,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
       sidesMargin = int.parse(hints[EncodeHintType.MARGIN].toString());
     }
 
-    List<bool> code = encodeContent(contents, hints);
+    final code = encodeContent(contents, hints);
     return _renderResult(code, width, height, sidesMargin);
   }
 
@@ -62,16 +62,16 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @return a byte array of horizontal pixels (0 = white, 1 = black)
   static BitMatrix _renderResult(
       List<bool> code, int width, int height, int sidesMargin) {
-    int inputWidth = code.length;
+    final inputWidth = code.length;
     // Add quiet zone on both sides.
-    int fullWidth = inputWidth + sidesMargin;
-    int outputWidth = math.max(width, fullWidth);
-    int outputHeight = math.max(1, height);
+    final fullWidth = inputWidth + sidesMargin;
+    final outputWidth = math.max(width, fullWidth);
+    final outputHeight = math.max(1, height);
 
-    int multiple = outputWidth ~/ fullWidth;
-    int leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
+    final multiple = outputWidth ~/ fullWidth;
+    final leftPadding = (outputWidth - (inputWidth * multiple)) ~/ 2;
 
-    BitMatrix output = BitMatrix(outputWidth, outputHeight);
+    final output = BitMatrix(outputWidth, outputHeight);
     for (int inputX = 0, outputX = leftPadding;
         inputX < inputWidth;
         inputX++, outputX += multiple) {
@@ -86,7 +86,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @throws IllegalArgumentException if input contains characters other than digits 0-9.
   static void checkNumeric(String contents) {
     if (!_numeric.hasMatch(contents)) {
-      throw ArgumentError("Input should only contain digits 0-9 ($contents)");
+      throw ArgumentError('Input should only contain digits 0-9 ($contents)');
     }
   }
 

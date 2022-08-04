@@ -17,7 +17,6 @@
 import 'dart:typed_data';
 
 import '../../qrcode/decoder/qrcode_decoder_meta_data.dart';
-import '../../common/decoder_result.dart';
 import '../../barcode_format.dart';
 import '../../common/detector_result.dart';
 import '../../binary_bitmap.dart';
@@ -42,25 +41,23 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   List<Result> decodeMultiple(BinaryBitmap image,
       [Map<DecodeHintType, Object>? hints]) {
     List<Result> results = [];
-    List<DetectorResult> detectorResults =
-        MultiDetector(image.blackMatrix).detectMulti(hints);
+    final detectorResults = MultiDetector(image.blackMatrix).detectMulti(hints);
     for (DetectorResult detectorResult in detectorResults) {
       try {
-        DecoderResult decoderResult =
-            decoder.decodeMatrix(detectorResult.bits, hints);
-        List<ResultPoint> points = detectorResult.points;
+        final decoderResult = decoder.decodeMatrix(detectorResult.bits, hints);
+        final points = detectorResult.points;
         // If the code was mirrored: swap the bottom-left and the top-right points.
         if (decoderResult.other is QRCodeDecoderMetaData) {
           (decoderResult.other as QRCodeDecoderMetaData)
               .applyMirroredCorrection(points);
         }
-        Result result = Result(decoderResult.text, decoderResult.rawBytes,
+        final result = Result(decoderResult.text, decoderResult.rawBytes,
             points, BarcodeFormat.QR_CODE);
-        List<Uint8List>? byteSegments = decoderResult.byteSegments;
+        final byteSegments = decoderResult.byteSegments;
         if (byteSegments != null) {
           result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
         }
-        String? ecLevel = decoderResult.ecLevel;
+        final ecLevel = decoderResult.ecLevel;
         if (ecLevel != null) {
           result.putMetadata(
               ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
@@ -85,8 +82,8 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   }
 
   static List<Result> processStructuredAppend(List<Result> results) {
-    List<Result> newResults = [];
-    List<Result> saResults = [];
+    final newResults = <Result>[];
+    final saResults = <Result>[];
     for (Result result in results) {
       if (result.resultMetadata!
           .containsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE)) {
@@ -101,17 +98,17 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
 
     // sort and concatenate the SA list items
     saResults.sort(_compareResult);
-    StringBuffer newText = StringBuffer();
-    BytesBuilder newRawBytes = BytesBuilder();
-    BytesBuilder newByteSegment = BytesBuilder();
+    final newText = StringBuffer();
+    final newRawBytes = BytesBuilder();
+    final newByteSegment = BytesBuilder();
     //ByteArrayOutputStream newRawBytes = ByteArrayOutputStream();
     //ByteArrayOutputStream newByteSegment = ByteArrayOutputStream();
     for (Result saResult in saResults) {
       newText.write(saResult.text);
-      List<int>? saBytes = saResult.rawBytes;
+      final saBytes = saResult.rawBytes;
       if (saBytes != null) newRawBytes.add(saBytes);
       // @SuppressWarnings("unchecked")
-      Iterable<Uint8List>? byteSegments =
+      final byteSegments =
           saResult.resultMetadata?[ResultMetadataType.BYTE_SEGMENTS]
               as Iterable<Uint8List>?;
       if (byteSegments != null) {
@@ -121,7 +118,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
       }
     }
 
-    Result newResult = Result(
+    final newResult = Result(
         newText.toString(),
         Uint8List.fromList(newRawBytes.takeBytes()),
         _noPoints,
@@ -135,11 +132,11 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   }
 
   static int _compareResult(Result a, Result b) {
-    int aNumber =
+    final aNumber =
         (a.resultMetadata![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
                 as int?) ??
             0;
-    int bNumber =
+    final bNumber =
         (b.resultMetadata![ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]
                 as int?) ??
             0;

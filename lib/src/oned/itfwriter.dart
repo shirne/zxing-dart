@@ -49,24 +49,26 @@ class ITFWriter extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(String contents,
       [Map<EncodeHintType, Object?>? hints]) {
-    int length = contents.length;
+    final length = contents.length;
     if (length % 2 != 0) {
-      throw ArgumentError("The length of the input should be even");
+      throw ArgumentError('The length of the input should be even');
     }
     if (length > 80) {
       throw ArgumentError(
-          "Requested contents should be less than 80 digits long, but got $length");
+        'Requested contents should be less than 80 '
+        'digits long, but got $length',
+      );
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
-    List<bool> result = List.filled(9 + 9 * length, false);
+    final result = List.filled(9 + 9 * length, false);
     int pos =
         OneDimensionalCodeWriter.appendPattern(result, 0, _START_PATTERN, true);
     for (int i = 0; i < length; i += 2) {
-      int one = int.parse(contents[i]);
-      int two = int.parse(contents[i + 1]);
-      List<int> encoding = List.filled(10, 0);
+      final one = int.parse(contents[i]);
+      final two = int.parse(contents[i + 1]);
+      final encoding = List.filled(10, 0);
       for (int j = 0; j < 5; j++) {
         encoding[2 * j] = _PATTERNS[one][j];
         encoding[2 * j + 1] = _PATTERNS[two][j];

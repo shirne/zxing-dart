@@ -31,9 +31,9 @@ import 'package:zxing_lib/oned.dart';
 
 void main() {
   BitArray buildBitArray(List<List<int>> pairValues) {
-    List<ExpandedPair> pairs = [];
+    final pairs = <ExpandedPair>[];
     for (int i = 0; i < pairValues.length; ++i) {
-      List<int> pair = pairValues[i];
+      final pair = pairValues[i];
 
       DataCharacter? leftChar;
       if (i == 0) {
@@ -51,7 +51,7 @@ void main() {
         rightChar = null;
       }
 
-      ExpandedPair expandedPair = ExpandedPair(leftChar, rightChar, null);
+      final expandedPair = ExpandedPair(leftChar, rightChar, null);
       pairs.add(expandedPair);
     }
 
@@ -59,17 +59,17 @@ void main() {
   }
 
   void checkBinary(List<List<int>> pairValues, String expected) {
-    BitArray binary = buildBitArray(pairValues);
+    final binary = buildBitArray(pairValues);
     expect(expected, binary.toString());
   }
 
   test('testBuildBitArray1', () {
-    List<List<int>> pairValues = [
+    final pairValues = [
       [19],
       [673, 16]
     ];
 
-    String expected = " .......X ..XX..X. X.X....X .......X ....";
+    final expected = ' .......X ..XX..X. X.X....X .......X ....';
 
     checkBinary(pairValues, expected);
   });

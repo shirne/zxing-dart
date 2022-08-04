@@ -39,13 +39,13 @@ class BitArrayBuilder {
       charNumber -= 1;
     }
 
-    int size = 12 * charNumber;
+    final size = 12 * charNumber;
 
-    BitArray binary = BitArray(size);
+    final binary = BitArray(size);
     int accPos = 0;
 
-    ExpandedPair firstPair = pairs[0];
-    int firstValue = firstPair.rightChar!.value;
+    final firstPair = pairs[0];
+    final firstValue = firstPair.rightChar!.value;
     for (int i = 11; i >= 0; --i) {
       if ((firstValue & (1 << i)) != 0) {
         binary.set(accPos);
@@ -54,9 +54,9 @@ class BitArrayBuilder {
     }
 
     for (int i = 1; i < pairs.length; ++i) {
-      ExpandedPair currentPair = pairs[i];
+      final currentPair = pairs[i];
 
-      int leftValue = currentPair.leftChar!.value;
+      final leftValue = currentPair.leftChar!.value;
       for (int j = 11; j >= 0; --j) {
         if ((leftValue & (1 << j)) != 0) {
           binary.set(accPos);
@@ -65,7 +65,7 @@ class BitArrayBuilder {
       }
 
       if (currentPair.rightChar != null) {
-        int rightValue = currentPair.rightChar!.value;
+        final rightValue = currentPair.rightChar!.value;
         for (int j = 11; j >= 0; --j) {
           if ((rightValue & (1 << j)) != 0) {
             binary.set(accPos);

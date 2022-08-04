@@ -28,11 +28,11 @@ void main() {
     SymbolInfo symbolInfo = SymbolInfo.lookup(3)!;
     String s =
         ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
-    expect("142 164 186 114 25 5 88 102", visualize(s));
+    expect('142 164 186 114 25 5 88 102', visualize(s));
 
     //"A" encoded (ASCII encoding + 2 padding characters)
     cw = [66, 129, 70];
     s = ErrorCorrection.encodeECC200(String.fromCharCodes(cw), symbolInfo);
-    expect("66 129 70 138 234 82 82 95", visualize(s));
+    expect('66 129 70 138 234 82 82 95', visualize(s));
   });
 }

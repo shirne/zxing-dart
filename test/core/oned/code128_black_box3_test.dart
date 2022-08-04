@@ -21,7 +21,7 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('Code128BlackBox3TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/code128-3",
+    AbstractBlackBoxTestCase('test/resources/blackbox/code128-3',
         MultiFormatReader(), BarcodeFormat.CODE_128)
       ..addTest(2, 2, 0.0)
       ..addTest(2, 2, 180.0)

@@ -31,14 +31,15 @@ void main() {
 
   test('testEncode', () {
     doTest(
-        "00123456789012",
-        "0000010101010111000111000101110100010101110001110111010001010001110100011" "100010101000101011100011101011101000111000101110100010101110001110100000");
+        '00123456789012',
+        '0000010101010111000111000101110100010101110001110111010001010001110100011'
+            '100010101000101011100011101011101000111000101110100010101110001110100000');
   });
 
   //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
     try {
-      ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
+      ITFWriter().encode('00123456789abc', BarcodeFormat.ITF, 0, 0);
       fail('should thrown ArgumentError');
     } catch (_) {
       // passed

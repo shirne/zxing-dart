@@ -25,13 +25,13 @@ void main() {
   final GenericGF field = GenericGF.qrCodeField256;
 
   test('testPolynomialString', () {
-    expect("0", field.zero.toString());
-    expect("-1", field.buildMonomial(0, -1).toString());
+    expect('0', field.zero.toString());
+    expect('-1', field.buildMonomial(0, -1).toString());
     GenericGFPoly p =
         GenericGFPoly(field, Int32List.fromList([3, 0, -2, 1, 1]));
-    expect("a^25x^4 - ax^2 + x + 1", p.toString());
+    expect('a^25x^4 - ax^2 + x + 1', p.toString());
     p = GenericGFPoly(field, Int32List.fromList([3]));
-    expect("a^25", p.toString());
+    expect('a^25', p.toString());
   });
 
   test('testZero', () {

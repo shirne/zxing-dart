@@ -42,59 +42,59 @@ void main() {
   }
 
   test('testEmailAddress', () {
-    doTestSingle("srowen@example.org", "srowen@example.org", null, null);
-    doTestSingle("mailto:srowen@example.org", "srowen@example.org", null, null);
+    doTestSingle('srowen@example.org', 'srowen@example.org', null, null);
+    doTestSingle('mailto:srowen@example.org', 'srowen@example.org', null, null);
   });
 
   test('testTos', () {
-    doTest("mailto:srowen@example.org,bob@example.org",
-        ["srowen@example.org", "bob@example.org"], null, null, null, null);
-    doTest("mailto:?to=srowen@example.org,bob@example.org",
-        ["srowen@example.org", "bob@example.org"], null, null, null, null);
+    doTest('mailto:srowen@example.org,bob@example.org',
+        ['srowen@example.org', 'bob@example.org'], null, null, null, null);
+    doTest('mailto:?to=srowen@example.org,bob@example.org',
+        ['srowen@example.org', 'bob@example.org'], null, null, null, null);
   });
 
   test('testCCs', () {
-    doTest("mailto:?cc=srowen@example.org", null, ["srowen@example.org"], null,
+    doTest('mailto:?cc=srowen@example.org', null, ['srowen@example.org'], null,
         null, null);
-    doTest("mailto:?cc=srowen@example.org,bob@example.org", null,
-        ["srowen@example.org", "bob@example.org"], null, null, null);
+    doTest('mailto:?cc=srowen@example.org,bob@example.org', null,
+        ['srowen@example.org', 'bob@example.org'], null, null, null);
   });
 
   test('testBCCs', () {
-    doTest("mailto:?bcc=srowen@example.org", null, null, ["srowen@example.org"],
+    doTest('mailto:?bcc=srowen@example.org', null, null, ['srowen@example.org'],
         null, null);
-    doTest("mailto:?bcc=srowen@example.org,bob@example.org", null, null,
-        ["srowen@example.org", "bob@example.org"], null, null);
+    doTest('mailto:?bcc=srowen@example.org,bob@example.org', null, null,
+        ['srowen@example.org', 'bob@example.org'], null, null);
   });
 
   test('testAll', () {
     doTest(
-        "mailto:bob@example.org?cc=foo@example.org&bcc=srowen@example.org&subject=baz&body=buzz",
-        ["bob@example.org"],
-        ["foo@example.org"],
-        ["srowen@example.org"],
-        "baz",
-        "buzz");
+        'mailto:bob@example.org?cc=foo@example.org&bcc=srowen@example.org&subject=baz&body=buzz',
+        ['bob@example.org'],
+        ['foo@example.org'],
+        ['srowen@example.org'],
+        'baz',
+        'buzz');
   });
 
   test('testEmailDocomo', () {
     doTestSingle(
-        "MATMSG:TO:srowen@example.org;;", "srowen@example.org", null, null);
-    doTestSingle("MATMSG:TO:srowen@example.org;SUB:Stuff;;",
-        "srowen@example.org", "Stuff", null);
+        'MATMSG:TO:srowen@example.org;;', 'srowen@example.org', null, null);
+    doTestSingle('MATMSG:TO:srowen@example.org;SUB:Stuff;;',
+        'srowen@example.org', 'Stuff', null);
     doTestSingle(
-        "MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;",
-        "srowen@example.org",
-        "Stuff",
-        "This is some text");
+        'MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;',
+        'srowen@example.org',
+        'Stuff',
+        'This is some text');
   });
 
   test('testSMTP', () {
-    doTestSingle("smtp:srowen@example.org", "srowen@example.org", null, null);
-    doTestSingle("SMTP:srowen@example.org", "srowen@example.org", null, null);
+    doTestSingle('smtp:srowen@example.org', 'srowen@example.org', null, null);
+    doTestSingle('SMTP:srowen@example.org', 'srowen@example.org', null, null);
     doTestSingle(
-        "smtp:srowen@example.org:foo", "srowen@example.org", "foo", null);
+        'smtp:srowen@example.org:foo', 'srowen@example.org', 'foo', null);
     doTestSingle(
-        "smtp:srowen@example.org:foo:bar", "srowen@example.org", "foo", "bar");
+        'smtp:srowen@example.org:foo:bar', 'srowen@example.org', 'foo', 'bar');
   });
 }

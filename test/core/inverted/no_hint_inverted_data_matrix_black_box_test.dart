@@ -21,7 +21,7 @@ import '../common/abstract_negative_black_box.dart';
 /// Without hint inverted barcodes should not be found.
 void main() {
   test('NoHintInvertedDataMatrixBlackBoxTestCase', () {
-    AbstractNegativeBlackBoxTestCase("test/resources/blackbox/inverted")
+    AbstractNegativeBlackBoxTestCase('test/resources/blackbox/inverted')
       ..addNegativeTest(0, 0.0)
       ..addNegativeTest(0, 90.0)
       ..addNegativeTest(0, 180.0)

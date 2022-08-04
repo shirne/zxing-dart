@@ -31,13 +31,13 @@ class RGBLuminanceSource extends LuminanceSource {
   final int _top;
 
   static Int8List intList2Int8List(List<int> pixels) {
-    int size = pixels.length;
-    Int8List luminances = Int8List(size);
+    final size = pixels.length;
+    final luminances = Int8List(size);
     for (int offset = 0; offset < size; offset++) {
-      int pixel = pixels[offset];
-      int r = (pixel >> 16) & 0xff; // red
-      int g2 = (pixel >> 7) & 0x1fe; // 2 * green
-      int b = pixel & 0xff; // blue
+      final pixel = pixels[offset];
+      final r = (pixel >> 16) & 0xff; // red
+      final g2 = (pixel >> 7) & 0x1fe; // 2 * green
+      final b = pixel & 0xff; // blue
       // Calculate green-favouring average cheaply
       luminances[offset] = ((r + g2 + b) ~/ 4);
     }
@@ -57,7 +57,7 @@ class RGBLuminanceSource extends LuminanceSource {
       : super(width ?? _dataWidth, height ?? _dataHeight) {
     if (width != null && height != null) {
       if (_left + width > _dataWidth || _top + height > _dataHeight) {
-        throw ArgumentError("Crop rectangle does not fit within image data.");
+        throw ArgumentError('Crop rectangle does not fit within image data.');
       }
     }
   }
@@ -65,12 +65,12 @@ class RGBLuminanceSource extends LuminanceSource {
   @override
   Int8List getRow(int y, Int8List? row) {
     if (y < 0 || y >= height) {
-      throw ArgumentError("Requested row is outside the image: $y");
+      throw ArgumentError('Requested row is outside the image: $y');
     }
     if (row == null || row.length < width) {
       row = Int8List(width);
     }
-    int offset = (y + _top) * _dataWidth + _left;
+    final offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _luminances, offset, offset + width);
     return row;
   }
@@ -83,8 +83,8 @@ class RGBLuminanceSource extends LuminanceSource {
       return _luminances;
     }
 
-    int area = width * height;
-    Int8List matrix = Int8List(area);
+    final area = width * height;
+    final matrix = Int8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
@@ -95,7 +95,7 @@ class RGBLuminanceSource extends LuminanceSource {
 
     // Otherwise copy one cropped row at a time.
     for (int y = 0; y < height; y++) {
-      int outputOffset = y * width;
+      final outputOffset = y * width;
       List.copyRange(
           matrix, outputOffset, _luminances, inputOffset, inputOffset + width);
       inputOffset += _dataWidth;
@@ -107,8 +107,7 @@ class RGBLuminanceSource extends LuminanceSource {
   bool get isCropSupported => true;
 
   @override
-  LuminanceSource crop(int left, int top, int width, int height) {
-    return RGBLuminanceSource._(_luminances, _dataWidth, _dataHeight,
-        _left + left, _top + top, width, height);
-  }
+  LuminanceSource crop(int left, int top, int width, int height) =>
+      RGBLuminanceSource._(_luminances, _dataWidth, _dataHeight, _left + left,
+          _top + top, width, height);
 }

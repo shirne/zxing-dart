@@ -47,21 +47,21 @@ void main() {
 
   test('testNotVIN', () {
     Result fakeResult =
-        Result("1M8GDM9A1KP042788", null, null, BarcodeFormat.CODE_39);
+        Result('1M8GDM9A1KP042788', null, null, BarcodeFormat.CODE_39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEXT, result.type);
     fakeResult =
-        Result("1M8GDM9AXKP042788", null, null, BarcodeFormat.CODE_128);
+        Result('1M8GDM9AXKP042788', null, null, BarcodeFormat.CODE_128);
     result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.TEXT, result.type);
   });
 
   test('testVIN', () {
-    doTest("1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A",
-        1989, 80 /* P */, "042788");
-    doTest("I1M8GDM9AXKP042788", "1M8", "GDM9AX", "KP042788", "US", "GDM9A",
-        1989, 80 /* P */, "042788");
-    doTest("LJCPCBLCX11000237", "LJC", "PCBLCX", "11000237", "CN", "PCBLC",
-        2001, 49 /* 1 */, "000237");
+    doTest('1M8GDM9AXKP042788', '1M8', 'GDM9AX', 'KP042788', 'US', 'GDM9A',
+        1989, 80 /* P */, '042788');
+    doTest('I1M8GDM9AXKP042788', '1M8', 'GDM9AX', 'KP042788', 'US', 'GDM9A',
+        1989, 80 /* P */, '042788');
+    doTest('LJCPCBLCX11000237', 'LJC', 'PCBLCX', '11000237', 'CN', 'PCBLC',
+        2001, 49 /* 1 */, '000237');
   });
 }

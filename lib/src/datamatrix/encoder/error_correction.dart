@@ -116,27 +116,27 @@ class ErrorCorrection {
   static String encodeECC200(String codewords, SymbolInfo symbolInfo) {
     if (codewords.length != symbolInfo.dataCapacity) {
       throw ArgumentError(
-          "The number of codewords does not match the selected symbol");
+          'The number of codewords does not match the selected symbol');
     }
-    StringBuilder sb = StringBuilder();
+    final sb = StringBuilder();
     sb.write(codewords);
-    int blockCount = symbolInfo.interleavedBlockCount;
+    final blockCount = symbolInfo.interleavedBlockCount;
     if (blockCount == 1) {
-      String ecc = _createECCBlock(codewords, symbolInfo.errorCodewords);
+      final ecc = _createECCBlock(codewords, symbolInfo.errorCodewords);
       sb.write(ecc);
     } else {
       sb.setLength(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
       // this is using for temp StringBuffer's init length
       //List<int> dataSizes = List.generate(blockCount, (index) => symbolInfo.getDataLengthForInterleavedBlock(index + 1));
-      List<int> errorSizes = List.generate(blockCount,
+      final errorSizes = List.generate(blockCount,
           (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1));
 
       for (int block = 0; block < blockCount; block++) {
-        StringBuffer temp = StringBuffer();
+        final temp = StringBuffer();
         for (int d = block; d < symbolInfo.dataCapacity; d += blockCount) {
           temp.write(codewords[d]);
         }
-        String ecc = _createECCBlock(temp.toString(), errorSizes[block]);
+        final ecc = _createECCBlock(temp.toString(), errorSizes[block]);
         int pos = 0;
         for (int e = block;
             e < errorSizes[block] * blockCount;
@@ -158,13 +158,13 @@ class ErrorCorrection {
     }
     if (table < 0) {
       throw ArgumentError(
-          "Illegal number of error correction codewords specified: $numECWords");
+          'Illegal number of error correction codewords specified: $numECWords');
     }
-    List<int> poly = _FACTORS[table];
-    List<int> ecc = List.filled(numECWords, 0);
+    final poly = _FACTORS[table];
+    final ecc = List.filled(numECWords, 0);
     init();
     for (int i = 0; i < codewords.length; i++) {
-      int m = ecc[numECWords - 1] ^ codewords.codeUnitAt(i);
+      final m = ecc[numECWords - 1] ^ codewords.codeUnitAt(i);
       for (int k = numECWords - 1; k > 0; k--) {
         if (m != 0 && poly[k] != 0) {
           ecc[k] = (ecc[k - 1] ^ _aLog[(_log[m] + _log[poly[k]]) % 255]);
@@ -178,7 +178,7 @@ class ErrorCorrection {
         ecc[0] = 0;
       }
     }
-    List<int> eccReversed = []; //numECWords
+    final eccReversed = <int>[]; //numECWords
     for (int i = 0; i < numECWords; i++) {
       eccReversed.add(ecc[numECWords - i - 1]);
     }

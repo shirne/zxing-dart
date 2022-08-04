@@ -58,15 +58,16 @@ class State {
   int get bitCount => _bitCount;
 
   State appendFLGn(int eci) {
-    State result = shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
+    final State result =
+        shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
     Token token = result._token;
     int bitsAdded = 3;
     if (eci < 0) {
       token = token.add(0, 3); // 0: FNC1
     } else if (eci > 999999) {
-      throw ArgumentError("ECI code must be between 0 and 999999");
+      throw ArgumentError('ECI code must be between 0 and 999999');
     } else {
-      Uint8List eciDigits = latin1.encode(eci.toString());
+      final Uint8List eciDigits = latin1.encode(eci.toString());
       token = token.add(eciDigits.length, 3); // 1-6: number of ECI digits
       for (int eciDigit in eciDigits) {
         token = token.add(eciDigit - 48 /*'0'*/ + 2, 4);
@@ -83,11 +84,11 @@ class State {
     int bitCount = _bitCount;
     Token token = _token;
     if (mode != _mode) {
-      int latch = HighLevelEncoder.LATCH_TABLE[_mode][mode];
+      final int latch = HighLevelEncoder.LATCH_TABLE[_mode][mode];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
     }
-    int latchModeBitCount = mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
+    final int latchModeBitCount = mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     token = token.add(value, latchModeBitCount);
     return State(token, mode, 0, bitCount + latchModeBitCount);
   }
@@ -97,7 +98,7 @@ class State {
   State shiftAndAppend(int mode, int value) {
     //assert binaryShiftByteCount == 0 && this.mode != mode;
     Token token = _token;
-    int thisModeBitCount = _mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
+    final int thisModeBitCount = _mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
     token =
         token.add(HighLevelEncoder.shiftTable[_mode][mode], thisModeBitCount);
@@ -114,13 +115,13 @@ class State {
     if (_mode == HighLevelEncoder.MODE_PUNCT ||
         _mode == HighLevelEncoder.MODE_DIGIT) {
       //assert binaryShiftByteCount == 0;
-      int latch =
+      final int latch =
           HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
       mode = HighLevelEncoder.MODE_UPPER;
     }
-    int deltaBitCount =
+    final int deltaBitCount =
         (_binaryShiftByteCount == 0 || _binaryShiftByteCount == 31)
             ? 18
             : (_binaryShiftByteCount == 62)
@@ -167,13 +168,13 @@ class State {
   BitArray toBitArray(List<int> text) {
     // Reverse the tokens, so that they are in the order that they should
     // be output
-    List<Token> symbols = [];
+    final List<Token> symbols = [];
     for (Token? token = endBinaryShift(text.length)._token;
         token != null;
         token = token.previous) {
       symbols.insert(0, token);
     }
-    BitArray bitArray = BitArray();
+    final BitArray bitArray = BitArray();
     // Add each token to the result.
     for (Token symbol in symbols) {
       symbol.appendTo(bitArray, text);
@@ -183,9 +184,8 @@ class State {
   }
 
   @override
-  String toString() {
-    return "${HighLevelEncoder.MODE_NAMES[_mode]} bits=$_bitCount bytes=$_binaryShiftByteCount";
-  }
+  String toString() => '${HighLevelEncoder.MODE_NAMES[_mode]} '
+      'bits=$_bitCount bytes=$_binaryShiftByteCount';
 
   static int _calculateBinaryShiftCost(int binaryShiftByteCount) {
     if (binaryShiftByteCount > 62) {

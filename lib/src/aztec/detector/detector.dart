@@ -43,9 +43,7 @@ class Point {
   int get y => _y;
 
   @override
-  String toString() {
-    return "<$_x $_y>";
-  }
+  String toString() => '<$_x $_y>';
 }
 
 /// Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
@@ -78,14 +76,14 @@ class Detector {
   /// @throws NotFoundException if no Aztec Code can be found
   AztecDetectorResult detect([bool isMirror = false]) {
     // 1. Get the center of the aztec matrix
-    Point pCenter = _getMatrixCenter();
+    final Point pCenter = _getMatrixCenter();
 
     // 2. Get the center points of the four diagonal points just outside the bull's eye
     //  [topRight, bottomRight, bottomLeft, topLeft]
-    List<ResultPoint> bullsEyeCorners = _getBullsEyeCorners(pCenter);
+    final List<ResultPoint> bullsEyeCorners = _getBullsEyeCorners(pCenter);
 
     if (isMirror) {
-      ResultPoint temp = bullsEyeCorners[0];
+      final ResultPoint temp = bullsEyeCorners[0];
       bullsEyeCorners[0] = bullsEyeCorners[2];
       bullsEyeCorners[2] = temp;
     }
@@ -94,7 +92,7 @@ class Detector {
     _extractParameters(bullsEyeCorners);
 
     // 4. Sample the grid
-    BitMatrix bits = _sampleGrid(
+    final BitMatrix bits = _sampleGrid(
         _image,
         bullsEyeCorners[_shift % 4],
         bullsEyeCorners[(_shift + 1) % 4],
@@ -102,7 +100,7 @@ class Detector {
         bullsEyeCorners[(_shift + 3) % 4]);
 
     // 5. Get the corners of the matrix.
-    List<ResultPoint> corners = _getMatrixCornerPoints(bullsEyeCorners);
+    final List<ResultPoint> corners = _getMatrixCornerPoints(bullsEyeCorners);
 
     return AztecDetectorResult(
         bits, corners, _compact, _nbDataBlocks, _nbLayers);
@@ -119,9 +117,9 @@ class Detector {
         !_isValidPoint(bullsEyeCorners[3])) {
       throw NotFoundException.instance;
     }
-    int length = 2 * _nbCenterLayers;
+    final int length = 2 * _nbCenterLayers;
     // Get the bits around the bull's eye
-    List<int> sides = [
+    final List<int> sides = [
       _sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], length), // Right side
       _sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length), // Bottom
       _sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], length), // Left side
@@ -137,7 +135,7 @@ class Detector {
     // Flatten the parameter bits into a single 28- or 40-bit long
     int parameterData = 0;
     for (int i = 0; i < 4; i++) {
-      int side = sides[(_shift + i) % 4];
+      final int side = sides[(_shift + i) % 4];
       if (_compact) {
         // Each side of the form ..XXXXXXX. where Xs are parameter data
         parameterData <<= 7;
@@ -151,7 +149,8 @@ class Detector {
 
     // Corrects parameter data using RS.  Returns just the data portion
     // without the error correction.
-    int correctedData = _getCorrectedParameterData(parameterData, _compact);
+    final int correctedData =
+        _getCorrectedParameterData(parameterData, _compact);
 
     if (_compact) {
       // 8 bits:  2 bits layers and 6 bits data blocks
@@ -177,7 +176,7 @@ class Detector {
     int cornerBits = 0;
     for (int side in sides) {
       // XX......X where X's are orientation marks
-      int t = ((side >> (length - 2)) << 1) + (side & 1);
+      final int t = ((side >> (length - 2)) << 1) + (side & 1);
       cornerBits = (cornerBits << 3) + t;
     }
     // Mov the bottom bit to the top, so that the three bits of the locator pattern at A are
@@ -212,14 +211,15 @@ class Detector {
       numDataCodewords = 4;
     }
 
-    int numECCodewords = numCodewords - numDataCodewords;
-    Int32List parameterWords = Int32List(numCodewords);
+    final int numECCodewords = numCodewords - numDataCodewords;
+    final Int32List parameterWords = Int32List(numCodewords);
     for (int i = numCodewords - 1; i >= 0; --i) {
       parameterWords[i] = parameterData & 0xF;
       parameterData >>= 4;
     }
     try {
-      ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(GenericGF.aztecParam);
+      final ReedSolomonDecoder rsDecoder =
+          ReedSolomonDecoder(GenericGF.aztecParam);
       rsDecoder.decode(parameterWords, numECCodewords);
     } on ReedSolomonException catch (_) {
       throw NotFoundException.instance;
@@ -248,17 +248,17 @@ class Detector {
     bool color = true;
 
     for (_nbCenterLayers = 1; _nbCenterLayers < 9; _nbCenterLayers++) {
-      Point pouta = _getFirstDifferent(pina, color, 1, -1);
-      Point poutb = _getFirstDifferent(pinb, color, 1, 1);
-      Point poutc = _getFirstDifferent(pinc, color, -1, 1);
-      Point poutd = _getFirstDifferent(pind, color, -1, -1);
+      final Point pouta = _getFirstDifferent(pina, color, 1, -1);
+      final Point poutb = _getFirstDifferent(pinb, color, 1, 1);
+      final Point poutc = _getFirstDifferent(pinc, color, -1, 1);
+      final Point poutd = _getFirstDifferent(pind, color, -1, -1);
 
       //d      a
       //
       //c      b
 
       if (_nbCenterLayers > 2) {
-        double q = _distance(poutd, pouta) *
+        final double q = _distance(poutd, pouta) *
             _nbCenterLayers /
             (_distance(pind, pina) * (_nbCenterLayers + 2));
         if (q < 0.75 ||
@@ -284,10 +284,10 @@ class Detector {
 
     // Expand the square by .5 pixel in each direction so that we're on the border
     // between the white square and the black square
-    ResultPoint pinax = ResultPoint(pina.x + 0.5, pina.y - 0.5);
-    ResultPoint pinbx = ResultPoint(pinb.x + 0.5, pinb.y + 0.5);
-    ResultPoint pincx = ResultPoint(pinc.x - 0.5, pinc.y + 0.5);
-    ResultPoint pindx = ResultPoint(pind.x - 0.5, pind.y - 0.5);
+    final ResultPoint pinax = ResultPoint(pina.x + 0.5, pina.y - 0.5);
+    final ResultPoint pinbx = ResultPoint(pinb.x + 0.5, pinb.y + 0.5);
+    final ResultPoint pincx = ResultPoint(pinc.x - 0.5, pinc.y + 0.5);
+    final ResultPoint pindx = ResultPoint(pind.x - 0.5, pind.y - 0.5);
 
     // Expand the square so that its corners are the centers of the points
     // just outside the bull's eye.
@@ -306,7 +306,8 @@ class Detector {
 
     //Get a white rectangle that can be the border of the matrix in center bull's eye or
     try {
-      List<ResultPoint> cornerPoints = WhiteRectangleDetector(_image).detect();
+      final List<ResultPoint> cornerPoints =
+          WhiteRectangleDetector(_image).detect();
       pointA = cornerPoints[0];
       pointB = cornerPoints[1];
       pointC = cornerPoints[2];
@@ -316,8 +317,8 @@ class Detector {
 
       // This exception can be in case the initial rectangle is white
       // In that case, surely in the bull's eye, we try to expand the rectangle.
-      int cx = _image.width ~/ 2;
-      int cy = _image.height ~/ 2;
+      final int cx = _image.width ~/ 2;
+      final int cy = _image.height ~/ 2;
       pointA = _getFirstDifferent(Point(cx + 7, cy - 7), false, 1, -1)
           .toResultPoint();
       pointB = _getFirstDifferent(Point(cx + 7, cy + 7), false, 1, 1)
@@ -336,7 +337,7 @@ class Detector {
     // This will ensure that we end up with a white rectangle in center bull's eye
     // in order to compute a more accurate center.
     try {
-      List<ResultPoint> cornerPoints =
+      final List<ResultPoint> cornerPoints =
           WhiteRectangleDetector(_image, 15, cx, cy).detect();
       pointA = cornerPoints[0];
       pointB = cornerPoints[1];
@@ -375,11 +376,11 @@ class Detector {
   /// diagonal just outside the bull's eye.
   BitMatrix _sampleGrid(BitMatrix image, ResultPoint topLeft,
       ResultPoint topRight, ResultPoint bottomRight, ResultPoint bottomLeft) {
-    GridSampler sampler = GridSampler.getInstance();
-    int dimension = _getDimension();
+    final GridSampler sampler = GridSampler.getInstance();
+    final int dimension = _getDimension();
 
-    double low = dimension / 2.0 - _nbCenterLayers;
-    double high = dimension / 2.0 + _nbCenterLayers;
+    final double low = dimension / 2.0 - _nbCenterLayers;
+    final double high = dimension / 2.0 + _nbCenterLayers;
 
     return sampler.sampleGridBulk(
         image,
@@ -412,12 +413,12 @@ class Detector {
   int _sampleLine(ResultPoint p1, ResultPoint p2, int size) {
     int result = 0;
 
-    double d = _distanceResult(p1, p2);
-    double moduleSize = d / size;
-    double px = p1.x;
-    double py = p1.y;
-    double dx = moduleSize * (p2.x - p1.x) / d;
-    double dy = moduleSize * (p2.y - p1.y) / d;
+    final double d = _distanceResult(p1, p2);
+    final double moduleSize = d / size;
+    final double px = p1.x;
+    final double py = p1.y;
+    final double dx = moduleSize * (p2.x - p1.x) / d;
+    final double dy = moduleSize * (p2.y - p1.y) / d;
     for (int i = 0; i < size; i++) {
       if (_image.get(
           MathUtils.round(px + i * dx), MathUtils.round(py + i * dy))) {
@@ -430,7 +431,7 @@ class Detector {
   /// return true if the border of the rectangle passed in parameter is compound of white points only
   ///         or black points only
   bool _isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4) {
-    int corr = 3;
+    final int corr = 3;
 
     p1 = Point(max(0, p1.x - corr), min(_image.height - 1, p1.y + corr));
     p2 = Point(max(0, p2.x - corr), max(0, p2.y - corr));
@@ -443,7 +444,7 @@ class Detector {
       min(_image.height - 1, p4.y + corr),
     );
 
-    int cInit = _getColor(p4, p1);
+    final int cInit = _getColor(p4, p1);
 
     if (cInit == 0) {
       return false;
@@ -470,20 +471,20 @@ class Detector {
   ///
   /// return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
   int _getColor(Point p1, Point p2) {
-    double d = _distance(p1, p2);
+    final double d = _distance(p1, p2);
     if (d == 0.0) {
       return 0;
     }
-    double dx = (p2.x - p1.x) / d;
-    double dy = (p2.y - p1.y) / d;
+    final double dx = (p2.x - p1.x) / d;
+    final double dy = (p2.y - p1.y) / d;
     int error = 0;
 
     double px = p1.x.toDouble();
     double py = p1.y.toDouble();
 
-    bool colorModel = _image.get(p1.x, p1.y);
+    final bool colorModel = _image.get(p1.x, p1.y);
 
-    int iMax = d.floor();
+    final int iMax = d.floor();
     for (int i = 0; i < iMax; i++) {
       if (_image.get(MathUtils.round(px), MathUtils.round(py)) != colorModel) {
         error++;
@@ -492,7 +493,7 @@ class Detector {
       py += dy;
     }
 
-    double errRatio = error / d;
+    final double errRatio = error / d;
 
     if (errRatio > 0.1 && errRatio < 0.9) {
       return 0;
@@ -535,24 +536,24 @@ class Detector {
   /// @return the corners of the expanded square
   static List<ResultPoint> _expandSquare(
       List<ResultPoint> cornerPoints, int oldSide, int newSide) {
-    double ratio = newSide / (2.0 * oldSide);
+    final double ratio = newSide / (2.0 * oldSide);
     double dx = cornerPoints[0].x - cornerPoints[2].x;
     double dy = cornerPoints[0].y - cornerPoints[2].y;
     double centerx = (cornerPoints[0].x + cornerPoints[2].x) / 2.0;
     double centery = (cornerPoints[0].y + cornerPoints[2].y) / 2.0;
 
-    ResultPoint result0 =
+    final ResultPoint result0 =
         ResultPoint(centerx + ratio * dx, centery + ratio * dy);
-    ResultPoint result2 =
+    final ResultPoint result2 =
         ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
     dx = cornerPoints[1].x - cornerPoints[3].x;
     dy = cornerPoints[1].y - cornerPoints[3].y;
     centerx = (cornerPoints[1].x + cornerPoints[3].x) / 2.0;
     centery = (cornerPoints[1].y + cornerPoints[3].y) / 2.0;
-    ResultPoint result1 =
+    final ResultPoint result1 =
         ResultPoint(centerx + ratio * dx, centery + ratio * dy);
-    ResultPoint result3 =
+    final ResultPoint result3 =
         ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
     return [result0, result1, result2, result3];
@@ -563,8 +564,8 @@ class Detector {
   }
 
   bool _isValidPoint(ResultPoint point) {
-    int x = MathUtils.round(point.x);
-    int y = MathUtils.round(point.y);
+    final int x = MathUtils.round(point.x);
+    final int y = MathUtils.round(point.y);
     return _isValid(x, y);
   }
 

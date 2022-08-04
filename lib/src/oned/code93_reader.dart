@@ -35,7 +35,7 @@ import 'one_dreader.dart';
 class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
   static const String ALPHABET_STRING =
-      r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+      r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*';
   static final List<int> _alphaBet = ALPHABET_STRING.codeUnits;
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars.
@@ -60,21 +60,21 @@ class Code93Reader extends OneDReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    List<int> start = _findAsteriskPattern(row);
+    final start = _findAsteriskPattern(row);
     // Read off white space
     int nextStart = row.getNextSet(start[1]);
-    int end = row.size;
+    final end = row.size;
 
-    List<int> theCounters = _counters;
+    final theCounters = _counters;
     theCounters.fillRange(0, theCounters.length, 0);
-    StringBuilder result = _decodeRowResult;
+    final result = _decodeRowResult;
     result.clear();
 
     String decodedChar;
     int lastStart;
     do {
       OneDReader.recordPattern(row, nextStart, theCounters);
-      int pattern = _toPattern(theCounters);
+      final pattern = _toPattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.instance;
       }
@@ -108,12 +108,12 @@ class Code93Reader extends OneDReader {
     // Remove checksum digits
     result.setLength(result.length - 2);
 
-    String resultString = _decodeExtended(result.toString());
+    final resultString = _decodeExtended(result.toString());
 
-    double left = (start[1] + start[0]) / 2.0;
-    double right = lastStart + lastPatternSize / 2.0;
+    final left = (start[1] + start[0]) / 2.0;
+    final right = lastStart + lastPatternSize / 2.0;
 
-    Result resultObject = Result(
+    final resultObject = Result(
         resultString,
         null,
         [
@@ -121,19 +121,19 @@ class Code93Reader extends OneDReader {
           ResultPoint(right, rowNumber.toDouble())
         ],
         BarcodeFormat.CODE_93);
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]G0");
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']G0');
     return resultObject;
   }
 
   List<int> _findAsteriskPattern(BitArray row) {
-    int width = row.size;
-    int rowOffset = row.getNextSet(0);
+    final width = row.size;
+    final rowOffset = row.getNextSet(0);
 
     _counters.fillRange(0, _counters.length, 0);
-    List<int> theCounters = _counters;
+    final theCounters = _counters;
     int patternStart = rowOffset;
     bool isWhite = false;
-    int patternLength = theCounters.length;
+    final patternLength = theCounters.length;
 
     int counterPosition = 0;
     for (int i = rowOffset; i < width; i++) {
@@ -165,9 +165,9 @@ class Code93Reader extends OneDReader {
       sum += counter;
     }
     int pattern = 0;
-    int max = counters.length;
+    final max = counters.length;
     for (int i = 0; i < max; i++) {
-      int scaled = (counters[i] * 9.0 / sum).round();
+      final scaled = (counters[i] * 9.0 / sum).round();
       if (scaled < 1 || scaled > 4) {
         return -1;
       }
@@ -192,15 +192,15 @@ class Code93Reader extends OneDReader {
   }
 
   static String _decodeExtended(String encoded) {
-    int length = encoded.length;
-    StringBuffer decoded = StringBuffer();
+    final length = encoded.length;
+    final decoded = StringBuffer();
     for (int i = 0; i < length; i++) {
-      int c = encoded.codeUnitAt(i);
+      final c = encoded.codeUnitAt(i);
       if (c >= 97 /* a */ && c <= 100 /* d */) {
         if (i >= length - 1) {
           throw FormatsException.instance;
         }
-        int next = encoded.codeUnitAt(i + 1);
+        final next = encoded.codeUnitAt(i + 1);
         int decodedChar = 0;
         switch (c) {
           case 100: // 'd'
@@ -270,7 +270,7 @@ class Code93Reader extends OneDReader {
   }
 
   static void _checkChecksums(String result) {
-    int length = result.length;
+    final length = result.length;
     _checkOneChecksum(result, length - 2, 20);
     _checkOneChecksum(result, length - 1, 15);
   }

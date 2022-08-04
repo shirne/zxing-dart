@@ -33,8 +33,8 @@ import 'parsed_result_type.dart';
 /// @author Antonio Manuel Benjumea Conde, Servinform, S.A.
 /// @author Agustín Delgado, Servinform, S.A.
 class ExpandedProductParsedResult extends ParsedResult {
-  static const String KILOGRAM = "KG";
-  static const String POUND = "LB";
+  static const String KILOGRAM = 'KG';
+  static const String POUND = 'LB';
 
   String? rawText;
   String? productID;

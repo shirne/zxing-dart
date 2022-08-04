@@ -36,9 +36,9 @@ class AI01320xDecoder extends AI013x0xDecoder {
   @override
   void addWeightCode(StringBuffer buf, int weight) {
     if (weight < 10000) {
-      buf.write("(3202)");
+      buf.write('(3202)');
     } else {
-      buf.write("(3203)");
+      buf.write('(3203)');
     }
   }
 

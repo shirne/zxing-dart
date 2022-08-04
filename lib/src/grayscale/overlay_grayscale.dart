@@ -15,11 +15,11 @@ class OverlayGrayscale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
-    Uint8List tranByte = translationScale.dispatch(data, width, height, rect);
+    final newByte = Uint8List.fromList(data);
+    final tranByte = translationScale.dispatch(data, width, height, rect);
 
-    int stepX = 2;
-    int stepY = 2;
+    final stepX = 2;
+    final stepY = 2;
 
     for (int startH = rect.top; startH < rect.bottom; startH += stepY) {
       for (int startW = rect.left; startW < rect.right; startW += stepX) {

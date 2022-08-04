@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shirne_dialog/shirne_dialog.dart';
 
 import 'generator/index.dart' as generator;
 import 'home/index.dart' as home;
@@ -15,10 +16,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const CupertinoApp(
+    return MaterialApp(
       title: 'ZXing Demo',
-      theme: CupertinoThemeData(primaryColor: Colors.red),
-      home: MyHomePage(title: 'ZXing Demo'),
+      navigatorKey: MyDialog.navigatorKey,
+      localizationsDelegates: const [
+        ShirneDialogLocalizations.delegate,
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.red,
+        extensions: [const ShirneDialogTheme()],
+      ),
+      home: const MyHomePage(title: 'ZXing Demo'),
     );
   }
 }

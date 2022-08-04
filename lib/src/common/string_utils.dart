@@ -36,8 +36,8 @@ class StringUtils {
           eucJpEncoding == _platformDefaultEncoding;
 
   // Retained for ABI compatibility with earlier versions
-  static final String shiftJisEncoding = "SJIS";
-  static final String gbkName = "GB2312";
+  static final shiftJisEncoding = 'SJIS';
+  static final gbkName = 'GB2312';
 
   StringUtils._();
 
@@ -48,13 +48,13 @@ class StringUtils {
   ///  of these can possibly be correct
   static String guessEncoding(
       Uint8List bytes, Map<DecodeHintType, Object>? hints) {
-    Encoding? c = guessCharset(bytes, hints);
+    final c = guessCharset(bytes, hints);
     if (c == shiftJisCharset) {
-      return "SJIS";
+      return 'SJIS';
     } else if (c == utf8) {
-      return "UTF8";
+      return 'UTF8';
     } else if (c == latin1) {
-      return "ISO8859_1";
+      return 'ISO8859_1';
     }
     return c!.name;
   }
@@ -95,7 +95,7 @@ class StringUtils {
 
     // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
     // which should be by far the most common encodings.
-    int length = bytes.length;
+    final length = bytes.length;
     bool canBeISO88591 = true;
     bool canBeShiftJIS = true;
     bool canBeUTF8 = true;
@@ -111,7 +111,7 @@ class StringUtils {
     int sjisMaxDoubleBytesWordLength = 0;
     int isoHighOther = 0;
 
-    bool utf8bom = bytes.length > 3 &&
+    final utf8bom = bytes.length > 3 &&
         bytes[0] == 0xEF &&
         bytes[1] == 0xBB &&
         bytes[2] == 0xBF;
@@ -119,7 +119,7 @@ class StringUtils {
     for (int i = 0;
         i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);
         i++) {
-      int value = bytes[i] & 0xFF;
+      final value = bytes[i] & 0xFF;
 
       // UTF-8 stuff
       if (canBeUTF8) {

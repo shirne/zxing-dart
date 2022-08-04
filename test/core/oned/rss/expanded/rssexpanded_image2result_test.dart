@@ -72,21 +72,21 @@ void main() {
   test('testDecodeRow2result2', () {
     // (01)90012345678908(3103)001750
     ExpandedProductParsedResult expected = ExpandedProductParsedResult(
-        "(01)90012345678908(3103)001750",
-        "90012345678908",
+        '(01)90012345678908(3103)001750',
+        '90012345678908',
         null,
         null,
         null,
         null,
         null,
         null,
-        "001750",
+        '001750',
         ExpandedProductParsedResult.KILOGRAM,
-        "3",
+        '3',
         null,
         null,
         null, {});
 
-    assertCorrectImage2result("2.png", expected);
+    assertCorrectImage2result('2.png', expected);
   });
 }

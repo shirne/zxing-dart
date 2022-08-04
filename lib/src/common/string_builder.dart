@@ -94,7 +94,7 @@ class StringBuilder extends StringBuffer {
 
   setLength(int length) {
     if (length > this.length) {
-      writeAll(List.filled(length - this.length, "\x00"));
+      writeAll(List.filled(length - this.length, '\x00'));
     } else {
       delete(length, this.length);
     }
@@ -120,13 +120,13 @@ class StringBuilder extends StringBuffer {
   /// Writes each individual object in [objects] in iteration order,
   /// and writes [separator] between any two objects.
   @override
-  void writeAll(Iterable<dynamic> objects, [String separator = ""]) {
+  void writeAll(Iterable<dynamic> objects, [String separator = '']) {
     _buffer = null;
     super.writeAll(objects, separator);
   }
 
   @override
-  void writeln([Object? obj = ""]) {
+  void writeln([Object? obj = '']) {
     _buffer = null;
     super.writeln(obj);
   }

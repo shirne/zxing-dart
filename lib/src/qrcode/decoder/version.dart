@@ -126,7 +126,7 @@ class Version {
 
   static Version getVersionForNumber(int versionNumber) {
     if (versionNumber < 1 || versionNumber > 40) {
-      throw ArgumentError("versionNumber($versionNumber) must in 1-40");
+      throw ArgumentError('versionNumber($versionNumber) must in 1-40');
     }
     return _versions[versionNumber - 1];
   }

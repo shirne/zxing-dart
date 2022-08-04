@@ -14,10 +14,10 @@ class RevGrayscale extends Dispatch {
 
   @override
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect) {
-    Uint8List newByte = Uint8List.fromList(data);
+    final newByte = Uint8List.fromList(data);
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
-        int index = startH * width + startW;
+        final index = startH * width + startW;
         newByte[index] = (255 - newByte[index] & 0xff);
       }
     }

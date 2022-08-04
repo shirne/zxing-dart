@@ -75,8 +75,7 @@ class BinaryBitmap {
   /// @param height The height of the rectangle to crop.
   /// @return A cropped version of this object.
   BinaryBitmap crop(int left, int top, int width, int height) {
-    LuminanceSource newSource =
-        _binarizer.luminanceSource.crop(left, top, width, height);
+    final newSource = _binarizer.luminanceSource.crop(left, top, width, height);
     return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
@@ -88,8 +87,7 @@ class BinaryBitmap {
   ///
   /// @return A rotated version of this object.
   BinaryBitmap rotateCounterClockwise() {
-    LuminanceSource newSource =
-        _binarizer.luminanceSource.rotateCounterClockwise();
+    final newSource = _binarizer.luminanceSource.rotateCounterClockwise();
     return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
@@ -98,7 +96,7 @@ class BinaryBitmap {
   ///
   /// @return A rotated version of this object.
   BinaryBitmap rotateCounterClockwise45() {
-    LuminanceSource newSource =
+    final LuminanceSource newSource =
         _binarizer.luminanceSource.rotateCounterClockwise45();
     return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }

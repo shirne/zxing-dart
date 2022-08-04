@@ -39,8 +39,8 @@ class GeoParsedResult extends ParsedResult {
       : super(ParsedResultType.GEO);
 
   String get geoURI {
-    StringBuffer result = StringBuffer();
-    result.write("geo:");
+    final result = StringBuffer();
+    result.write('geo:');
     result.write(latitude);
     result.write(',');
     result.write(longitude);
@@ -57,17 +57,17 @@ class GeoParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     result.write(latitude);
-    result.write(", ");
+    result.write(', ');
     result.write(longitude);
     if (altitude > 0.0) {
-      result.write(", ");
+      result.write(', ');
       result.write(altitude);
       result.write('m');
     }
     if (query != null) {
-      result.write(" (");
+      result.write(' (');
       result.write(query);
       result.write(')');
     }

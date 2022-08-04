@@ -29,13 +29,13 @@ class EAN8Reader extends UPCEANReader {
 
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuffer result) {
-    List<int> counters = _decodeMiddleCounters;
+    final counters = _decodeMiddleCounters;
     counters.fillRange(0, counters.length, 0);
-    int end = row.size;
+    final end = row.size;
     int rowOffset = startRange[1];
 
     for (int x = 0; x < 4 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
@@ -43,12 +43,12 @@ class EAN8Reader extends UPCEANReader {
       }
     }
 
-    List<int> middleRange = UPCEANReader.findGuardPattern(
+    final middleRange = UPCEANReader.findGuardPattern(
         row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
     rowOffset = middleRange[1];
 
     for (int x = 0; x < 4 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {

@@ -40,9 +40,9 @@ class InvertedLuminanceSource extends LuminanceSource {
 
   @override
   Int8List get matrix {
-    Int8List matrix = _delegate.matrix;
-    int length = width * height;
-    Int8List invertedMatrix = Int8List(length);
+    final matrix = _delegate.matrix;
+    final length = width * height;
+    final invertedMatrix = Int8List(length);
     for (int i = 0; i < length; i++) {
       invertedMatrix[i] = (255 - (matrix[i] & 0xFF));
     }

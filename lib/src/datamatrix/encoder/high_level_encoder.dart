@@ -75,13 +75,13 @@ class HighLevelEncoder {
   static const int X12_UNLATCH = 254;
 
   /// 05 Macro header
-  static const String MACRO_05_HEADER = "[)>\u001E05\u001D";
+  static const String MACRO_05_HEADER = '[)>\u001E05\u001D';
 
   /// 06 Macro header
-  static const String MACRO_06_HEADER = "[)>\u001E06\u001D";
+  static const String MACRO_06_HEADER = '[)>\u001E06\u001D';
 
   /// Macro trailer
-  static const String MACRO_TRAILER = "\u001E\u0004";
+  static const String MACRO_TRAILER = '\u001E\u0004';
 
   static const int ASCII_ENCODATION = 0;
   static const int C40_ENCODATION = 1;
@@ -93,8 +93,8 @@ class HighLevelEncoder {
   HighLevelEncoder._();
 
   static int _randomize253State(int codewordPosition) {
-    int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
-    int tempVariable = _PAD + pseudoRandom;
+    final pseudoRandom = ((149 * codewordPosition) % 253) + 1;
+    final tempVariable = _PAD + pseudoRandom;
     return tempVariable <= 254 ? tempVariable : tempVariable - 254;
   }
 
@@ -115,8 +115,8 @@ class HighLevelEncoder {
     bool forceC40 = false,
   ]) {
     //the codewords 0..255 are encoded as Unicode characters
-    C40Encoder c40Encoder = C40Encoder();
-    List<Encoder> encoders = [
+    final c40Encoder = C40Encoder();
+    final encoders = <Encoder>[
       ASCIIEncoder(),
       c40Encoder,
       TextEncoder(),
@@ -125,7 +125,7 @@ class HighLevelEncoder {
       Base256Encoder()
     ];
 
-    EncoderContext context = EncoderContext(msg);
+    final context = EncoderContext(msg);
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
 
@@ -155,9 +155,9 @@ class HighLevelEncoder {
         context.resetEncoderSignal();
       }
     }
-    int len = context.codewordCount;
+    final len = context.codewordCount;
     context.updateSymbolInfo();
-    int capacity = context.symbolInfo!.dataCapacity;
+    final capacity = context.symbolInfo!.dataCapacity;
     if (len < capacity &&
         encodingMode != ASCII_ENCODATION &&
         encodingMode != BASE256_ENCODATION &&
@@ -165,7 +165,7 @@ class HighLevelEncoder {
       context.writeCodeword('\u00fe'); //Unlatch (254)
     }
     //Padding
-    StringBuffer codewords = context.codewords;
+    final codewords = context.codewords;
     if (codewords.length < capacity) {
       codewords.writeCharCode(_PAD);
     }
@@ -177,9 +177,9 @@ class HighLevelEncoder {
   }
 
   static int lookAheadTest(String msg, int startPos, int currentMode) {
-    int newMode = lookAheadTestIntern(msg, startPos, currentMode);
+    final newMode = lookAheadTestIntern(msg, startPos, currentMode);
     if (currentMode == X12_ENCODATION && newMode == X12_ENCODATION) {
-      int endPos = math.min(startPos + 3, msg.length);
+      final endPos = math.min(startPos + 3, msg.length);
       for (int i = startPos; i < endPos; i++) {
         if (!isNativeX12(msg.codeUnitAt(i))) {
           return ASCII_ENCODATION;
@@ -187,7 +187,7 @@ class HighLevelEncoder {
       }
     } else if (currentMode == EDIFACT_ENCODATION &&
         newMode == EDIFACT_ENCODATION) {
-      int endPos = math.min(startPos + 4, msg.length);
+      final endPos = math.min(startPos + 4, msg.length);
       for (int i = startPos; i < endPos; i++) {
         if (!isNativeEDIFACT(msg.codeUnitAt(i))) {
           return ASCII_ENCODATION;
@@ -211,14 +211,14 @@ class HighLevelEncoder {
     }
 
     int charsProcessed = 0;
-    Int8List mins = Int8List(6);
-    Int8List intCharCounts = Int8List(6);
+    final mins = Int8List(6);
+    final intCharCounts = Int8List(6);
     while (true) {
       //step K
       if ((startPos + charsProcessed) == msg.length) {
         mins.fillRange(0, mins.length, 0);
         intCharCounts.fillRange(0, mins.length, 0);
-        int min =
+        final min =
             _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
         int minCount = _getMinimumCount(mins);
 
@@ -241,7 +241,7 @@ class HighLevelEncoder {
         }
 
         // to fix result
-        double dmin = charCounts.fold(
+        final dmin = charCounts.fold<double>(
           MathUtils.MAX_VALUE.toDouble(),
           (previousValue, element) => math.min(previousValue, element),
         );
@@ -257,7 +257,7 @@ class HighLevelEncoder {
         return C40_ENCODATION;
       }
 
-      int c = msg.codeUnitAt(startPos + charsProcessed);
+      final c = msg.codeUnitAt(startPos + charsProcessed);
       charsProcessed++;
 
       //step L
@@ -386,7 +386,7 @@ class HighLevelEncoder {
           if (intCharCounts[C40_ENCODATION] == intCharCounts[X12_ENCODATION]) {
             int p = startPos + charsProcessed + 1;
             while (p < msg.length) {
-              int tc = msg.codeUnitAt(p);
+              final tc = msg.codeUnitAt(p);
               if (_isX12TermSep(tc)) {
                 return X12_ENCODATION;
               }
@@ -416,7 +416,7 @@ class HighLevelEncoder {
     Int8List mins,
   ) {
     for (int i = 0; i < 6; i++) {
-      int current = (intCharCounts[i] = charCounts[i].ceil());
+      final current = (intCharCounts[i] = charCounts[i].ceil());
 
       if (min > current) {
         min = current;
@@ -503,7 +503,7 @@ class HighLevelEncoder {
   /// @param startPos the start position within the message
   /// @return the requested character count
   static int determineConsecutiveDigitCount(String msg, int startPos) {
-    int len = msg.length;
+    final len = msg.length;
     int idx = startPos;
     while (idx < len && isDigit(msg.codeUnitAt(idx))) {
       idx++;
@@ -514,6 +514,6 @@ class HighLevelEncoder {
   static void illegalCharacter(int c) {
     String hex = (c).toRadixString(16);
     hex = hex.padLeft(4, '0');
-    throw ArgumentError("Illegal character: chr($c) (0x$hex)");
+    throw ArgumentError('Illegal character: chr($c) (0x$hex)');
   }
 }

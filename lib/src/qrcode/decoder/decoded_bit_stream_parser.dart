@@ -36,9 +36,9 @@ import 'version.dart';
 /// @author Sean Owen
 class DecodedBitStreamParser {
   /// See ISO 18004:2006, 6.4.4 Table 5
-  static final List<String> _alphaNumericChars =
-      r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".split('');
-  static final int _gbkSubset = 1;
+  static final _alphaNumericChars =
+      r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.split('');
+  static final _gbkSubset = 1;
 
   DecodedBitStreamParser._();
 
@@ -80,7 +80,7 @@ class DecodedBitStreamParser {
             break;
           case Mode.STRUCTURED_APPEND:
             if (bits.available() < 16) {
-              throw FormatsException("bits.available < 16");
+              throw FormatsException('bits.available < 16');
             }
             // sequence number and parity is added later to the result metadata
             // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
@@ -93,7 +93,7 @@ class DecodedBitStreamParser {
             currentCharacterSetECI =
                 CharacterSetECI.getCharacterSetECIByValue(value);
             if (currentCharacterSetECI == null) {
-              throw FormatsException("CharacterSet is null");
+              throw FormatsException('CharacterSet is null');
             }
             break;
           case Mode.HANZI:
@@ -124,7 +124,7 @@ class DecodedBitStreamParser {
                 _decodeKanjiSegment(bits, result, count);
                 break;
               default:
-                throw FormatsException("mode");
+                throw FormatsException('mode');
             }
             break;
         }

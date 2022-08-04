@@ -30,16 +30,16 @@ import 'package:zxing_lib/oned.dart';
 
 void main() {
   void checkFields(String expected) {
-    String field = expected.replaceAll("(", "").replaceAll(")", "");
+    String field = expected.replaceAll('(', '').replaceAll(')', '');
     String actual = FieldParser.parseFieldsInGeneralPurpose(field)!;
     expect(expected, actual);
   }
 
   test('testParseField', () {
-    checkFields("(15)991231(3103)001750(10)12A");
+    checkFields('(15)991231(3103)001750(10)12A');
   });
 
   test('testParseField2', () {
-    checkFields("(15)991231(15)991231(3103)001750(10)12A");
+    checkFields('(15)991231(15)991231(3103)001750(10)12A');
   });
 }

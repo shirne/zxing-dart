@@ -25,7 +25,7 @@ class ASCIIEncoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     //step B
-    int n = HighLevelEncoder.determineConsecutiveDigitCount(
+    final n = HighLevelEncoder.determineConsecutiveDigitCount(
       context.message,
       context.pos,
     );
@@ -36,8 +36,8 @@ class ASCIIEncoder implements Encoder {
       ));
       context.pos += 2;
     } else {
-      int c = context.currentChar;
-      int newMode = HighLevelEncoder.lookAheadTest(
+      final c = context.currentChar;
+      final newMode = HighLevelEncoder.lookAheadTest(
         context.message,
         context.pos,
         encodingMode,
@@ -65,7 +65,7 @@ class ASCIIEncoder implements Encoder {
             context.signalEncoderChange(HighLevelEncoder.EDIFACT_ENCODATION);
             break;
           default:
-            throw StateError("Illegal mode: $newMode");
+            throw StateError('Illegal mode: $newMode');
         }
       } else if (HighLevelEncoder.isExtendedASCII(c)) {
         context.writeCodeword(HighLevelEncoder.UPPER_SHIFT);
@@ -80,9 +80,9 @@ class ASCIIEncoder implements Encoder {
 
   static int _encodeASCIIDigits(int digit1, int digit2) {
     if (HighLevelEncoder.isDigit(digit1) && HighLevelEncoder.isDigit(digit2)) {
-      int num = (digit1 - 48) * 10 + (digit2 - 48);
+      final num = (digit1 - 48) * 10 + (digit2 - 48);
       return num + 130;
     }
-    throw ArgumentError("not digits: $digit1 $digit2");
+    throw ArgumentError('not digits: $digit1 $digit2');
   }
 }

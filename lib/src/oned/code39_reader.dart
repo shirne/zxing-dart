@@ -36,7 +36,7 @@ import 'one_dreader.dart';
 /// @author Sean Owen
 class Code39Reader extends OneDReader {
   static const String ALPHABET_STRING =
-      r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+      r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%';
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars.
   /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
@@ -71,22 +71,22 @@ class Code39Reader extends OneDReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    List<int> theCounters = _counters;
+    final theCounters = _counters;
     theCounters.fillRange(0, theCounters.length, 0);
 
-    StringBuilder result = _decodeRowResult;
+    final result = _decodeRowResult;
     result.clear();
 
-    List<int> start = _findAsteriskPattern(row, theCounters);
+    final start = _findAsteriskPattern(row, theCounters);
     // Read off white space
     int nextStart = row.getNextSet(start[1]);
-    int end = row.size;
+    final end = row.size;
 
     String decodedChar;
     int lastStart;
     do {
       OneDReader.recordPattern(row, nextStart, theCounters);
-      int pattern = _toNarrowWidePattern(theCounters);
+      final pattern = _toNarrowWidePattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.instance;
       }
@@ -106,7 +106,7 @@ class Code39Reader extends OneDReader {
     for (int counter in theCounters) {
       lastPatternSize += counter;
     }
-    int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
+    final whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
     if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
@@ -114,7 +114,7 @@ class Code39Reader extends OneDReader {
     }
 
     if (_usingCheckDigit) {
-      int max = result.length - 1;
+      final max = result.length - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
         total += ALPHABET_STRING.indexOf(_decodeRowResult.charAt(i));
@@ -137,10 +137,10 @@ class Code39Reader extends OneDReader {
       resultString = result.toString();
     }
 
-    double left = (start[1] + start[0]) / 2.0;
-    double right = lastStart + lastPatternSize / 2.0;
+    final left = (start[1] + start[0]) / 2.0;
+    final right = lastStart + lastPatternSize / 2.0;
 
-    Result resultObject = Result(
+    final resultObject = Result(
         resultString,
         null,
         [
@@ -148,18 +148,18 @@ class Code39Reader extends OneDReader {
           ResultPoint(right, rowNumber.toDouble())
         ],
         BarcodeFormat.CODE_39);
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']A0');
     return resultObject;
   }
 
   static List<int> _findAsteriskPattern(BitArray row, List<int> counters) {
-    int width = row.size;
-    int rowOffset = row.getNextSet(0);
+    final width = row.size;
+    final rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
     int patternStart = rowOffset;
     bool isWhite = false;
-    int patternLength = counters.length;
+    final patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
       if (row.get(i) != isWhite) {
@@ -190,7 +190,7 @@ class Code39Reader extends OneDReader {
   // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
   // per image when using some of our blackbox images.
   static int _toNarrowWidePattern(List<int> counters) {
-    int numCounters = counters.length;
+    final numCounters = counters.length;
     int maxNarrowCounter = 0;
     int wideCounters;
     do {
@@ -205,7 +205,7 @@ class Code39Reader extends OneDReader {
       int totalWideCountersWidth = 0;
       int pattern = 0;
       for (int i = 0; i < numCounters; i++) {
-        int counter = counters[i];
+        final counter = counters[i];
         if (counter > maxNarrowCounter) {
           pattern |= 1 << (numCounters - 1 - i);
           wideCounters++;
@@ -217,7 +217,7 @@ class Code39Reader extends OneDReader {
         // We can perform a cheap, conservative check to see if any individual
         // counter is more than 1.5 times the average:
         for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-          int counter = counters[i];
+          final counter = counters[i];
           if (counter > maxNarrowCounter) {
             wideCounters--;
             // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
@@ -245,12 +245,12 @@ class Code39Reader extends OneDReader {
   }
 
   static String _decodeExtended(String encoded) {
-    int length = encoded.length;
-    StringBuffer decoded = StringBuffer();
+    final length = encoded.length;
+    final decoded = StringBuffer();
     for (int i = 0; i < length; i++) {
-      String c = encoded[i];
+      final c = encoded[i];
       if (c == '+' || c == r'$' || c == '%' || c == '/') {
-        int next = encoded.codeUnitAt(i + 1);
+        final next = encoded.codeUnitAt(i + 1);
         String decodedChar = '\x00';
         switch (c) {
           case '+':

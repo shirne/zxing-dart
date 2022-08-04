@@ -35,7 +35,7 @@ class AI013103decoder extends AI013x0xDecoder {
   //@protected
   @override
   void addWeightCode(StringBuffer buf, int weight) {
-    buf.write("(3103)");
+    buf.write('(3103)');
   }
 
   //@protected

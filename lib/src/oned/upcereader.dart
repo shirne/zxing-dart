@@ -145,22 +145,22 @@ class UPCEReader extends UPCEANReader {
       case 50: //'2'
         result.write(String.fromCharCodes(upceChars.getRange(0, 2))); // 0, 2
         result.writeCharCode(lastChar);
-        result.write("0000");
+        result.write('0000');
         result.write(String.fromCharCodes(upceChars.getRange(2, 5))); // 2, 3
         break;
       case 51: //'3'
         result.write(String.fromCharCodes(upceChars.getRange(0, 3))); // 0, 3
-        result.write("00000");
+        result.write('00000');
         result.write(String.fromCharCodes(upceChars.getRange(3, 5))); // 3, 2
         break;
       case 52: //'4'
         result.write(String.fromCharCodes(upceChars.getRange(0, 4))); // 0, 4
-        result.write("00000");
+        result.write('00000');
         result.writeCharCode(upceChars[4]);
         break;
       default:
         result.write(String.fromCharCodes(upceChars.getRange(0, 5))); // 0, 5
-        result.write("0000");
+        result.write('0000');
         result.writeCharCode(lastChar);
         break;
     }

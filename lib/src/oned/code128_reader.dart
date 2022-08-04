@@ -164,14 +164,14 @@ class Code128Reader extends OneDReader {
   static const int _CODE_STOP = 106;
 
   static List<int> _findStartPattern(BitArray row) {
-    int width = row.size;
-    int rowOffset = row.getNextSet(0);
+    final width = row.size;
+    final rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
-    List<int> counters = List.filled(6, 0);
+    final counters = List.filled(6, 0);
     int patternStart = rowOffset;
     bool isWhite = false;
-    int patternLength = counters.length;
+    final patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
       if (row.get(i) != isWhite) {
@@ -183,7 +183,7 @@ class Code128Reader extends OneDReader {
           for (int startCode = _CODE_START_A;
               startCode <= _CODE_START_C;
               startCode++) {
-            double variance = OneDReader.patternMatchVariance(
+            final variance = OneDReader.patternMatchVariance(
                 counters, CODE_PATTERNS[startCode], _MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
@@ -216,8 +216,8 @@ class Code128Reader extends OneDReader {
     double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     for (int d = 0; d < CODE_PATTERNS.length; d++) {
-      List<int> pattern = CODE_PATTERNS[d];
-      double variance = OneDReader.patternMatchVariance(
+      final pattern = CODE_PATTERNS[d];
+      final variance = OneDReader.patternMatchVariance(
           counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
@@ -235,15 +235,15 @@ class Code128Reader extends OneDReader {
   @override
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
-    bool convertFNC1 =
+    final convertFNC1 =
         hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
     int symbologyModifier = 0;
 
-    List<int> startPatternInfo = _findStartPattern(row);
-    int startCode = startPatternInfo[2];
+    final startPatternInfo = _findStartPattern(row);
+    final startCode = startPatternInfo[2];
 
-    List<int> rawCodes = [];
+    final rawCodes = <int>[];
     rawCodes.add(startCode);
 
     int codeSet;
@@ -264,11 +264,11 @@ class Code128Reader extends OneDReader {
     bool done = false;
     bool isNextShifted = false;
 
-    StringBuilder result = StringBuilder();
+    final result = StringBuilder();
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
-    List<int> counters = List.filled(6, 0);
+    final counters = List.filled(6, 0);
 
     int lastCode = 0;
     int code = 0;
@@ -279,7 +279,7 @@ class Code128Reader extends OneDReader {
     bool shiftUpperMode = false;
 
     while (!done) {
-      bool unshift = isNextShifted;
+      final unshift = isNextShifted;
       isNextShifted = false;
 
       // Save off last code
@@ -349,7 +349,7 @@ class Code128Reader extends OneDReader {
                   if (result.length == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
                     // is FNC1 then this is GS1-128. We add the symbology identifier.
-                    result.write("]C1");
+                    result.write(']C1');
                   } else {
                     // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
                     result.writeCharCode(29);
@@ -413,7 +413,7 @@ class Code128Reader extends OneDReader {
                   if (result.length == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
                     // is FNC1 then this is GS1-128. We add the symbology identifier.
-                    result.write("]C1");
+                    result.write(']C1');
                   } else {
                     // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
                     result.writeCharCode(29);
@@ -476,7 +476,7 @@ class Code128Reader extends OneDReader {
                   if (result.length == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
                     // is FNC1 then this is GS1-128. We add the symbology identifier.
-                    result.write("]C1");
+                    result.write(']C1');
                   } else {
                     // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
                     result.writeCharCode(29);
@@ -503,7 +503,7 @@ class Code128Reader extends OneDReader {
       }
     }
 
-    int lastPatternSize = nextStart - lastStart;
+    final lastPatternSize = nextStart - lastStart;
 
     // Check for ample whitespace following pattern, but, to do this we first need to remember that
     // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
@@ -522,7 +522,7 @@ class Code128Reader extends OneDReader {
     }
 
     // Need to pull out the check digits from string
-    int resultLength = result.length;
+    final resultLength = result.length;
     if (resultLength == 0) {
       // false positive
       throw NotFoundException.instance;
@@ -538,15 +538,15 @@ class Code128Reader extends OneDReader {
       }
     }
 
-    double left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0;
-    double right = lastStart + lastPatternSize / 2.0;
+    final left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0;
+    final right = lastStart + lastPatternSize / 2.0;
 
-    int rawCodesSize = rawCodes.length;
-    Uint8List rawBytes = Uint8List(rawCodesSize);
+    final rawCodesSize = rawCodes.length;
+    final rawBytes = Uint8List(rawCodesSize);
     for (int i = 0; i < rawCodesSize; i++) {
       rawBytes[i] = rawCodes[i];
     }
-    Result resultObject = Result(
+    final resultObject = Result(
         result.toString(),
         rawBytes,
         [
@@ -555,7 +555,7 @@ class Code128Reader extends OneDReader {
         ],
         BarcodeFormat.CODE_128);
     resultObject.putMetadata(
-        ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C$symbologyModifier");
+        ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']C$symbologyModifier');
     return resultObject;
   }
 }

@@ -26,16 +26,16 @@ class ISBNResultParser extends ResultParser {
   /// See <a href="http://www.bisg.org/isbn-13/for.dummies.html">ISBN-13 For Dummies</a>
   @override
   ISBNParsedResult? parse(Result result) {
-    BarcodeFormat format = result.barcodeFormat;
+    final format = result.barcodeFormat;
     if (format != BarcodeFormat.EAN_13) {
       return null;
     }
-    String rawText = ResultParser.getMassagedText(result);
-    int length = rawText.length;
+    final rawText = ResultParser.getMassagedText(result);
+    final length = rawText.length;
     if (length != 13) {
       return null;
     }
-    if (!rawText.startsWith("978") && !rawText.startsWith("979")) {
+    if (!rawText.startsWith('978') && !rawText.startsWith('979')) {
       return null;
     }
 

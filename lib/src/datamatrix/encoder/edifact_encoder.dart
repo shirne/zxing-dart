@@ -26,18 +26,18 @@ class EdifactEncoder implements Encoder {
   @override
   void encode(EncoderContext context) {
     //step F
-    StringBuilder buffer = StringBuilder();
+    final buffer = StringBuilder();
     while (context.hasMoreCharacters) {
-      int c = context.currentChar;
+      final c = context.currentChar;
       _encodeChar(c, buffer);
       context.pos++;
 
-      int count = buffer.length;
+      final count = buffer.length;
       if (count >= 4) {
         context.writeCodewords(_encodeToCodewords(buffer));
         buffer.delete(0, 4);
 
-        int newMode = HighLevelEncoder.lookAheadTest(
+        final newMode = HighLevelEncoder.lookAheadTest(
             context.message, context.pos, encodingMode);
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
@@ -56,7 +56,7 @@ class EdifactEncoder implements Encoder {
   /// @param buffer  the buffer with the remaining encoded characters
   static void _handleEOD(EncoderContext context, StringBuilder buffer) {
     try {
-      int count = buffer.length;
+      final count = buffer.length;
       if (count == 0) {
         return; //Already finished
       }
@@ -65,7 +65,7 @@ class EdifactEncoder implements Encoder {
         context.updateSymbolInfo();
         int available =
             context.symbolInfo!.dataCapacity - context.codewordCount;
-        int remaining = context.remainingCharacters;
+        final remaining = context.remainingCharacters;
         // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
         if (remaining > available) {
           context.updateSymbolInfo(context.codewordCount + 1);
@@ -77,16 +77,16 @@ class EdifactEncoder implements Encoder {
       }
 
       if (count > 4) {
-        throw StateError("Count must not exceed 4");
+        throw StateError('Count must not exceed 4');
       }
-      int restChars = count - 1;
-      String encoded = _encodeToCodewords(buffer);
-      bool endOfSymbolReached = !context.hasMoreCharacters;
+      final restChars = count - 1;
+      final encoded = _encodeToCodewords(buffer);
+      final endOfSymbolReached = !context.hasMoreCharacters;
       bool restInAscii = endOfSymbolReached && restChars <= 2;
 
       if (restChars <= 2) {
         context.updateSymbolInfo(context.codewordCount + restChars);
-        int available =
+        final available =
             context.symbolInfo!.dataCapacity - context.codewordCount;
         if (available >= 3) {
           restInAscii = false;
@@ -117,20 +117,20 @@ class EdifactEncoder implements Encoder {
   }
 
   static String _encodeToCodewords(StringBuilder sb) {
-    int len = sb.length;
+    final len = sb.length;
     if (len == 0) {
-      throw StateError("StringBuffer must not be empty");
+      throw StateError('StringBuffer must not be empty');
     }
-    int c1 = sb.codePointAt(0);
-    int c2 = len >= 2 ? sb.codePointAt(1) : 0;
-    int c3 = len >= 3 ? sb.codePointAt(2) : 0;
-    int c4 = len >= 4 ? sb.codePointAt(3) : 0;
+    final c1 = sb.codePointAt(0);
+    final c2 = len >= 2 ? sb.codePointAt(1) : 0;
+    final c3 = len >= 3 ? sb.codePointAt(2) : 0;
+    final c4 = len >= 4 ? sb.codePointAt(3) : 0;
 
-    int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
-    int cw1 = (v >> 16) & 255;
-    int cw2 = (v >> 8) & 255;
-    int cw3 = v & 255;
-    StringBuffer res = StringBuffer();
+    final v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
+    final cw1 = (v >> 16) & 255;
+    final cw2 = (v >> 8) & 255;
+    final cw3 = v & 255;
+    final res = StringBuffer();
     res.writeCharCode(cw1);
     if (len >= 2) {
       res.writeCharCode(cw2);

@@ -25,9 +25,9 @@ import 'parsed_result_type.dart';
 ///
 /// @author Sean Owen
 class CalendarParsedResult extends ParsedResult {
-  static final RegExp _rfc2445Duration = RegExp(
-      r"^P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$");
-  static final List<int> _rfc2445DurationFieldUnits = [
+  static final _rfc2445Duration = RegExp(
+      r'^P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$');
+  static final _rfc2445DurationFieldUnits = [
     7 * 24 * 60 * 60 * 1000, // 1 week
     24 * 60 * 60 * 1000, // 1 day
     60 * 60 * 1000, // 1 hour
@@ -35,7 +35,7 @@ class CalendarParsedResult extends ParsedResult {
     1000, // 1 second
   ];
 
-  static final RegExp _dateTime = RegExp(r"^[0-9]{8}(T[0-9]{6}Z?)?$");
+  static final _dateTime = RegExp(r'^[0-9]{8}(T[0-9]{6}Z?)?$');
 
   String? summary;
   late int _start;
@@ -68,7 +68,7 @@ class CalendarParsedResult extends ParsedResult {
     }
 
     if (endString == null) {
-      int durationMS = _parseDurationMS(durationString);
+      final durationMS = _parseDurationMS(durationString);
       _end = durationMS < 0 ? -1 : _start + durationMS;
     } else {
       try {
@@ -119,7 +119,7 @@ class CalendarParsedResult extends ParsedResult {
 
   @override
   String get displayResult {
-    StringBuffer result = StringBuffer();
+    final StringBuffer result = StringBuffer();
     maybeAppend(summary, result);
     maybeAppend(_format(_startAllDay, _start), result);
     maybeAppend(_format(_endAllDay, _end), result);
@@ -139,7 +139,7 @@ class CalendarParsedResult extends ParsedResult {
     if (when == null || !_dateTime.hasMatch(when)) {
       throw ParseException('Date Parse error $when');
     }
-    DateTime date = DateTime.parse(when);
+    final DateTime date = DateTime.parse(when);
 
     return date.millisecondsSinceEpoch;
   }
@@ -148,9 +148,10 @@ class CalendarParsedResult extends ParsedResult {
     if (timestamp < 0) {
       return null;
     }
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp).toLocal();
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(timestamp).toLocal();
     // DateFormat.MEDIUM Jan 17, 2015, 7:16:02 PM
-    DateFormat format = DateFormat.yMMMEd();
+    final DateFormat format = DateFormat.yMMMEd();
     if (!allDay) format.add_jms();
     return format.format(date);
   }
@@ -159,13 +160,13 @@ class CalendarParsedResult extends ParsedResult {
     if (durationString == null) {
       return -1;
     }
-    var m = _rfc2445Duration.firstMatch(durationString);
+    final m = _rfc2445Duration.firstMatch(durationString);
     if (m == null) {
       return -1;
     }
     int durationMS = 0;
     for (int i = 0; i < _rfc2445DurationFieldUnits.length; i++) {
-      String? fieldValue = m.group(i + 1);
+      final String? fieldValue = m.group(i + 1);
       if (fieldValue != null) {
         durationMS += _rfc2445DurationFieldUnits[i] * int.parse(fieldValue);
       }

@@ -43,9 +43,9 @@ class MultiFormatUPCEANReader extends OneDReader {
 
   MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
-    List<BarcodeFormat>? possibleFormats =
+    final possibleFormats =
         hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-    List<UPCEANReader> readers = [];
+    final readers = <UPCEANReader>[];
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
         readers.add(EAN13Reader());
@@ -72,10 +72,10 @@ class MultiFormatUPCEANReader extends OneDReader {
   Result decodeRow(
       int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
     // Compute this location once and reuse it on multiple implementations
-    List<int> startGuardPattern = UPCEANReader.findStartGuardPattern(row);
+    final startGuardPattern = UPCEANReader.findStartGuardPattern(row);
     for (UPCEANReader reader in _readers) {
       try {
-        Result result =
+        final result =
             reader.decodeRow(rowNumber, row, hints, startGuardPattern);
         // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
         // followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
@@ -89,17 +89,17 @@ class MultiFormatUPCEANReader extends OneDReader {
         // result if appropriate.
         //
         // But, don't return UPC-A if UPC-A was not a requested format!
-        bool ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.EAN_13 &&
+        final ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.EAN_13 &&
             result.text[0] == '0';
         // @SuppressWarnings("unchecked")
-        List<BarcodeFormat>? possibleFormats =
+        final possibleFormats =
             hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-        bool canReturnUPCA = possibleFormats == null ||
+        final canReturnUPCA = possibleFormats == null ||
             possibleFormats.contains(BarcodeFormat.UPC_A);
 
         if (ean13MayBeUPCA && canReturnUPCA) {
           // Transfer the metadata across
-          Result resultUPCA = Result(result.text.substring(1), result.rawBytes,
+          final resultUPCA = Result(result.text.substring(1), result.rawBytes,
               result.resultPoints, BarcodeFormat.UPC_A);
           resultUPCA.putAllMetadata(result.resultMetadata);
           return resultUPCA;

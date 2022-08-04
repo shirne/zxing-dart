@@ -50,6 +50,6 @@ class Codeword {
 
   @override
   String toString() {
-    return "$rowNumber|$_value";
+    return '$rowNumber|$_value';
   }
 }

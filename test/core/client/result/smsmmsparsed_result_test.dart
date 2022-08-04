@@ -38,18 +38,18 @@ void main() {
   }
 
   test('testSMS', () {
-    doTest("sms:+15551212", "+15551212", null, null, null, "sms:+15551212");
-    doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar",
-        null, "sms:+15551212?body=bar&subject=foo");
-    doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333",
-        "sms:+15551212;via=999333");
+    doTest('sms:+15551212', '+15551212', null, null, null, 'sms:+15551212');
+    doTest('sms:+15551212?subject=foo&body=bar', '+15551212', 'foo', 'bar',
+        null, 'sms:+15551212?body=bar&subject=foo');
+    doTest('sms:+15551212;via=999333', '+15551212', null, null, '999333',
+        'sms:+15551212;via=999333');
   });
 
   test('testMMS', () {
-    doTest("mms:+15551212", "+15551212", null, null, null, "sms:+15551212");
-    doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar",
-        null, "sms:+15551212?body=bar&subject=foo");
-    doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333",
-        "sms:+15551212;via=999333");
+    doTest('mms:+15551212', '+15551212', null, null, null, 'sms:+15551212');
+    doTest('mms:+15551212?subject=foo&body=bar', '+15551212', 'foo', 'bar',
+        null, 'sms:+15551212?body=bar&subject=foo');
+    doTest('mms:+15551212;via=999333', '+15551212', null, null, '999333',
+        'sms:+15551212;via=999333');
   });
 }

@@ -21,7 +21,7 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('Code39BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/code39-1",
+    AbstractBlackBoxTestCase('test/resources/blackbox/code39-1',
         MultiFormatReader(), BarcodeFormat.CODE_39)
       ..addTest(4, 4, 0.0)
       ..addTest(4, 4, 180.0)

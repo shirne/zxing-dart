@@ -55,25 +55,25 @@ class EAN13Reader extends UPCEANReader {
   // in binary:
   //                0    1    1   0   0    1   == 0x19
   //
-  static const List<int> FIRST_DIGIT_ENCODINGS = [
+  static const FIRST_DIGIT_ENCODINGS = [
     0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A //
   ];
 
-  final List<int> _decodeMiddleCounters = [0, 0, 0, 0];
+  final _decodeMiddleCounters = [0, 0, 0, 0];
 
   EAN13Reader();
 
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
-    List<int> counters = _decodeMiddleCounters;
+    final counters = _decodeMiddleCounters;
     counters.fillRange(0, counters.length, 0);
-    int end = row.size;
+    final end = row.size;
     int rowOffset = startRange[1];
 
     int lgPatternFound = 0;
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.lAndGPatterns);
       result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
@@ -86,12 +86,12 @@ class EAN13Reader extends UPCEANReader {
 
     _determineFirstDigit(result, lgPatternFound);
 
-    List<int> middleRange = UPCEANReader.findGuardPattern(
+    final middleRange = UPCEANReader.findGuardPattern(
         row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
     rowOffset = middleRange[1];
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
-      int bestMatch = UPCEANReader.decodeDigit(
+      final bestMatch = UPCEANReader.decodeDigit(
           row, counters, rowOffset, UPCEANReader.L_PATTERNS);
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {

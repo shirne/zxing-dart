@@ -21,7 +21,7 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('UPCEBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase("test/resources/blackbox/upce-1",
+    AbstractBlackBoxTestCase('test/resources/blackbox/upce-1',
         MultiFormatReader(), BarcodeFormat.UPC_E)
       ..addTest(3, 3, 0.0)
       ..addTest(3, 3, 180.0)

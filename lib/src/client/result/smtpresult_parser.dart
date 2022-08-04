@@ -25,8 +25,8 @@ import 'result_parser.dart';
 class SMTPResultParser extends ResultParser {
   @override
   EmailAddressParsedResult? parse(Result result) {
-    String rawText = ResultParser.getMassagedText(result);
-    if (!(rawText.startsWith("smtp:") || rawText.startsWith("SMTP:"))) {
+    final rawText = ResultParser.getMassagedText(result);
+    if (!(rawText.startsWith('smtp:') || rawText.startsWith('SMTP:'))) {
       return null;
     }
     String emailAddress = rawText.substring(5);

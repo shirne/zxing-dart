@@ -88,7 +88,7 @@ class GenericGF {
     if (coefficient == 0) {
       return _zero;
     }
-    Int32List coefficients = Int32List(degree + 1);
+    final coefficients = Int32List(degree + 1);
     coefficients[0] = coefficient;
     return GenericGFPoly(this, coefficients);
   }
@@ -135,6 +135,6 @@ class GenericGF {
 
   @override
   String toString() {
-    return "GF(0x${_primitive.toRadixString(16)},$_size)";
+    return 'GF(0x${_primitive.toRadixString(16)},$_size)';
   }
 }

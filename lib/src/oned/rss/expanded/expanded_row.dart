@@ -35,7 +35,7 @@ class ExpandedRow {
 
   @override
   String toString() {
-    return "{ $_pairs }";
+    return '{ $_pairs }';
   }
 
   /// Two rows are equal if they contain the same pairs in the same order.

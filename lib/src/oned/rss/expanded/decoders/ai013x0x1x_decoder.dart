@@ -51,7 +51,7 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
       throw NotFoundException.instance;
     }
 
-    StringBuilder buf = StringBuilder();
+    final buf = StringBuilder();
 
     encodeCompressedGtin(buf, _HEADER_SIZE);
     encodeCompressedWeight(
@@ -73,11 +73,11 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
     buf.write(_dateCode);
     buf.write(')');
 
-    int day = numericDate % 32;
+    final day = numericDate % 32;
     numericDate = numericDate ~/ 32;
-    int month = numericDate % 12 + 1;
+    final month = numericDate % 12 + 1;
     numericDate = numericDate ~/ 12;
-    int year = numericDate;
+    final year = numericDate;
 
     if (year ~/ 10 == 0) {
       buf.write('0');
@@ -104,7 +104,5 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
 
   //@protected
   @override
-  int checkWeight(int weight) {
-    return weight % 100000;
-  }
+  int checkWeight(int weight) => weight % 100000;
 }

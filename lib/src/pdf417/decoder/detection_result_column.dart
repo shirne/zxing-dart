@@ -74,11 +74,14 @@ class DetectionResultColumn {
     int row = 0;
     for (Codeword? codeword in _codewords) {
       if (codeword == null) {
-        formatter.write("${(row++).toString().padLeft(3)}:    |   \n");
+        formatter.write('${(row++).toString().padLeft(3)}:    |   \n');
         continue;
       }
       formatter.write(
-          "${(row++).toString().padLeft(3)}: ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}\n");
+        '${(row++).toString().padLeft(3)}: '
+        '${codeword.rowNumber.toString().padLeft(3)}|'
+        '${codeword.value.toString().padLeft(3)}\n',
+      );
     }
     return formatter.toString();
   }

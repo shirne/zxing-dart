@@ -49,19 +49,19 @@ class ByteMatrix {
 
   @override
   String toString() {
-    StringBuffer result = StringBuffer();
+    final result = StringBuffer();
     for (int y = 0; y < _height; ++y) {
-      Int8List bytesY = _bytes[y];
+      final bytesY = _bytes[y];
       for (int x = 0; x < _width; ++x) {
         switch (bytesY[x]) {
           case 0:
-            result.write(" 0");
+            result.write(' 0');
             break;
           case 1:
-            result.write(" 1");
+            result.write(' 1');
             break;
           default:
-            result.write("  ");
+            result.write('  ');
             break;
         }
       }

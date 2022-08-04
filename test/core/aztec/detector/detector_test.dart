@@ -149,7 +149,7 @@ void main() {
           }
           try {
             Detector(makeLarger(copy, 3)).detect(false);
-            fail("Should not reach here");
+            fail('Should not reach here');
           } catch (_) {
             // NotFoundException
             // continue
@@ -162,16 +162,16 @@ void main() {
   test('testErrorInParameterLocatorZeroZero', () {
     // Layers=1, CodeWords=1.  So the parameter info and its Reed-Solomon info
     // will be completely zero!
-    testErrorInParameterLocator("X");
+    testErrorInParameterLocator('X');
   });
 
   test('testErrorInParameterLocatorCompact', () {
     testErrorInParameterLocator(
-        "This is an example Aztec symbol for Wikipedia.");
+        'This is an example Aztec symbol for Wikipedia.');
   });
 
   test('testErrorInParameterLocatorNotCompact', () {
-    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz";
+    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz';
     testErrorInParameterLocator(alphabet + alphabet + alphabet);
   });
 }

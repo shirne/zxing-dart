@@ -32,7 +32,7 @@ void main() {
       (67 /* C */ + 1)
     ]);
     String decodedString = DecodedBitStreamParser.decode(bytes).text;
-    expect("abcABC", decodedString);
+    expect('abcABC', decodedString);
   });
 
   test('testAsciiDoubleDigitDecode', () {
@@ -44,7 +44,7 @@ void main() {
       (99 + 130),
     ]);
     String decodedString = DecodedBitStreamParser.decode(bytes).text;
-    expect("00019899", decodedString);
+    expect('00019899', decodedString);
   });
 
   // TODO(bbrown): Add test cases for each encoding type

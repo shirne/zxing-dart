@@ -67,7 +67,7 @@ void testMask(DataMask mask, int dimension, bool Function(int, int) condition) {
   mask.unmaskBitMatrix(bits, dimension);
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
-      expect(condition(i, j), bits.get(j, i), reason: "$dimension($i,$j)");
+      expect(condition(i, j), bits.get(j, i), reason: '$dimension($i,$j)');
     }
   }
 }

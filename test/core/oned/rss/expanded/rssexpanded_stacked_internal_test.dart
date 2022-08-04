@@ -38,13 +38,13 @@ void main() {
     RSSExpandedReader rssExpandedReader = RSSExpandedReader();
 
     BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
-        "test/resources/blackbox/rssexpandedstacked-2/1000.png");
+        'test/resources/blackbox/rssexpandedstacked-2/1000.png');
 
     int firstRowNumber = binaryMap.height ~/ 3;
     BitArray firstRow = binaryMap.getBlackRow(firstRowNumber, null);
     try {
       rssExpandedReader.decodeRow2pairs(firstRowNumber, firstRow);
-      fail("NotFoundException expected");
+      fail('NotFoundException expected');
     } catch (_) {
       // NotFoundException
       // ok
@@ -66,16 +66,16 @@ void main() {
         rssExpandedReader.decodeRow2pairs(secondRowNumber, secondRow);
 
     Result result = RSSExpandedReader.constructResult(totalPairs);
-    expect("(01)98898765432106(3202)012345(15)991231", result.text);
+    expect('(01)98898765432106(3202)012345(15)991231', result.text);
   });
 
   test('testCompleteDecode', () async {
     OneDReader rssExpandedReader = RSSExpandedReader();
 
     BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap(
-        "test/resources/blackbox/rssexpandedstacked-2/1000.png");
+        'test/resources/blackbox/rssexpandedstacked-2/1000.png');
 
     Result result = rssExpandedReader.decode(binaryMap);
-    expect("(01)98898765432106(3202)012345(15)991231", result.text);
+    expect('(01)98898765432106(3202)012345(15)991231', result.text);
   });
 }
