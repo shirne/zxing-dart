@@ -6,13 +6,14 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 
 ## Progress
 
-- [x] Core package translate
-- [x] Core test translate
-- [x] Core unit test(all passed)
-- [x] Demo Creator
-- [x] Demo Scanner
-- [x] Code optimization
-- [ ] Keep syncing from zxing java...
+- ✅ Core package translate
+- ✅ Core test translate
+- ✅ Core unit test(all passed)
+- ✅ Demo Creator
+- ✅ Demo Scanner
+- ✅ Code optimization
+
+- 🚧 Keep syncing from zxing java...
 
 ## Preview
 
