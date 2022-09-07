@@ -1,3 +1,8 @@
+## [0.7.3]
+* upgrade charset
+* improve example
+* code format
+
 ## [0.7.2]
 * sync zxing to 2022-07-21
 
