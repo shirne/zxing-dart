@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
+      theme: const CupertinoThemeData(
+        scaffoldBackgroundColor: CupertinoColors.lightBackgroundGray,
+      ),
       home: const MyHomePage(title: 'ZXing Demo'),
     );
   }
@@ -32,10 +35,11 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
+
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {

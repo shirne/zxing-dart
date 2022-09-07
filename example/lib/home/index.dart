@@ -57,13 +57,13 @@ class IconItem extends StatelessWidget {
   final bool isAvailable;
   final void Function()? onTap;
 
-  const IconItem(
-      {Key? key,
-      required this.image,
-      required this.title,
-      this.onTap,
-      this.isAvailable = true})
-      : super(key: key);
+  const IconItem({
+    Key? key,
+    required this.image,
+    required this.title,
+    this.onTap,
+    this.isAvailable = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

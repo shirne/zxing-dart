@@ -34,7 +34,9 @@ class _ResultPageState extends State<ResultPage> {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 20),
+                          vertical: 5,
+                          horizontal: 20,
+                        ),
                         decoration: const BoxDecoration(
                           border: Border(
                             top: BorderSide(

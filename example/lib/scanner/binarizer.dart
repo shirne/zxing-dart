@@ -29,11 +29,14 @@ class _BinarizerPageState extends State<BinarizerPage> {
 
   int imageLoadStatus = 0;
 
-  takePicture() async {
-    XFile? picture =
-        await Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
-      return const TakePhoto();
-    }));
+  Future<void> takePicture() async {
+    XFile? picture = await Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (context) {
+          return const TakePhoto();
+        },
+      ),
+    );
     if (picture != null) {
       setState(() {
         imageLoadStatus = 1;
@@ -42,7 +45,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
     }
   }
 
-  loadFile() async {
+  Future<void> loadFile() async {
     Uint8List? fileData = await _pickFile();
 
     if (fileData != null) {
@@ -55,7 +58,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
     }
   }
 
-  initImage(Uint8List fileData) async {
+  Future<void> initImage(Uint8List fileData) async {
     bufferImage = await BufferImage.fromFile(fileData);
     if (bufferImage == null) {
       alert(context, 'Can\'t read the image');
@@ -70,13 +73,17 @@ class _BinarizerPageState extends State<BinarizerPage> {
       ..deNoise();
     setState(() {});
     binaryImage = bin2Image(
-        GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy())));
+      GlobalHistogramBinarizer(ImageLuminanceSource(bufferImage!.copy())),
+    );
     setState(() {});
     hybridBinaryImage =
         bin2Image(HybridBinarizer(ImageLuminanceSource(bufferImage!.copy())));
     setState(() {});
-    inverseImage = bin2Image(GlobalHistogramBinarizer(
-        ImageLuminanceSource(bufferImage!.copy()..inverse())));
+    inverseImage = bin2Image(
+      GlobalHistogramBinarizer(
+        ImageLuminanceSource(bufferImage!.copy()..inverse()),
+      ),
+    );
     setState(() {
       imageLoadStatus = 2;
     });
@@ -136,55 +143,60 @@ class _BinarizerPageState extends State<BinarizerPage> {
               const SizedBox(height: 20),
               if (bufferImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(bufferImage!, scale: 1),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (grayImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(
-                        BufferImage.fromGray(grayImage!),
-                        scale: 1),
+                      BufferImage.fromGray(grayImage!),
+                      scale: 1,
+                    ),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (deNoiseImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(
-                        BufferImage.fromGray(deNoiseImage!),
-                        scale: 1),
+                      BufferImage.fromGray(deNoiseImage!),
+                      scale: 1,
+                    ),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (binaryImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(
-                        BufferImage.fromGray(binaryImage!),
-                        scale: 1),
+                      BufferImage.fromGray(binaryImage!),
+                      scale: 1,
+                    ),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (hybridBinaryImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(
-                        BufferImage.fromGray(hybridBinaryImage!),
-                        scale: 1),
+                      BufferImage.fromGray(hybridBinaryImage!),
+                      scale: 1,
+                    ),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (inverseImage != null)
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Image(
                     image: RgbaImage.fromBufferImage(
-                        BufferImage.fromGray(inverseImage!),
-                        scale: 1),
+                      BufferImage.fromGray(inverseImage!),
+                      scale: 1,
+                    ),
                   ),
-                  padding: const EdgeInsets.only(bottom: 20),
                 ),
               if (imageLoadStatus == 1) const CircularProgressIndicator(),
             ],
@@ -213,12 +225,16 @@ class _TakePhotoState extends State<TakePhoto> {
     initCamera();
   }
 
-  initCamera() async {
+  Future<void> initCamera() async {
     _cameras = await availableCameras();
 
     if (_cameras!.isNotEmpty) {
-      _controller = CameraController(_cameras![0], ResolutionPreset.max,
-          enableAudio: false, imageFormatGroup: ImageFormatGroup.jpeg);
+      _controller = CameraController(
+        _cameras![0],
+        ResolutionPreset.max,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
 
       _controller!.initialize().then((_) {
         if (!mounted) {
@@ -241,7 +257,7 @@ class _TakePhotoState extends State<TakePhoto> {
     super.dispose();
   }
 
-  takePicture() async {
+  Future<void> takePicture() async {
     XFile picture = await _controller!.takePicture();
     Navigator.of(context).pop(picture);
   }

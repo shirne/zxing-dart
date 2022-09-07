@@ -30,12 +30,17 @@ class _TextFormState extends State<WIFIForm> {
     });
   }
 
-  selectType() {
+  void selectType() {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
         title: const Text('WIFI Encrypt Type'),
-        message: const Text('Message'),
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             child: const Text('WPA'),
@@ -63,6 +68,7 @@ class _TextFormState extends State<WIFIForm> {
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
+      labelWidth: 100,
       children: [
         FormCell(
           label: const Text('SSID'),
@@ -75,8 +81,24 @@ class _TextFormState extends State<WIFIForm> {
         FormCell(
           label: const Text('Type'),
           field: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: selectType,
-            child: Text(widget.result.networkEncryption),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color(0x33000000),
+                ),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Row(
+                children: [
+                  Text(widget.result.networkEncryption),
+                  const Spacer(),
+                  const Icon(CupertinoIcons.chevron_down),
+                ],
+              ),
+            ),
           ),
         ),
       ],

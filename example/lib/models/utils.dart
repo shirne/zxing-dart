@@ -8,8 +8,12 @@ import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/multi.dart';
 import 'package:zxing_lib/zxing.dart';
 
-Future<bool?> alert<bool>(BuildContext context, String message,
-    {String? title, List<Widget>? actions}) {
+Future<bool?> alert<bool>(
+  BuildContext context,
+  String message, {
+  String? title,
+  List<Widget>? actions,
+}) {
   return showCupertinoDialog<bool>(
     context: context,
     barrierDismissible: true,
@@ -52,8 +56,11 @@ class IsoMessage {
 }
 
 Future<List<Result>?> decodeImageInIsolate(
-    Uint8List image, int width, int height,
-    {bool isRgb = true}) async {
+  Uint8List image,
+  int width,
+  int height, {
+  bool isRgb = true,
+}) async {
   if (kIsWeb) {
     return isRgb
         ? decodeImage(IsoMessage(null, image, width, height))
@@ -61,16 +68,20 @@ Future<List<Result>?> decodeImageInIsolate(
   }
   var complete = Completer<List<Result>?>();
   var port = ReceivePort();
-  port.listen((message) {
-    print("onData: $message");
-    if (!complete.isCompleted) {
-      complete.complete(message as List<Result>?);
-    }
-  }, onDone: () {
-    print('iso close');
-  }, onError: (error) {
-    print('iso error: $error');
-  });
+  port.listen(
+    (message) {
+      print("onData: $message");
+      if (!complete.isCompleted) {
+        complete.complete(message as List<Result>?);
+      }
+    },
+    onDone: () {
+      print('iso close');
+    },
+    onError: (error) {
+      print('iso error: $error');
+    },
+  );
 
   IsoMessage message = IsoMessage(port.sendPort, image, width, height);
   if (isRgb) {
@@ -97,14 +108,20 @@ int getColor(int r, int g, int b, [int a = 255]) {
 
 int getColorFromByte(List<int> byte, int index, {bool isLog = false}) {
   return getColor(
-      byte[index], byte[index + 1], byte[index + 2], byte[index + 3]);
+    byte[index],
+    byte[index + 1],
+    byte[index + 2],
+    byte[index + 3],
+  );
 }
 
 List<Result>? decodeImage(IsoMessage message) {
   int length = message.byteData.length;
 
-  var pixels = List<int>.generate(
-      length ~/ 4, (index) => getColorFromByte(message.byteData, index * 4));
+  final pixels = List<int>.generate(
+    length ~/ 4,
+    (index) => getColorFromByte(message.byteData, index * 4),
+  );
 
   LuminanceSource imageSource =
       RGBLuminanceSource(message.width, message.height, pixels);
@@ -115,8 +132,10 @@ List<Result>? decodeImage(IsoMessage message) {
       GenericMultipleBarcodeReader(MultiFormatReader());
   try {
     print('start decode...');
-    var results = reader.decodeMultiple(bitmap,
-        {DecodeHintType.TRY_HARDER: true, DecodeHintType.ALSO_INVERTED: true});
+    var results = reader.decodeMultiple(bitmap, {
+      DecodeHintType.TRY_HARDER: true,
+      DecodeHintType.ALSO_INVERTED: true,
+    });
 
     message.sendPort?.send(results);
     return results;
@@ -138,8 +157,10 @@ List<Result>? decodeCamera(IsoMessage message) {
   MultipleBarcodeReader reader =
       GenericMultipleBarcodeReader(MultiFormatReader());
   try {
-    var results = reader.decodeMultiple(bitmap,
-        {DecodeHintType.TRY_HARDER: true, DecodeHintType.ALSO_INVERTED: true});
+    final results = reader.decodeMultiple(bitmap, {
+      DecodeHintType.TRY_HARDER: true,
+      DecodeHintType.ALSO_INVERTED: true,
+    });
     message.sendPort?.send(results);
     return results;
   } on NotFoundException catch (_) {}

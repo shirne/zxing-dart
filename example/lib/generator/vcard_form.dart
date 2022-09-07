@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
-import '../widgets/cupertino_list_tile.dart';
 import '../widgets/form_cell.dart';
 import '../widgets/list_tile_group.dart';
 
@@ -57,6 +56,7 @@ class _TextFormState extends State<VCardForm> {
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
+      labelWidth: 80,
       children: [
         FormCell(
           label: const Text('Name.'),
@@ -78,12 +78,17 @@ class _TextFormState extends State<VCardForm> {
           label: const Text('Add'),
           field: CupertinoTextField(controller: _addController),
         ),
-        const CupertinoListTile(
-          title: Text('Note'),
+        const FormCell(
+          label: Text('Note'),
+          field: SizedBox(),
         ),
-        CupertinoTextField(
-          maxLines: 5,
-          controller: _controller,
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          color: CupertinoColors.white,
+          child: CupertinoTextField(
+            maxLines: 5,
+            controller: _controller,
+          ),
         )
       ],
     );

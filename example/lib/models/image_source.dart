@@ -14,9 +14,13 @@ class ImageLuminanceSource extends LuminanceSource {
   final int left;
   final int top;
 
-  ImageLuminanceSource(this.image,
-      [this.left = 0, this.top = 0, int? width, int? height])
-      : super(width ?? image.width, height ?? image.height) {
+  ImageLuminanceSource(
+    this.image, [
+    this.left = 0,
+    this.top = 0,
+    int? width,
+    int? height,
+  ]) : super(width ?? image.width, height ?? image.height) {
     width ??= image.width - left;
     height ??= image.height - top;
 
@@ -24,7 +28,9 @@ class ImageLuminanceSource extends LuminanceSource {
     int sourceHeight = image.height;
     if (left + width > sourceWidth || top + height > sourceHeight) {
       throw ArgumentError(
-          "Crop rectangle($left, $top) does not fit within image($sourceWidth x $sourceHeight) data.");
+        "Crop rectangle($left, $top) does not fit within "
+        "image($sourceWidth x $sourceHeight) data.",
+      );
     }
 
     buffer = Uint8List(width * height);
@@ -52,9 +58,11 @@ class ImageLuminanceSource extends LuminanceSource {
     }
   }
 
-  scaleDown(int scale) {
+  LuminanceSource scaleDown(int scale) {
     var newImage = BufferImage(
-        (image.width / scale).ceil(), (image.height / scale).ceil());
+      (image.width / scale).ceil(),
+      (image.height / scale).ceil(),
+    );
     List<Color?> colors = List.filled(scale * scale, null);
     for (int y = 0; y < newImage.width; y++) {
       for (int x = 0; x < newImage.width; x++) {
@@ -84,10 +92,15 @@ class ImageLuminanceSource extends LuminanceSource {
           }
         }
         newImage.setColor(
-            x,
-            y,
-            Color.fromARGB(
-                alpha ~/ count, red ~/ count, green ~/ count, blue ~/ count));
+          x,
+          y,
+          Color.fromARGB(
+            alpha ~/ count,
+            red ~/ count,
+            green ~/ count,
+            blue ~/ count,
+          ),
+        );
       }
     }
 

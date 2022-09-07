@@ -15,13 +15,17 @@ abstract class QRCodeStyle {
 
   const QRCodeStyle(this.type, this.name);
 
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)});
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  });
 
-  Future<BufferImage?> whiteBlock(int size,
-          {Color blackColor = const Color(0xff000000),
-          Color whiteColor = const Color(0xffffffff)}) async =>
+  Future<BufferImage?> whiteBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async =>
       null;
 
   @override
@@ -34,12 +38,16 @@ class NormalQRCodeStyle extends QRCodeStyle {
   const NormalQRCodeStyle() : super('normal', 'Normal');
 
   @override
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     image.drawRect(
-        Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()), blackColor);
+      Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
+      blackColor,
+    );
 
     return image;
   }
@@ -49,14 +57,23 @@ class RRectQRCodeStyle extends QRCodeStyle {
   const RRectQRCodeStyle() : super('rRect', 'RRect');
 
   @override
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     await image.drawPath(
       Path()
-        ..addRRect(RRect.fromLTRBR(0, 0, size.toDouble(), size.toDouble(),
-            Radius.circular(size * 0.2))),
+        ..addRRect(
+          RRect.fromLTRBR(
+            0,
+            0,
+            size.toDouble(),
+            size.toDouble(),
+            Radius.circular(size * 0.2),
+          ),
+        ),
       blackColor,
     );
 
@@ -68,27 +85,42 @@ class RRectOutQRCodeStyle extends QRCodeStyle {
   const RRectOutQRCodeStyle() : super('rRectOut', 'RRectOut');
 
   @override
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     image.drawRect(
-        Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()), blackColor);
+      Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
+      blackColor,
+    );
 
     return image;
   }
 
   @override
-  Future<BufferImage?> whiteBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> whiteBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     image.drawRect(
-        Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()), blackColor);
+      Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
+      blackColor,
+    );
     await image.drawPath(
       Path()
-        ..addRRect(RRect.fromLTRBR(0, 0, size.toDouble(), size.toDouble(),
-            Radius.circular(size * 0.2))),
+        ..addRRect(
+          RRect.fromLTRBR(
+            0,
+            0,
+            size.toDouble(),
+            size.toDouble(),
+            Radius.circular(size * 0.2),
+          ),
+        ),
       whiteColor,
     );
 
@@ -100,20 +132,25 @@ class DotQRCodeStyle extends QRCodeStyle {
   const DotQRCodeStyle() : super('dot', 'Dot');
 
   @override
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     await image.drawPath(
       Path()
-        ..addRRect(RRect.fromLTRBR(
+        ..addRRect(
+          RRect.fromLTRBR(
             0,
             0,
             size.toDouble(),
             size.toDouble(),
             Radius.circular(
               size * .5,
-            ))),
+            ),
+          ),
+        ),
       blackColor,
     );
 
@@ -125,33 +162,44 @@ class DotOutQRCodeStyle extends QRCodeStyle {
   const DotOutQRCodeStyle() : super('dotOut', 'DotOut');
 
   @override
-  Future<BufferImage?> blackBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> blackBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     image.drawRect(
-        Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()), blackColor);
+      Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
+      blackColor,
+    );
 
     return image;
   }
 
   @override
-  Future<BufferImage?> whiteBlock(int size,
-      {Color blackColor = const Color(0xff000000),
-      Color whiteColor = const Color(0xffffffff)}) async {
+  Future<BufferImage?> whiteBlock(
+    int size, {
+    Color blackColor = const Color(0xff000000),
+    Color whiteColor = const Color(0xffffffff),
+  }) async {
     BufferImage image = BufferImage(size, size);
     image.drawRect(
-        Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()), blackColor);
+      Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
+      blackColor,
+    );
     await image.drawPath(
       Path()
-        ..addRRect(RRect.fromLTRBR(
+        ..addRRect(
+          RRect.fromLTRBR(
             0,
             0,
             size.toDouble(),
             size.toDouble(),
             Radius.circular(
               size * .5,
-            ))),
+            ),
+          ),
+        ),
       whiteColor,
     );
 

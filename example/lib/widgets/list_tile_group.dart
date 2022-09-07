@@ -7,16 +7,22 @@ class ListTileGroup extends StatelessWidget {
   final Color dividerColor;
   final double dividerIntent;
   final double dividerEndIntent;
+  final double? labelWidth;
+  final AlignmentGeometry labelAlign;
+  final EdgeInsetsGeometry? labelPadding;
 
-  const ListTileGroup(
-      {Key? key,
-      required this.children,
-      this.dividerWith = 0.5,
-      this.paddingBottom = 10,
-      this.dividerIntent = 20,
-      this.dividerEndIntent = 0,
-      this.dividerColor = CupertinoColors.lightBackgroundGray})
-      : super(key: key);
+  const ListTileGroup({
+    Key? key,
+    required this.children,
+    this.dividerWith = 0.5,
+    this.paddingBottom = 10,
+    this.dividerIntent = 20,
+    this.dividerEndIntent = 0,
+    this.dividerColor = CupertinoColors.lightBackgroundGray,
+    this.labelWidth,
+    this.labelAlign = Alignment.centerRight,
+    this.labelPadding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +32,18 @@ class ListTileGroup extends StatelessWidget {
           MediaQuery.of(context).size.width - dividerIntent - dividerEndIntent,
       margin: EdgeInsets.only(left: dividerIntent, right: dividerEndIntent),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(width: dividerWith, color: dividerColor))),
+        border: Border(
+          bottom: BorderSide(width: dividerWith, color: dividerColor),
+        ),
+      ),
     );
     return Padding(
       padding: EdgeInsets.only(bottom: paddingBottom),
       child: Column(
-        children: List.generate(children.length * 2 - 1,
-            (index) => index % 2 == 0 ? children[index ~/ 2] : divider),
+        children: List.generate(
+          children.length * 2 - 1,
+          (index) => index % 2 == 0 ? children[index ~/ 2] : divider,
+        ),
       ),
     );
   }

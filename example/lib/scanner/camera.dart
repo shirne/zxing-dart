@@ -30,12 +30,16 @@ class _CameraPageState extends State<CameraPage> {
     initCamera();
   }
 
-  initCamera() async {
+  Future<void> initCamera() async {
     _cameras = await availableCameras();
 
     if (_cameras!.isNotEmpty) {
-      _controller = CameraController(_cameras![0], ResolutionPreset.max,
-          enableAudio: false, imageFormatGroup: ImageFormatGroup.yuv420);
+      _controller = CameraController(
+        _cameras![0],
+        ResolutionPreset.max,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.yuv420,
+      );
       //_controller!.addListener(onCameraView);
       //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
       _controller!.initialize().then((_) {
@@ -54,7 +58,7 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  onCameraView() async {
+  Future<void> onCameraView() async {
     if (isDetecting) return;
     setState(() {
       isDetecting = true;
@@ -98,7 +102,7 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  changeBoltMode() {
+  void changeBoltMode() {
     var cIndex = FlashMode.values.indexOf(_flashMode);
     cIndex++;
     if (cIndex >= FlashMode.values.length) {

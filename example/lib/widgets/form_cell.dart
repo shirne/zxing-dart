@@ -1,28 +1,38 @@
 import 'package:flutter/cupertino.dart';
 
+import 'list_tile_group.dart';
+
 class FormCell extends StatelessWidget {
   const FormCell({
     Key? key,
     required this.label,
     required this.field,
-    this.isLink = false,
-  }) : super(key: key);
+    this.labelWidth,
+    bool? isLink,
+    this.onTap,
+  })  : isLink = isLink ?? onTap != null,
+        super(key: key);
 
   final Widget label;
   final Widget field;
   final bool isLink;
+  final double? labelWidth;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final group = context.findAncestorWidgetOfExactType<ListTileGroup>();
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      width: MediaQuery.of(context).size.width,
       color: CupertinoColors.white,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+          Container(
+            width: labelWidth ?? group?.labelWidth,
+            padding: group?.labelPadding ??
+                const EdgeInsets.symmetric(horizontal: 10),
+            alignment: group?.labelAlign,
             child: label,
           ),
           Expanded(

@@ -102,7 +102,7 @@ class VCardResultGenerator extends ResultGenerator<AddressBookParsedResult> {
     return buffer.toString();
   }
 
-  _writeN(String name, StringBuffer buffer) {
+  void _writeN(String name, StringBuffer buffer) {
     List<String> namePart = name.split(RegExp('\\s+'));
     if (namePart.length < 2) {
       buffer.write("N:$name\r\n");

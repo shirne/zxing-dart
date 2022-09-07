@@ -49,15 +49,17 @@ class CupertinoListTile extends StatelessWidget {
             ),
             if (trailing != null)
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: trailing!),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: trailing!,
+              ),
             if (isLink)
               const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(
-                    CupertinoIcons.right_chevron,
-                    color: CupertinoColors.inactiveGray,
-                  ))
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(
+                  CupertinoIcons.right_chevron,
+                  color: CupertinoColors.inactiveGray,
+                ),
+              )
           ],
         ),
       ),

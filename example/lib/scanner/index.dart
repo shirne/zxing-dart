@@ -82,7 +82,7 @@ class _IndexPageState extends State<_IndexPage> {
     }
   }
 
-  isoEntry(BufferImage image) {}
+  void isoEntry(BufferImage image) {}
 
   Future<Uint8List?> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform

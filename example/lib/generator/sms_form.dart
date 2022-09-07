@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zxing_lib/client.dart';
 
-import '../widgets/cupertino_list_tile.dart';
 import '../widgets/form_cell.dart';
 import '../widgets/list_tile_group.dart';
 
@@ -39,6 +38,7 @@ class _SMSFormState extends State<SMSForm> {
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
+      labelWidth: 100,
       children: [
         FormCell(
           label: const Text('phone No.'),
@@ -48,12 +48,17 @@ class _SMSFormState extends State<SMSForm> {
           label: const Text('subject'),
           field: CupertinoTextField(controller: _subController),
         ),
-        const CupertinoListTile(
-          title: Text('body'),
+        const FormCell(
+          label: Text('body'),
+          field: SizedBox(),
         ),
-        CupertinoTextField(
-          maxLines: 5,
-          controller: _controller,
+        Container(
+          color: CupertinoColors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: CupertinoTextField(
+            maxLines: 5,
+            controller: _controller,
+          ),
         )
       ],
     );

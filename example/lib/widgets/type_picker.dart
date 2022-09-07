@@ -5,9 +5,12 @@ class TypePicker<T> extends StatefulWidget {
   final List<T> values;
   final void Function(T type)? onChange;
 
-  const TypePicker(
-      {Key? key, required this.value, this.onChange, required this.values})
-      : super(key: key);
+  const TypePicker({
+    Key? key,
+    required this.value,
+    this.onChange,
+    required this.values,
+  }) : super(key: key);
 
   @override
   State<TypePicker> createState() => _TypePickerState<T>();
@@ -19,7 +22,8 @@ class _TypePickerState<T> extends State<TypePicker<T>> {
   void initState() {
     super.initState();
     _scrollController = FixedExtentScrollController(
-        initialItem: widget.values.indexOf(widget.value));
+      initialItem: widget.values.indexOf(widget.value),
+    );
   }
 
   @override

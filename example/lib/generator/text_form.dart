@@ -32,9 +32,13 @@ class _TextFormState extends State<TextForm> {
         const CupertinoListTile(
           title: Text('文本内容'),
         ),
-        CupertinoTextField(
-          maxLines: 5,
-          controller: _controller,
+        Container(
+          color: CupertinoColors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: CupertinoTextField(
+            maxLines: 5,
+            controller: _controller,
+          ),
         )
       ],
     );

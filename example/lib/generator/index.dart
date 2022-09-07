@@ -31,9 +31,12 @@ class _IndexPageState extends State<IndexPage> {
   late BufferImage image;
   bool _isCreating = false;
 
-  setResult() async {
+  Future<void> setResult() async {
     ResultGenerator? newResult = await pickerType<ResultGenerator>(
-        context, ResultGenerator.values, result);
+      context,
+      ResultGenerator.values,
+      result,
+    );
     if (newResult != null) {
       setState(() {
         result = newResult;
@@ -41,7 +44,7 @@ class _IndexPageState extends State<IndexPage> {
     }
   }
 
-  setStyle() async {
+  Future<void> setStyle() async {
     QRCodeStyle? newStyle =
         await pickerType<QRCodeStyle>(context, QRCodeStyle.values, style);
     if (newStyle != null) {
@@ -51,32 +54,37 @@ class _IndexPageState extends State<IndexPage> {
     }
   }
 
-  formWidget(ResultGenerator type) {
+  Widget formWidget(ResultGenerator type) {
     switch (type) {
       case ResultGenerator.wifi:
         return WIFIForm(
-            result: results.putIfAbsent(type, () => typeResult(type))
-                as WifiParsedResult);
+          result: results.putIfAbsent(type, () => typeResult(type))
+              as WifiParsedResult,
+        );
       case ResultGenerator.vcard:
         return VCardForm(
-            result: results.putIfAbsent(type, () => typeResult(type))
-                as AddressBookParsedResult);
+          result: results.putIfAbsent(type, () => typeResult(type))
+              as AddressBookParsedResult,
+        );
       case ResultGenerator.sms:
         return SMSForm(
-            result: results.putIfAbsent(type, () => typeResult(type))
-                as SMSParsedResult);
+          result: results.putIfAbsent(type, () => typeResult(type))
+              as SMSParsedResult,
+        );
       case ResultGenerator.geo:
         return GeoForm(
-            result: results.putIfAbsent(type, () => typeResult(type))
-                as GeoParsedResult);
+          result: results.putIfAbsent(type, () => typeResult(type))
+              as GeoParsedResult,
+        );
       default:
         return TextForm(
-            result: results.putIfAbsent(type, () => typeResult(type))
-                as TextParsedResult);
+          result: results.putIfAbsent(type, () => typeResult(type))
+              as TextParsedResult,
+        );
     }
   }
 
-  typeResult(ResultGenerator type) {
+  ParsedResult typeResult(ResultGenerator type) {
     switch (type) {
       case ResultGenerator.vcard:
         return AddressBookParsedResult()
@@ -94,21 +102,26 @@ class _IndexPageState extends State<IndexPage> {
     }
   }
 
-  Future<BufferImage> createQrcode(String content,
-      {int pixelSize = 0,
-      Color bgColor = Colors.white,
-      Color color = Colors.black}) async {
+  Future<BufferImage> createQrcode(
+    String content, {
+    int pixelSize = 0,
+    Color bgColor = Colors.white,
+    Color color = Colors.black,
+  }) async {
     QRCode code = Encoder.encode(content);
     print(content);
     ByteMatrix matrix = code.matrix!;
     if (pixelSize < 1) {
       pixelSize = 350 ~/ matrix.width;
     }
-    BufferImage image = BufferImage(matrix.width * pixelSize + pixelSize * 2,
-        matrix.height * pixelSize + pixelSize * 2);
+    BufferImage image = BufferImage(
+      matrix.width * pixelSize + pixelSize * 2,
+      matrix.height * pixelSize + pixelSize * 2,
+    );
     image.drawRect(
-        Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
-        bgColor);
+      Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+      bgColor,
+    );
     BufferImage? blackImage = await style.blackBlock(pixelSize);
     BufferImage? whiteImage = await style.whiteBlock(pixelSize);
     for (int x = 0; x < matrix.width; x++) {
@@ -137,12 +150,12 @@ class _IndexPageState extends State<IndexPage> {
     return image;
   }
 
-  createQrCode() async {
+  Future<void> createQrCode() async {
     if (_isCreating) return;
     _isCreating = true;
-    var _result = results[result];
-    if (_result != null) {
-      image = await createQrcode(result.generator(_result));
+    final rst = results[result];
+    if (rst != null) {
+      image = await createQrcode(result.generator(rst));
       showCupertinoDialog(
         context: context,
         barrierDismissible: true,
@@ -176,7 +189,6 @@ class _IndexPageState extends State<IndexPage> {
           },
         ),
       ),
-      backgroundColor: Colors.black12,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 20),
@@ -190,6 +202,7 @@ class _IndexPageState extends State<IndexPage> {
                       setResult();
                     },
                     trailing: Text(result.name),
+                    isLink: true,
                   ),
                   CupertinoListTile(
                     onTap: setStyle,

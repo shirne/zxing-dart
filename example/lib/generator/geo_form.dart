@@ -35,6 +35,7 @@ class _GeoFormState extends State<GeoForm> {
   @override
   Widget build(BuildContext context) {
     return ListTileGroup(
+      labelWidth: 100,
       children: [
         FormCell(
           label: const Text('latitude'),
