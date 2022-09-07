@@ -62,9 +62,11 @@ class Encoder {
         MaskUtil.applyMaskPenaltyRule4(matrix);
   }
 
-  static QRCode encode(String content,
-      [ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H,
-      Map<EncodeHintType, Object>? hints]) {
+  static QRCode encode(
+    String content, [
+    ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H,
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     Version version;
     BitArray headerAndDataBits;
     Mode mode;
@@ -82,8 +84,8 @@ class Encoder {
         hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
       encoding = CharacterSetECI.getCharacterSetECIByName(
-              hints[EncodeHintType.CHARACTER_SET].toString())
-          ?.charset;
+        hints[EncodeHintType.CHARACTER_SET].toString(),
+      )?.charset;
     }
 
     if (hasCompactionHint) {
@@ -92,7 +94,12 @@ class Encoder {
       final priorityEncoding =
           encoding == defaultByteModeEncoding ? null : encoding;
       final rn = MinimalEncoder.encode(
-          content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
+        content,
+        null,
+        priorityEncoding,
+        hasGS1FormatHint,
+        ecLevel,
+      );
 
       headerAndDataBits = BitArray();
       rn.getBits(headerAndDataBits);
@@ -158,8 +165,12 @@ class Encoder {
     terminateBits(numDataBytes, headerAndDataBits);
 
     // Interleave data bits with error correction code.
-    final finalBits = interleaveWithECBytes(headerAndDataBits,
-        version.totalCodewords, numDataBytes, ecBlocks.numBlocks);
+    final finalBits = interleaveWithECBytes(
+      headerAndDataBits,
+      version.totalCodewords,
+      numDataBytes,
+      ecBlocks.numBlocks,
+    );
 
     final qrCode = QRCode(ecLevel: ecLevel, mode: mode, version: version);
 
@@ -191,13 +202,21 @@ class Encoder {
   /// Decides the smallest version of QR code that will contain all of the provided data.
   ///
   /// @throws WriterException if the data cannot fit in any version
-  static Version _recommendVersion(ErrorCorrectionLevel ecLevel, Mode mode,
-      BitArray headerBits, BitArray dataBits) {
+  static Version _recommendVersion(
+    ErrorCorrectionLevel ecLevel,
+    Mode mode,
+    BitArray headerBits,
+    BitArray dataBits,
+  ) {
     // Hard part: need to know version to know how many bits length takes. But need to know how many
     // bits it takes to know version. First we take a guess at version by assuming version will be
     // the minimum, 1:
     final provisionalBitsNeeded = _calculateBitsNeeded(
-        mode, headerBits, dataBits, Version.getVersionForNumber(1));
+      mode,
+      headerBits,
+      dataBits,
+      Version.getVersionForNumber(1),
+    );
     final provisionalVersion = _chooseVersion(provisionalBitsNeeded, ecLevel);
 
     // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
@@ -207,7 +226,11 @@ class Encoder {
   }
 
   static int _calculateBitsNeeded(
-      Mode mode, BitArray headerBits, BitArray dataBits, Version version) {
+    Mode mode,
+    BitArray headerBits,
+    BitArray dataBits,
+    Version version,
+  ) {
     return headerBits.size +
         mode.getCharacterCountBits(version) +
         dataBits.size;
@@ -270,8 +293,12 @@ class Encoder {
     return true;
   }
 
-  static int _chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel,
-      Version version, ByteMatrix matrix) {
+  static int _chooseMaskPattern(
+    BitArray bits,
+    ErrorCorrectionLevel ecLevel,
+    Version version,
+    ByteMatrix matrix,
+  ) {
     int minPenalty =
         MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
@@ -290,7 +317,9 @@ class Encoder {
   }
 
   static Version _chooseVersion(
-      int numInputBits, ErrorCorrectionLevel ecLevel) {
+    int numInputBits,
+    ErrorCorrectionLevel ecLevel,
+  ) {
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       final version = Version.getVersionForNumber(versionNum);
       if (willFit(numInputBits, version, ecLevel)) {
@@ -303,7 +332,10 @@ class Encoder {
   /// @return true if the number of input bits will fit in a code with the specified version and
   /// error correction level.
   static bool willFit(
-      int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
+    int numInputBits,
+    Version version,
+    ErrorCorrectionLevel ecLevel,
+  ) {
     // In the following comments, we use numbers of Version 7-H.
     // numBytes = 196
     final numBytes = version.totalCodewords;
@@ -321,7 +353,8 @@ class Encoder {
     final capacity = numDataBytes * 8;
     if (bits.size > capacity) {
       throw WriterException(
-          'data bits cannot fit in the QR Code ${bits.size} > $capacity');
+        'data bits cannot fit in the QR Code ${bits.size} > $capacity',
+      );
     }
     // Append Mode.TERMINATE if there is enough space (value is 0000)
     for (int i = 0; i < 4 && bits.size < capacity; ++i) {
@@ -349,12 +382,13 @@ class Encoder {
   /// the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
   /// JISX0510:2004 (p.30)
   static void getNumDataBytesAndNumECBytesForBlockID(
-      int numTotalBytes,
-      int numDataBytes,
-      int numRSBlocks,
-      int blockID,
-      List<int> numDataBytesInBlock,
-      List<int> numECBytesInBlock) {
+    int numTotalBytes,
+    int numDataBytes,
+    int numRSBlocks,
+    int blockID,
+    List<int> numDataBytesInBlock,
+    List<int> numECBytesInBlock,
+  ) {
     if (blockID >= numRSBlocks) {
       throw WriterException('Block ID too large');
     }
@@ -403,7 +437,11 @@ class Encoder {
   /// Interleave "bits" with corresponding error correction bytes. On success, store the result in
   /// "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
   static BitArray interleaveWithECBytes(
-      BitArray bits, int numTotalBytes, int numDataBytes, int numRSBlocks) {
+    BitArray bits,
+    int numTotalBytes,
+    int numDataBytes,
+    int numRSBlocks,
+  ) {
     // "bits" must have "getNumDataBytes" bytes of data.
     if (bits.sizeInBytes != numDataBytes) {
       throw WriterException('Number of bits and data bytes does not match');
@@ -421,8 +459,14 @@ class Encoder {
     for (int i = 0; i < numRSBlocks; ++i) {
       final numDataBytesInBlock = [0];
       final numEcBytesInBlock = [0];
-      getNumDataBytesAndNumECBytesForBlockID(numTotalBytes, numDataBytes,
-          numRSBlocks, i, numDataBytesInBlock, numEcBytesInBlock);
+      getNumDataBytesAndNumECBytesForBlockID(
+        numTotalBytes,
+        numDataBytes,
+        numRSBlocks,
+        i,
+        numDataBytesInBlock,
+        numEcBytesInBlock,
+      );
 
       final size = numDataBytesInBlock[0];
       final dataBytes = Uint8List(size);
@@ -461,7 +505,8 @@ class Encoder {
     if (numTotalBytes != result.sizeInBytes) {
       // Should be same.
       throw WriterException(
-          'Interleaving error: $numTotalBytes and ${result.sizeInBytes} differ.');
+        'Interleaving error: $numTotalBytes and ${result.sizeInBytes} differ.',
+      );
     }
 
     return result;
@@ -491,18 +536,27 @@ class Encoder {
 
   /// Append length info. On success, store the result in "bits".
   static void appendLengthInfo(
-      int numLetters, Version version, Mode mode, BitArray bits) {
+    int numLetters,
+    Version version,
+    Mode mode,
+    BitArray bits,
+  ) {
     final numBits = mode.getCharacterCountBits(version);
     if (numLetters >= (1 << numBits)) {
       throw WriterException(
-          '$numLetters is bigger than ${((1 << numBits) - 1)}');
+        '$numLetters is bigger than ${((1 << numBits) - 1)}',
+      );
     }
     bits.appendBits(numLetters, numBits);
   }
 
   /// Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
   static void appendBytes(
-      String content, Mode mode, BitArray bits, Encoding encoding) {
+    String content,
+    Mode mode,
+    BitArray bits,
+    Encoding encoding,
+  ) {
     switch (mode) {
       case Mode.NUMERIC:
         appendNumericBytes(content, bits);
@@ -570,7 +624,10 @@ class Encoder {
   }
 
   static void append8BitBytes(
-      String content, BitArray bits, Encoding encoding) {
+    String content,
+    BitArray bits,
+    Encoding encoding,
+  ) {
     final bytes = encoding.encode(content);
     for (int b in bytes) {
       bits.appendBits(b, 8);

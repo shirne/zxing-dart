@@ -68,8 +68,15 @@ class Detector {
       dimensionTop = dimensionRight = math.max(dimensionTop, dimensionRight);
     }
 
-    final bits = _sampleGrid(_image, topLeft, bottomLeft, bottomRight, topRight,
-        dimensionTop, dimensionRight);
+    final bits = _sampleGrid(
+      _image,
+      topLeft,
+      bottomLeft,
+      bottomRight,
+      topRight,
+      dimensionTop,
+      dimensionRight,
+    );
 
     return DetectorResult(bits, [topLeft, bottomLeft, bottomRight, topRight]);
   }
@@ -200,11 +207,13 @@ class Detector {
     trRight = _transitionsBetween(pointCs, pointD);
 
     final candidate1 = ResultPoint(
-        pointD.x + (pointC.x - pointB.x) / (trTop + 1),
-        pointD.y + (pointC.y - pointB.y) / (trTop + 1));
+      pointD.x + (pointC.x - pointB.x) / (trTop + 1),
+      pointD.y + (pointC.y - pointB.y) / (trTop + 1),
+    );
     final candidate2 = ResultPoint(
-        pointD.x + (pointA.x - pointB.x) / (trRight + 1),
-        pointD.y + (pointA.y - pointB.y) / (trRight + 1));
+      pointD.x + (pointA.x - pointB.x) / (trRight + 1),
+      pointD.y + (pointA.y - pointB.y) / (trRight + 1),
+    );
 
     if (!_isValid(candidate1)) {
       if (_isValid(candidate2)) {
@@ -289,35 +298,37 @@ class Detector {
   }
 
   static BitMatrix _sampleGrid(
-      BitMatrix image,
-      ResultPoint topLeft,
-      ResultPoint bottomLeft,
-      ResultPoint bottomRight,
-      ResultPoint topRight,
-      int dimensionX,
-      int dimensionY) {
+    BitMatrix image,
+    ResultPoint topLeft,
+    ResultPoint bottomLeft,
+    ResultPoint bottomRight,
+    ResultPoint topRight,
+    int dimensionX,
+    int dimensionY,
+  ) {
     final sampler = GridSampler.getInstance();
 
     return sampler.sampleGridBulk(
-        image,
-        dimensionX,
-        dimensionY,
-        0.5,
-        0.5,
-        dimensionX - 0.5,
-        0.5,
-        dimensionX - 0.5,
-        dimensionY - 0.5,
-        0.5,
-        dimensionY - 0.5,
-        topLeft.x,
-        topLeft.y,
-        topRight.x,
-        topRight.y,
-        bottomRight.x,
-        bottomRight.y,
-        bottomLeft.x,
-        bottomLeft.y);
+      image,
+      dimensionX,
+      dimensionY,
+      0.5,
+      0.5,
+      dimensionX - 0.5,
+      0.5,
+      dimensionX - 0.5,
+      dimensionY - 0.5,
+      0.5,
+      dimensionY - 0.5,
+      topLeft.x,
+      topLeft.y,
+      topRight.x,
+      topRight.y,
+      bottomRight.x,
+      bottomRight.y,
+      bottomLeft.x,
+      bottomLeft.y,
+    );
   }
 
   /// Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.

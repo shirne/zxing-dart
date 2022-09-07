@@ -30,26 +30,36 @@ class PerspectiveTransform {
   final double a32;
   final double a33;
 
-  PerspectiveTransform._(this.a11, this.a21, this.a31, this.a12, this.a22,
-      this.a32, this.a13, this.a23, this.a33);
+  PerspectiveTransform._(
+    this.a11,
+    this.a21,
+    this.a31,
+    this.a12,
+    this.a22,
+    this.a32,
+    this.a13,
+    this.a23,
+    this.a33,
+  );
 
   static PerspectiveTransform quadrilateralToQuadrilateral(
-      double x0,
-      double y0,
-      double x1,
-      double y1,
-      double x2,
-      double y2,
-      double x3,
-      double y3,
-      double x0p,
-      double y0p,
-      double x1p,
-      double y1p,
-      double x2p,
-      double y2p,
-      double x3p,
-      double y3p) {
+    double x0,
+    double y0,
+    double x1,
+    double y1,
+    double x2,
+    double y2,
+    double x3,
+    double y3,
+    double x0p,
+    double y0p,
+    double x1p,
+    double y1p,
+    double x2p,
+    double y2p,
+    double x3p,
+    double y3p,
+  ) {
     final qToS = quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
     final sToQ = squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
     return sToQ.times(qToS);
@@ -77,14 +87,31 @@ class PerspectiveTransform {
     }
   }
 
-  static PerspectiveTransform squareToQuadrilateral(double x0, double y0,
-      double x1, double y1, double x2, double y2, double x3, double y3) {
+  static PerspectiveTransform squareToQuadrilateral(
+    double x0,
+    double y0,
+    double x1,
+    double y1,
+    double x2,
+    double y2,
+    double x3,
+    double y3,
+  ) {
     final dx3 = x0 - x1 + x2 - x3;
     final dy3 = y0 - y1 + y2 - y3;
     if (dx3 == 0.0 && dy3 == 0.0) {
       // Affine
       return PerspectiveTransform._(
-          x1 - x0, x2 - x1, x0, y1 - y0, y2 - y1, y0, 0.0, 0.0, 1.0);
+        x1 - x0,
+        x2 - x1,
+        x0,
+        y1 - y0,
+        y2 - y1,
+        y0,
+        0.0,
+        0.0,
+        1.0,
+      );
     } else {
       final dx1 = x1 - x2;
       final dx2 = x3 - x2;
@@ -93,8 +120,17 @@ class PerspectiveTransform {
       final denominator = dx1 * dy2 - dx2 * dy1;
       final a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
       final a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
-      return PerspectiveTransform._(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0,
-          y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0, a13, a23, 1.0);
+      return PerspectiveTransform._(
+        x1 - x0 + a13 * x1,
+        x3 - x0 + a23 * x3,
+        x0,
+        y1 - y0 + a13 * y1,
+        y3 - y0 + a23 * y3,
+        y0,
+        a13,
+        a23,
+        1.0,
+      );
     }
   }
 

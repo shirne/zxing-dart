@@ -128,20 +128,27 @@ class DecodedBitStreamParser {
 
   // @SuppressWarnings("deprecation")
   static int decodeMacroBlock(
-      List<int> codewords, int codeIndex, PDF417ResultMetadata resultMetadata) {
+    List<int> codewords,
+    int codeIndex,
+    PDF417ResultMetadata resultMetadata,
+  ) {
     if (codeIndex + _NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
       throw FormatsException.instance;
     }
     final segmentIndexArray = List.generate(
-        _NUMBER_OF_SEQUENCE_CODEWORDS, (_) => codewords[codeIndex++]);
+      _NUMBER_OF_SEQUENCE_CODEWORDS,
+      (_) => codewords[codeIndex++],
+    );
     //List<int> segmentIndexArray = List.filled(_NUMBER_OF_SEQUENCE_CODEWORDS, 0);
     //for (int i = 0; i < _NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
     //  segmentIndexArray[i] = codewords[codeIndex];
     //}
 
     final segmentIndexString = _decodeBase900toBase10(
-        segmentIndexArray, _NUMBER_OF_SEQUENCE_CODEWORDS);
+      segmentIndexArray,
+      _NUMBER_OF_SEQUENCE_CODEWORDS,
+    );
     if (segmentIndexString.isEmpty) {
       resultMetadata.segmentIndex = 0;
     } else {
@@ -241,7 +248,9 @@ class DecodedBitStreamParser {
 
       // ignore: deprecated_consistency, deprecated_member_use_from_same_package
       resultMetadata.optionalData = codewords.sublist(
-          optionalFieldsStart, optionalFieldsStart + optionalFieldsLength);
+        optionalFieldsStart,
+        optionalFieldsStart + optionalFieldsLength,
+      );
     }
 
     return codeIndex;
@@ -256,7 +265,10 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _textCompaction(
-      List<int> codewords, int codeIndex, ECIStringBuilder result) {
+    List<int> codewords,
+    int codeIndex,
+    ECIStringBuilder result,
+  ) {
     // 2 character per codeword
     List<int> textCompactionData =
         List.filled((codewords[0] - codeIndex) * 2, 0);
@@ -302,7 +314,12 @@ class DecodedBitStreamParser {
             break;
           case _ECI_CHARSET:
             subMode = _decodeTextCompaction(
-                textCompactionData, byteCompactionData, index, result, subMode);
+              textCompactionData,
+              byteCompactionData,
+              index,
+              result,
+              subMode,
+            );
             result.appendECI(codewords[codeIndex++]);
             textCompactionData = List.filled((codewords[0] - codeIndex) * 2, 0);
             byteCompactionData = List.filled((codewords[0] - codeIndex) * 2, 0);
@@ -336,11 +353,12 @@ class DecodedBitStreamParser {
   /// @param length             The size of the text compaction and byte compaction data.
   /// @param result             The decoded data is appended to the result.
   static _Mode _decodeTextCompaction(
-      List<int> textCompactionData,
-      List<int> byteCompactionData,
-      int length,
-      ECIStringBuilder result,
-      _Mode startMode) {
+    List<int> textCompactionData,
+    List<int> byteCompactionData,
+    int length,
+    ECIStringBuilder result,
+    _Mode startMode,
+  ) {
     // Beginning from an initial state of the Alpha sub-mode
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
     // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
@@ -529,7 +547,11 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _byteCompaction(
-      int mode, List<int> codewords, int codeIndex, ECIStringBuilder result) {
+    int mode,
+    List<int> codewords,
+    int codeIndex,
+    ECIStringBuilder result,
+  ) {
     bool end = false;
 
     while (codeIndex < codewords[0] && !end) {
@@ -585,7 +607,10 @@ class DecodedBitStreamParser {
   /// @param result    The decoded data is appended to the result.
   /// @return The next index into the codeword array.
   static int _numericCompaction(
-      List<int> codewords, int codeIndex, ECIStringBuilder result) {
+    List<int> codewords,
+    int codeIndex,
+    ECIStringBuilder result,
+  ) {
     int count = 0;
     bool end = false;
 

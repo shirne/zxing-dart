@@ -25,37 +25,61 @@ import 'package:zxing_lib/src/writer_exception.dart';
 void main() {
   test('testEncodeAuto', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        'ABCD', Compaction.AUTO, utf8, false);
+      'ABCD',
+      Compaction.AUTO,
+      utf8,
+      false,
+    );
     expect(encoded, '\u039f\u001A\u0385ABCD');
   });
 
   test('testEncodeAutoWithSpecialChars', () {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
-        r'1%§s ?aG$', Compaction.AUTO, utf8, false);
+      r'1%§s ?aG$',
+      Compaction.AUTO,
+      utf8,
+      false,
+    );
   });
 
   test('testEncodeIso88591WithSpecialChars', () {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
-        'asdfg§asd', Compaction.AUTO, latin1, false);
+      'asdfg§asd',
+      Compaction.AUTO,
+      latin1,
+      false,
+    );
   });
 
   test('testEncodeText', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        'ABCD', Compaction.TEXT, utf8, false);
+      'ABCD',
+      Compaction.TEXT,
+      utf8,
+      false,
+    );
     expect('Ο\u001A\u0001?', encoded);
   });
 
   test('testEncodeNumeric', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        '1234', Compaction.NUMERIC, utf8, false);
+      '1234',
+      Compaction.NUMERIC,
+      utf8,
+      false,
+    );
     expect('\u039f\u001A\u0386\f\u01b2', encoded);
   });
 
   test('testEncodeByte', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        'abcd', Compaction.BYTE, utf8, false);
+      'abcd',
+      Compaction.BYTE,
+      utf8,
+      false,
+    );
     expect('\u039f\u001A\u0385abcd', encoded);
   });
 

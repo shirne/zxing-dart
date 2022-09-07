@@ -63,10 +63,15 @@ abstract class AbstractRSSReader extends OneDReader {
 
   // @protected
   static int parseFinderValue(
-      List<int> counters, List<List<int>> finderPatterns) {
+    List<int> counters,
+    List<List<int>> finderPatterns,
+  ) {
     for (int value = 0; value < finderPatterns.length; value++) {
       if (OneDReader.patternMatchVariance(
-              counters, finderPatterns[value], _MAX_INDIVIDUAL_VARIANCE) <
+            counters,
+            finderPatterns[value],
+            _MAX_INDIVIDUAL_VARIANCE,
+          ) <
           _MAX_AVG_VARIANCE) {
         return value;
       }

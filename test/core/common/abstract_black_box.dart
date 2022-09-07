@@ -45,9 +45,11 @@ class AbstractBlackBoxTestCase {
   }
 
   AbstractBlackBoxTestCase(
-      String testBasePathSuffix, this._barcodeReader, this._expectedFormat,
-      [this._imageProcess])
-      : _testBase = buildTestBase(testBasePathSuffix);
+    String testBasePathSuffix,
+    this._barcodeReader,
+    this._expectedFormat, [
+    this._imageProcess,
+  ]) : _testBase = buildTestBase(testBasePathSuffix);
 
   Directory getTestBase() {
     return _testBase;
@@ -145,15 +147,19 @@ class AbstractBlackBoxTestCase {
       final testResult = _testResults[x];
       _log.info('Rotation ${testResult.rotation} degrees:');
       _log.info(
-          ' ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)');
+        ' ${passedCounts[x]} of ${imageFiles.length} images passed (${testResult.mustPassCount} required)',
+      );
       int failed = imageFiles.length - passedCounts[x];
       _log.info(
-          ' ${misreadCounts[x]} failed due to misreads, ${failed - misreadCounts[x]} not detected');
+        ' ${misreadCounts[x]} failed due to misreads, ${failed - misreadCounts[x]} not detected',
+      );
       _log.info(
-          ' ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.tryHarderCount} required)');
+        ' ${tryHarderCounts[x]} of ${imageFiles.length} images passed with try harder (${testResult.tryHarderCount} required)',
+      );
       failed = imageFiles.length - tryHarderCounts[x];
       _log.info(
-          ' ${tryHarderMisreadCounts[x]} failed due to misreads, ${failed - tryHarderMisreadCounts[x]} not detected');
+        ' ${tryHarderMisreadCounts[x]} failed due to misreads, ${failed - tryHarderMisreadCounts[x]} not detected',
+      );
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
       totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
@@ -163,7 +169,8 @@ class AbstractBlackBoxTestCase {
 
     final totalTests = imageFiles.length * testCount * 2;
     _log.info(
-        'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
+      'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)',
+    );
     if (totalFound > totalMustPass) {
       _log.warning('+++ Test too lax by ${totalFound - totalMustPass} images');
     } else if (totalFound < totalMustPass) {
@@ -176,7 +183,8 @@ class AbstractBlackBoxTestCase {
       );
     } else if (totalMisread > totalMaxMisread) {
       _log.warning(
-          '--- Test had too many misreads by ${totalMisread - totalMaxMisread} images');
+        '--- Test had too many misreads by ${totalMisread - totalMaxMisread} images',
+      );
     }
 
     // Then run through again and assert if any failed
@@ -185,13 +193,17 @@ class AbstractBlackBoxTestCase {
       String label =
           'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
-      assert(tryHarderCounts[x] >= testResult.tryHarderCount,
-          'Try harder, $label');
+      assert(
+        tryHarderCounts[x] >= testResult.tryHarderCount,
+        'Try harder, $label',
+      );
       label =
           'Rotation ${testResult.rotation} degrees: Too many images misread';
       assert(misreadCounts[x] <= testResult.maxMisreads, label);
-      assert(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads,
-          'Try harder, $label');
+      assert(
+        tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads,
+        'Try harder, $label',
+      );
     }
   }
 
@@ -203,15 +215,29 @@ class AbstractBlackBoxTestCase {
   /// @param maxTryHarderMisreads Maximum number of images which can fail due to successfully
   ///                             reading the wrong contents using the try harder flag
   /// @param rotation The rotation in degrees clockwise to use for this test.
-  void addTest(int mustPassCount, int tryHarderCount, double rotation,
-      [int maxMisreads = 0, int maxTryHarderMisreads = 0]) {
-    _testResults.add(TestResult(mustPassCount, tryHarderCount, maxMisreads,
-        maxTryHarderMisreads, rotation));
+  void addTest(
+    int mustPassCount,
+    int tryHarderCount,
+    double rotation, [
+    int maxMisreads = 0,
+    int maxTryHarderMisreads = 0,
+  ]) {
+    _testResults.add(
+      TestResult(
+        mustPassCount,
+        tryHarderCount,
+        maxMisreads,
+        maxTryHarderMisreads,
+        rotation,
+      ),
+    );
   }
 
   List<File> getImageFiles() {
-    assert(_testBase.existsSync(),
-        "Please download and install test images, and run from the 'test' directory");
+    assert(
+      _testBase.existsSync(),
+      "Please download and install test images, and run from the 'test' directory",
+    );
     final paths = <File>[];
     final files = _testBase.listSync();
     for (var element in files) {
@@ -257,14 +283,16 @@ class AbstractBlackBoxTestCase {
 
     if (_expectedFormat != result.barcodeFormat) {
       _log.warning(
-          "Format mismatch: $filename expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix");
+        "Format mismatch: $filename expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix",
+      );
       return false;
     }
 
     final resultText = result.text;
     if (expectedText != resultText) {
       _log.warning(
-          "Content mismatch: $filename expected '$expectedText' but got '$resultText'$suffix");
+        "Content mismatch: $filename expected '$expectedText' but got '$resultText'$suffix",
+      );
       return false;
     }
 
@@ -275,7 +303,8 @@ class AbstractBlackBoxTestCase {
       final Object? actualValue = resultMetadata?[key];
       if (expectedValue != actualValue) {
         _log.warning(
-            "Metadata mismatch $filename for key '${key.toString().replaceFirst('ResultMetadataType.', '')}': expected '$expectedValue' but got '$actualValue'");
+          "Metadata mismatch $filename for key '${key.toString().replaceFirst('ResultMetadataType.', '')}': expected '$expectedValue' but got '$actualValue'",
+        );
         return false;
       }
     }

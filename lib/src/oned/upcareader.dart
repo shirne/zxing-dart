@@ -33,10 +33,14 @@ class UPCAReader extends UPCEANReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints,
-      [List<int>? startGuardRange]) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints, [
+    List<int>? startGuardRange,
+  ]) {
     return _maybeReturnResult(
-        _ean13Reader.decodeRow(rowNumber, row, hints, startGuardRange));
+      _ean13Reader.decodeRow(rowNumber, row, hints, startGuardRange),
+    );
   }
 
   @override
@@ -56,7 +60,11 @@ class UPCAReader extends UPCEANReader {
     final text = result.text;
     if (text[0] == '0') {
       final upcaResult = Result(
-          text.substring(1), null, result.resultPoints, BarcodeFormat.UPC_A);
+        text.substring(1),
+        null,
+        result.resultPoints,
+        BarcodeFormat.UPC_A,
+      );
       if (result.resultMetadata != null) {
         upcaResult.putAllMetadata(result.resultMetadata);
       }

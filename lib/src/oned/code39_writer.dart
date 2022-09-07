@@ -27,12 +27,15 @@ class Code39Writer extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_39];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     int length = contents.length;
     if (length > 80) {
       throw ArgumentError(
-          'Requested contents should be less than 80 digits long, but got $length');
+        'Requested contents should be less than 80 digits long, but got $length',
+      );
     }
 
     for (int i = 0; i < length; i++) {
@@ -64,7 +67,11 @@ class Code39Writer extends OneDimensionalCodeWriter {
       _toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, narrowWhite, false);
+        result,
+        pos,
+        narrowWhite,
+        false,
+      );
     }
     _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
@@ -127,7 +134,8 @@ class Code39Writer extends OneDimensionalCodeWriter {
             extendedContent.writeCharCode((80 /* P */ + (c - 123)));
           } else {
             throw ArgumentError(
-                "Requested content contains a non-encodable character: '${contents[i]}'");
+              "Requested content contains a non-encodable character: '${contents[i]}'",
+            );
           }
           break;
       }

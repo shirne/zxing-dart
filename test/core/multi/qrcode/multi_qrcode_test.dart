@@ -31,7 +31,8 @@ void main() {
   test('testMultiQRCodes', () async {
     // Very basic test for now
     final testBase = AbstractBlackBoxTestCase.buildTestBase(
-        'test/resources/blackbox/multi-qrcode-1');
+      'test/resources/blackbox/multi-qrcode-1',
+    );
 
     final testImage = File('${testBase.path}/1.png');
     final image = decodeImage(testImage.readAsBytesSync())!;
@@ -51,13 +52,17 @@ void main() {
     }
     final expectedContents = <String>{};
     expectedContents.add(
-        "You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
+      "You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!",
+    );
     expectedContents.add(
-        'You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!');
+      'You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!',
+    );
     expectedContents.add(
-        "You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)");
+      "You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)",
+    );
     expectedContents.add(
-        'You get to CREATE OUR JOURNAL PROMPT FOR THE DAY!  Yay!  Way to go!  ');
+      'You get to CREATE OUR JOURNAL PROMPT FOR THE DAY!  Yay!  Way to go!  ',
+    );
     expect(barcodeContents, expectedContents);
   });
 
@@ -68,10 +73,14 @@ void main() {
     sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
     sa2.putMetadata(
-        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
+      ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+      (1 << 4) + 2,
+    );
     sa2.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
     sa3.putMetadata(
-        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
+      ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+      (2 << 4) + 2,
+    );
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
 
     final nsa = Result('NotSA', [], <ResultPoint>[], BarcodeFormat.QR_CODE);

@@ -34,9 +34,12 @@ class GeoParsedResult extends ParsedResult {
   /// query string associated with geo URI or null if none exists
   String? query;
 
-  GeoParsedResult(this.latitude, this.longitude,
-      [this.altitude = 0, this.query])
-      : super(ParsedResultType.GEO);
+  GeoParsedResult(
+    this.latitude,
+    this.longitude, [
+    this.altitude = 0,
+    this.query,
+  ]) : super(ParsedResultType.GEO);
 
   String get geoURI {
     final result = StringBuffer();

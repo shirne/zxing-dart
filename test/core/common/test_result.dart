@@ -22,6 +22,11 @@ class TestResult {
   final int maxTryHarderMisreads;
   final double rotation;
 
-  TestResult(this.mustPassCount, this.tryHarderCount, this.maxMisreads,
-      this.maxTryHarderMisreads, this.rotation);
+  TestResult(
+    this.mustPassCount,
+    this.tryHarderCount,
+    this.maxMisreads,
+    this.maxTryHarderMisreads,
+    this.rotation,
+  );
 }

@@ -26,9 +26,13 @@ class InputEdge {
   /* private */ final InputEdge? previous;
   /* private */ late int cachedTotalSize;
 
-  /* private */ InputEdge(int c, ECIEncoderSet encoderSet, this.encoderIndex,
-      this.previous, int fnc1)
-      : c = c == fnc1 ? 1000 : c {
+  /* private */ InputEdge(
+    int c,
+    ECIEncoderSet encoderSet,
+    this.encoderIndex,
+    this.previous,
+    int fnc1,
+  ) : c = c == fnc1 ? 1000 : c {
     int size = this.c == 1000 ? 1 : encoderSet.encode(c, encoderIndex).length;
     final previousEncoderIndex = previous?.encoderIndex ?? 0;
     if (previousEncoderIndex != encoderIndex) {
@@ -121,7 +125,8 @@ class MinimalECIInput implements ECIInput {
     if (isECI(index)) {
       //IllegalArgumentException
       throw ArgumentError(
-          'value at $index (${bytes[index]}) is not a character but an ECI');
+        'value at $index (${bytes[index]}) is not a character but an ECI',
+      );
     }
     return isFNC1(index) ? fnc1 : bytes[index];
   }
@@ -155,7 +160,8 @@ class MinimalECIInput implements ECIInput {
       if (isECI(i)) {
         // IllegalArgumentException
         throw ArgumentError(
-            'value at $i (${charAt(i)}) is not a character but an ECI');
+          'value at $i (${charAt(i)}) is not a character but an ECI',
+        );
       }
       result.writeCharCode(charAt(i));
     }
@@ -255,8 +261,14 @@ class MinimalECIInput implements ECIInput {
     }
   }
 
-  static void addEdges(String stringToEncode, ECIEncoderSet encoderSet,
-      List<List<InputEdge?>> edges, int from, InputEdge? previous, int fnc1) {
+  static void addEdges(
+    String stringToEncode,
+    ECIEncoderSet encoderSet,
+    List<List<InputEdge?>> edges,
+    int from,
+    InputEdge? previous,
+    int fnc1,
+  ) {
     // chr
     final ch = stringToEncode.codeUnitAt(from);
 
@@ -277,12 +289,17 @@ class MinimalECIInput implements ECIInput {
   }
 
   static List<int> encodeMinimally(
-      String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
+    String stringToEncode,
+    ECIEncoderSet encoderSet,
+    int fnc1,
+  ) {
     final inputLength = stringToEncode.length;
 
     // Array that represents vertices. There is a vertex for every character and encoding.
     final List<List<InputEdge?>> edges = List.generate(
-        inputLength + 1, (index) => List.filled(encoderSet.length, null));
+      inputLength + 1,
+      (index) => List.filled(encoderSet.length, null),
+    );
     addEdges(stringToEncode, encoderSet, edges, 0, null, fnc1);
 
     for (int i = 1; i <= inputLength; i++) {
@@ -310,7 +327,8 @@ class MinimalECIInput implements ECIInput {
     if (minimalJ < 0) {
       // RuntimeException
       throw AssertionError(
-          'Internal error: failed to encode "$stringToEncode"');
+        'Internal error: failed to encode "$stringToEncode"',
+      );
     }
     final intsAL = <int>[];
     InputEdge? current = edges[inputLength][minimalJ];

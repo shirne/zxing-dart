@@ -22,8 +22,11 @@ import '../common/abstract_black_box.dart';
 /// Inverted barcodes
 void main() {
   test('InvertedDataMatrixBlackBoxTestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/inverted',
-        MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/inverted',
+      MultiFormatReader(),
+      BarcodeFormat.DATA_MATRIX,
+    )
       ..addHint(DecodeHintType.ALSO_INVERTED)
       ..addTest(1, 1, 0.0)
       ..addTest(1, 1, 90.0)

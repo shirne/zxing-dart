@@ -54,7 +54,9 @@ void main() {
 }
 
 void testMaskAcrossDimensions(
-    int reference, bool Function(int, int) condition) {
+  int reference,
+  bool Function(int, int) condition,
+) {
   final mask = DataMask.values[reference];
   for (int version = 1; version <= 40; version++) {
     final dimension = 17 + 4 * version;

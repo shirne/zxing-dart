@@ -46,8 +46,10 @@ class Decoder {
   /// @return text and bytes encoded within the QR Code
   /// @throws FormatException if the QR Code cannot be decoded
   /// @throws ChecksumException if error correction fails
-  DecoderResult decode(List<List<bool>> image,
-      [Map<DecodeHintType, Object>? hints]) {
+  DecoderResult decode(
+    List<List<bool>> image, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     return decodeMatrix(BitMatrix.parse(image), hints);
   }
 
@@ -58,8 +60,10 @@ class Decoder {
   /// @return text and bytes encoded within the QR Code
   /// @throws FormatException if the QR Code cannot be decoded
   /// @throws ChecksumException if error correction fails
-  DecoderResult decodeMatrix(BitMatrix bits,
-      [Map<DecodeHintType, Object>? hints]) {
+  DecoderResult decodeMatrix(
+    BitMatrix bits, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     // Construct a parser and read version, error-correction level
     final parser = BitMatrixParser(bits);
     FormatsException? fe;
@@ -115,8 +119,10 @@ class Decoder {
     }
   }
 
-  DecoderResult _decodeParser(BitMatrixParser parser,
-      [Map<DecodeHintType, Object>? hints]) {
+  DecoderResult _decodeParser(
+    BitMatrixParser parser, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     final version = parser.readVersion();
     final ecLevel = parser.readFormatInformation().errorCorrectionLevel;
 

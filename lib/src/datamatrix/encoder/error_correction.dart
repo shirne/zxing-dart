@@ -92,7 +92,7 @@ class ErrorCorrection {
   static final List<int> _log = List.filled(256, 0);
   static final List<int> _aLog = List.filled(255, 0);
 
-  static init() {
+  static void init() {
     if (_isInit) return;
     _isInit = true;
     int p = 1;
@@ -116,7 +116,8 @@ class ErrorCorrection {
   static String encodeECC200(String codewords, SymbolInfo symbolInfo) {
     if (codewords.length != symbolInfo.dataCapacity) {
       throw ArgumentError(
-          'The number of codewords does not match the selected symbol');
+        'The number of codewords does not match the selected symbol',
+      );
     }
     final sb = StringBuilder();
     sb.write(codewords);
@@ -128,8 +129,10 @@ class ErrorCorrection {
       sb.setLength(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
       // this is using for temp StringBuffer's init length
       //List<int> dataSizes = List.generate(blockCount, (index) => symbolInfo.getDataLengthForInterleavedBlock(index + 1));
-      final errorSizes = List.generate(blockCount,
-          (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1));
+      final errorSizes = List.generate(
+        blockCount,
+        (index) => symbolInfo.getErrorLengthForInterleavedBlock(index + 1),
+      );
 
       for (int block = 0; block < blockCount; block++) {
         final temp = StringBuffer();
@@ -158,7 +161,8 @@ class ErrorCorrection {
     }
     if (table < 0) {
       throw ArgumentError(
-          'Illegal number of error correction codewords specified: $numECWords');
+        'Illegal number of error correction codewords specified: $numECWords',
+      );
     }
     final poly = _FACTORS[table];
     final ecc = List.filled(numECWords, 0);

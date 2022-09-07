@@ -211,11 +211,12 @@ void main() {
     }
     final matrix = ByteMatrix(21, 21);
     MatrixUtil.buildMatrix(
-        bits,
-        ErrorCorrectionLevel.H,
-        Version.getVersionForNumber(1), // Version 1
-        3, // Mask pattern 3
-        matrix);
+      bits,
+      ErrorCorrectionLevel.H,
+      Version.getVersionForNumber(1), // Version 1
+      3, // Mask pattern 3
+      matrix,
+    );
     final expected = ' 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n'
         ' 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n'
         ' 1 0 1 1 1 0 1 0 0 0 0 1 0 0 1 0 1 1 1 0 1\n'

@@ -87,18 +87,23 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
     if (totalFalsePositives < totalAllowed) {
       log.warning(
-          '+++ Test too lax by ${totalAllowed - totalFalsePositives} images');
+        '+++ Test too lax by ${totalAllowed - totalFalsePositives} images',
+      );
     } else if (totalFalsePositives > totalAllowed) {
       log.warning(
-          '--- Test failed by ${totalFalsePositives - totalAllowed} images');
+        '--- Test failed by ${totalFalsePositives - totalAllowed} images',
+      );
     }
 
     for (int x = 0; x < testResults.length; x++) {
       final testResult = testResults[x];
       log.info(
-          'Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)');
-      assert(falsePositives[x] <= testResult.getFalsePositivesAllowed(),
-          'Rotation ${testResult.getRotation()} degrees: Too many false positives found');
+        'Rotation ${testResult.getRotation().toInt()} degrees: ${falsePositives[x]} of ${imageFiles.length} images were false positives (${testResult.getFalsePositivesAllowed()} allowed)',
+      );
+      assert(
+        falsePositives[x] <= testResult.getFalsePositivesAllowed(),
+        'Rotation ${testResult.getRotation()} degrees: Too many false positives found',
+      );
     }
   }
 
@@ -116,7 +121,8 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     try {
       result = reader!.decode(bitmap);
       log.info(
-          "Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
+        "Found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})",
+      );
       return false;
     } on ReaderException catch (_) {
       // continue
@@ -128,7 +134,8 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
     try {
       result = reader!.decode(bitmap, hints);
       log.info(
-          "Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})");
+        "Try harder found false positive: '${result.text}' with format '${result.barcodeFormat}' (rotation: ${rotationInDegrees.toInt()})",
+      );
       return false;
     } on ReaderException catch (_) {
       // continue

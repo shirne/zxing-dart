@@ -54,25 +54,25 @@ class ExpandedProductParsedResult extends ParsedResult {
   Map<String, String> uncommonAIs;
 
   ExpandedProductParsedResult(
-      this.rawText,
-      this.productID,
-      this.sscc,
-      this.lotNumber,
-      this.productionDate,
-      this.packagingDate,
-      this.bestBeforeDate,
-      this.expirationDate,
-      this.weight,
-      this.weightType,
-      this.weightIncrement,
-      this.price,
-      this.priceIncrement,
-      this.priceCurrency,
-      this.uncommonAIs)
-      : super(ParsedResultType.PRODUCT);
+    this.rawText,
+    this.productID,
+    this.sscc,
+    this.lotNumber,
+    this.productionDate,
+    this.packagingDate,
+    this.bestBeforeDate,
+    this.expirationDate,
+    this.weight,
+    this.weightType,
+    this.weightIncrement,
+    this.price,
+    this.priceIncrement,
+    this.priceCurrency,
+    this.uncommonAIs,
+  ) : super(ParsedResultType.PRODUCT);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! ExpandedProductParsedResult) {
       return false;
     }

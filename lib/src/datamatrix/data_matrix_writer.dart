@@ -36,8 +36,13 @@ import 'encoder/symbol_shape_hint.dart';
 /// @author Guillaume Le Biller Added to zxing lib.
 class DataMatrixWriter implements Writer {
   @override
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]) {
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     if (contents.isEmpty) {
       throw ArgumentError('Found empty contents');
     }
@@ -48,7 +53,8 @@ class DataMatrixWriter implements Writer {
 
     if (width < 0 || height < 0) {
       throw ArgumentError(
-          "Requested dimensions can't be negative: $width" 'x$height');
+        "Requested dimensions can't be negative: $width" 'x$height',
+      );
     }
 
     // Try to get force shape & min / max size
@@ -91,7 +97,11 @@ class DataMatrixWriter implements Writer {
         charset = (hints[EncodeHintType.CHARACTER_SET] as Encoding?);
       }
       encoded = MinimalEncoder.encodeHighLevel(
-          contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
+        contents,
+        charset,
+        hasGS1FormatHint ? 0x1D : -1,
+        shape,
+      );
     } else {
       encoded =
           HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
@@ -105,7 +115,10 @@ class DataMatrixWriter implements Writer {
 
     //3. step: Module placement in Matrix
     final placement = DefaultPlacement(
-        codewords, symbolInfo.symbolDataWidth, symbolInfo.symbolDataHeight);
+      codewords,
+      symbolInfo.symbolDataWidth,
+      symbolInfo.symbolDataHeight,
+    );
     placement.place();
 
     //4. step: low-level encoding
@@ -117,8 +130,12 @@ class DataMatrixWriter implements Writer {
   /// @param placement  The DataMatrix placement.
   /// @param symbolInfo The symbol info to encode.
   /// @return The bit matrix generated.
-  static BitMatrix _encodeLowLevel(DefaultPlacement placement,
-      SymbolInfo symbolInfo, int width, int height) {
+  static BitMatrix _encodeLowLevel(
+    DefaultPlacement placement,
+    SymbolInfo symbolInfo,
+    int width,
+    int height,
+  ) {
     final symbolWidth = symbolInfo.symbolDataWidth;
     final symbolHeight = symbolInfo.symbolDataHeight;
 
@@ -174,7 +191,10 @@ class DataMatrixWriter implements Writer {
   /// @param matrix The input matrix.
   /// @return The output matrix.
   static BitMatrix _convertByteMatrixToBitMatrix(
-      ByteMatrix matrix, int reqWidth, int reqHeight) {
+    ByteMatrix matrix,
+    int reqWidth,
+    int reqHeight,
+  ) {
     final matrixWidth = matrix.width;
     final matrixHeight = matrix.height;
     final outputWidth = math.max(reqWidth, matrixWidth);

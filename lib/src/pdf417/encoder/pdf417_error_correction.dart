@@ -175,7 +175,9 @@ class PDF417ErrorCorrection {
   /// @param errorCorrectionLevel the error correction level (0-8)
   /// @return the String representing the error correction codewords
   static String generateErrorCorrection(
-      String dataCodewords, int errorCorrectionLevel) {
+    String dataCodewords,
+    int errorCorrectionLevel,
+  ) {
     final k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
     final e = List.filled(k, 0);
     final sld = dataCodewords.length;

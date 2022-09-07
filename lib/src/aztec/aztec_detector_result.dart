@@ -28,9 +28,13 @@ class AztecDetectorResult extends DetectorResult {
   final int _nbDataBlocks;
   final int _nbLayers;
 
-  AztecDetectorResult(BitMatrix bits, List<ResultPoint> points, this._compact,
-      this._nbDataBlocks, this._nbLayers)
-      : super(bits, points);
+  AztecDetectorResult(
+    BitMatrix bits,
+    List<ResultPoint> points,
+    this._compact,
+    this._nbDataBlocks,
+    this._nbLayers,
+  ) : super(bits, points);
 
   int get nbLayers => _nbLayers;
 

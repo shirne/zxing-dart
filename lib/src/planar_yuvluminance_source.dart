@@ -94,7 +94,12 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     for (int y = 0; y < height; y++) {
       final outputOffset = y * width;
       List.copyRange(
-          matrix, outputOffset, _yuvData, inputOffset, inputOffset + width);
+        matrix,
+        outputOffset,
+        _yuvData,
+        inputOffset,
+        inputOffset + width,
+      );
       inputOffset += _dataWidth;
     }
     return matrix;

@@ -127,22 +127,23 @@ class HighLevelEncoder {
   // A map showing the available shift codes.  (The shifts to BINARY are not
   // shown
   static final List<List<int>> shiftTable = List.generate(
-      6,
-      (idx) => List.generate(6, (index) {
-            if (idx == MODE_UPPER) {
-              if (index == MODE_PUNCT) return 0;
-            } else if (idx == MODE_LOWER) {
-              if (index == MODE_PUNCT) return 0;
-              if (index == MODE_UPPER) return 28;
-            } else if (idx == MODE_MIXED) {
-              if (index == MODE_PUNCT) return 0;
-            } else if (idx == MODE_DIGIT) {
-              if (index == MODE_PUNCT) return 0;
-              if (index == MODE_UPPER) return 15;
-            }
+    6,
+    (idx) => List.generate(6, (index) {
+      if (idx == MODE_UPPER) {
+        if (index == MODE_PUNCT) return 0;
+      } else if (idx == MODE_LOWER) {
+        if (index == MODE_PUNCT) return 0;
+        if (index == MODE_UPPER) return 28;
+      } else if (idx == MODE_MIXED) {
+        if (index == MODE_PUNCT) return 0;
+      } else if (idx == MODE_DIGIT) {
+        if (index == MODE_PUNCT) return 0;
+        if (index == MODE_UPPER) return 15;
+      }
 
-            return -1;
-          })); // mode shift codes, per table
+      return -1;
+    }),
+  ); // mode shift codes, per table
 
   final List<int> _text;
   final Encoding? _charset;
@@ -258,7 +259,10 @@ class HighLevelEncoder {
   }
 
   static List<State> _updateStateListForPair(
-      Iterable<State> states, int index, int pairCode) {
+    Iterable<State> states,
+    int index,
+    int pairCode,
+  ) {
     final List<State> result = [];
     for (State state in states) {
       _updateStateForPair(state, index, pairCode, result);
@@ -267,7 +271,11 @@ class HighLevelEncoder {
   }
 
   static void _updateStateForPair(
-      State state, int index, int pairCode, List<State> result) {
+    State state,
+    int index,
+    int pairCode,
+    List<State> result,
+  ) {
     final State stateNoBinary = state.endBinaryShift(index);
     // Possibility 1.  Latch to MODE_PUNCT, and then append this code
     result.add(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode));

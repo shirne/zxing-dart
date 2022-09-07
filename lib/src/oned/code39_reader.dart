@@ -70,7 +70,10 @@ class Code39Reader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final theCounters = _counters;
     theCounters.fillRange(0, theCounters.length, 0);
 
@@ -141,13 +144,14 @@ class Code39Reader extends OneDReader {
     final right = lastStart + lastPatternSize / 2.0;
 
     final resultObject = Result(
-        resultString,
-        null,
-        [
-          ResultPoint(left, rowNumber.toDouble()),
-          ResultPoint(right, rowNumber.toDouble())
-        ],
-        BarcodeFormat.CODE_39);
+      resultString,
+      null,
+      [
+        ResultPoint(left, rowNumber.toDouble()),
+        ResultPoint(right, rowNumber.toDouble())
+      ],
+      BarcodeFormat.CODE_39,
+    );
     resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']A0');
     return resultObject;
   }
@@ -168,8 +172,11 @@ class Code39Reader extends OneDReader {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
           if (_toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
-              row.isRange(math.max(0, patternStart - ((i - patternStart) ~/ 2)),
-                  patternStart, false)) {
+              row.isRange(
+                math.max(0, patternStart - ((i - patternStart) ~/ 2)),
+                patternStart,
+                false,
+              )) {
             return [patternStart, i];
           }
           patternStart += counters[0] + counters[1];

@@ -4,8 +4,13 @@ import 'dart:typed_data';
 import 'package:test/expect.dart';
 import 'package:zxing_lib/common.dart';
 
-void assertListEquals(List<int> expected, int expectedFrom, Uint8List actual,
-    int actualFrom, int length) {
+void assertListEquals(
+  List<int> expected,
+  int expectedFrom,
+  Uint8List actual,
+  int actualFrom,
+  int length,
+) {
   for (int i = 0; i < length; i++) {
     expect(actual[actualFrom + i], expected[expectedFrom + i]);
   }
@@ -16,9 +21,11 @@ void assertArrayEquals(List<dynamic>? a, List<dynamic>? b) {
     assert(a == null && b == null);
     return;
   }
-  expect(a.runtimeType.toString().replaceAll('?', ''),
-      b.runtimeType.toString().replaceAll('?', ''),
-      reason: 'runtime not match');
+  expect(
+    a.runtimeType.toString().replaceAll('?', ''),
+    b.runtimeType.toString().replaceAll('?', ''),
+    reason: 'runtime not match',
+  );
   expect(a.length, b.length, reason: 'length not match \n $a \n $b');
 
   for (int i = 0; i < a.length; i++) {
@@ -34,8 +41,10 @@ void assertEqualOrNaN(double expected, double actual, [int eps = 1000]) {
   if (expected.isNaN) {
     assert(actual.isNaN);
   } else {
-    expect((expected * math.pow(10, eps)).round(),
-        (actual * math.pow(10, eps)).round());
+    expect(
+      (expected * math.pow(10, eps)).round(),
+      (actual * math.pow(10, eps)).round(),
+    );
   }
 }
 

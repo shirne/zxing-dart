@@ -39,14 +39,16 @@ import '../../../common/abstract_black_box.dart';
 void main() {
   Image readImage(String fileName) {
     final path = File(
-        '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName');
+      '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName',
+    );
     return decodeImage(path.readAsBytesSync())!;
   }
 
   test('testFindFinderPatterns', () async {
     final image = readImage('2.png');
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final rowNumber = binaryMap.height ~/ 2;
     final row = binaryMap.getBlackRow(rowNumber, null);
     final previousPairs = <ExpandedPair>[];
@@ -82,7 +84,8 @@ void main() {
   test('testRetrieveNextPairPatterns', () async {
     final image = readImage('3.png');
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final rowNumber = binaryMap.height ~/ 2;
     final row = binaryMap.getBlackRow(rowNumber, null);
     final previousPairs = <ExpandedPair>[];
@@ -109,7 +112,8 @@ void main() {
   test('testDecodeCheckCharacter', () async {
     final image = readImage('3.png');
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 
     //image pixels where the A1 pattern starts (at 124) and ends (at 214)
@@ -137,18 +141,28 @@ void main() {
   test('testDecodeDataCharacter', () async {
     final image = readImage('3.png');
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final row = binaryMap.getBlackRow(binaryMap.height ~/ 2, null);
 
     //image pixels where the A1 pattern starts (at 124) and ends (at 214)
     final startEnd = [145, 243];
     const value = 0; // A
     final finderPatternA1 = FinderPattern(
-        value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
+      value,
+      startEnd,
+      startEnd[0],
+      startEnd[1],
+      image.height ~/ 2,
+    );
     //{1, 8, 4, 1, 1};
     final rssExpandedReader = RSSExpandedReader();
     final dataCharacter = rssExpandedReader.decodeDataCharacter(
-        row, finderPatternA1, true, false);
+      row,
+      finderPatternA1,
+      true,
+      false,
+    );
 
     expect(19, dataCharacter.value);
     expect(1007, dataCharacter.checksumPortion);

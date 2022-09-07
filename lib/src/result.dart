@@ -28,13 +28,23 @@ class Result {
   Map<ResultMetadataType, Object>? _resultMetadata;
   final int _timestamp;
 
-  Result(this._text, this._rawBytes, this._resultPoints, this._format,
-      [int? timestamp])
-      : _numBits = _rawBytes == null ? 0 : (8 * _rawBytes.length),
+  Result(
+    this._text,
+    this._rawBytes,
+    this._resultPoints,
+    this._format, [
+    int? timestamp,
+  ])  : _numBits = _rawBytes == null ? 0 : (8 * _rawBytes.length),
         _timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
-  Result.full(this._text, this._rawBytes, this._numBits, this._resultPoints,
-      this._format, this._timestamp);
+  Result.full(
+    this._text,
+    this._rawBytes,
+    this._numBits,
+    this._resultPoints,
+    this._format,
+    this._timestamp,
+  );
 
   /// @return raw text encoded by the barcode
   String get text => _text;

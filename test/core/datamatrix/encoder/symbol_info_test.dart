@@ -56,9 +56,11 @@ void main() {
           'There\'s no rectangular symbol for more than 1558 data codewords',
     );
 
-    expect(() => SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE),
-        throwsArgumentError,
-        reason: 'There\'s no rectangular symbol for 50 data codewords');
+    expect(
+      () => SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE),
+      throwsArgumentError,
+      reason: 'There\'s no rectangular symbol for 50 data codewords',
+    );
 
     info = SymbolInfo.lookup(35)!;
     expect(24, info.symbolWidth);
@@ -66,37 +68,67 @@ void main() {
 
     final fixedSize = Dimension(26, 26);
     info = SymbolInfo.lookup(
-        35, SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false)!;
+      35,
+      SymbolShapeHint.FORCE_NONE,
+      fixedSize,
+      fixedSize,
+      false,
+    )!;
     expect(26, info.symbolWidth);
     expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(
-        45, SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
+      45,
+      SymbolShapeHint.FORCE_NONE,
+      fixedSize,
+      fixedSize,
+      false,
+    );
     expect(null, info);
 
     final minSize = fixedSize;
     final maxSize = Dimension(32, 32);
 
     info = SymbolInfo.lookup(
-        35, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
+      35,
+      SymbolShapeHint.FORCE_NONE,
+      minSize,
+      maxSize,
+      false,
+    )!;
     //assertNotNull(info);
     expect(26, info.symbolWidth);
     expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(
-        40, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
+      40,
+      SymbolShapeHint.FORCE_NONE,
+      minSize,
+      maxSize,
+      false,
+    )!;
     //assertNotNull(info);
     expect(26, info.symbolWidth);
     expect(26, info.symbolHeight);
 
     info = SymbolInfo.lookup(
-        45, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false)!;
+      45,
+      SymbolShapeHint.FORCE_NONE,
+      minSize,
+      maxSize,
+      false,
+    )!;
     //assertNotNull(info);
     expect(32, info.symbolWidth);
     expect(32, info.symbolHeight);
 
     info = SymbolInfo.lookup(
-        63, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
+      63,
+      SymbolShapeHint.FORCE_NONE,
+      minSize,
+      maxSize,
+      false,
+    );
     expect(null, info);
   });
 }

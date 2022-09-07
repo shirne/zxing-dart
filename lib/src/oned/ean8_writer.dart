@@ -37,8 +37,10 @@ class EAN8Writer extends UPCEANWriter {
 
   /// @return a byte array of horizontal pixels (false = white, true = black)
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     final length = contents.length;
     switch (length) {
       case 7:
@@ -74,24 +76,44 @@ class EAN8Writer extends UPCEANWriter {
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.START_END_PATTERN, true);
+      result,
+      pos,
+      UPCEANReader.START_END_PATTERN,
+      true,
+    );
 
     for (int i = 0; i <= 3; i++) {
       final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, UPCEANReader.L_PATTERNS[digit], false);
+        result,
+        pos,
+        UPCEANReader.L_PATTERNS[digit],
+        false,
+      );
     }
 
     pos += OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.MIDDLE_PATTERN, false);
+      result,
+      pos,
+      UPCEANReader.MIDDLE_PATTERN,
+      false,
+    );
 
     for (int i = 4; i <= 7; i++) {
       final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, UPCEANReader.L_PATTERNS[digit], true);
+        result,
+        pos,
+        UPCEANReader.L_PATTERNS[digit],
+        true,
+      );
     }
     OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.START_END_PATTERN, true);
+      result,
+      pos,
+      UPCEANReader.START_END_PATTERN,
+      true,
+    );
 
     return result;
   }

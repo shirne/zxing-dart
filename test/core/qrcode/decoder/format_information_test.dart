@@ -32,44 +32,69 @@ void main() {
   test('testDecode', () {
     // Normal case
     final expected = FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+      MASKED_TEST_FORMAT_INFO,
+      MASKED_TEST_FORMAT_INFO,
+    );
     assert(expected != null);
     expect(0x07, expected!.dataMask);
     expect(ErrorCorrectionLevel.Q, expected.errorCorrectionLevel);
     // where the code forgot the mask!
     expect(
-        expected,
-        FormatInformation.decodeFormatInformation(
-            UNMASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO));
+      expected,
+      FormatInformation.decodeFormatInformation(
+        UNMASKED_TEST_FORMAT_INFO,
+        MASKED_TEST_FORMAT_INFO,
+      ),
+    );
   });
 
   test('testDecodeWithBitDifference', () {
     final expected = FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+      MASKED_TEST_FORMAT_INFO,
+      MASKED_TEST_FORMAT_INFO,
+    );
     // 1,2,3,4 bits difference
     expect(
-        expected,
-        FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x01, MASKED_TEST_FORMAT_INFO ^ 0x01));
+      expected,
+      FormatInformation.decodeFormatInformation(
+        MASKED_TEST_FORMAT_INFO ^ 0x01,
+        MASKED_TEST_FORMAT_INFO ^ 0x01,
+      ),
+    );
     expect(
-        expected,
-        FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x03));
+      expected,
+      FormatInformation.decodeFormatInformation(
+        MASKED_TEST_FORMAT_INFO ^ 0x03,
+        MASKED_TEST_FORMAT_INFO ^ 0x03,
+      ),
+    );
     expect(
-        expected,
-        FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x07, MASKED_TEST_FORMAT_INFO ^ 0x07));
-    assert(FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F) ==
-        null);
+      expected,
+      FormatInformation.decodeFormatInformation(
+        MASKED_TEST_FORMAT_INFO ^ 0x07,
+        MASKED_TEST_FORMAT_INFO ^ 0x07,
+      ),
+    );
+    assert(
+      FormatInformation.decodeFormatInformation(
+            MASKED_TEST_FORMAT_INFO ^ 0x0F,
+            MASKED_TEST_FORMAT_INFO ^ 0x0F,
+          ) ==
+          null,
+    );
   });
 
   test('testDecodeWithMisread', () {
     final expected = FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+      MASKED_TEST_FORMAT_INFO,
+      MASKED_TEST_FORMAT_INFO,
+    );
     expect(
-        expected,
-        FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x0F));
+      expected,
+      FormatInformation.decodeFormatInformation(
+        MASKED_TEST_FORMAT_INFO ^ 0x03,
+        MASKED_TEST_FORMAT_INFO ^ 0x0F,
+      ),
+    );
   });
 }

@@ -23,13 +23,15 @@ Random getPseudoRandom() {
 
 void assertDataEquals(String message, List<int> expected, List<int> received) {
   for (int i = 0; i < expected.length; i++) {
-    assert(expected[i] == received[i],
-        '$message. Mismatch at $i. Expected $expected, got ${received.getRange(0, expected.length)}');
+    assert(
+      expected[i] == received[i],
+      '$message. Mismatch at $i. Expected $expected, got ${received.getRange(0, expected.length)}',
+    );
   }
 }
 
 void corrupt(List<int> received, int howMany, Random random, int max) {
-  final corrupted = <int>{};
+  final corrupted = <int>{}; // BitSet
   for (int j = 0; j < howMany; j++) {
     final int location = random.nextInt(received.length);
     final int value = random.nextInt(max);
@@ -79,8 +81,10 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
       } on ReedSolomonException catch (e) {
         // ReedSolomonException
         // fail only if maxErrors exceeded
-        assert(i > maxErrors,
-            'Decode in $field (${dataWords.length},${ecWords.length}) failed at $i errors: $e');
+        assert(
+          i > maxErrors,
+          'Decode in $field (${dataWords.length},${ecWords.length}) failed at $i errors: $e',
+        );
         // else stop
         break;
       }
@@ -101,10 +105,14 @@ void testEncodeDecode(GenericGF field, List<int> dataWords, List<int> ecWords) {
 }
 
 void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
-  assert(dataSize > 0 && dataSize <= field.size - 3,
-      'Invalid data size for $field');
-  assert(ecSize > 0 && ecSize + dataSize <= field.size,
-      'Invalid ECC size for $field');
+  assert(
+    dataSize > 0 && dataSize <= field.size - 3,
+    'Invalid data size for $field',
+  );
+  assert(
+    ecSize > 0 && ecSize + dataSize <= field.size,
+    'Invalid ECC size for $field',
+  );
   final encoder = ReedSolomonEncoder(field);
   final message = Int32List(dataSize + ecSize);
   final dataWords = Int32List(dataSize);

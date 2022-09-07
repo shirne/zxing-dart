@@ -29,7 +29,11 @@ class UPCEANExtensionSupport {
 
   Result decodeRow(int rowNumber, BitArray row, int rowOffset) {
     final extensionStartRange = UPCEANReader.findGuardPattern(
-        row, rowOffset, false, _EXTENSION_START_PATTERN);
+      row,
+      rowOffset,
+      false,
+      _EXTENSION_START_PATTERN,
+    );
     try {
       return _fiveSupport.decodeRow(rowNumber, row, extensionStartRange);
     } on ReaderException catch (_) {

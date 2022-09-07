@@ -31,12 +31,13 @@ class QRCode {
   late int maskPattern;
   ByteMatrix? matrix;
 
-  QRCode(
-      {this.mode,
-      this.ecLevel,
-      this.version,
-      this.maskPattern = -1,
-      this.matrix});
+  QRCode({
+    this.mode,
+    this.ecLevel,
+    this.version,
+    this.maskPattern = -1,
+    this.matrix,
+  });
 
   @override
   String toString() {

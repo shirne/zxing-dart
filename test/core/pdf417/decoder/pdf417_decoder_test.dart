@@ -32,10 +32,18 @@ void main() {
     expect(result.text, expectedResult);
   }
 
-  int encodeDecode(String input,
-      [Encoding? charset, bool autoECI = false, bool decode = true]) {
+  int encodeDecode(
+    String input, [
+    Encoding? charset,
+    bool autoECI = false,
+    bool decode = true,
+  ]) {
     final s = PDF417HighLevelEncoder.encodeHighLevel(
-        input, Compaction.AUTO, charset, autoECI);
+      input,
+      Compaction.AUTO,
+      charset,
+      autoECI,
+    );
     if (decode) {
       final codewords = List.filled(s.length + 1, 0);
       codewords[0] = codewords.length;
@@ -65,7 +73,8 @@ void main() {
     String prefix = '';
     for (int i = 0; i < baseNNumber.length; i++) {
       prefix += String.fromCharCode(
-          chars[baseNNumber.codeUnitAt(i) - '0'.codeUnitAt(0)]);
+        chars[baseNNumber.codeUnitAt(i) - '0'.codeUnitAt(0)],
+      );
     }
     return prefix;
   }
@@ -90,7 +99,11 @@ void main() {
   }
 
   String generateText(
-      math.Random random, int maxWidth, List<int> chars, List<double> weights) {
+    math.Random random,
+    int maxWidth,
+    List<int> chars,
+    List<double> weights,
+  ) {
     final result = StringBuffer();
     const maxWordWidth = 7;
     double total = 0;
@@ -133,8 +146,12 @@ void main() {
     return result.toString();
   }
 
-  void performECITest(List<int> chars, List<double> weights,
-      int expectedMinLength, int expectedUTFLength) {
+  void performECITest(
+    List<int> chars,
+    List<double> weights,
+    int expectedMinLength,
+    int expectedUTFLength,
+  ) {
     final random = math.Random(0);
     int minLength = 0;
     int utfLength = 0;
@@ -169,12 +186,18 @@ void main() {
 
     // ignore: deprecated_consistency, deprecated_member_use_from_same_package
     final optionalData = resultMetadata.optionalData!;
-    expect(optionalData[0], 1,
-        reason:
-            'first element of optional array should be the first field identifier');
-    expect(optionalData[optionalData.length - 1], 67,
-        reason:
-            'last element of optional array should be the last codeword of the last field');
+    expect(
+      optionalData[0],
+      1,
+      reason:
+          'first element of optional array should be the first field identifier',
+    );
+    expect(
+      optionalData[optionalData.length - 1],
+      67,
+      reason:
+          'last element of optional array should be the last codeword of the last field',
+    );
   });
 
   /// Tests the second given in ISO/IEC 15438:2015(E) - Annex H.4
@@ -197,12 +220,18 @@ void main() {
 
     // ignore: deprecated_consistency, deprecated_member_use_from_same_package
     final optionalData = resultMetadata.optionalData!;
-    expect(1, optionalData[0],
-        reason:
-            'first element of optional array should be the first field identifier');
-    expect(104, optionalData[optionalData.length - 1],
-        reason:
-            'last element of optional array should be the last codeword of the last field');
+    expect(
+      1,
+      optionalData[0],
+      reason:
+          'first element of optional array should be the first field identifier',
+    );
+    expect(
+      104,
+      optionalData[optionalData.length - 1],
+      reason:
+          'last element of optional array should be the last codeword of the last field',
+    );
   });
 
   /// Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
@@ -324,8 +353,10 @@ void main() {
   });
 
   test('testNumeric', () {
-    performEncodeTest('1'.codeUnitAt(0),
-        [2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10]);
+    performEncodeTest(
+      '1'.codeUnitAt(0),
+      [2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10],
+    );
   });
 
   test('testByte', () {
@@ -353,35 +384,53 @@ void main() {
   test('testUppercaseLowercaseMix2', () {
     // orig: 8972
     performPermutationTest(
-        ['A', 'a'].map((e) => e.codeUnitAt(0)).toList(), 10, 8960);
+      ['A', 'a'].map((e) => e.codeUnitAt(0)).toList(),
+      10,
+      8960,
+    );
   });
 
   test('testUppercaseNumericMix', () {
     performPermutationTest(
-        ['A', '1'].map((e) => e.codeUnitAt(0)).toList(), 14, 192510);
+      ['A', '1'].map((e) => e.codeUnitAt(0)).toList(),
+      14,
+      192510,
+    );
   });
 
   test('testUppercaseMixedMix', () {
     performPermutationTest(
-        ['A', '1', ' ', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 106060);
+      ['A', '1', ' ', ';'].map((e) => e.codeUnitAt(0)).toList(),
+      7,
+      106060,
+    );
   });
 
   test('testUppercasePunctuationMix', () {
     // orig: 8967
     performPermutationTest(
-        ['A', ';'].map((e) => e.codeUnitAt(0)).toList(), 10, 8960);
+      ['A', ';'].map((e) => e.codeUnitAt(0)).toList(),
+      10,
+      8960,
+    );
   });
 
   test('testUppercaseByteMix', () {
     // orig: 11222
     performPermutationTest(
-        ['A', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 10, 11210);
+      ['A', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(),
+      10,
+      11210,
+    );
   });
 
   test('testLowercaseByteMix', () {
     // orig: 11233
     performPermutationTest(
-        ['a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 10, 11221);
+      ['a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(),
+      10,
+      11221,
+    );
   });
 
   test('testUppercaseLowercaseNumericMix', () {
@@ -390,22 +439,34 @@ void main() {
 
   test('testUppercaseLowercasePunctuationMix', () {
     performPermutationTest(
-        ['A', 'a', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 15491);
+      ['A', 'a', ';'].map((e) => e.codeUnitAt(0)).toList(),
+      7,
+      15491,
+    );
   });
 
   test('testUppercaseLowercaseByteMix', () {
     performPermutationTest(
-        ['A', 'a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 7, 17288);
+      ['A', 'a', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(),
+      7,
+      17288,
+    );
   });
 
   test('testLowercasePunctuationByteMix', () {
     performPermutationTest(
-        ['a', ';', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(), 7, 17427);
+      ['a', ';', '\u00c4'].map((e) => e.codeUnitAt(0)).toList(),
+      7,
+      17427,
+    );
   });
 
   test('testUppercaseLowercaseNumericPunctuationMix', () {
     performPermutationTest(
-        ['A', 'a', '1', ';'].map((e) => e.codeUnitAt(0)).toList(), 7, 120479);
+      ['A', 'a', '1', ';'].map((e) => e.codeUnitAt(0)).toList(),
+      7,
+      120479,
+    );
   });
 
   test('testBinaryData', () {
@@ -423,67 +484,87 @@ void main() {
   test('testECIEnglishHiragana', () {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
     // orig: 105825 110914
-    performECITest(['a', '1', '\u3040'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 110854, 110754);
+    performECITest(
+      ['a', '1', '\u3040'].map((e) => e.codeUnitAt(0)).toList(),
+      [20.0, 1.0, 10.0],
+      110854,
+      110754,
+    );
   });
 
   test('testECIEnglishKatakana', () {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
     // orig: 109177 110914
-    performECITest(['a', '1', '\u30a0'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 110854, 110754);
+    performECITest(
+      ['a', '1', '\u30a0'].map((e) => e.codeUnitAt(0)).toList(),
+      [20.0, 1.0, 10.0],
+      110854,
+      110754,
+    );
   });
 
   test('testECIEnglishHalfWidthKatakana', () {
     //single ECI orig: 80617 110914
-    performECITest(['a', '1', '\uff80'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 80562, 110754);
+    performECITest(
+      ['a', '1', '\uff80'].map((e) => e.codeUnitAt(0)).toList(),
+      [20.0, 1.0, 10.0],
+      80562,
+      110754,
+    );
   });
 
   test('testECIEnglishChinese', () {
     //single ECI orig: 95797 110914
-    performECITest(['a', '1', '\u4e00'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 10.0], 95707, 110754);
+    performECITest(
+      ['a', '1', '\u4e00'].map((e) => e.codeUnitAt(0)).toList(),
+      [20.0, 1.0, 10.0],
+      95707,
+      110754,
+    );
   });
 
   test('testECIGermanCyrillic', () {
     //single ECI since the German Umlaut is in ISO-8859-1
     // orig: 80755 96007
     performECITest(
-        ['a', '1', '\u00c4', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
-        [20.0, 1.0, 1.0, 10.0],
-        80549,
-        95729);
+      ['a', '1', '\u00c4', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+      [20.0, 1.0, 1.0, 10.0],
+      80549,
+      95729,
+    );
   });
 
   test('testECIEnglishCzechCyrillic1', () {
     //multi ECI between ISO-8859-2 and ISO-8859-5
     // orig: 102824 124525
     performECITest(
-        ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
-        [10.0, 1.0, 10.0, 10.0],
-        102903,
-        124195);
+      ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+      [10.0, 1.0, 10.0, 10.0],
+      102903,
+      124195,
+    );
   });
 
   test('testECIEnglishCzechCyrillic2', () {
     //multi ECI between ISO-8859-2 and ISO-8859-5
     // orig: 81321 88236
     performECITest(
-        ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
-        [40.0, 1.0, 10.0, 10.0],
-        81652,
-        88507);
+      ['a', '1', '\u010c', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+      [40.0, 1.0, 10.0, 10.0],
+      81652,
+      88507,
+    );
   });
 
   test('testECIEnglishArabicCyrillic', () {
     //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
     // orig: 118510 124525
     performECITest(
-        ['a', '1', '\u0620', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
-        [10.0, 1.0, 10.0, 10.0],
-        118419,
-        124195);
+      ['a', '1', '\u0620', '\u042f'].map((e) => e.codeUnitAt(0)).toList(),
+      [10.0, 1.0, 10.0, 10.0],
+      118419,
+      124195,
+    );
   });
 
   test('testBinaryMultiECI', () {
@@ -493,8 +574,9 @@ void main() {
     performDecodeTest([9, 927, 4, 901, 200, 927, 7, 901, 207], '\u010c\u042f');
     performDecodeTest([8, 927, 4, 901, 200, 927, 7, 207], '\u010c\u042f');
     performDecodeTest(
-        [14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207],
-        '\u010c\u042f\u010c\u042f');
+      [14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207],
+      '\u010c\u042f\u010c\u042f',
+    );
     performDecodeTest(
       [
         16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858,

@@ -72,17 +72,25 @@ class SymbolInfo {
     _symbols = override;
   }
 
-  const SymbolInfo(this._rectangular, this._dataCapacity, this._errorCodewords,
-      this.matrixWidth, this.matrixHeight, this._dataRegions,
-      [int? rsBlockData, int? rsBlockError])
-      : _rsBlockData = rsBlockData ?? _dataCapacity,
+  const SymbolInfo(
+    this._rectangular,
+    this._dataCapacity,
+    this._errorCodewords,
+    this.matrixWidth,
+    this.matrixHeight,
+    this._dataRegions, [
+    int? rsBlockData,
+    int? rsBlockError,
+  ])  : _rsBlockData = rsBlockData ?? _dataCapacity,
         _rsBlockError = rsBlockError ?? _errorCodewords;
 
-  static SymbolInfo? lookup(int dataCodewords,
-      [Object? shapeOrIsRect,
-      Object? minSizeOrFail,
-      Dimension? maxSize,
-      bool fail = true]) {
+  static SymbolInfo? lookup(
+    int dataCodewords, [
+    Object? shapeOrIsRect,
+    Object? minSizeOrFail,
+    Dimension? maxSize,
+    bool fail = true,
+  ]) {
     late SymbolShapeHint shape;
     Dimension? minSize;
     if (shapeOrIsRect is bool) {
@@ -103,8 +111,13 @@ class SymbolInfo {
     return _lookup(dataCodewords, shape, minSize, maxSize, fail);
   }
 
-  static SymbolInfo? _lookup(int dataCodewords, SymbolShapeHint? shape,
-      Dimension? minSize, Dimension? maxSize, bool fail) {
+  static SymbolInfo? _lookup(
+    int dataCodewords,
+    SymbolShapeHint? shape,
+    Dimension? minSize,
+    Dimension? maxSize,
+    bool fail,
+  ) {
     for (SymbolInfo symbol in _symbols) {
       if (shape == SymbolShapeHint.FORCE_SQUARE && symbol._rectangular) {
         continue;

@@ -98,7 +98,8 @@ class Decoder {
     final numCodewords = codewordBytes.length;
     // First read into an array of ints
     final codewordsInts = Int32List.fromList(
-        List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF));
+      List.generate(numCodewords, (index) => codewordBytes[index] & 0xFF),
+    );
 
     try {
       _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);

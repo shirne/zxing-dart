@@ -166,31 +166,31 @@ class AddressBookParsedResult extends ParsedResult {
 
   List<String>? get urls => _urls;
 
-  addName(String name) {
+  void addName(String name) {
     _names ??= [];
     _names!.add(name);
   }
 
-  addNickname(String name) {
+  void addNickname(String name) {
     _nicknames ??= [];
     _nicknames!.add(name);
   }
 
-  addPhoneNumber(String phone, [String? type]) {
+  void addPhoneNumber(String phone, [String? type]) {
     _phoneNumbers ??= [];
     _phoneTypes ??= [];
     _phoneNumbers!.add(phone);
     _phoneTypes!.add(type);
   }
 
-  addEmail(String email, [String? type]) {
+  void addEmail(String email, [String? type]) {
     _emails ??= [];
     _emailTypes ??= [];
     _emails!.add(email);
     _emailTypes!.add(type);
   }
 
-  addAddress(String address, [String? type]) {
+  void addAddress(String address, [String? type]) {
     _addresses ??= [];
     _addressTypes ??= [];
     _addresses!.add(address);

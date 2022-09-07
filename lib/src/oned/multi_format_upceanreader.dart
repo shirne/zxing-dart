@@ -70,7 +70,10 @@ class MultiFormatUPCEANReader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     // Compute this location once and reuse it on multiple implementations
     final startGuardPattern = UPCEANReader.findStartGuardPattern(row);
     for (UPCEANReader reader in _readers) {
@@ -99,8 +102,12 @@ class MultiFormatUPCEANReader extends OneDReader {
 
         if (ean13MayBeUPCA && canReturnUPCA) {
           // Transfer the metadata across
-          final resultUPCA = Result(result.text.substring(1), result.rawBytes,
-              result.resultPoints, BarcodeFormat.UPC_A);
+          final resultUPCA = Result(
+            result.text.substring(1),
+            result.rawBytes,
+            result.resultPoints,
+            BarcodeFormat.UPC_A,
+          );
           resultUPCA.putAllMetadata(result.resultMetadata);
           return resultUPCA;
         }

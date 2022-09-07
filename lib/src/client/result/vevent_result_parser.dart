@@ -72,8 +72,18 @@ class VEventResultParser extends ResultParser {
     }
 
     try {
-      return CalendarParsedResult(summary, start, end, duration, location,
-          organizer, attendees, description, latitude, longitude);
+      return CalendarParsedResult(
+        summary,
+        start,
+        end,
+        duration,
+        location,
+        organizer,
+        attendees,
+        description,
+        latitude,
+        longitude,
+      );
     } catch (_) {
       // IllegalArgumentException
       return null;
@@ -82,7 +92,11 @@ class VEventResultParser extends ResultParser {
 
   static String? _matchSingleVCardPrefixedField(String prefix, String rawText) {
     final values = VCardResultParser.matchSingleVCardPrefixedField(
-        prefix, rawText, true, false);
+      prefix,
+      rawText,
+      true,
+      false,
+    );
     return values == null || values.isEmpty ? null : values[0];
   }
 

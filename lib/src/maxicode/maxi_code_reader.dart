@@ -41,8 +41,12 @@ class MaxiCodeReader implements Reader {
     // and can't detect it in an image
     final bits = _extractPureBits(image.blackMatrix);
     final decoderResult = _decoder.decode(bits, hints);
-    final result = Result(decoderResult.text, decoderResult.rawBytes,
-        _NO_POINTS, BarcodeFormat.MAXICODE);
+    final result = Result(
+      decoderResult.text,
+      decoderResult.rawBytes,
+      _NO_POINTS,
+      BarcodeFormat.MAXICODE,
+    );
 
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
@@ -75,15 +79,18 @@ class MaxiCodeReader implements Reader {
     final bits = BitMatrix(_MATRIX_WIDTH, _MATRIX_HEIGHT);
     for (int y = 0; y < _MATRIX_HEIGHT; y++) {
       final iy = math.min(
-          top + (y * height + height ~/ 2) ~/ _MATRIX_HEIGHT, height - 1);
+        top + (y * height + height ~/ 2) ~/ _MATRIX_HEIGHT,
+        height - 1,
+      );
       for (int x = 0; x < _MATRIX_WIDTH; x++) {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
         final ix = left +
             math.min<int>(
-                (x * width + width ~/ 2 + (y & 0x01) * width ~/ 2) ~/
-                    _MATRIX_WIDTH,
-                width - 1);
+              (x * width + width ~/ 2 + (y & 0x01) * width ~/ 2) ~/
+                  _MATRIX_WIDTH,
+              width - 1,
+            );
         if (image.get(ix, iy)) {
           bits.set(x, y);
         }

@@ -339,7 +339,9 @@ class Decoder {
     }
 
     return CorrectedBitsResult(
-        correctedBits, 100 * (numCodewords - numDataCodewords) ~/ numCodewords);
+      correctedBits,
+      100 * (numCodewords - numDataCodewords) ~/ numCodewords,
+    );
   }
 
   /// Gets the array of bits from an Aztec Code matrix

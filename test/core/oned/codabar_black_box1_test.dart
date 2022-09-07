@@ -21,8 +21,11 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('CodabarBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/codabar-1',
-        MultiFormatReader(), BarcodeFormat.CODABAR)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/codabar-1',
+      MultiFormatReader(),
+      BarcodeFormat.CODABAR,
+    )
       ..addTest(11, 11, 0.0)
       ..addTest(11, 11, 180.0)
       ..testBlackBox();

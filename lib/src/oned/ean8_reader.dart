@@ -36,7 +36,11 @@ class EAN8Reader extends UPCEANReader {
 
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.L_PATTERNS);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.L_PATTERNS,
+      );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
@@ -44,12 +48,20 @@ class EAN8Reader extends UPCEANReader {
     }
 
     final middleRange = UPCEANReader.findGuardPattern(
-        row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
+      row,
+      rowOffset,
+      true,
+      UPCEANReader.MIDDLE_PATTERN,
+    );
     rowOffset = middleRange[1];
 
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.L_PATTERNS);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.L_PATTERNS,
+      );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;

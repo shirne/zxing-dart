@@ -32,8 +32,13 @@ class BoundingBox {
   late int _minY;
   late int _maxY;
 
-  BoundingBox(this._image, ResultPoint? topLeft, ResultPoint? bottomLeft,
-      ResultPoint? topRight, ResultPoint? bottomRight) {
+  BoundingBox(
+    this._image,
+    ResultPoint? topLeft,
+    ResultPoint? bottomLeft,
+    ResultPoint? topRight,
+    ResultPoint? bottomRight,
+  ) {
     final leftUnspecified = topLeft == null || bottomLeft == null;
     final rightUnspecified = topRight == null || bottomRight == null;
     if (leftUnspecified && rightUnspecified) {
@@ -74,12 +79,20 @@ class BoundingBox {
     if (rightBox == null) {
       return leftBox;
     }
-    return BoundingBox(leftBox._image, leftBox._topLeft, leftBox._bottomLeft,
-        rightBox._topRight, rightBox._bottomRight);
+    return BoundingBox(
+      leftBox._image,
+      leftBox._topLeft,
+      leftBox._bottomLeft,
+      rightBox._topRight,
+      rightBox._bottomRight,
+    );
   }
 
   BoundingBox addMissingRows(
-      int missingStartRows, int missingEndRows, bool isLeft) {
+    int missingStartRows,
+    int missingEndRows,
+    bool isLeft,
+  ) {
     ResultPoint newTopLeft = _topLeft;
     ResultPoint newBottomLeft = _bottomLeft;
     ResultPoint newTopRight = _topRight;
@@ -114,7 +127,12 @@ class BoundingBox {
     }
 
     return BoundingBox(
-        _image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
+      _image,
+      newTopLeft,
+      newBottomLeft,
+      newTopRight,
+      newBottomRight,
+    );
   }
 
   int get minX => _minX;

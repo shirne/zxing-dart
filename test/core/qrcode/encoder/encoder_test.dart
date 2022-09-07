@@ -58,8 +58,10 @@ void main() {
     expect(Mode.NUMERIC, Encoder.chooseMode('0123456789'));
     // Alphanumeric mode.
     expect(Mode.ALPHANUMERIC, Encoder.chooseMode('A'));
-    expect(Mode.ALPHANUMERIC,
-        Encoder.chooseMode(r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'));
+    expect(
+      Mode.ALPHANUMERIC,
+      Encoder.chooseMode(r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'),
+    );
     // 8-bit byte mode.
     expect(Mode.BYTE, Encoder.chooseMode('a'));
     expect(Mode.BYTE, Encoder.chooseMode('#'));
@@ -70,19 +72,25 @@ void main() {
 
     // AIUE in Hiragana in Shift_JIS
     expect(
-        Mode.BYTE,
-        Encoder.chooseMode(
-            shiftJISString(bytes([0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6]))));
+      Mode.BYTE,
+      Encoder.chooseMode(
+        shiftJISString(bytes([0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6])),
+      ),
+    );
 
     // Nihon in Kanji in Shift_JIS.
-    expect(Mode.BYTE,
-        Encoder.chooseMode(shiftJISString(bytes([0x9, 0xf, 0x9, 0x7b]))));
+    expect(
+      Mode.BYTE,
+      Encoder.chooseMode(shiftJISString(bytes([0x9, 0xf, 0x9, 0x7b]))),
+    );
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
     expect(
-        Mode.BYTE,
-        Encoder.chooseMode(
-            shiftJISString(bytes([0xe, 0x4, 0x9, 0x5, 0x9, 0x61]))));
+      Mode.BYTE,
+      Encoder.chooseMode(
+        shiftJISString(bytes([0xe, 0x4, 0x9, 0x5, 0x9, 0x61])),
+      ),
+    );
   });
 
   test('testEncodeDefault', () {
@@ -321,31 +329,35 @@ void main() {
   test('testAppendLengthInfo', () {
     BitArray bits = BitArray();
     Encoder.appendLengthInfo(
-        1, // 1 letter (1/1).
-        Version.getVersionForNumber(1),
-        Mode.NUMERIC,
-        bits);
+      1, // 1 letter (1/1).
+      Version.getVersionForNumber(1),
+      Mode.NUMERIC,
+      bits,
+    );
     expect(' ........ .X', bits.toString()); // 10 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
-        2, // 2 letters (2/1).
-        Version.getVersionForNumber(10),
-        Mode.ALPHANUMERIC,
-        bits);
+      2, // 2 letters (2/1).
+      Version.getVersionForNumber(10),
+      Mode.ALPHANUMERIC,
+      bits,
+    );
     expect(' ........ .X.', bits.toString()); // 11 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
-        255, // 255 letter (255/1).
-        Version.getVersionForNumber(27),
-        Mode.BYTE,
-        bits);
+      255, // 255 letter (255/1).
+      Version.getVersionForNumber(27),
+      Mode.BYTE,
+      bits,
+    );
     expect(' ........ XXXXXXXX', bits.toString()); // 16 bits.
     bits = BitArray();
     Encoder.appendLengthInfo(
-        512, // 512 letters (1024/2).
-        Version.getVersionForNumber(40),
-        Mode.KANJI,
-        bits);
+      512, // 512 letters (1024/2).
+      Version.getVersionForNumber(40),
+      Mode.KANJI,
+      bits,
+    );
     expect(' ..X..... ....', bits.toString()); // 12 bits.
   });
 
@@ -354,13 +366,21 @@ void main() {
     // 1 = 01 = 0001 in 4 bits.
     BitArray bits = BitArray();
     Encoder.appendBytes(
-        '1', Mode.NUMERIC, bits, Encoder.defaultByteModeEncoding);
+      '1',
+      Mode.NUMERIC,
+      bits,
+      Encoder.defaultByteModeEncoding,
+    );
     expect(' ...X', bits.toString());
     // Should use appendAlphanumericBytes.
     // A = 10 = 0xa = 001010 in 6 bits
     bits = BitArray();
     Encoder.appendBytes(
-        'A', Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
+      'A',
+      Mode.ALPHANUMERIC,
+      bits,
+      Encoder.defaultByteModeEncoding,
+    );
     expect(' ..X.X.', bits.toString());
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
 
@@ -378,16 +398,28 @@ void main() {
     // 0x61, 0x62, 0x63
     bits = BitArray();
     Encoder.appendBytes(
-        'abc', Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
+      'abc',
+      Mode.BYTE,
+      bits,
+      Encoder.defaultByteModeEncoding,
+    );
     expect(' .XX....X .XX...X. .XX...XX', bits.toString());
     // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
     Encoder.appendBytes(
-        '\x00', Mode.BYTE, bits, Encoder.defaultByteModeEncoding);
+      '\x00',
+      Mode.BYTE,
+      bits,
+      Encoder.defaultByteModeEncoding,
+    );
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = BitArray();
-    Encoder.appendBytes(shiftJISString(bytes([0x93, 0x5f])), Mode.KANJI, bits,
-        Encoder.defaultByteModeEncoding);
+    Encoder.appendBytes(
+      shiftJISString(bytes([0x93, 0x5f])),
+      Mode.KANJI,
+      bits,
+      Encoder.defaultByteModeEncoding,
+    );
     expect(' .XX.XX.. XXXXX', bits.toString());
   });
 
@@ -424,41 +456,89 @@ void main() {
     final numEcBytes = [0];
     // Version 1-H.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        26, 9, 1, 0, numDataBytes, numEcBytes);
+      26,
+      9,
+      1,
+      0,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(9, numDataBytes[0]);
     expect(17, numEcBytes[0]);
 
     // Version 3-H.  2 blocks.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        70, 26, 2, 0, numDataBytes, numEcBytes);
+      70,
+      26,
+      2,
+      0,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(13, numDataBytes[0]);
     expect(22, numEcBytes[0]);
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        70, 26, 2, 1, numDataBytes, numEcBytes);
+      70,
+      26,
+      2,
+      1,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(13, numDataBytes[0]);
     expect(22, numEcBytes[0]);
 
     // Version 7-H. (4 + 1) blocks.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        196, 66, 5, 0, numDataBytes, numEcBytes);
+      196,
+      66,
+      5,
+      0,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(13, numDataBytes[0]);
     expect(26, numEcBytes[0]);
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        196, 66, 5, 4, numDataBytes, numEcBytes);
+      196,
+      66,
+      5,
+      4,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(14, numDataBytes[0]);
     expect(26, numEcBytes[0]);
 
     // Version 40-H. (20 + 61) blocks.
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 0, numDataBytes, numEcBytes);
+      3706,
+      1276,
+      81,
+      0,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(15, numDataBytes[0]);
     expect(30, numEcBytes[0]);
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 20, numDataBytes, numEcBytes);
+      3706,
+      1276,
+      81,
+      20,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(16, numDataBytes[0]);
     expect(30, numEcBytes[0]);
     Encoder.getNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 80, numDataBytes, numEcBytes);
+      3706,
+      1276,
+      81,
+      80,
+      numDataBytes,
+      numEcBytes,
+    );
     expect(16, numDataBytes[0]);
     expect(30, numEcBytes[0]);
   });
@@ -608,7 +688,8 @@ void main() {
       expect(expected[x], ecBytes[x] & 0xFF);
     }
     dataBytes = bytes(
-        [67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182, 198, 214]);
+      [67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182, 198, 214],
+    );
     ecBytes = Encoder.generateECBytes(dataBytes, 18);
     expected = [
       175, 80, 155, 64, 178, 45, 214, 233, 65, //
@@ -754,17 +835,29 @@ void main() {
 
   test('testMinimalEncoder22', () {
     verifyMinimalEncoding(
-        'A12345678', 'BYTE(A),NUMERIC(12345678)', null, false);
+      'A12345678',
+      'BYTE(A),NUMERIC(12345678)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder23', () {
     verifyMinimalEncoding(
-        'A123456789', 'BYTE(A),NUMERIC(123456789)', null, false);
+      'A123456789',
+      'BYTE(A),NUMERIC(123456789)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder24', () {
     verifyMinimalEncoding(
-        'A1234567890', 'ALPHANUMERIC(A1),NUMERIC(234567890)', null, false);
+      'A1234567890',
+      'ALPHANUMERIC(A1),NUMERIC(234567890)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder25', () {
@@ -797,20 +890,29 @@ void main() {
 
   test('testMinimalEncoder32', () {
     verifyMinimalEncoding(
-        'http://foo.com', 'BYTE(http://foo.com)', null, false);
+      'http://foo.com',
+      'BYTE(http://foo.com)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder33', () {
     verifyMinimalEncoding(
-        'HTTP://FOO.COM', 'ALPHANUMERIC(HTTP://FOO.COM' ')', null, false);
+      'HTTP://FOO.COM',
+      'ALPHANUMERIC(HTTP://FOO.COM' ')',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder34', () {
     verifyMinimalEncoding(
-        '1001114670010%01201220%107211220%140045003267781',
-        'NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
-        null,
-        false);
+      '1001114670010%01201220%107211220%140045003267781',
+      'NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder35', () {
@@ -826,51 +928,73 @@ void main() {
   });
 
   test('testMinimalEncoder38', () {
-    verifyMinimalEncoding('\u0150\u0150\u015C\u015C',
-        'ECI(ISO-8859-2),BYTE(..),ECI(ISO-8859-3),BYTE(..)', null, false);
+    verifyMinimalEncoding(
+      '\u0150\u0150\u015C\u015C',
+      'ECI(ISO-8859-2),BYTE(..),ECI(ISO-8859-3),BYTE(..)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder39', () {
     verifyMinimalEncoding(
-        'abcdef\u0150ghij', 'ECI(ISO-8859-2),BYTE(abcdef.ghij)', null, false);
+      'abcdef\u0150ghij',
+      'ECI(ISO-8859-2),BYTE(abcdef.ghij)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder40', () {
     verifyMinimalEncoding(
-        '2938928329832983\u01502938928329832983\u015C2938928329832983',
-        'NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8'
-            '859-3),BYTE(.),NUMERIC(2938928329832983)',
-        null,
-        false);
+      '2938928329832983\u01502938928329832983\u015C2938928329832983',
+      'NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8'
+          '859-3),BYTE(.),NUMERIC(2938928329832983)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder41', () {
     verifyMinimalEncoding(
-        '1001114670010%01201220%107211220%140045003267781',
-        'FNC1_FIRST_POSITION(),NUMERIC(100111'
-            '4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
-        null,
-        true);
+      '1001114670010%01201220%107211220%140045003267781',
+      'FNC1_FIRST_POSITION(),NUMERIC(100111'
+          '4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)',
+      null,
+      true,
+    );
   });
 
   test('testMinimalEncoder42', () {
     // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
-    verifyMinimalEncoding('Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66',
-        'ECI(shift-jis),BYTE(Katakana:......)', null, false);
+    verifyMinimalEncoding(
+      'Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66',
+      'ECI(shift-jis),BYTE(Katakana:......)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder43', () {
     // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
-    verifyMinimalEncoding('Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2',
-        'BYTE(Katakana:),KANJI(......)', null, false);
+    verifyMinimalEncoding(
+      'Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2',
+      'BYTE(Katakana:),KANJI(......)',
+      null,
+      false,
+    );
   });
 
   test('testMinimalEncoder44', () {
     // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
     // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
     // that Shift_JIS encoding is more compact as in this example
-    verifyMinimalEncoding('Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2',
-        'ECI(shift-jis),BYTE(Katakana:.a.a.a' '.a.a.)', null, false);
+    verifyMinimalEncoding(
+      'Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2',
+      'ECI(shift-jis),BYTE(Katakana:.a.a.a' '.a.a.)',
+      null,
+      false,
+    );
   });
 }
 
@@ -885,7 +1009,12 @@ void verifyMinimalEncoding(
   bool isGS1,
 ) {
   final result = MinimalEncoder.encode(
-      input, null, priorityCharset, isGS1, ErrorCorrectionLevel.L);
+    input,
+    null,
+    priorityCharset,
+    isGS1,
+    ErrorCorrectionLevel.L,
+  );
   expect(result.toString(), expectedResult);
 }
 

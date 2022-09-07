@@ -23,7 +23,10 @@ import '../common/abstract_black_box.dart';
 void main() {
   test('AztecBlackBox1TestCase', () {
     AbstractBlackBoxTestCase(
-        'test/resources/blackbox/aztec-1', AztecReader(), BarcodeFormat.AZTEC)
+      'test/resources/blackbox/aztec-1',
+      AztecReader(),
+      BarcodeFormat.AZTEC,
+    )
       ..addTest(14, 14, 0.0)
       ..addTest(14, 14, 90.0)
       ..addTest(14, 14, 180.0)

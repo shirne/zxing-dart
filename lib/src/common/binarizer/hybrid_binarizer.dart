@@ -76,8 +76,15 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
           _calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
       final newMatrix = BitMatrix(width, height);
-      _calculateThresholdForBlock(luminances, subWidth, subHeight, width,
-          height, blackPoints, newMatrix);
+      _calculateThresholdForBlock(
+        luminances,
+        subWidth,
+        subHeight,
+        width,
+        height,
+        blackPoints,
+        newMatrix,
+      );
       _matrix = newMatrix;
     } else {
       // If the image is too small, fall back to the global histogram approach.
@@ -95,13 +102,14 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// of the blocks around it. Also handles the corner cases (fractional blocks are computed based
   /// on the last pixels in the row/column which are also used in the previous block).
   static void _calculateThresholdForBlock(
-      Int8List luminances,
-      int subWidth,
-      int subHeight,
-      int width,
-      int height,
-      List<List<int>> blackPoints,
-      BitMatrix matrix) {
+    Int8List luminances,
+    int subWidth,
+    int subHeight,
+    int width,
+    int height,
+    List<List<int>> blackPoints,
+    BitMatrix matrix,
+  ) {
     final maxYOffset = height - BLOCK_SIZE;
     final maxXOffset = width - BLOCK_SIZE;
     for (int y = 0; y < subHeight; y++) {
@@ -136,8 +144,14 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   /// Applies a single threshold to a block of pixels.
-  static void _thresholdBlock(Int8List luminances, int xoffset, int yoffset,
-      int threshold, int stride, BitMatrix matrix) {
+  static void _thresholdBlock(
+    Int8List luminances,
+    int xoffset,
+    int yoffset,
+    int threshold,
+    int stride,
+    BitMatrix matrix,
+  ) {
     for (int y = 0, offset = yoffset * stride + xoffset;
         y < BLOCK_SIZE;
         y++, offset += stride) {
@@ -154,7 +168,12 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// See the following thread for a discussion of this algorithm:
   ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
   static List<List<int>> _calculateBlackPoints(
-      Int8List luminances, int subWidth, int subHeight, int width, int height) {
+    Int8List luminances,
+    int subWidth,
+    int subHeight,
+    int width,
+    int height,
+  ) {
     final maxYOffset = height - BLOCK_SIZE;
     final maxXOffset = width - BLOCK_SIZE;
     final blackPoints =

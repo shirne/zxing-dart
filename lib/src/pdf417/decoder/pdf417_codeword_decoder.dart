@@ -23,10 +23,11 @@ import '../pdf417_common.dart';
 class PDF417CodewordDecoder {
   static bool _isInit = false;
   static final List<List<double>> _ratiosTable = List.generate(
-      PDF417Common.SYMBOL_TABLE.length,
-      (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0));
+    PDF417Common.SYMBOL_TABLE.length,
+    (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0),
+  );
 
-  static init() {
+  static void init() {
     if (_isInit) return;
     _isInit = true;
     // Pre-computes the symbol ratio table.

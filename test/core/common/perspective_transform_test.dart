@@ -20,19 +20,36 @@ import 'package:zxing_lib/common.dart';
 void main() {
   final int accp = 10000;
 
-  void assertPointEquals(double expectedX, double expectedY, double sourceX,
-      double sourceY, PerspectiveTransform pt) {
+  void assertPointEquals(
+    double expectedX,
+    double expectedY,
+    double sourceX,
+    double sourceY,
+    PerspectiveTransform pt,
+  ) {
     final List<double> points = [sourceX, sourceY];
     pt.transformPoints(points);
-    assert((expectedX * accp).round() == (points[0] * accp).round(),
-        '$expectedX ${points[0]},');
-    assert((expectedY * accp).round() == (points[1] * accp).round(),
-        '$expectedY ${points[1]},');
+    assert(
+      (expectedX * accp).round() == (points[0] * accp).round(),
+      '$expectedX ${points[0]},',
+    );
+    assert(
+      (expectedY * accp).round() == (points[1] * accp).round(),
+      '$expectedY ${points[1]},',
+    );
   }
 
   test('testSquareToQuadrilateral', () {
     final pt = PerspectiveTransform.squareToQuadrilateral(
-        2.0, 3.0, 10.0, 4.0, 16.0, 15.0, 4.0, 9.0);
+      2.0,
+      3.0,
+      10.0,
+      4.0,
+      16.0,
+      15.0,
+      4.0,
+      9.0,
+    );
     assertPointEquals(2.0, 3.0, 0.0, 0.0, pt);
     assertPointEquals(10.0, 4.0, 1.0, 0.0, pt);
     assertPointEquals(4.0, 9.0, 0.0, 1.0, pt);
@@ -43,22 +60,23 @@ void main() {
 
   test('testQuadrilateralToQuadrilateral', () {
     final pt = PerspectiveTransform.quadrilateralToQuadrilateral(
-        2.0,
-        3.0,
-        10.0,
-        4.0,
-        16.0,
-        15.0,
-        4.0,
-        9.0,
-        103.0,
-        110.0,
-        300.0,
-        120.0,
-        290.0,
-        270.0,
-        150.0,
-        280.0);
+      2.0,
+      3.0,
+      10.0,
+      4.0,
+      16.0,
+      15.0,
+      4.0,
+      9.0,
+      103.0,
+      110.0,
+      300.0,
+      120.0,
+      290.0,
+      270.0,
+      150.0,
+      280.0,
+    );
     assertPointEquals(103.0, 110.0, 2.0, 3.0, pt);
     assertPointEquals(300.0, 120.0, 10.0, 4.0, pt);
     assertPointEquals(290.0, 270.0, 16.0, 15.0, pt);

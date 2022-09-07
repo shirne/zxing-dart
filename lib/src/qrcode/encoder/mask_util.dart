@@ -112,7 +112,11 @@ class MaskUtil {
   }
 
   static bool _isWhiteVertical(
-      List<Int8List> array, int col, int from, int to) {
+    List<Int8List> array,
+    int col,
+    int from,
+    int to,
+  ) {
     if (from < 0 || array.length < to) {
       return false;
     }
@@ -187,7 +191,9 @@ class MaskUtil {
   /// Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
   /// vertical and horizontal orders respectively.
   static int _applyMaskPenaltyRule1Internal(
-      ByteMatrix matrix, bool isHorizontal) {
+    ByteMatrix matrix,
+    bool isHorizontal,
+  ) {
     int penalty = 0;
     final iLimit = isHorizontal ? matrix.height : matrix.width;
     final jLimit = isHorizontal ? matrix.width : matrix.height;

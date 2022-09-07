@@ -84,7 +84,10 @@ class ReedSolomonDecoder {
   }
 
   List<GenericGFPoly> _runEuclideanAlgorithm(
-      GenericGFPoly a, GenericGFPoly b, int R) {
+    GenericGFPoly a,
+    GenericGFPoly b,
+    int R,
+  ) {
     // Assume a's degree is >= b's
     if (a.degree < b.degree) {
       final temp = a;
@@ -124,7 +127,8 @@ class ReedSolomonDecoder {
 
       if (r.degree >= rLast.degree) {
         throw ReedSolomonException(
-            'Division algorithm failed to reduce polynomial?');
+          'Division algorithm failed to reduce polynomial?',
+        );
       }
     }
 
@@ -156,13 +160,16 @@ class ReedSolomonDecoder {
     }
     if (e != numErrors) {
       throw ReedSolomonException(
-          'Error locator degree does not match number of roots ($e != $numErrors)');
+        'Error locator degree does not match number of roots ($e != $numErrors)',
+      );
     }
     return result;
   }
 
   Int32List _findErrorMagnitudes(
-      GenericGFPoly errorEvaluator, List<int> errorLocations) {
+    GenericGFPoly errorEvaluator,
+    List<int> errorLocations,
+  ) {
     // This is directly applying Forney's Formula
     final s = errorLocations.length;
     final result = Int32List(s);
@@ -181,7 +188,9 @@ class ReedSolomonDecoder {
         }
       }
       result[i] = _field.multiply(
-          errorEvaluator.evaluateAt(xiInverse), _field.inverse(denominator));
+        errorEvaluator.evaluateAt(xiInverse),
+        _field.inverse(denominator),
+      );
       if (_field.generatorBase != 0) {
         result[i] = _field.multiply(result[i], xiInverse);
       }

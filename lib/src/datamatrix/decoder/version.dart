@@ -63,8 +63,14 @@ class Version {
   final ECBlocks _ecBlocks;
   late int _totalCodewords;
 
-  Version._(this._versionNumber, this._symbolSizeRows, this._symbolSizeColumns,
-      this._dataRegionSizeRows, this._dataRegionSizeColumns, this._ecBlocks) {
+  Version._(
+    this._versionNumber,
+    this._symbolSizeRows,
+    this._symbolSizeColumns,
+    this._dataRegionSizeRows,
+    this._dataRegionSizeColumns,
+    this._ecBlocks,
+  ) {
     // Calculate the total number of codewords
     int total = 0;
     final ecCodewords = _ecBlocks.ecCodewords;

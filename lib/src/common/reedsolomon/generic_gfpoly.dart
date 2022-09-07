@@ -41,7 +41,8 @@ class GenericGFPoly {
       throw ArgumentError();
     }
     _coefficients = Int32List.fromList(
-        coefficients.skipWhile((value) => value == 0).toList());
+      coefficients.skipWhile((value) => value == 0).toList(),
+    );
     if (_coefficients.isEmpty) {
       _coefficients = Int32List(1);
     }
@@ -108,7 +109,9 @@ class GenericGFPoly {
 
     for (int i = lengthDiff; i < largerCoefficients.length; i++) {
       sumDiff[i] = GenericGF.addOrSubtract(
-          smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+        smallerCoefficients[i - lengthDiff],
+        largerCoefficients[i],
+      );
     }
 
     return GenericGFPoly(_field, sumDiff);
@@ -130,7 +133,9 @@ class GenericGFPoly {
       final aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
         product[i + j] = GenericGF.addOrSubtract(
-            product[i + j], _field.multiply(aCoeff, bCoefficients[j]));
+          product[i + j],
+          _field.multiply(aCoeff, bCoefficients[j]),
+        );
       }
     }
     return GenericGFPoly(_field, product);
@@ -183,8 +188,10 @@ class GenericGFPoly {
 
     while (remainder.degree >= other.degree && !remainder.isZero) {
       final degreeDifference = remainder.degree - other.degree;
-      final scale = _field.multiply(remainder.getCoefficient(remainder.degree),
-          inverseDenominatorLeadingTerm);
+      final scale = _field.multiply(
+        remainder.getCoefficient(remainder.degree),
+        inverseDenominatorLeadingTerm,
+      );
       final term = other.multiplyByMonomial(degreeDifference, scale);
       final iterationQuotient = _field.buildMonomial(degreeDifference, scale);
       quotient = quotient.addOrSubtract(iterationQuotient);

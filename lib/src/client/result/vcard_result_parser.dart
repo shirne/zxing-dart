@@ -89,9 +89,9 @@ class VCardResultParser extends ResultParser {
       _toPrimaryValues(addresses),
       _toTypes(addresses),
       _toPrimaryValue(org),
-      _toPrimaryValue((birthday != null && !_isLikeVCardDate(birthday[0]))
-          ? null
-          : birthday),
+      _toPrimaryValue(
+        (birthday != null && !_isLikeVCardDate(birthday[0])) ? null : birthday,
+      ),
       _toPrimaryValue(title),
       _toPrimaryValues(urls),
       geo,
@@ -99,7 +99,11 @@ class VCardResultParser extends ResultParser {
   }
 
   static List<List<String>>? matchVCardPrefixedField(
-      String prefix, String rawText, bool trim, bool parseFieldDivider) {
+    String prefix,
+    String rawText,
+    bool trim,
+    bool parseFieldDivider,
+  ) {
     List<List<String>>? matches;
     int i = 0;
     final max = rawText.length;
@@ -247,7 +251,10 @@ class VCardResultParser extends ResultParser {
   }
 
   static void _maybeAppendFragment(
-      BytesBuilder fragmentBuffer, String? charset, StringBuffer result) {
+    BytesBuilder fragmentBuffer,
+    String? charset,
+    StringBuffer result,
+  ) {
     if (fragmentBuffer.length > 0) {
       final fragmentBytes = fragmentBuffer.takeBytes();
       String fragment;
@@ -269,7 +276,11 @@ class VCardResultParser extends ResultParser {
   }
 
   static List<String>? matchSingleVCardPrefixedField(
-      String prefix, String rawText, bool trim, bool parseFieldDivider) {
+    String prefix,
+    String rawText,
+    bool trim,
+    bool parseFieldDivider,
+  ) {
     final values =
         matchVCardPrefixedField(prefix, rawText, trim, parseFieldDivider);
     return values == null || values.isEmpty ? null : values[0];
@@ -356,7 +367,10 @@ class VCardResultParser extends ResultParser {
   }
 
   static void _maybeAppendComponent(
-      List<String> components, int i, StringBuffer newName) {
+    List<String> components,
+    int i,
+    StringBuffer newName,
+  ) {
     if (components.length > i && components[i].isNotEmpty) {
       if (newName.length > 0) {
         newName.write(' ');

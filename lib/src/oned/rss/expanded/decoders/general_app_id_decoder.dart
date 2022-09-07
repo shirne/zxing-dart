@@ -114,7 +114,10 @@ class GeneralAppIdDecoder {
   }
 
   static int extractNumericFromBitArray(
-      BitArray information, int pos, int bits) {
+    BitArray information,
+    int pos,
+    int bits,
+  ) {
     int value = 0;
     for (int i = 0; i < bits; ++i) {
       if (information.get(pos + i)) {
@@ -137,7 +140,10 @@ class GeneralAppIdDecoder {
     final lastDecoded = _parseBlocks();
     if (lastDecoded != null && lastDecoded.isRemaining) {
       return DecodedInformation(
-          _current.position, _buffer.toString(), lastDecoded.remainingValue);
+        _current.position,
+        _buffer.toString(),
+        lastDecoded.remainingValue,
+      );
     }
     return DecodedInformation(_current.position, _buffer.toString());
   }
@@ -181,7 +187,10 @@ class GeneralAppIdDecoder {
               DecodedInformation(_current.position, _buffer.toString());
         } else {
           information = DecodedInformation(
-              _current.position, _buffer.toString(), numeric.secondDigit);
+            _current.position,
+            _buffer.toString(),
+            numeric.secondDigit,
+          );
         }
         return BlockParsedResult(information, true);
       }

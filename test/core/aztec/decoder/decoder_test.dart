@@ -54,101 +54,111 @@ void main() {
 
   void testHighLevelDecodeString(String expectedString, String b) {
     final BitArray bits = toBitArray(stripSpace(b));
-    expect(expectedString, Decoder.highLevelDecode(toBooleanArray(bits)),
-        reason: 'highLevelDecode() failed for input bits: $b');
+    expect(
+      expectedString,
+      Decoder.highLevelDecode(toBooleanArray(bits)),
+      reason: 'highLevelDecode() failed for input bits: $b',
+    );
   }
 
   test('testHighLevelDecode', () {
     // no ECI codes
     testHighLevelDecodeString(
-        'A. b.',
-        // 'A'  P/S   '. ' L/L    b    D/L    '.'
-        '...X. ..... ...XX XXX.. ...XX XXXX. XX.X');
+      'A. b.',
+      // 'A'  P/S   '. ' L/L    b    D/L    '.'
+      '...X. ..... ...XX XXX.. ...XX XXXX. XX.X',
+    );
 
     // initial ECI code 26 (switch to UTF-8)
     testHighLevelDecodeString(
-        'Ça',
-        // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-        '..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.');
+      'Ça',
+      // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+      '..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.',
+    );
 
     // initial character without ECI (must be interpreted as ISO_8859_1)
     // followed by ECI code 26 (= UTF-8) and UTF-8 text
     testHighLevelDecodeString(
-        '±Ça',
-        // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-        'XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.');
+      '±Ça',
+      // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+      'XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.',
+    );
 
     // GS1 data
     testHighLevelDecodeString(
-        '101233742',
-        // P/S FLG(n) 0  D/L   1    0    1    2    3    P/S  FLG(n) 0  3    7    4    2
-        '..... ..... ... XXXX. ..XX ..X. ..XX .X.. .X.X .... ..... ... .X.X X..X .XX. .X..');
+      '101233742',
+      // P/S FLG(n) 0  D/L   1    0    1    2    3    P/S  FLG(n) 0  3    7    4    2
+      '..... ..... ... XXXX. ..XX ..X. ..XX .X.. .X.X .... ..... ... .X.X X..X .XX. .X..',
+    );
   });
 
   test('testAztecResult', () {
     final BitMatrix matrix = BitMatrix.parse(
-        'X X X X X     X X X       X X X     X X X     \n'
-            'X X X     X X X     X X X X     X X X     X X \n'
-            '  X   X X       X   X   X X X X     X     X X \n'
-            '  X   X X     X X     X     X   X       X   X \n'
-            '  X X   X X         X               X X     X \n'
-            '  X X   X X X X X X X X X X X X X X X     X   \n'
-            '  X X X X X                       X   X X X   \n'
-            '  X   X   X   X X X X X X X X X   X X X   X X \n'
-            '  X   X X X   X               X   X X       X \n'
-            '  X X   X X   X   X X X X X   X   X X X X   X \n'
-            '  X X   X X   X   X       X   X   X   X X X   \n'
-            '  X   X   X   X   X   X   X   X   X   X   X   \n'
-            '  X X X   X   X   X       X   X   X X   X X   \n'
-            '  X X X X X   X   X X X X X   X   X X X   X X \n'
-            'X X   X X X   X               X   X   X X   X \n'
-            '  X       X   X X X X X X X X X   X   X     X \n'
-            '  X X   X X                       X X   X X   \n'
-            '  X X X   X X X X X X X X X X X X X X   X X   \n'
-            'X     X     X     X X   X X               X X \n'
-            'X   X X X X X   X X X X X     X   X   X     X \n'
-            'X X X   X X X X           X X X       X     X \n'
-            'X X     X X X     X X X X     X X X     X X   \n'
-            '    X X X     X X X       X X X     X X X X   \n',
-        'X ',
-        '  ');
+      'X X X X X     X X X       X X X     X X X     \n'
+          'X X X     X X X     X X X X     X X X     X X \n'
+          '  X   X X       X   X   X X X X     X     X X \n'
+          '  X   X X     X X     X     X   X       X   X \n'
+          '  X X   X X         X               X X     X \n'
+          '  X X   X X X X X X X X X X X X X X X     X   \n'
+          '  X X X X X                       X   X X X   \n'
+          '  X   X   X   X X X X X X X X X   X X X   X X \n'
+          '  X   X X X   X               X   X X       X \n'
+          '  X X   X X   X   X X X X X   X   X X X X   X \n'
+          '  X X   X X   X   X       X   X   X   X X X   \n'
+          '  X   X   X   X   X   X   X   X   X   X   X   \n'
+          '  X X X   X   X   X       X   X   X X   X X   \n'
+          '  X X X X X   X   X X X X X   X   X X X   X X \n'
+          'X X   X X X   X               X   X   X X   X \n'
+          '  X       X   X X X X X X X X X   X   X     X \n'
+          '  X X   X X                       X X   X X   \n'
+          '  X X X   X X X X X X X X X X X X X X   X X   \n'
+          'X     X     X     X X   X X               X X \n'
+          'X   X X X X X   X X X X X     X   X   X     X \n'
+          'X X X   X X X X           X X X       X     X \n'
+          'X X     X X X     X X X X     X X X     X X   \n'
+          '    X X X     X X X       X X X     X X X X   \n',
+      'X ',
+      '  ',
+    );
     final AztecDetectorResult r =
         AztecDetectorResult(matrix, noPoints, false, 30, 2);
     final DecoderResult result = Decoder().decode(r);
     expect(result.text, '88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
     assertArrayEquals(
-        Uint8List.fromList([
-          -11, 85, 85, 117, 107, 90, -42, -75, -83, 107, //
-          90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
-          90, -42, -80
-        ]),
-        result.rawBytes);
+      Uint8List.fromList([
+        -11, 85, 85, 117, 107, 90, -42, -75, -83, 107, //
+        90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
+        90, -42, -80
+      ]),
+      result.rawBytes,
+    );
     expect(result.numBits, 180);
   });
 
   test('testAztecResultECI', () {
     final BitMatrix matrix = BitMatrix.parse(
-        '      X     X X X   X           X     \n'
-            '    X X   X X   X X X X X X X   X     \n'
-            '    X X                         X   X \n'
-            '  X X X X X X X X X X X X X X X X X   \n'
-            '      X                       X       \n'
-            '      X   X X X X X X X X X   X   X   \n'
-            '  X X X   X               X   X X X   \n'
-            '  X   X   X   X X X X X   X   X X X   \n'
-            '      X   X   X       X   X   X X X   \n'
-            '  X   X   X   X   X   X   X   X   X   \n'
-            'X   X X   X   X       X   X   X     X \n'
-            '  X X X   X   X X X X X   X   X X     \n'
-            '      X   X               X   X X   X \n'
-            '      X   X X X X X X X X X   X   X X \n'
-            '  X   X                       X       \n'
-            'X X   X X X X X X X X X X X X X X X   \n'
-            'X X     X   X         X X X       X X \n'
-            '  X   X   X   X X X X X     X X   X   \n'
-            'X     X       X X   X X X       X     \n',
-        'X ',
-        '  ');
+      '      X     X X X   X           X     \n'
+          '    X X   X X   X X X X X X X   X     \n'
+          '    X X                         X   X \n'
+          '  X X X X X X X X X X X X X X X X X   \n'
+          '      X                       X       \n'
+          '      X   X X X X X X X X X   X   X   \n'
+          '  X X X   X               X   X X X   \n'
+          '  X   X   X   X X X X X   X   X X X   \n'
+          '      X   X   X       X   X   X X X   \n'
+          '  X   X   X   X   X   X   X   X   X   \n'
+          'X   X X   X   X       X   X   X     X \n'
+          '  X X X   X   X X X X X   X   X X     \n'
+          '      X   X               X   X X   X \n'
+          '      X   X X X X X X X X X   X   X X \n'
+          '  X   X                       X       \n'
+          'X X   X X X X X X X X X X X X X X X   \n'
+          'X X     X   X         X X X       X X \n'
+          '  X   X   X   X X X X X     X X   X   \n'
+          'X     X       X X   X X X       X     \n',
+      'X ',
+      '  ',
+    );
     final AztecDetectorResult r =
         AztecDetectorResult(matrix, noPoints, false, 15, 1);
     final DecoderResult result = Decoder().decode(r);
@@ -157,36 +167,37 @@ void main() {
 
   test('testDecodeTooManyErrors', () {
     final BitMatrix matrix = BitMatrix.parse(
-        ''
-            'X X . X . . . X X . . . X . . X X X . X . X X X X X . \n'
-            'X X . . X X . . . . . X X . . . X X . . . X . X . . X \n'
-            'X . . . X X . . X X X . X X . X X X X . X X . . X . . \n'
-            '. . . . X . X X . . X X . X X . X . X X X X . X . . X \n'
-            'X X X . . X X X X X . . . . . X X . . . X . X . X . X \n'
-            'X X . . . . . . . . X . . . X . X X X . X . . X . . . \n'
-            'X X . . X . . . . . X X . . . . . X . . . . X . . X X \n'
-            '. . . X . X . X . . . . . X X X X X X . . . . . . X X \n'
-            'X . . . X . X X X X X X . . X X X . X . X X X X X X . \n'
-            'X . . X X X . X X X X X X X X X X X X X . . . X . X X \n'
-            '. . . . X X . . . X . . . . . . . X X . . . X X . X . \n'
-            '. . . X X X . . X X . X X X X X . X . . X . . . . . . \n'
-            'X . . . . X . X . X . X . . . X . X . X X . X X . X X \n'
-            'X . X . . X . X . X . X . X . X . X . . . . . X . X X \n'
-            'X . X X X . . X . X . X . . . X . X . X X X . . . X X \n'
-            'X X X X X X X X . X . X X X X X . X . X . X . X X X . \n'
-            '. . . . . . . X . X . . . . . . . X X X X . . . X X X \n'
-            'X X . . X . . X . X X X X X X X X X X X X X . . X . X \n'
-            'X X X . X X X X . . X X X X . . X . . . . X . . X X X \n'
-            '. . . . X . X X X . . . . X X X X . . X X X X . . . . \n'
-            '. . X . . X . X . . . X . X X . X X . X . . . X . X . \n'
-            'X X . . X . . X X X X X X X . . X . X X X X X X X . . \n'
-            'X . X X . . X X . . . . . X . . . . . . X X . X X X . \n'
-            'X . . X X . . X X . X . X . . . . X . X . . X . . X . \n'
-            'X . X . X . . X . X X X X X X X X . X X X X . . X X . \n'
-            'X X X X . . . X . . X X X . X X . . X . . . . X X X . \n'
-            'X X . X . X . . . X . X . . . . X X . X . . X X . . . \n',
-        'X ',
-        '. ');
+      ''
+          'X X . X . . . X X . . . X . . X X X . X . X X X X X . \n'
+          'X X . . X X . . . . . X X . . . X X . . . X . X . . X \n'
+          'X . . . X X . . X X X . X X . X X X X . X X . . X . . \n'
+          '. . . . X . X X . . X X . X X . X . X X X X . X . . X \n'
+          'X X X . . X X X X X . . . . . X X . . . X . X . X . X \n'
+          'X X . . . . . . . . X . . . X . X X X . X . . X . . . \n'
+          'X X . . X . . . . . X X . . . . . X . . . . X . . X X \n'
+          '. . . X . X . X . . . . . X X X X X X . . . . . . X X \n'
+          'X . . . X . X X X X X X . . X X X . X . X X X X X X . \n'
+          'X . . X X X . X X X X X X X X X X X X X . . . X . X X \n'
+          '. . . . X X . . . X . . . . . . . X X . . . X X . X . \n'
+          '. . . X X X . . X X . X X X X X . X . . X . . . . . . \n'
+          'X . . . . X . X . X . X . . . X . X . X X . X X . X X \n'
+          'X . X . . X . X . X . X . X . X . X . . . . . X . X X \n'
+          'X . X X X . . X . X . X . . . X . X . X X X . . . X X \n'
+          'X X X X X X X X . X . X X X X X . X . X . X . X X X . \n'
+          '. . . . . . . X . X . . . . . . . X X X X . . . X X X \n'
+          'X X . . X . . X . X X X X X X X X X X X X X . . X . X \n'
+          'X X X . X X X X . . X X X X . . X . . . . X . . X X X \n'
+          '. . . . X . X X X . . . . X X X X . . X X X X . . . . \n'
+          '. . X . . X . X . . . X . X X . X X . X . . . X . X . \n'
+          'X X . . X . . X X X X X X X . . X . X X X X X X X . . \n'
+          'X . X X . . X X . . . . . X . . . . . . X X . X X X . \n'
+          'X . . X X . . X X . X . X . . . . X . X . . X . . X . \n'
+          'X . X . X . . X . X X X X X X X X . X X X X . . X X . \n'
+          'X X X X . . . X . . X X X . X X . . X . . . . X X X . \n'
+          'X X . X . X . . . X . X . . . . X X . X . . X X . . . \n',
+      'X ',
+      '. ',
+    );
     final AztecDetectorResult r = AztecDetectorResult(
       matrix,
       noPoints,
@@ -204,36 +215,37 @@ void main() {
 
   test('testDecodeTooManyErrors2', () {
     final BitMatrix matrix = BitMatrix.parse(
-        ''
-            '. X X . . X . X X . . . X . . X X X . . . X X . X X . \n'
-            'X X . X X . . X . . . X X . . . X X . X X X . X . X X \n'
-            '. . . . X . . . X X X . X X . X X X X . X X . . X . . \n'
-            'X . X X . . X . . . X X . X X . X . X X . . . . . X . \n'
-            'X X . X . . X . X X . . . . . X X . . . . . X . . . X \n'
-            'X . . X . . . . . . X . . . X . X X X X X X X . . . X \n'
-            'X . . X X . . X . . X X . . . . . X . . . . . X X X . \n'
-            '. . X X X X . X . . . . . X X X X X X . . . . . . X X \n'
-            'X . . . X . X X X X X X . . X X X . X . X X X X X X . \n'
-            'X . . X X X . X X X X X X X X X X X X X . . . X . X X \n'
-            '. . . . X X . . . X . . . . . . . X X . . . X X . X . \n'
-            '. . . X X X . . X X . X X X X X . X . . X . . . . . . \n'
-            'X . . . . X . X . X . X . . . X . X . X X . X X . X X \n'
-            'X . X . . X . X . X . X . X . X . X . . . . . X . X X \n'
-            'X . X X X . . X . X . X . . . X . X . X X X . . . X X \n'
-            'X X X X X X X X . X . X X X X X . X . X . X . X X X . \n'
-            '. . . . . . . X . X . . . . . . . X X X X . . . X X X \n'
-            'X X . . X . . X . X X X X X X X X X X X X X . . X . X \n'
-            'X X X . X X X X . . X X X X . . X . . . . X . . X X X \n'
-            '. . X X X X X . X . . . . X X X X . . X X X . X . X . \n'
-            '. . X X . X . X . . . X . X X . X X . . . . X X . . . \n'
-            'X . . . X . X . X X X X X X . . X . X X X X X . X . . \n'
-            '. X . . . X X X . . . . . X . . . . . X X X X X . X . \n'
-            'X . . X . X X X X . X . X . . . . X . X X . X . . X . \n'
-            'X . . . X X . X . X X X X X X X X . X X X X . . X X . \n'
-            '. X X X X . . X . . X X X . X X . . X . . . . X X X . \n'
-            'X X . . . X X . . X . X . . . . X X . X . . X . X . X \n',
-        'X ',
-        '. ');
+      ''
+          '. X X . . X . X X . . . X . . X X X . . . X X . X X . \n'
+          'X X . X X . . X . . . X X . . . X X . X X X . X . X X \n'
+          '. . . . X . . . X X X . X X . X X X X . X X . . X . . \n'
+          'X . X X . . X . . . X X . X X . X . X X . . . . . X . \n'
+          'X X . X . . X . X X . . . . . X X . . . . . X . . . X \n'
+          'X . . X . . . . . . X . . . X . X X X X X X X . . . X \n'
+          'X . . X X . . X . . X X . . . . . X . . . . . X X X . \n'
+          '. . X X X X . X . . . . . X X X X X X . . . . . . X X \n'
+          'X . . . X . X X X X X X . . X X X . X . X X X X X X . \n'
+          'X . . X X X . X X X X X X X X X X X X X . . . X . X X \n'
+          '. . . . X X . . . X . . . . . . . X X . . . X X . X . \n'
+          '. . . X X X . . X X . X X X X X . X . . X . . . . . . \n'
+          'X . . . . X . X . X . X . . . X . X . X X . X X . X X \n'
+          'X . X . . X . X . X . X . X . X . X . . . . . X . X X \n'
+          'X . X X X . . X . X . X . . . X . X . X X X . . . X X \n'
+          'X X X X X X X X . X . X X X X X . X . X . X . X X X . \n'
+          '. . . . . . . X . X . . . . . . . X X X X . . . X X X \n'
+          'X X . . X . . X . X X X X X X X X X X X X X . . X . X \n'
+          'X X X . X X X X . . X X X X . . X . . . . X . . X X X \n'
+          '. . X X X X X . X . . . . X X X X . . X X X . X . X . \n'
+          '. . X X . X . X . . . X . X X . X X . . . . X X . . . \n'
+          'X . . . X . X . X X X X X X . . X . X X X X X . X . . \n'
+          '. X . . . X X X . . . . . X . . . . . X X X X X . X . \n'
+          'X . . X . X X X X . X . X . . . . X . X X . X . . X . \n'
+          'X . . . X X . X . X X X X X X X X . X X X X . . X X . \n'
+          '. X X X X . . X . . X X X . X X . . X . . . . X X X . \n'
+          'X X . . . X X . . X . X . . . . X X . X . . X . X . X \n',
+      'X ',
+      '. ',
+    );
     final AztecDetectorResult r = AztecDetectorResult(
       matrix,
       noPoints,

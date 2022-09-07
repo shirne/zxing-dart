@@ -21,8 +21,11 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('QRCodeBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/qrcode-1',
-        MultiFormatReader(), BarcodeFormat.QR_CODE)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/qrcode-1',
+      MultiFormatReader(),
+      BarcodeFormat.QR_CODE,
+    )
       ..addTest(17, 17, 0.0)
       ..addTest(14, 14, 90.0)
       ..addTest(17, 17, 180.0)

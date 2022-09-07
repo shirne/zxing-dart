@@ -33,7 +33,8 @@ import 'binary_util.dart';
 void main() {
   test('testNoAi', () {
     final information = BinaryUtil.buildBitArrayFromString(
-        ' .......X ..XX..X. X.X....X .......X ....');
+      ' .......X ..XX..X. X.X....X .......X ....',
+    );
 
     final decoder = AbstractExpandedDecoder.createDecoder(information);
     final decoded = decoder.parseInformation();

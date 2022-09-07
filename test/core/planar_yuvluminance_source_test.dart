@@ -33,7 +33,9 @@ void main() {
   const int COLS = 6;
   const int ROWS = 4;
   final List<int> Y = List.generate(
-      COLS * ROWS, (index) => index < YUV.length ? YUV[index] : 0);
+    COLS * ROWS,
+    (index) => index < YUV.length ? YUV[index] : 0,
+  );
 
   test('testNoCrop', () {
     final source = PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS);
@@ -44,17 +46,34 @@ void main() {
   });
 
   test('testCrop', () {
-    final source = PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS,
-        left: 1, top: 1, width: COLS - 2, height: ROWS - 2);
+    final source = PlanarYUVLuminanceSource(
+      Int8List.fromList(YUV),
+      COLS,
+      ROWS,
+      left: 1,
+      top: 1,
+      width: COLS - 2,
+      height: ROWS - 2,
+    );
     expect(source.isCropSupported, true);
     final cropMatrix = source.matrix;
     for (int r = 0; r < ROWS - 2; r++) {
       assertListEquals(
-          Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
+        Y,
+        (r + 1) * COLS + 1,
+        cropMatrix,
+        r * (COLS - 2),
+        COLS - 2,
+      );
     }
     for (int r = 0; r < ROWS - 2; r++) {
       assertListEquals(
-          Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS - 2);
+        Y,
+        (r + 1) * COLS + 1,
+        source.getRow(r, null),
+        0,
+        COLS - 2,
+      );
     }
   });
 
@@ -71,8 +90,13 @@ void main() {
   });
 }
 
-void assertListEquals(List<int> expected, int expectedFrom, Int8List actual,
-    int actualFrom, int length) {
+void assertListEquals(
+  List<int> expected,
+  int expectedFrom,
+  Int8List actual,
+  int actualFrom,
+  int length,
+) {
   for (int i = 0; i < length; i++) {
     expect(actual[actualFrom + i], expected[expectedFrom + i]);
   }

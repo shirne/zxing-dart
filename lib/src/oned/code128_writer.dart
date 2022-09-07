@@ -60,29 +60,32 @@ class MinimalEncoder {
         case Latch.A:
           charset = Charset.A;
           addPattern(
-              patterns,
-              i == 0 ? Code128Writer._CODE_START_A : Code128Writer._CODE_CODE_A,
-              checkSum,
-              checkWeight,
-              i);
+            patterns,
+            i == 0 ? Code128Writer._CODE_START_A : Code128Writer._CODE_CODE_A,
+            checkSum,
+            checkWeight,
+            i,
+          );
           break;
         case Latch.B:
           charset = Charset.B;
           addPattern(
-              patterns,
-              i == 0 ? Code128Writer._CODE_START_B : Code128Writer._CODE_CODE_B,
-              checkSum,
-              checkWeight,
-              i);
+            patterns,
+            i == 0 ? Code128Writer._CODE_START_B : Code128Writer._CODE_CODE_B,
+            checkSum,
+            checkWeight,
+            i,
+          );
           break;
         case Latch.C:
           charset = Charset.C;
           addPattern(
-              patterns,
-              i == 0 ? Code128Writer._CODE_START_C : Code128Writer._CODE_CODE_C,
-              checkSum,
-              checkWeight,
-              i);
+            patterns,
+            i == 0 ? Code128Writer._CODE_START_C : Code128Writer._CODE_CODE_C,
+            checkSum,
+            checkWeight,
+            i,
+          );
           break;
         case Latch.SHIFT:
           addPattern(patterns, codeShift, checkSum, checkWeight, i);
@@ -93,12 +96,23 @@ class MinimalEncoder {
       if (charset == Charset.C) {
         if (contents.codeUnitAt(i) == Code128Writer._ESCAPE_FNC_1) {
           addPattern(
-              patterns, Code128Writer._CODE_FNC_1, checkSum, checkWeight, i);
+            patterns,
+            Code128Writer._CODE_FNC_1,
+            checkSum,
+            checkWeight,
+            i,
+          );
         } else {
-          addPattern(patterns, int.parse(contents.substring(i, i + 2)),
-              checkSum, checkWeight, i);
-          assert(i + 1 <
-              length); //the algorithm never leads to a single trailing digit in character set C
+          addPattern(
+            patterns,
+            int.parse(contents.substring(i, i + 2)),
+            checkSum,
+            checkWeight,
+            i,
+          );
+          assert(
+            i + 1 < length,
+          ); //the algorithm never leads to a single trailing digit in character set C
           if (i + 1 < length) {
             i++;
           }
@@ -141,8 +155,13 @@ class MinimalEncoder {
     return Code128Writer.produceResult(patterns, checkSum[0]);
   }
 
-  static void addPattern(List<List<int>> patterns, int patternIndex,
-      List<int> checkSum, List<int> checkWeight, int position) {
+  static void addPattern(
+    List<List<int>> patterns,
+    int patternIndex,
+    List<int> checkSum,
+    List<int> checkWeight,
+    int position,
+  ) {
     patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
     if (position != 0) {
       checkWeight[0]++;
@@ -279,8 +298,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_128];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     final forcedCodeSet = _check(contents, hints);
 
     final hasCompactionHint = hints != null &&
@@ -371,7 +392,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   static List<bool> encodeFast(
-      String contents, Map<EncodeHintType, Object?>? hints, int forcedCodeSet) {
+    String contents,
+    Map<EncodeHintType, Object?>? hints,
+    int forcedCodeSet,
+  ) {
     final length = contents.length;
     final patterns = <List<int>>[]; // temporary storage for patterns
     int checkSum = 0;
@@ -427,7 +451,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
                 if (position + 1 == length) {
                   // this is the last character, but the encoding is C, which always encodes two characers
                   throw ArgumentError(
-                      'Bad number of characters for digit only encoding.');
+                    'Bad number of characters for digit only encoding.',
+                  );
                 }
                 patternIndex =
                     int.parse(contents.substring(position, position + 2));

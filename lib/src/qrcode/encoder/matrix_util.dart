@@ -126,8 +126,13 @@ class MatrixUtil {
 
   // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
   // success, store the result in "matrix" and return true.
-  static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel,
-      Version version, int maskPattern, ByteMatrix matrix) {
+  static void buildMatrix(
+    BitArray dataBits,
+    ErrorCorrectionLevel ecLevel,
+    Version version,
+    int maskPattern,
+    ByteMatrix matrix,
+  ) {
     clearMatrix(matrix);
     embedBasicPatterns(version, matrix);
     // Type information appear with any version.
@@ -158,7 +163,10 @@ class MatrixUtil {
 
   // Embed type information. On success, modify the matrix.
   static void embedTypeInfo(
-      ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix) {
+    ErrorCorrectionLevel ecLevel,
+    int maskPattern,
+    ByteMatrix matrix,
+  ) {
     final typeInfoBits = BitArray();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
@@ -216,7 +224,10 @@ class MatrixUtil {
   // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
   static void embedDataBits(
-      BitArray dataBits, int maskPattern, ByteMatrix matrix) {
+    BitArray dataBits,
+    int maskPattern,
+    ByteMatrix matrix,
+  ) {
     int bitIndex = 0;
     int direction = -1;
     // Start from the right bottom cell.
@@ -260,7 +271,8 @@ class MatrixUtil {
     // All bits should be consumed.
     if (bitIndex != dataBits.size) {
       throw WriterException(
-          'Not all bits consumed: $bitIndex' '/${dataBits.size}');
+        'Not all bits consumed: $bitIndex' '/${dataBits.size}',
+      );
     }
   }
 
@@ -318,7 +330,10 @@ class MatrixUtil {
   // Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
   static void makeTypeInfoBits(
-      ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits) {
+    ErrorCorrectionLevel ecLevel,
+    int maskPattern,
+    BitArray bits,
+  ) {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw WriterException('Invalid mask pattern');
     }
@@ -381,7 +396,10 @@ class MatrixUtil {
   }
 
   static void _embedHorizontalSeparationPattern(
-      int xStart, int yStart, ByteMatrix matrix) {
+    int xStart,
+    int yStart,
+    ByteMatrix matrix,
+  ) {
     for (int x = 0; x < 8; ++x) {
       if (!_isEmpty(matrix.get(xStart + x, yStart))) {
         throw WriterException();
@@ -391,7 +409,10 @@ class MatrixUtil {
   }
 
   static void _embedVerticalSeparationPattern(
-      int xStart, int yStart, ByteMatrix matrix) {
+    int xStart,
+    int yStart,
+    ByteMatrix matrix,
+  ) {
     for (int y = 0; y < 7; ++y) {
       if (!_isEmpty(matrix.get(xStart, yStart + y))) {
         throw WriterException();
@@ -401,7 +422,10 @@ class MatrixUtil {
   }
 
   static void _embedPositionAdjustmentPattern(
-      int xStart, int yStart, ByteMatrix matrix) {
+    int xStart,
+    int yStart,
+    ByteMatrix matrix,
+  ) {
     for (int y = 0; y < 5; ++y) {
       final patternY = _POSITION_ADJUSTMENT_PATTERN[y];
       for (int x = 0; x < 5; ++x) {
@@ -411,7 +435,10 @@ class MatrixUtil {
   }
 
   static void _embedPositionDetectionPattern(
-      int xStart, int yStart, ByteMatrix matrix) {
+    int xStart,
+    int yStart,
+    ByteMatrix matrix,
+  ) {
     for (int y = 0; y < 7; ++y) {
       final patternY = _POSITION_DETECTION_PATTERN[y];
       for (int x = 0; x < 7; ++x) {
@@ -437,7 +464,10 @@ class MatrixUtil {
     _embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
     // Right top corner.
     _embedHorizontalSeparationPattern(
-        matrix.width - hspWidth, hspWidth - 1, matrix);
+      matrix.width - hspWidth,
+      hspWidth - 1,
+      matrix,
+    );
     // Left bottom corner.
     _embedHorizontalSeparationPattern(0, matrix.width - hspWidth, matrix);
 
@@ -453,7 +483,9 @@ class MatrixUtil {
 
   // Embed position adjustment patterns if need be.
   static void _maybeEmbedPositionAdjustmentPatterns(
-      Version version, ByteMatrix matrix) {
+    Version version,
+    ByteMatrix matrix,
+  ) {
     if (version.versionNumber < 2) {
       // The patterns appear if version >= 2
       return;

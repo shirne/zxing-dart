@@ -69,8 +69,12 @@ class DefaultGridSampler extends GridSampler {
   }
 
   @override
-  BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY,
-      PerspectiveTransform transform) {
+  BitMatrix sampleGrid(
+    BitMatrix image,
+    int dimensionX,
+    int dimensionY,
+    PerspectiveTransform transform,
+  ) {
     if (dimensionX <= 0 || dimensionY <= 0) {
       throw NotFoundException.instance;
     }

@@ -92,7 +92,10 @@ class C40Encoder implements Encoder {
       final count = buffer.length;
       if ((count % 3) == 0) {
         final newMode = HighLevelEncoder.lookAheadTest(
-            context.message, context.pos, encodingMode);
+          context.message,
+          context.pos,
+          encodingMode,
+        );
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
           context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
@@ -103,8 +106,12 @@ class C40Encoder implements Encoder {
     handleEOD(context, buffer);
   }
 
-  int _backtrackOneCharacter(EncoderContext context, StringBuilder buffer,
-      StringBuffer removed, int lastCharSize) {
+  int _backtrackOneCharacter(
+    EncoderContext context,
+    StringBuilder buffer,
+    StringBuffer removed,
+    int lastCharSize,
+  ) {
     final count = buffer.length;
     buffer.delete(count - lastCharSize, count);
     context.pos--;

@@ -30,10 +30,12 @@ class ASCIIEncoder implements Encoder {
       context.pos,
     );
     if (n >= 2) {
-      context.writeCodeword(_encodeASCIIDigits(
-        context.message.codeUnitAt(context.pos),
-        context.message.codeUnitAt(context.pos + 1),
-      ));
+      context.writeCodeword(
+        _encodeASCIIDigits(
+          context.message.codeUnitAt(context.pos),
+          context.message.codeUnitAt(context.pos + 1),
+        ),
+      );
       context.pos += 2;
     } else {
       final c = context.currentChar;

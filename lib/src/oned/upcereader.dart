@@ -83,7 +83,11 @@ class UPCEReader extends UPCEANReader {
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.lAndGPatterns);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.lAndGPatterns,
+      );
       result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
@@ -102,7 +106,11 @@ class UPCEReader extends UPCEANReader {
   @override
   List<int> decodeEnd(BitArray row, int endStart) {
     return UPCEANReader.findGuardPattern(
-        row, endStart, true, _MIDDLE_END_PATTERN);
+      row,
+      endStart,
+      true,
+      _MIDDLE_END_PATTERN,
+    );
   }
 
   //@protected
@@ -112,7 +120,9 @@ class UPCEReader extends UPCEANReader {
   }
 
   static void _determineNumSysAndCheckDigit(
-      StringBuilder resultString, int lgPatternFound) {
+    StringBuilder resultString,
+    int lgPatternFound,
+  ) {
     for (int numSys = 0; numSys <= 1; numSys++) {
       for (int d = 0; d < 10; d++) {
         if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {

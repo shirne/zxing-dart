@@ -300,7 +300,7 @@ class BitArray {
   }
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! BitArray) {
       return false;
     }

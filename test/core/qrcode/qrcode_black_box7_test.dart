@@ -51,8 +51,12 @@ void main() {
       default:
         data = origData;
     }
-    final result = Image.fromBytes(image.width, image.height, data,
-        format: Format.luminance);
+    final result = Image.fromBytes(
+      image.width,
+      image.height,
+      data,
+      format: Format.luminance,
+    );
     // File(path.replaceAll('.png', '-p.png')).writeAsBytes(encodePng(result));
     return result;
   }

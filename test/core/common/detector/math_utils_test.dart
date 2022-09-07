@@ -38,15 +38,23 @@ void main() {
     expect(-3, MathUtils.round(-2.5)); // This differs from Math.round()
 
     expect(
-        MathUtils.MAX_VALUE, MathUtils.round(MathUtils.MAX_VALUE.toDouble()));
+      MathUtils.MAX_VALUE,
+      MathUtils.round(MathUtils.MAX_VALUE.toDouble()),
+    );
     expect(
-        MathUtils.MIN_VALUE, MathUtils.round(MathUtils.MIN_VALUE.toDouble()));
+      MathUtils.MIN_VALUE,
+      MathUtils.round(MathUtils.MIN_VALUE.toDouble()),
+    );
 
     // todo ??
-    expect(MathUtils.MAX_VALUE,
-        MathUtils.round(double.infinity)); //Float.POSITIVE_INFINITY
-    expect(MathUtils.MIN_VALUE,
-        MathUtils.round(double.negativeInfinity)); //Float.NEGATIVE_INFINITY
+    expect(
+      MathUtils.MAX_VALUE,
+      MathUtils.round(double.infinity),
+    ); //Float.POSITIVE_INFINITY
+    expect(
+      MathUtils.MIN_VALUE,
+      MathUtils.round(double.negativeInfinity),
+    ); //Float.NEGATIVE_INFINITY
 
     expect(0, MathUtils.round(double.nan));
   });
@@ -88,8 +96,11 @@ void main() {
       521145851: 0
     };
     tZeros.forEach((key, value) {
-      expect(MathUtils.numberOfTrailingZeros(key), value,
-          reason: '$key => $value');
+      expect(
+        MathUtils.numberOfTrailingZeros(key),
+        value,
+        reason: '$key => $value',
+      );
     });
   });
 }

@@ -35,7 +35,7 @@ class SMSParsedResult extends ParsedResult {
   SMSParsedResult(this._numbers, this._vias, this.subject, this.body)
       : super(ParsedResultType.SMS);
 
-  addNumber(String num, [String? via]) {
+  void addNumber(String num, [String? via]) {
     _numbers.add(num);
     if (via != null) {
       _vias ??= List.filled(_numbers.length - 1, '');

@@ -34,7 +34,10 @@ class Base256Encoder implements Encoder {
       context.pos++;
 
       final newMode = HighLevelEncoder.lookAheadTest(
-          context.message, context.pos, encodingMode);
+        context.message,
+        context.pos,
+        encodingMode,
+      );
       if (newMode != encodingMode) {
         // Return to ASCII encodation, which will actually handle latch to new mode
         context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
@@ -59,7 +62,8 @@ class Base256Encoder implements Encoder {
     final l = buffer.length;
     for (int i = 0; i < l; i++) {
       context.writeCodeword(
-          _randomize255State(buffer.charAt(i), context.codewordCount + 1));
+        _randomize255State(buffer.charAt(i), context.codewordCount + 1),
+      );
     }
   }
 

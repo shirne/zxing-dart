@@ -144,7 +144,9 @@ class State {
     }
     Token token = _token;
     token = token.addBinaryShift(
-        index - _binaryShiftByteCount, _binaryShiftByteCount);
+      index - _binaryShiftByteCount,
+      _binaryShiftByteCount,
+    );
     //assert token.getTotalBitCount() == this.bitCount;
     return State(token, _mode, 0, _bitCount);
   }

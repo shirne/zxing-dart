@@ -52,9 +52,15 @@ class RGBLuminanceSource extends LuminanceSource {
         _luminances = intList2Int8List(pixels),
         super(width, height);
 
-  RGBLuminanceSource._(this._luminances, this._dataWidth, this._dataHeight,
-      [this._left = 0, this._top = 0, int? width, int? height])
-      : super(width ?? _dataWidth, height ?? _dataHeight) {
+  RGBLuminanceSource._(
+    this._luminances,
+    this._dataWidth,
+    this._dataHeight, [
+    this._left = 0,
+    this._top = 0,
+    int? width,
+    int? height,
+  ]) : super(width ?? _dataWidth, height ?? _dataHeight) {
     if (width != null && height != null) {
       if (_left + width > _dataWidth || _top + height > _dataHeight) {
         throw ArgumentError('Crop rectangle does not fit within image data.');
@@ -97,7 +103,12 @@ class RGBLuminanceSource extends LuminanceSource {
     for (int y = 0; y < height; y++) {
       final outputOffset = y * width;
       List.copyRange(
-          matrix, outputOffset, _luminances, inputOffset, inputOffset + width);
+        matrix,
+        outputOffset,
+        _luminances,
+        inputOffset,
+        inputOffset + width,
+      );
       inputOffset += _dataWidth;
     }
     return matrix;
@@ -108,6 +119,13 @@ class RGBLuminanceSource extends LuminanceSource {
 
   @override
   LuminanceSource crop(int left, int top, int width, int height) =>
-      RGBLuminanceSource._(_luminances, _dataWidth, _dataHeight, _left + left,
-          _top + top, width, height);
+      RGBLuminanceSource._(
+        _luminances,
+        _dataWidth,
+        _dataHeight,
+        _left + left,
+        _top + top,
+        width,
+        height,
+      );
 }

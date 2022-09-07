@@ -46,9 +46,15 @@ class DecoderResult {
   /// arbitrary additional metadata
   Object? other;
 
-  DecoderResult(this._rawBytes, this._text, this._byteSegments, this._ecLevel,
-      {saSequence = -1, saParity = -1, symbologyModifier = 0})
-      : _structuredAppendSequenceNumber = saSequence,
+  DecoderResult(
+    this._rawBytes,
+    this._text,
+    this._byteSegments,
+    this._ecLevel, {
+    saSequence = -1,
+    saParity = -1,
+    symbologyModifier = 0,
+  })  : _structuredAppendSequenceNumber = saSequence,
         _structuredAppendParity = saParity,
         _symbologyModifier = symbologyModifier,
         numBits = _rawBytes == null ? 0 : 8 * _rawBytes.length;

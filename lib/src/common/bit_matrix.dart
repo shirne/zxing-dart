@@ -119,7 +119,8 @@ class BitMatrix {
         bitsPos++;
       } else {
         throw ArgumentError(
-            'illegal character encountered: ${stringRepresentation.substring(pos)}');
+          'illegal character encountered: ${stringRepresentation.substring(pos)}',
+        );
       }
     }
 
@@ -287,7 +288,8 @@ class BitMatrix {
         return;
     }
     throw ArgumentsException(
-        'degrees must be a multiple of 0, 90, 180, or 270');
+      'degrees must be a multiple of 0, 90, 180, or 270',
+    );
   }
 
   /// Modifies this `BitMatrix` to represent the same but rotated 180 degrees
@@ -431,7 +433,7 @@ class BitMatrix {
   int get rowSize => _rowSize;
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! BitMatrix) {
       return false;
     }
@@ -456,15 +458,19 @@ class BitMatrix {
   /// @param lineSeparator newline character in string representation
   /// @return string representation of entire matrix utilizing given strings and line separator
   @override
-  String toString(
-      [String setString = 'X ',
-      String unsetString = '  ',
-      String lineSeparator = '\n']) {
+  String toString([
+    String setString = 'X ',
+    String unsetString = '  ',
+    String lineSeparator = '\n',
+  ]) {
     return _buildToString(setString, unsetString, lineSeparator);
   }
 
   String _buildToString(
-      String setString, String unsetString, String lineSeparator) {
+    String setString,
+    String unsetString,
+    String lineSeparator,
+  ) {
     final result = StringBuffer();
     for (int y = 0; y < _height; y++) {
       for (int x = 0; x < _width; x++) {
@@ -478,6 +484,10 @@ class BitMatrix {
   // @override
   BitMatrix clone() {
     return BitMatrix._(
-        _width, _height, _rowSize, Uint32List.fromList(_bits.toList()));
+      _width,
+      _height,
+      _rowSize,
+      Uint32List.fromList(_bits.toList()),
+    );
   }
 }

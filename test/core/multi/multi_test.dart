@@ -31,7 +31,8 @@ void main() {
   test('testMulti', () async {
     // Very basic test for now
     final testBase = AbstractBlackBoxTestCase.buildTestBase(
-        'test/resources/blackbox/multi-1');
+      'test/resources/blackbox/multi-1',
+    );
 
     final testImage = File('${testBase.path}/1.png');
     final image = decodeImage(testImage.readAsBytesSync())!;

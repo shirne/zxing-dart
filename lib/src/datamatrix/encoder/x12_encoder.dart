@@ -39,7 +39,10 @@ class X12Encoder extends C40Encoder {
         C40Encoder.writeNextTriplet(context, buffer);
 
         final newMode = HighLevelEncoder.lookAheadTest(
-            context.message, context.pos, encodingMode);
+          context.message,
+          context.pos,
+          encodingMode,
+        );
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
           context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);

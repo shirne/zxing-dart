@@ -49,8 +49,12 @@ class DataMatrixReader implements Reader {
       decoderResult = _decoder.decodeMatrix(detectorResult.bits);
       points = detectorResult.points;
     }
-    final result = Result(decoderResult.text, decoderResult.rawBytes, points,
-        BarcodeFormat.DATA_MATRIX);
+    final result = Result(
+      decoderResult.text,
+      decoderResult.rawBytes,
+      points,
+      BarcodeFormat.DATA_MATRIX,
+    );
     final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
@@ -59,8 +63,10 @@ class DataMatrixReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-        ']d${decoderResult.symbologyModifier}');
+    result.putMetadata(
+      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ']d${decoderResult.symbologyModifier}',
+    );
     return result;
   }
 

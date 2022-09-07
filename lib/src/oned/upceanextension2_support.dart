@@ -37,14 +37,17 @@ class UPCEANExtension2Support {
     final extensionData = _parseExtensionString(resultString);
 
     final extensionResult = Result(
-        resultString,
-        null,
-        [
-          ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0,
-              rowNumber.toDouble()),
-          ResultPoint(end.toDouble(), rowNumber.toDouble()),
-        ],
-        BarcodeFormat.UPC_EAN_EXTENSION);
+      resultString,
+      null,
+      [
+        ResultPoint(
+          (extensionStartRange[0] + extensionStartRange[1]) / 2.0,
+          rowNumber.toDouble(),
+        ),
+        ResultPoint(end.toDouble(), rowNumber.toDouble()),
+      ],
+      BarcodeFormat.UPC_EAN_EXTENSION,
+    );
     if (extensionData != null) {
       extensionResult.putAllMetadata(extensionData);
     }
@@ -52,7 +55,10 @@ class UPCEANExtension2Support {
   }
 
   int _decodeMiddle(
-      BitArray row, List<int> startRange, StringBuffer resultString) {
+    BitArray row,
+    List<int> startRange,
+    StringBuffer resultString,
+  ) {
     // TODO is need ?
     final counters = _decodeMiddleCounters;
     counters[0] = 0;
@@ -66,7 +72,11 @@ class UPCEANExtension2Support {
 
     for (int x = 0; x < 2 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.lAndGPatterns);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.lAndGPatterns,
+      );
       resultString.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;

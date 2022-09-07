@@ -44,13 +44,16 @@ import '../../../common/abstract_black_box.dart';
 
 void main() {
   void assertCorrectImage2result(
-      String fileName, ExpandedProductParsedResult expected) async {
+    String fileName,
+    ExpandedProductParsedResult expected,
+  ) async {
     final path =
         '${AbstractBlackBoxTestCase.buildTestBase("test/resources/blackbox/rssexpanded-1/").path}/$fileName';
 
     final image = decodeImage(File(path).readAsBytesSync())!;
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final rowNumber = binaryMap.height ~/ 2;
     final row = binaryMap.getBlackRow(rowNumber, null);
 
@@ -72,20 +75,22 @@ void main() {
   test('testDecodeRow2result2', () {
     // (01)90012345678908(3103)001750
     final expected = ExpandedProductParsedResult(
-        '(01)90012345678908(3103)001750',
-        '90012345678908',
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        '001750',
-        ExpandedProductParsedResult.KILOGRAM,
-        '3',
-        null,
-        null,
-        null, {});
+      '(01)90012345678908(3103)001750',
+      '90012345678908',
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      '001750',
+      ExpandedProductParsedResult.KILOGRAM,
+      '3',
+      null,
+      null,
+      null,
+      {},
+    );
 
     assertCorrectImage2result('2.png', expected);
   });

@@ -62,8 +62,9 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   static const double _DIFF_MODSIZE_CUTOFF = 0.5;
 
   MultiFinderPatternFinder(
-      BitMatrix image, ResultPointCallback? resultPointCallback)
-      : super(image, resultPointCallback);
+    BitMatrix image,
+    ResultPointCallback? resultPointCallback,
+  ) : super(image, resultPointCallback);
 
   int _compare(FinderPattern? center1, FinderPattern? center2) {
     if (center1 == null) return center2 == null ? 0 : -1;

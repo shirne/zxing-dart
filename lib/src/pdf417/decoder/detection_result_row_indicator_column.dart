@@ -43,7 +43,8 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // finding row numbers for other columns easier
   // use row height count to make detection of invalid row numbers more reliable
   void adjustCompleteIndicatorColumnRowNumbers(
-      BarcodeMetadata barcodeMetadata) {
+    BarcodeMetadata barcodeMetadata,
+  ) {
     _setRowNumbers();
     _removeIncorrectCodewords(codewords, barcodeMetadata);
     final top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
@@ -124,7 +125,8 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // finding row numbers for other columns easier
   // use row height count to make detection of invalid row numbers more reliable
   void _adjustIncompleteIndicatorColumnRowNumbers(
-      BarcodeMetadata barcodeMetadata) {
+    BarcodeMetadata barcodeMetadata,
+  ) {
     final top = isLeft ? boundingBox.topLeft : boundingBox.topRight;
     final bottom = isLeft ? boundingBox.bottomLeft : boundingBox.bottomRight;
     final firstRow = imageRowToCodewordIndex(top.y.toInt());
@@ -205,17 +207,20 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       return null;
     }
     final barcodeMetadata = BarcodeMetadata(
-        barcodeColumnCount.getValue()[0],
-        barcodeRowCountUpperPart.getValue()[0],
-        barcodeRowCountLowerPart.getValue()[0],
-        barcodeECLevel.getValue()[0]);
+      barcodeColumnCount.getValue()[0],
+      barcodeRowCountUpperPart.getValue()[0],
+      barcodeRowCountLowerPart.getValue()[0],
+      barcodeECLevel.getValue()[0],
+    );
     _removeIncorrectCodewords(codewords, barcodeMetadata);
     return barcodeMetadata;
   }
 
   /// todo test error
   void _removeIncorrectCodewords(
-      List<Codeword?> codewords, BarcodeMetadata barcodeMetadata) {
+    List<Codeword?> codewords,
+    BarcodeMetadata barcodeMetadata,
+  ) {
     // Remove codewords which do not match the metadata
     // TODO Maybe we should keep the incorrect codewords for the start and end positions?
     for (int codewordRow = 0; codewordRow < codewords.length; codewordRow++) {

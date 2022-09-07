@@ -5,7 +5,7 @@ class Properties {
 
   Properties([this._defaults]);
 
-  load(String inString) {
+  void load(String inString) {
     final List<String> lines = inString.split(RegExp('(\r\n|\r|\n)'));
     for (var element in lines) {
       if (!element.startsWith('<')) {
@@ -25,7 +25,7 @@ class Properties {
     return _properties[key] ?? (_defaults?.getProperty(key) ?? defaultValue);
   }
 
-  setProperty(String key, String value) {
+  void setProperty(String key, String value) {
     _properties[key] = value;
   }
 }

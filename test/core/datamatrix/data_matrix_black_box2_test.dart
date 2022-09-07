@@ -21,8 +21,11 @@ import '../common/abstract_black_box.dart';
 
 void main() {
   test('DataMatrixBlackBox2TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/datamatrix-2',
-        MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/datamatrix-2',
+      MultiFormatReader(),
+      BarcodeFormat.DATA_MATRIX,
+    )
       ..addTest(13, 13, 0.0, 0, 1)
       ..addTest(15, 15, 90.0, 0, 1)
       ..addTest(17, 16, 180.0, 0, 1)

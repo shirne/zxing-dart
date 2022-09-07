@@ -75,7 +75,9 @@ class BitMatrixParser {
     }
 
     _parsedFormatInfo = FormatInformation.decodeFormatInformation(
-        formatInfoBits1, formatInfoBits2);
+      formatInfoBits1,
+      formatInfoBits2,
+    );
     if (_parsedFormatInfo != null) {
       return _parsedFormatInfo!;
     }

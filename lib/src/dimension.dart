@@ -32,7 +32,7 @@ class Dimension {
   int get height => _height;
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is Dimension) {
       return _width == other._width && _height == other._height;
     }

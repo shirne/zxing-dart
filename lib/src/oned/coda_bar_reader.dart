@@ -72,7 +72,10 @@ class CodaBarReader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     _counters.fillRange(0, _counters.length, 0);
     _setCounters(row);
     final startOffset = _findStartPattern();
@@ -152,13 +155,14 @@ class CodaBarReader extends OneDReader {
     final right = runningCount.toDouble();
 
     final result = Result(
-        _decodeRowResult.toString(),
-        null,
-        [
-          ResultPoint(left, rowNumber.toDouble()),
-          ResultPoint(right, rowNumber.toDouble())
-        ],
-        BarcodeFormat.CODABAR);
+      _decodeRowResult.toString(),
+      null,
+      [
+        ResultPoint(left, rowNumber.toDouble()),
+        ResultPoint(right, rowNumber.toDouble())
+      ],
+      BarcodeFormat.CODABAR,
+    );
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']F0');
     return result;
   }

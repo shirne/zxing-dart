@@ -65,16 +65,24 @@ void main() {
 
   test('testShortShiftJIS1', () {
     // 金魚
-    doTest([
-      0x8b, 0xe0, 0x8b, 0x9b, //
-    ], StringUtils.shiftJisCharset, 'SJIS');
+    doTest(
+      [
+        0x8b, 0xe0, 0x8b, 0x9b, //
+      ],
+      StringUtils.shiftJisCharset,
+      'SJIS',
+    );
   });
 
   test('testShortISO885911', () {
     // båd
-    doTest([
-      0x62, 0xe5, 0x64, //
-    ], latin1, 'ISO8859_1');
+    doTest(
+      [
+        0x62, 0xe5, 0x64, //
+      ],
+      latin1,
+      'ISO8859_1',
+    );
   });
 
   test('testShortUTF81', () {
@@ -84,22 +92,34 @@ void main() {
 
   test('testMixedShiftJIS1', () {
     // Hello 金!
-    doTest([
-      0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21, //
-    ], StringUtils.shiftJisCharset, 'SJIS');
+    doTest(
+      [
+        0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21, //
+      ],
+      StringUtils.shiftJisCharset,
+      'SJIS',
+    );
   });
 
   test('testUTF16BE', () {
     // 调压柜
-    doTest([
-      0xFE, 0xFF, 0x8c, 0x03, 0x53, 0x8b, 0x67, 0xdc, //
-    ], utf16, utf16.name);
+    doTest(
+      [
+        0xFE, 0xFF, 0x8c, 0x03, 0x53, 0x8b, 0x67, 0xdc, //
+      ],
+      utf16,
+      utf16.name,
+    );
   });
 
   test('testUTF16LE', () {
     // 调压柜
-    doTest([
-      0xFF, 0xFE, 0x03, 0x8c, 0x8b, 0x53, 0xdc, 0x67, //
-    ], utf16, utf16.name);
+    doTest(
+      [
+        0xFF, 0xFE, 0x03, 0x8c, 0x8b, 0x53, 0xdc, 0x67, //
+      ],
+      utf16,
+      utf16.name,
+    );
   });
 }

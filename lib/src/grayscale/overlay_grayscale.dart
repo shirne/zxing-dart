@@ -43,8 +43,13 @@ class OverlayGrayscale extends Dispatch {
         for (int i = startH; i < startH + stepY; i++) {
           //System.arraycopy(tranByte, i * width + start_w, newByte,
           //    i * width + start_w, start_w + stepX - start_w);
-          List.copyRange(newByte, i * width + startW, tranByte,
-              i * width + startW, startW + stepX + i * width);
+          List.copyRange(
+            newByte,
+            i * width + startW,
+            tranByte,
+            i * width + startW,
+            startW + stepX + i * width,
+          );
         }
       }
     }

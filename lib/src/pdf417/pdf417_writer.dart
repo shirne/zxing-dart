@@ -35,8 +35,13 @@ class PDF417Writer implements Writer {
   static const int _DEFAULT_ERROR_CORRECTION_LEVEL = 2;
 
   @override
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]) {
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     if (format != BarcodeFormat.PDF_417) {
       throw ArgumentError('Can only encode PDF_417, but got $format');
     }
@@ -52,13 +57,18 @@ class PDF417Writer implements Writer {
       }
       if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
         encoder.setCompaction(
-            hints[EncodeHintType.PDF417_COMPACTION] as Compaction);
+          hints[EncodeHintType.PDF417_COMPACTION] as Compaction,
+        );
       }
       if (hints.containsKey(EncodeHintType.PDF417_DIMENSIONS)) {
         final dimensions =
             hints[EncodeHintType.PDF417_DIMENSIONS] as Dimensions;
-        encoder.setDimensions(dimensions.maxCols, dimensions.minCols,
-            dimensions.maxRows, dimensions.minRows);
+        encoder.setDimensions(
+          dimensions.maxCols,
+          dimensions.minCols,
+          dimensions.maxRows,
+          dimensions.minRows,
+        );
       }
       if (hints.containsKey(EncodeHintType.MARGIN)) {
         margin = int.parse(hints[EncodeHintType.MARGIN].toString());
@@ -69,8 +79,8 @@ class PDF417Writer implements Writer {
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         final encoding = CharacterSetECI.getCharacterSetECIByName(
-                hints[EncodeHintType.CHARACTER_SET].toString())
-            ?.charset;
+          hints[EncodeHintType.CHARACTER_SET].toString(),
+        )?.charset;
         if (encoding != null) encoder.setEncoding(encoding);
       }
       autoECI = (hints[EncodeHintType.PDF417_AUTO_ECI] as bool?) ?? false;
@@ -150,7 +160,9 @@ class PDF417Writer implements Writer {
   /// Takes and rotates the it 90 degrees
   static List<Uint8List> _rotateArray(List<Uint8List> bitarray) {
     final temp = List.generate(
-        bitarray[0].length, (index) => Uint8List(bitarray.length));
+      bitarray[0].length,
+      (index) => Uint8List(bitarray.length),
+    );
     for (int ii = 0; ii < bitarray.length; ii++) {
       // This makes the direction consistent on screen when rotating the
       // screen;

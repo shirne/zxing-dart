@@ -4,7 +4,7 @@ class StringBuilder extends StringBuffer {
 
   StringBuilder([String content = '']) : super(content);
 
-  _initBuffer([force = false]) {
+  void _initBuffer([force = false]) {
     if (_buffer == null || force) {
       _buffer = super.toString();
     }
@@ -46,14 +46,14 @@ class StringBuilder extends StringBuffer {
     return _buffer!.substring(start, end);
   }
 
-  reverse() {
+  void reverse() {
     _initBuffer();
     super.clear();
     super.writeAll(_buffer!.split('').reversed);
     _buffer = null;
   }
 
-  insert(int offset, Object? obj) {
+  void insert(int offset, Object? obj) {
     _initBuffer();
     super.clear();
     if (offset > 0) super.write(_buffer!.substring(0, offset));
@@ -62,7 +62,7 @@ class StringBuilder extends StringBuffer {
     _buffer = null;
   }
 
-  _writeAuto(Object? obj) {
+  void _writeAuto(Object? obj) {
     if (obj is int) {
       super.writeCharCode(obj);
     } else if (obj is List) {
@@ -80,7 +80,7 @@ class StringBuilder extends StringBuffer {
     }
   }
 
-  delete(int start, int end) {
+  void delete(int start, int end) {
     _initBuffer();
     super.clear();
     if (start > 0) super.write(_buffer!.substring(0, start));
@@ -88,11 +88,11 @@ class StringBuilder extends StringBuffer {
     _buffer = null;
   }
 
-  deleteCharAt(int idx) {
+  void deleteCharAt(int idx) {
     delete(idx, idx + 1);
   }
 
-  setLength(int length) {
+  void setLength(int length) {
     if (length > this.length) {
       writeAll(List.filled(length - this.length, '\x00'));
     } else {

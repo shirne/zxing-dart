@@ -42,7 +42,12 @@ void main() {
     final bigEnough = 64;
     final writer = DataMatrixWriter();
     final matrix = writer.encode(
-        'Hello Google', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
+      'Hello Google',
+      BarcodeFormat.DATA_MATRIX,
+      bigEnough,
+      bigEnough,
+      hints,
+    );
 
     //assert(matrix != null);
     assert(bigEnough >= matrix.width);
@@ -56,7 +61,12 @@ void main() {
     const bigEnough = 14;
     final writer = DataMatrixWriter();
     final matrix = writer.encode(
-        'Hello Me', BarcodeFormat.DATA_MATRIX, bigEnough, bigEnough, hints);
+      'Hello Me',
+      BarcodeFormat.DATA_MATRIX,
+      bigEnough,
+      bigEnough,
+      hints,
+    );
     //assertNotNull(matrix);
     expect(bigEnough, matrix.width);
     expect(bigEnough, matrix.height);
@@ -66,8 +76,13 @@ void main() {
     // The DataMatrix will not fit in this size, so the matrix should come back bigger
     const tooSmall = 8;
     final writer = DataMatrixWriter();
-    final matrix = writer.encode('http://www.google.com/',
-        BarcodeFormat.DATA_MATRIX, tooSmall, tooSmall, null);
+    final matrix = writer.encode(
+      'http://www.google.com/',
+      BarcodeFormat.DATA_MATRIX,
+      tooSmall,
+      tooSmall,
+      null,
+    );
     //assertNotNull(matrix);
     assert(tooSmall < matrix.width);
     assert(tooSmall < matrix.height);

@@ -296,8 +296,11 @@ class Detector {
 
     // Expand the square so that its corners are the centers of the points
     // just outside the bull's eye.
-    return _expandSquare([pinax, pinbx, pincx, pindx], 2 * _nbCenterLayers - 3,
-        2 * _nbCenterLayers);
+    return _expandSquare(
+      [pinax, pinbx, pincx, pindx],
+      2 * _nbCenterLayers - 3,
+      2 * _nbCenterLayers,
+    );
   }
 
   /// Finds a candidate center point of an Aztec code from an image
@@ -379,8 +382,13 @@ class Detector {
   /// Creates a BitMatrix by sampling the provided image.
   /// topLeft, topRight, bottomRight, and bottomLeft are the centers of the squares on the
   /// diagonal just outside the bull's eye.
-  BitMatrix _sampleGrid(BitMatrix image, ResultPoint topLeft,
-      ResultPoint topRight, ResultPoint bottomRight, ResultPoint bottomLeft) {
+  BitMatrix _sampleGrid(
+    BitMatrix image,
+    ResultPoint topLeft,
+    ResultPoint topRight,
+    ResultPoint bottomRight,
+    ResultPoint bottomLeft,
+  ) {
     final GridSampler sampler = GridSampler.getInstance();
     final int dimension = _getDimension();
 
@@ -388,25 +396,26 @@ class Detector {
     final double high = dimension / 2.0 + _nbCenterLayers;
 
     return sampler.sampleGridBulk(
-        image,
-        dimension,
-        dimension,
-        low,
-        low, // topleft
-        high,
-        low, // topright
-        high,
-        high, // bottomright
-        low,
-        high, // bottomleft
-        topLeft.x,
-        topLeft.y,
-        topRight.x,
-        topRight.y,
-        bottomRight.x,
-        bottomRight.y,
-        bottomLeft.x,
-        bottomLeft.y);
+      image,
+      dimension,
+      dimension,
+      low,
+      low, // topleft
+      high,
+      low, // topright
+      high,
+      high, // bottomright
+      low,
+      high, // bottomleft
+      topLeft.x,
+      topLeft.y,
+      topRight.x,
+      topRight.y,
+      bottomRight.x,
+      bottomRight.y,
+      bottomLeft.x,
+      bottomLeft.y,
+    );
   }
 
   /// Samples a line.
@@ -426,7 +435,9 @@ class Detector {
     final double dy = moduleSize * (p2.y - p1.y) / d;
     for (int i = 0; i < size; i++) {
       if (_image.get(
-          MathUtils.round(px + i * dx), MathUtils.round(py + i * dy))) {
+        MathUtils.round(px + i * dx),
+        MathUtils.round(py + i * dy),
+      )) {
         result |= 1 << (size - i - 1);
       }
     }
@@ -540,7 +551,10 @@ class Detector {
   /// @param newSide the new length of the size of the square in the target bit matrix
   /// @return the corners of the expanded square
   static List<ResultPoint> _expandSquare(
-      List<ResultPoint> cornerPoints, int oldSide, int newSide) {
+    List<ResultPoint> cornerPoints,
+    int oldSide,
+    int newSide,
+  ) {
     final double ratio = newSide / (2.0 * oldSide);
     double dx = cornerPoints[0].x - cornerPoints[2].x;
     double dy = cornerPoints[0].y - cornerPoints[2].y;
@@ -576,7 +590,11 @@ class Detector {
 
   static double _distance(Point a, Point b) {
     return MathUtils.distance(
-        a.x.toDouble(), a.y.toDouble(), b.x.toDouble(), b.y.toDouble());
+      a.x.toDouble(),
+      a.y.toDouble(),
+      b.x.toDouble(),
+      b.y.toDouble(),
+    );
   }
 
   static double _distanceResult(ResultPoint a, ResultPoint b) {

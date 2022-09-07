@@ -40,15 +40,21 @@ void main() {
   test('testCharacterCount', () {
     // Spot check a few values
     expect(
-        10, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)));
-    expect(12,
-        Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)));
-    expect(14,
-        Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(40)));
+      10,
+      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)),
+    );
     expect(
-        9,
-        Mode.ALPHANUMERIC
-            .getCharacterCountBits(Version.getVersionForNumber(6)));
+      12,
+      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)),
+    );
+    expect(
+      14,
+      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(40)),
+    );
+    expect(
+      9,
+      Mode.ALPHANUMERIC.getCharacterCountBits(Version.getVersionForNumber(6)),
+    );
     expect(8, Mode.BYTE.getCharacterCountBits(Version.getVersionForNumber(7)));
     expect(8, Mode.KANJI.getCharacterCountBits(Version.getVersionForNumber(8)));
   });

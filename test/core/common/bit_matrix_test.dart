@@ -24,8 +24,10 @@ void main() {
   BitMatrix getExpected(int width, int height) {
     final result = BitMatrix(width, height);
     for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
-      result.set(width - 1 - BIT_MATRIX_POINTS[i],
-          height - 1 - BIT_MATRIX_POINTS[i + 1]);
+      result.set(
+        width - 1 - BIT_MATRIX_POINTS[i],
+        height - 1 - BIT_MATRIX_POINTS[i + 1],
+      );
     }
     return result;
   }
@@ -39,7 +41,10 @@ void main() {
   }
 
   void testXOR(
-      BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {
+    BitMatrix dataMatrix,
+    BitMatrix flipMatrix,
+    BitMatrix expectedMatrix,
+  ) {
     final matrix = dataMatrix.clone();
     matrix.xor(flipMatrix);
     assert(expectedMatrix == matrix);

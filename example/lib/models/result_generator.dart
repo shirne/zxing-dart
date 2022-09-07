@@ -102,6 +102,7 @@ class VCardResultGenerator extends ResultGenerator<AddressBookParsedResult> {
     return buffer.toString();
   }
 
+  // ignore: unused_element
   void _writeN(String name, StringBuffer buffer) {
     List<String> namePart = name.split(RegExp('\\s+'));
     if (namePart.length < 2) {

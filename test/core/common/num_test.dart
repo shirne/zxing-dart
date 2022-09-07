@@ -60,8 +60,11 @@ void main() {
       545482263,
       4294967296,
     ]) {
-      expect((~Int32(a)).toInt(), (~a).toSigned(32),
-          reason: '$a reverted error}');
+      expect(
+        (~Int32(a)).toInt(),
+        (~a).toSigned(32),
+        reason: '$a reverted error}',
+      );
     }
   });
 
@@ -76,9 +79,12 @@ void main() {
       final int reverseFun = Utils.reverseSign32(a);
       final int reverse2Fun = reverse2(a);
       //int reverseI32 = reverseInt32(a);
-      expect(reverseFun, reverse2Fun,
-          reason:
-              '$a reverted error\n${reverseFun.toRadixString(2)}\n${reverse2Fun.toRadixString(2)}');
+      expect(
+        reverseFun,
+        reverse2Fun,
+        reason:
+            '$a reverted error\n${reverseFun.toRadixString(2)}\n${reverse2Fun.toRadixString(2)}',
+      );
     }
   });
 
@@ -96,7 +102,9 @@ void main() {
       4294967296,
     ]) {
       expect(
-          Int32(a).numberOfTrailingZeros(), MathUtils.numberOfTrailingZeros(a));
+        Int32(a).numberOfTrailingZeros(),
+        MathUtils.numberOfTrailingZeros(a),
+      );
     }
   });
 

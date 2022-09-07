@@ -322,7 +322,10 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
   static void _decodeTextSegment(
-      BitSource bits, ECIStringBuilder result, Set<int> fnc1positions) {
+    BitSource bits,
+    ECIStringBuilder result,
+    Set<int> fnc1positions,
+  ) {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
@@ -509,7 +512,10 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
   static void _decodeBase256Segment(
-      BitSource bits, ECIStringBuilder result, List<Uint8List> byteSegments) {
+    BitSource bits,
+    ECIStringBuilder result,
+    List<Uint8List> byteSegments,
+  ) {
     // Figure out how long the Base 256 Segment is.
     int codewordPosition = 1 + bits.byteOffset; // position is 1-indexed
     final d1 = _unrandomize255State(bits.readBits(8), codewordPosition++);
@@ -572,7 +578,9 @@ class DecodedBitStreamParser {
 
   /// See ISO 16022:2006, Annex B, B.2
   static int _unrandomize255State(
-      int randomizedBase256Codeword, int base256CodewordPosition) {
+    int randomizedBase256Codeword,
+    int base256CodewordPosition,
+  ) {
     final pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     final tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
     return tempVariable >= 0 ? tempVariable : tempVariable + 256;

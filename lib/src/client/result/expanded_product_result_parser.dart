@@ -150,21 +150,22 @@ class ExpandedProductResultParser extends ResultParser {
     }
 
     return ExpandedProductParsedResult(
-        rawText,
-        productID,
-        sscc,
-        lotNumber,
-        productionDate,
-        packagingDate,
-        bestBeforeDate,
-        expirationDate,
-        weight,
-        weightType,
-        weightIncrement,
-        price,
-        priceIncrement,
-        priceCurrency,
-        uncommonAIs);
+      rawText,
+      productID,
+      sscc,
+      lotNumber,
+      productionDate,
+      packagingDate,
+      bestBeforeDate,
+      expirationDate,
+      weight,
+      weightType,
+      weightIncrement,
+      price,
+      priceIncrement,
+      priceCurrency,
+      uncommonAIs,
+    );
   }
 
   static String? _findAIValue(int i, String rawText) {

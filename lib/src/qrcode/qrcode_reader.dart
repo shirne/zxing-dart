@@ -59,8 +59,12 @@ class QRCodeReader implements Reader {
           .applyMirroredCorrection(points);
     }
 
-    final result = Result(decoderResult.text, decoderResult.rawBytes, points,
-        BarcodeFormat.QR_CODE);
+    final result = Result(
+      decoderResult.text,
+      decoderResult.rawBytes,
+      points,
+      BarcodeFormat.QR_CODE,
+    );
     final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
@@ -70,13 +74,19 @@ class QRCodeReader implements Reader {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     if (decoderResult.hasStructuredAppend) {
-      result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
-          decoderResult.structuredAppendSequenceNumber);
-      result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY,
-          decoderResult.structuredAppendParity);
+      result.putMetadata(
+        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+        decoderResult.structuredAppendSequenceNumber,
+      );
+      result.putMetadata(
+        ResultMetadataType.STRUCTURED_APPEND_PARITY,
+        decoderResult.structuredAppendParity,
+      );
     }
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-        ']Q${decoderResult.symbologyModifier}');
+    result.putMetadata(
+      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ']Q${decoderResult.symbologyModifier}',
+    );
     return result;
   }
 

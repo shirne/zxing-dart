@@ -137,7 +137,10 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     // Rows can start with even pattern in case in prev rows there where odd number of patters.
     // So lets try twice
     _pairs.clear();
@@ -229,7 +232,9 @@ class RSSExpandedReader extends AbstractRSSReader {
   // Try to construct a valid rows sequence
   // Recursion is used to implement backtracking
   List<ExpandedPair> _checkRowsCurrent(
-      List<ExpandedRow> collectedRows, int currentRow) {
+    List<ExpandedRow> collectedRows,
+    int currentRow,
+  ) {
     for (int i = currentRow; i < _rows.length; i++) {
       final row = _rows[i];
       _pairs.clear();
@@ -312,7 +317,9 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   // Remove all the rows that contains only specified pairs
   static void _removePartialRows(
-      List<ExpandedPair> pairs, List<ExpandedRow> rows) {
+    List<ExpandedPair> pairs,
+    List<ExpandedRow> rows,
+  ) {
     rows.removeWhere((r) {
       if (r.pairs.length != pairs.length) {
         bool allFound = true;
@@ -333,7 +340,9 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   // Returns true when one of the rows already contains all the pairs
   static bool _isPartialRow(
-      Iterable<ExpandedPair> pairs, Iterable<ExpandedRow> rows) {
+    Iterable<ExpandedPair> pairs,
+    Iterable<ExpandedRow> rows,
+  ) {
     for (ExpandedRow r in rows) {
       bool allFound = true;
       for (ExpandedPair p in pairs) {
@@ -371,10 +380,11 @@ class RSSExpandedReader extends AbstractRSSReader {
     final lastPoints = pairs[pairs.length - 1].finderPattern!.resultPoints;
 
     final result = Result(
-        resultingString,
-        null,
-        [firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]],
-        BarcodeFormat.RSS_EXPANDED);
+      resultingString,
+      null,
+      [firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]],
+      BarcodeFormat.RSS_EXPANDED,
+    );
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']e0');
     return result;
   }
@@ -423,7 +433,10 @@ class RSSExpandedReader extends AbstractRSSReader {
 
   // not private for testing
   ExpandedPair? retrieveNextPair(
-      BitArray row, List<ExpandedPair> previousPairs, int rowNumber) {
+    BitArray row,
+    List<ExpandedPair> previousPairs,
+    int rowNumber,
+  ) {
     bool isOddPattern = previousPairs.length % 2 == 0;
     if (_startFromEven) {
       isOddPattern = !isOddPattern;
@@ -463,7 +476,10 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   void _findNextPair(
-      BitArray row, List<ExpandedPair> previousPairs, int forcedOffset) {
+    BitArray row,
+    List<ExpandedPair> previousPairs,
+    int forcedOffset,
+  ) {
     final counters = decodeFinderCounters;
     counters.fillRange(0, 4, 0);
 
@@ -539,7 +555,10 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   FinderPattern? _parseFoundFinderPattern(
-      BitArray row, int rowNumber, bool oddPattern) {
+    BitArray row,
+    int rowNumber,
+    bool oddPattern,
+  ) {
     // Actually we found elements 2-5.
     int firstCounter;
     int start;
@@ -582,7 +601,11 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   DataCharacter decodeDataCharacter(
-      BitArray row, FinderPattern pattern, bool isOddPattern, bool leftChar) {
+    BitArray row,
+    FinderPattern pattern,
+    bool isOddPattern,
+    bool leftChar,
+  ) {
     final counters = dataCharacterCounters;
     counters.fillRange(0, counters.length, 0);
 
@@ -680,7 +703,10 @@ class RSSExpandedReader extends AbstractRSSReader {
   }
 
   static bool _isNotA1left(
-      FinderPattern pattern, bool isOddPattern, bool leftChar) {
+    FinderPattern pattern,
+    bool isOddPattern,
+    bool leftChar,
+  ) {
     // A1: pattern.getValue is 0 (A), and it's an oddPattern, and it is a left char
     return !(pattern.value == 0 && isOddPattern && leftChar);
   }

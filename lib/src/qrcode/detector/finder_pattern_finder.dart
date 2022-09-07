@@ -328,7 +328,11 @@ class FinderPatternFinder {
   /// observed in any reading state, based on the results of the horizontal scan
   /// @return vertical center of finder pattern, or {@link double#NaN} if not found
   double _crossCheckVertical(
-      int startI, int centerJ, int maxCount, int originalStateCountTotal) {
+    int startI,
+    int centerJ,
+    int maxCount,
+    int originalStateCountTotal,
+  ) {
     final image = _image;
 
     final maxI = image.height;
@@ -404,7 +408,11 @@ class FinderPatternFinder {
   /// except it reads horizontally instead of vertically. This is used to cross-cross
   /// check a vertical cross check and locate the real center of the alignment pattern.</p>
   double _crossCheckHorizontal(
-      int startJ, int centerI, int maxCount, int originalStateCountTotal) {
+    int startJ,
+    int centerI,
+    int maxCount,
+    int originalStateCountTotal,
+  ) {
     final image = _image;
 
     final maxJ = image.width;
@@ -489,8 +497,12 @@ class FinderPatternFinder {
   /// @param j end of possible finder pattern in row
   /// @return true if a finder pattern candidate was found this time
   //@protected
-  bool handlePossibleCenter(List<int> stateCount, int i, int j,
-      [bool pureBarcode = false]) {
+  bool handlePossibleCenter(
+    List<int> stateCount,
+    int i,
+    int j, [
+    bool pureBarcode = false,
+  ]) {
     final stateCountTotal = stateCount[0] +
         stateCount[1] +
         stateCount[2] +
@@ -502,7 +514,11 @@ class FinderPatternFinder {
     if (!(centerI).isNaN) {
       // Re-cross check
       centerJ = _crossCheckHorizontal(
-          centerJ.toInt(), centerI.toInt(), stateCount[2], stateCountTotal);
+        centerJ.toInt(),
+        centerI.toInt(),
+        stateCount[2],
+        stateCountTotal,
+      );
       if (!(centerJ).isNaN &&
           _crossCheckDiagonal(centerI.toInt(), centerJ.toInt())) {
         final estimatedModuleSize = stateCountTotal / 7.0;

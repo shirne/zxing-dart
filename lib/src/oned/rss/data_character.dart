@@ -31,7 +31,7 @@ class DataCharacter {
   }
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! DataCharacter) {
       return false;
     }

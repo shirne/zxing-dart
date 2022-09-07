@@ -55,9 +55,14 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
 
     encodeCompressedGtin(buf, _HEADER_SIZE);
     encodeCompressedWeight(
-        buf, _HEADER_SIZE + AI01decoder.GTIN_SIZE, _WEIGHT_SIZE);
+      buf,
+      _HEADER_SIZE + AI01decoder.GTIN_SIZE,
+      _WEIGHT_SIZE,
+    );
     _encodeCompressedDate(
-        buf, _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE);
+      buf,
+      _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE,
+    );
 
     return buf.toString();
   }

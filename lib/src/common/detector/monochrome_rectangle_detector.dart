@@ -55,22 +55,67 @@ class MonochromeRectangleDetector {
     int bottom = height;
     int left = 0;
     int right = width;
-    ResultPoint pointA = findCornerFromCenter(halfWidth, 0, left, right,
-        halfHeight, -deltaY, top, bottom, halfWidth ~/ 2);
+    ResultPoint pointA = findCornerFromCenter(
+      halfWidth,
+      0,
+      left,
+      right,
+      halfHeight,
+      -deltaY,
+      top,
+      bottom,
+      halfWidth ~/ 2,
+    );
     top = pointA.y.toInt() - 1;
-    final pointB = findCornerFromCenter(halfWidth, -deltaX, left, right,
-        halfHeight, 0, top, bottom, halfHeight ~/ 2);
+    final pointB = findCornerFromCenter(
+      halfWidth,
+      -deltaX,
+      left,
+      right,
+      halfHeight,
+      0,
+      top,
+      bottom,
+      halfHeight ~/ 2,
+    );
     left = pointB.x.toInt() - 1;
-    final pointC = findCornerFromCenter(halfWidth, deltaX, left, right,
-        halfHeight, 0, top, bottom, halfHeight ~/ 2);
+    final pointC = findCornerFromCenter(
+      halfWidth,
+      deltaX,
+      left,
+      right,
+      halfHeight,
+      0,
+      top,
+      bottom,
+      halfHeight ~/ 2,
+    );
     right = pointC.x.toInt() + 1;
-    final pointD = findCornerFromCenter(halfWidth, 0, left, right, halfHeight,
-        deltaY, top, bottom, halfWidth ~/ 2);
+    final pointD = findCornerFromCenter(
+      halfWidth,
+      0,
+      left,
+      right,
+      halfHeight,
+      deltaY,
+      top,
+      bottom,
+      halfWidth ~/ 2,
+    );
     bottom = pointD.y.toInt() + 1;
 
     // Go try to find point A again with better information -- might have been off at first.
-    pointA = findCornerFromCenter(halfWidth, 0, left, right, halfHeight,
-        -deltaY, top, bottom, halfWidth ~/ 4);
+    pointA = findCornerFromCenter(
+      halfWidth,
+      0,
+      left,
+      right,
+      halfHeight,
+      -deltaY,
+      top,
+      bottom,
+      halfWidth ~/ 4,
+    );
 
     return [pointA, pointB, pointC, pointD];
   }
@@ -91,8 +136,17 @@ class MonochromeRectangleDetector {
   ///  the barcode
   /// @return a [ResultPoint] encapsulating the corner that was found
   /// @throws NotFoundException if such a point cannot be found
-  ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
-      int centerY, int deltaY, int top, int bottom, int maxWhiteRun) {
+  ResultPoint findCornerFromCenter(
+    int centerX,
+    int deltaX,
+    int left,
+    int right,
+    int centerY,
+    int deltaY,
+    int top,
+    int bottom,
+    int maxWhiteRun,
+  ) {
     List<int>? lastRange;
     for (int y = centerY, x = centerX;
         y < bottom && y >= top && x < right && x >= left;
@@ -116,7 +170,9 @@ class MonochromeRectangleDetector {
             if (lastRange[1] > centerX) {
               // straddle, choose one or the other based on direction
               return ResultPoint(
-                  lastRange[deltaY > 0 ? 0 : 1].toDouble(), lastY.toDouble());
+                lastRange[deltaY > 0 ? 0 : 1].toDouble(),
+                lastY.toDouble(),
+              );
             }
             return ResultPoint(lastRange[0].toDouble(), lastY.toDouble());
           } else {
@@ -127,7 +183,9 @@ class MonochromeRectangleDetector {
           if (lastRange[0] < centerY) {
             if (lastRange[1] > centerY) {
               return ResultPoint(
-                  lastX.toDouble(), lastRange[deltaX < 0 ? 0 : 1].toDouble());
+                lastX.toDouble(),
+                lastRange[deltaX < 0 ? 0 : 1].toDouble(),
+              );
             }
             return ResultPoint(lastX.toDouble(), lastRange[0].toDouble());
           } else {
@@ -152,8 +210,13 @@ class MonochromeRectangleDetector {
   /// @param horizontal if true, we're scanning left-right, instead of up-down
   /// @return List<int> with start and end of found range, or null if no such range is found
   ///  (e.g. only white was found)
-  List<int>? blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim,
-      int maxDim, bool horizontal) {
+  List<int>? blackWhiteRange(
+    int fixedDimension,
+    int maxWhiteRun,
+    int minDim,
+    int maxDim,
+    bool horizontal,
+  ) {
     final center = (minDim + maxDim) ~/ 2;
 
     // Scan left/up first

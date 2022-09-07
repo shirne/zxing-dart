@@ -59,7 +59,10 @@ class Code93Reader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final start = _findAsteriskPattern(row);
     // Read off white space
     int nextStart = row.getNextSet(start[1]);
@@ -114,13 +117,14 @@ class Code93Reader extends OneDReader {
     final right = lastStart + lastPatternSize / 2.0;
 
     final resultObject = Result(
-        resultString,
-        null,
-        [
-          ResultPoint(left, rowNumber.toDouble()),
-          ResultPoint(right, rowNumber.toDouble())
-        ],
-        BarcodeFormat.CODE_93);
+      resultString,
+      null,
+      [
+        ResultPoint(left, rowNumber.toDouble()),
+        ResultPoint(right, rowNumber.toDouble())
+      ],
+      BarcodeFormat.CODE_93,
+    );
     resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']G0');
     return resultObject;
   }
@@ -276,7 +280,10 @@ class Code93Reader extends OneDReader {
   }
 
   static void _checkOneChecksum(
-      String result, int checkPosition, int weightMax) {
+    String result,
+    int checkPosition,
+    int weightMax,
+  ) {
     int weight = 1;
     int total = 0;
     for (int i = checkPosition - 1; i >= 0; i--) {

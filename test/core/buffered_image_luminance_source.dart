@@ -31,9 +31,13 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   final int left;
   final int top;
 
-  BufferedImageLuminanceSource(this.image,
-      [this.left = 0, this.top = 0, int? width, int? height])
-      : super(width ?? image.width, height ?? image.height) {
+  BufferedImageLuminanceSource(
+    this.image, [
+    this.left = 0,
+    this.top = 0,
+    int? width,
+    int? height,
+  ]) : super(width ?? image.width, height ?? image.height) {
     width ??= image.width - left;
     height ??= image.height - top;
 
@@ -99,7 +103,12 @@ class BufferedImageLuminanceSource extends LuminanceSource {
   @override
   LuminanceSource crop(int left, int top, int width, int height) {
     return BufferedImageLuminanceSource(
-        image.clone(), this.left + left, this.top + top, width, height);
+      image.clone(),
+      this.left + left,
+      this.top + top,
+      width,
+      height,
+    );
   }
 
   /// This is always true, since the image is a gray-scale image.
@@ -119,7 +128,12 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     // Maintain the cropped region, but rotate it too.
     return BufferedImageLuminanceSource(
-        newImage, top, sourceWidth - (left + width), height, width);
+      newImage,
+      top,
+      sourceWidth - (left + width),
+      height,
+      width,
+    );
   }
 
   @override
@@ -143,6 +157,11 @@ class BufferedImageLuminanceSource extends LuminanceSource {
         math.min(sourceDimension - 1, oldCenterY + halfDimension);
 
     return BufferedImageLuminanceSource(
-        newImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
+      newImage,
+      newLeft,
+      newTop,
+      newRight - newLeft,
+      newBottom - newTop,
+    );
   }
 }

@@ -576,8 +576,13 @@ class PDF417 {
     logic.addBar(last, width);
   }
 
-  void _encodeLowLevel(String fullCodewords, int c, int r,
-      int errorCorrectionLevel, BarcodeMatrix logic) {
+  void _encodeLowLevel(
+    String fullCodewords,
+    int c,
+    int r,
+    int errorCorrectionLevel,
+    BarcodeMatrix logic,
+  ) {
     int idx = 0;
     for (int y = 0; y < r; y++) {
       final cluster = y % 3;
@@ -607,8 +612,11 @@ class PDF417 {
       }
 
       if (_compact) {
-        _encodeChar(_STOP_PATTERN, 1,
-            logic.getCurrentRow()); // encodes stop line for compact pdf417
+        _encodeChar(
+          _STOP_PATTERN,
+          1,
+          logic.getCurrentRow(),
+        ); // encodes stop line for compact pdf417
       } else {
         pattern = _CODEWORD_TABLE[cluster][right];
         _encodeChar(pattern, 17, logic.getCurrentRow());
@@ -629,7 +637,8 @@ class PDF417 {
     //1. step: High-level encoding
     final errorCorrectionCodeWords =
         PDF417ErrorCorrection.getErrorCorrectionCodewordCount(
-            errorCorrectionLevel);
+      errorCorrectionLevel,
+    );
     final highLevel = PDF417HighLevelEncoder.encodeHighLevel(
       msg,
       _compaction,
@@ -647,7 +656,11 @@ class PDF417 {
     final rows = dimension[1];
 
     final pad = _getNumberOfPadCodewords(
-        sourceCodeWords, errorCorrectionCodeWords, cols, rows);
+      sourceCodeWords,
+      errorCorrectionCodeWords,
+      cols,
+      rows,
+    );
 
     //2. step: construct data codewords
     if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) {
@@ -668,12 +681,19 @@ class PDF417 {
 
     //3. step: Error correction
     final ec = PDF417ErrorCorrection.generateErrorCorrection(
-        dataCodewords, errorCorrectionLevel);
+      dataCodewords,
+      errorCorrectionLevel,
+    );
 
     //4. step: low-level encoding
     _barcodeMatrix = BarcodeMatrix(rows, cols);
     _encodeLowLevel(
-        dataCodewords + ec, cols, rows, errorCorrectionLevel, _barcodeMatrix!);
+      dataCodewords + ec,
+      cols,
+      rows,
+      errorCorrectionLevel,
+      _barcodeMatrix!,
+    );
   }
 
   /// Determine optimal nr of columns and rows for the specified number of
@@ -683,13 +703,18 @@ class PDF417 {
   /// @param errorCorrectionCodeWords number of error correction code words
   /// @return dimension object containing cols as width and rows as height
   List<int> _determineDimensions(
-      int sourceCodeWords, int errorCorrectionCodeWords) {
+    int sourceCodeWords,
+    int errorCorrectionCodeWords,
+  ) {
     double ratio = 0.0;
     List<int>? dimension;
 
     for (int cols = _minCols; cols <= _maxCols; cols++) {
       final rows = _calculateNumberOfRows(
-          sourceCodeWords, errorCorrectionCodeWords, cols);
+        sourceCodeWords,
+        errorCorrectionCodeWords,
+        cols,
+      );
 
       if (rows < _minRows) {
         break;
@@ -716,7 +741,10 @@ class PDF417 {
     // Handle case when min values were larger than necessary
     if (dimension == null) {
       final rows = _calculateNumberOfRows(
-          sourceCodeWords, errorCorrectionCodeWords, _minCols);
+        sourceCodeWords,
+        errorCorrectionCodeWords,
+        _minCols,
+      );
       if (rows < _minRows) {
         dimension = [_minCols, _minRows];
       }

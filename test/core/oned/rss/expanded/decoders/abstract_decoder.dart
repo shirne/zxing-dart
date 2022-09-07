@@ -62,7 +62,9 @@ abstract class AbstractDecoderTest {
   static final String compressedDateEnd = 'X..X.XX.........';
 
   static void assertCorrectBinaryString(
-      String binaryString, String expectedNumber) {
+    String binaryString,
+    String expectedNumber,
+  ) {
     final binary =
         BinaryUtil.buildBitArrayFromStringWithoutSpaces(binaryString);
     final decoder = AbstractExpandedDecoder.createDecoder(binary);
@@ -71,6 +73,6 @@ abstract class AbstractDecoderTest {
   }
 }
 
-assertCorrectBinaryString(String binaryString, String expectedNumber) {
+void assertCorrectBinaryString(String binaryString, String expectedNumber) {
   AbstractDecoderTest.assertCorrectBinaryString(binaryString, expectedNumber);
 }

@@ -60,7 +60,10 @@ class Detector {
   /// @return [PDF417DetectorResult] encapsulating results of detecting a PDF417 code
   /// @throws NotFoundException if no PDF417 Code can be found
   static PDF417DetectorResult detect(
-      BinaryBitmap image, Map<DecodeHintType, Object>? hints, bool multiple) {
+    BinaryBitmap image,
+    Map<DecodeHintType, Object>? hints,
+    bool multiple,
+  ) {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
     // different binarizers
     //bool tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -154,16 +157,26 @@ class Detector {
   ///           vertices[6] x, y top right codeword area
   ///           vertices[7] x, y bottom right codeword area
   static List<ResultPoint?> _findVertices(
-      BitMatrix matrix, int startRow, int startColumn) {
+    BitMatrix matrix,
+    int startRow,
+    int startColumn,
+  ) {
     final height = matrix.height;
     final width = matrix.width;
 
     final result = List<ResultPoint?>.filled(8, null);
     _copyToResult(
-        result,
-        _findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, _START_PATTERN),
-        _INDEXES_START_PATTERN);
+      result,
+      _findRowsWithPattern(
+        matrix,
+        height,
+        width,
+        startRow,
+        startColumn,
+        _START_PATTERN,
+      ),
+      _INDEXES_START_PATTERN,
+    );
 
     if (result[4] != null) {
       startColumn = result[4]!.x.toInt();
@@ -171,33 +184,61 @@ class Detector {
     }
 
     _copyToResult(
-        result,
-        _findRowsWithPattern(
-            matrix, height, width, startRow, startColumn, _STOP_PATTERN),
-        _INDEXES_STOP_PATTERN);
+      result,
+      _findRowsWithPattern(
+        matrix,
+        height,
+        width,
+        startRow,
+        startColumn,
+        _STOP_PATTERN,
+      ),
+      _INDEXES_STOP_PATTERN,
+    );
 
     return result;
   }
 
-  static void _copyToResult(List<ResultPoint?> result,
-      List<ResultPoint?> tmpResult, List<int> destinationIndexes) {
+  static void _copyToResult(
+    List<ResultPoint?> result,
+    List<ResultPoint?> tmpResult,
+    List<int> destinationIndexes,
+  ) {
     for (int i = 0; i < destinationIndexes.length; i++) {
       result[destinationIndexes[i]] = tmpResult[i];
     }
   }
 
-  static List<ResultPoint?> _findRowsWithPattern(BitMatrix matrix, int height,
-      int width, int startRow, int startColumn, List<int> pattern) {
+  static List<ResultPoint?> _findRowsWithPattern(
+    BitMatrix matrix,
+    int height,
+    int width,
+    int startRow,
+    int startColumn,
+    List<int> pattern,
+  ) {
     final result = List<ResultPoint?>.filled(4, null);
     bool found = false;
     final counters = List.filled(pattern.length, 0);
     for (; startRow < height; startRow += _ROW_STEP) {
       List<int>? loc = _findGuardPattern(
-          matrix, startColumn, startRow, width, pattern, counters);
+        matrix,
+        startColumn,
+        startRow,
+        width,
+        pattern,
+        counters,
+      );
       if (loc != null) {
         while (startRow > 0) {
           final previousRowLoc = _findGuardPattern(
-              matrix, startColumn, --startRow, width, pattern, counters);
+            matrix,
+            startColumn,
+            --startRow,
+            width,
+            pattern,
+            counters,
+          );
           if (previousRowLoc != null) {
             loc = previousRowLoc;
           } else {
@@ -218,7 +259,13 @@ class Detector {
       List<int> previousRowLoc = [result[0]!.x.toInt(), result[1]!.x.toInt()];
       for (; stopRow < height; stopRow++) {
         final loc = _findGuardPattern(
-            matrix, previousRowLoc[0], stopRow, width, pattern, counters);
+          matrix,
+          previousRowLoc[0],
+          stopRow,
+          width,
+          pattern,
+          counters,
+        );
         // a found pattern is only considered to belong to the same barcode if the start and end positions
         // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
         // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
@@ -254,8 +301,14 @@ class Detector {
   ///                 being searched for as a pattern
   /// @param counters array of counters, as long as pattern, to re-use
   /// @return start/end horizontal offset of guard pattern, as an array of two ints.
-  static List<int>? _findGuardPattern(BitMatrix matrix, int column, int row,
-      int width, List<int> pattern, List<int> counters) {
+  static List<int>? _findGuardPattern(
+    BitMatrix matrix,
+    int column,
+    int row,
+    int width,
+    List<int> pattern,
+    List<int> counters,
+  ) {
     counters.fillRange(0, counters.length, 0);
     int patternStart = column;
     int pixelDrift = 0;

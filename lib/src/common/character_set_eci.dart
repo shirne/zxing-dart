@@ -60,7 +60,10 @@ class CharacterSetECI {
   static final ISO8859_16 =
       CharacterSetECI('iso-8859-16', 18, ['latin-10', 'iso8859_16']);
   static final SJIS = CharacterSetECI(
-      'shift-jis', 20, ['sjis', 'shift_jis', 'ms932', 'iso-2022-jp', 'jis']);
+    'shift-jis',
+    20,
+    ['sjis', 'shift_jis', 'ms932', 'iso-2022-jp', 'jis'],
+  );
   static final Cp1250 =
       CharacterSetECI('cp1250', 21, ['windows-1250', 'windows1250']);
   static final Cp1251 =
@@ -69,8 +72,11 @@ class CharacterSetECI {
       CharacterSetECI('cp1252', 23, ['windows-1252', 'windows1252']);
   static final Cp1256 =
       CharacterSetECI('cp1256', 24, ['windows-1256', 'windows1256']);
-  static final UnicodeBigUnmarked = CharacterSetECI('utf-16', 25,
-      ['utf-16be', 'unicode-big-unmarked', 'utf-16be', 'unicode-big']);
+  static final UnicodeBigUnmarked = CharacterSetECI(
+    'utf-16',
+    25,
+    ['utf-16be', 'unicode-big-unmarked', 'utf-16be', 'unicode-big'],
+  );
   static final UTF8 = CharacterSetECI('utf-8', 26, ['utf8']);
   static final ASCII =
       CharacterSetECI('ascii', [27, 170], ['us-ascii', 'ascii']);
@@ -112,7 +118,7 @@ class CharacterSetECI {
   ];
   static final Map<int, CharacterSetECI> _valueToEci = {};
   static final Map<String, CharacterSetECI> _nameToEci = {};
-  static init() {
+  static void init() {
     for (CharacterSetECI eci in values) {
       for (int value in eci._indexes) {
         _valueToEci[value] = eci;

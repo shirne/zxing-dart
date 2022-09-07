@@ -49,7 +49,7 @@ class ExpandedPair {
   }
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! ExpandedPair) {
       return false;
     }

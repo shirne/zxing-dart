@@ -42,7 +42,10 @@ class DataBlock {
   /// @return DataBlocks containing original bytes, "de-interleaved" from representation in the
   ///         QR Code
   static List<DataBlock> getDataBlocks(
-      Uint8List rawCodewords, Version version, ErrorCorrectionLevel ecLevel) {
+    Uint8List rawCodewords,
+    Version version,
+    ErrorCorrectionLevel ecLevel,
+  ) {
     if (rawCodewords.length != version.totalCodewords) {
       throw ArgumentError();
     }

@@ -24,7 +24,7 @@ abstract class AbstractErrorCorrectionTestCase {
   }
 
   static List<int> erase(List<int> received, int howMany, Random random) {
-    final erased = <int>{};
+    final erased = <int>{}; // BitSet
     final erasures = List.filled(howMany, 0);
     int erasureOffset = 0;
     for (int j = 0; j < howMany; j++) {

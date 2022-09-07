@@ -45,10 +45,15 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
   }
 
   void encodeCompressedGtinWithoutAI(
-      StringBuilder buf, int currentPos, int initialBufferPosition) {
+    StringBuilder buf,
+    int currentPos,
+    int initialBufferPosition,
+  ) {
     for (int i = 0; i < 4; ++i) {
       final currentBlock = generalDecoder.extractNumericValueFromBitArray(
-          currentPos + 10 * i, 10);
+        currentPos + 10 * i,
+        10,
+      );
       if (currentBlock ~/ 100 == 0) {
         buf.write('0');
       }

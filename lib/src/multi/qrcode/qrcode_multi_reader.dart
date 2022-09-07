@@ -38,8 +38,10 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   static final List<ResultPoint> _noPoints = [];
 
   @override
-  List<Result> decodeMultiple(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints]) {
+  List<Result> decodeMultiple(
+    BinaryBitmap image, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     List<Result> results = [];
     final detectorResults = MultiDetector(image.blackMatrix).detectMulti(hints);
     for (DetectorResult detectorResult in detectorResults) {
@@ -51,8 +53,12 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
           (decoderResult.other as QRCodeDecoderMetaData)
               .applyMirroredCorrection(points);
         }
-        final result = Result(decoderResult.text, decoderResult.rawBytes,
-            points, BarcodeFormat.QR_CODE);
+        final result = Result(
+          decoderResult.text,
+          decoderResult.rawBytes,
+          points,
+          BarcodeFormat.QR_CODE,
+        );
         final byteSegments = decoderResult.byteSegments;
         if (byteSegments != null) {
           result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
@@ -60,13 +66,19 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
         final ecLevel = decoderResult.ecLevel;
         if (ecLevel != null) {
           result.putMetadata(
-              ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
+            ResultMetadataType.ERROR_CORRECTION_LEVEL,
+            ecLevel,
+          );
         }
         if (decoderResult.hasStructuredAppend) {
-          result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
-              decoderResult.structuredAppendSequenceNumber);
-          result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY,
-              decoderResult.structuredAppendParity);
+          result.putMetadata(
+            ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+            decoderResult.structuredAppendSequenceNumber,
+          );
+          result.putMetadata(
+            ResultMetadataType.STRUCTURED_APPEND_PARITY,
+            decoderResult.structuredAppendParity,
+          );
         }
         results.add(result);
       } on ReaderException catch (_) {
@@ -119,13 +131,16 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
     }
 
     final newResult = Result(
-        newText.toString(),
-        Uint8List.fromList(newRawBytes.takeBytes()),
-        _noPoints,
-        BarcodeFormat.QR_CODE);
+      newText.toString(),
+      Uint8List.fromList(newRawBytes.takeBytes()),
+      _noPoints,
+      BarcodeFormat.QR_CODE,
+    );
     if (newByteSegment.length > 0) {
       newResult.putMetadata(
-          ResultMetadataType.BYTE_SEGMENTS, [newByteSegment.toBytes()]);
+        ResultMetadataType.BYTE_SEGMENTS,
+        [newByteSegment.toBytes()],
+      );
     }
     newResults.add(newResult);
     return newResults;

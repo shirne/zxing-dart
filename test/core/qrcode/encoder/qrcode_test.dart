@@ -23,10 +23,11 @@ void main() {
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
     final qrCode = QRCode(
-        mode: Mode.BYTE,
-        ecLevel: ErrorCorrectionLevel.H,
-        version: Version.getVersionForNumber(7),
-        maskPattern: 3);
+      mode: Mode.BYTE,
+      ecLevel: ErrorCorrectionLevel.H,
+      version: Version.getVersionForNumber(7),
+      maskPattern: 3,
+    );
 
     expect(Mode.BYTE, qrCode.mode);
     expect(ErrorCorrectionLevel.H, qrCode.ecLevel);
@@ -61,10 +62,11 @@ void main() {
 
   test('testToString2', () {
     final qrCode = QRCode(
-        mode: Mode.BYTE,
-        ecLevel: ErrorCorrectionLevel.H,
-        version: Version.getVersionForNumber(1),
-        maskPattern: 3);
+      mode: Mode.BYTE,
+      ecLevel: ErrorCorrectionLevel.H,
+      version: Version.getVersionForNumber(1),
+      maskPattern: 3,
+    );
     final matrix = ByteMatrix(21, 21);
     for (int y = 0; y < 21; ++y) {
       for (int x = 0; x < 21; ++x) {

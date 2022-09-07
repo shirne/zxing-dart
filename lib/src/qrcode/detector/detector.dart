@@ -97,7 +97,11 @@ class Detector {
       for (int i = 4; i <= 16; i <<= 1) {
         try {
           alignmentPattern = findAlignmentInRegion(
-              moduleSize, estAlignmentX, estAlignmentY, i.toDouble());
+            moduleSize,
+            estAlignmentX,
+            estAlignmentY,
+            i.toDouble(),
+          );
           break;
         } on NotFoundException catch (_) {
           // try next round
@@ -107,7 +111,12 @@ class Detector {
     }
 
     final transform = _createTransform(
-        topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+      topLeft,
+      topRight,
+      bottomLeft,
+      alignmentPattern,
+      dimension,
+    );
 
     final bits = _sampleGrid(_image, transform, dimension);
 
@@ -121,11 +130,12 @@ class Detector {
   }
 
   static PerspectiveTransform _createTransform(
-      ResultPoint topLeft,
-      ResultPoint topRight,
-      ResultPoint bottomLeft,
-      ResultPoint? alignmentPattern,
-      int dimension) {
+    ResultPoint topLeft,
+    ResultPoint topRight,
+    ResultPoint bottomLeft,
+    ResultPoint? alignmentPattern,
+    int dimension,
+  ) {
     final dimMinusThree = dimension - 3.5;
     double bottomRightX;
     double bottomRightY;
@@ -145,34 +155,42 @@ class Detector {
     }
 
     return PerspectiveTransform.quadrilateralToQuadrilateral(
-        3.5,
-        3.5,
-        dimMinusThree,
-        3.5,
-        sourceBottomRightX,
-        sourceBottomRightY,
-        3.5,
-        dimMinusThree,
-        topLeft.x,
-        topLeft.y,
-        topRight.x,
-        topRight.y,
-        bottomRightX,
-        bottomRightY,
-        bottomLeft.x,
-        bottomLeft.y);
+      3.5,
+      3.5,
+      dimMinusThree,
+      3.5,
+      sourceBottomRightX,
+      sourceBottomRightY,
+      3.5,
+      dimMinusThree,
+      topLeft.x,
+      topLeft.y,
+      topRight.x,
+      topRight.y,
+      bottomRightX,
+      bottomRightY,
+      bottomLeft.x,
+      bottomLeft.y,
+    );
   }
 
   static BitMatrix _sampleGrid(
-      BitMatrix image, PerspectiveTransform transform, int dimension) {
+    BitMatrix image,
+    PerspectiveTransform transform,
+    int dimension,
+  ) {
     final sampler = GridSampler.getInstance();
     return sampler.sampleGrid(image, dimension, dimension, transform);
   }
 
   /// <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
   /// of the finder patterns and estimated module size.</p>
-  static int _computeDimension(ResultPoint topLeft, ResultPoint topRight,
-      ResultPoint bottomLeft, double moduleSize) {
+  static int _computeDimension(
+    ResultPoint topLeft,
+    ResultPoint topRight,
+    ResultPoint bottomLeft,
+    double moduleSize,
+  ) {
     final tltrCentersDimension =
         MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
     final tlblCentersDimension =
@@ -202,7 +220,10 @@ class Detector {
   /// @return estimated module size
   //@protected
   double calculateModuleSize(
-      ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft) {
+    ResultPoint topLeft,
+    ResultPoint topRight,
+    ResultPoint bottomLeft,
+  ) {
     // Take the average
     return (_calculateModuleSizeOneWay(topLeft, topRight) +
             _calculateModuleSizeOneWay(topLeft, bottomLeft)) /
@@ -213,7 +234,9 @@ class Detector {
   /// {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
   /// width of each, measuring along the axis between their centers.</p>
   double _calculateModuleSizeOneWay(
-      ResultPoint pattern, ResultPoint otherPattern) {
+    ResultPoint pattern,
+    ResultPoint otherPattern,
+  ) {
     final moduleSizeEst1 = _sizeOfBlackWhiteBlackRunBothWays(
       pattern.x.toInt(),
       pattern.y.toInt(),
@@ -241,7 +264,11 @@ class Detector {
   /// a finder pattern by looking for a black-white-black run from the center in the direction
   /// of another point (another finder pattern center), and in the opposite direction too.
   double _sizeOfBlackWhiteBlackRunBothWays(
-      int fromX, int fromY, int toX, int toY) {
+    int fromX,
+    int fromY,
+    int toX,
+    int toY,
+  ) {
     double result = _sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 
     // Now count other way -- don't run off image though of course
@@ -311,7 +338,11 @@ class Detector {
       if ((state == 1) == _image.get(realX, realY)) {
         if (state == 2) {
           return MathUtils.distance(
-              x.toDouble(), y.toDouble(), fromX.toDouble(), fromY.toDouble());
+            x.toDouble(),
+            y.toDouble(),
+            fromX.toDouble(),
+            fromY.toDouble(),
+          );
         }
         state++;
       }
@@ -329,8 +360,12 @@ class Detector {
     // is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
     // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
     if (state == 2) {
-      return MathUtils.distance((toX + xstep).toDouble(), toY.toDouble(),
-          fromX.toDouble(), fromY.toDouble());
+      return MathUtils.distance(
+        (toX + xstep).toDouble(),
+        toY.toDouble(),
+        fromX.toDouble(),
+        fromY.toDouble(),
+      );
     }
     // else we didn't find even black-white-black; no estimate is really possible
     return double.nan;
@@ -346,8 +381,12 @@ class Detector {
   /// @return [AlignmentPattern] if found, or null otherwise
   /// @throws NotFoundException if an unexpected error occurs during detection
   //@protected
-  AlignmentPattern findAlignmentInRegion(double overallEstModuleSize,
-      int estAlignmentX, int estAlignmentY, double allowanceFactor) {
+  AlignmentPattern findAlignmentInRegion(
+    double overallEstModuleSize,
+    int estAlignmentX,
+    int estAlignmentY,
+    double allowanceFactor,
+  ) {
     // Look for an alignment pattern (3 modules in size) around where it
     // should be
     final allowance = (allowanceFactor * overallEstModuleSize).toInt();
@@ -366,13 +405,14 @@ class Detector {
     }
 
     final alignmentFinder = AlignmentPatternFinder(
-        _image,
-        alignmentAreaLeftX,
-        alignmentAreaTopY,
-        alignmentAreaRightX - alignmentAreaLeftX,
-        alignmentAreaBottomY - alignmentAreaTopY,
-        overallEstModuleSize,
-        _resultPointCallback);
+      _image,
+      alignmentAreaLeftX,
+      alignmentAreaTopY,
+      alignmentAreaRightX - alignmentAreaLeftX,
+      alignmentAreaBottomY - alignmentAreaTopY,
+      overallEstModuleSize,
+      _resultPointCallback,
+    );
     return alignmentFinder.find();
   }
 }

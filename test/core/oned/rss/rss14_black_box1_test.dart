@@ -21,8 +21,11 @@ import '../../common/abstract_black_box.dart';
 
 void main() {
   test('RSS14BlackBox1TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/rss14-1',
-        MultiFormatReader(), BarcodeFormat.RSS_14)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/rss14-1',
+      MultiFormatReader(),
+      BarcodeFormat.RSS_14,
+    )
       ..addTest(6, 6, 0.0)
       ..addTest(6, 6, 180.0)
       ..testBlackBox();

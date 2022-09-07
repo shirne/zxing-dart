@@ -22,9 +22,12 @@ class BarcodeMetadata {
   final int _rowCountLowerPart;
   final int _rowCount;
 
-  BarcodeMetadata(this._columnCount, this._rowCountUpperPart,
-      this._rowCountLowerPart, this._errorCorrectionLevel)
-      : _rowCount = _rowCountUpperPart + _rowCountLowerPart;
+  BarcodeMetadata(
+    this._columnCount,
+    this._rowCountUpperPart,
+    this._rowCountLowerPart,
+    this._errorCorrectionLevel,
+  ) : _rowCount = _rowCountUpperPart + _rowCountLowerPart;
 
   int get columnCount => _columnCount;
 

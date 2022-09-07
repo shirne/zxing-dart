@@ -31,7 +31,7 @@ class ResultPoint {
   double get y => _y;
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is ResultPoint) {
       final otherPoint = other;
       return _x == otherPoint._x && _y == otherPoint._y;
@@ -103,7 +103,10 @@ class ResultPoint {
 
   /// Returns the z component of the cross product between vectors BC and BA.
   static double crossProductZ(
-      ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
+    ResultPoint pointA,
+    ResultPoint pointB,
+    ResultPoint pointC,
+  ) {
     final bX = pointB.x;
     final bY = pointB.y;
     return ((pointC.x - bX) * (pointA.y - bY)) -

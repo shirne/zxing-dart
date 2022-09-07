@@ -37,8 +37,10 @@ class EAN13Writer extends UPCEANWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.EAN_13];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     final length = contents.length;
     switch (length) {
       case 12:
@@ -75,7 +77,11 @@ class EAN13Writer extends UPCEANWriter {
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.START_END_PATTERN, true);
+      result,
+      pos,
+      UPCEANReader.START_END_PATTERN,
+      true,
+    );
 
     // See EAN13Reader for a description of how the first digit & left bars are encoded
     for (int i = 1; i <= 6; i++) {
@@ -84,19 +90,35 @@ class EAN13Writer extends UPCEANWriter {
         digit += 10;
       }
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, UPCEANReader.lAndGPatterns[digit], false);
+        result,
+        pos,
+        UPCEANReader.lAndGPatterns[digit],
+        false,
+      );
     }
 
     pos += OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.MIDDLE_PATTERN, false);
+      result,
+      pos,
+      UPCEANReader.MIDDLE_PATTERN,
+      false,
+    );
 
     for (int i = 7; i <= 12; i++) {
       final digit = int.parse(contents[i]);
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, UPCEANReader.L_PATTERNS[digit], true);
+        result,
+        pos,
+        UPCEANReader.L_PATTERNS[digit],
+        true,
+      );
     }
     OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.START_END_PATTERN, true);
+      result,
+      pos,
+      UPCEANReader.START_END_PATTERN,
+      true,
+    );
 
     return result;
   }

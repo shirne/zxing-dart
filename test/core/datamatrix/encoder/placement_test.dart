@@ -24,7 +24,8 @@ import 'debug_placement.dart';
 void main() {
   test('testPlacement', () {
     final codewords = unVisualize(
-        '66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221'); //"AIMAIM" encoded
+      '66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221',
+    ); //"AIMAIM" encoded
     final placement = DebugPlacement(codewords, 12, 12);
     placement.place();
     final expected = [

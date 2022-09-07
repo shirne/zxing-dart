@@ -206,7 +206,10 @@ abstract class OneDReader implements Reader {
   }
 
   static void recordPatternInReverse(
-      BitArray row, int start, List<int> counters) {
+    BitArray row,
+    int start,
+    List<int> counters,
+  ) {
     // This could be more efficient I guess
     int numTransitionsLeft = counters.length;
     bool last = row.get(start);
@@ -231,7 +234,10 @@ abstract class OneDReader implements Reader {
   /// @param maxIndividualVariance The most any counter can differ before we give up
   /// @return ratio of total variance between counters and pattern compared to total pattern size
   static double patternMatchVariance(
-      List<int> counters, List<int> pattern, double maxIndividualVariance) {
+    List<int> counters,
+    List<int> pattern,
+    double maxIndividualVariance,
+  ) {
     final numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
@@ -274,5 +280,8 @@ abstract class OneDReader implements Reader {
   /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
   /// @throws FormatException if a potential barcode is found but format is invalid
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints);
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  );
 }

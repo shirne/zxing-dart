@@ -35,7 +35,7 @@ class FinderPattern {
   List<ResultPoint> get resultPoints => _resultPoints;
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! FinderPattern) {
       return false;
     }

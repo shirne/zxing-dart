@@ -94,8 +94,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
             // ignore
           }
         }
-        results.sort((Result r, Result o) =>
-            getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex));
+        results.sort(
+          (Result r, Result o) =>
+              getMeta(r)!.segmentIndex.compareTo(getMeta(o)!.segmentIndex),
+        );
         final resultText = StringBuffer();
         String? fileId;
         for (Result result in results) {
@@ -122,16 +124,19 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         'Rotation ${testResult.rotation} degrees:',
       );
       log.info(
-          ' ${passedCounts[x]} of $numberOfTests images passed (${testResult.mustPassCount} required)');
+        ' ${passedCounts[x]} of $numberOfTests images passed (${testResult.mustPassCount} required)',
+      );
       log.info(
-          ' ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.tryHarderCount} required)');
+        ' ${tryHarderCounts[x]} of $numberOfTests images passed with try harder (${testResult.tryHarderCount} required)',
+      );
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
     }
 
     final totalTests = numberOfTests * testCount * 2;
     log.info(
-        'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)');
+      'Decoded $totalFound images out of $totalTests (${totalFound * 100 ~/ totalTests}%, $totalMustPass required)',
+    );
     if (totalFound > totalMustPass) {
       log.warning('+++ Test too lax by ${totalFound - totalMustPass} images');
     } else if (totalFound < totalMustPass) {
@@ -144,8 +149,10 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       final label =
           'Rotation ${testResult.rotation} degrees: Too many images failed';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
-      assert(tryHarderCounts[x] >= testResult.tryHarderCount,
-          'Try harder, $label');
+      assert(
+        tryHarderCounts[x] >= testResult.tryHarderCount,
+        'Try harder, $label',
+      );
     }
   }
 

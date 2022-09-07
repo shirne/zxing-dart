@@ -28,8 +28,10 @@ class Code93Writer extends OneDimensionalCodeWriter {
   /// @param contents barcode contents to encode. It should not be encoded for extended characters.
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     contents = convertToExtended(contents);
     final length = contents.length;
     if (length > 80) {
@@ -50,7 +52,10 @@ class Code93Writer extends OneDimensionalCodeWriter {
     for (int i = 0; i < length; i++) {
       final indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
       pos += _appendPattern(
-          result, pos, Code93Reader.CHARACTER_ENCODINGS[indexInString]);
+        result,
+        pos,
+        Code93Reader.CHARACTER_ENCODINGS[indexInString],
+      );
     }
 
     //add two checksums
@@ -82,7 +87,11 @@ class Code93Writer extends OneDimensionalCodeWriter {
   /// @deprecated without replacement; intended as an internal-only method
   @Deprecated('not replacement; intended as an internal-only method')
   static int appendPatternDpr(
-      List<bool> target, int pos, List<int> pattern, bool startColor) {
+    List<bool> target,
+    int pos,
+    List<int> pattern,
+    bool startColor,
+  ) {
     for (int bit in pattern) {
       target[pos++] = bit != 0;
     }
@@ -170,7 +179,8 @@ class Code93Writer extends OneDimensionalCodeWriter {
         extCont.writeCharCode(80 /* P */ + character - 123 /* { */);
       } else {
         throw ArgumentError(
-            "Requested content contains a non-encodable character: 'chr($character)'");
+          "Requested content contains a non-encodable character: 'chr($character)'",
+        );
       }
     }
     return extCont.toString();

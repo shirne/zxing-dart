@@ -30,13 +30,16 @@ class WifiParsedResult extends ParsedResult {
   String? eapMethod;
   String? phase2Method;
 
-  WifiParsedResult(this.networkEncryption, this.ssid, this.password,
-      [this.hidden = false,
-      this.identity,
-      this.anonymousIdentity,
-      this.eapMethod,
-      this.phase2Method])
-      : super(ParsedResultType.WIFI);
+  WifiParsedResult(
+    this.networkEncryption,
+    this.ssid,
+    this.password, [
+    this.hidden = false,
+    this.identity,
+    this.anonymousIdentity,
+    this.eapMethod,
+    this.phase2Method,
+  ]) : super(ParsedResultType.WIFI);
 
   @override
   String get displayResult {

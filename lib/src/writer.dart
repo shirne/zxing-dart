@@ -29,6 +29,11 @@ abstract class Writer {
   /// @param hints Additional parameters to supply to the encoder
   /// @return [BitMatrix] representing encoded barcode image
   /// @throws WriterException if contents cannot be encoded legally in a format
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]);
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]);
 }

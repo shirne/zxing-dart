@@ -60,7 +60,10 @@ class RSS14Reader extends AbstractRSSReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final leftPair = _decodePair(row, false, rowNumber, hints);
     _addOrTally(_possibleLeftPairs, leftPair);
     row.reverse();
@@ -126,15 +129,16 @@ class RSS14Reader extends AbstractRSSReader {
     final leftPoints = leftPair.finderPattern.resultPoints;
     final rightPoints = rightPair.finderPattern.resultPoints;
     final result = Result(
-        buffer.toString(),
-        null,
-        [
-          leftPoints[0],
-          leftPoints[1],
-          rightPoints[0],
-          rightPoints[1],
-        ],
-        BarcodeFormat.RSS_14);
+      buffer.toString(),
+      null,
+      [
+        leftPoints[0],
+        leftPoints[1],
+        rightPoints[0],
+        rightPoints[1],
+      ],
+      BarcodeFormat.RSS_14,
+    );
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']e0');
     return result;
   }
@@ -153,8 +157,12 @@ class RSS14Reader extends AbstractRSSReader {
     return checkValue == targetCheckValue;
   }
 
-  Pair? _decodePair(BitArray row, bool right, int rowNumber,
-      Map<DecodeHintType, Object>? hints) {
+  Pair? _decodePair(
+    BitArray row,
+    bool right,
+    int rowNumber,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     try {
       List<int> startEnd = _findFinderPattern(row, right);
       final pattern = _parseFoundFinderPattern(row, rowNumber, right, startEnd);
@@ -171,20 +179,27 @@ class RSS14Reader extends AbstractRSSReader {
           center = row.size - 1 - center;
         }
         resultPointCallback.foundPossibleResultPoint(
-            ResultPoint(center, rowNumber.toDouble()));
+          ResultPoint(center, rowNumber.toDouble()),
+        );
       }
 
       final outside = _decodeDataCharacter(row, pattern, true);
       final inside = _decodeDataCharacter(row, pattern, false);
-      return Pair(1597 * outside.value + inside.value,
-          outside.checksumPortion + 4 * inside.checksumPortion, pattern);
+      return Pair(
+        1597 * outside.value + inside.value,
+        outside.checksumPortion + 4 * inside.checksumPortion,
+        pattern,
+      );
     } on NotFoundException catch (_) {
       return null;
     }
   }
 
   DataCharacter _decodeDataCharacter(
-      BitArray row, FinderPattern pattern, bool outsideChar) {
+    BitArray row,
+    FinderPattern pattern,
+    bool outsideChar,
+  ) {
     final counters = dataCharacterCounters;
     counters.fillRange(0, counters.length, 0);
 
@@ -315,7 +330,11 @@ class RSS14Reader extends AbstractRSSReader {
   }
 
   FinderPattern _parseFoundFinderPattern(
-      BitArray row, int rowNumber, bool right, List<int> startEnd) {
+    BitArray row,
+    int rowNumber,
+    bool right,
+    List<int> startEnd,
+  ) {
     // Actually we found elements 2-5
     final firstIsBlack = row.get(startEnd[0]);
     int firstElementStart = startEnd[0] - 1;
@@ -341,7 +360,12 @@ class RSS14Reader extends AbstractRSSReader {
       end = row.size - 1 - end;
     }
     return FinderPattern(
-        value, [firstElementStart, startEnd[1]], start, end, rowNumber);
+      value,
+      [firstElementStart, startEnd[1]],
+      start,
+      end,
+      rowNumber,
+    );
   }
 
   void _adjustOddEvenCounts(bool outsideChar, int numModules) {

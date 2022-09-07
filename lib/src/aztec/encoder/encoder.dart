@@ -51,13 +51,19 @@ class Encoder {
   ///                will be inserted, and the string must be encodable as ISO/IEC 8859-1
   ///                (Latin-1), the default encoding of the symbol.
   /// @return Aztec symbol matrix with metadata
-  static AztecCode encode(String data,
-      [int minECCPercent = DEFAULT_AZTEC_LAYERS,
-      int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
-      Encoding? charset]) {
+  static AztecCode encode(
+    String data, [
+    int minECCPercent = DEFAULT_AZTEC_LAYERS,
+    int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
+    Encoding? charset,
+  ]) {
     final List<int> bytes = (charset ?? latin1).encode(data);
     return encodeData(
-        Uint8List.fromList(bytes), minECCPercent, userSpecifiedLayers, charset);
+      Uint8List.fromList(bytes),
+      minECCPercent,
+      userSpecifiedLayers,
+      charset,
+    );
   }
 
   /// Encodes the given binary content as an Aztec symbol
@@ -69,10 +75,12 @@ class Encoder {
   /// @param charset character set to mark using ECI; if null, no ECI code will be inserted, and the
   ///                default encoding of ISO/IEC 8859-1 will be assuming by readers.
   /// @return Aztec symbol matrix with metadata
-  static AztecCode encodeData(Uint8List data,
-      [int minECCPercent = DEFAULT_AZTEC_LAYERS,
-      int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
-      Encoding? charset]) {
+  static AztecCode encodeData(
+    Uint8List data, [
+    int minECCPercent = DEFAULT_AZTEC_LAYERS,
+    int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
+    Encoding? charset,
+  ]) {
     // High-level encode
     final BitArray bits = HighLevelEncoder(data, charset).encode();
 
@@ -176,16 +184,22 @@ class Encoder {
             matrix.set(alignmentMap[i * 2 + k], alignmentMap[i * 2 + j]);
           }
           if (messageBits.get(rowOffset + rowSize * 2 + columnOffset + k)) {
-            matrix.set(alignmentMap[i * 2 + j],
-                alignmentMap[baseMatrixSize - 1 - i * 2 - k]);
+            matrix.set(
+              alignmentMap[i * 2 + j],
+              alignmentMap[baseMatrixSize - 1 - i * 2 - k],
+            );
           }
           if (messageBits.get(rowOffset + rowSize * 4 + columnOffset + k)) {
-            matrix.set(alignmentMap[baseMatrixSize - 1 - i * 2 - k],
-                alignmentMap[baseMatrixSize - 1 - i * 2 - j]);
+            matrix.set(
+              alignmentMap[baseMatrixSize - 1 - i * 2 - k],
+              alignmentMap[baseMatrixSize - 1 - i * 2 - j],
+            );
           }
           if (messageBits.get(rowOffset + rowSize * 6 + columnOffset + k)) {
-            matrix.set(alignmentMap[baseMatrixSize - 1 - i * 2 - j],
-                alignmentMap[i * 2 + k]);
+            matrix.set(
+              alignmentMap[baseMatrixSize - 1 - i * 2 - j],
+              alignmentMap[i * 2 + k],
+            );
           }
         }
       }
@@ -237,7 +251,10 @@ class Encoder {
   }
 
   static BitArray generateModeMessage(
-      bool compact, int layers, int messageSizeInWords) {
+    bool compact,
+    int layers,
+    int messageSizeInWords,
+  ) {
     BitArray modeMessage = BitArray();
     if (compact) {
       modeMessage.appendBits(layers - 1, 2);
@@ -252,7 +269,11 @@ class Encoder {
   }
 
   static void _drawModeMessage(
-      BitMatrix matrix, bool compact, int matrixSize, BitArray modeMessage) {
+    BitMatrix matrix,
+    bool compact,
+    int matrixSize,
+    BitArray modeMessage,
+  ) {
     final int center = matrixSize ~/ 2;
     if (compact) {
       for (int i = 0; i < 7; i++) {
@@ -290,7 +311,10 @@ class Encoder {
   }
 
   static BitArray _generateCheckWords(
-      BitArray bitArray, int totalBits, int wordSize) {
+    BitArray bitArray,
+    int totalBits,
+    int wordSize,
+  ) {
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
     final int messageSizeInWords = bitArray.size ~/ wordSize;
     final ReedSolomonEncoder rs = ReedSolomonEncoder(_getGF(wordSize));
@@ -307,7 +331,10 @@ class Encoder {
   }
 
   static List<int> _bitsToWords(
-      BitArray stuffedBits, int wordSize, int totalWords) {
+    BitArray stuffedBits,
+    int wordSize,
+    int totalWords,
+  ) {
     final List<int> message = List.filled(totalWords, 0);
     int i = 0;
     final int n = stuffedBits.size ~/ wordSize;

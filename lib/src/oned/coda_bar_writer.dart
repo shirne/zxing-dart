@@ -37,8 +37,10 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODABAR];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     if (contents.length < 2) {
       // Can't have a start/end guard, so tentatively add default guards
       contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;

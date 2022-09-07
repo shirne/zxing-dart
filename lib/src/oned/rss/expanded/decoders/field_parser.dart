@@ -223,7 +223,10 @@ class FieldParser {
     if (threeDigitDataLength != null) {
       if (threeDigitDataLength.variable) {
         return _processVariableAI(
-            3, threeDigitDataLength.length, rawInformation);
+          3,
+          threeDigitDataLength.length,
+          rawInformation,
+        );
       }
       return _processFixedAI(3, threeDigitDataLength.length, rawInformation);
     }
@@ -237,10 +240,16 @@ class FieldParser {
     if (threeDigitPlusDigitDataLength != null) {
       if (threeDigitPlusDigitDataLength.variable) {
         return _processVariableAI(
-            4, threeDigitPlusDigitDataLength.length, rawInformation);
+          4,
+          threeDigitPlusDigitDataLength.length,
+          rawInformation,
+        );
       }
       return _processFixedAI(
-          4, threeDigitPlusDigitDataLength.length, rawInformation);
+        4,
+        threeDigitPlusDigitDataLength.length,
+        rawInformation,
+      );
     }
 
     final firstFourDigits = rawInformation.substring(0, 4);
@@ -248,7 +257,10 @@ class FieldParser {
     if (firstFourDigitLength != null) {
       if (firstFourDigitLength.variable) {
         return _processVariableAI(
-            4, firstFourDigitLength.length, rawInformation);
+          4,
+          firstFourDigitLength.length,
+          rawInformation,
+        );
       }
       return _processFixedAI(4, firstFourDigitLength.length, rawInformation);
     }
@@ -257,7 +269,10 @@ class FieldParser {
   }
 
   static String _processFixedAI(
-      int aiSize, int fieldSize, String rawInformation) {
+    int aiSize,
+    int fieldSize,
+    String rawInformation,
+  ) {
     if (rawInformation.length < aiSize) {
       throw NotFoundException.instance;
     }
@@ -276,7 +291,10 @@ class FieldParser {
   }
 
   static String _processVariableAI(
-      int aiSize, int variableFieldSize, String rawInformation) {
+    int aiSize,
+    int variableFieldSize,
+    String rawInformation,
+  ) {
     final ai = rawInformation.substring(0, aiSize);
     final maxSize = math.min(rawInformation.length, aiSize + variableFieldSize);
     final field = rawInformation.substring(aiSize, maxSize);

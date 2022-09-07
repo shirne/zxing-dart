@@ -38,7 +38,8 @@ class DetectionResult {
   List<DetectionResultColumn?> getDetectionResultColumns() {
     _adjustIndicatorColumnRowNumbers(_detectionResultColumns[0]);
     _adjustIndicatorColumnRowNumbers(
-        _detectionResultColumns[_barcodeColumnCount + 1]);
+      _detectionResultColumns[_barcodeColumnCount + 1],
+    );
     int unadjustedCodewordCount = PDF417Common.MAX_CODEWORDS_IN_BARCODE;
     int previousUnadjustedCount;
     do {
@@ -50,7 +51,8 @@ class DetectionResult {
   }
 
   void _adjustIndicatorColumnRowNumbers(
-      DetectionResultColumn? detectionResultColumn) {
+    DetectionResultColumn? detectionResultColumn,
+  ) {
     if (detectionResultColumn != null) {
       (detectionResultColumn as DetectionResultRowIndicatorColumn)
           .adjustCompleteIndicatorColumnRowNumbers(_barcodeMetadata);
@@ -150,7 +152,10 @@ class DetectionResult {
             _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = _adjustRowNumberIfValid(
-              rowIndicatorRowNumber, invalidRowCounts, codeword);
+            rowIndicatorRowNumber,
+            invalidRowCounts,
+            codeword,
+          );
           if (!codeword.hasValidRowNumber()) {
             unadjustedCount++;
           }
@@ -182,7 +187,10 @@ class DetectionResult {
             _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = _adjustRowNumberIfValid(
-              rowIndicatorRowNumber, invalidRowCounts, codeword);
+            rowIndicatorRowNumber,
+            invalidRowCounts,
+            codeword,
+          );
           if (!codeword.hasValidRowNumber()) {
             unadjustedCount++;
           }
@@ -193,7 +201,10 @@ class DetectionResult {
   }
 
   static int _adjustRowNumberIfValid(
-      int rowIndicatorRowNumber, int invalidRowCounts, Codeword? codeword) {
+    int rowIndicatorRowNumber,
+    int invalidRowCounts,
+    Codeword? codeword,
+  ) {
     if (codeword == null) {
       return invalidRowCounts;
     }
@@ -209,7 +220,10 @@ class DetectionResult {
   }
 
   void _adjustRowNumbersWords(
-      int barcodeColumn, int codewordsRow, List<Codeword?> codewords) {
+    int barcodeColumn,
+    int codewordsRow,
+    List<Codeword?> codewords,
+  ) {
     final codeword = codewords[codewordsRow];
     final previousColumnCodewords =
         _detectionResultColumns[barcodeColumn - 1]!.codewords;
@@ -271,7 +285,9 @@ class DetectionResult {
   int get barcodeECLevel => _barcodeMetadata.errorCorrectionLevel;
 
   void setDetectionResultColumn(
-      int barcodeColumn, DetectionResultColumn? detectionResultColumn) {
+    int barcodeColumn,
+    DetectionResultColumn? detectionResultColumn,
+  ) {
     _detectionResultColumns[barcodeColumn] = detectionResultColumn;
   }
 
@@ -302,7 +318,8 @@ class DetectionResult {
           continue;
         }
         formatter.write(
-            ' ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}');
+          ' ${codeword.rowNumber.toString().padLeft(3)}|${codeword.value.toString().padLeft(3)}',
+        );
       }
       formatter.write('\n');
     }

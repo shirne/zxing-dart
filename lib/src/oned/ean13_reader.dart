@@ -74,7 +74,11 @@ class EAN13Reader extends UPCEANReader {
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.lAndGPatterns);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.lAndGPatterns,
+      );
       result.writeCharCode(48 /* 0 */ + bestMatch % 10);
       for (int counter in counters) {
         rowOffset += counter;
@@ -87,12 +91,20 @@ class EAN13Reader extends UPCEANReader {
     _determineFirstDigit(result, lgPatternFound);
 
     final middleRange = UPCEANReader.findGuardPattern(
-        row, rowOffset, true, UPCEANReader.MIDDLE_PATTERN);
+      row,
+      rowOffset,
+      true,
+      UPCEANReader.MIDDLE_PATTERN,
+    );
     rowOffset = middleRange[1];
 
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       final bestMatch = UPCEANReader.decodeDigit(
-          row, counters, rowOffset, UPCEANReader.L_PATTERNS);
+        row,
+        counters,
+        rowOffset,
+        UPCEANReader.L_PATTERNS,
+      );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
         rowOffset += counter;
@@ -114,7 +126,9 @@ class EAN13Reader extends UPCEANReader {
   ///  encode digits
   /// @throws NotFoundException if first digit cannot be determined
   static void _determineFirstDigit(
-      StringBuilder resultString, int lgPatternFound) {
+    StringBuilder resultString,
+    int lgPatternFound,
+  ) {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
         resultString.insert(0, String.fromCharCode(48 /* 0 */ + d));

@@ -48,8 +48,11 @@ void main() {
 
   void testEncode(String data, bool compact, int layers, String expected) {
     final aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect(aztec.isCompact, compact,
-        reason: 'Unexpected symbol format (compact)');
+    expect(
+      aztec.isCompact,
+      compact,
+      reason: 'Unexpected symbol format (compact)',
+    );
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
     final matrix = aztec.matrix!;
     expect(matrix.toString(), expected, reason: 'encode() failed');
@@ -58,12 +61,20 @@ void main() {
   void testEncodeDecode(String data, bool compact, int layers) {
     final AztecCode aztec =
         Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
-    expect(aztec.isCompact, compact,
-        reason: 'Unexpected symbol format (compact)');
+    expect(
+      aztec.isCompact,
+      compact,
+      reason: 'Unexpected symbol format (compact)',
+    );
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
     final BitMatrix matrix = aztec.matrix!;
     AztecDetectorResult r = AztecDetectorResult(
-        matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
+      matrix,
+      noPoints,
+      aztec.isCompact,
+      aztec.codeWords,
+      aztec.layers,
+    );
     DecoderResult res = Decoder().decode(r);
     expect(
       res.text,
@@ -73,18 +84,32 @@ void main() {
     final Random random = getPseudoRandom();
     matrix.flip(random.nextInt(matrix.width), random.nextInt(2));
     matrix.flip(
-        random.nextInt(matrix.width), matrix.height - 2 + random.nextInt(2));
+      random.nextInt(matrix.width),
+      matrix.height - 2 + random.nextInt(2),
+    );
     matrix.flip(random.nextInt(2), random.nextInt(matrix.height));
     matrix.flip(
-        matrix.width - 2 + random.nextInt(2), random.nextInt(matrix.height));
+      matrix.width - 2 + random.nextInt(2),
+      random.nextInt(matrix.height),
+    );
     r = AztecDetectorResult(
-        matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
+      matrix,
+      noPoints,
+      aztec.isCompact,
+      aztec.codeWords,
+      aztec.layers,
+    );
     res = Decoder().decode(r);
     expect(res.text, data);
   }
 
-  void testWriter(String data, Encoding? charset, int eccPercent, bool compact,
-      int layers) {
+  void testWriter(
+    String data,
+    Encoding? charset,
+    int eccPercent,
+    bool compact,
+    int layers,
+  ) {
     // Perform an encode-decode round-trip because it can be lossy.
     final Map<EncodeHintType, Object> hints = {};
     if (null != charset) {
@@ -96,13 +121,21 @@ void main() {
         writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
     final AztecCode aztec =
         Encoder.encode(data, eccPercent, Encoder.DEFAULT_AZTEC_LAYERS, charset);
-    expect(aztec.isCompact, compact,
-        reason: 'Unexpected symbol format (compact)');
+    expect(
+      aztec.isCompact,
+      compact,
+      reason: 'Unexpected symbol format (compact)',
+    );
     expect(aztec.layers, layers, reason: 'Unexpected nr. of layers');
     final BitMatrix matrix2 = aztec.matrix!;
     expect(matrix, matrix2);
     AztecDetectorResult r = AztecDetectorResult(
-        matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
+      matrix,
+      noPoints,
+      aztec.isCompact,
+      aztec.codeWords,
+      aztec.layers,
+    );
     DecoderResult res = Decoder().decode(r);
     expect(
       res.text,
@@ -122,15 +155,23 @@ void main() {
       matrix.flip(x, y);
     }
     r = AztecDetectorResult(
-        matrix, noPoints, aztec.isCompact, aztec.codeWords, aztec.layers);
+      matrix,
+      noPoints,
+      aztec.isCompact,
+      aztec.codeWords,
+      aztec.layers,
+    );
     res = Decoder().decode(r);
     expect(res.text, data);
   }
 
   void testModeMessage(bool compact, int layers, int words, String expected) {
     final BitArray inBit = Encoder.generateModeMessage(compact, layers, words);
-    expect(stripSpace(expected), stripSpace(inBit.toString()),
-        reason: 'generateModeMessage() failed');
+    expect(
+      stripSpace(expected),
+      stripSpace(inBit.toString()),
+      reason: 'generateModeMessage() failed',
+    );
   }
 
   BitArray toBitArray(String bits) {
@@ -145,8 +186,11 @@ void main() {
   void testStuffBits(int wordSize, String bits, String expected) {
     final BitArray inBit = toBitArray(bits);
     final BitArray stuffed = Encoder.stuffBits(inBit, wordSize);
-    expect(stripSpace(expected), stripSpace(stuffed.toString()),
-        reason: 'stuffBits() failed for input string: $bits');
+    expect(
+      stripSpace(expected),
+      stripSpace(stuffed.toString()),
+      reason: 'stuffBits() failed for input string: $bits',
+    );
   }
 
   List<bool> toBooleanArray(BitArray bitArray) {
@@ -161,8 +205,11 @@ void main() {
     final BitArray bits = HighLevelEncoder(latin1.encode(s)).encode();
     final String receivedBits = stripSpace(bits.toString());
     expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
-    expect(stripSpace(expectedBits), receivedBits,
-        reason: 'highLevelEncode() failed for input string: $s');
+    expect(
+      stripSpace(expectedBits),
+      receivedBits,
+      reason: 'highLevelEncode() failed for input string: $s',
+    );
   }
 
   // todo 加密串长度和预期不一致，但是能解密 ?
@@ -172,7 +219,8 @@ void main() {
     expect(Decoder.highLevelDecode(toBooleanArray(bits)), s);
     if (expectedReceivedBits != receivedBitCount) {
       print(
-          'highLevelEncode() result length($receivedBitCount) unexpected(expected $expectedReceivedBits) for input string: $s');
+        'highLevelEncode() result length($receivedBitCount) unexpected(expected $expectedReceivedBits) for input string: $s',
+      );
     }
     //expect(expectedReceivedBits, receivedBitCount, reason: "highLevelEncode() failed for input string: $s");
   }
@@ -280,13 +328,21 @@ void main() {
     testWriter('\u20AC 1 sample data.', utf_8, 300, true, 4);
     testWriter('\u20AC 1 sample data.', utf_8, 500, false, 5);
     testWriter(
-        'The capital of Japan is named \u6771\u4EAC.', shiftJis, 25, true, 3);
+      'The capital of Japan is named \u6771\u4EAC.',
+      shiftJis,
+      25,
+      true,
+      3,
+    );
     // Test AztecWriter defaults
     final String data = 'In ut magna vel mauris malesuada';
     final AztecWriter writer = AztecWriter();
     final BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
     final AztecCode aztec = Encoder.encode(
-        data, Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
+      data,
+      Encoder.DEFAULT_EC_PERCENT,
+      Encoder.DEFAULT_AZTEC_LAYERS,
+    );
     final BitMatrix expectedMatrix = aztec.matrix!;
     expect(matrix, expectedMatrix);
   });
@@ -303,194 +359,234 @@ void main() {
 
   test('testEncodeDecode3', () {
     testEncodeDecode(
-        'AAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAAN', true, 3);
+      'AAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAAN',
+      true,
+      3,
+    );
   });
 
   test('testEncodeDecode4', () {
     testEncodeDecode(
-        "http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384", true, 4);
+      "http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384",
+      true,
+      4,
+    );
   });
 
   test('testEncodeDecode5', () {
     testEncodeDecode(
-        "http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
-        'Four score and seven our forefathers brought forth',
-        false,
-        5);
+      "http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
+      'Four score and seven our forefathers brought forth',
+      false,
+      5,
+    );
   });
 
   test('testEncodeDecode10', () {
     testEncodeDecode(
-        'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
-        ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
-        ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
-        ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
-        ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
-        ' elementum sapien dolor et diam.',
-        false,
-        10);
+      'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
+      ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
+      ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
+      ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
+      ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
+      ' elementum sapien dolor et diam.',
+      false,
+      10,
+    );
   });
 
   test('testEncodeDecode23', () {
     testEncodeDecode(
-        'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
-        ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
-        ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
-        ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
-        ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
-        ' elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend.'
-        ' Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus'
-        ' justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu'
-        ' tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus'
-        ' quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec'
-        ' laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida,'
-        ' justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec'
-        ' lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar'
-        ' nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat'
-        ' eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra'
-        ' fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo'
-        ' diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla'
-        ' ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
-        ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
-        ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit'
-        ' felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo'
-        ' erat pulvinar nisi, id elementum sapien dolor et diam.',
-        false,
-        23);
+      'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
+      ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
+      ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
+      ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
+      ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
+      ' elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend.'
+      ' Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus'
+      ' justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu'
+      ' tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus'
+      ' quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec'
+      ' laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida,'
+      ' justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec'
+      ' lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar'
+      ' nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat'
+      ' eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra'
+      ' fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo'
+      ' diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla'
+      ' ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
+      ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
+      ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit'
+      ' felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo'
+      ' erat pulvinar nisi, id elementum sapien dolor et diam.',
+      false,
+      23,
+    );
   });
 
   test('testEncodeDecode31', () {
     testEncodeDecode(
-        'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
-        ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
-        ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
-        ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
-        ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
-        ' elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend.'
-        ' Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus'
-        ' justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu'
-        ' tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus'
-        ' quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec'
-        ' laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida,'
-        ' justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec'
-        ' lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar'
-        ' nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat'
-        ' eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra'
-        ' fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo'
-        ' diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla'
-        ' ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
-        ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
-        ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit'
-        ' felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo'
-        ' erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit'
-        ' placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at'
-        ' pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est.'
-        ' Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada'
-        ' dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id'
-        ' justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum'
-        ' sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat,'
-        ' eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet'
-        ' laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac'
-        ' nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula,'
-        ' massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus'
-        ' sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum.'
-        ' Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
-        ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
-        ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget'
-        ' hendrerit felis turpis nec lorem.',
-        false,
-        31);
+      'In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam'
+      ' cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum'
+      ' est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue'
+      ' auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla'
+      ' ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id'
+      ' elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend.'
+      ' Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus'
+      ' justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu'
+      ' tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus'
+      ' quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec'
+      ' laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida,'
+      ' justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec'
+      ' lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar'
+      ' nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat'
+      ' eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra'
+      ' fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo'
+      ' diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla'
+      ' ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
+      ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
+      ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit'
+      ' felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo'
+      ' erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit'
+      ' placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at'
+      ' pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est.'
+      ' Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada'
+      ' dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id'
+      ' justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum'
+      ' sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat,'
+      ' eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet'
+      ' laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac'
+      ' nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula,'
+      ' massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus'
+      ' sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum.'
+      ' Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum'
+      ' sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet.'
+      ' Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget'
+      ' hendrerit felis turpis nec lorem.',
+      false,
+      31,
+    );
   });
 
   test('testGenerateModeMessage', () {
     testModeMessage(true, 2, 29, '.X .XXX.. ...X XX.. ..X .XX. .XX.X');
     testModeMessage(true, 4, 64, 'XX XXXXXX .X.. ...X ..XX .X.. XX..');
     testModeMessage(
-        false, 21, 660, 'X.X.. .X.X..X..XX .XXX ..X.. .XXX. .X... ..XXX');
+      false,
+      21,
+      660,
+      'X.X.. .X.X..X..XX .XXX ..X.. .XXX. .X... ..XXX',
+    );
     testModeMessage(
-        false, 32, 4096, 'XXXXX XXXXXXXXXXX X.X. ..... XXX.X ..X.. X.XXX');
+      false,
+      32,
+      4096,
+      'XXXXX XXXXXXXXXXX X.X. ..... XXX.X ..X.. X.XXX',
+    );
   });
 
   test('testStuffBits', () {
     testStuffBits(5, '.X.X. X.X.X .X.X.', '.X.X. X.X.X .X.X.');
     testStuffBits(5, '.X.X. ..... .X.X', '.X.X. ....X ..X.X');
     testStuffBits(
-        3, 'XX. ... ... ..X XXX .X. ..', 'XX. ..X ..X ..X ..X .XX XX. .X. ..X');
+      3,
+      'XX. ... ... ..X XXX .X. ..',
+      'XX. ..X ..X ..X ..X .XX XX. .X. ..X',
+    );
     testStuffBits(6, '.X.X.. ...... ..X.XX', '.X.X.. .....X. ..X.XX XXXX.');
     testStuffBits(
-        6, '.X.X.. ...... ...... ..X.X.', '.X.X.. .....X .....X ....X. X.XXXX');
+      6,
+      '.X.X.. ...... ...... ..X.X.',
+      '.X.X.. .....X .....X ....X. X.XXXX',
+    );
     testStuffBits(
-        6, '.X.X.. XXXXXX ...... ..X.XX', '.X.X.. XXXXX. X..... ...X.X XXXXX.');
+      6,
+      '.X.X.. XXXXXX ...... ..X.XX',
+      '.X.X.. XXXXX. X..... ...X.X XXXXX.',
+    );
     testStuffBits(
-        6,
-        '...... ..XXXX X..XX. .X.... .X.X.X .....X .X.... ...X.X .....X ....XX ..X... ....X. X..XXX X.XX.X',
-        '.....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX');
+      6,
+      '...... ..XXXX X..XX. .X.... .X.X.X .....X .X.... ...X.X .....X ....XX ..X... ....X. X..XXX X.XX.X',
+      '.....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX',
+    );
   });
 
   test('testHighLevelEncode', () {
     testHighLevelEncodeString(
-        'A. b.',
-        // 'A'  P/S   '. ' L/L    b    D/L    '.'
-        '...X. ..... ...XX XXX.. ...XX XXXX. XX.X');
+      'A. b.',
+      // 'A'  P/S   '. ' L/L    b    D/L    '.'
+      '...X. ..... ...XX XXX.. ...XX XXXX. XX.X',
+    );
     testHighLevelEncodeString(
-        'Lorem ipsum.',
-        // 'L'  L/L   'o'   'r'   'e'   'm'   ' '   'i'   'p'   's'   'u'   'm'   D/L   '.'
-        '.XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X');
+      'Lorem ipsum.',
+      // 'L'  L/L   'o'   'r'   'e'   'm'   ' '   'i'   'p'   's'   'u'   'm'   D/L   '.'
+      '.XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X',
+    );
     testHighLevelEncodeString(
-        'Lo. Test 123.',
-        // 'L'  L/L   'o'   P/S   '. '  U/S   'T'   'e'   's'   't'    D/L   ' '  '1'  '2'  '3'  '.'
-        '.XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X  XXXX. ...X ..XX .X.. .X.X XX.X');
+      'Lo. Test 123.',
+      // 'L'  L/L   'o'   P/S   '. '  U/S   'T'   'e'   's'   't'    D/L   ' '  '1'  '2'  '3'  '.'
+      '.XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X  XXXX. ...X ..XX .X.. .X.X XX.X',
+    );
     testHighLevelEncodeString(
-        'Lo...x',
-        // 'L'  L/L   'o'   D/L   '.'  '.'  '.'  U/L  L/L   'x'
-        '.XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X');
+      'Lo...x',
+      // 'L'  L/L   'o'   D/L   '.'  '.'  '.'  U/L  L/L   'x'
+      '.XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X',
+    );
     testHighLevelEncodeString(
-        '. x://abc/.',
-        //P/S   '. '  L/L   'x'   P/S   ':'   P/S   '/'   P/S   '/'   'a'   'b'   'c'   P/S   '/'   D/L   '.'
-        '..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X');
+      '. x://abc/.',
+      //P/S   '. '  L/L   'x'   P/S   ':'   P/S   '/'   P/S   '/'   'a'   'b'   'c'   P/S   '/'   D/L   '.'
+      '..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X',
+    );
     // Uses Binary/Shift rather than Lower/Shift to save two bits.
     testHighLevelEncodeString(
-        'ABCdEFG',
-        //'A'   'B'   'C'   B/S    =1    'd'     'E'   'F'   'G'
-        '...X. ...XX ..X.. XXXXX ....X .XX..X.. ..XX. ..XXX .X...');
+      'ABCdEFG',
+      //'A'   'B'   'C'   B/S    =1    'd'     'E'   'F'   'G'
+      '...X. ...XX ..X.. XXXXX ....X .XX..X.. ..XX. ..XXX .X...',
+    );
 
     testHighLevelEncodeString(
-        // Found on an airline boarding pass.  Several stretches of Binary shift are
-        // necessary to keep the bitcount so low.
-        '09  UAG    ^160MEUCIQC0sYS/HpKxnBELR1uB85R20OoqqwFGa0q2uEi'
-        'Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=',
-        823);
+      // Found on an airline boarding pass.  Several stretches of Binary shift are
+      // necessary to keep the bitcount so low.
+      '09  UAG    ^160MEUCIQC0sYS/HpKxnBELR1uB85R20OoqqwFGa0q2uEi'
+      'Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=',
+      823,
+    );
   });
 
   test('testHighLevelEncodeBinary', () {
     // binary short form single byte
     testHighLevelEncodeString(
-        'N\x00N',
-        // 'N'  B/S    =1   '\x00'      N
-        '.XXXX XXXXX ....X ........ .XXXX'); // Encode "N" in UPPER
+      'N\x00N',
+      // 'N'  B/S    =1   '\x00'      N
+      '.XXXX XXXXX ....X ........ .XXXX',
+    ); // Encode "N" in UPPER
 
     testHighLevelEncodeString(
-        'N\x00n',
-        // 'N'  B/S    =2   '\x00'       'n'
-        '.XXXX XXXXX ...X. ........ .XX.XXX.'); // Encode "n" in BINARY
+      'N\x00n',
+      // 'N'  B/S    =2   '\x00'       'n'
+      '.XXXX XXXXX ...X. ........ .XX.XXX.',
+    ); // Encode "n" in BINARY
 
     // binary short form consecutive bytes
     testHighLevelEncodeString(
-        'N\x00\u0080 A',
-        // 'N'  B/S    =2    '\x00'    \u0080   ' '  'A'
-        '.XXXX XXXXX ...X. ........ X....... ....X ...X.');
+      'N\x00\u0080 A',
+      // 'N'  B/S    =2    '\x00'    \u0080   ' '  'A'
+      '.XXXX XXXXX ...X. ........ X....... ....X ...X.',
+    );
 
     // binary skipping over single character
     testHighLevelEncodeString(
-        '\x00a\u00FF\u0080 A',
-        // B/S  =4    '\x00'      'a'     '\3ff'   '\x80'   ' '   'A'
-        'XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.');
+      '\x00a\u00FF\u0080 A',
+      // B/S  =4    '\x00'      'a'     '\3ff'   '\x80'   ' '   'A'
+      'XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.',
+    );
 
     // getting into binary mode from digit mode
     testHighLevelEncodeString(
-        '1234\x00',
-        //D/L   '1'  '2'  '3'  '4'  U/L  B/S    =1    \x00
-        'XXXX. ..XX .X.. .X.X .XX. XXX. XXXXX ....X ........');
+      '1234\x00',
+      //D/L   '1'  '2'  '3'  '4'  U/L  B/S    =1    \x00
+      'XXXX. ..XX .X.. .X.X .XX. XXX. XXXXX ....X ........',
+    );
 
     // Create a string in which every character requires binary
     StringBuilder sb = StringBuilder();
@@ -563,26 +659,30 @@ void main() {
   test('testHighLevelEncodePairs', () {
     // Typical usage
     testHighLevelEncodeString(
-        'ABC. DEF\r\n',
-        //  A     B    C    P/S   .<sp>   D    E     F    P/S   \r\n
-        '...X. ...XX ..X.. ..... ...XX ..X.X ..XX. ..XXX ..... ...X.');
+      'ABC. DEF\r\n',
+      //  A     B    C    P/S   .<sp>   D    E     F    P/S   \r\n
+      '...X. ...XX ..X.. ..... ...XX ..X.X ..XX. ..XXX ..... ...X.',
+    );
 
     // We should latch to PUNCT mode, rather than shift.  Also check all pairs
     testHighLevelEncodeString(
-        'A. : , \r\n',
-        // 'A'    M/L   P/L   ". "  ": "   ", " "\r\n"
-        '...X. XXX.X XXXX. ...XX ..X.X  ..X.. ...X.');
+      'A. : , \r\n',
+      // 'A'    M/L   P/L   ". "  ": "   ", " "\r\n"
+      '...X. XXX.X XXXX. ...XX ..X.X  ..X.. ...X.',
+    );
 
     // Latch to DIGIT rather than shift to PUNCT
     testHighLevelEncodeString(
-        'A. 1234',
-        // 'A'  D/L   '.'  ' '  '1' '2'   '3'  '4'
-        '...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X.');
+      'A. 1234',
+      // 'A'  D/L   '.'  ' '  '1' '2'   '3'  '4'
+      '...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X.',
+    );
     // Don't bother leaving Binary Shift.
     testHighLevelEncodeString(
-        'A\x80. \x80',
-        // 'A'  B/S    =2    \x80      "."     " "     \x80
-        '...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......');
+      'A\x80. \x80',
+      // 'A'  B/S    =2    \x80      "."     " "     \x80
+      '...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......',
+    );
   });
 
   void doTestUserSpecifiedLayers(int userSpecifiedLayers) {

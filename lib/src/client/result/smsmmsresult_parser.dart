@@ -80,7 +80,10 @@ class SMSMMSResultParser extends ResultParser {
   }
 
   static void _addNumberVia(
-      List<String> numbers, List<String> vias, String numberPart) {
+    List<String> numbers,
+    List<String> vias,
+    String numberPart,
+  ) {
     final numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
       numbers.add(numberPart);

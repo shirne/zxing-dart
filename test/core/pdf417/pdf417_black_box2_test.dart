@@ -32,7 +32,8 @@ void main() {
   // todo the result is different with zxing java
   test('test22png', () {
     final root = AbstractBlackBoxTestCase.buildTestBase(
-        'test/resources/blackbox/pdf417-2');
+      'test/resources/blackbox/pdf417-2',
+    );
     final testImage = File('${root.path}/22.png');
     final image = decodeImage(testImage.readAsBytesSync())!;
     final source = BufferedImageLuminanceSource(image);
@@ -47,8 +48,11 @@ void main() {
   });
 
   test('PDF417BlackBox2TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/pdf417-2',
-        MultiFormatReader(), BarcodeFormat.PDF_417)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/pdf417-2',
+      MultiFormatReader(),
+      BarcodeFormat.PDF_417,
+    )
       ..addTest(24, 24, 0.0, 0, 0)
       ..addTest(24, 24, 180.0, 0, 0)
       ..testBlackBox();

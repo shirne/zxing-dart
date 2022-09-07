@@ -32,8 +32,10 @@ void main() {
 
   test('testGetProvisionalVersionForDimension', () {
     for (int i = 1; i <= 40; i++) {
-      expect(i,
-          Version.getProvisionalVersionForDimension(4 * i + 17).versionNumber);
+      expect(
+        i,
+        Version.getProvisionalVersionForDimension(4 * i + 17).versionNumber,
+      );
     }
   });
 

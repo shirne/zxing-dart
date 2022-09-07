@@ -84,7 +84,9 @@ class FormatInformation {
   /// @return information about the format it specifies, or `null`
   ///  if doesn't seem to match any known pattern
   static FormatInformation? decodeFormatInformation(
-      int maskedFormatInfo1, int maskedFormatInfo2) {
+    int maskedFormatInfo1,
+    int maskedFormatInfo2,
+  ) {
     final formatInfo =
         _doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
     if (formatInfo != null) {
@@ -93,12 +95,16 @@ class FormatInformation {
     // Should return null, but, some QR codes apparently
     // do not mask this info. Try again by actually masking the pattern
     // first
-    return _doDecodeFormatInformation(maskedFormatInfo1 ^ _FORMAT_INFO_MASK_QR,
-        maskedFormatInfo2 ^ _FORMAT_INFO_MASK_QR);
+    return _doDecodeFormatInformation(
+      maskedFormatInfo1 ^ _FORMAT_INFO_MASK_QR,
+      maskedFormatInfo2 ^ _FORMAT_INFO_MASK_QR,
+    );
   }
 
   static FormatInformation? _doDecodeFormatInformation(
-      int maskedFormatInfo1, int maskedFormatInfo2) {
+    int maskedFormatInfo1,
+    int maskedFormatInfo2,
+  ) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;
     int bestFormatInfo = 0;
@@ -140,7 +146,7 @@ class FormatInformation {
   }
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! FormatInformation) {
       return false;
     }

@@ -43,7 +43,8 @@ void main() {
 
     final image = decodeImage(File(path).readAsBytesSync())!;
     final binaryMap = BinaryBitmap(
-        GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)));
+      GlobalHistogramBinarizer(BufferedImageLuminanceSource(image)),
+    );
     final rowNumber = binaryMap.height ~/ 2;
     final row = binaryMap.getBlackRow(rowNumber, null);
 
@@ -74,7 +75,9 @@ void main() {
 
   test('testDecodeRow2string4', () {
     assertCorrectImage2string(
-        '4.png', '(01)98898765432106(3202)012345(15)991231');
+      '4.png',
+      '(01)98898765432106(3202)012345(15)991231',
+    );
   });
 
   test('testDecodeRow2string5', () {
@@ -92,8 +95,10 @@ void main() {
   });
 
   test('testDecodeRow2string11', () {
-    assertCorrectImage2string('11.png',
-        '(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456');
+    assertCorrectImage2string(
+      '11.png',
+      '(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456',
+    );
   });
 
   test('testDecodeRow2string12', () {
@@ -110,42 +115,58 @@ void main() {
 
   test('testDecodeRow2string15', () {
     assertCorrectImage2string(
-        '15.png', '(01)90012345678908(3102)001750(11)100312');
+      '15.png',
+      '(01)90012345678908(3102)001750(11)100312',
+    );
   });
 
   test('testDecodeRow2string16', () {
     assertCorrectImage2string(
-        '16.png', '(01)90012345678908(3202)001750(11)100312');
+      '16.png',
+      '(01)90012345678908(3202)001750(11)100312',
+    );
   });
 
   test('testDecodeRow2string17', () {
     assertCorrectImage2string(
-        '17.png', '(01)90012345678908(3102)001750(13)100312');
+      '17.png',
+      '(01)90012345678908(3102)001750(13)100312',
+    );
   });
 
   test('testDecodeRow2string18', () {
     assertCorrectImage2string(
-        '18.png', '(01)90012345678908(3202)001750(13)100312');
+      '18.png',
+      '(01)90012345678908(3202)001750(13)100312',
+    );
   });
 
   test('testDecodeRow2string19', () {
     assertCorrectImage2string(
-        '19.png', '(01)90012345678908(3102)001750(15)100312');
+      '19.png',
+      '(01)90012345678908(3102)001750(15)100312',
+    );
   });
 
   test('testDecodeRow2string20', () {
     assertCorrectImage2string(
-        '20.png', '(01)90012345678908(3202)001750(15)100312');
+      '20.png',
+      '(01)90012345678908(3202)001750(15)100312',
+    );
   });
 
   test('testDecodeRow2string21', () {
     assertCorrectImage2string(
-        '21.png', '(01)90012345678908(3102)001750(17)100312');
+      '21.png',
+      '(01)90012345678908(3102)001750(17)100312',
+    );
   });
 
   test('testDecodeRow2string22', () {
     assertCorrectImage2string(
-        '22.png', '(01)90012345678908(3202)001750(17)100312');
+      '22.png',
+      '(01)90012345678908(3202)001750(17)100312',
+    );
   });
 
   test('testDecodeRow2string25', () {
@@ -177,7 +198,9 @@ void main() {
   });
 
   test('testDecodeRow2string32', () {
-    assertCorrectImage2string('32.png',
-        '(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012');
+    assertCorrectImage2string(
+      '32.png',
+      '(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012',
+    );
   });
 }

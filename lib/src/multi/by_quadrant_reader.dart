@@ -51,7 +51,9 @@ class ByQuadrantReader implements Reader {
 
     try {
       final result = _delegate.decode(
-          image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
+        image.crop(halfWidth, 0, halfWidth, halfHeight),
+        hints,
+      );
       _makeAbsolute(result.resultPoints, halfWidth, 0);
       return result;
     } on NotFoundException catch (_) {
@@ -60,7 +62,9 @@ class ByQuadrantReader implements Reader {
 
     try {
       final result = _delegate.decode(
-          image.crop(0, halfHeight, halfWidth, halfHeight), hints);
+        image.crop(0, halfHeight, halfWidth, halfHeight),
+        hints,
+      );
       _makeAbsolute(result.resultPoints, 0, halfHeight);
       return result;
     } on NotFoundException catch (_) {
@@ -69,7 +73,9 @@ class ByQuadrantReader implements Reader {
 
     try {
       final result = _delegate.decode(
-          image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
+        image.crop(halfWidth, halfHeight, halfWidth, halfHeight),
+        hints,
+      );
       _makeAbsolute(result.resultPoints, halfWidth, halfHeight);
       return result;
     } on NotFoundException catch (_) {
@@ -91,7 +97,10 @@ class ByQuadrantReader implements Reader {
   }
 
   static void _makeAbsolute(
-      List<ResultPoint?>? points, int leftOffset, int topOffset) {
+    List<ResultPoint?>? points,
+    int leftOffset,
+    int topOffset,
+  ) {
     if (points != null) {
       for (int i = 0; i < points.length; i++) {
         final relative = points[i];

@@ -67,7 +67,10 @@ class BizcardResultParser extends AbstractDoCoMoResultParser {
   }
 
   static List<String>? _buildPhoneNumbers(
-      String? number1, String? number2, String? number3) {
+    String? number1,
+    String? number2,
+    String? number3,
+  ) {
     final List<String> numbers = [];
     if (number1 != null) {
       numbers.add(number1);

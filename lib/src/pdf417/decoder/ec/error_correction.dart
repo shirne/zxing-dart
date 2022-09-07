@@ -66,7 +66,10 @@ class ErrorCorrection {
     //syndrome = syndrome.multiply(knownErrors);
 
     final sigmaOmega = _runEuclideanAlgorithm(
-        _field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+      _field.buildMonomial(numECCodewords, 1),
+      syndrome,
+      numECCodewords,
+    );
     final sigma = sigmaOmega[0];
     final omega = sigmaOmega[1];
 
@@ -87,7 +90,10 @@ class ErrorCorrection {
   }
 
   List<ModulusPoly> _runEuclideanAlgorithm(
-      ModulusPoly a, ModulusPoly b, int R) {
+    ModulusPoly a,
+    ModulusPoly b,
+    int R,
+  ) {
     // Assume a's degree is >= b's
     if (a.degree < b.degree) {
       final temp = a;
@@ -152,8 +158,11 @@ class ErrorCorrection {
     return result;
   }
 
-  List<int> _findErrorMagnitudes(ModulusPoly errorEvaluator,
-      ModulusPoly errorLocator, List<int> errorLocations) {
+  List<int> _findErrorMagnitudes(
+    ModulusPoly errorEvaluator,
+    ModulusPoly errorLocator,
+    List<int> errorLocations,
+  ) {
     final errorLocatorDegree = errorLocator.degree;
     if (errorLocatorDegree < 1) {
       return [0];

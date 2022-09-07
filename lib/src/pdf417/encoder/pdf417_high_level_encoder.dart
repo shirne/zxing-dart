@@ -127,10 +127,18 @@ class PDF417HighLevelEncoder {
     10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
   ];
 
-  static final Uint8List _mixed = Uint8List.fromList(List.generate(
-      128, (index) => index == 0 ? 0xff : _textMixedRaw.indexOf(index)));
-  static final Uint8List _punctuatuin = Uint8List.fromList(List.generate(
-      128, (index) => index == 0 ? 0xff : _textPunctuationRaw.indexOf(index)));
+  static final Uint8List _mixed = Uint8List.fromList(
+    List.generate(
+      128,
+      (index) => index == 0 ? 0xff : _textMixedRaw.indexOf(index),
+    ),
+  );
+  static final Uint8List _punctuatuin = Uint8List.fromList(
+    List.generate(
+      128,
+      (index) => index == 0 ? 0xff : _textPunctuationRaw.indexOf(index),
+    ),
+  );
 
   static final Encoding _defaultEncoding = latin1;
 
@@ -146,7 +154,11 @@ class PDF417HighLevelEncoder {
   ///  or `null` for default / not applicable
   /// @return the encoded message (the char values range from 0 to 928)
   static String encodeHighLevel(
-      String msg, Compaction compaction, Encoding? encoding, bool autoECI) {
+    String msg,
+    Compaction compaction,
+    Encoding? encoding,
+    bool autoECI,
+  ) {
     if (msg.isEmpty) {
       throw WriterException('Empty message not allowed');
     }
@@ -228,14 +240,18 @@ class PDF417HighLevelEncoder {
               p += t;
             } else {
               int b = _determineConsecutiveBinaryCount(
-                  input, p, autoECI ? null : encoding);
+                input,
+                p,
+                autoECI ? null : encoding,
+              );
               if (b == 0) {
                 b = 1;
               }
               final bytes = autoECI
                   ? null
                   : Uint8List.fromList(
-                      encoding!.encode(input.toString().substring(p, p + b)));
+                      encoding!.encode(input.toString().substring(p, p + b)),
+                    );
               if ((bytes == null && b == 1) ||
                   (bytes != null && bytes.length == 1) &&
                       encodingMode == _TEXT_COMPACTION) {
@@ -274,8 +290,13 @@ class PDF417HighLevelEncoder {
   /// @param sb             receives the encoded codewords
   /// @param initialSubmode should normally be SUBMODE_ALPHA
   /// @return the text submode in which this method ends
-  static int _encodeText(ECIInput input, int startpos, int count,
-      StringBuffer sb, int initialSubmode) {
+  static int _encodeText(
+    ECIInput input,
+    int startpos,
+    int count,
+    StringBuffer sb,
+    int initialSubmode,
+  ) {
     final tmp = StringBuilder();
     int submode = initialSubmode;
     int idx = 0;
@@ -392,7 +413,12 @@ class PDF417HighLevelEncoder {
   }
 
   static void _encodeMultiECIBinary(
-      ECIInput input, int startpos, int count, int startmode, StringBuffer sb) {
+    ECIInput input,
+    int startpos,
+    int count,
+    int startmode,
+    StringBuffer sb,
+  ) {
     final int end = math.min(startpos + count, input.length);
     int localStart = startpos;
     while (true) {
@@ -413,8 +439,13 @@ class PDF417HighLevelEncoder {
         break;
       } else {
         //encode the segment
-        _encodeBinary(subBytes(input, localStart, localEnd), 0, localCount,
-            localStart == startpos ? startmode : _BYTE_COMPACTION, sb);
+        _encodeBinary(
+          subBytes(input, localStart, localEnd),
+          0,
+          localCount,
+          localStart == startpos ? startmode : _BYTE_COMPACTION,
+          sb,
+        );
         localStart = localEnd;
       }
     }
@@ -438,8 +469,13 @@ class PDF417HighLevelEncoder {
   /// @param count     the number of bytes to encode
   /// @param startmode the mode from which this method starts
   /// @param sb        receives the encoded codewords
-  static void _encodeBinary(List<int> bytes, int startpos, int count,
-      int startmode, StringBuffer sb) {
+  static void _encodeBinary(
+    List<int> bytes,
+    int startpos,
+    int count,
+    int startmode,
+    StringBuffer sb,
+  ) {
     if (count == 1 && startmode == _TEXT_COMPACTION) {
       sb.writeCharCode(_SHIFT_TO_BYTE);
     } else {
@@ -478,7 +514,11 @@ class PDF417HighLevelEncoder {
   }
 
   static void _encodeNumeric(
-      ECIInput input, int startpos, int count, StringBuffer sb) {
+    ECIInput input,
+    int startpos,
+    int count,
+    StringBuffer sb,
+  ) {
     int idx = 0;
     final tmp = StringBuilder();
     final num900 = BigInt.from(900);
@@ -579,7 +619,10 @@ class PDF417HighLevelEncoder {
   /// @param encoding the charset used to convert the message to a byte array
   /// @return the requested character count
   static int _determineConsecutiveBinaryCount(
-      ECIInput input, int startpos, Encoding? encoding) {
+    ECIInput input,
+    int startpos,
+    Encoding? encoding,
+  ) {
     final len = input.length;
     int idx = startpos;
     while (idx < len) {
@@ -602,10 +645,13 @@ class PDF417HighLevelEncoder {
       // 判断是否超出字符集
       if (encoding != null &&
           !Charset.canEncode(
-              encoding, String.fromCharCode(input.charAt(idx)))) {
+            encoding,
+            String.fromCharCode(input.charAt(idx)),
+          )) {
         final ch = input.charAt(idx);
         throw WriterException(
-            'Non-encodable character detected: $ch (Unicode: $ch)');
+          'Non-encodable character detected: $ch (Unicode: $ch)',
+        );
       }
       idx++;
     }
@@ -625,7 +671,8 @@ class PDF417HighLevelEncoder {
       sb.writeCharCode((810900 - eci));
     } else {
       throw WriterException(
-          'ECI number not in valid range from 0..811799, but was $eci');
+        'ECI number not in valid range from 0..811799, but was $eci',
+      );
     }
   }
 }

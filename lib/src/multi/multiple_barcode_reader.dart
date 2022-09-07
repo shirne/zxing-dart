@@ -25,6 +25,8 @@ import '../result.dart';
 /// @see com.google.zxing.Reader
 /// @author Sean Owen
 abstract class MultipleBarcodeReader {
-  List<Result> decodeMultiple(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints]);
+  List<Result> decodeMultiple(
+    BinaryBitmap image, [
+    Map<DecodeHintType, Object>? hints,
+  ]);
 }

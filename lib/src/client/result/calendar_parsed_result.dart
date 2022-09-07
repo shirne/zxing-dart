@@ -26,7 +26,8 @@ import 'parsed_result_type.dart';
 /// @author Sean Owen
 class CalendarParsedResult extends ParsedResult {
   static final _rfc2445Duration = RegExp(
-      r'^P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$');
+    r'^P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$',
+  );
   static final _rfc2445DurationFieldUnits = [
     7 * 24 * 60 * 60 * 1000, // 1 week
     24 * 60 * 60 * 1000, // 1 day
@@ -50,17 +51,17 @@ class CalendarParsedResult extends ParsedResult {
   double? longitude;
 
   CalendarParsedResult(
-      this.summary,
-      String? startString,
-      String? endString,
-      String? durationString,
-      this.location,
-      this.organizer,
-      this._attendees,
-      this.description,
-      this.latitude,
-      this.longitude)
-      : super(ParsedResultType.CALENDAR) {
+    this.summary,
+    String? startString,
+    String? endString,
+    String? durationString,
+    this.location,
+    this.organizer,
+    this._attendees,
+    this.description,
+    this.latitude,
+    this.longitude,
+  ) : super(ParsedResultType.CALENDAR) {
     try {
       _start = _parseDate(startString);
     } on ParseException catch (_) {
@@ -82,8 +83,12 @@ class CalendarParsedResult extends ParsedResult {
     _endAllDay = endString != null && endString.length == 8;
   }
 
-  setDuration(DateTime start, DateTime end,
-      {bool startAllDay = false, bool endAllDay = false}) {
+  void setDuration(
+    DateTime start,
+    DateTime end, {
+    bool startAllDay = false,
+    bool endAllDay = false,
+  }) {
     _start = start.millisecondsSinceEpoch;
     _end = end.millisecondsSinceEpoch;
     _startAllDay = startAllDay;

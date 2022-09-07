@@ -47,7 +47,9 @@ class StringUtils {
   ///  "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
   ///  of these can possibly be correct
   static String guessEncoding(
-      Uint8List bytes, Map<DecodeHintType, Object>? hints) {
+    Uint8List bytes,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final c = guessCharset(bytes, hints);
     if (c == shiftJisCharset) {
       return 'SJIS';
@@ -79,11 +81,13 @@ class StringUtils {
   ///  or the platform default encoding if
   ///  none of these can possibly be correct
   static Encoding? guessCharset(
-      Uint8List bytes, Map<DecodeHintType, Object>? hints) {
+    Uint8List bytes,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
       return CharacterSetECI.getCharacterSetECIByName(
-              hints[DecodeHintType.CHARACTER_SET].toString())
-          ?.charset;
+        hints[DecodeHintType.CHARACTER_SET].toString(),
+      )?.charset;
     }
 
     // First try UTF-16, assuming anything with its BOM is UTF-16

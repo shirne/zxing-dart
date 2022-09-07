@@ -34,8 +34,10 @@ class UPCEWriter extends UPCEANWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.UPC_E];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     final length = contents.length;
     switch (length) {
       case 7:
@@ -43,7 +45,8 @@ class UPCEWriter extends UPCEANWriter {
         int check;
         try {
           check = UPCEANReader.getStandardUPCEANChecksum(
-              UPCEReader.convertUPCEtoUPCA(contents));
+            UPCEReader.convertUPCEtoUPCA(contents),
+          );
         } on FormatsException catch (fe) {
           //
           throw ArgumentError(fe);
@@ -53,7 +56,8 @@ class UPCEWriter extends UPCEANWriter {
       case 8:
         try {
           if (!UPCEANReader.checkStandardUPCEANChecksum(
-              UPCEReader.convertUPCEtoUPCA(contents))) {
+            UPCEReader.convertUPCEtoUPCA(contents),
+          )) {
             throw ArgumentError('Contents do not pass checksum');
           }
         } on FormatsException catch (_) {
@@ -63,7 +67,8 @@ class UPCEWriter extends UPCEANWriter {
         break;
       default:
         throw ArgumentError(
-            'Requested contents should be 7 or 8 digits long, but got $length');
+          'Requested contents should be 7 or 8 digits long, but got $length',
+        );
     }
 
     OneDimensionalCodeWriter.checkNumeric(contents);
@@ -79,7 +84,11 @@ class UPCEWriter extends UPCEANWriter {
     final result = List.filled(_CODE_WIDTH, false);
 
     int pos = OneDimensionalCodeWriter.appendPattern(
-        result, 0, UPCEANReader.START_END_PATTERN, true);
+      result,
+      0,
+      UPCEANReader.START_END_PATTERN,
+      true,
+    );
 
     for (int i = 1; i <= 6; i++) {
       int digit = int.parse(contents[i]);
@@ -87,11 +96,19 @@ class UPCEWriter extends UPCEANWriter {
         digit += 10;
       }
       pos += OneDimensionalCodeWriter.appendPattern(
-          result, pos, UPCEANReader.lAndGPatterns[digit], false);
+        result,
+        pos,
+        UPCEANReader.lAndGPatterns[digit],
+        false,
+      );
     }
 
     OneDimensionalCodeWriter.appendPattern(
-        result, pos, UPCEANReader.END_PATTERN, false);
+      result,
+      pos,
+      UPCEANReader.END_PATTERN,
+      false,
+    );
 
     return result;
   }

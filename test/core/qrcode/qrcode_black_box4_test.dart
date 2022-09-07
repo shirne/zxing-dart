@@ -20,11 +20,13 @@ import 'package:zxing_lib/zxing.dart';
 import '../common/abstract_black_box.dart';
 
 /// Tests of various QR Codes from t-shirts, which are notoriously not flat.
-///
 void main() {
   test('QRCodeBlackBox4TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/qrcode-4',
-        MultiFormatReader(), BarcodeFormat.QR_CODE)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/qrcode-4',
+      MultiFormatReader(),
+      BarcodeFormat.QR_CODE,
+    )
       ..addTest(36, 36, 0.0)
       ..addTest(35, 35, 90.0)
       ..addTest(35, 35, 180.0)

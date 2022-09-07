@@ -122,8 +122,10 @@ void main() {
     //"else" case
 
     visualized = encodeHighLevel('AIMAIMAIMë');
-    expect('230 91 11 91 11 91 11 254 235 108',
-        visualized); //Activate when additional rectangulars are available
+    expect(
+      '230 91 11 91 11 91 11 254 235 108',
+      visualized,
+    ); //Activate when additional rectangulars are available
     //Expl: 230 = shift to C40, "91 11" = "AIM",
     //"�" in C40 encodes to: 1 30 2 11 which doesn't fit into a triplet
     //"10 243" =
@@ -134,8 +136,10 @@ void main() {
   test('testC40EncodationSpecExample', () {
     //Example in Figure 1 in the spec
     final visualized = encodeHighLevel('A1B2C3D4E5F6G7H8I9J0K1L2');
-    expect('230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254',
-        visualized);
+    expect(
+      '230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254',
+      visualized,
+    );
   });
 
   test('testC40EncodationSpecialCases1', () {
@@ -212,7 +216,9 @@ void main() {
 
     visualized = encodeHighLevel('ABC>ABC123>ABCDEF');
     expect(
-        '238 89 233 14 192 100 207 44 31 96 82 254 70 71 129 237', visualized);
+      '238 89 233 14 192 100 207 44 31 96 82 254 70 71 129 237',
+      visualized,
+    );
   });
 
   test('testEDIFACTEncodation', () {
@@ -220,8 +226,9 @@ void main() {
 
     String visualized = encodeHighLevel('.A.C1.3.DATA.123DATA.123DATA');
     expect(
-        '240 184 27 131 198 236 238 16 21 1 187 28 179 16 21 1 187 28 179 16 21 1',
-        visualized);
+      '240 184 27 131 198 236 238 16 21 1 187 28 179 16 21 1 187 28 179 16 21 1',
+      visualized,
+    );
 
     visualized = encodeHighLevel('.A.C1.3.X.X2..');
     expect('240 184 27 131 198 236 238 98 230 50 47 47', visualized);
@@ -245,11 +252,12 @@ void main() {
     visualized =
         encodeHighLevel('.XXX.XXX.XXX.XXX.XXX.XXX.üXX.XXX.XXX.XXX.XXX.XXX.XXX');
     expect(
-        '240 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24'
-        ' 124 47 235 125 240' //<-- this is the temporary unlatch
+      '240 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24 185 134 24'
+      ' 124 47 235 125 240' //<-- this is the temporary unlatch
 
-        ' 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 89 89',
-        visualized);
+      ' 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 97 139 152 89 89',
+      visualized,
+    );
   });
 
   test('testBase256Encodation', () {
@@ -272,20 +280,23 @@ void main() {
 
     visualized = encodeHighLevel('\u00ABäöüé\u00BB 23£ 1234567890123456789');
     expect(
-        '231 54 108 59 226 126 1 104 99 10 161 167 33 142 164 186 208'
-        ' 220 142 164 186 208 58 129 59 209 104 254 150 45',
-        visualized);
+      '231 54 108 59 226 126 1 104 99 10 161 167 33 142 164 186 208'
+      ' 220 142 164 186 208 58 129 59 209 104 254 150 45',
+      visualized,
+    );
 
     visualized = encodeHighLevel(createBinaryMessage(20));
     expect(
-        '231 44 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 253 150',
-        visualized);
+      '231 44 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 253 150',
+      visualized,
+    );
 
     //padding necessary at the end
     visualized = encodeHighLevel(createBinaryMessage(19));
     expect(
-        '231 63 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 1 129',
-        visualized);
+      '231 63 108 59 226 126 1 141 36 5 37 187 80 230 123 17 166 60 210 103 1 129',
+      visualized,
+    );
 
     visualized = encodeHighLevel(createBinaryMessage(276));
     assertStartsWith('231 38 219 2 208 120 20 150 35', visualized);
@@ -299,13 +310,17 @@ void main() {
   test('testUnlatchingFromC40', () {
     final visualized = encodeHighLevel('AIMAIMAIMAIMaimaimaim');
     expect(
-        '230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11', visualized);
+      '230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11',
+      visualized,
+    );
   });
 
   test('testUnlatchingFromText', () {
     final visualized = encodeHighLevel('aimaimaimaim12345678');
     expect(
-        '239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237', visualized);
+      '239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237',
+      visualized,
+    );
   });
 
   test('testHelloWorld', () {
@@ -367,42 +382,48 @@ void main() {
     String visualized =
         encodeHighLevel('AAAAAAAAAAA**\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     expect(
-        '230 89 191 89 191 89 191 89 178 56 114 10 243 177 63 89 191 89 191 89 191 89 191 89 191 89 191 89 '
-        '191 89 191 89 191 254 66 129',
-        visualized);
+      '230 89 191 89 191 89 191 89 178 56 114 10 243 177 63 89 191 89 191 89 191 89 191 89 191 89 191 89 '
+      '191 89 191 89 191 254 66 129',
+      visualized,
+    );
     //X12 encoding error with integer comparisons in lookAheadTest()
     visualized =
         encodeHighLevel('AAAAAAAAAAAA0+****AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     expect(
-        '238 89 191 89 191 89 191 89 191 254 240 194 186 170 170 160 65 4 16 65 4 16 65 4 16 65 4 16 65 4 '
-        '16 65 4 16 65 4 16 65 124 129 167 62 212 107',
-        visualized);
+      '238 89 191 89 191 89 191 89 191 254 240 194 186 170 170 160 65 4 16 65 4 16 65 4 16 65 4 16 65 4 '
+      '16 65 4 16 65 4 16 65 124 129 167 62 212 107',
+      visualized,
+    );
     //EDIFACT encoding error with spec conform float point comparisons in lookAheadTest()
     visualized =
         encodeHighLevel('AAAAAAAAAAA++++\u00FCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     expect(
-        '230 89 191 89 191 89 191 254 66 66 44 44 44 44 235 125 230 89 191 89 191 89 191 89 191 89 191 89 '
-        '191 89 191 89 191 89 191 89 191 254 129 17 167 62 212 107',
-        visualized);
+      '230 89 191 89 191 89 191 254 66 66 44 44 44 44 235 125 230 89 191 89 191 89 191 89 191 89 191 89 '
+      '191 89 191 89 191 89 191 89 191 254 129 17 167 62 212 107',
+      visualized,
+    );
     //EDIFACT encoding error with integer comparisons in lookAheadTest()
     visualized =
         encodeHighLevel('++++++++++AAa0 0++++++++++++++++++++++++++++++');
     expect(
-        '240 174 186 235 174 186 235 174 176 65 124 98 240 194 12 43 174 186 235 174 186 235 174 186 235 '
-        '174 186 235 174 186 235 174 186 235 174 186 235 173 240 129 167 62 212 107',
-        visualized);
+      '240 174 186 235 174 186 235 174 176 65 124 98 240 194 12 43 174 186 235 174 186 235 174 186 235 '
+      '174 186 235 174 186 235 174 186 235 174 186 235 173 240 129 167 62 212 107',
+      visualized,
+    );
     visualized =
         encodeHighLevel('AAAAAAAAAAAA*+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     expect(
-        '230 89 191 89 191 89 191 89 191 7 170 64 191 89 191 89 191 89 191 89 191 89 191 89 191 89 191 89 '
-        '191 89 191 66',
-        visualized);
+      '230 89 191 89 191 89 191 89 191 7 170 64 191 89 191 89 191 89 191 89 191 89 191 89 191 89 191 89 '
+      '191 89 191 66',
+      visualized,
+    );
     visualized =
         encodeHighLevel('AAAAAAAAAAA*0a0 *AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     expect(
-        '230 89 191 89 191 89 191 89 178 56 227 6 228 7 183 89 191 89 191 89 191 89 191 89 191 89 191 89 '
-        '191 89 191 89 191 254 66 66',
-        visualized);
+      '230 89 191 89 191 89 191 89 178 56 227 6 228 7 183 89 191 89 191 89 191 89 191 89 191 89 191 89 '
+      '191 89 191 89 191 254 66 66',
+      visualized,
+    );
   });
 
   test('testSizes', () {
@@ -512,19 +533,22 @@ void main() {
     expect(8, sizes[1]);
 
     encodeHighLevelSize(
-        '\u00F0\u00F0'
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF',
-        sizes);
+      '\u00F0\u00F0'
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF',
+      sizes,
+    );
     expect(114, sizes[0]);
     expect(62, sizes[1]);
   });
 
   test('testECIs', () {
-    String visualized = visualize(MinimalEncoder.encodeHighLevel(
-      'that particularly stands out to me is \u0625\u0650'
-      '\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) "pear", suggested to have originated from Hebrew '
-      '\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)',
-    ));
+    String visualized = visualize(
+      MinimalEncoder.encodeHighLevel(
+        'that particularly stands out to me is \u0625\u0650'
+        '\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) "pear", suggested to have originated from Hebrew '
+        '\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)',
+      ),
+    );
     expect(
       visualized,
       '239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113 15 254'
@@ -533,13 +557,16 @@ void main() {
       ' 248 118 36 254 231 106 196 19 239 101 27 107 69 189 112 236 156 252 16 174 125 24 10 125 116 42 129',
     );
 
-    visualized = visualize(MinimalEncoder.encodeHighLevel(
+    visualized = visualize(
+      MinimalEncoder.encodeHighLevel(
         'that particularly stands out to me is \u0625\u0650'
         '\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) "pear", suggested to have originated from Hebrew '
         '\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)',
         utf8,
         -1,
-        SymbolShapeHint.FORCE_NONE));
+        SymbolShapeHint.FORCE_NONE,
+      ),
+    );
     expect(
       visualized,
       '241 27 239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113'
@@ -553,9 +580,10 @@ void main() {
   test('testPadding', () {
     final sizes = List.filled(2, 0);
     encodeHighLevelSize(
-        'IS010000000000000000000000S1118058599124123S21.2.250.1.213.1.4.8 S3FIRST NAMETEST S5MS618-06'
-        '-1985S713201S4LASTNAMETEST',
-        sizes);
+      'IS010000000000000000000000S1118058599124123S21.2.250.1.213.1.4.8 S3FIRST NAMETEST S5MS618-06'
+      '-1985S713201S4LASTNAMETEST',
+      sizes,
+    );
     expect(86, sizes[0]);
     expect(86, sizes[1]);
   });

@@ -55,8 +55,10 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   }
 
   @override
-  List<Result> decodeMultiple(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints]) {
+  List<Result> decodeMultiple(
+    BinaryBitmap image, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     try {
       return _decodeStatic(image, hints, true);
     } on FormatsException catch (_) {
@@ -66,32 +68,48 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
     }
   }
 
-  static List<Result> _decodeStatic(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints, bool multiple = true]) {
+  static List<Result> _decodeStatic(
+    BinaryBitmap image, [
+    Map<DecodeHintType, Object>? hints,
+    bool multiple = true,
+  ]) {
     final results = <Result>[];
     final detectorResult = Detector.detect(image, hints, multiple);
     for (List<ResultPoint?> points in detectorResult.points) {
       final decoderResult = PDF417ScanningDecoder.decode(
-          detectorResult.bits,
-          points[4],
-          points[5],
-          points[6],
-          points[7],
-          _getMinCodewordWidth(points),
-          _getMaxCodewordWidth(points));
-      final result = Result(decoderResult.text, decoderResult.rawBytes, points,
-          BarcodeFormat.PDF_417);
+        detectorResult.bits,
+        points[4],
+        points[5],
+        points[6],
+        points[7],
+        _getMinCodewordWidth(points),
+        _getMaxCodewordWidth(points),
+      );
+      final result = Result(
+        decoderResult.text,
+        decoderResult.rawBytes,
+        points,
+        BarcodeFormat.PDF_417,
+      );
       result.putMetadata(
-          ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ecLevel!);
+        ResultMetadataType.ERROR_CORRECTION_LEVEL,
+        decoderResult.ecLevel!,
+      );
       final pdf417ResultMetadata = decoderResult.other as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {
         result.putMetadata(
-            ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
+          ResultMetadataType.PDF417_EXTRA_METADATA,
+          pdf417ResultMetadata,
+        );
       }
       result.putMetadata(
-          ResultMetadataType.ORIENTATION, detectorResult.rotation);
-      result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER,
-          ']L${decoderResult.symbologyModifier}');
+        ResultMetadataType.ORIENTATION,
+        detectorResult.rotation,
+      );
+      result.putMetadata(
+        ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+        ']L${decoderResult.symbologyModifier}',
+      );
       results.add(result);
     }
     return results;
@@ -113,30 +131,36 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   static int _getMaxCodewordWidth(List<ResultPoint?> p) {
     return math.max(
-        math.max(
-            _getMaxWidth(p[0], p[4]),
-            _getMaxWidth(p[6], p[2]) *
-                PDF417Common.MODULES_IN_CODEWORD ~/
-                PDF417Common.MODULES_IN_STOP_PATTERN),
-        math.max(
-            _getMaxWidth(p[1], p[5]),
-            _getMaxWidth(p[7], p[3]) *
-                PDF417Common.MODULES_IN_CODEWORD ~/
-                PDF417Common.MODULES_IN_STOP_PATTERN));
+      math.max(
+        _getMaxWidth(p[0], p[4]),
+        _getMaxWidth(p[6], p[2]) *
+            PDF417Common.MODULES_IN_CODEWORD ~/
+            PDF417Common.MODULES_IN_STOP_PATTERN,
+      ),
+      math.max(
+        _getMaxWidth(p[1], p[5]),
+        _getMaxWidth(p[7], p[3]) *
+            PDF417Common.MODULES_IN_CODEWORD ~/
+            PDF417Common.MODULES_IN_STOP_PATTERN,
+      ),
+    );
   }
 
   static int _getMinCodewordWidth(List<ResultPoint?> p) {
     return math.min(
-        math.min(
-            _getMinWidth(p[0], p[4]),
-            _getMinWidth(p[6], p[2]) *
-                PDF417Common.MODULES_IN_CODEWORD ~/
-                PDF417Common.MODULES_IN_STOP_PATTERN),
-        math.min(
-            _getMinWidth(p[1], p[5]),
-            _getMinWidth(p[7], p[3]) *
-                PDF417Common.MODULES_IN_CODEWORD ~/
-                PDF417Common.MODULES_IN_STOP_PATTERN));
+      math.min(
+        _getMinWidth(p[0], p[4]),
+        _getMinWidth(p[6], p[2]) *
+            PDF417Common.MODULES_IN_CODEWORD ~/
+            PDF417Common.MODULES_IN_STOP_PATTERN,
+      ),
+      math.min(
+        _getMinWidth(p[1], p[5]),
+        _getMinWidth(p[7], p[3]) *
+            PDF417Common.MODULES_IN_CODEWORD ~/
+            PDF417Common.MODULES_IN_STOP_PATTERN,
+      ),
+    );
   }
 
   @override

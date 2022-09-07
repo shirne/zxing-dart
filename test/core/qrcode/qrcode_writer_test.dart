@@ -31,8 +31,10 @@ void main() {
     final file = File('$baseImagePath$fileName');
 
     final exists = await file.exists();
-    expect(!exists,
-        "Please download and install test images($fileName), and run from the 'core' directory");
+    expect(
+      !exists,
+      "Please download and install test images($fileName), and run from the 'core' directory",
+    );
 
     return decodeImage(file.readAsBytesSync())!;
   }
@@ -41,8 +43,10 @@ void main() {
   BitMatrix createMatrixFromImage(Image image) {
     final width = image.width;
     final height = image.height;
-    final pixels = List.generate(width * height,
-        (index) => image.getPixel(index % width, index ~/ width));
+    final pixels = List.generate(
+      width * height,
+      (index) => image.getPixel(index % width, index ~/ width),
+    );
     //image.getRGB(0, 0, width, height, pixels, 0, width);
 
     final matrix = BitMatrix(width, height);
@@ -62,16 +66,26 @@ void main() {
     // The QR should be multiplied up to fit, with extra padding if necessary
     final bigEnough = 256;
     final writer = QRCodeWriter();
-    BitMatrix matrix = writer.encode('http://www.google.com/',
-        BarcodeFormat.QR_CODE, bigEnough, bigEnough, null);
+    BitMatrix matrix = writer.encode(
+      'http://www.google.com/',
+      BarcodeFormat.QR_CODE,
+      bigEnough,
+      bigEnough,
+      null,
+    );
     //assertNotNull(matrix);
     expect(bigEnough, matrix.width);
     expect(bigEnough, matrix.height);
 
     // The QR will not fit in this size, so the matrix should come back bigger
     final tooSmall = 20;
-    matrix = writer.encode('http://www.google.com/', BarcodeFormat.QR_CODE,
-        tooSmall, tooSmall, null);
+    matrix = writer.encode(
+      'http://www.google.com/',
+      BarcodeFormat.QR_CODE,
+      tooSmall,
+      tooSmall,
+      null,
+    );
     //assertNotNull(matrix);
     expect(tooSmall < matrix.width, true);
     expect(tooSmall < matrix.height, true);
@@ -79,15 +93,24 @@ void main() {
     // We should also be able to handle non-square requests by padding them
     final strangeWidth = 500;
     final strangeHeight = 100;
-    matrix = writer.encode('http://www.google.com/', BarcodeFormat.QR_CODE,
-        strangeWidth, strangeHeight, null);
+    matrix = writer.encode(
+      'http://www.google.com/',
+      BarcodeFormat.QR_CODE,
+      strangeWidth,
+      strangeHeight,
+      null,
+    );
     //assertNotNull(matrix);
     expect(strangeWidth, matrix.width);
     expect(strangeHeight, matrix.height);
   });
 
-  void compareToGoldenFile(String contents, ErrorCorrectionLevel ecLevel,
-      int resolution, String fileName) async {
+  void compareToGoldenFile(
+    String contents,
+    ErrorCorrectionLevel ecLevel,
+    int resolution,
+    String fileName,
+  ) async {
     final image = await loadImage(fileName);
     //assertNotNull(image);
     final goldenResult = createMatrixFromImage(image);
@@ -97,7 +120,12 @@ void main() {
     hints[EncodeHintType.ERROR_CORRECTION] = ecLevel;
     final writer = QRCodeWriter();
     final generatedResult = writer.encode(
-        contents, BarcodeFormat.QR_CODE, resolution, resolution, hints);
+      contents,
+      BarcodeFormat.QR_CODE,
+      resolution,
+      resolution,
+      hints,
+    );
 
     expect(resolution, generatedResult.width);
     expect(resolution, generatedResult.height);
@@ -108,7 +136,11 @@ void main() {
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly.
   test('testRegressionTest', () {
-    compareToGoldenFile('http://www.google.com/', ErrorCorrectionLevel.M, 99,
-        'renderer-test-01.png');
+    compareToGoldenFile(
+      'http://www.google.com/',
+      ErrorCorrectionLevel.M,
+      99,
+      'renderer-test-01.png',
+    );
   });
 }

@@ -26,8 +26,14 @@ import '../../utils.dart';
 void main() {
   const int EPSILON = 10;
 
-  void doTest(String contents, double latitude, double longitude,
-      double altitude, String? query, String? uri) {
+  void doTest(
+    String contents,
+    double latitude,
+    double longitude,
+    double altitude,
+    String? query,
+    String? uri,
+  ) {
     final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
     final result = ResultParser.parseResult(fakeResult);
     expect(ParsedResultType.GEO, result.type);
@@ -43,9 +49,21 @@ void main() {
     doTest('geo:1,2', 1.0, 2.0, 0.0, null, 'geo:1.0,2.0');
     doTest('geo:80.33,-32.3344,3.35', 80.33, -32.3344, 3.35, null, null);
     doTest('geo:-20.33,132.3344,0.01', -20.33, 132.3344, 0.01, null, null);
-    doTest('geo:-20.33,132.3344,0.01?q=foobar', -20.33, 132.3344, 0.01,
-        'q=foobar', null);
-    doTest('GEO:-20.33,132.3344,0.01?q=foobar', -20.33, 132.3344, 0.01,
-        'q=foobar', null);
+    doTest(
+      'geo:-20.33,132.3344,0.01?q=foobar',
+      -20.33,
+      132.3344,
+      0.01,
+      'q=foobar',
+      null,
+    );
+    doTest(
+      'GEO:-20.33,132.3344,0.01?q=foobar',
+      -20.33,
+      132.3344,
+      0.01,
+      'q=foobar',
+      null,
+    );
   });
 }

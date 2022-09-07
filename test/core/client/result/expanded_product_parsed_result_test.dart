@@ -33,8 +33,12 @@ void main() {
   test('testRSSExpanded', () {
     final uncommonAIs = <String, String>{};
     uncommonAIs['123'] = '544654';
-    final result = Result('(01)66546(13)001205(3932)4455(3102)6544(123)544654',
-        null, null, BarcodeFormat.RSS_EXPANDED);
+    final result = Result(
+      '(01)66546(13)001205(3932)4455(3102)6544(123)544654',
+      null,
+      null,
+      BarcodeFormat.RSS_EXPANDED,
+    );
     final o = ExpandedProductResultParser().parse(result)!;
     //assertNotNull(o);
     expect('66546', o.productID);

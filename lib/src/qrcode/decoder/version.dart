@@ -85,7 +85,10 @@ class Version {
   late int _totalCodewords;
 
   Version._(
-      this._versionNumber, this._alignmentPatternCenters, this._ecBlocks) {
+    this._versionNumber,
+    this._alignmentPatternCenters,
+    this._ecBlocks,
+  ) {
     int total = 0;
     final ecCodewords = _ecBlocks[0].ecCodewordsPerBlock;
     final ecbArray = _ecBlocks[0].ecBlocks;

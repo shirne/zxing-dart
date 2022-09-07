@@ -46,8 +46,10 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   GenericMultipleBarcodeReader(this._delegate);
 
   @override
-  List<Result> decodeMultiple(BinaryBitmap image,
-      [Map<DecodeHintType, Object>? hints]) {
+  List<Result> decodeMultiple(
+    BinaryBitmap image, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     final results = <Result>[];
     _doDecodeMultiple(image, hints, results, 0, 0, 0);
     if (results.isEmpty) {
@@ -56,8 +58,14 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     return results.toList();
   }
 
-  void _doDecodeMultiple(BinaryBitmap image, Map<DecodeHintType, Object>? hints,
-      List<Result> results, int xOffset, int yOffset, int currentDepth) {
+  void _doDecodeMultiple(
+    BinaryBitmap image,
+    Map<DecodeHintType, Object>? hints,
+    List<Result> results,
+    int xOffset,
+    int yOffset,
+    int currentDepth,
+  ) {
     if (currentDepth > _MAX_DEPTH) {
       return;
     }
@@ -110,23 +118,36 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
 
     // Decode left of barcode
     if (minX > _MIN_DIMENSION_TO_RECUR) {
-      _doDecodeMultiple(image.crop(0, 0, minX.toInt(), height), hints, results,
-          xOffset, yOffset, currentDepth + 1);
+      _doDecodeMultiple(
+        image.crop(0, 0, minX.toInt(), height),
+        hints,
+        results,
+        xOffset,
+        yOffset,
+        currentDepth + 1,
+      );
     }
     // Decode above barcode
     if (minY > _MIN_DIMENSION_TO_RECUR) {
-      _doDecodeMultiple(image.crop(0, 0, width, minY.toInt()), hints, results,
-          xOffset, yOffset, currentDepth + 1);
+      _doDecodeMultiple(
+        image.crop(0, 0, width, minY.toInt()),
+        hints,
+        results,
+        xOffset,
+        yOffset,
+        currentDepth + 1,
+      );
     }
     // Decode right of barcode
     if (maxX < width - _MIN_DIMENSION_TO_RECUR) {
       _doDecodeMultiple(
-          image.crop(maxX.toInt(), 0, width - maxX.toInt(), height),
-          hints,
-          results,
-          xOffset + maxX.toInt(),
-          yOffset,
-          currentDepth + 1);
+        image.crop(maxX.toInt(), 0, width - maxX.toInt(), height),
+        hints,
+        results,
+        xOffset + maxX.toInt(),
+        yOffset,
+        currentDepth + 1,
+      );
     }
     // Decode below barcode
     if (maxY < height - _MIN_DIMENSION_TO_RECUR) {
@@ -142,7 +163,10 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   }
 
   static Result _translateResultPoints(
-      Result result, int xOffset, int yOffset) {
+    Result result,
+    int xOffset,
+    int yOffset,
+  ) {
     final oldResultPoints = result.resultPoints;
     if (oldResultPoints == null) {
       return result;

@@ -34,14 +34,17 @@ void main() {
   test('testMulti', () async {
     // Very basic test for now
     final testBase = AbstractBlackBoxTestCase.buildTestBase(
-        'test/resources/blackbox/multi-2');
+      'test/resources/blackbox/multi-2',
+    );
 
     final testImage = File('${testBase.path}/multi.jpg');
     final image = decodeImage(testImage.readAsBytesSync())!;
-    final scaleImage = copyResize(image,
-        width: image.width ~/ 2,
-        height: image.height ~/ 2,
-        interpolation: Interpolation.average);
+    final scaleImage = copyResize(
+      image,
+      width: image.width ~/ 2,
+      height: image.height ~/ 2,
+      interpolation: Interpolation.average,
+    );
     final source = BufferedImageLuminanceSource(scaleImage);
     final bitmap = BinaryBitmap(HybridBinarizer(source));
 
@@ -57,27 +60,36 @@ void main() {
     expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
   });
 
-  testQR(String name, {int down = 0, String text = 'www.airtable.com/jobs'}) {
+  void testQR(
+    String name, {
+    int down = 0,
+    String text = 'www.airtable.com/jobs',
+  }) {
     final testBase = AbstractBlackBoxTestCase.buildTestBase(
-        'test/resources/blackbox/multi-2');
+      'test/resources/blackbox/multi-2',
+    );
     final startTimer = DateTime.now().millisecondsSinceEpoch;
 
     final testImage = File('${testBase.path}/$name');
     Image image = decodeImage(testImage.readAsBytesSync())!;
     if (down > 0) {
       //image.scaleDown(down.toDouble());
-      image = copyResize(image,
-          width: (image.width / down).ceil(),
-          height: (image.height / down).ceil(),
-          interpolation: Interpolation.average);
+      image = copyResize(
+        image,
+        width: (image.width / down).ceil(),
+        height: (image.height / down).ceil(),
+        interpolation: Interpolation.average,
+      );
     }
     final pixels = <int>[];
     for (int y = 0; y < image.height; y++) {
       for (int x = 0; x < image.width; x++) {
         final color = image.getPixel(x, y);
-        pixels.add(((color & 0xff) << 16) +
-            ((color >> 8) & 0xff) +
-            ((color >> 16) & 0xff));
+        pixels.add(
+          ((color & 0xff) << 16) +
+              ((color >> 8) & 0xff) +
+              ((color >> 16) & 0xff),
+        );
       }
     }
 

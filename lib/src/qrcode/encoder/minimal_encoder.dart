@@ -96,9 +96,13 @@ class ResultNode extends Context<ResultList> {
   final int charsetEncoderIndex;
   final int characterLength;
 
-  ResultNode(this.mode, this.fromPosition, this.charsetEncoderIndex,
-      this.characterLength, ResultList context)
-      : super(context);
+  ResultNode(
+    this.mode,
+    this.fromPosition,
+    this.charsetEncoderIndex,
+    this.characterLength,
+    ResultList context,
+  ) : super(context);
 
   /// returns the size in bits
   int getSize(Version version) {
@@ -181,12 +185,14 @@ class ResultNode extends Context<ResultList> {
       result
           .write(context.context.encoders.getCharsetName(charsetEncoderIndex));
     } else {
-      result.write(makePrintable(
-        context.context.stringToEncode.substring(
-          fromPosition,
-          fromPosition + characterLength,
+      result.write(
+        makePrintable(
+          context.context.stringToEncode.substring(
+            fromPosition,
+            fromPosition + characterLength,
+          ),
         ),
-      ));
+      );
     }
     result.write(')');
     return result.toString();
@@ -232,17 +238,29 @@ class ResultList extends Context<MinimalEncoder> {
 
       if (previous == null || previous.mode != current.mode || needECI) {
         list.insert(
-            0,
-            ResultNode(current.mode, current.fromPosition,
-                current.charsetEncoderIndex, length, this));
+          0,
+          ResultNode(
+            current.mode,
+            current.fromPosition,
+            current.charsetEncoderIndex,
+            length,
+            this,
+          ),
+        );
         length = 0;
       }
 
       if (needECI) {
         list.insert(
+          0,
+          ResultNode(
+            Mode.ECI,
+            current.fromPosition,
+            current.charsetEncoderIndex,
             0,
-            ResultNode(Mode.ECI, current.fromPosition,
-                current.charsetEncoderIndex, 0, this));
+            this,
+          ),
+        );
       }
       current = previous;
     }
@@ -257,8 +275,10 @@ class ResultList extends Context<MinimalEncoder> {
       }
       first = list[0];
       // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
-      list.insert(first.mode != Mode.ECI ? 0 : 1,
-          ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this));
+      list.insert(
+        first.mode != Mode.ECI ? 0 : 1,
+        ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this),
+      );
     }
 
     // set version to smallest version into which the bits fit.
@@ -283,14 +303,20 @@ class ResultList extends Context<MinimalEncoder> {
     final size = getSize(version);
     // increase version if needed
     while (versionNumber < upperLimit &&
-        !Encoder.willFit(size, Version.getVersionForNumber(versionNumber),
-            context.ecLevel)) {
+        !Encoder.willFit(
+          size,
+          Version.getVersionForNumber(versionNumber),
+          context.ecLevel,
+        )) {
       versionNumber++;
     }
     // shrink version if possible
     while (versionNumber > lowerLimit &&
-        Encoder.willFit(size, Version.getVersionForNumber(versionNumber - 1),
-            context.ecLevel)) {
+        Encoder.willFit(
+          size,
+          Version.getVersionForNumber(versionNumber - 1),
+          context.ecLevel,
+        )) {
       versionNumber--;
     }
     this.version = Version.getVersionForNumber(versionNumber);
@@ -373,8 +399,11 @@ class MinimalEncoder {
   /// @param ecLevel The error correction level.
   /// @see ResultList#getVersion
   MinimalEncoder(
-      this.stringToEncode, Encoding? priorityCharset, this.isGS1, this.ecLevel)
-      : encoders = ECIEncoderSet(stringToEncode, priorityCharset, -1);
+    this.stringToEncode,
+    Encoding? priorityCharset,
+    this.isGS1,
+    this.ecLevel,
+  ) : encoders = ECIEncoderSet(stringToEncode, priorityCharset, -1);
 
   /// Encodes the string minimally
   ///
@@ -391,8 +420,13 @@ class MinimalEncoder {
   /// @see ResultList#getBits
   /// @see ResultList#getVersion
   /// @see ResultList#getSize
-  static ResultList encode(String stringToEncode, Version? version,
-      Encoding? priorityCharset, bool isGS1, ErrorCorrectionLevel ecLevel) {
+  static ResultList encode(
+    String stringToEncode,
+    Version? version,
+    Encoding? priorityCharset,
+    bool isGS1,
+    ErrorCorrectionLevel ecLevel,
+  ) {
     return MinimalEncoder(stringToEncode, priorityCharset, isGS1, ecLevel)
         .doEncode(version);
   }
@@ -427,8 +461,11 @@ class MinimalEncoder {
     } else {
       // compute minimal encoding for a given version
       final result = encodeSpecificVersion(version);
-      if (!Encoder.willFit(result.getSize(),
-          getVersion(getVersionSize(result.getVersion())), ecLevel)) {
+      if (!Encoder.willFit(
+        result.getSize(),
+        getVersion(getVersionSize(result.getVersion())),
+        ecLevel,
+      )) {
         throw WriterException('Data too big for version $version');
       }
       return result;
@@ -513,14 +550,20 @@ class MinimalEncoder {
     }
   }
 
-  void addEdges(Version version, List<List<List<Edge?>>> edges, int from,
-      Edge? previous) {
+  void addEdges(
+    Version version,
+    List<List<List<Edge?>>> edges,
+    int from,
+    Edge? previous,
+  ) {
     int start = 0;
     int end = encoders.length;
     final priorityEncoderIndex = encoders.priorityEncoderIndex;
     if (priorityEncoderIndex >= 0 &&
         encoders.canEncode(
-            stringToEncode.codeUnitAt(from), priorityEncoderIndex)) {
+          stringToEncode.codeUnitAt(from),
+          priorityEncoderIndex,
+        )) {
       start = priorityEncoderIndex;
       end = priorityEncoderIndex + 1;
     }
@@ -528,54 +571,70 @@ class MinimalEncoder {
     for (int i = start; i < end; i++) {
       if (encoders.canEncode(stringToEncode.codeUnitAt(from), i)) {
         addEdge(
-            edges, from, Edge(Mode.BYTE, from, i, 1, previous, version, this));
+          edges,
+          from,
+          Edge(Mode.BYTE, from, i, 1, previous, version, this),
+        );
       }
     }
 
     if (canEncode(Mode.KANJI, stringToEncode.codeUnitAt(from))) {
       addEdge(
-          edges, from, Edge(Mode.KANJI, from, 0, 1, previous, version, this));
+        edges,
+        from,
+        Edge(Mode.KANJI, from, 0, 1, previous, version, this),
+      );
     }
 
     final inputLength = stringToEncode.length;
     if (canEncode(Mode.ALPHANUMERIC, stringToEncode.codeUnitAt(from))) {
       addEdge(
-          edges,
+        edges,
+        from,
+        Edge(
+          Mode.ALPHANUMERIC,
           from,
-          Edge(
-              Mode.ALPHANUMERIC,
-              from,
-              0,
-              from + 1 >= inputLength ||
-                      !canEncode(Mode.ALPHANUMERIC,
-                          stringToEncode.codeUnitAt(from + 1))
-                  ? 1
-                  : 2,
-              previous,
-              version,
-              this));
+          0,
+          from + 1 >= inputLength ||
+                  !canEncode(
+                    Mode.ALPHANUMERIC,
+                    stringToEncode.codeUnitAt(from + 1),
+                  )
+              ? 1
+              : 2,
+          previous,
+          version,
+          this,
+        ),
+      );
     }
 
     if (canEncode(Mode.NUMERIC, stringToEncode.codeUnitAt(from))) {
       addEdge(
-          edges,
+        edges,
+        from,
+        Edge(
+          Mode.NUMERIC,
           from,
-          Edge(
-              Mode.NUMERIC,
-              from,
-              0,
-              from + 1 >= inputLength ||
+          0,
+          from + 1 >= inputLength ||
+                  !canEncode(
+                    Mode.NUMERIC,
+                    stringToEncode.codeUnitAt(from + 1),
+                  )
+              ? 1
+              : from + 2 >= inputLength ||
                       !canEncode(
-                          Mode.NUMERIC, stringToEncode.codeUnitAt(from + 1))
-                  ? 1
-                  : from + 2 >= inputLength ||
-                          !canEncode(
-                              Mode.NUMERIC, stringToEncode.codeUnitAt(from + 2))
-                      ? 2
-                      : 3,
-              previous,
-              version,
-              this));
+                        Mode.NUMERIC,
+                        stringToEncode.codeUnitAt(from + 2),
+                      )
+                  ? 2
+                  : 3,
+          previous,
+          version,
+          this,
+        ),
+      );
     }
   }
 
@@ -697,9 +756,9 @@ class MinimalEncoder {
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
     final List<List<List<Edge?>>> edges = List.generate(
-        inputLength + 1,
-        (idx) =>
-            List.generate(encoders.length, (idx2) => List.filled(4, null)));
+      inputLength + 1,
+      (idx) => List.generate(encoders.length, (idx2) => List.filled(4, null)),
+    );
     addEdges(version, edges, 0, null);
 
     for (int i = 1; i <= inputLength; i++) {
@@ -728,7 +787,8 @@ class MinimalEncoder {
     }
     if (minimalJ < 0) {
       throw WriterException(
-          'Internal error: failed to encode "$stringToEncode"');
+        'Internal error: failed to encode "$stringToEncode"',
+      );
     }
     return ResultList(version, edges[inputLength][minimalJ][minimalK], this);
   }

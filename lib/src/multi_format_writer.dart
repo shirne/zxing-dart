@@ -38,8 +38,13 @@ import 'writer.dart';
 /// @author dswitkin@google.com (Daniel Switkin)
 class MultiFormatWriter implements Writer {
   @override
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]) {
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     Writer writer;
     switch (format) {
       case BarcodeFormat.EAN_8:

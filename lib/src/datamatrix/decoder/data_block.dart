@@ -40,7 +40,9 @@ class DataBlock {
   /// @return DataBlocks containing original bytes, "de-interleaved" from representation in the
   ///         Data Matrix Code
   static List<DataBlock> getDataBlocks(
-      Uint8List rawCodewords, Version version) {
+    Uint8List rawCodewords,
+    Version version,
+  ) {
     // Figure out the number and size of data blocks used by this version
     final ecBlocks = version.ecBlocks;
 

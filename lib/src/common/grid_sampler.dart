@@ -79,28 +79,33 @@ abstract class GridSampler {
   /// @throws NotFoundException if image can't be sampled, for example, if the transformation defined
   ///   by the given points is invalid or results in sampling outside the image boundaries
   BitMatrix sampleGridBulk(
-      BitMatrix image,
-      int dimensionX,
-      int dimensionY,
-      double p1ToX,
-      double p1ToY,
-      double p2ToX,
-      double p2ToY,
-      double p3ToX,
-      double p3ToY,
-      double p4ToX,
-      double p4ToY,
-      double p1FromX,
-      double p1FromY,
-      double p2FromX,
-      double p2FromY,
-      double p3FromX,
-      double p3FromY,
-      double p4FromX,
-      double p4FromY);
+    BitMatrix image,
+    int dimensionX,
+    int dimensionY,
+    double p1ToX,
+    double p1ToY,
+    double p2ToX,
+    double p2ToY,
+    double p3ToX,
+    double p3ToY,
+    double p4ToX,
+    double p4ToY,
+    double p1FromX,
+    double p1FromY,
+    double p2FromX,
+    double p2FromY,
+    double p3FromX,
+    double p3FromY,
+    double p4FromX,
+    double p4FromY,
+  );
 
-  BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY,
-      PerspectiveTransform transform);
+  BitMatrix sampleGrid(
+    BitMatrix image,
+    int dimensionX,
+    int dimensionY,
+    PerspectiveTransform transform,
+  );
 
   /// <p>Checks a set of points that have been transformed to sample points on an image against
   /// the image's dimensions to see if the point are even within the image.</p>
@@ -116,7 +121,7 @@ abstract class GridSampler {
   /// @param points actual points in x1,y1,...,xn,yn form
   /// @throws NotFoundException if an endpoint is lies outside the image boundaries
   //@protected
-  static checkAndNudgePoints(BitMatrix image, List<double> points) {
+  static void checkAndNudgePoints(BitMatrix image, List<double> points) {
     final width = image.width;
     final height = image.height;
     // Check and nudge points from start until we see some that are OK:

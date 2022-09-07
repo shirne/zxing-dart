@@ -22,8 +22,11 @@ import '../common/abstract_black_box.dart';
 void main() {
   /// Tests all characters in Set A.
   test('QRCodeBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/maxicode-1',
-        MultiFormatReader(), BarcodeFormat.MAXICODE)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/maxicode-1',
+      MultiFormatReader(),
+      BarcodeFormat.MAXICODE,
+    )
       ..addHint(DecodeHintType.PURE_BARCODE)
       ..addTest(1, 1, 0.0)
       ..testBlackBox();

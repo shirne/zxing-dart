@@ -47,8 +47,10 @@ class ITFWriter extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.ITF];
 
   @override
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]) {
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]) {
     final length = contents.length;
     if (length % 2 != 0) {
       throw ArgumentError('The length of the input should be even');

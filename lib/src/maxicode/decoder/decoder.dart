@@ -71,8 +71,13 @@ class Decoder {
     return DecodedBitStreamParser.decode(datawords, mode);
   }
 
-  void _correctErrors(Uint8List codewordBytes, int start, int dataCodewords,
-      int ecCodewords, int mode) {
+  void _correctErrors(
+    Uint8List codewordBytes,
+    int start,
+    int dataCodewords,
+    int ecCodewords,
+    int mode,
+  ) {
     final codewords = dataCodewords + ecCodewords;
 
     // in EVEN or ODD mode only half the codewords

@@ -203,7 +203,11 @@ abstract class ResultParser {
   }
 
   List<String>? matchPrefixedField(
-      String prefix, String rawText, String endChar, bool trim) {
+    String prefix,
+    String rawText,
+    String endChar,
+    bool trim,
+  ) {
     List<String>? matches;
     int i = 0;
     final int max = rawText.length;
@@ -258,7 +262,11 @@ abstract class ResultParser {
   }
 
   String? matchSinglePrefixedField(
-      String prefix, String rawText, String endChar, bool trim) {
+    String prefix,
+    String rawText,
+    String endChar,
+    bool trim,
+  ) {
     final List<String>? matches =
         matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];

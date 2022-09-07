@@ -44,8 +44,13 @@ class Edge {
   /* private */ final Edge? previous;
   /* private */ late int cachedTotalSize;
 
-  /* private */ Edge(this.input, this.mode, this.fromPosition,
-      this.characterLength, this.previous) {
+  /* private */ Edge(
+    this.input,
+    this.mode,
+    this.fromPosition,
+    this.characterLength,
+    this.previous,
+  ) {
     assert(fromPosition + characterLength <= input.length);
 
     int size = previous?.cachedTotalSize ?? 0;
@@ -71,7 +76,9 @@ class Edge {
         size++;
         if (input.isECI(fromPosition) ||
             MinimalEncoder.isExtendedASCII(
-                input.charAt(fromPosition), input.fnc1Character)) {
+              input.charAt(fromPosition),
+              input.fnc1Character,
+            )) {
           size++;
         }
         if (previousMode == Mode.C40 ||
@@ -103,7 +110,11 @@ class Edge {
         } else {
           final charLen = [0];
           size += MinimalEncoder.getNumberOfC40Words(
-                  input, fromPosition, mode == Mode.C40, charLen) *
+                input,
+                fromPosition,
+                mode == Mode.C40,
+                charLen,
+              ) *
               2;
         }
 
@@ -194,16 +205,22 @@ class Edge {
     }
     if (length - from == 1) {
       if (MinimalEncoder.isExtendedASCII(
-          input.charAt(from), input.fnc1Character)) {
+        input.charAt(from),
+        input.fnc1Character,
+      )) {
         return 0;
       }
       return 1;
     }
     if (length - from == 2) {
       if (MinimalEncoder.isExtendedASCII(
-              input.charAt(from), input.fnc1Character) ||
+            input.charAt(from),
+            input.fnc1Character,
+          ) ||
           MinimalEncoder.isExtendedASCII(
-              input.charAt(from + 1), input.fnc1Character)) {
+            input.charAt(from + 1),
+            input.fnc1Character,
+          )) {
         return 0;
       }
       if (HighLevelEncoder.isDigit(input.charAt(from)) &&
@@ -216,13 +233,17 @@ class Edge {
       if (HighLevelEncoder.isDigit(input.charAt(from)) &&
           HighLevelEncoder.isDigit(input.charAt(from + 1)) &&
           !MinimalEncoder.isExtendedASCII(
-              input.charAt(from + 2), input.fnc1Character)) {
+            input.charAt(from + 2),
+            input.fnc1Character,
+          )) {
         return 2;
       }
       if (HighLevelEncoder.isDigit(input.charAt(from + 1)) &&
           HighLevelEncoder.isDigit(input.charAt(from + 2)) &&
           !MinimalEncoder.isExtendedASCII(
-              input.charAt(from), input.fnc1Character)) {
+            input.charAt(from),
+            input.fnc1Character,
+          )) {
         return 2;
       }
       return 0;
@@ -309,11 +330,12 @@ class Edge {
     final result = Uint8List(characterLength ~/ 3 * 2);
     for (int i = 0; i < result.length; i += 2) {
       setC40Word(
-          result,
-          i,
-          getX12Value(input.charAt(fromPosition + i ~/ 2 * 3)),
-          getX12Value(input.charAt(fromPosition + i ~/ 2 * 3 + 1)),
-          getX12Value(input.charAt(fromPosition + i ~/ 2 * 3 + 2)));
+        result,
+        i,
+        getX12Value(input.charAt(fromPosition + i ~/ 2 * 3)),
+        getX12Value(input.charAt(fromPosition + i ~/ 2 * 3 + 1)),
+        getX12Value(input.charAt(fromPosition + i ~/ 2 * 3 + 2)),
+      );
     }
     return result;
   }
@@ -329,7 +351,11 @@ class Edge {
   }
 
   /* private */ static int getC40Value(
-      bool c40, int setIndex, int c, int fnc1) {
+    bool c40,
+    int setIndex,
+    int c,
+    int fnc1,
+  ) {
     if (c == fnc1) {
       assert(setIndex == 2);
       return 27;
@@ -411,16 +437,23 @@ class Edge {
     }
 
     if ((c40Values.length % 3) != 0) {
-      assert((c40Values.length - 2) % 3 == 0 &&
-          fromPosition + characterLength == input.length);
+      assert(
+        (c40Values.length - 2) % 3 == 0 &&
+            fromPosition + characterLength == input.length,
+      );
       c40Values.add(0); // pad with 0 (Shift 1)
     }
 
     final result = Uint8List(c40Values.length ~/ 3 * 2);
     int byteIndex = 0;
     for (int i = 0; i < c40Values.length; i += 3) {
-      setC40Word(result, byteIndex, c40Values[i] & 0xff,
-          c40Values[i + 1] & 0xff, c40Values[i + 2] & 0xff);
+      setC40Word(
+        result,
+        byteIndex,
+        c40Values[i] & 0xff,
+        c40Values[i + 1] & 0xff,
+        c40Values[i + 2] & 0xff,
+      );
       byteIndex += 2;
     }
     return result;
@@ -506,13 +539,17 @@ class Edge {
         if (input.isECI(fromPosition)) {
           return getBytes(241, input.getECIValue(fromPosition) + 1);
         } else if (MinimalEncoder.isExtendedASCII(
-            input.charAt(fromPosition), input.fnc1Character)) {
+          input.charAt(fromPosition),
+          input.fnc1Character,
+        )) {
           return getBytes(235, input.charAt(fromPosition) - 127);
         } else if (characterLength == 2) {
-          return getBytes((input.charAt(fromPosition) - 48 /*'0'*/) * 10 +
-              input.charAt(fromPosition + 1) -
-              48 +
-              130);
+          return getBytes(
+            (input.charAt(fromPosition) - 48 /*'0'*/) * 10 +
+                input.charAt(fromPosition + 1) -
+                48 +
+                130,
+          );
         } else if (input.isFNC1(fromPosition)) {
           return getBytes(232);
         } else {
@@ -635,9 +672,13 @@ class Input extends MinimalECIInput {
   /* private */ final SymbolShapeHint shape;
   /* private */ final int macroId;
 
-  Input(String stringToEncode, Encoding? priorityCharset, int fnc1, this.shape,
-      this.macroId)
-      : super(stringToEncode, priorityCharset, fnc1);
+  Input(
+    String stringToEncode,
+    Encoding? priorityCharset,
+    int fnc1,
+    this.shape,
+    this.macroId,
+  ) : super(stringToEncode, priorityCharset, fnc1);
 
   SymbolShapeHint get shapeHint => shape;
 }
@@ -765,13 +806,15 @@ class MinimalEncoder {
     SymbolShapeHint shape,
     int macroId,
   ) {
-    return encodeMinimally(Input(
-      input,
-      priorityCharset,
-      fnc1,
-      shape,
-      macroId,
-    )).bytes;
+    return encodeMinimally(
+      Input(
+        input,
+        priorityCharset,
+        fnc1,
+        shape,
+        macroId,
+      ),
+    ).bytes;
   }
 
   static void addEdge(List<List<Edge?>> edges, Edge edge) {
@@ -789,7 +832,11 @@ class MinimalEncoder {
   ///  end of the string where two C40 values are allowed (according to the spec the third c40 value
   ///  is filled  with 0 (Shift 1) in this case).
   static int getNumberOfC40Words(
-      Input input, int from, bool c40, List<int> characterLength) {
+    Input input,
+    int from,
+    bool c40,
+    List<int> characterLength,
+  ) {
     int thirdsCount = 0;
     for (int i = from; i < input.length; i++) {
       if (input.isECI(i)) {
@@ -824,7 +871,11 @@ class MinimalEncoder {
   }
 
   static void addEdges(
-      Input input, List<List<Edge?>> edges, int from, Edge? previous) {
+    Input input,
+    List<List<Edge?>> edges,
+    int from,
+    Edge? previous,
+  ) {
     if (input.isECI(from)) {
       addEdge(edges, Edge(input, Mode.ASCII, from, 1, previous));
       return;
@@ -848,7 +899,11 @@ class MinimalEncoder {
       for (Mode mode in modes) {
         final characterLength = [0];
         if (getNumberOfC40Words(
-                input, from, mode == Mode.C40, characterLength) >
+              input,
+              from,
+              mode == Mode.C40,
+              characterLength,
+            ) >
             0) {
           addEdge(edges, Edge(input, mode, from, characterLength[0], previous));
         }

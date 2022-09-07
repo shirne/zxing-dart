@@ -1,6 +1,6 @@
 /// Any utils
 class Utils {
-  static arrayEquals(List<dynamic>? a, List<dynamic>? b) {
+  static bool arrayEquals(List<dynamic>? a, List<dynamic>? b) {
     if (a == null || b == null) {
       if (a == null && b == null) {
         return true;

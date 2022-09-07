@@ -184,7 +184,10 @@ class Code128Reader extends OneDReader {
               startCode <= _CODE_START_C;
               startCode++) {
             final variance = OneDReader.patternMatchVariance(
-                counters, CODE_PATTERNS[startCode], _MAX_INDIVIDUAL_VARIANCE);
+              counters,
+              CODE_PATTERNS[startCode],
+              _MAX_INDIVIDUAL_VARIANCE,
+            );
             if (variance < bestVariance) {
               bestVariance = variance;
               bestMatch = startCode;
@@ -192,8 +195,11 @@ class Code128Reader extends OneDReader {
           }
           // Look for whitespace before start pattern, >= 50% of width of start pattern
           if (bestMatch >= 0 &&
-              row.isRange(math.max(0, patternStart - (i - patternStart) ~/ 2),
-                  patternStart, false)) {
+              row.isRange(
+                math.max(0, patternStart - (i - patternStart) ~/ 2),
+                patternStart,
+                false,
+              )) {
             return [patternStart, i, bestMatch];
           }
           patternStart += counters[0] + counters[1];
@@ -218,7 +224,10 @@ class Code128Reader extends OneDReader {
     for (int d = 0; d < CODE_PATTERNS.length; d++) {
       final pattern = CODE_PATTERNS[d];
       final variance = OneDReader.patternMatchVariance(
-          counters, pattern, _MAX_INDIVIDUAL_VARIANCE);
+        counters,
+        pattern,
+        _MAX_INDIVIDUAL_VARIANCE,
+      );
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = d;
@@ -234,7 +243,10 @@ class Code128Reader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final convertFNC1 =
         hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
@@ -509,8 +521,11 @@ class Code128Reader extends OneDReader {
     // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
     // to read off. Would be slightly better to properly read. Here we just skip it:
     nextStart = row.getNextUnset(nextStart);
-    if (!row.isRange(nextStart,
-        math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2), false)) {
+    if (!row.isRange(
+      nextStart,
+      math.min(row.size, nextStart + (nextStart - lastStart) ~/ 2),
+      false,
+    )) {
       throw NotFoundException.instance;
     }
 
@@ -547,15 +562,18 @@ class Code128Reader extends OneDReader {
       rawBytes[i] = rawCodes[i];
     }
     final resultObject = Result(
-        result.toString(),
-        rawBytes,
-        [
-          ResultPoint(left, rowNumber.toDouble()),
-          ResultPoint(right, rowNumber.toDouble())
-        ],
-        BarcodeFormat.CODE_128);
+      result.toString(),
+      rawBytes,
+      [
+        ResultPoint(left, rowNumber.toDouble()),
+        ResultPoint(right, rowNumber.toDouble())
+      ],
+      BarcodeFormat.CODE_128,
+    );
     resultObject.putMetadata(
-        ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']C$symbologyModifier');
+      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ']C$symbologyModifier',
+    );
     return resultObject;
   }
 }

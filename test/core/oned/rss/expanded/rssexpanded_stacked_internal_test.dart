@@ -36,7 +36,8 @@ void main() {
     final rssExpandedReader = RSSExpandedReader();
 
     final binaryMap = TestCaseUtil.getBinaryBitmap(
-        'test/resources/blackbox/rssexpandedstacked-2/1000.png');
+      'test/resources/blackbox/rssexpandedstacked-2/1000.png',
+    );
 
     final firstRowNumber = binaryMap.height ~/ 3;
     final firstRow = binaryMap.getBlackRow(firstRowNumber, null);
@@ -71,7 +72,8 @@ void main() {
     final rssExpandedReader = RSSExpandedReader();
 
     final binaryMap = TestCaseUtil.getBinaryBitmap(
-        'test/resources/blackbox/rssexpandedstacked-2/1000.png');
+      'test/resources/blackbox/rssexpandedstacked-2/1000.png',
+    );
 
     final result = rssExpandedReader.decode(binaryMap);
     expect('(01)98898765432106(3202)012345(15)991231', result.text);

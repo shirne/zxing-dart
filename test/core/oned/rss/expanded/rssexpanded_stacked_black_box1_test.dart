@@ -33,8 +33,11 @@ import '../../../common/abstract_black_box.dart';
 /// stacked RSS barcodes.
 void main() {
   test('RSSExpandedStackedBlackBox1TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/rssexpandedstacked-1',
-        MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/rssexpandedstacked-1',
+      MultiFormatReader(),
+      BarcodeFormat.RSS_EXPANDED,
+    )
       ..addTest(59, 64, 0.0)
       ..addTest(59, 64, 180.0)
       ..testBlackBox();

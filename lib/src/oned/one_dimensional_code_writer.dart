@@ -33,15 +33,21 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// `height` to zero to get minimum size barcode. If negative value is set to `width`
   /// or `height`, `IllegalArgumentException` is thrown.
   @override
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]) {
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     if (contents.isEmpty) {
       throw ArgumentError('Found empty contents');
     }
 
     if (width < 0 || height < 0) {
       throw ArgumentError(
-          'Negative size is not allowed. Input: $width' 'x$height');
+        'Negative size is not allowed. Input: $width' 'x$height',
+      );
     }
     final supportedFormats = supportedWriteFormats;
     if (supportedFormats != null && !supportedFormats.contains(format)) {
@@ -61,7 +67,11 @@ abstract class OneDimensionalCodeWriter implements Writer {
 
   /// @return a byte array of horizontal pixels (0 = white, 1 = black)
   static BitMatrix _renderResult(
-      List<bool> code, int width, int height, int sidesMargin) {
+    List<bool> code,
+    int width,
+    int height,
+    int sidesMargin,
+  ) {
     final inputWidth = code.length;
     // Add quiet zone on both sides.
     final fullWidth = inputWidth + sidesMargin;
@@ -96,7 +106,11 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @param startColor starting color - false for white, true for black
   /// @return the number of elements added to target.
   static int appendPattern(
-      List<bool> target, int pos, List<int> pattern, bool startColor) {
+    List<bool> target,
+    int pos,
+    List<int> pattern,
+    bool startColor,
+  ) {
     bool color = startColor;
     int numAdded = 0;
     for (int len in pattern) {
@@ -118,6 +132,8 @@ abstract class OneDimensionalCodeWriter implements Writer {
   ///
   /// @param contents barcode contents to encode
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
-  List<bool> encodeContent(String contents,
-      [Map<EncodeHintType, Object?>? hints]);
+  List<bool> encodeContent(
+    String contents, [
+    Map<EncodeHintType, Object?>? hints,
+  ]);
 }

@@ -22,8 +22,11 @@ import '../common/abstract_black_box.dart';
 /// A very difficult set of images taken with extreme shadows and highlights.
 void main() {
   test('EAN13BlackBox4TestCase', () {
-    AbstractBlackBoxTestCase('test/resources/blackbox/ean13-4',
-        MultiFormatReader(), BarcodeFormat.EAN_13)
+    AbstractBlackBoxTestCase(
+      'test/resources/blackbox/ean13-4',
+      MultiFormatReader(),
+      BarcodeFormat.EAN_13,
+    )
       ..addTest(6, 13, 0.0, 1, 1)
       ..addTest(7, 13, 180.0, 1, 1)
       ..testBlackBox();

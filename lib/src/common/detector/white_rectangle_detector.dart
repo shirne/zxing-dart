@@ -43,9 +43,12 @@ class WhiteRectangleDetector {
   /// @param x x position of search center
   /// @param y y position of search center
   /// @throws NotFoundException if image is too small to accommodate `initSize`
-  WhiteRectangleDetector(this._image,
-      [int initSize = _INIT_SIZE, int? x, int? y])
-      : _height = _image.height,
+  WhiteRectangleDetector(
+    this._image, [
+    int initSize = _INIT_SIZE,
+    int? x,
+    int? y,
+  ])  : _height = _image.height,
         _width = _image.width,
         _leftInit = (x ?? _image.width ~/ 2) - initSize ~/ 2,
         _rightInit = (x ?? _image.width ~/ 2) + initSize ~/ 2,
@@ -177,8 +180,12 @@ class WhiteRectangleDetector {
 
       ResultPoint? z;
       for (int i = 1; z == null && i < maxSize; i++) {
-        z = getBlackPointOnSegment(left.toDouble(), (down - i).toDouble(),
-            (left + i).toDouble(), down.toDouble());
+        z = getBlackPointOnSegment(
+          left.toDouble(),
+          (down - i).toDouble(),
+          (left + i).toDouble(),
+          down.toDouble(),
+        );
       }
 
       if (z == null) {
@@ -188,8 +195,12 @@ class WhiteRectangleDetector {
       ResultPoint? t;
       //go down right
       for (int i = 1; t == null && i < maxSize; i++) {
-        t = getBlackPointOnSegment(left.toDouble(), (up + i).toDouble(),
-            (left + i).toDouble(), up.toDouble());
+        t = getBlackPointOnSegment(
+          left.toDouble(),
+          (up + i).toDouble(),
+          (left + i).toDouble(),
+          up.toDouble(),
+        );
       }
 
       if (t == null) {
@@ -199,8 +210,12 @@ class WhiteRectangleDetector {
       ResultPoint? x;
       //go down left
       for (int i = 1; x == null && i < maxSize; i++) {
-        x = getBlackPointOnSegment(right.toDouble(), (up + i).toDouble(),
-            (right - i).toDouble(), up.toDouble());
+        x = getBlackPointOnSegment(
+          right.toDouble(),
+          (up + i).toDouble(),
+          (right - i).toDouble(),
+          up.toDouble(),
+        );
       }
 
       if (x == null) {
@@ -210,8 +225,12 @@ class WhiteRectangleDetector {
       ResultPoint? y;
       //go up left
       for (int i = 1; y == null && i < maxSize; i++) {
-        y = getBlackPointOnSegment(right.toDouble(), (down - i).toDouble(),
-            (right - i).toDouble(), down.toDouble());
+        y = getBlackPointOnSegment(
+          right.toDouble(),
+          (down - i).toDouble(),
+          (right - i).toDouble(),
+          down.toDouble(),
+        );
       }
 
       if (y == null) {
@@ -225,7 +244,11 @@ class WhiteRectangleDetector {
   }
 
   ResultPoint? getBlackPointOnSegment(
-      double aX, double aY, double bX, double bY) {
+    double aX,
+    double aY,
+    double bX,
+    double bY,
+  ) {
     final dist = MathUtils.round(MathUtils.distance(aX, aY, bX, bY));
     final xStep = (bX - aX) / dist;
     final yStep = (bY - aY) / dist;
@@ -252,7 +275,11 @@ class WhiteRectangleDetector {
   ///         point and the last, the bottommost. The second point will be
   ///         leftmost and the third, the rightmost
   List<ResultPoint> centerEdges(
-      ResultPoint y, ResultPoint z, ResultPoint x, ResultPoint t) {
+    ResultPoint y,
+    ResultPoint z,
+    ResultPoint x,
+    ResultPoint t,
+  ) {
     //
     //       t            t
     //  z                      x

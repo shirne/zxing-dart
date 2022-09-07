@@ -28,9 +28,13 @@ class EmailAddressParsedResult extends ParsedResult {
   String? subject;
   String? body;
 
-  EmailAddressParsedResult(dynamic tos,
-      [this._ccs, this._bccs, this.subject, this.body])
-      : _tos = tos is String ? [tos] : tos as List<String>?,
+  EmailAddressParsedResult(
+    dynamic tos, [
+    this._ccs,
+    this._bccs,
+    this.subject,
+    this.body,
+  ])  : _tos = tos is String ? [tos] : tos as List<String>?,
         super(ParsedResultType.EMAIL_ADDRESS);
 
   /// @return first elements of [tos] or `null` if none
@@ -44,17 +48,17 @@ class EmailAddressParsedResult extends ParsedResult {
 
   List<String>? get bccs => _bccs;
 
-  addTo(String to) {
+  void addTo(String to) {
     _tos ??= [];
     _tos!.add(to);
   }
 
-  addCC(String to) {
+  void addCC(String to) {
     _ccs ??= [];
     _ccs!.add(to);
   }
 
-  addBCC(String to) {
+  void addBCC(String to) {
     _bccs ??= [];
     _bccs!.add(to);
   }

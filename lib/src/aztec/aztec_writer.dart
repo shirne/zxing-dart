@@ -28,16 +28,21 @@ import 'encoder/encoder.dart';
 /// Renders an Aztec code as a [BitMatrix].
 class AztecWriter implements Writer {
   @override
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      [Map<EncodeHintType, Object>? hints]) {
+  BitMatrix encode(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height, [
+    Map<EncodeHintType, Object>? hints,
+  ]) {
     Encoding? charset; // Do not add any ECI code by default
     int eccPercent = Encoder.DEFAULT_EC_PERCENT;
     int layers = Encoder.DEFAULT_AZTEC_LAYERS;
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         charset = CharacterSetECI.getCharacterSetECIByName(
-                hints[EncodeHintType.CHARACTER_SET] as String)
-            ?.charset;
+          hints[EncodeHintType.CHARACTER_SET] as String,
+        )?.charset;
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
         eccPercent =
@@ -48,11 +53,25 @@ class AztecWriter implements Writer {
       }
     }
     return _encodeStatic(
-        contents, format, width, height, charset, eccPercent, layers);
+      contents,
+      format,
+      width,
+      height,
+      charset,
+      eccPercent,
+      layers,
+    );
   }
 
-  static BitMatrix _encodeStatic(String contents, BarcodeFormat format,
-      int width, int height, Encoding? charset, int eccPercent, int layers) {
+  static BitMatrix _encodeStatic(
+    String contents,
+    BarcodeFormat format,
+    int width,
+    int height,
+    Encoding? charset,
+    int eccPercent,
+    int layers,
+  ) {
     if (format != BarcodeFormat.AZTEC) {
       throw ArgumentError('Can only encode AZTEC, but got $format');
     }

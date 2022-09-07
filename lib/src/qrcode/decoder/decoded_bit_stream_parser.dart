@@ -42,8 +42,12 @@ class DecodedBitStreamParser {
 
   DecodedBitStreamParser._();
 
-  static DecoderResult decode(Uint8List bytes, Version version,
-      ErrorCorrectionLevel? ecLevel, Map<DecodeHintType, Object>? hints) {
+  static DecoderResult decode(
+    Uint8List bytes,
+    Version version,
+    ErrorCorrectionLevel? ecLevel,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     final bits = BitSource(bytes);
     final result = StringBuilder();
     final byteSegments = <Uint8List>[]; //new ArrayList<>(1);
@@ -118,8 +122,14 @@ class DecodedBitStreamParser {
                 _decodeAlphanumericSegment(bits, result, count, fc1InEffect);
                 break;
               case Mode.BYTE:
-                _decodeByteSegment(bits, result, count, currentCharacterSetECI,
-                    byteSegments, hints);
+                _decodeByteSegment(
+                  bits,
+                  result,
+                  count,
+                  currentCharacterSetECI,
+                  byteSegments,
+                  hints,
+                );
                 break;
               case Mode.KANJI:
                 _decodeKanjiSegment(bits, result, count);
@@ -167,7 +177,10 @@ class DecodedBitStreamParser {
 
   /// See specification GBT 18284-2000
   static void _decodeHanziSegment(
-      BitSource bits, StringBuffer result, int count) {
+    BitSource bits,
+    StringBuffer result,
+    int count,
+  ) {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatsException.instance;
@@ -199,7 +212,10 @@ class DecodedBitStreamParser {
   }
 
   static void _decodeKanjiSegment(
-      BitSource bits, StringBuffer result, int count) {
+    BitSource bits,
+    StringBuffer result,
+    int count,
+  ) {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatsException.instance;
@@ -229,9 +245,14 @@ class DecodedBitStreamParser {
     result.write(StringUtils.shiftJisCharset.decode(buffer));
   }
 
-  static void _decodeByteSegment(BitSource bits, StringBuffer result, int count,
-      CharacterSetECI? currentCharacterSetECI, List<Uint8List> byteSegments,
-      [Map<DecodeHintType, Object>? hints]) {
+  static void _decodeByteSegment(
+    BitSource bits,
+    StringBuffer result,
+    int count,
+    CharacterSetECI? currentCharacterSetECI,
+    List<Uint8List> byteSegments, [
+    Map<DecodeHintType, Object>? hints,
+  ]) {
     // Don't crash trying to read more bits than we have available.
     if (8 * count > bits.available()) {
       throw FormatsException.instance;
@@ -265,7 +286,11 @@ class DecodedBitStreamParser {
   }
 
   static void _decodeAlphanumericSegment(
-      BitSource bits, StringBuilder result, int count, bool fc1InEffect) {
+    BitSource bits,
+    StringBuilder result,
+    int count,
+    bool fc1InEffect,
+  ) {
     // Read two characters at a time
     final start = result.length;
     while (count > 1) {
@@ -302,7 +327,10 @@ class DecodedBitStreamParser {
   }
 
   static void _decodeNumericSegment(
-      BitSource bits, StringBuffer result, int count) {
+    BitSource bits,
+    StringBuffer result,
+    int count,
+  ) {
     // Read three digits at a time
     while (count >= 3) {
       // Each 10 bits encodes three digits

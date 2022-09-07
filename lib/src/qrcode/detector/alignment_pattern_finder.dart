@@ -51,9 +51,15 @@ class AlignmentPatternFinder {
   /// @param width width of region to search
   /// @param height height of region to search
   /// @param moduleSize estimated module size so far
-  AlignmentPatternFinder(this._image, this._startX, this._startY, this._width,
-      this._height, this._moduleSize, this._resultPointCallback)
-      : _possibleCenters = []; // 5
+  AlignmentPatternFinder(
+    this._image,
+    this._startX,
+    this._startY,
+    this._width,
+    this._height,
+    this._moduleSize,
+    this._resultPointCallback,
+  ) : _possibleCenters = []; // 5
 
   /// <p>This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
   /// it's pretty performance-critical and so is written to be fast foremost.</p>
@@ -165,7 +171,11 @@ class AlignmentPatternFinder {
   /// observed in any reading state, based on the results of the horizontal scan
   /// @return vertical center of alignment pattern, or {@link double#NaN} if not found
   double _crossCheckVertical(
-      int startI, int centerJ, int maxCount, int originalStateCountTotal) {
+    int startI,
+    int centerJ,
+    int maxCount,
+    int originalStateCountTotal,
+  ) {
     final image = _image;
 
     final maxI = image.height;
@@ -233,7 +243,11 @@ class AlignmentPatternFinder {
     final stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     final centerJ = _centerFromEnd(stateCount, j);
     final centerI = _crossCheckVertical(
-        i, centerJ.toInt(), 2 * stateCount[1], stateCountTotal);
+      i,
+      centerJ.toInt(),
+      2 * stateCount[1],
+      stateCountTotal,
+    );
     if (!(centerI).isNaN) {
       final estimatedModuleSize =
           (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0;

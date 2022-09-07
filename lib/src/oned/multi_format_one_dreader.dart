@@ -90,7 +90,10 @@ class MultiFormatOneDReader extends OneDReader {
 
   @override
   Result decodeRow(
-      int rowNumber, BitArray row, Map<DecodeHintType, Object>? hints) {
+    int rowNumber,
+    BitArray row,
+    Map<DecodeHintType, Object>? hints,
+  ) {
     for (OneDReader reader in _readers) {
       try {
         return reader.decodeRow(rowNumber, row, hints);
