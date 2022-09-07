@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';

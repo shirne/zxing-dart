@@ -17,7 +17,6 @@
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
-import 'package:zxing_lib/src/arguments_exception.dart';
 
 void main() {
   const List<int> BIT_MATRIX_POINTS = [1, 2, 2, 0, 3, 1];

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'ZXing Demo',
       navigatorKey: MyDialog.navigatorKey,
       localizationsDelegates: const [
@@ -25,10 +25,6 @@ class MyApp extends StatelessWidget {
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
-      theme: ThemeData.light().copyWith(
-        primaryColor: Colors.red,
-        extensions: [const ShirneDialogTheme()],
-      ),
       home: const MyHomePage(title: 'ZXing Demo'),
     );
   }
@@ -44,22 +40,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.house),
-              activeIcon: Icon(CupertinoIcons.house_fill),
-              label: 'Home'),
+            icon: Icon(CupertinoIcons.house),
+            activeIcon: Icon(CupertinoIcons.house_fill),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.qrcode),
-              activeIcon: Icon(CupertinoIcons.qrcode_viewfinder),
-              label: 'Scanner'),
+            icon: Icon(CupertinoIcons.qrcode),
+            activeIcon: Icon(CupertinoIcons.qrcode_viewfinder),
+            label: 'Scanner',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.app_badge),
-              activeIcon: Icon(CupertinoIcons.app_badge_fill),
-              label: 'Generator'),
+            icon: Icon(CupertinoIcons.app_badge),
+            activeIcon: Icon(CupertinoIcons.app_badge_fill),
+            label: 'Generator',
+          ),
         ],
       ),
       tabBuilder: (BuildContext context, int index) {

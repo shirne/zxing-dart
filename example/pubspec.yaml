@@ -34,7 +34,7 @@ dependencies:
   camera: ^0.9.4+19
   file_picker: ^4.5.1
   buffer_image: ^0.3.7
-  shirne_dialog: ^3.0.0
+  shirne_dialog: ^4.3.0
   zxing_lib:
     path: ../
 
