@@ -28,10 +28,6 @@ void main() {
 
   //@Test(expected = IllegalArgumentException.class)
   test('testBadECLevel', () {
-    try {
-      ErrorCorrectionLevel.values[4];
-    } catch (_) {
-      // passed
-    }
+    expect(() => ErrorCorrectionLevel.values[4], throwsRangeError);
   });
 }

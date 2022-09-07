@@ -16,6 +16,7 @@
 
 import 'dart:typed_data';
 
+import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 import 'package:zxing_lib/oned.dart';
@@ -38,35 +39,23 @@ void main() {
 
   // for UPCEANReader.decodeDigit bug (https://github.com/zxing/zxing/issues/1400)
   test('p11Test', () {
-    Result? result;
     final row = BitArray.test(
-        Uint32List.fromList([
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -33570816,
-          118,
-          0,
-          0,
-          946064924,
-          -2026257522,
-          955253639,
-          124828,
-          0,
-          0,
-          0,
-          0
-        ]),
-        640);
+      Uint32List.fromList([
+        0, 0, 0, 0, 0, 0, 0, 0, //
+        -33570816, 118, 0, 0, //
+        946064924, -2026257522, 955253639, 124828, //
+        0, 0, 0, 0
+      ]),
+      640,
+    );
+
     try {
-      result =
-          UPCEReader().decodeRow(128, row, {DecodeHintType.TRY_HARDER: true});
-      print(result);
+      final result = UPCEReader().decodeRow(128, row, {
+        DecodeHintType.TRY_HARDER: true,
+      });
+
+      // what ever is ok
+      expect('05111169', result.text);
     } on ChecksumException catch (_) {
       //pass
     }

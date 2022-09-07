@@ -103,8 +103,12 @@ class AbstractBlackBoxTestCase {
         final bitmap = BinaryBitmap(HybridBinarizer(source));
         try {
           if (_decode(
-              bitmap, rotation, expectedText, expectedMetadata.properties,
-              filename: fileBaseName)) {
+            bitmap,
+            rotation,
+            expectedText,
+            expectedMetadata.properties,
+            filename: fileBaseName,
+          )) {
             passedCounts[x]++;
           } else {
             misreadCounts[x]++;
@@ -114,8 +118,13 @@ class AbstractBlackBoxTestCase {
         }
         try {
           if (_decode(
-              bitmap, rotation, expectedText, expectedMetadata.properties,
-              tryHarder: true, filename: fileBaseName)) {
+            bitmap,
+            rotation,
+            expectedText,
+            expectedMetadata.properties,
+            tryHarder: true,
+            filename: fileBaseName,
+          )) {
             tryHarderCounts[x]++;
           } else {
             tryHarderMisreadCounts[x]++;
@@ -217,9 +226,14 @@ class AbstractBlackBoxTestCase {
 
   Reader? get reader => _barcodeReader;
 
-  bool _decode(BinaryBitmap source, double rotation, String expectedText,
-      Map<Object, Object> expectedMetadata,
-      {bool tryHarder = false, filename = ''}) {
+  bool _decode(
+    BinaryBitmap source,
+    double rotation,
+    String expectedText,
+    Map<Object, Object> expectedMetadata, {
+    bool tryHarder = false,
+    filename = '',
+  }) {
     final suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
 
     final hints = Map<DecodeHintType, Object>.from(_hints);

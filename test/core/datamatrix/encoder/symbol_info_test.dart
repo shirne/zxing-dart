@@ -49,21 +49,16 @@ void main() {
     expect(14, info.matrixHeight);
     expect(16, info.symbolWidth);
     expect(16, info.symbolHeight);
+    expect(
+      () => SymbolInfo.lookup(1559),
+      throwsArgumentError,
+      reason:
+          'There\'s no rectangular symbol for more than 1558 data codewords',
+    );
 
-    try {
-      SymbolInfo.lookup(1559);
-      fail("There's no rectangular symbol for more than 1558 data codewords");
-    } on ArgumentError catch (_) {
-      // IllegalArgumentException
-      //expected
-    }
-    try {
-      SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE);
-      fail("There's no rectangular symbol for 50 data codewords");
-    } on ArgumentError catch (_) {
-      // IllegalArgumentException
-      //expected
-    }
+    expect(() => SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE),
+        throwsArgumentError,
+        reason: 'There\'s no rectangular symbol for 50 data codewords');
 
     info = SymbolInfo.lookup(35)!;
     expect(24, info.symbolWidth);
@@ -77,7 +72,7 @@ void main() {
 
     info = SymbolInfo.lookup(
         45, SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
-    assert(info == null);
+    expect(null, info);
 
     final minSize = fixedSize;
     final maxSize = Dimension(32, 32);
@@ -102,6 +97,6 @@ void main() {
 
     info = SymbolInfo.lookup(
         63, SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
-    assert(info == null);
+    expect(null, info);
   });
 }

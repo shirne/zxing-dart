@@ -49,15 +49,13 @@ void main() {
     assertCorrectBinaryString(data, expected);
   });
 
-  //@Test(expected = NotFoundException.class)
   test('test013103invalid', () {
     final data = '$header${AbstractDecoderTest.compressedGtin900123456798908}'
         '${AbstractDecoderTest.compressed15bitWeight1750}..';
-    try {
-      assertCorrectBinaryString(data, '');
-      fail('accepted NotFoundException');
-    } on NotFoundException catch (_) {
-      // passed
-    }
+
+    expect(
+      () => assertCorrectBinaryString(data, ''),
+      throwsA(TypeMatcher<NotFoundException>()),
+    );
   });
 }

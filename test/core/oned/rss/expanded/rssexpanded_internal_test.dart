@@ -73,13 +73,10 @@ void main() {
     //assertNotNull(finderPattern);
     expect(1, finderPattern.value);
 
-    try {
-      rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
-      //   the previous was the last pair
-      fail('NotFoundException expected');
-    } on NotFoundException catch (_) {
-      // ok
-    }
+    expect(
+      () => rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber),
+      throwsA(TypeMatcher<NotFoundException>()),
+    );
   });
 
   test('testRetrieveNextPairPatterns', () async {
@@ -94,16 +91,19 @@ void main() {
     final pair1 =
         rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
     previousPairs.add(pair1);
-    FinderPattern finderPattern = pair1.finderPattern!;
-    //assertNotNull(finderPattern);
-    expect(0, finderPattern.value);
+    var finderPattern = pair1.finderPattern;
+    expect(finderPattern, isNotNull);
+    expect(0, finderPattern!.value);
 
-    final pair2 =
-        rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber)!;
+    final pair2 = rssExpandedReader.retrieveNextPair(
+      row,
+      previousPairs,
+      rowNumber,
+    )!;
     previousPairs.add(pair2);
-    finderPattern = pair2.finderPattern!;
-    //assertNotNull(finderPattern);
-    expect(0, finderPattern.value);
+    finderPattern = pair2.finderPattern;
+    expect(finderPattern, isNotNull);
+    expect(0, finderPattern!.value);
   });
 
   test('testDecodeCheckCharacter', () async {
@@ -116,11 +116,20 @@ void main() {
     final startEnd = [145, 243];
     const value = 0; // A
     final finderPatternA1 = FinderPattern(
-        value, startEnd, startEnd[0], startEnd[1], image.height ~/ 2);
+      value,
+      startEnd,
+      startEnd[0],
+      startEnd[1],
+      image.height ~/ 2,
+    );
     //{1, 8, 4, 1, 1};
     final rssExpandedReader = RSSExpandedReader();
-    final dataCharacter =
-        rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
+    final dataCharacter = rssExpandedReader.decodeDataCharacter(
+      row,
+      finderPatternA1,
+      true,
+      true,
+    );
 
     expect(98, dataCharacter.value);
   });

@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/aztec.dart';
 import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/zxing.dart';
 
 /// Tests for the Detector
 ///
@@ -106,10 +108,9 @@ void main() {
 
   // Test that we can tolerate errors in the parameter locator bits
   void testErrorInParameterLocator(String data) {
-    final AztecCode aztec =
-        Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
-    final Random random =
-        Random(aztec.matrix!.hashCode); // pseudo-random, but deterministic
+    final aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    // pseudo-random, but deterministic
+    final random = Random(aztec.matrix!.hashCode);
     final int layers = aztec.layers;
     final bool compact = aztec.isCompact;
     final List<Point> orientationPoints = getOrientationPoints(aztec);
@@ -125,11 +126,12 @@ void main() {
             if (error2 > error1) {
               // if error2 == error1, we only test a single error
               copy.flip(
-                  orientationPoints[error2].x, orientationPoints[error2].y);
+                orientationPoints[error2].x,
+                orientationPoints[error2].y,
+              );
             }
             // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
-            final AztecDetectorResult r =
-                Detector(makeLarger(copy, 3)).detect(isMirror);
+            final r = Detector(makeLarger(copy, 3)).detect(isMirror);
             //assertNotNull(r);
             expect(r.nbLayers, layers);
             expect(r.isCompact, compact);
@@ -140,21 +142,20 @@ void main() {
         // Try a few random three-bit errors;
         for (int i = 0; i < 5; i++) {
           final BitMatrix copy = clone(matrix);
-          final List<int> errors = [];
+          final errors = SplayTreeSet<int>(); // TreeSet
           while (errors.length < 3) {
             // Quick and dirty way of getting three distinct integers between 1 and n.
             errors.add(random.nextInt(orientationPoints.length));
           }
+
           for (int error in errors) {
             copy.flip(orientationPoints[error].x, orientationPoints[error].y);
           }
-          try {
-            Detector(makeLarger(copy, 3)).detect(false);
-            fail('Should not reach here');
-          } catch (_) {
-            // NotFoundException
-            // continue
-          }
+          expect(
+            () => Detector(makeLarger(copy, 3)).detect(false),
+            throwsA(TypeMatcher<NotFoundException>()),
+            reason: 'Should throw NotFoundException',
+          );
         }
       }
     }
@@ -168,12 +169,12 @@ void main() {
 
   test('testErrorInParameterLocatorCompact', () {
     testErrorInParameterLocator(
-        'This is an example Aztec symbol for Wikipedia.');
+      'This is an example Aztec symbol for Wikipedia.',
+    );
   });
 
   test('testErrorInParameterLocatorNotCompact', () {
-    final String alphabet =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz';
+    final alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz';
     testErrorInParameterLocator(alphabet + alphabet + alphabet);
   });
 }

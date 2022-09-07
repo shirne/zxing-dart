@@ -155,7 +155,6 @@ void main() {
     expect(result.text, 'Français');
   });
 
-  //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors', () {
     final BitMatrix matrix = BitMatrix.parse(
         ''
@@ -188,17 +187,21 @@ void main() {
             'X X . X . X . . . X . X . . . . X X . X . . X X . . . \n',
         'X ',
         '. ');
-    final AztecDetectorResult r =
-        AztecDetectorResult(matrix, noPoints, true, 16, 4);
-    try {
-      Decoder().decode(r);
-      fail('here should be FormatException');
-    } catch (_) {
-      // passed
-    }
+    final AztecDetectorResult r = AztecDetectorResult(
+      matrix,
+      noPoints,
+      true,
+      16,
+      4,
+    );
+
+    expect(
+      () => Decoder().decode(r),
+      throwsA(TypeMatcher<FormatsException>()),
+      reason: 'Should throw FormatsException',
+    );
   });
 
-  //@Test(expected = FormatException.class)
   test('testDecodeTooManyErrors2', () {
     final BitMatrix matrix = BitMatrix.parse(
         ''
@@ -231,14 +234,18 @@ void main() {
             'X X . . . X X . . X . X . . . . X X . X . . X . X . X \n',
         'X ',
         '. ');
-    final AztecDetectorResult r =
-        AztecDetectorResult(matrix, noPoints, true, 16, 4);
-    try {
-      Decoder().decode(r);
-      fail('here should be FormatException');
-    } catch (_) {
-      // passed
-    }
+    final AztecDetectorResult r = AztecDetectorResult(
+      matrix,
+      noPoints,
+      true,
+      16,
+      4,
+    );
+    expect(
+      () => Decoder().decode(r),
+      throwsA(TypeMatcher<FormatsException>()),
+      reason: 'Should throw FormatsException',
+    );
   });
 
   test('testRawBytes', () {

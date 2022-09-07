@@ -38,13 +38,11 @@ void main() {
     expect(testStr, matrixToString(result));
   });
 
-  //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
-    try {
-      EAN8Writer().encode('96385abc', BarcodeFormat.EAN_8, 0, 0);
-      fail('Should throw ArgumentError');
-    } on ArgumentError catch (_) {
-      // passed
-    }
+    expect(
+      () => EAN8Writer().encode('96385abc', BarcodeFormat.EAN_8, 0, 0),
+      throwsArgumentError,
+      reason: 'Should throw ArgumentError',
+    );
   });
 }

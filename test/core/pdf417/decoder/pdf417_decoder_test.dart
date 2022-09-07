@@ -287,32 +287,35 @@ void main() {
     final sampleCodes = [3, 928, 222, 0];
     final resultMetadata = PDF417ResultMetadata();
 
-    try {
-      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } on FormatsException catch (_) {
-      // continue
-    }
+    expect(
+      () => DecodedBitStreamParser.decodeMacroBlock(
+        sampleCodes,
+        2,
+        resultMetadata,
+      ),
+      throwsA(TypeMatcher<FormatsException>()),
+    );
   });
 
   test('testSampleWithNoFileIdMacro', () {
     final sampleCodes = [4, 928, 222, 198, 0];
     final resultMetadata = PDF417ResultMetadata();
-
-    try {
-      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } on FormatsException catch (_) {
-      // continue
-    }
+    expect(
+      () => DecodedBitStreamParser.decodeMacroBlock(
+        sampleCodes,
+        2,
+        resultMetadata,
+      ),
+      throwsA(TypeMatcher<FormatsException>()),
+    );
   });
 
   test('testSampleWithNoDataNoMacro', () {
     final sampleCodes = [3, 899, 899, 0];
-
-    try {
-      DecodedBitStreamParser.decode(sampleCodes, '0');
-    } on FormatsException catch (_) {
-      // continue
-    }
+    expect(
+      () => DecodedBitStreamParser.decode(sampleCodes, '0'),
+      throwsA(TypeMatcher<FormatsException>()),
+    );
   });
 
   test('testUppercase', () {

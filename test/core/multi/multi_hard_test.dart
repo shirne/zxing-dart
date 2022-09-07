@@ -97,7 +97,9 @@ void main() {
     } on NotFoundException catch (_) {
       try {
         result = reader.decode(
-            BinaryBitmap(GlobalHistogramBinarizer(source)), hints);
+          BinaryBitmap(GlobalHistogramBinarizer(source)),
+          hints,
+        );
       } on NotFoundException catch (_) {}
     }
     print('${DateTime.now().millisecondsSinceEpoch - startTimer} ms');

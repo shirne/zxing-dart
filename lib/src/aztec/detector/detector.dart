@@ -93,17 +93,23 @@ class Detector {
 
     // 4. Sample the grid
     final BitMatrix bits = _sampleGrid(
-        _image,
-        bullsEyeCorners[_shift % 4],
-        bullsEyeCorners[(_shift + 1) % 4],
-        bullsEyeCorners[(_shift + 2) % 4],
-        bullsEyeCorners[(_shift + 3) % 4]);
+      _image,
+      bullsEyeCorners[_shift % 4],
+      bullsEyeCorners[(_shift + 1) % 4],
+      bullsEyeCorners[(_shift + 2) % 4],
+      bullsEyeCorners[(_shift + 3) % 4],
+    );
 
     // 5. Get the corners of the matrix.
     final List<ResultPoint> corners = _getMatrixCornerPoints(bullsEyeCorners);
 
     return AztecDetectorResult(
-        bits, corners, _compact, _nbDataBlocks, _nbLayers);
+      bits,
+      corners,
+      _compact,
+      _nbDataBlocks,
+      _nbLayers,
+    );
   }
 
   /// Extracts the number of data layers and data blocks from the layer around the bull's eye.
@@ -149,8 +155,7 @@ class Detector {
 
     // Corrects parameter data using RS.  Returns just the data portion
     // without the error correction.
-    final int correctedData =
-        _getCorrectedParameterData(parameterData, _compact);
+    final correctedData = _getCorrectedParameterData(parameterData, _compact);
 
     if (_compact) {
       // 8 bits:  2 bits layers and 6 bits data blocks

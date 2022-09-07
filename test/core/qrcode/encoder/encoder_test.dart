@@ -129,13 +129,14 @@ void main() {
   test('testEncodeWithVersionTooSmall', () {
     final hints = <EncodeHintType, Object>{};
     hints[EncodeHintType.QR_VERSION] = 3;
-    try {
-      Encoder.encode('THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
-          ErrorCorrectionLevel.H, hints);
-      fail('Data too big for requested version');
-    } on WriterException catch (_) {
-      // passed
-    }
+    expect(
+      () => Encoder.encode(
+        'THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
+        ErrorCorrectionLevel.H,
+        hints,
+      ),
+      throwsA(TypeMatcher<WriterException>()),
+    );
   });
 
   test('testSimpleUTF8ECI', () {
@@ -362,13 +363,17 @@ void main() {
         'A', Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
     expect(' ..X.X.', bits.toString());
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
-    try {
-      Encoder.appendBytes(
-          'a', Mode.ALPHANUMERIC, bits, Encoder.defaultByteModeEncoding);
-    } on WriterException catch (_) {
-      //
-      // good
-    }
+
+    expect(
+      () => Encoder.appendBytes(
+        'a',
+        Mode.ALPHANUMERIC,
+        bits,
+        Encoder.defaultByteModeEncoding,
+      ),
+      throwsA(TypeMatcher<WriterException>()),
+    );
+
     // Should use append8BitBytes.
     // 0x61, 0x62, 0x63
     bits = BitArray();
@@ -560,13 +565,13 @@ void main() {
     bits = BitArray();
     Encoder.appendAlphanumericBytes('', bits);
     expect('', bits.toString());
-    // Invalid data.
-    try {
-      Encoder.appendAlphanumericBytes('abc', BitArray());
-    } catch (_) {
-      // WriterException
-      // good
-    }
+
+    expect(
+      () => Encoder.appendAlphanumericBytes('abc', BitArray()),
+      throwsA(
+        TypeMatcher<WriterException>(),
+      ),
+    );
   });
 
   test('testAppend8BitBytes', () {

@@ -21,12 +21,7 @@ import 'package:zxing_lib/qrcode.dart';
 void main() {
   //@Test(expected = IllegalArgumentException.class)
   test('testBadVersion', () {
-    try {
-      Version.getVersionForNumber(0);
-      fail('expected');
-    } catch (_) {
-      //passed
-    }
+    expect(() => Version.getVersionForNumber(0), throwsArgumentError);
   });
 
   test('testVersionForNumber', () {

@@ -595,14 +595,12 @@ void main() {
     expect(aztec.layers, 32);
     assert(!aztec.isCompact);
 
-    try {
-      Encoder.encode(alphabet, 25, userSpecifiedLayers);
-      fail(
-          'Encode should have failed.  No such thing as $userSpecifiedLayers layers');
-    } on ArgumentError catch (_) {
-      // IllegalArgumentException
-      // continue
-    }
+    expect(
+      () => Encoder.encode(alphabet, 25, userSpecifiedLayers),
+      throwsA(TypeMatcher<ArgumentError>()),
+      reason: 'Encode should have failed.  '
+          'No such thing as $userSpecifiedLayers layers',
+    );
   }
 
   test('testUserSpecifiedLayers', () {
@@ -618,13 +616,11 @@ void main() {
     final String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     // encodes as 26 * 5 * 4 = 520 bits of data
     final String alphabet4 = alphabet * 4;
-    try {
-      Encoder.encode(alphabet4, 0, -4);
-      fail('Rest must be error correction');
-    } on ArgumentError catch (_) {
-      // IllegalArgumentException
-      // continue
-    }
+    expect(
+      () => Encoder.encode(alphabet4, 0, -4),
+      throwsA(TypeMatcher<ArgumentError>()),
+      reason: 'Rest must be error correction',
+    );
   });
   test('testBorderCompact4Case', () {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
@@ -642,7 +638,10 @@ void main() {
     // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
     // include more error checking.
     aztecCode = Encoder.encode(
-        alphabet4.substring(0, 100), 10, Encoder.DEFAULT_AZTEC_LAYERS);
+      alphabet4.substring(0, 100),
+      10,
+      Encoder.DEFAULT_AZTEC_LAYERS,
+    );
     assert(aztecCode.isCompact);
     expect(aztecCode.layers, 4);
   });

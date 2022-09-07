@@ -76,7 +76,7 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
       corrupt(message, i, random, field.size);
       try {
         decoder.decode(message, ecWords.length);
-      } catch (e) {
+      } on ReedSolomonException catch (e) {
         // ReedSolomonException
         // fail only if maxErrors exceeded
         assert(i > maxErrors,

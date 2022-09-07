@@ -82,7 +82,10 @@ class BitMatrix {
   }
 
   static BitMatrix _parseString(
-      String? stringRepresentation, String setString, String unsetString) {
+    String? stringRepresentation,
+    String setString,
+    String unsetString,
+  ) {
     if (stringRepresentation == null) {
       throw ArgumentError('IllegalArgument');
     }

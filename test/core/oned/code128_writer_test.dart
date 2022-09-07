@@ -41,12 +41,6 @@ void main() {
   final writer = Code128Writer();
   final reader = Code128Reader();
 
-  //@Before
-  //void setUp() {
-  //  writer = Code128Writer();
-  //  reader = Code128Reader();
-  //}
-
   BitMatrix encode(String toEncode, bool compact, String? expectedLoopback) {
     final hints = <EncodeHintType, Object>{};
     if (compact) {
@@ -289,26 +283,25 @@ void main() {
 
     final hints = <EncodeHintType, Object>{EncodeHintType.FORCE_CODE_SET: 'A'};
 
-    try {
-      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail(
-          'Lower case characters should not be accepted when the code set is forced to A.');
-    } on ArgumentError catch (_) {
-      //IllegalArgumentException
-    }
+    expect(
+      () => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints),
+      throwsArgumentError,
+      reason: 'Lower case characters should not be accepted '
+          'when the code set is forced to A.',
+    );
   });
   test('testEncodeWithForcedCodeSetFailureCodeSetBBadCharacter', () {
     final toEncode = 'ASdf\x000123'; // \0 (ascii value 0)
     // Characters with ASCII value below 32 should not be accepted when the code set is forced to B.
 
     final hints = <EncodeHintType, Object>{EncodeHintType.FORCE_CODE_SET: 'B'};
-    try {
-      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail(
-          'Characters with ASCII value below 32 should not be accepted when the code set is forced to B.');
-    } on ArgumentError catch (_) {
-      //IllegalArgumentException
-    }
+
+    expect(
+      () => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints),
+      throwsArgumentError,
+      reason: 'Characters with ASCII value below 32 '
+          'should not be accepted when the code set is forced to B.',
+    );
   });
 
   test('testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersNonNum', () {
@@ -316,13 +309,13 @@ void main() {
     // Non-digit characters should not be accepted when the code set is forced to C.
 
     final hints = <EncodeHintType, Object>{EncodeHintType.FORCE_CODE_SET: 'C'};
-    try {
-      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail(
-          'Non-digit characters should not be accepted when the code set is forced to C.');
-    } on ArgumentError catch (_) {
-      //IllegalArgumentException
-    }
+
+    expect(
+      () => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints),
+      throwsArgumentError,
+      reason: 'Non-digit characters should not be accepted '
+          'when the code set is forced to C.',
+    );
   });
 
   test('testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersFncCode', () {
@@ -330,13 +323,13 @@ void main() {
     // Function codes other than 1 should not be accepted when the code set is forced to C.
 
     final hints = <EncodeHintType, Object>{EncodeHintType.FORCE_CODE_SET: 'C'};
-    try {
-      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail(
-          'Function codes other than 1 should not be accepted when the code set is forced to C.');
-    } on ArgumentError catch (_) {
-      //IllegalArgumentException
-    }
+
+    expect(
+      () => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints),
+      throwsArgumentError,
+      reason: 'Function codes other than 1 should not be accepted '
+          'when the code set is forced to C.',
+    );
   });
 
   test('testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits', () {
@@ -344,16 +337,16 @@ void main() {
     // An uneven amount of digits should not be accepted when the code set is forced to C.
 
     final hints = <EncodeHintType, Object>{EncodeHintType.FORCE_CODE_SET: 'C'};
-    try {
-      writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail(
-          'An uneven amount of digits should not be accepted when the code set is forced to C.');
-    } on ArgumentError catch (_) {
-      //IllegalArgumentException
-    }
+
+    expect(
+      () => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints),
+      throwsArgumentError,
+      reason: 'An uneven amount of digits should not be accepted '
+          'when the code set is forced to C.',
+    );
   });
 
-  test('testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits', () {
+  test('testEncodeWithForcedCodeSetFailureCodeSetA', () {
     final toEncode = 'AB123';
     // would default to B
     final expected = '$QUIET_SPACE$START_CODE_A'

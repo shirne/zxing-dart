@@ -81,11 +81,9 @@ void main() {
     final received = PDF417_TEST_WITH_EC.toList();
     final random = AbstractErrorCorrectionTestCase.getRandom();
     AbstractErrorCorrectionTestCase.corrupt(received, maxErrors + 1, random);
-    try {
-      checkDecode(received);
-      fail('Should not have decoded');
-    } on ChecksumException catch (_) {
-      // good
-    }
+    expect(
+      () => checkDecode(received),
+      throwsA(TypeMatcher<ChecksumException>()),
+    );
   });
 }

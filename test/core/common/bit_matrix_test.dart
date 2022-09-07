@@ -17,6 +17,7 @@
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
+import 'package:zxing_lib/src/arguments_exception.dart';
 
 void main() {
   const List<int> BIT_MATRIX_POINTS = [1, 2, 2, 0, 3, 1];
@@ -226,27 +227,28 @@ void main() {
     centerMatrix.setRegion(1, 1, 1, 1);
     final emptyMatrix24 = BitMatrix(2, 4);
 
-    assert(emptyMatrix == BitMatrix.parse('   \n   \n   \n', 'x', ' '));
-    assert(emptyMatrix == BitMatrix.parse('   \n   \r\r\n   \n\r', 'x', ' '));
-    assert(emptyMatrix == BitMatrix.parse('   \n   \n   ', 'x', ' '));
+    expect(BitMatrix.parse('   \n   \n   \n', 'x', ' '), emptyMatrix);
+    expect(BitMatrix.parse('   \n   \r\r\n   \n\r', 'x', ' '), emptyMatrix);
+    expect(BitMatrix.parse('   \n   \n   ', 'x', ' '), emptyMatrix);
 
-    assert(fullMatrix == BitMatrix.parse('xxx\nxxx\nxxx\n', 'x', ' '));
+    expect(BitMatrix.parse('xxx\nxxx\nxxx\n', 'x', ' '), fullMatrix);
 
-    assert(centerMatrix == BitMatrix.parse('   \n x \n   \n', 'x', ' '));
-    assert(centerMatrix ==
-        BitMatrix.parse('      \n  x   \n      \n', 'x ', '  '));
-    try {
-      assert(centerMatrix == BitMatrix.parse('   \n xy\n   \n', 'x', ' '));
-      assert(false);
-    } catch (_) {
-      // IllegalArgumentException
-      // good
-    }
+    expect(BitMatrix.parse('   \n x \n   \n', 'x', ' '), centerMatrix);
+    expect(
+      BitMatrix.parse('      \n  x   \n      \n', 'x ', '  '),
+      centerMatrix,
+    );
+    expect(
+      () => BitMatrix.parse('   \n xy\n   \n', 'x', ' '),
+      throwsArgumentError,
+    );
 
-    assert(emptyMatrix24 == BitMatrix.parse('  \n  \n  \n  \n', 'x', ' '));
+    expect(BitMatrix.parse('  \n  \n  \n  \n', 'x', ' '), emptyMatrix24);
 
-    assert(centerMatrix ==
-        BitMatrix.parse(centerMatrix.toString('x', '.'), 'x', '.'));
+    expect(
+      BitMatrix.parse(centerMatrix.toString('x', '.'), 'x', '.'),
+      centerMatrix,
+    );
   });
 
   test('testParseBoolean', () {
@@ -305,20 +307,7 @@ void main() {
     testXOR(fullMatrix, centerMatrix, invertedCenterMatrix);
     testXOR(fullMatrix, fullMatrix, emptyMatrix);
 
-    try {
-      emptyMatrix.clone().xor(badMatrix);
-      assert(false);
-    } catch (_) {
-      //IllegalArgumentException
-      // good
-    }
-
-    try {
-      badMatrix.clone().xor(emptyMatrix);
-      assert(false);
-    } catch (_) {
-      // IllegalArgumentException
-      // good
-    }
+    expect(() => emptyMatrix.clone().xor(badMatrix), throwsArgumentError);
+    expect(() => badMatrix.clone().xor(emptyMatrix), throwsArgumentError);
   });
 }
