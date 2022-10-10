@@ -33,7 +33,7 @@ dependencies:
   webview_flutter: ^3.0.4
   camera: ^0.10.0+3
   file_picker: ^4.5.1
-  buffer_image: ^0.3.11
+  buffer_image: ^0.3.12
   shirne_dialog: ^4.4.1
   zxing_lib:
     path: ../

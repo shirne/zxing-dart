@@ -21,7 +21,7 @@ packages:
       name: buffer_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.11"
+    version: "0.3.12"
   camera:
     dependency: "direct main"
     description:

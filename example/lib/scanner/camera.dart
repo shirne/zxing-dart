@@ -36,7 +36,7 @@ class _CameraPageState extends State<CameraPage> {
     if (_cameras!.isNotEmpty) {
       _controller = CameraController(
         _cameras![0],
-        ResolutionPreset.max,
+        ResolutionPreset.low,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
