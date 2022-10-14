@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:zxing_lib/zxing.dart';
 
 class ResultPage extends StatefulWidget {
@@ -23,47 +24,49 @@ class _ResultPageState extends State<ResultPage> {
         middle: Text('Results'),
       ),
       resizeToAvoidBottomInset: true,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.results
-                .map<Widget>(
-                  (result) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 20,
-                        ),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: CupertinoColors.lightBackgroundGray,
+      child: Material(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.results
+                  .map<Widget>(
+                    (result) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 20,
+                          ),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: CupertinoColors.lightBackgroundGray,
+                              ),
                             ),
+                            color: CupertinoColors.white,
                           ),
-                          color: CupertinoColors.white,
-                        ),
-                        child: Text(
-                          "Detected ${result.barcodeFormat.toString().replaceFirst('BarcodeFormat.', '')} at ${result.resultPoints}",
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: CupertinoColors.inactiveGray,
+                          child: SelectableText(
+                            "Detected ${result.barcodeFormat.toString().replaceFirst('BarcodeFormat.', '')} at ${result.resultPoints}",
                           ),
-                          color: CupertinoColors.lightBackgroundGray,
                         ),
-                        child: Text(result.toString()),
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: CupertinoColors.inactiveGray,
+                            ),
+                            color: CupertinoColors.lightBackgroundGray,
+                          ),
+                          child: SelectableText(result.toString()),
+                        ),
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ),
       ),
