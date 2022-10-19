@@ -3,6 +3,14 @@
 
 A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode multiple 1D/2D barcodes, Supported qrcode, pdf417, oned, maxicode, datamatrix, aztec.
 
+## Why
+
+* Pure Dart implementation, no need to rely on native packages, good platform compatibility
+* Provide pure Dart encoding for all platforms
+* Provide pure Dart decoding for all platforms
+* Research learning and an exploration of Dart language
+
+... At present, this package is far inferior to other native packages in decoding speed and accuracy, and can be used as a decoding tool and some platforms (such as Web and Desktop). I will also continue to pay attention to the improvement of zxing and the improvement of the performance problems in this project. And welcome suggestions for improvement from those with experience in decoding algorithms and image algorithms.
 
 ## Feature
 
