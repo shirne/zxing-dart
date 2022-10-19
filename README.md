@@ -4,7 +4,7 @@
 A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode multiple 1D/2D barcodes, Supported qrcode, pdf417, oned, maxicode, datamatrix, aztec.
 
 
-## Progress
+## Feature
 
 - ✅ Core package translate
 - ✅ Core test translate
