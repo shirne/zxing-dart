@@ -8,6 +8,7 @@ import 'package:zxing_lib/zxing.dart';
 import '../models/utils.dart';
 import 'binarizer.dart';
 import 'camera.dart';
+import 'camera_stream.dart';
 import 'result.dart';
 
 class IndexPage extends StatelessWidget {
@@ -22,6 +23,9 @@ class IndexPage extends StatelessWidget {
         switch (settings.name) {
           case '/camera':
             builder = (BuildContext context) => const CameraPage();
+            break;
+          case '/camera-stream':
+            builder = (BuildContext context) => const CameraStreamPage();
             break;
           case '/result':
             builder = (BuildContext context) =>
@@ -49,6 +53,10 @@ class _IndexPageState extends State<_IndexPage> {
   bool isReading = false;
   void openCamera() {
     Navigator.of(context).pushNamed('/camera');
+  }
+
+  void openCameraStream() {
+    Navigator.of(context).pushNamed('/camera-stream');
   }
 
   void openBinarizer() {
@@ -107,27 +115,28 @@ class _IndexPageState extends State<_IndexPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             CupertinoButton.filled(
               child: const Text('Scanner'),
               onPressed: () {
                 openCamera();
               },
             ),
-            const SizedBox(
-              height: 20,
+            const SizedBox(height: 20),
+            CupertinoButton.filled(
+              child: const Text('Scanner With CameraStream'),
+              onPressed: () {
+                openCameraStream();
+              },
             ),
+            const SizedBox(height: 20),
             CupertinoButton.filled(
               child: const Text('Binarizer'),
               onPressed: () {
                 openBinarizer();
               },
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             CupertinoButton.filled(
               child: SizedBox(
                 width: 160,

@@ -74,6 +74,7 @@ Future<List<Result>?> decodeImageInIsolate(
       if (!complete.isCompleted) {
         complete.complete(message as List<Result>?);
       }
+      port.close();
     },
     onDone: () {
       print('iso close');
@@ -123,13 +124,15 @@ List<Result>? decodeImage(IsoMessage message) {
     (index) => getColorFromByte(message.byteData, index * 4),
   );
 
-  LuminanceSource imageSource =
-      RGBLuminanceSource(message.width, message.height, pixels);
+  final imageSource = RGBLuminanceSource(
+    message.width,
+    message.height,
+    pixels,
+  );
 
-  BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
+  final bitmap = BinaryBitmap(HybridBinarizer(imageSource));
 
-  MultipleBarcodeReader reader =
-      GenericMultipleBarcodeReader(MultiFormatReader());
+  final reader = GenericMultipleBarcodeReader(MultiFormatReader());
   try {
     print('start decode...');
     var results = reader.decodeMultiple(bitmap, {
@@ -147,22 +150,25 @@ List<Result>? decodeImage(IsoMessage message) {
 }
 
 List<Result>? decodeCamera(IsoMessage message) {
-  var yuvData = Int8List.fromList(message.byteData);
+  print(message.byteData.length);
+  final imageSource = PlanarYUVLuminanceSource(
+    message.byteData.buffer.asInt8List(),
+    message.width,
+    message.height,
+  );
 
-  LuminanceSource imageSource =
-      PlanarYUVLuminanceSource(yuvData, message.width, message.height);
-
-  BinaryBitmap bitmap = BinaryBitmap(HybridBinarizer(imageSource));
-
-  MultipleBarcodeReader reader =
-      GenericMultipleBarcodeReader(MultiFormatReader());
+  final bitmap = BinaryBitmap(HybridBinarizer(imageSource));
+  final reader = GenericMultipleBarcodeReader(MultiFormatReader());
   try {
     final results = reader.decodeMultiple(bitmap, {
-      DecodeHintType.TRY_HARDER: true,
-      DecodeHintType.ALSO_INVERTED: true,
+      DecodeHintType.TRY_HARDER: false,
+      DecodeHintType.ALSO_INVERTED: false,
     });
     message.sendPort?.send(results);
     return results;
-  } on NotFoundException catch (_) {}
+  } on NotFoundException catch (_) {
+    print(_);
+    message.sendPort?.send(null);
+  }
   return null;
 }

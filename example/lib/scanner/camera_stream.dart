@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,25 +9,31 @@ import 'package:shirne_dialog/shirne_dialog.dart';
 import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
 
-class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+class CameraStreamPage extends StatefulWidget {
+  const CameraStreamPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CameraPageState();
+  State<StatefulWidget> createState() => _CameraStreamPageState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraStreamPageState extends State<CameraStreamPage> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   FlashMode _flashMode = FlashMode.off;
   bool detectedCamera = false;
   bool isDetecting = false;
-  Timer? _detectTimer;
 
   @override
   void initState() {
     super.initState();
     initCamera();
+  }
+
+  @override
+  void dispose() {
+    stop();
+    _controller?.dispose();
+    super.dispose();
   }
 
   Future<void> initCamera() async {
@@ -36,12 +42,11 @@ class _CameraPageState extends State<CameraPage> {
     if (_cameras!.isNotEmpty) {
       _controller = CameraController(
         _cameras![0],
-        ResolutionPreset.medium,
+        ResolutionPreset.low,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
-      //_controller!.addListener(onCameraView);
-      //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
+
       _controller!.initialize().then((_) {
         if (!mounted) {
           return;
@@ -50,6 +55,11 @@ class _CameraPageState extends State<CameraPage> {
         setState(() {
           detectedCamera = true;
         });
+        if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
+          MyDialog.toast('Does not support current platform');
+          return;
+        }
+        Future.delayed(Duration.zero).then((_) => start());
       });
     } else {
       setState(() {
@@ -58,48 +68,57 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  Future<void> onCameraView() async {
+  bool _isStart = false;
+  void start() {
+    if (_isStart) return;
+    _isStart = true;
+    _controller!.startImageStream(tryDecodeImage);
+  }
+
+  void stop() {
+    if (!_isStart) return;
+    _isStart = false;
+    _controller!.stopImageStream();
+  }
+
+  Future<void> tryDecodeImage(CameraImage image) async {
     if (isDetecting) return;
+    stop();
     setState(() {
       isDetecting = true;
     });
-    XFile pic = await _controller!.takePicture();
-
-    Uint8List data = await pic.readAsBytes();
-    BufferImage? image = await BufferImage.fromFile(data);
-    if (image != null) {
-      if (image.width > 1000) {
-        image.scaleDown(image.width / 800);
-      }
-
-      var results =
-          await decodeImageInIsolate(image.buffer, image.width, image.height);
-      if (!mounted) return;
-      setState(() {
-        isDetecting = false;
-      });
-      if (results != null) {
-        Navigator.of(context).pushNamed('/result', arguments: results);
-      } else {
-        MyDialog.toast('detected nothing');
-        if (!kIsWeb) {
-          onCameraView();
-        }
-      }
-    } else {
-      setState(() {
-        isDetecting = false;
-      });
-      print('can\'t take picture from camera');
+    print(
+      image.planes
+          .map((p) =>
+              '${p.bytes.length} ${p.bytesPerPixel} ${p.bytesPerRow} ${p.width} ${p.height}')
+          .toList(),
+    );
+    final e = image.planes.first;
+    final width = e.bytesPerRow;
+    final height = (e.bytes.length / width).round();
+    final total = image.planes
+        .map<double>((p) => p.bytesPerPixel!.toDouble())
+        .reduce((value, element) => value + 1 / element)
+        .toInt();
+    final data = Uint8List(width * height * total);
+    int startIndex = 0;
+    for (var p in image.planes) {
+      List.copyRange(data, startIndex, p.bytes);
+      startIndex += width * height ~/ p.bytesPerPixel!;
     }
-    _controller?.setFocusMode(FocusMode.auto);
-  }
 
-  @override
-  void dispose() {
-    _controller?.dispose();
-    _detectTimer?.cancel();
-    super.dispose();
+    var results = await decodeImageInIsolate(data, width, height, isRgb: false);
+    if (!mounted) return;
+    setState(() {
+      isDetecting = false;
+    });
+    if (results != null) {
+      Navigator.of(context).pushNamed('/result', arguments: results);
+    } else {
+      MyDialog.toast('detected nothing');
+      start();
+      _controller?.setFocusMode(FocusMode.auto);
+    }
   }
 
   void changeBoltMode() {
@@ -153,7 +172,7 @@ class _CameraPageState extends State<CameraPage> {
                             const Icon(CupertinoIcons.qrcode_viewfinder),
                           ],
                         ),
-                        onPressed: onCameraView,
+                        //onPressed: onCameraView,
                       ),
                     ),
                     Align(
