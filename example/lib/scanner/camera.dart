@@ -36,7 +36,7 @@ class _CameraPageState extends State<CameraPage> {
     if (_cameras!.isNotEmpty) {
       _controller = CameraController(
         _cameras![0],
-        ResolutionPreset.medium,
+        ResolutionPreset.low,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
@@ -145,13 +145,19 @@ class _CameraPageState extends State<CameraPage> {
                     Align(
                       alignment: const Alignment(0, 0.7),
                       child: CupertinoIconButton(
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (isDetecting) const CupertinoActivityIndicator(),
-                            const Icon(CupertinoIcons.qrcode_viewfinder),
-                          ],
+                        color: const Color(0xffffffff),
+                        icon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (isDetecting)
+                                const CupertinoActivityIndicator()
+                              else
+                                const Icon(CupertinoIcons.qrcode_viewfinder),
+                            ],
+                          ),
                         ),
                         onPressed: onCameraView,
                       ),

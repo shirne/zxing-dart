@@ -159,15 +159,21 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
                     Align(
                       alignment: const Alignment(0, 0.7),
                       child: CupertinoIconButton(
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (isDetecting) const CupertinoActivityIndicator(),
-                            const Icon(CupertinoIcons.qrcode_viewfinder),
-                          ],
+                        color: const Color(0xffffffff),
+                        icon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (isDetecting)
+                                const CupertinoActivityIndicator()
+                              else
+                                const Icon(CupertinoIcons.qrcode_viewfinder),
+                            ],
+                          ),
                         ),
-                        //onPressed: onCameraView,
+                        onPressed: start,
                       ),
                     ),
                     Align(
