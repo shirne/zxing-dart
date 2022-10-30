@@ -1,3 +1,6 @@
+## [0.8.1]
+* Sync zxing to 2022-10-24
+
 ## [0.8.0]
 * Optimize data type
 
