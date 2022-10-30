@@ -45,10 +45,10 @@ class InterruptGrayscale extends Dispatch {
         int min = 256;
         for (int y_ = stepH; y_ < stepH + stepY; y_++) {
           for (int x_ = stepW; x_ < stepW + stepX; x_++) {
-            if ((newByte[y_ * width + x_] & 0xff) < 150) count++;
-            //avage += newByte[y_ * width + x_] & 0xff;
-            if ((newByte[y_ * width + x_] & 0xff) < min) {
-              min = newByte[y_ * width + x_] & 0xff;
+            if (newByte[y_ * width + x_] < 150) count++;
+            //avage += newByte[y_ * width + x_];
+            if (newByte[y_ * width + x_] < min) {
+              min = newByte[y_ * width + x_];
             }
           }
         }
@@ -76,9 +76,9 @@ class InterruptGrayscale extends Dispatch {
         int max = 0;
         for (int y_ = stepH; y_ < stepH + stepY; y_++) {
           for (int x_ = stepW; x_ < stepW + stepX; x_++) {
-            if ((newByte[y_ * width + x_] & 0xff) < 150) count++;
-            if ((newByte[y_ * width + x_] & 0xff) > max) {
-              max = newByte[y_ * width + x_] & 0xff;
+            if (newByte[y_ * width + x_] < 150) count++;
+            if (newByte[y_ * width + x_] > max) {
+              max = newByte[y_ * width + x_];
             }
           }
         }

@@ -28,10 +28,10 @@ class OverlayGrayscale extends Dispatch {
         int min = 256;
         for (int i = startH; i < startH + stepY; i++) {
           for (int j = startW; j < startW + stepX; j++) {
-            oriAverage += (newByte[i * width + j] & 0xff);
-            tranAverage += (tranByte[i * width + j] & 0xff);
-            if ((tranByte[i * width + j] & 0xff) < min) {
-              min = tranByte[i * width + j] & 0xff;
+            oriAverage += newByte[i * width + j];
+            tranAverage += tranByte[i * width + j];
+            if (tranByte[i * width + j] < min) {
+              min = tranByte[i * width + j];
             }
           }
         }

@@ -21,7 +21,7 @@ class DefaultPlacement {
   final String _codewords;
   final int _numRows;
   final int _numCols;
-  final Int8List _bits;
+  final Uint8List _bits;
 
   /// Main constructor
   ///
@@ -29,13 +29,13 @@ class DefaultPlacement {
   /// @param numcols   the number of columns
   /// @param numrows   the number of rows
   DefaultPlacement(this._codewords, this._numCols, this._numRows)
-      : _bits = Int8List.fromList(List.filled(_numCols * _numRows, -1));
+      : _bits = Uint8List.fromList(List.filled(_numCols * _numRows, 0xff));
 
   int get numRows => _numRows;
 
   int get numCols => _numCols;
 
-  Int8List get bits => _bits;
+  Uint8List get bits => _bits;
 
   bool getBit(int col, int row) {
     return _bits[row * _numCols + col] == 1;
@@ -46,7 +46,7 @@ class DefaultPlacement {
   }
 
   bool _noBit(int col, int row) {
-    return _bits[row * _numCols + col] < 0;
+    return _bits[row * _numCols + col] > 1;
   }
 
   void place() {

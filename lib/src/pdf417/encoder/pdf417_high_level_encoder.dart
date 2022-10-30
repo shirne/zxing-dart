@@ -455,7 +455,7 @@ class PDF417HighLevelEncoder {
     final int count = end - start;
     final result = List.filled(count, 0);
     for (int i = start; i < end; i++) {
-      result[i - start] = (input.charAt(i) & 0xff);
+      result[i - start] = input.charAt(i);
     }
     return result;
   }

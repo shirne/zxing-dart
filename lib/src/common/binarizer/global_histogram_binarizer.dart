@@ -36,9 +36,9 @@ class GlobalHistogramBinarizer extends Binarizer {
   static const int _luminanceBits = 5;
   static const int _luminanceShift = 8 - _luminanceBits;
   static const int _luminanceBuckets = 1 << _luminanceBits;
-  static final Int8List _empty = Int8List(0);
+  static final Uint8List _empty = Uint8List(0);
 
-  Int8List _luminances;
+  Uint8List _luminances;
   final List<int> _buckets;
 
   GlobalHistogramBinarizer(LuminanceSource source)
@@ -61,22 +61,22 @@ class GlobalHistogramBinarizer extends Binarizer {
     final localLuminances = source.getRow(y, _luminances);
     final localBuckets = _buckets;
     for (int x = 0; x < width; x++) {
-      localBuckets[(localLuminances[x] & 0xff) >> _luminanceShift]++;
+      localBuckets[localLuminances[x] >> _luminanceShift]++;
     }
     final blackPoint = _estimateBlackPoint(localBuckets);
 
     if (width < 3) {
       // Special case for very small images
       for (int x = 0; x < width; x++) {
-        if ((localLuminances[x] & 0xff) < blackPoint) {
+        if (localLuminances[x] < blackPoint) {
           row.set(x);
         }
       }
     } else {
-      int left = localLuminances[0] & 0xff;
-      int center = localLuminances[1] & 0xff;
+      int left = localLuminances[0];
+      int center = localLuminances[1];
       for (int x = 1; x < width - 1; x++) {
-        final right = localLuminances[x + 1] & 0xff;
+        final right = localLuminances[x + 1];
         // A simple -1 4 -1 box filter with a weight of 2.
         if (((center * 4) - left - right) ~/ 2 < blackPoint) {
           row.set(x);
@@ -105,7 +105,7 @@ class GlobalHistogramBinarizer extends Binarizer {
       final localLuminances = source.getRow(row, _luminances);
       final right = (width * 4) ~/ 5;
       for (int x = width ~/ 5; x < right; x++) {
-        final pixel = localLuminances[x] & 0xff;
+        final pixel = localLuminances[x];
         localBuckets[pixel >> _luminanceShift]++;
       }
     }
@@ -118,7 +118,7 @@ class GlobalHistogramBinarizer extends Binarizer {
     for (int y = 0; y < height; y++) {
       final offset = y * width;
       for (int x = 0; x < width; x++) {
-        final pixel = localLuminances[offset + x] & 0xff;
+        final pixel = localLuminances[offset + x];
         if (pixel < blackPoint) {
           matrix.set(x, y);
         }
@@ -135,7 +135,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
   void _initArrays(int luminanceSize) {
     if (_luminances.length < luminanceSize) {
-      _luminances = Int8List(luminanceSize);
+      _luminances = Uint8List(luminanceSize);
     }
     _buckets.fillRange(0, _luminanceBuckets, 0);
     /*for (int x = 0; x < _luminanceBuckets; x++) {

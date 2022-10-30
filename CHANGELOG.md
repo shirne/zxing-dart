@@ -1,3 +1,6 @@
+## [0.8.0]
+* Optimize data type
+
 ## [0.7.3]
 * upgrade charset
 * improve example

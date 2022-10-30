@@ -41,15 +41,15 @@ abstract class LuminanceSource {
   /// @param row An optional preallocated array. If null or too small, it will be ignored.
   ///            Always use the returned object, and ignore the .length of the array.
   /// @return An array containing the luminance data.
-  Int8List getRow(int y, Int8List? row);
+  Uint8List getRow(int y, Uint8List? row);
 
   /// Fetches luminance data for the underlying bitmap. Values should be fetched using:
-  /// {@code int luminance = array[y * width + x] & 0xff}
+  /// {@code int luminance = array[y * width + x]}
   ///
   /// @return A row-major 2D array of luminance values. Do not use result.length as it may be
   ///         larger than width * height bytes on some platforms. Do not modify the contents
   ///         of the result.
-  Int8List get matrix;
+  Uint8List get matrix;
 
   /// Get the width of the bitmap.
   int get width => _width;
@@ -105,12 +105,12 @@ abstract class LuminanceSource {
 
   @override
   String toString() {
-    late Int8List row = Int8List(_width);
+    late Uint8List row = Uint8List(_width);
     final result = StringBuffer();
     for (int y = 0; y < _height; y++) {
       row = getRow(y, row);
       for (int x = 0; x < _width; x++) {
-        final luminance = row[x] & 0xFF;
+        final luminance = row[x];
         String c;
         if (luminance < 0x40) {
           c = '#';

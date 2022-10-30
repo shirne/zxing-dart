@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:isolate';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -152,7 +151,7 @@ List<Result>? decodeImage(IsoMessage message) {
 List<Result>? decodeCamera(IsoMessage message) {
   print(message.byteData.length);
   final imageSource = PlanarYUVLuminanceSource(
-    message.byteData.buffer.asInt8List(),
+    message.byteData.buffer.asUint8List(),
     message.width,
     message.height,
   );

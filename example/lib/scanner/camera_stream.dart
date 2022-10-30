@@ -87,12 +87,7 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
     setState(() {
       isDetecting = true;
     });
-    print(
-      image.planes
-          .map((p) =>
-              '${p.bytes.length} ${p.bytesPerPixel} ${p.bytesPerRow} ${p.width} ${p.height}')
-          .toList(),
-    );
+
     final e = image.planes.first;
     final width = e.bytesPerRow;
     final height = (e.bytes.length / width).round();

@@ -24,15 +24,15 @@ import 'luminance_source.dart';
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Betaminos
 class RGBLuminanceSource extends LuminanceSource {
-  final Int8List _luminances;
+  final Uint8List _luminances;
   final int _dataWidth;
   final int _dataHeight;
   final int _left;
   final int _top;
 
-  static Int8List intList2Int8List(List<int> pixels) {
+  static Uint8List intList2Uint8List(List<int> pixels) {
     final size = pixels.length;
-    final luminances = Int8List(size);
+    final luminances = Uint8List(size);
     for (int offset = 0; offset < size; offset++) {
       final pixel = pixels[offset];
       final r = (pixel >> 16) & 0xff; // red
@@ -49,7 +49,7 @@ class RGBLuminanceSource extends LuminanceSource {
         _dataHeight = height,
         _left = 0,
         _top = 0,
-        _luminances = intList2Int8List(pixels),
+        _luminances = intList2Uint8List(pixels),
         super(width, height);
 
   RGBLuminanceSource._(
@@ -69,12 +69,12 @@ class RGBLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List getRow(int y, Int8List? row) {
+  Uint8List getRow(int y, Uint8List? row) {
     if (y < 0 || y >= height) {
       throw ArgumentError('Requested row is outside the image: $y');
     }
     if (row == null || row.length < width) {
-      row = Int8List(width);
+      row = Uint8List(width);
     }
     final offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _luminances, offset, offset + width);
@@ -82,7 +82,7 @@ class RGBLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List get matrix {
+  Uint8List get matrix {
     // If the caller asks for the entire underlying image, save the copy and give them the
     // original data. The docs specifically warn that result.length must be ignored.
     if (width == _dataWidth && height == _dataHeight) {
@@ -90,7 +90,7 @@ class RGBLuminanceSource extends LuminanceSource {
     }
 
     final area = width * height;
-    final matrix = Int8List(area);
+    final matrix = Uint8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.

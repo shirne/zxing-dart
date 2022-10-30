@@ -338,7 +338,7 @@ class MinimalECIInput implements ECIInput {
       } else {
         final bytes = encoderSet.encode(current.c, current.encoderIndex);
         for (int i = bytes.length - 1; i >= 0; i--) {
-          intsAL.insert(0, (bytes[i] & 0xFF));
+          intsAL.insert(0, bytes[i]);
         }
       }
       final previousEncoderIndex = current.previous?.encoderIndex ?? 0;

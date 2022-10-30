@@ -25,8 +25,8 @@ void main() {
   const List<int> YUV = [
     0, 1, 1, 2, 3, 5, //
     8, 13, 21, 34, 55, 89,
-    0, -1, -1, -2, -3, -5,
-    -8, -13, -21, -34, -55, -89,
+    0, 255, 255, 254, 253, 251,
+    248, 243, 235, 222, 201, 167,
     127, 127, 127, 127, 127, 127,
     127, 127, 127, 127, 127, 127,
   ];
@@ -38,7 +38,8 @@ void main() {
   );
 
   test('testNoCrop', () {
-    final source = PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS);
+    final source =
+        PlanarYUVLuminanceSource(Uint8List.fromList(YUV), COLS, ROWS);
     assertListEquals(Y, 0, source.matrix, 0, Y.length);
     for (int r = 0; r < ROWS; r++) {
       assertListEquals(Y, r * COLS, source.getRow(r, null), 0, COLS);
@@ -47,7 +48,7 @@ void main() {
 
   test('testCrop', () {
     final source = PlanarYUVLuminanceSource(
-      Int8List.fromList(YUV),
+      Uint8List.fromList(YUV),
       COLS,
       ROWS,
       left: 1,
@@ -78,7 +79,8 @@ void main() {
   });
 
   test('testThumbnail', () {
-    final source = PlanarYUVLuminanceSource(Int8List.fromList(YUV), COLS, ROWS);
+    final source =
+        PlanarYUVLuminanceSource(Uint8List.fromList(YUV), COLS, ROWS);
     expect(source.renderThumbnail(), [
       0xFF000000,
       0xFF010101,
@@ -93,7 +95,7 @@ void main() {
 void assertListEquals(
   List<int> expected,
   int expectedFrom,
-  Int8List actual,
+  Uint8List actual,
   int actualFrom,
   int length,
 ) {

@@ -211,8 +211,8 @@ class HighLevelEncoder {
     }
 
     int charsProcessed = 0;
-    final mins = Int8List(6);
-    final intCharCounts = Int8List(6);
+    final mins = Uint8List(6);
+    final intCharCounts = Uint8List(6);
     while (true) {
       //step K
       if ((startPos + charsProcessed) == msg.length) {
@@ -413,7 +413,7 @@ class HighLevelEncoder {
     List<double> charCounts,
     List<int> intCharCounts,
     int min,
-    Int8List mins,
+    Uint8List mins,
   ) {
     for (int i = 0; i < 6; i++) {
       final current = (intCharCounts[i] = charCounts[i].ceil());
@@ -429,7 +429,7 @@ class HighLevelEncoder {
     return min;
   }
 
-  static int _getMinimumCount(Int8List mins) {
+  static int _getMinimumCount(Uint8List mins) {
     int minCount = 0;
     for (int i = 0; i < 6; i++) {
       minCount += mins[i];

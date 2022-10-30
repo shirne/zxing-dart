@@ -516,7 +516,7 @@ class Encoder {
     final numDataBytes = dataBytes.length;
     final toEncode = <int>[];
     for (int i = 0; i < numDataBytes; i++) {
-      toEncode.add(dataBytes[i] & 0xFF);
+      toEncode.add(dataBytes[i]);
     }
     toEncode.addAll(List.filled(numEcBytesInBlock, 0));
     ReedSolomonEncoder(GenericGF.qrCodeField256)

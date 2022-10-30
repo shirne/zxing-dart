@@ -368,7 +368,7 @@ class MatrixUtil {
 
   // Check if "value" is empty.
   static bool _isEmpty(int value) {
-    return value == -1;
+    return value == 255;
   }
 
   static void _embedTimingPatterns(ByteMatrix matrix) {

@@ -39,7 +39,7 @@ void main() {
   test('testMatrix', () {
     expect(
       source.matrix,
-      [0x00, 0x7F, (0xFF).toSigned(8), 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F],
+      [0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F],
     );
     final croppedFullWidth = source.crop(0, 1, 3, 2);
     expect(croppedFullWidth.matrix, [0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F]);
@@ -48,7 +48,7 @@ void main() {
   });
 
   test('testGetRow', () {
-    expect(source.getRow(2, Int8List(3)), [0x3F, 0x7F, 0x3F]);
+    expect(source.getRow(2, Uint8List(3)), [0x3F, 0x7F, 0x3F]);
   });
 
   test('testToString', () {

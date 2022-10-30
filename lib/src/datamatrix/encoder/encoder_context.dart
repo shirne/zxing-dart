@@ -38,7 +38,7 @@ class EncoderContext {
     final sb = StringBuffer();
     final c = msgBinary.length;
     for (int i = 0; i < c; i++) {
-      final ch = msgBinary[i] & 0xff;
+      final ch = msgBinary[i];
       if (ch == 63 /*'?'*/ && msg[i] != '?') {
         throw ArgumentError(
           'Message contains characters outside ISO-8859-1 encoding.',

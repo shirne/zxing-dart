@@ -87,7 +87,7 @@ class Decoder {
     final codewordsInts = Int32List(codewords ~/ divisor);
     for (int i = 0; i < codewords; i++) {
       if ((mode == _ALL) || (i % 2 == (mode - 1))) {
-        codewordsInts[i ~/ divisor] = codewordBytes[i + start] & 0xFF;
+        codewordsInts[i ~/ divisor] = codewordBytes[i + start];
       }
     }
     try {

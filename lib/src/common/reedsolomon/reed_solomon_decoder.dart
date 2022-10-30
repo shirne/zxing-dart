@@ -52,7 +52,7 @@ class ReedSolomonDecoder {
   /// @param received data and error-correction codewords
   /// @param twoS number of error-correction codewords available
   /// @throws ReedSolomonException if decoding fails for any reason
-  void decode(Int32List received, int twoS) {
+  void decode(List<int> received, int twoS) {
     final poly = GenericGFPoly(_field, received);
     final syndromeCoefficients = Int32List(twoS);
     bool noError = true;

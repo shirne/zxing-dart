@@ -164,7 +164,7 @@ class Decoder {
     // First read into an array of ints
     final codewordsInts = Int32List(numCodewords);
     for (int i = 0; i < numCodewords; i++) {
-      codewordsInts[i] = codewordBytes[i] & 0xFF;
+      codewordsInts[i] = codewordBytes[i];
     }
     try {
       _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);

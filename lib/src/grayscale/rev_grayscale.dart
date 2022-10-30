@@ -7,7 +7,7 @@ class RevGrayscale extends Dispatch {
   @override
   Uint8List dispatchFull(Uint8List data, int width, int height) {
     for (int i = 0; i < width * height; i++) {
-      data[i] = (255 - data[i] & 0xff);
+      data[i] = 255 - data[i];
     }
     return data;
   }
@@ -18,7 +18,7 @@ class RevGrayscale extends Dispatch {
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
         final index = startH * width + startW;
-        newByte[index] = (255 - newByte[index] & 0xff);
+        newByte[index] = 255 - newByte[index];
       }
     }
     return newByte;

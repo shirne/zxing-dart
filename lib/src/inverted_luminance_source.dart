@@ -29,22 +29,22 @@ class InvertedLuminanceSource extends LuminanceSource {
       : super(_delegate.width, _delegate.height);
 
   @override
-  Int8List getRow(int y, Int8List? row) {
+  Uint8List getRow(int y, Uint8List? row) {
     row = _delegate.getRow(y, row);
 
     for (int i = 0; i < width; i++) {
-      row[i] = (255 - (row[i] & 0xFF));
+      row[i] = (255 - row[i]);
     }
     return row;
   }
 
   @override
-  Int8List get matrix {
+  Uint8List get matrix {
     final matrix = _delegate.matrix;
     final length = width * height;
-    final invertedMatrix = Int8List(length);
+    final invertedMatrix = Uint8List(length);
     for (int i = 0; i < length; i++) {
-      invertedMatrix[i] = (255 - (matrix[i] & 0xFF));
+      invertedMatrix[i] = (255 - matrix[i]);
     }
     return invertedMatrix;
   }

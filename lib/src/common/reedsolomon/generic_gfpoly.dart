@@ -27,7 +27,7 @@ import 'generic_gf.dart';
 /// @author Sean Owen
 class GenericGFPoly {
   final GenericGF _field;
-  late Int32List _coefficients;
+  late List<int> _coefficients;
 
   /// @param field the [GenericGF] instance representing the field to use
   /// to perform computations
@@ -36,19 +36,17 @@ class GenericGFPoly {
   /// @throws IllegalArgumentException if argument is null or empty,
   /// or if leading coefficient is 0 and this is not a
   /// constant polynomial (that is, it is not the monomial "0")
-  GenericGFPoly(this._field, Int32List coefficients) {
+  GenericGFPoly(this._field, List<int> coefficients) {
     if (coefficients.isEmpty) {
       throw ArgumentError();
     }
-    _coefficients = Int32List.fromList(
-      coefficients.skipWhile((value) => value == 0).toList(),
-    );
+    _coefficients = coefficients.skipWhile((value) => value == 0).toList();
     if (_coefficients.isEmpty) {
-      _coefficients = Int32List(1);
+      _coefficients = List.filled(1, 0);
     }
   }
 
-  Int32List get coefficients => _coefficients;
+  List<int> get coefficients => _coefficients;
 
   /// @return degree of this polynomial
   int get degree => _coefficients.length - 1;

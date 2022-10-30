@@ -108,12 +108,12 @@ class ImageLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List getRow(int y, Int8List? row) {
+  Uint8List getRow(int y, Uint8List? row) {
     if (y < 0 || y >= height) {
       throw Exception("Requested row is outside the image: $y");
     }
     if (row == null || row.length < width) {
-      row = Int8List(width);
+      row = Uint8List(width);
     }
     // The underlying raster of image consists of bytes with the luminance values
     //image.getDataElements(left, top + y, width, 1, row);
@@ -122,10 +122,10 @@ class ImageLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List get matrix {
+  Uint8List get matrix {
     // The underlying raster of image consists of area bytes with the luminance values
     //image.getDataElements(left, top, width, height, matrix);
-    Int8List matrix = Int8List.fromList(buffer);
+    Uint8List matrix = Uint8List.fromList(buffer);
     return matrix;
   }
 

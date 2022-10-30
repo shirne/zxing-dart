@@ -99,7 +99,7 @@ class MaskUtil {
     return numPenalties * _N3;
   }
 
-  static bool _isWhiteHorizontal(Int8List rowArray, int from, int to) {
+  static bool _isWhiteHorizontal(Uint8List rowArray, int from, int to) {
     if (from < 0 || rowArray.length < to) {
       return false;
     }
@@ -112,7 +112,7 @@ class MaskUtil {
   }
 
   static bool _isWhiteVertical(
-    List<Int8List> array,
+    List<Uint8List> array,
     int col,
     int from,
     int to,

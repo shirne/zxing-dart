@@ -123,7 +123,7 @@ class StringUtils {
     for (int i = 0;
         i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);
         i++) {
-      final value = bytes[i] & 0xFF;
+      final value = bytes[i];
 
       // UTF-8 stuff
       if (canBeUTF8) {

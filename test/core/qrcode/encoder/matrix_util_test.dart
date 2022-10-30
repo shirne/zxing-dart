@@ -28,9 +28,9 @@ void main() {
     array.set(0, 1, 1);
     array.set(1, 1, 0);
     array.set(2, 1, 1);
-    array.set(0, 2, -1);
-    array.set(1, 2, -1);
-    array.set(2, 2, -1);
+    array.set(0, 2, 0xff);
+    array.set(1, 2, 0xff);
+    array.set(2, 2, 0xff);
     final expected = ' 0 1 0\n' ' 1 0 1\n' '      \n';
     expect(expected, array.toString());
   });
@@ -38,10 +38,10 @@ void main() {
   test('testClearMatrix', () {
     final matrix = ByteMatrix(2, 2);
     MatrixUtil.clearMatrix(matrix);
-    expect(-1, matrix.get(0, 0));
-    expect(-1, matrix.get(1, 0));
-    expect(-1, matrix.get(0, 1));
-    expect(-1, matrix.get(1, 1));
+    expect(255, matrix.get(0, 0));
+    expect(255, matrix.get(1, 0));
+    expect(255, matrix.get(0, 1));
+    expect(255, matrix.get(1, 1));
   });
 
   test('testEmbedBasicPatterns1', () {

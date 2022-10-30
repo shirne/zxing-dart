@@ -102,7 +102,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// of the blocks around it. Also handles the corner cases (fractional blocks are computed based
   /// on the last pixels in the row/column which are also used in the previous block).
   static void _calculateThresholdForBlock(
-    Int8List luminances,
+    Uint8List luminances,
     int subWidth,
     int subHeight,
     int width,
@@ -145,7 +145,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
 
   /// Applies a single threshold to a block of pixels.
   static void _thresholdBlock(
-    Int8List luminances,
+    Uint8List luminances,
     int xoffset,
     int yoffset,
     int threshold,
@@ -157,7 +157,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         y++, offset += stride) {
       for (int x = 0; x < BLOCK_SIZE; x++) {
         // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
-        if ((luminances[offset + x] & 0xFF) <= threshold) {
+        if (luminances[offset + x] <= threshold) {
           matrix.set(xoffset + x, yoffset + y);
         }
       }
@@ -168,7 +168,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
   /// See the following thread for a discussion of this algorithm:
   ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
   static List<List<int>> _calculateBlackPoints(
-    Int8List luminances,
+    Uint8List luminances,
     int subWidth,
     int subHeight,
     int width,
@@ -195,7 +195,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
             yy < BLOCK_SIZE;
             yy++, offset += width) {
           for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-            final pixel = luminances[offset + xx] & 0xFF;
+            final pixel = luminances[offset + xx];
             sum += pixel;
             // still looking for good contrast
             if (pixel < min) {
@@ -212,7 +212,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
             offset += width;
             for (; yy < BLOCK_SIZE; yy++, offset += width) {
               for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-                sum += luminances[offset + xx] & 0xFF;
+                sum += luminances[offset + xx];
               }
             }
           }

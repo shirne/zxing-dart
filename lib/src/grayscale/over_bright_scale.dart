@@ -10,7 +10,7 @@ class OverBrightScale extends Dispatch {
     final random = math.Random();
     final rand = (random.nextDouble() * 10) + 2;
     for (int i = 0; i < width * height; i++) {
-      data[i] = (255 * math.pow((data[i] & 0xff) / 255, rand)).toInt();
+      data[i] = (255 * math.pow(data[i] / 255, rand)).toInt();
     }
     return data;
   }
@@ -23,8 +23,7 @@ class OverBrightScale extends Dispatch {
     for (int startH = rect.top; startH < rect.bottom; startH++) {
       for (int startW = rect.left; startW < rect.right; startW++) {
         final index = startH * width + startW;
-        newByte[index] =
-            (255 * math.pow((newByte[index] & 0xff) / 255, rand)).toInt();
+        newByte[index] = (255 * math.pow(newByte[index] / 255, rand)).toInt();
       }
     }
     return newByte;

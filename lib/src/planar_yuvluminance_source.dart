@@ -29,7 +29,7 @@ import 'luminance_source.dart';
 class PlanarYUVLuminanceSource extends LuminanceSource {
   static const int _THUMBNAIL_SCALE_FACTOR = 2;
 
-  final Int8List _yuvData;
+  final Uint8List _yuvData;
   final int _dataWidth;
   final int _dataHeight;
   final int _left;
@@ -59,13 +59,13 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List getRow(int y, Int8List? row) {
+  Uint8List getRow(int y, Uint8List? row) {
     if (y < 0 || y >= height) {
       throw ArgumentError('Requested row is outside the image: $y');
     }
 
     if (row == null || row.length < width) {
-      row = Int8List(width);
+      row = Uint8List(width);
     }
     final offset = (y + _top) * _dataWidth + _left;
     List.copyRange(row, 0, _yuvData, offset, offset + width);
@@ -73,7 +73,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   @override
-  Int8List get matrix {
+  Uint8List get matrix {
     // If the caller asks for the entire underlying image, save the copy and give them the
     // original data. The docs specifically warn that result.length must be ignored.
     if (width == _dataWidth && height == _dataHeight) {
@@ -81,7 +81,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     }
 
     final area = width * height;
-    final matrix = Int8List(area);
+    final matrix = Uint8List(area);
     int inputOffset = _top * _dataWidth + _left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
@@ -131,7 +131,7 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     for (int y = 0; y < tHeight; y++) {
       final outputOffset = y * tWidth;
       for (int x = 0; x < tWidth; x++) {
-        final grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR] & 0xff;
+        final grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR];
         pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
       }
       inputOffset += _dataWidth * _THUMBNAIL_SCALE_FACTOR;
