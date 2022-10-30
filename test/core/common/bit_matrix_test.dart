@@ -261,7 +261,6 @@ void main() {
     fullMatrix.setRegion(0, 0, 3, 3);
     final centerMatrix = BitMatrix(3, 3);
     centerMatrix.setRegion(1, 1, 1, 1);
-    //BitMatrix emptyMatrix24 = BitMatrix(2, 4);
 
     final matrix = List.generate(3, (index) => List.filled(3, false));
     assert(emptyMatrix == BitMatrix.parse(matrix));

@@ -1161,7 +1161,8 @@ class MinimalEncoder {
     }
 
     if (minimalJ < 0) {
-      throw Exception('Internal error: failed to encode "$input"');
+      // IllegalStateException
+      throw StateError('Failed to encode "$input"');
     }
     return Result(edges[inputLength][minimalJ]!);
   }

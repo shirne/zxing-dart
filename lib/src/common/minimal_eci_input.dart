@@ -26,7 +26,7 @@ class InputEdge {
   /* private */ final InputEdge? previous;
   /* private */ late int cachedTotalSize;
 
-  /* private */ InputEdge(
+  InputEdge(
     int c,
     ECIEncoderSet encoderSet,
     this.encoderIndex,
@@ -325,9 +325,9 @@ class MinimalECIInput implements ECIInput {
       }
     }
     if (minimalJ < 0) {
-      // RuntimeException
-      throw AssertionError(
-        'Internal error: failed to encode "$stringToEncode"',
+      // IllegalStateException
+      throw StateError(
+        'Failed to encode "$stringToEncode"',
       );
     }
     final intsAL = <int>[];

@@ -142,10 +142,9 @@ class MinimalEncoder {
             patternIndex = contents.codeUnitAt(i) - 32 /*' '*/;
         }
         if ((charset == Charset.A && latch != Latch.SHIFT) ||
-            (charset == Charset.B && latch == Latch.SHIFT)) {
-          if (patternIndex < 0) {
-            patternIndex += 96 /*'`'*/;
-          }
+            (charset == Charset.B && latch == Latch.SHIFT) &&
+                patternIndex < 0) {
+          patternIndex += 96 /*'`'*/;
         }
         addPattern(patterns, patternIndex, checkSum, checkWeight, i);
       }

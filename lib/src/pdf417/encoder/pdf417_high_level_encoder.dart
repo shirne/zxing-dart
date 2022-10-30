@@ -367,13 +367,12 @@ class PDF417HighLevelEncoder {
                 tmp.writeCharCode(27); //ll
                 continue;
               } else {
-                if (startpos + idx + 1 < count) {
-                  if (!input.isECI(startpos + idx + 1) &&
-                      _isPunctuation(input.charAt(startpos + idx + 1))) {
-                    submode = _SUBMODE_PUNCTUATION;
-                    tmp.writeCharCode(25); //pl
-                    continue;
-                  }
+                if (startpos + idx + 1 < count &&
+                    !input.isECI(startpos + idx + 1) &&
+                    _isPunctuation(input.charAt(startpos + idx + 1))) {
+                  submode = _SUBMODE_PUNCTUATION;
+                  tmp.writeCharCode(25); //pl
+                  continue;
                 }
                 tmp.writeCharCode(29); //ps
                 tmp.writeCharCode(_punctuatuin[ch]);

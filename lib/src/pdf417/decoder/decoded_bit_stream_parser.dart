@@ -205,25 +205,42 @@ class DecodedBitStreamParser {
               final segmentCount = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, segmentCount);
-              resultMetadata.segmentCount = int.parse(segmentCount.toString());
+              try {
+                resultMetadata.segmentCount =
+                    int.parse(segmentCount.toString());
+              } on FormatException catch (_) {
+                throw FormatsException.instance;
+              }
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
               final timestamp = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, timestamp);
-              resultMetadata.timestamp = int.parse(timestamp.toString());
+              try {
+                resultMetadata.timestamp = int.parse(timestamp.toString());
+              } on FormatException catch (_) {
+                throw FormatsException.instance;
+              }
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
               final checksum = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, checksum);
-              resultMetadata.checksum = int.parse(checksum.toString());
+              try {
+                resultMetadata.checksum = int.parse(checksum.toString());
+              } on FormatException catch (_) {
+                throw FormatsException.instance;
+              }
               break;
             case _MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
               final fileSize = ECIStringBuilder();
               codeIndex =
                   _numericCompaction(codewords, codeIndex + 1, fileSize);
-              resultMetadata.fileSize = int.parse(fileSize.toString());
+              try {
+                resultMetadata.fileSize = int.parse(fileSize.toString());
+              } on FormatException catch (_) {
+                throw FormatsException.instance;
+              }
               break;
             default:
               throw FormatsException.instance;
@@ -246,11 +263,13 @@ class DecodedBitStreamParser {
         optionalFieldsLength--;
       }
 
-      // ignore: deprecated_consistency, deprecated_member_use_from_same_package
-      resultMetadata.optionalData = codewords.sublist(
-        optionalFieldsStart,
-        optionalFieldsStart + optionalFieldsLength,
-      );
+      if (optionalFieldsLength > 0) {
+        // ignore: deprecated_consistency, deprecated_member_use_from_same_package
+        resultMetadata.optionalData = codewords.sublist(
+          optionalFieldsStart,
+          optionalFieldsStart + optionalFieldsLength,
+        );
+      }
     }
 
     return codeIndex;
@@ -321,6 +340,9 @@ class DecodedBitStreamParser {
               subMode,
             );
             result.appendECI(codewords[codeIndex++]);
+            if (codeIndex > codewords[0]) {
+              throw FormatsException.instance;
+            }
             textCompactionData = List.filled((codewords[0] - codeIndex) * 2, 0);
             byteCompactionData = List.filled((codewords[0] - codeIndex) * 2, 0);
             index = 0;

@@ -51,11 +51,13 @@ class StringUtils {
     Map<DecodeHintType, Object>? hints,
   ) {
     final c = guessCharset(bytes, hints);
-    if (c == shiftJisCharset) {
+    if (c?.name == shiftJisCharset.name) {
       return 'SJIS';
-    } else if (c == utf8) {
+    }
+    if (c?.name == utf8.name) {
       return 'UTF8';
-    } else if (c == latin1) {
+    }
+    if (c?.name == latin1.name) {
       return 'ISO8859_1';
     }
     return c!.name;
