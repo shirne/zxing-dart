@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 
-import '../models/utils.dart';
+import '../models/decoder.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class CameraStreamPage extends StatefulWidget {
@@ -20,19 +20,26 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   FlashMode _flashMode = FlashMode.off;
+  IsolateController _isoController = IsolateController();
   bool detectedCamera = false;
   bool isDetecting = false;
 
   @override
   void initState() {
     super.initState();
-    initCamera();
+
+    Future.wait([
+      initCamera(),
+      _isoController.start(),
+      Future.delayed(const Duration(seconds: 1)),
+    ]).then((value) => start());
   }
 
   @override
   void dispose() {
     stop();
     _controller?.dispose();
+    _isoController.dispose();
     super.dispose();
   }
 
@@ -47,20 +54,18 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
 
-      _controller!.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
+      await _controller!.initialize();
+      if (!mounted) {
+        return;
+      }
 
-        setState(() {
-          detectedCamera = true;
-        });
-        if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
-          MyDialog.toast('Does not support current platform');
-          return;
-        }
-        Future.delayed(Duration.zero).then((_) => start());
+      setState(() {
+        detectedCamera = true;
       });
+      if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
+        MyDialog.toast('Does not support current platform');
+        return;
+      }
     } else {
       setState(() {
         detectedCamera = true;
@@ -69,50 +74,39 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
   }
 
   bool _isStart = false;
-  void start() {
+  Future<void> start() async {
     if (_isStart) return;
+    await _controller!.startImageStream(tryDecodeImage);
     _isStart = true;
-    _controller!.startImageStream(tryDecodeImage);
   }
 
-  void stop() {
+  Future<void> stop() async {
     if (!_isStart) return;
+    await _controller!.stopImageStream();
     _isStart = false;
-    _controller!.stopImageStream();
   }
 
   Future<void> tryDecodeImage(CameraImage image) async {
     if (isDetecting) return;
-    stop();
+    await stop();
     setState(() {
       isDetecting = true;
     });
 
-    final e = image.planes.first;
-    final width = e.bytesPerRow;
-    final height = (e.bytes.length / width).round();
-    final total = image.planes
-        .map<double>((p) => p.bytesPerPixel!.toDouble())
-        .reduce((value, element) => value + 1 / element)
-        .toInt();
-    final data = Uint8List(width * height * total);
-    int startIndex = 0;
-    for (var p in image.planes) {
-      List.copyRange(data, startIndex, p.bytes);
-      startIndex += width * height ~/ p.bytesPerPixel!;
-    }
-
-    var results = await decodeImageInIsolate(data, width, height, isRgb: false);
-    if (!mounted) return;
-    setState(() {
-      isDetecting = false;
-    });
-    if (results != null) {
+    try {
+      final results = await _isoController.setPlanes(image.planes);
+      setState(() {
+        isDetecting = false;
+      });
       Navigator.of(context).pushNamed('/result', arguments: results);
-    } else {
+    } catch (_) {
+      setState(() {
+        isDetecting = false;
+      });
       MyDialog.toast('detected nothing');
-      start();
-      _controller?.setFocusMode(FocusMode.auto);
+      Future.delayed(Duration.zero).then((_) {
+        start();
+      });
     }
   }
 
