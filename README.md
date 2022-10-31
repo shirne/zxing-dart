@@ -18,7 +18,7 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 - ✅ Core test translate
 - ✅ Core unit test(all passed)
 - ✅ Demo Creator
-- ✅ Demo Scanner
+- ✅ Demo Scanner (Decode from Captured picture or CameraImage from camera stream)
 - ✅ Code optimization
 
 - 🚧 Keep syncing from zxing java...
