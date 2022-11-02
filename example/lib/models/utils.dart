@@ -107,6 +107,9 @@ int getColor(int r, int g, int b, [int a = 255]) {
 }
 
 int getColorFromByte(List<int> byte, int index, {bool isLog = false}) {
+  if (byte.length <= index + 3) {
+    return 0xffffffff;
+  }
   return getColor(
     byte[index],
     byte[index + 1],
@@ -116,10 +119,8 @@ int getColorFromByte(List<int> byte, int index, {bool isLog = false}) {
 }
 
 List<Result>? decodeImage(IsoMessage message) {
-  int length = message.byteData.length;
-
   final pixels = List<int>.generate(
-    length ~/ 4,
+    message.width * message.height,
     (index) => getColorFromByte(message.byteData, index * 4),
   );
 
