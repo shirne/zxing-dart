@@ -20,7 +20,7 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   FlashMode _flashMode = FlashMode.off;
-  IsolateController _isoController = IsolateController();
+  final _isoController = IsolateController();
   bool detectedCamera = false;
   bool isDetecting = false;
 
