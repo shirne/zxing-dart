@@ -44,6 +44,17 @@ class RGBLuminanceSource extends LuminanceSource {
     return luminances;
   }
 
+  static int getLuminance(int r, int g, int b) {
+    return ((r + (g << 1) + b) ~/ 4);
+  }
+
+  RGBLuminanceSource.orig(int width, int height, this._luminances)
+      : _dataWidth = width,
+        _dataHeight = height,
+        _left = 0,
+        _top = 0,
+        super(width, height);
+
   RGBLuminanceSource(int width, int height, List<int> pixels)
       : _dataWidth = width,
         _dataHeight = height,
