@@ -118,13 +118,25 @@ int getColorFromByte(List<int> byte, int index, {bool isLog = false}) {
   );
 }
 
-List<Result>? decodeImage(IsoMessage message) {
-  final pixels = List<int>.generate(
-    message.width * message.height,
-    (index) => getColorFromByte(message.byteData, index * 4),
-  );
+int getLuminanceSourcePixel(List<int> byte, int index) {
+  if (byte.length <= index + 3) {
+    return 0xff;
+  }
+  final r = byte[index] & 0xff; // red
+  final g2 = (byte[index + 1] << 1) & 0x1fe; // 2 * green
+  final b = byte[index + 2]; // blue
+  // Calculate green-favouring average cheaply
+  return ((r + g2 + b) ~/ 4);
+}
 
-  final imageSource = RGBLuminanceSource(
+List<Result>? decodeImage(IsoMessage message) {
+  final pixels = Uint8List(message.width * message.height);
+  for (int i = 0; i < pixels.length; i++) {
+    pixels[i] = getLuminanceSourcePixel(message.byteData, i * 4);
+  }
+  print(pixels);
+
+  final imageSource = RGBLuminanceSource.orig(
     message.width,
     message.height,
     pixels,

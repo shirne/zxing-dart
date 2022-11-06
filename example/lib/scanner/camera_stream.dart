@@ -75,7 +75,7 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
 
   bool _isStart = false;
   Future<void> start() async {
-    if (_isStart) return;
+    if (_isStart || !mounted) return;
     await _controller!.startImageStream(tryDecodeImage);
     _isStart = true;
   }
@@ -87,7 +87,7 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
   }
 
   Future<void> tryDecodeImage(CameraImage image) async {
-    if (isDetecting) return;
+    if (isDetecting || !mounted) return;
     await stop();
     setState(() {
       isDetecting = true;
@@ -95,11 +95,13 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
 
     try {
       final results = await _isoController.setPlanes(image.planes);
+      if (!mounted) return;
       setState(() {
         isDetecting = false;
       });
       Navigator.of(context).pushNamed('/result', arguments: results);
     } catch (_) {
+      if (!mounted) return;
       setState(() {
         isDetecting = false;
       });

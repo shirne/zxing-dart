@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:buffer_image/buffer_image.dart';
 import 'package:camera/camera.dart';
@@ -47,6 +48,8 @@ class _CameraPageState extends State<CameraPage> {
           return;
         }
 
+        _controller!.setFlashMode(_flashMode);
+
         setState(() {
           detectedCamera = true;
         });
@@ -58,25 +61,29 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  BufferImage? image;
   Future<void> onCameraView() async {
-    if (isDetecting) return;
+    if (isDetecting || !mounted) return;
     setState(() {
       isDetecting = true;
     });
     XFile pic = await _controller!.takePicture();
 
     Uint8List data = await pic.readAsBytes();
-    BufferImage? image = await BufferImage.fromFile(data);
+    image = await BufferImage.fromFile(data);
+    if (!mounted) return;
     if (image != null) {
-      if (image.width > 1000) {
-        image.scaleDown(image.width / 800);
-      }
+      setState(() {});
 
-      var results =
-          await decodeImageInIsolate(image.buffer, image.width, image.height);
+      var results = await decodeImageInIsolate(
+        image!.buffer,
+        image!.width,
+        image!.height,
+      );
       if (!mounted) return;
       setState(() {
         isDetecting = false;
+        image = null;
       });
       if (results != null) {
         Navigator.of(context).pushNamed('/result', arguments: results);
@@ -88,6 +95,7 @@ class _CameraPageState extends State<CameraPage> {
       }
     } else {
       setState(() {
+        image = null;
         isDetecting = false;
       });
       print('can\'t take picture from camera');
@@ -142,6 +150,25 @@ class _CameraPageState extends State<CameraPage> {
                 _controller!,
                 child: Stack(
                   children: [
+                    if (image != null)
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: FutureBuilder<ui.Image>(
+                          future: image!.getImage(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const SizedBox.shrink();
+                            }
+                            return RawImage(
+                              image: snapshot.data!,
+                              fit: BoxFit.fill,
+                            );
+                          },
+                        ),
+                      ),
                     Align(
                       alignment: const Alignment(0, 0.7),
                       child: CupertinoIconButton(
