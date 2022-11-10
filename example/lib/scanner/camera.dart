@@ -35,8 +35,15 @@ class _CameraPageState extends State<CameraPage> {
     _cameras = await availableCameras();
 
     if (_cameras!.isNotEmpty) {
+      var camera = _cameras!.first;
+      for (var c in _cameras!) {
+        if (c.lensDirection == CameraLensDirection.back) {
+          camera = c;
+        }
+      }
+
       _controller = CameraController(
-        _cameras![0],
+        camera,
         ResolutionPreset.low,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.yuv420,
