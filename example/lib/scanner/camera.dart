@@ -32,36 +32,43 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<void> initCamera() async {
-    _cameras = await availableCameras();
+    try {
+      _cameras = await availableCameras();
 
-    if (_cameras!.isNotEmpty) {
-      var camera = _cameras!.first;
-      for (var c in _cameras!) {
-        if (c.lensDirection == CameraLensDirection.back) {
-          camera = c;
-        }
-      }
-
-      _controller = CameraController(
-        camera,
-        ResolutionPreset.low,
-        enableAudio: false,
-        imageFormatGroup: ImageFormatGroup.yuv420,
-      );
-      //_controller!.addListener(onCameraView);
-      //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
-      _controller!.initialize().then((_) {
-        if (!mounted) {
-          return;
+      if (_cameras!.isNotEmpty) {
+        var camera = _cameras!.first;
+        for (var c in _cameras!) {
+          if (c.lensDirection == CameraLensDirection.back) {
+            camera = c;
+          }
         }
 
-        _controller!.setFlashMode(_flashMode);
+        _controller = CameraController(
+          camera,
+          ResolutionPreset.low,
+          enableAudio: false,
+          imageFormatGroup: ImageFormatGroup.yuv420,
+        );
+        //_controller!.addListener(onCameraView);
+        //_detectTimer = Timer.periodic(Duration(seconds: 2), onCameraView);
+        _controller!.initialize().then((_) {
+          if (!mounted) {
+            return;
+          }
 
+          _controller!.setFlashMode(_flashMode);
+
+          setState(() {
+            detectedCamera = true;
+          });
+        });
+      } else {
         setState(() {
           detectedCamera = true;
         });
-      });
-    } else {
+      }
+    } catch (e) {
+      alert(context, '$e');
       setState(() {
         detectedCamera = true;
       });
@@ -74,38 +81,46 @@ class _CameraPageState extends State<CameraPage> {
     setState(() {
       isDetecting = true;
     });
-    XFile pic = await _controller!.takePicture();
+    try {
+      XFile pic = await _controller!.takePicture();
 
-    Uint8List data = await pic.readAsBytes();
-    image = await BufferImage.fromFile(data);
-    if (!mounted) return;
-    if (image != null) {
-      setState(() {});
-
-      var results = await decodeImageInIsolate(
-        image!.buffer,
-        image!.width,
-        image!.height,
-      );
+      Uint8List data = await pic.readAsBytes();
+      image = await BufferImage.fromFile(data);
       if (!mounted) return;
-      setState(() {
-        isDetecting = false;
-        image = null;
-      });
-      if (results != null) {
-        Navigator.of(context).pushNamed('/result', arguments: results);
-      } else {
-        MyDialog.toast('detected nothing');
-        if (!kIsWeb) {
-          onCameraView();
+      if (image != null) {
+        setState(() {});
+
+        var results = await decodeImageInIsolate(
+          image!.buffer,
+          image!.width,
+          image!.height,
+        );
+        if (!mounted) return;
+        setState(() {
+          isDetecting = false;
+          image = null;
+        });
+        if (results != null) {
+          Navigator.of(context).pushNamed('/result', arguments: results);
+        } else {
+          MyDialog.toast('detected nothing');
+          if (!kIsWeb) {
+            onCameraView();
+          }
         }
+      } else {
+        setState(() {
+          image = null;
+          isDetecting = false;
+        });
+        print('can\'t take picture from camera');
       }
-    } else {
+    } catch (e) {
+      alert(context, '$e');
       setState(() {
         image = null;
         isDetecting = false;
       });
-      print('can\'t take picture from camera');
     }
     _controller?.setFocusMode(FocusMode.auto);
   }

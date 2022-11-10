@@ -134,7 +134,6 @@ List<Result>? decodeImage(IsoMessage message) {
   for (int i = 0; i < pixels.length; i++) {
     pixels[i] = getLuminanceSourcePixel(message.byteData, i * 4);
   }
-  print(pixels);
 
   final imageSource = RGBLuminanceSource.orig(
     message.width,
