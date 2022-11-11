@@ -20,6 +20,13 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.17.0 <3.0.0"
 
+dependency_overrides: 
+  camera_web:
+    git:
+      url: git@github.com:shirne/plugins.git
+      ref: fix-web-camera-fetch-error
+      path: packages/camera/camera_web/
+
 dependencies:
   flutter:
     sdk: flutter

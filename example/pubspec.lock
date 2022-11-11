@@ -51,11 +51,13 @@ packages:
     source: hosted
     version: "2.2.2"
   camera_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: camera_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "packages/camera/camera_web"
+      ref: fix-web-camera-fetch-error
+      resolved-ref: "96192654d14a4097e0b002eca47d826b39d90732"
+      url: "git@github.com:shirne/plugins.git"
+    source: git
     version: "0.3.0+1"
   characters:
     dependency: transitive
