@@ -3,6 +3,12 @@
 
 A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode multiple 1D/2D barcodes, Supported qrcode, pdf417, oned, maxicode, datamatrix, aztec.
 
+| | |
+|:---:|:---:|
+|ZXing Widget|[![pub package](https://img.shields.io/pub/v/zxing_widget.svg)](https://pub.dartlang.org/packages/zxing_widget)|
+|ZXing Scanner|[![pub package](https://img.shields.io/pub/v/zxing_scanner.svg)](https://pub.dartlang.org/packages/zxing_scanner)|
+
+
 ## Why
 
 * Pure Dart implementation, no need to rely on native packages, good platform compatibility
@@ -22,6 +28,7 @@ A Dart port of [zxing](https://github.com/zxing/zxing) that encode and decode mu
 - ✅ Code optimization
 
 - 🚧 Keep syncing from zxing java...
+
 
 ## Preview
 
