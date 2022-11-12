@@ -3,6 +3,13 @@
 
 [zxing](https://github.com/zxing/zxing) Dart版，用于各种条码、二维码编码和解码.
 
+| | |
+|:---:|:---:|
+|ZXing二维码/条码生成组件|[![pub package](https://img.shields.io/pub/v/zxing_widget.svg)](https://pub.dartlang.org/packages/zxing_widget)|
+|ZXing扫码组件|[![pub package](https://img.shields.io/pub/v/zxing_scanner.svg)](https://pub.dartlang.org/packages/zxing_scanner)|
+
+
+
 ## 为什么做这个包
 
 * 纯Dart实现，无需依赖原生包，平台兼容性好
