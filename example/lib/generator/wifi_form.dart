@@ -42,24 +42,25 @@ class _TextFormState extends State<WIFIForm> {
           child: const Text('Cancel'),
         ),
         actions: <CupertinoActionSheetAction>[
+          for (String etype in ['WEP', 'WPA', 'WPA/WPA2', 'WPA2'])
+            CupertinoActionSheetAction(
+              child: Text(etype),
+              onPressed: () {
+                setState(() {
+                  widget.result.networkEncryption = etype;
+                });
+                Navigator.pop(context);
+              },
+            ),
           CupertinoActionSheetAction(
-            child: const Text('WPA'),
+            child: const Text('无加密'),
             onPressed: () {
               setState(() {
-                widget.result.networkEncryption = 'WPA';
+                widget.result.networkEncryption = '';
               });
               Navigator.pop(context);
             },
           ),
-          CupertinoActionSheetAction(
-            child: const Text('WEP'),
-            onPressed: () {
-              setState(() {
-                widget.result.networkEncryption = 'WEP';
-              });
-              Navigator.pop(context);
-            },
-          )
         ],
       ),
     );
@@ -73,10 +74,6 @@ class _TextFormState extends State<WIFIForm> {
         FormCell(
           label: const Text('SSID'),
           field: CupertinoTextField(controller: _ssidController),
-        ),
-        FormCell(
-          label: const Text('Password'),
-          field: CupertinoTextField(controller: _passController),
         ),
         FormCell(
           label: const Text('Type'),
@@ -101,6 +98,11 @@ class _TextFormState extends State<WIFIForm> {
             ),
           ),
         ),
+        if (widget.result.networkEncryption.isNotEmpty)
+          FormCell(
+            label: const Text('Password'),
+            field: CupertinoTextField(controller: _passController),
+          ),
       ],
     );
   }
