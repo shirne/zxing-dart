@@ -28,14 +28,16 @@ enum Latch { A, B, C, SHIFT, NONE }
 
 /// Encodes minimally using Divide-And-Conquer with Memoization
 class MinimalEncoder {
-  static final String A =
+  static final List<int> A =
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002"
-      '\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011'
-      '\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F'
-      '\u00FF';
-  static final String B =
+              '\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011'
+              '\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F'
+              '\u00FF'
+          .codeUnits;
+  static final List<int> B =
       " !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr"
-      'stuvwxyz{|}~\u007F\u00FF';
+              'stuvwxyz{|}~\u007F\u00FF'
+          .codeUnits;
 
   static final int codeShift = 98;
 
@@ -90,7 +92,7 @@ class MinimalEncoder {
         case Latch.SHIFT:
           addPattern(patterns, codeShift, checkSum, checkWeight, i);
           break;
-        case Latch.NONE:
+        default:
           break;
       }
       if (charset == Charset.C) {
@@ -110,9 +112,10 @@ class MinimalEncoder {
             checkWeight,
             i,
           );
-          assert(
-            i + 1 < length,
-          ); //the algorithm never leads to a single trailing digit in character set C
+
+          //the algorithm never leads to a single trailing digit in character set C
+          assert(i + 1 < length);
+
           if (i + 1 < length) {
             i++;
           }
@@ -131,8 +134,8 @@ class MinimalEncoder {
             patternIndex = Code128Writer._CODE_FNC_3;
             break;
           case Code128Writer._ESCAPE_FNC_4:
-            if ((charset == Charset.A && latch != Latch.SHIFT) ||
-                (charset == Charset.B && latch == Latch.SHIFT)) {
+            if (charset == Charset.A && latch != Latch.SHIFT ||
+                charset == Charset.B && latch == Latch.SHIFT) {
               patternIndex = Code128Writer._CODE_FNC_4_A;
             } else {
               patternIndex = Code128Writer._CODE_FNC_4_B;
@@ -141,9 +144,9 @@ class MinimalEncoder {
           default:
             patternIndex = contents.codeUnitAt(i) - 32 /*' '*/;
         }
-        if ((charset == Charset.A && latch != Latch.SHIFT) ||
-            (charset == Charset.B && latch == Latch.SHIFT) &&
-                patternIndex < 0) {
+        if ((charset == Charset.A && latch != Latch.SHIFT ||
+                charset == Charset.B && latch == Latch.SHIFT) &&
+            patternIndex < 0) {
           patternIndex += 96 /*'`'*/;
         }
         addPattern(patterns, patternIndex, checkSum, checkWeight, i);
@@ -174,20 +177,20 @@ class MinimalEncoder {
 
   bool canEncode(String contents, Charset charset, int position) {
     final c = contents.codeUnitAt(position);
-    final cs = String.fromCharCode(c);
+
     switch (charset) {
       case Charset.A:
         return c == Code128Writer._ESCAPE_FNC_1 ||
             c == Code128Writer._ESCAPE_FNC_2 ||
             c == Code128Writer._ESCAPE_FNC_3 ||
             c == Code128Writer._ESCAPE_FNC_4 ||
-            A.contains(cs);
+            A.contains(c);
       case Charset.B:
         return c == Code128Writer._ESCAPE_FNC_1 ||
             c == Code128Writer._ESCAPE_FNC_2 ||
             c == Code128Writer._ESCAPE_FNC_3 ||
             c == Code128Writer._ESCAPE_FNC_4 ||
-            B.contains(cs);
+            B.contains(c);
       case Charset.C:
         return c == Code128Writer._ESCAPE_FNC_1 ||
             (position + 1 < contents.length &&
