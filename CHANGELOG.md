@@ -1,3 +1,6 @@
+## [0.8.3]
+* Sync zxing to 2022-12-22
+
 ## [0.8.2]
 * improve example
 * add RGBLuminanceSource.orig
