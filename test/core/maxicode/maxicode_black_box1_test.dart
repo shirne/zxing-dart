@@ -28,7 +28,7 @@ void main() {
       BarcodeFormat.MAXICODE,
     )
       ..addHint(DecodeHintType.PURE_BARCODE)
-      ..addTest(1, 1, 0.0)
+      ..addTest(7, 7, 0.0)
       ..testBlackBox();
   });
 }

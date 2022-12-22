@@ -27,7 +27,7 @@ void main() {
       BarcodeFormat.QR_CODE,
     )
       ..addTest(31, 31, 0.0)
-      ..addTest(30, 30, 90.0)
+      ..addTest(29, 29, 90.0)
       ..addTest(30, 30, 180.0)
       ..addTest(30, 30, 270.0)
       ..testBlackBox();

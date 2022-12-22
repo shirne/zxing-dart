@@ -27,7 +27,7 @@ void main() {
       MultiFormatReader(),
       BarcodeFormat.MAXICODE,
     )
-      ..addTest(6, 6, 0.0)
+      ..addTest(7, 7, 0.0)
       ..testBlackBox();
   });
 }

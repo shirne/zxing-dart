@@ -625,6 +625,8 @@ class FinderPatternFinder {
       throw NotFoundException.instance;
     }
 
+    _possibleCenters.removeWhere((e) => e.count < _CENTER_QUORUM);
+
     _possibleCenters.sort(_centerCompare);
 
     double distortion = double.maxFinite;
