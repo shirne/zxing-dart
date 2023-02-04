@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebviewPage extends StatefulWidget {
@@ -12,12 +9,30 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
+  final controller = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setBackgroundColor(const Color(0x00000000))
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onProgress: (int progress) {
+          // Update loading bar.
+        },
+        onPageStarted: (String url) {},
+        onPageFinished: (String url) {},
+        onWebResourceError: (WebResourceError error) {},
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url.startsWith('https://www.youtube.com/')) {
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+      ),
+    )
+    ..loadRequest(Uri.parse('https://flutter.cn'));
+
   @override
   void initState() {
     super.initState();
-    if (!kIsWeb) {
-      if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-    }
   }
 
   @override
@@ -26,15 +41,8 @@ class _WebviewPageState extends State<WebviewPage> {
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Webview'),
       ),
-      child: WebView(
-        initialUrl: 'https://flutter.cn',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (webview) {
-          print(webview);
-          webview.runJavascript("""
-            alert('aaa');
-            """);
-        },
+      child: WebViewWidget(
+        controller: controller,
       ),
     );
   }

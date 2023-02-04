@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' hide CupertinoListTile;
 import 'package:zxing_lib/client.dart';
 
 import '../widgets/cupertino_list_tile.dart';

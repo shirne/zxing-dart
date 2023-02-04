@@ -120,7 +120,7 @@ class MinimalECIInput implements ECIInput {
   int charAt(int index) {
     if (index < 0 || index >= length) {
       //IndexOutOfBoundsException
-      throw IndexError(index, length);
+      throw IndexError.withLength(index, length);
     }
     if (isECI(index)) {
       //IllegalArgumentException
@@ -153,7 +153,7 @@ class MinimalECIInput implements ECIInput {
   String subSequence(int start, int end) {
     if (start < 0 || start > end || end > length) {
       //IndexOutOfBoundsException
-      throw IndexError(start, length);
+      throw IndexError.withLength(start, length);
     }
     final result = StringBuffer();
     for (int i = start; i < end; i++) {
@@ -181,7 +181,7 @@ class MinimalECIInput implements ECIInput {
   bool isECI(int index) {
     if (index < 0 || index >= length) {
       // IndexOutOfBoundsException
-      throw IndexError(index, length);
+      throw IndexError.withLength(index, length);
     }
     return bytes[index] > 255 && bytes[index] <= 999;
   }
@@ -198,7 +198,7 @@ class MinimalECIInput implements ECIInput {
   bool isFNC1(int index) {
     if (index < 0 || index >= length) {
       // IndexOutOfBoundsException
-      throw IndexError(index, length);
+      throw IndexError.withLength(index, length);
     }
     return bytes[index] == 1000;
   }
@@ -223,7 +223,7 @@ class MinimalECIInput implements ECIInput {
   int getECIValue(int index) {
     if (index < 0 || index >= length) {
       // IndexOutOfBoundsException
-      throw IndexError(index, length);
+      throw IndexError.withLength(index, length);
     }
     if (!isECI(index)) {
       //IllegalArgumentException

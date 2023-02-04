@@ -1,5 +1,5 @@
 import 'package:buffer_image/buffer_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' hide CupertinoListTile;
 import 'package:flutter/material.dart';
 import 'package:zxing_lib/client.dart';
 import 'package:zxing_lib/qrcode.dart';
