@@ -42,6 +42,7 @@ dependencies:
   file_picker: ^5.2.5
   buffer_image: ^0.3.12
   shirne_dialog: ^4.5.0
+  super_clipboard: ^0.2.3
   zxing_lib:
     path: ../
 

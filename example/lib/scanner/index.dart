@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:buffer_image/buffer_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:super_clipboard/super_clipboard.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../models/utils.dart';
@@ -63,30 +65,48 @@ class _IndexPageState extends State<_IndexPage> {
     Navigator.of(context).pushNamed('/binarizer');
   }
 
+  void fromClipBoard() async {
+    final reader = await ClipboardReader.readClipboard();
+
+    if (reader.canProvide(Formats.jpeg)) {
+      reader.getFile(Formats.jpeg, (file) async {
+        discernFile(await file.readAll());
+      });
+    } else if (reader.canProvide(Formats.png)) {
+      reader.getFile(Formats.png, (file) async {
+        discernFile(await file.readAll());
+      });
+    }
+  }
+
   void openFile() async {
     Uint8List? fileData = await _pickFile();
 
     if (fileData != null) {
-      BufferImage? image = await BufferImage.fromFile(fileData);
-      if (image == null) {
-        alert(context, 'Can\'t read the image');
-        return;
-      }
-      setState(() {
-        isReading = true;
-      });
-      var results =
-          await decodeImageInIsolate(image.buffer, image.width, image.height);
-      setState(() {
-        isReading = false;
-      });
-      if (results != null) {
-        Navigator.of(context).pushNamed('/result', arguments: results);
-      } else {
-        alert(context, 'Can\'t detect barcodes or qrcodes');
-      }
+      discernFile(fileData);
     } else {
       print('not pick any file');
+    }
+  }
+
+  void discernFile(Uint8List data) async {
+    BufferImage? image = await BufferImage.fromFile(data);
+    if (image == null) {
+      alert(context, 'Can\'t read the image');
+      return;
+    }
+    setState(() {
+      isReading = true;
+    });
+    var results =
+        await decodeImageInIsolate(image.buffer, image.width, image.height);
+    setState(() {
+      isReading = false;
+    });
+    if (results != null) {
+      Navigator.of(context).pushNamed('/result', arguments: results);
+    } else {
+      alert(context, 'Can\'t detect barcodes or qrcodes');
     }
   }
 
@@ -117,40 +137,42 @@ class _IndexPageState extends State<_IndexPage> {
           children: [
             const SizedBox(height: 20),
             CupertinoButton.filled(
+              onPressed: openCamera,
               child: const Text('Scanner'),
-              onPressed: () {
-                openCamera();
-              },
             ),
             const SizedBox(height: 20),
             CupertinoButton.filled(
+              onPressed: openCameraStream,
               child: const Text('Scanner With CameraStream'),
-              onPressed: () {
-                openCameraStream();
-              },
             ),
             const SizedBox(height: 20),
             CupertinoButton.filled(
+              onPressed: openBinarizer,
               child: const Text('Binarizer'),
-              onPressed: () {
-                openBinarizer();
-              },
             ),
             const SizedBox(height: 20),
             CupertinoButton.filled(
-              child: SizedBox(
-                width: 160,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (isReading) const CupertinoActivityIndicator(),
-                    const Text('Image discern')
-                  ],
-                ),
+              onPressed: fromClipBoard,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isReading) const CupertinoActivityIndicator(),
+                  const Text('Image discern from clipboard')
+                ],
               ),
-              onPressed: () {
-                openFile();
-              },
+            ),
+            const SizedBox(height: 20),
+            CupertinoButton.filled(
+              onPressed: openFile,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isReading) const CupertinoActivityIndicator(),
+                  const Text('Image discern')
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             const Text('Multi decode mode'),

@@ -114,6 +114,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.1+1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      sha256: aa274aa7774f8964e4f4f38cc994db7b6158dd36e9187aaceaddc994b35c6c67
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -193,6 +201,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.18.0"
+  irondash_engine_context:
+    dependency: transitive
+    description:
+      name: irondash_engine_context
+      sha256: "18c1636c1fe53032862cdbfabb28b1a1bffaed4cf143118308618f63784b757b"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
+  irondash_message_channel:
+    dependency: transitive
+    description:
+      name: irondash_message_channel
+      sha256: a35566b1e7c8747b7ff6c64e43f8d8fe68b6f9a9d79158d6e4147b46ab4e43b4
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
   js:
     dependency: transitive
     description:
@@ -350,6 +374,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.0"
+  super_clipboard:
+    dependency: "direct main"
+    description:
+      name: super_clipboard
+      sha256: "6dbc0f90c3a4d09cb54e1f74bc0b0f4f306dfeda609c9fe240f65828a1438426"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.3+1"
+  super_native_extensions:
+    dependency: transitive
+    description:
+      name: super_native_extensions
+      sha256: "6e015f1101e654070d00aba21080e0ed19bdcbd8b286114d8698ef3689c809b7"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.4"
   term_glyph:
     dependency: transitive
     description:
@@ -366,6 +406,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.16"
+  typed_data:
+    dependency: transitive
+    description:
+      name: typed_data
+      sha256: "26f87ade979c47a150c9eaab93ccd2bebe70a27dc0b4b29517f2904f04eb11a5"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.1"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
