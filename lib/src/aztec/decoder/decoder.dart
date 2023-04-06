@@ -26,7 +26,54 @@ import '../../common/reedsolomon/reed_solomon_exception.dart';
 import '../../formats_exception.dart';
 import '../aztec_detector_result.dart';
 
-enum _Table { UPPER, LOWER, MIXED, DIGIT, PUNCT, BINARY }
+final Map<String, _Table> _tableMap =
+    Map.fromEntries(_Table.values.map((e) => MapEntry(e.label, e)));
+
+enum _Table {
+  upper('U', [
+    'CTRL_PS', ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', //
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', //
+    'X', 'Y', 'Z', 'CTRL_LL', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS'
+  ]),
+  lower('L', [
+    'CTRL_PS', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', //
+    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', //
+    'x', 'y', 'z', 'CTRL_US', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS'
+  ]),
+  mixed('M', [
+    'CTRL_PS', ' ', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07',
+    '\b', '\t',
+    '\n', //
+    '\x0e', '\f', '\r', '\x1b', '\x1c', '\x1d', '\x1e', '\x1f', '@', '\\', '^',
+    '_',
+    '`', '|', '~', '\x7f', 'CTRL_LL', 'CTRL_UL', 'CTRL_PL', 'CTRL_BS'
+  ]),
+  digit('D', [
+    'CTRL_PS', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', //
+    '9', ',', '.', 'CTRL_UL', 'CTRL_US'
+  ]),
+  punct('P', [
+    'FLG(n)', '\r', '\r\n', '. ', ', ', ': ', '!', '"', '#', r'$', '%', '&',
+    "'", '(', ')', //
+    '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '[', ']', '{',
+    '}', 'CTRL_UL'
+  ]),
+  binary('B', []);
+
+  final String label;
+
+  final List<String> table;
+
+  const _Table(this.label, this.table);
+
+  /// gets the table corresponding to the char passed
+  factory _Table.fromLabel(String t) {
+    if (t.isNotEmpty) {
+      return _tableMap[t]!;
+    }
+    return upper;
+  }
+}
 
 class CorrectedBitsResult {
   final List<bool> correctBits;
@@ -40,46 +87,13 @@ class CorrectedBitsResult {
 ///
 /// @author David Olivier
 class Decoder {
-  static const List<String> _UPPER_TABLE = [
-    'CTRL_PS', ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', //
-    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', //
-    'X', 'Y', 'Z', 'CTRL_LL', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS'
-  ];
-
-  static const List<String> _LOWER_TABLE = [
-    'CTRL_PS', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', //
-    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', //
-    'x', 'y', 'z', 'CTRL_US', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS'
-  ];
-
-  static const List<String> _MIXED_TABLE = [
-    'CTRL_PS', ' ', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07',
-    '\b', '\t',
-    '\n', //
-    '\x0e', '\f', '\r', '\x1b', '\x1c', '\x1d', '\x1e', '\x1f', '@', '\\', '^',
-    '_',
-    '`', '|', '~', '\x7f', 'CTRL_LL', 'CTRL_UL', 'CTRL_PL', 'CTRL_BS'
-  ];
-
-  static const List<String> _PUNCT_TABLE = [
-    'FLG(n)', '\r', '\r\n', '. ', ', ', ': ', '!', '"', '#', r'$', '%', '&',
-    "'", '(', ')', //
-    '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '[', ']', '{',
-    '}', 'CTRL_UL'
-  ];
-
-  static const List<String> _DIGIT_TABLE = [
-    'CTRL_PS', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', //
-    '9', ',', '.', 'CTRL_UL', 'CTRL_US'
-  ];
-
   static const Encoding _DEFAULT_ENCODING = latin1;
 
-  late AztecDetectorResult _dData;
+  late final AztecDetectorResult _dData;
 
   DecoderResult decode(AztecDetectorResult detectorResult) {
     _dData = detectorResult;
-    final BitMatrix matrix = detectorResult.bits;
+    final BitMatrix matrix = _dData.bits;
     final List<bool> rawBits = _extractBits(matrix);
     final CorrectedBitsResult correctedBits = _correctBits(rawBits);
     final Uint8List rawBytes = convertBoolArrayToByteArray(
@@ -106,8 +120,8 @@ class Decoder {
   /// @return the decoded string
   static String _getEncodedData(List<bool> correctedBits) {
     final int endIndex = correctedBits.length;
-    _Table latchTable = _Table.UPPER; // table most recently latched to
-    _Table shiftTable = _Table.UPPER; // table to use for the next read
+    _Table latchTable = _Table.upper; // table most recently latched to
+    _Table shiftTable = _Table.upper; // table to use for the next read
 
     // Final decoded string result
     // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
@@ -120,7 +134,7 @@ class Decoder {
 
     int index = 0;
     while (index < endIndex) {
-      if (shiftTable == _Table.BINARY) {
+      if (shiftTable == _Table.binary) {
         if (endIndex - index < 5) {
           break;
         }
@@ -145,13 +159,13 @@ class Decoder {
         // Go back to whatever mode we had been in
         shiftTable = latchTable;
       } else {
-        final int size = shiftTable == _Table.DIGIT ? 4 : 5;
+        final int size = shiftTable == _Table.digit ? 4 : 5;
         if (endIndex - index < size) {
           break;
         }
         final int code = _readCode(correctedBits, index, size);
         index += size;
-        final String str = _getCharacter(shiftTable, code);
+        final String str = shiftTable.table[code];
         if ('FLG(n)' == str) {
           if (endIndex - index < 3) {
             break;
@@ -203,7 +217,7 @@ class Decoder {
           // Our test case dlusbs.png for issue #642 exercises that.
           latchTable =
               shiftTable; // Latch the current mode, so as to return to Upper after U/S B/S
-          shiftTable = _getTable(str[5]);
+          shiftTable = _Table.fromLabel(str[5]);
           if (str[6] == 'L') {
             latchTable = shiftTable;
           }
@@ -224,47 +238,6 @@ class Decoder {
       rethrow;
     }
     return result.toString();
-  }
-
-  /// gets the table corresponding to the char passed
-  static _Table _getTable(String t) {
-    switch (t) {
-      case 'L':
-        return _Table.LOWER;
-      case 'P':
-        return _Table.PUNCT;
-      case 'M':
-        return _Table.MIXED;
-      case 'D':
-        return _Table.DIGIT;
-      case 'B':
-        return _Table.BINARY;
-      case 'U':
-      default:
-        return _Table.UPPER;
-    }
-  }
-
-  /// Gets the character (or string) corresponding to the passed code in the given table
-  ///
-  /// @param table the table used
-  /// @param code the code of the character
-  static String _getCharacter(_Table table, int code) {
-    switch (table) {
-      case _Table.UPPER:
-        return _UPPER_TABLE[code];
-      case _Table.LOWER:
-        return _LOWER_TABLE[code];
-      case _Table.MIXED:
-        return _MIXED_TABLE[code];
-      case _Table.PUNCT:
-        return _PUNCT_TABLE[code];
-      case _Table.DIGIT:
-        return _DIGIT_TABLE[code];
-      default:
-        // Should not reach here. [IllegalStateException]
-        throw ArgumentError('Bad table');
-    }
   }
 
   /// <p>Performs RS error correction on an array of bits.</p>

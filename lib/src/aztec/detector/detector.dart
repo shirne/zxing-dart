@@ -29,21 +29,17 @@ import '../../result_point.dart';
 import '../aztec_detector_result.dart';
 
 class Point {
-  final int _x;
-  final int _y;
+  final int x;
+  final int y;
+
+  const Point(this.x, this.y);
 
   ResultPoint toResultPoint() {
-    return ResultPoint(_x.toDouble(), _y.toDouble());
+    return ResultPoint(x.toDouble(), y.toDouble());
   }
 
-  Point(this._x, this._y);
-
-  int get x => _x;
-
-  int get y => _y;
-
   @override
-  String toString() => '<$_x $_y>';
+  String toString() => '<$x $y>';
 }
 
 /// Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
