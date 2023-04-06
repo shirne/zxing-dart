@@ -62,7 +62,7 @@ class GenericGF {
     int x = 1;
     for (int i = 0; i < _size; i++) {
       _expTable[i] = x;
-      x *= 2; // we're assuming the generator alpha is 2
+      x *= 2; // 2 (the polynomial x) is a primitive element
       if (x >= _size) {
         x ^= _primitive;
         x &= _size - 1;
