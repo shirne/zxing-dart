@@ -117,14 +117,20 @@ void main() {
       654123,
       545482263,
       2147483647,
-      4294967297.toUnsigned(32)
+      4294967297.toUnsigned(32),
+      4294967295,
+      4294967296,
     ]);
-    print(lists.toList());
-    print(lists.map<String>((item) => item.toRadixString(2)).toList());
+    expect(lists[6], 2147483647);
+    expect(lists[7], 1);
+    expect(lists[8], 4294967295);
+    expect(lists[9], 0);
     for (int i = 0; i < lists.length; i++) {
       lists[i] = (lists[i] * 2).toUnsigned(32);
     }
-    print(lists.toList());
-    print(lists.map<String>((item) => item.toRadixString(2)).toList());
+    expect(lists[6], 4294967294);
+    expect(lists[7], 2);
+    expect(lists[8], 4294967294);
+    expect(lists[9], 0);
   });
 }
