@@ -21,12 +21,12 @@ import 'symbol_info.dart';
 class ErrorCorrection {
   /// Lookup table which factors to use for which number of error correction codewords.
   /// See FACTORS.
-  static const List<int> _FACTOR_SETS = [
+  static const List<int> _factorSets = [
     5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68 //
   ];
 
   /// Precomputed polynomial factors for ECC 200.
-  static const List<List<int>> _FACTORS = [
+  static const List<List<int>> _factors = [
     [228, 48, 15, 111, 62],
     [23, 68, 144, 134, 240, 92, 254],
     [28, 24, 185, 166, 223, 248, 116, 255, 110, 61],
@@ -86,7 +86,7 @@ class ErrorCorrection {
     ]
   ];
 
-  static const int _MODULO_VALUE = 0x12D;
+  static const int _moduloValue = 0x12D;
 
   static bool _isInit = false;
   static final List<int> _log = List.filled(256, 0);
@@ -101,7 +101,7 @@ class ErrorCorrection {
       _log[p] = i;
       p *= 2;
       if (p >= 256) {
-        p ^= _MODULO_VALUE;
+        p ^= _moduloValue;
       }
     }
   }
@@ -153,8 +153,8 @@ class ErrorCorrection {
 
   static String _createECCBlock(String codewords, int numECWords) {
     int table = -1;
-    for (int i = 0; i < _FACTOR_SETS.length; i++) {
-      if (_FACTOR_SETS[i] == numECWords) {
+    for (int i = 0; i < _factorSets.length; i++) {
+      if (_factorSets[i] == numECWords) {
         table = i;
         break;
       }
@@ -164,7 +164,7 @@ class ErrorCorrection {
         'Illegal number of error correction codewords specified: $numECWords',
       );
     }
-    final poly = _FACTORS[table];
+    final poly = _factors[table];
     final ecc = List.filled(numECWords, 0);
     init();
     for (int i = 0; i < codewords.length; i++) {

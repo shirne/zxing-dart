@@ -39,7 +39,7 @@ class VINParsedResult extends ParsedResult {
     this.modelYear = 0,
     this.plantCode = 0,
     this.sequentialNumber = '',
-  }) : super(ParsedResultType.VIN);
+  }) : super(ParsedResultType.vin);
 
   @override
   String get displayResult {

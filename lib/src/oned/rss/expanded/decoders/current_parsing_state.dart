@@ -24,12 +24,12 @@
  *   http://www.piramidepse.com/
  */
 
-enum _State { NUMERIC, ALPHA, ISO_IEC_646 }
+enum _State { numeric, alpha, isoIec646 }
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class CurrentParsingState {
   int position = 0;
-  _State _encoding = _State.NUMERIC;
+  _State _encoding = _State.numeric;
 
   CurrentParsingState();
 
@@ -37,21 +37,21 @@ class CurrentParsingState {
     position += delta;
   }
 
-  bool get isAlpha => _encoding == _State.ALPHA;
+  bool get isAlpha => _encoding == _State.alpha;
 
-  bool get isNumeric => _encoding == _State.NUMERIC;
+  bool get isNumeric => _encoding == _State.numeric;
 
-  bool get isIsoIec646 => _encoding == _State.ISO_IEC_646;
+  bool get isIsoIec646 => _encoding == _State.isoIec646;
 
   void setNumeric() {
-    _encoding = _State.NUMERIC;
+    _encoding = _State.numeric;
   }
 
   void setAlpha() {
-    _encoding = _State.ALPHA;
+    _encoding = _State.alpha;
   }
 
   void setIsoIec646() {
-    _encoding = _State.ISO_IEC_646;
+    _encoding = _State.isoIec646;
   }
 }

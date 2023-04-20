@@ -35,7 +35,7 @@ class EmailAddressParsedResult extends ParsedResult {
     this.subject,
     this.body,
   ])  : _tos = tos is String ? [tos] : tos as List<String>?,
-        super(ParsedResultType.EMAIL_ADDRESS);
+        super(ParsedResultType.emailAddress);
 
   /// @return first elements of [tos] or `null` if none
   /// @deprecated use [tos]

@@ -19,14 +19,14 @@ import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/common.dart';
 
 void main() {
-  const List<int> BIT_MATRIX_POINTS = [1, 2, 2, 0, 3, 1];
+  const List<int> bitMatrixPoints = [1, 2, 2, 0, 3, 1];
 
   BitMatrix getExpected(int width, int height) {
     final result = BitMatrix(width, height);
-    for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
+    for (int i = 0; i < bitMatrixPoints.length; i += 2) {
       result.set(
-        width - 1 - BIT_MATRIX_POINTS[i],
-        height - 1 - BIT_MATRIX_POINTS[i + 1],
+        width - 1 - bitMatrixPoints[i],
+        height - 1 - bitMatrixPoints[i + 1],
       );
     }
     return result;
@@ -34,8 +34,8 @@ void main() {
 
   BitMatrix getInput(int width, int height) {
     final result = BitMatrix(width, height);
-    for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
-      result.set(BIT_MATRIX_POINTS[i], BIT_MATRIX_POINTS[i + 1]);
+    for (int i = 0; i < bitMatrixPoints.length; i += 2) {
+      result.set(bitMatrixPoints[i], bitMatrixPoints[i + 1]);
     }
     return result;
   }

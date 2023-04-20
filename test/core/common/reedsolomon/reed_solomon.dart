@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:zxing_lib/common.dart';
 
-const int DECODER_RANDOM_TEST_ITERATIONS = 3;
-const int DECODER_TEST_ITERATIONS = 10;
+const int decoderRandomTestIterations = 3;
+const int decoderTestIterations = 10;
 
 String arrayToString(List<int> data) {
   final sb = StringBuilder('{');
@@ -65,7 +65,7 @@ void testDecoder(GenericGF field, List<int> dataWords, List<int> ecWords) {
   final message = Int32List(dataWords.length + ecWords.length);
   final maxErrors = ecWords.length ~/ 2;
   final random = getPseudoRandom();
-  final iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
+  final iterations = field.size > 256 ? 1 : decoderTestIterations;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWords.length; i++) {
       if (i > 10 && i < ecWords.length ~/ 2 - 10) {
@@ -118,7 +118,7 @@ void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize) {
   final dataWords = Int32List(dataSize);
   final ecWords = Int32List(ecSize);
   final random = getPseudoRandom();
-  final int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
+  final int iterations = field.size > 256 ? 1 : decoderRandomTestIterations;
   for (int i = 0; i < iterations; i++) {
     // generate random data
     for (int k = 0; k < dataSize; k++) {

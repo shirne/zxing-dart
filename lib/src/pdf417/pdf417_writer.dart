@@ -29,10 +29,10 @@ import 'encoder/pdf417.dart';
 /// @author qwandor@google.com (Andrew Walbran)
 class PDF417Writer implements Writer {
   /// default white space (margin) around the code
-  static const int _WHITE_SPACE = 30;
+  static const int _whiteSpace = 30;
 
   /// default error correction level
-  static const int _DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+  static const int _defaultErrorCorrectionLevel = 2;
 
   @override
   BitMatrix encode(
@@ -42,27 +42,26 @@ class PDF417Writer implements Writer {
     int height, [
     Map<EncodeHintType, Object>? hints,
   ]) {
-    if (format != BarcodeFormat.PDF_417) {
+    if (format != BarcodeFormat.pdf417) {
       throw ArgumentError('Can only encode PDF_417, but got $format');
     }
 
     final encoder = PDF417();
-    int margin = _WHITE_SPACE;
-    int errorCorrectionLevel = _DEFAULT_ERROR_CORRECTION_LEVEL;
+    int margin = _whiteSpace;
+    int errorCorrectionLevel = _defaultErrorCorrectionLevel;
     bool autoECI = false;
 
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
-        encoder.setCompact(hints[EncodeHintType.PDF417_COMPACT] as bool);
+      if (hints.containsKey(EncodeHintType.pdf417Compact)) {
+        encoder.setCompact(hints[EncodeHintType.pdf417Compact] as bool);
       }
-      if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
+      if (hints.containsKey(EncodeHintType.pdf417Compaction)) {
         encoder.setCompaction(
-          hints[EncodeHintType.PDF417_COMPACTION] as Compaction,
+          hints[EncodeHintType.pdf417Compaction] as Compaction,
         );
       }
-      if (hints.containsKey(EncodeHintType.PDF417_DIMENSIONS)) {
-        final dimensions =
-            hints[EncodeHintType.PDF417_DIMENSIONS] as Dimensions;
+      if (hints.containsKey(EncodeHintType.pdf417Dimensions)) {
+        final dimensions = hints[EncodeHintType.pdf417Dimensions] as Dimensions;
         encoder.setDimensions(
           dimensions.maxCols,
           dimensions.minCols,
@@ -70,20 +69,20 @@ class PDF417Writer implements Writer {
           dimensions.minRows,
         );
       }
-      if (hints.containsKey(EncodeHintType.MARGIN)) {
-        margin = int.parse(hints[EncodeHintType.MARGIN].toString());
+      if (hints.containsKey(EncodeHintType.margin)) {
+        margin = int.parse(hints[EncodeHintType.margin].toString());
       }
-      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+      if (hints.containsKey(EncodeHintType.errorCorrection)) {
         errorCorrectionLevel =
-            int.parse(hints[EncodeHintType.ERROR_CORRECTION].toString());
+            int.parse(hints[EncodeHintType.errorCorrection].toString());
       }
-      if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
+      if (hints.containsKey(EncodeHintType.characterSet)) {
         final encoding = CharacterSetECI.getCharacterSetECIByName(
-          hints[EncodeHintType.CHARACTER_SET].toString(),
+          hints[EncodeHintType.characterSet].toString(),
         )?.charset;
         if (encoding != null) encoder.setEncoding(encoding);
       }
-      autoECI = (hints[EncodeHintType.PDF417_AUTO_ECI] as bool?) ?? false;
+      autoECI = (hints[EncodeHintType.pdf417AutoEci] as bool?) ?? false;
     }
 
     return _bitMatrixFromEncoder(

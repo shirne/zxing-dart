@@ -30,7 +30,7 @@ import 'package:test/scaffolding.dart';
 import 'binary_util.dart';
 
 void main() {
-  const Pattern SPACE = ' ';
+  const Pattern space = ' ';
 
   void check(String data) {
     final binary = BinaryUtil.buildBitArrayFromString(data);
@@ -38,7 +38,7 @@ void main() {
   }
 
   void checkWithoutSpaces(String data) {
-    final dataWithoutSpaces = data.replaceAll(SPACE, '');
+    final dataWithoutSpaces = data.replaceAll(space, '');
     final binary =
         BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     expect(data, binary.toString());

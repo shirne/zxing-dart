@@ -26,12 +26,12 @@ import 'upcereader.dart';
 ///
 /// @author 0979097955s@gmail.com (RX)
 class UPCEWriter extends UPCEANWriter {
-  static const int _CODE_WIDTH = 3 + // start guard
+  static const int _codeWidth = 3 + // start guard
       (7 * 6) + // bars
       6; // end guard
 
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.UPC_E];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.upcE];
 
   @override
   List<bool> encodeContent(
@@ -80,13 +80,13 @@ class UPCEWriter extends UPCEANWriter {
 
     final checkDigit = int.parse(contents[7]);
     final parities =
-        UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
-    final result = List.filled(_CODE_WIDTH, false);
+        UPCEReader.numsysAndCheckDigitPatterns[firstDigit][checkDigit];
+    final result = List.filled(_codeWidth, false);
 
     int pos = OneDimensionalCodeWriter.appendPattern(
       result,
       0,
-      UPCEANReader.START_END_PATTERN,
+      UPCEANReader.startEndPattern,
       true,
     );
 
@@ -106,7 +106,7 @@ class UPCEWriter extends UPCEANWriter {
     OneDimensionalCodeWriter.appendPattern(
       result,
       pos,
-      UPCEANReader.END_PATTERN,
+      UPCEANReader.endPattern,
       false,
     );
 

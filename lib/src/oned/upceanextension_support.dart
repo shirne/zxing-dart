@@ -22,7 +22,7 @@ import 'upceanextension5_support.dart';
 import 'upceanreader.dart';
 
 class UPCEANExtensionSupport {
-  static const List<int> _EXTENSION_START_PATTERN = [1, 1, 2];
+  static const List<int> _extensionStartPattern = [1, 1, 2];
 
   final UPCEANExtension2Support _twoSupport = UPCEANExtension2Support();
   final UPCEANExtension5Support _fiveSupport = UPCEANExtension5Support();
@@ -32,7 +32,7 @@ class UPCEANExtensionSupport {
       row,
       rowOffset,
       false,
-      _EXTENSION_START_PATTERN,
+      _extensionStartPattern,
     );
     try {
       return _fiveSupport.decodeRow(rowNumber, row, extensionStartRange);

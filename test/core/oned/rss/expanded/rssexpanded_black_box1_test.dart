@@ -35,7 +35,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/rssexpanded-1',
       MultiFormatReader(),
-      BarcodeFormat.RSS_EXPANDED,
+      BarcodeFormat.rssExpanded,
     )
       ..addTest(32, 32, 0.0)
       ..addTest(32, 32, 180.0)

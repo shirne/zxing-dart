@@ -20,11 +20,27 @@ import '../encode_hint_type.dart';
 import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
-enum _CType { UNCODABLE, ONE_DIGIT, TWO_DIGITS, FNC_1 }
+enum _CType {
+  uncodable,
+  oneDigit,
+  twoDigits,
+  fnc1,
+}
 
-enum Charset { A, B, C, NONE }
+enum Charset {
+  A,
+  B,
+  C,
+  none,
+}
 
-enum Latch { A, B, C, SHIFT, NONE }
+enum Latch {
+  A,
+  B,
+  C,
+  shift,
+  none,
+}
 
 /// Encodes minimally using Divide-And-Conquer with Memoization
 class MinimalEncoder {
@@ -47,15 +63,15 @@ class MinimalEncoder {
   List<bool> encode(String contents) {
     memoizedCost = List.generate(4, (index) => List.filled(contents.length, 0));
     minPath =
-        List.generate(4, (index) => List.filled(contents.length, Latch.NONE));
+        List.generate(4, (index) => List.filled(contents.length, Latch.none));
 
-    encodeCharset(contents, Charset.NONE, 0);
+    encodeCharset(contents, Charset.none, 0);
 
     final patterns = <List<int>>[];
     final checkSum = [0];
     final checkWeight = [1];
     final length = contents.length;
-    Charset charset = Charset.NONE;
+    Charset charset = Charset.none;
     for (int i = 0; i < length; i++) {
       final latch = minPath![charset.index][i];
       switch (latch) {
@@ -63,7 +79,7 @@ class MinimalEncoder {
           charset = Charset.A;
           addPattern(
             patterns,
-            i == 0 ? Code128Writer._CODE_START_A : Code128Writer._CODE_CODE_A,
+            i == 0 ? Code128Writer._codeStartA : Code128Writer._codeCodeA,
             checkSum,
             checkWeight,
             i,
@@ -73,7 +89,7 @@ class MinimalEncoder {
           charset = Charset.B;
           addPattern(
             patterns,
-            i == 0 ? Code128Writer._CODE_START_B : Code128Writer._CODE_CODE_B,
+            i == 0 ? Code128Writer._codeStartB : Code128Writer._codeCodeB,
             checkSum,
             checkWeight,
             i,
@@ -83,23 +99,23 @@ class MinimalEncoder {
           charset = Charset.C;
           addPattern(
             patterns,
-            i == 0 ? Code128Writer._CODE_START_C : Code128Writer._CODE_CODE_C,
+            i == 0 ? Code128Writer._codeStartC : Code128Writer._codeCodeC,
             checkSum,
             checkWeight,
             i,
           );
           break;
-        case Latch.SHIFT:
+        case Latch.shift:
           addPattern(patterns, codeShift, checkSum, checkWeight, i);
           break;
         default:
           break;
       }
       if (charset == Charset.C) {
-        if (contents.codeUnitAt(i) == Code128Writer._ESCAPE_FNC_1) {
+        if (contents.codeUnitAt(i) == Code128Writer._escapeFnc1) {
           addPattern(
             patterns,
-            Code128Writer._CODE_FNC_1,
+            Code128Writer._codeFnc1,
             checkSum,
             checkWeight,
             i,
@@ -124,28 +140,28 @@ class MinimalEncoder {
         // charset A or B
         int patternIndex;
         switch (contents.codeUnitAt(i)) {
-          case Code128Writer._ESCAPE_FNC_1:
-            patternIndex = Code128Writer._CODE_FNC_1;
+          case Code128Writer._escapeFnc1:
+            patternIndex = Code128Writer._codeFnc1;
             break;
-          case Code128Writer._ESCAPE_FNC_2:
-            patternIndex = Code128Writer._CODE_FNC_2;
+          case Code128Writer._escapeFnc2:
+            patternIndex = Code128Writer._codeFnc2;
             break;
-          case Code128Writer._ESCAPE_FNC_3:
-            patternIndex = Code128Writer._CODE_FNC_3;
+          case Code128Writer._escapeFnc3:
+            patternIndex = Code128Writer._codeFnc3;
             break;
-          case Code128Writer._ESCAPE_FNC_4:
-            if (charset == Charset.A && latch != Latch.SHIFT ||
-                charset == Charset.B && latch == Latch.SHIFT) {
-              patternIndex = Code128Writer._CODE_FNC_4_A;
+          case Code128Writer._escapeFnc4:
+            if (charset == Charset.A && latch != Latch.shift ||
+                charset == Charset.B && latch == Latch.shift) {
+              patternIndex = Code128Writer._codeFnc4A;
             } else {
-              patternIndex = Code128Writer._CODE_FNC_4_B;
+              patternIndex = Code128Writer._codeFnc4B;
             }
             break;
           default:
             patternIndex = contents.codeUnitAt(i) - 32 /*' '*/;
         }
-        if ((charset == Charset.A && latch != Latch.SHIFT ||
-                charset == Charset.B && latch == Latch.SHIFT) &&
+        if ((charset == Charset.A && latch != Latch.shift ||
+                charset == Charset.B && latch == Latch.shift) &&
             patternIndex < 0) {
           patternIndex += 96 /*'`'*/;
         }
@@ -164,7 +180,7 @@ class MinimalEncoder {
     List<int> checkWeight,
     int position,
   ) {
-    patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
+    patterns.add(Code128Reader.codePatterns[patternIndex]);
     if (position != 0) {
       checkWeight[0]++;
     }
@@ -180,19 +196,19 @@ class MinimalEncoder {
 
     switch (charset) {
       case Charset.A:
-        return c == Code128Writer._ESCAPE_FNC_1 ||
-            c == Code128Writer._ESCAPE_FNC_2 ||
-            c == Code128Writer._ESCAPE_FNC_3 ||
-            c == Code128Writer._ESCAPE_FNC_4 ||
+        return c == Code128Writer._escapeFnc1 ||
+            c == Code128Writer._escapeFnc2 ||
+            c == Code128Writer._escapeFnc3 ||
+            c == Code128Writer._escapeFnc4 ||
             A.contains(c);
       case Charset.B:
-        return c == Code128Writer._ESCAPE_FNC_1 ||
-            c == Code128Writer._ESCAPE_FNC_2 ||
-            c == Code128Writer._ESCAPE_FNC_3 ||
-            c == Code128Writer._ESCAPE_FNC_4 ||
+        return c == Code128Writer._escapeFnc1 ||
+            c == Code128Writer._escapeFnc2 ||
+            c == Code128Writer._escapeFnc3 ||
+            c == Code128Writer._escapeFnc4 ||
             B.contains(c);
       case Charset.C:
-        return c == Code128Writer._ESCAPE_FNC_1 ||
+        return c == Code128Writer._escapeFnc1 ||
             (position + 1 < contents.length &&
                 isDigit(c) &&
                 isDigit(contents.codeUnitAt(position + 1)));
@@ -209,15 +225,15 @@ class MinimalEncoder {
       return mCost;
     }
 
-    int minCost = MathUtils.MAX_VALUE;
-    Latch minLatch = Latch.NONE;
+    int minCost = MathUtils.maxValue;
+    Latch minLatch = Latch.none;
     final atEnd = position + 1 >= contents.length;
 
     final sets = [Charset.A, Charset.B];
     for (int i = 0; i <= 1; i++) {
       if (canEncode(contents, sets[i], position)) {
         int cost = 1;
-        Latch latch = Latch.NONE;
+        Latch latch = Latch.none;
         if (charset != sets[i]) {
           cost++;
           latch = Latch.values[sets[i].index];
@@ -232,7 +248,7 @@ class MinimalEncoder {
         cost = 1;
         if (charset == sets[(i + 1) % 2]) {
           cost++;
-          latch = Latch.SHIFT;
+          latch = Latch.shift;
           if (!atEnd) {
             cost += encodeCharset(contents, charset, position + 1);
           }
@@ -245,13 +261,13 @@ class MinimalEncoder {
     }
     if (canEncode(contents, Charset.C, position)) {
       int cost = 1;
-      Latch latch = Latch.NONE;
+      Latch latch = Latch.none;
       if (charset != Charset.C) {
         cost++;
         latch = Latch.C;
       }
       final advance =
-          contents.codeUnitAt(position) == Code128Writer._ESCAPE_FNC_1 ? 1 : 2;
+          contents.codeUnitAt(position) == Code128Writer._escapeFnc1 ? 1 : 2;
       if (position + advance < contents.length) {
         cost += encodeCharset(contents, Charset.C, position + advance);
       }
@@ -260,7 +276,7 @@ class MinimalEncoder {
         minLatch = latch;
       }
     }
-    if (minCost == MathUtils.MAX_VALUE) {
+    if (minCost == MathUtils.maxValue) {
       throw ArgumentError('Bad character in input: '
           'ASCII value=${contents.codeUnitAt(position)}');
     }
@@ -274,30 +290,30 @@ class MinimalEncoder {
 ///
 /// @author erik.barbara@gmail.com (Erik Barbara)
 class Code128Writer extends OneDimensionalCodeWriter {
-  static const int _CODE_START_A = 103;
-  static const int _CODE_START_B = 104;
-  static const int _CODE_START_C = 105;
-  static const int _CODE_CODE_A = 101;
-  static const int _CODE_CODE_B = 100;
-  static const int _CODE_CODE_C = 99;
-  static const int _CODE_STOP = 106;
+  static const int _codeStartA = 103;
+  static const int _codeStartB = 104;
+  static const int _codeStartC = 105;
+  static const int _codeCodeA = 101;
+  static const int _codeCodeB = 100;
+  static const int _codeCodeC = 99;
+  static const int _codeStop = 106;
 
   // Dummy characters used to specify control characters in input
-  static const int _ESCAPE_FNC_1 = 0xf1; //'\u00f1';
-  static const int _ESCAPE_FNC_2 = 0xf2; //'\u00f2';
-  static const int _ESCAPE_FNC_3 = 0xf3; //'\u00f3';
-  static const int _ESCAPE_FNC_4 = 0xf4; //'\u00f4';
+  static const int _escapeFnc1 = 0xf1; //'\u00f1';
+  static const int _escapeFnc2 = 0xf2; //'\u00f2';
+  static const int _escapeFnc3 = 0xf3; //'\u00f3';
+  static const int _escapeFnc4 = 0xf4; //'\u00f4';
 
-  static const int _CODE_FNC_1 = 102; // Code A, Code B, Code C
-  static const int _CODE_FNC_2 = 97; // Code A, Code B
-  static const int _CODE_FNC_3 = 96; // Code A, Code B
-  static const int _CODE_FNC_4_A = 101; // Code A
-  static const int _CODE_FNC_4_B = 100; // Code B
+  static const int _codeFnc1 = 102; // Code A, Code B, Code C
+  static const int _codeFnc2 = 97; // Code A, Code B
+  static const int _codeFnc3 = 96; // Code A, Code B
+  static const int _codeFnc4A = 101; // Code A
+  static const int _codeFnc4B = 100; // Code B
 
   /// Results of minimal lookahead for code C
   //@protected
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_128];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.code128];
 
   @override
   List<bool> encodeContent(
@@ -307,8 +323,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
     final forcedCodeSet = _check(contents, hints);
 
     final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
-        (hints[EncodeHintType.CODE128_COMPACT] as bool);
+        hints.containsKey(EncodeHintType.code128Compact) &&
+        (hints[EncodeHintType.code128Compact] as bool);
 
     return hasCompactionHint
         ? MinimalEncoder().encode(contents)
@@ -325,17 +341,17 @@ class Code128Writer extends OneDimensionalCodeWriter {
     }
     // Check for forced code set hint.
     int forcedCodeSet = -1;
-    if (hints != null && hints.containsKey(EncodeHintType.FORCE_CODE_SET)) {
-      final codeSetHint = hints[EncodeHintType.FORCE_CODE_SET] as String;
+    if (hints != null && hints.containsKey(EncodeHintType.forceCodeSet)) {
+      final codeSetHint = hints[EncodeHintType.forceCodeSet] as String;
       switch (codeSetHint) {
         case 'A':
-          forcedCodeSet = _CODE_CODE_A;
+          forcedCodeSet = _codeCodeA;
           break;
         case 'B':
-          forcedCodeSet = _CODE_CODE_B;
+          forcedCodeSet = _codeCodeB;
           break;
         case 'C':
-          forcedCodeSet = _CODE_CODE_C;
+          forcedCodeSet = _codeCodeC;
           break;
         default:
           throw ArgumentError('Unsupported code set hint: $codeSetHint');
@@ -348,10 +364,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
       // check for non ascii characters that are not special GS1 characters
       switch (c) {
         // special function characters
-        case _ESCAPE_FNC_1:
-        case _ESCAPE_FNC_2:
-        case _ESCAPE_FNC_3:
-        case _ESCAPE_FNC_4:
+        case _escapeFnc1:
+        case _escapeFnc2:
+        case _escapeFnc3:
+        case _escapeFnc4:
           break;
         // non ascii characters
         default:
@@ -363,27 +379,27 @@ class Code128Writer extends OneDimensionalCodeWriter {
       }
       // check characters for compatibility with forced code set
       switch (forcedCodeSet) {
-        case _CODE_CODE_A:
+        case _codeCodeA:
           // allows no ascii above 95 (no lower caps, no special symbols)
           if (c > 95 && c <= 127) {
             throw ArgumentError('Bad character in input for forced code set A:'
                 ' ASCII value=$c');
           }
           break;
-        case _CODE_CODE_B:
+        case _codeCodeB:
           // allows no ascii below 32 (terminal symbols)
           if (c <= 32) {
             throw ArgumentError('Bad character in input for forced code set B:'
                 ' ASCII value=$c');
           }
           break;
-        case _CODE_CODE_C:
+        case _codeCodeC:
           // allows only numbers and no FNC 2/3/4
           if (c < 48 ||
               (c > 57 && c <= 127) ||
-              c == _ESCAPE_FNC_2 ||
-              c == _ESCAPE_FNC_3 ||
-              c == _ESCAPE_FNC_4) {
+              c == _escapeFnc2 ||
+              c == _escapeFnc3 ||
+              c == _escapeFnc4) {
             throw ArgumentError('Bad character in input for forced code set C:'
                 ' ASCII value=$c');
           }
@@ -419,33 +435,33 @@ class Code128Writer extends OneDimensionalCodeWriter {
         // Encode the current character
         // First handle escapes
         switch (contents.codeUnitAt(position)) {
-          case _ESCAPE_FNC_1:
-            patternIndex = _CODE_FNC_1;
+          case _escapeFnc1:
+            patternIndex = _codeFnc1;
             break;
-          case _ESCAPE_FNC_2:
-            patternIndex = _CODE_FNC_2;
+          case _escapeFnc2:
+            patternIndex = _codeFnc2;
             break;
-          case _ESCAPE_FNC_3:
-            patternIndex = _CODE_FNC_3;
+          case _escapeFnc3:
+            patternIndex = _codeFnc3;
             break;
-          case _ESCAPE_FNC_4:
-            if (codeSet == _CODE_CODE_A) {
-              patternIndex = _CODE_FNC_4_A;
+          case _escapeFnc4:
+            if (codeSet == _codeCodeA) {
+              patternIndex = _codeFnc4A;
             } else {
-              patternIndex = _CODE_FNC_4_B;
+              patternIndex = _codeFnc4B;
             }
             break;
           default:
             // Then handle normal characters otherwise
             switch (codeSet) {
-              case _CODE_CODE_A:
+              case _codeCodeA:
                 patternIndex = contents.codeUnitAt(position) - 32 /*   */;
                 if (patternIndex < 0) {
                   // everything below a space character comes behind the underscore in the code patterns table
                   patternIndex += 96 /* ` */;
                 }
                 break;
-              case _CODE_CODE_B:
+              case _codeCodeB:
                 patternIndex = contents.codeUnitAt(position) - 32 /*   */;
                 break;
               default:
@@ -469,14 +485,14 @@ class Code128Writer extends OneDimensionalCodeWriter {
         if (codeSet == 0) {
           // No, we don't have a code set
           switch (newCodeSet) {
-            case _CODE_CODE_A:
-              patternIndex = _CODE_START_A;
+            case _codeCodeA:
+              patternIndex = _codeStartA;
               break;
-            case _CODE_CODE_B:
-              patternIndex = _CODE_START_B;
+            case _codeCodeB:
+              patternIndex = _codeStartB;
               break;
             default:
-              patternIndex = _CODE_START_C;
+              patternIndex = _codeStartC;
               break;
           }
         } else {
@@ -487,7 +503,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
       }
 
       // Get the pattern
-      patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
+      patterns.add(Code128Reader.codePatterns[patternIndex]);
 
       // Compute checksum
       checkSum += patternIndex * checkWeight;
@@ -501,10 +517,10 @@ class Code128Writer extends OneDimensionalCodeWriter {
   static List<bool> produceResult(List<List<int>> patterns, int checkSum) {
     // Compute and append checksum
     checkSum %= 103;
-    patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);
+    patterns.add(Code128Reader.codePatterns[checkSum]);
 
     // Append stop code
-    patterns.add(Code128Reader.CODE_PATTERNS[_CODE_STOP]);
+    patterns.add(Code128Reader.codePatterns[_codeStop]);
 
     // Compute code width
     int codeWidth = 0;
@@ -527,93 +543,92 @@ class Code128Writer extends OneDimensionalCodeWriter {
   static _CType _findCType(String value, int start) {
     final last = value.length;
     if (start >= last) {
-      return _CType.UNCODABLE;
+      return _CType.uncodable;
     }
     int c = value.codeUnitAt(start);
-    if (c == _ESCAPE_FNC_1) {
-      return _CType.FNC_1;
+    if (c == _escapeFnc1) {
+      return _CType.fnc1;
     }
     if (c < 48 /* 0 */ || c > 57 /* 9 */) {
-      return _CType.UNCODABLE;
+      return _CType.uncodable;
     }
     if (start + 1 >= last) {
-      return _CType.ONE_DIGIT;
+      return _CType.oneDigit;
     }
     c = value.codeUnitAt(start + 1);
     if (c < 48 /* 0 */ || c > 57 /* 9 */) {
-      return _CType.ONE_DIGIT;
+      return _CType.oneDigit;
     }
-    return _CType.TWO_DIGITS;
+    return _CType.twoDigits;
   }
 
   static int _chooseCode(String value, int start, int oldCode) {
     _CType lookahead = _findCType(value, start);
-    if (lookahead == _CType.ONE_DIGIT) {
-      if (oldCode == _CODE_CODE_A) {
-        return _CODE_CODE_A;
+    if (lookahead == _CType.oneDigit) {
+      if (oldCode == _codeCodeA) {
+        return _codeCodeA;
       }
-      return _CODE_CODE_B;
+      return _codeCodeB;
     }
-    if (lookahead == _CType.UNCODABLE) {
+    if (lookahead == _CType.uncodable) {
       if (start < value.length) {
         final c = value.codeUnitAt(start);
         if (c < 32 /*   */ ||
-            (oldCode == _CODE_CODE_A &&
-                (c < 96 /* ` */ ||
-                    (c >= _ESCAPE_FNC_1 && c <= _ESCAPE_FNC_4)))) {
+            (oldCode == _codeCodeA &&
+                (c < 96 /* ` */ || (c >= _escapeFnc1 && c <= _escapeFnc4)))) {
           // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
-          return _CODE_CODE_A;
+          return _codeCodeA;
         }
       }
-      return _CODE_CODE_B; // no choice
+      return _codeCodeB; // no choice
     }
-    if (oldCode == _CODE_CODE_A && lookahead == _CType.FNC_1) {
-      return _CODE_CODE_A;
+    if (oldCode == _codeCodeA && lookahead == _CType.fnc1) {
+      return _codeCodeA;
     }
-    if (oldCode == _CODE_CODE_C) {
+    if (oldCode == _codeCodeC) {
       // can continue in code C
-      return _CODE_CODE_C;
+      return _codeCodeC;
     }
-    if (oldCode == _CODE_CODE_B) {
-      if (lookahead == _CType.FNC_1) {
-        return _CODE_CODE_B; // can continue in code B
+    if (oldCode == _codeCodeB) {
+      if (lookahead == _CType.fnc1) {
+        return _codeCodeB; // can continue in code B
       }
       // Seen two consecutive digits, see what follows
       lookahead = _findCType(value, start + 2);
-      if (lookahead == _CType.UNCODABLE || lookahead == _CType.ONE_DIGIT) {
-        return _CODE_CODE_B; // not worth switching now
+      if (lookahead == _CType.uncodable || lookahead == _CType.oneDigit) {
+        return _codeCodeB; // not worth switching now
       }
-      if (lookahead == _CType.FNC_1) {
+      if (lookahead == _CType.fnc1) {
         // two digits, then FNC_1...
         lookahead = _findCType(value, start + 3);
-        if (lookahead == _CType.TWO_DIGITS) {
+        if (lookahead == _CType.twoDigits) {
           // then two more digits, switch
-          return _CODE_CODE_C;
+          return _codeCodeC;
         } else {
-          return _CODE_CODE_B; // otherwise not worth switching
+          return _codeCodeB; // otherwise not worth switching
         }
       }
       // At this point, there are at least 4 consecutive digits.
       // Look ahead to choose whether to switch now or on the next round.
       int index = start + 4;
-      while ((lookahead = _findCType(value, index)) == _CType.TWO_DIGITS) {
+      while ((lookahead = _findCType(value, index)) == _CType.twoDigits) {
         index += 2;
       }
-      if (lookahead == _CType.ONE_DIGIT) {
+      if (lookahead == _CType.oneDigit) {
         // odd number of digits, switch later
-        return _CODE_CODE_B;
+        return _codeCodeB;
       }
-      return _CODE_CODE_C; // even number of digits, switch now
+      return _codeCodeC; // even number of digits, switch now
     }
     // Here oldCode == 0, which means we are choosing the initial code
-    if (lookahead == _CType.FNC_1) {
+    if (lookahead == _CType.fnc1) {
       // ignore FNC_1
       lookahead = _findCType(value, start + 1);
     }
-    if (lookahead == _CType.TWO_DIGITS) {
+    if (lookahead == _CType.twoDigits) {
       // at least two digits, start in code C
-      return _CODE_CODE_C;
+      return _codeCodeC;
     }
-    return _CODE_CODE_B;
+    return _codeCodeB;
   }
 }

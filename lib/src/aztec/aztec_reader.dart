@@ -67,8 +67,8 @@ class AztecReader implements Reader {
     }
 
     if (hints != null) {
-      final rpcb = hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-          as ResultPointCallback?;
+      final rpcb =
+          hints[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
       if (rpcb != null) {
         for (ResultPoint point in points!) {
           rpcb.foundPossibleResultPoint(point);
@@ -81,20 +81,20 @@ class AztecReader implements Reader {
       decoderResult.rawBytes,
       decoderResult.numBits,
       points!,
-      BarcodeFormat.AZTEC,
+      BarcodeFormat.aztec,
       DateTime.now().millisecondsSinceEpoch,
     );
 
     final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
+      result.putMetadata(ResultMetadataType.byteSegments, byteSegments);
     }
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
+      result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
     result.putMetadata(
-      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ResultMetadataType.symbologyIdentifier,
       ']z${decoderResult.symbologyModifier}',
     );
 

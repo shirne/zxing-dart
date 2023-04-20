@@ -24,7 +24,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/itf-2',
       MultiFormatReader(),
-      BarcodeFormat.ITF,
+      BarcodeFormat.itf,
     )
       ..addTest(13, 13, 0.0)
       ..addTest(13, 13, 180.0)

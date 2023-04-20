@@ -26,7 +26,7 @@ void main() {
     final testStr =
         '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
     final result =
-        EAN8Writer().encode('96385074', BarcodeFormat.EAN_8, testStr.length, 0);
+        EAN8Writer().encode('96385074', BarcodeFormat.ean8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
@@ -34,13 +34,13 @@ void main() {
     final testStr =
         '0000001010001011010111101111010110111010101001110111001010001001011100101000000';
     final result =
-        EAN8Writer().encode('9638507', BarcodeFormat.EAN_8, testStr.length, 0);
+        EAN8Writer().encode('9638507', BarcodeFormat.ean8, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
   test('testEncodeIllegalCharacters', () {
     expect(
-      () => EAN8Writer().encode('96385abc', BarcodeFormat.EAN_8, 0, 0),
+      () => EAN8Writer().encode('96385abc', BarcodeFormat.ean8, 0, 0),
       throwsArgumentError,
       reason: 'Should throw ArgumentError',
     );

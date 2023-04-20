@@ -19,8 +19,8 @@ import 'package:test/scaffolding.dart';
 import 'package:zxing_lib/qrcode.dart';
 
 void main() {
-  const int MASKED_TEST_FORMAT_INFO = 0x2BED;
-  const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
+  const int maskedTestFormatInfo = 0x2BED;
+  const int unmaskedTestFormatInfo = maskedTestFormatInfo ^ 0x5412;
 
   test('testBitsDiffering', () {
     expect(0, FormatInformation.numBitsDiffering(1, 1));
@@ -32,8 +32,8 @@ void main() {
   test('testDecode', () {
     // Normal case
     final expected = FormatInformation.decodeFormatInformation(
-      MASKED_TEST_FORMAT_INFO,
-      MASKED_TEST_FORMAT_INFO,
+      maskedTestFormatInfo,
+      maskedTestFormatInfo,
     );
     assert(expected != null);
     expect(0x07, expected!.dataMask);
@@ -42,43 +42,43 @@ void main() {
     expect(
       expected,
       FormatInformation.decodeFormatInformation(
-        UNMASKED_TEST_FORMAT_INFO,
-        MASKED_TEST_FORMAT_INFO,
+        unmaskedTestFormatInfo,
+        maskedTestFormatInfo,
       ),
     );
   });
 
   test('testDecodeWithBitDifference', () {
     final expected = FormatInformation.decodeFormatInformation(
-      MASKED_TEST_FORMAT_INFO,
-      MASKED_TEST_FORMAT_INFO,
+      maskedTestFormatInfo,
+      maskedTestFormatInfo,
     );
     // 1,2,3,4 bits difference
     expect(
       expected,
       FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x01,
-        MASKED_TEST_FORMAT_INFO ^ 0x01,
+        maskedTestFormatInfo ^ 0x01,
+        maskedTestFormatInfo ^ 0x01,
       ),
     );
     expect(
       expected,
       FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x03,
-        MASKED_TEST_FORMAT_INFO ^ 0x03,
+        maskedTestFormatInfo ^ 0x03,
+        maskedTestFormatInfo ^ 0x03,
       ),
     );
     expect(
       expected,
       FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x07,
-        MASKED_TEST_FORMAT_INFO ^ 0x07,
+        maskedTestFormatInfo ^ 0x07,
+        maskedTestFormatInfo ^ 0x07,
       ),
     );
     assert(
       FormatInformation.decodeFormatInformation(
-            MASKED_TEST_FORMAT_INFO ^ 0x0F,
-            MASKED_TEST_FORMAT_INFO ^ 0x0F,
+            maskedTestFormatInfo ^ 0x0F,
+            maskedTestFormatInfo ^ 0x0F,
           ) ==
           null,
     );
@@ -86,14 +86,14 @@ void main() {
 
   test('testDecodeWithMisread', () {
     final expected = FormatInformation.decodeFormatInformation(
-      MASKED_TEST_FORMAT_INFO,
-      MASKED_TEST_FORMAT_INFO,
+      maskedTestFormatInfo,
+      maskedTestFormatInfo,
     );
     expect(
       expected,
       FormatInformation.decodeFormatInformation(
-        MASKED_TEST_FORMAT_INFO ^ 0x03,
-        MASKED_TEST_FORMAT_INFO ^ 0x0F,
+        maskedTestFormatInfo ^ 0x03,
+        maskedTestFormatInfo ^ 0x0F,
       ),
     );
   });

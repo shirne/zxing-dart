@@ -43,7 +43,7 @@ class QRCodeReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     late DecoderResult decoderResult;
     late List<ResultPoint> points;
-    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+    if (hints != null && hints.containsKey(DecodeHintType.pureBarcode)) {
       final bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits, hints);
       points = _noPoints;
@@ -63,28 +63,28 @@ class QRCodeReader implements Reader {
       decoderResult.text,
       decoderResult.rawBytes,
       points,
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
     );
     final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
+      result.putMetadata(ResultMetadataType.byteSegments, byteSegments);
     }
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
+      result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
     if (decoderResult.hasStructuredAppend) {
       result.putMetadata(
-        ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+        ResultMetadataType.structuredAppendSequence,
         decoderResult.structuredAppendSequenceNumber,
       );
       result.putMetadata(
-        ResultMetadataType.STRUCTURED_APPEND_PARITY,
+        ResultMetadataType.structuredAppendParity,
         decoderResult.structuredAppendParity,
       );
     }
     result.putMetadata(
-      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ResultMetadataType.symbologyIdentifier,
       ']Q${decoderResult.symbologyModifier}',
     );
     return result;

@@ -55,7 +55,7 @@ class EAN13Reader extends UPCEANReader {
   // in binary:
   //                0    1    1   0   0    1   == 0x19
   //
-  static const FIRST_DIGIT_ENCODINGS = [
+  static const firstDigitEncodings = [
     0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A //
   ];
 
@@ -94,7 +94,7 @@ class EAN13Reader extends UPCEANReader {
       row,
       rowOffset,
       true,
-      UPCEANReader.MIDDLE_PATTERN,
+      UPCEANReader.middlePattern,
     );
     rowOffset = middleRange[1];
 
@@ -103,7 +103,7 @@ class EAN13Reader extends UPCEANReader {
         row,
         counters,
         rowOffset,
-        UPCEANReader.L_PATTERNS,
+        UPCEANReader.lPatterns,
       );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
@@ -115,7 +115,7 @@ class EAN13Reader extends UPCEANReader {
   }
 
   @override
-  BarcodeFormat get barcodeFormat => BarcodeFormat.EAN_13;
+  BarcodeFormat get barcodeFormat => BarcodeFormat.ean13;
 
   /// Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
   /// digits in a barcode, determines the implicitly encoded first digit and adds it to the
@@ -130,7 +130,7 @@ class EAN13Reader extends UPCEANReader {
     int lgPatternFound,
   ) {
     for (int d = 0; d < 10; d++) {
-      if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
+      if (lgPatternFound == firstDigitEncodings[d]) {
         resultString.insert(0, String.fromCharCode(48 /* 0 */ + d));
         return;
       }

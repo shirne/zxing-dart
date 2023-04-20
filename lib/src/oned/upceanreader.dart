@@ -40,20 +40,20 @@ abstract class UPCEANReader extends OneDReader {
   // These two values are critical for determining how permissive the decoding will be.
   // We've arrived at these values through a lot of trial and error. Setting them any higher
   // lets false positives creep in quickly.
-  static const double _MAX_AVG_VARIANCE = 0.48;
-  static const double _MAX_INDIVIDUAL_VARIANCE = 0.7;
+  static const double _maxAvgVariance = 0.48;
+  static const double _maxIndividualVariance = 0.7;
 
   /// Start/end guard pattern.
-  static const List<int> START_END_PATTERN = [1, 1, 1];
+  static const List<int> startEndPattern = [1, 1, 1];
 
   /// Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
-  static const List<int> MIDDLE_PATTERN = [1, 1, 1, 1, 1];
+  static const List<int> middlePattern = [1, 1, 1, 1, 1];
 
   /// end guard pattern.
-  static const List<int> END_PATTERN = [1, 1, 1, 1, 1, 1];
+  static const List<int> endPattern = [1, 1, 1, 1, 1, 1];
 
   /// "Odd", or "L" patterns used to encode UPC/EAN digits.
-  static const List<List<int>> L_PATTERNS = [
+  static const List<List<int>> lPatterns = [
     [3, 2, 1, 1], // 0
     [2, 2, 2, 1], // 1
     [2, 1, 2, 2], // 2
@@ -70,11 +70,11 @@ abstract class UPCEANReader extends OneDReader {
   static final List<List<int>> lAndGPatterns = List.generate(
     20,
     (index) => index < 10
-        ? L_PATTERNS[index].toList()
+        ? lPatterns[index].toList()
         : List.generate(
-            L_PATTERNS[index - 10].length,
+            lPatterns[index - 10].length,
             (idx) =>
-                L_PATTERNS[index - 10][L_PATTERNS[index - 10].length - idx - 1],
+                lPatterns[index - 10][lPatterns[index - 10].length - idx - 1],
           ),
   );
 
@@ -101,12 +101,12 @@ abstract class UPCEANReader extends OneDReader {
     bool foundStart = false;
     late List<int> startRange;
     int nextStart = 0;
-    final counters = List.filled(START_END_PATTERN.length, 0);
+    final counters = List.filled(startEndPattern.length, 0);
     while (!foundStart) {
-      counters.fillRange(0, START_END_PATTERN.length, 0);
+      counters.fillRange(0, startEndPattern.length, 0);
 
       startRange =
-          _findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
+          _findGuardPattern(row, nextStart, false, startEndPattern, counters);
       final start = startRange[0];
       nextStart = startRange[1];
       // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
@@ -141,8 +141,7 @@ abstract class UPCEANReader extends OneDReader {
   ]) {
     startGuardRange ??= findStartGuardPattern(row);
     final resultPointCallback =
-        hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-            as ResultPointCallback?;
+        hints?[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
     int symbologyIdentifier = 0;
 
     if (resultPointCallback != null) {
@@ -208,7 +207,7 @@ abstract class UPCEANReader extends OneDReader {
       final extensionResult =
           _extensionReader.decodeRow(rowNumber, row, endRange[1]);
       decodeResult.putMetadata(
-        ResultMetadataType.UPC_EAN_EXTENSION,
+        ResultMetadataType.upcEanExtension,
         extensionResult.text,
       );
       decodeResult.putAllMetadata(extensionResult.resultMetadata);
@@ -219,7 +218,7 @@ abstract class UPCEANReader extends OneDReader {
     }
 
     final allowedExtensions =
-        hints?[DecodeHintType.ALLOWED_EAN_EXTENSIONS] as List<int>?;
+        hints?[DecodeHintType.allowedEanExtensions] as List<int>?;
     if (allowedExtensions != null) {
       bool valid = false;
       for (int length in allowedExtensions) {
@@ -233,21 +232,21 @@ abstract class UPCEANReader extends OneDReader {
       }
     }
 
-    if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
+    if (format == BarcodeFormat.ean13 || format == BarcodeFormat.upcA) {
       final countryID = _eanManSupport.lookupCountryIdentifier(resultString);
       if (countryID != null) {
         decodeResult.putMetadata(
-          ResultMetadataType.POSSIBLE_COUNTRY,
+          ResultMetadataType.possibleCountry,
           countryID,
         );
       }
     }
-    if (format == BarcodeFormat.EAN_8) {
+    if (format == BarcodeFormat.ean8) {
       symbologyIdentifier = 4;
     }
 
     decodeResult.putMetadata(
-      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ResultMetadataType.symbologyIdentifier,
       ']E$symbologyIdentifier',
     );
 
@@ -303,7 +302,7 @@ abstract class UPCEANReader extends OneDReader {
   }
 
   List<int> decodeEnd(BitArray row, int endStart) {
-    return _findGuardPattern(row, endStart, false, START_END_PATTERN);
+    return _findGuardPattern(row, endStart, false, startEndPattern);
   }
 
   static List<int> findGuardPattern(
@@ -353,9 +352,9 @@ abstract class UPCEANReader extends OneDReader {
           if (OneDReader.patternMatchVariance(
                 counters,
                 pattern,
-                _MAX_INDIVIDUAL_VARIANCE,
+                _maxIndividualVariance,
               ) <
-              _MAX_AVG_VARIANCE) {
+              _maxAvgVariance) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -390,7 +389,7 @@ abstract class UPCEANReader extends OneDReader {
     List<List<int>> patterns,
   ) {
     OneDReader.recordPattern(row, rowOffset, counters);
-    double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
+    double bestVariance = _maxAvgVariance; // worst variance we'll accept
     int bestMatch = -1;
     final max = patterns.length;
     for (int i = 0; i < max; i++) {
@@ -398,7 +397,7 @@ abstract class UPCEANReader extends OneDReader {
       final variance = OneDReader.patternMatchVariance(
         counters,
         pattern,
-        _MAX_INDIVIDUAL_VARIANCE,
+        _maxIndividualVariance,
       );
 
       // todo in zxing java float compare may return true between the same float number

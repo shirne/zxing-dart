@@ -34,13 +34,13 @@ import 'one_dreader.dart';
 /// @author Sean Owen
 class Code93Reader extends OneDReader {
   // Note that 'abcd' are dummy characters in place of control characters.
-  static const String ALPHABET_STRING =
+  static const String alphabetString =
       r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*';
-  static final List<int> _alphaBet = ALPHABET_STRING.codeUnits;
+  static final List<int> _alphaBet = alphabetString.codeUnits;
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars.
   /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
-  static const List<int> CHARACTER_ENCODINGS = [
+  static const List<int> characterEncodings = [
     0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
     0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
     0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
@@ -48,7 +48,7 @@ class Code93Reader extends OneDReader {
     0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
     0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
   ];
-  static final int asteriskEncoding = CHARACTER_ENCODINGS[47];
+  static final int asteriskEncoding = characterEncodings[47];
 
   final StringBuilder _decodeRowResult;
   final List<int> _counters;
@@ -123,9 +123,9 @@ class Code93Reader extends OneDReader {
         ResultPoint(left, rowNumber.toDouble()),
         ResultPoint(right, rowNumber.toDouble())
       ],
-      BarcodeFormat.CODE_93,
+      BarcodeFormat.code93,
     );
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']G0');
+    resultObject.putMetadata(ResultMetadataType.symbologyIdentifier, ']G0');
     return resultObject;
   }
 
@@ -187,8 +187,8 @@ class Code93Reader extends OneDReader {
   }
 
   static String _patternToChar(int pattern) {
-    for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
-      if (CHARACTER_ENCODINGS[i] == pattern) {
+    for (int i = 0; i < characterEncodings.length; i++) {
+      if (characterEncodings[i] == pattern) {
         return String.fromCharCode(_alphaBet[i]);
       }
     }
@@ -287,7 +287,7 @@ class Code93Reader extends OneDReader {
     int weight = 1;
     int total = 0;
     for (int i = checkPosition - 1; i >= 0; i--) {
-      total += weight * ALPHABET_STRING.indexOf(result[i]);
+      total += weight * alphabetString.indexOf(result[i]);
       if (++weight > weightMax) {
         weight = 1;
       }

@@ -23,7 +23,7 @@ import 'parsed_result_type.dart';
 class ISBNParsedResult extends ParsedResult {
   String isbn;
 
-  ISBNParsedResult(this.isbn) : super(ParsedResultType.ISBN);
+  ISBNParsedResult(this.isbn) : super(ParsedResultType.isbn);
 
   @override
   String get displayResult {

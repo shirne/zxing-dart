@@ -40,8 +40,8 @@ void main() {
     final bitmap = BinaryBitmap(HybridBinarizer(source));
     try {
       final result = PDF417Reader().decode(bitmap, {
-        DecodeHintType.PURE_BARCODE: true,
-        DecodeHintType.TRY_HARDER: true,
+        DecodeHintType.pureBarcode: true,
+        DecodeHintType.tryHarder: true,
       });
       print(result.text);
     } on ReaderException catch (_) {}
@@ -51,7 +51,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/pdf417-2',
       MultiFormatReader(),
-      BarcodeFormat.PDF_417,
+      BarcodeFormat.pdf417,
     )
       ..addTest(24, 24, 0.0, 0, 0)
       ..addTest(24, 24, 180.0, 0, 0)

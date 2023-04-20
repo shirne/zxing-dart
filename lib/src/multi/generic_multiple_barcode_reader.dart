@@ -36,10 +36,10 @@ import 'multiple_barcode_reader.dart';
 ///
 /// @author Sean Owen
 class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
-  static const int _MIN_DIMENSION_TO_RECUR = 100;
-  static const int _MAX_DEPTH = 4;
+  static const int _minDimensionToRecur = 100;
+  static const int _maxDepth = 4;
 
-  static const List<Result> EMPTY_RESULT_ARRAY = [];
+  static const emptyResultArray = <Result>[];
 
   final Reader _delegate;
 
@@ -66,7 +66,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     int yOffset,
     int currentDepth,
   ) {
-    if (currentDepth > _MAX_DEPTH) {
+    if (currentDepth > _maxDepth) {
       return;
     }
 
@@ -117,7 +117,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
     }
 
     // Decode left of barcode
-    if (minX > _MIN_DIMENSION_TO_RECUR) {
+    if (minX > _minDimensionToRecur) {
       _doDecodeMultiple(
         image.crop(0, 0, minX.toInt(), height),
         hints,
@@ -128,7 +128,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       );
     }
     // Decode above barcode
-    if (minY > _MIN_DIMENSION_TO_RECUR) {
+    if (minY > _minDimensionToRecur) {
       _doDecodeMultiple(
         image.crop(0, 0, width, minY.toInt()),
         hints,
@@ -139,7 +139,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       );
     }
     // Decode right of barcode
-    if (maxX < width - _MIN_DIMENSION_TO_RECUR) {
+    if (maxX < width - _minDimensionToRecur) {
       _doDecodeMultiple(
         image.crop(maxX.toInt(), 0, width - maxX.toInt(), height),
         hints,
@@ -150,7 +150,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
       );
     }
     // Decode below barcode
-    if (maxY < height - _MIN_DIMENSION_TO_RECUR) {
+    if (maxY < height - _minDimensionToRecur) {
       _doDecodeMultiple(
         image.crop(0, maxY.toInt(), width, height - maxY.toInt()),
         hints,

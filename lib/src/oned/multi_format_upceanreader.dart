@@ -44,18 +44,18 @@ class MultiFormatUPCEANReader extends OneDReader {
   MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
     final possibleFormats =
-        hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+        hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
     final readers = <UPCEANReader>[];
     if (possibleFormats != null) {
-      if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
+      if (possibleFormats.contains(BarcodeFormat.ean13)) {
         readers.add(EAN13Reader());
-      } else if (possibleFormats.contains(BarcodeFormat.UPC_A)) {
+      } else if (possibleFormats.contains(BarcodeFormat.upcA)) {
         readers.add(UPCAReader());
       }
-      if (possibleFormats.contains(BarcodeFormat.EAN_8)) {
+      if (possibleFormats.contains(BarcodeFormat.ean8)) {
         readers.add(EAN8Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.UPC_E)) {
+      if (possibleFormats.contains(BarcodeFormat.upcE)) {
         readers.add(UPCEReader());
       }
     }
@@ -92,13 +92,13 @@ class MultiFormatUPCEANReader extends OneDReader {
         // result if appropriate.
         //
         // But, don't return UPC-A if UPC-A was not a requested format!
-        final ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.EAN_13 &&
+        final ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.ean13 &&
             result.text[0] == '0';
         // @SuppressWarnings("unchecked")
         final possibleFormats =
-            hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+            hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
         final canReturnUPCA = possibleFormats == null ||
-            possibleFormats.contains(BarcodeFormat.UPC_A);
+            possibleFormats.contains(BarcodeFormat.upcA);
 
         if (ean13MayBeUPCA && canReturnUPCA) {
           // Transfer the metadata across
@@ -106,7 +106,7 @@ class MultiFormatUPCEANReader extends OneDReader {
             result.text.substring(1),
             result.rawBytes,
             result.resultPoints,
-            BarcodeFormat.UPC_A,
+            BarcodeFormat.upcA,
           );
           resultUPCA.putAllMetadata(result.resultMetadata);
           return resultUPCA;

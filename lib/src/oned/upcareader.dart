@@ -49,7 +49,7 @@ class UPCAReader extends UPCEANReader {
   }
 
   @override
-  BarcodeFormat get barcodeFormat => BarcodeFormat.UPC_A;
+  BarcodeFormat get barcodeFormat => BarcodeFormat.upcA;
 
   @override
   int decodeMiddle(BitArray row, List<int> startRange, StringBuilder result) {
@@ -63,7 +63,7 @@ class UPCAReader extends UPCEANReader {
         text.substring(1),
         null,
         result.resultPoints,
-        BarcodeFormat.UPC_A,
+        BarcodeFormat.upcA,
       );
       if (result.resultMetadata != null) {
         upcaResult.putAllMetadata(result.resultMetadata);

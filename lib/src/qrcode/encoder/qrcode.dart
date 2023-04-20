@@ -22,7 +22,7 @@ import 'byte_matrix.dart';
 /// @author satorux@google.com (Satoru Takabayashi) - creator
 /// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class QRCode {
-  static const int NUM_MASK_PATTERNS = 8;
+  static const int numMaskPatterns = 8;
 
   ///the mode. Not relevant if [EncodeHintType.QR_COMPACT] is selected.
   Mode? mode;
@@ -63,6 +63,6 @@ class QRCode {
 
   // Check if "mask_pattern" is valid.
   static bool isValidMaskPattern(int maskPattern) {
-    return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
+    return maskPattern >= 0 && maskPattern < numMaskPatterns;
   }
 }

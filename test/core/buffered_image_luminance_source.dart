@@ -23,7 +23,7 @@ import 'package:zxing_lib/zxing.dart';
 /// This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.
 ///
 class BufferedImageLuminanceSource extends LuminanceSource {
-  static const double MINUS_45_IN_RADIANS =
+  static const double minus45InRadians =
       -0.7853981633974483; // Math.toRadians(-45.0)
 
   late Uint8List buffer;

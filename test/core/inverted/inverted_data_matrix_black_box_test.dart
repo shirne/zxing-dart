@@ -25,9 +25,9 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/inverted',
       MultiFormatReader(),
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
     )
-      ..addHint(DecodeHintType.ALSO_INVERTED)
+      ..addHint(DecodeHintType.alsoInverted)
       ..addTest(1, 1, 0.0)
       ..addTest(1, 1, 90.0)
       ..addTest(1, 1, 180.0)

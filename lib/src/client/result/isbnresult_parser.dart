@@ -27,7 +27,7 @@ class ISBNResultParser extends ResultParser {
   @override
   ISBNParsedResult? parse(Result result) {
     final format = result.barcodeFormat;
-    if (format != BarcodeFormat.EAN_13) {
+    if (format != BarcodeFormat.ean13) {
       return null;
     }
     final rawText = ResultParser.getMassagedText(result);

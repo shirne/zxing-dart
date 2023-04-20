@@ -40,7 +40,7 @@ void main() {
   ]) {
     final s = PDF417HighLevelEncoder.encodeHighLevel(
       input,
-      Compaction.AUTO,
+      Compaction.auto,
       charset,
       autoECI,
     );

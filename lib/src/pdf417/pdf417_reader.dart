@@ -89,25 +89,25 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
         decoderResult.text,
         decoderResult.rawBytes,
         points,
-        BarcodeFormat.PDF_417,
+        BarcodeFormat.pdf417,
       );
       result.putMetadata(
-        ResultMetadataType.ERROR_CORRECTION_LEVEL,
+        ResultMetadataType.errorCorrectionLevel,
         decoderResult.ecLevel!,
       );
       final pdf417ResultMetadata = decoderResult.other as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {
         result.putMetadata(
-          ResultMetadataType.PDF417_EXTRA_METADATA,
+          ResultMetadataType.pdf417ExtraMetadata,
           pdf417ResultMetadata,
         );
       }
       result.putMetadata(
-        ResultMetadataType.ORIENTATION,
+        ResultMetadataType.orientation,
         detectorResult.rotation,
       );
       result.putMetadata(
-        ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+        ResultMetadataType.symbologyIdentifier,
         ']L${decoderResult.symbologyModifier}',
       );
       results.add(result);
@@ -124,7 +124,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   static int _getMinWidth(ResultPoint? p1, ResultPoint? p2) {
     if (p1 == null || p2 == null) {
-      return MathUtils.MAX_VALUE; // Integer.MAX_VALUE;
+      return MathUtils.maxValue; // Integer.MAX_VALUE;
     }
     return (p1.x - p2.x).abs().toInt();
   }
@@ -134,14 +134,14 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
       math.max(
         _getMaxWidth(p[0], p[4]),
         _getMaxWidth(p[6], p[2]) *
-            PDF417Common.MODULES_IN_CODEWORD ~/
-            PDF417Common.MODULES_IN_STOP_PATTERN,
+            PDF417Common.modulesInCodeword ~/
+            PDF417Common.modulesInStopPattern,
       ),
       math.max(
         _getMaxWidth(p[1], p[5]),
         _getMaxWidth(p[7], p[3]) *
-            PDF417Common.MODULES_IN_CODEWORD ~/
-            PDF417Common.MODULES_IN_STOP_PATTERN,
+            PDF417Common.modulesInCodeword ~/
+            PDF417Common.modulesInStopPattern,
       ),
     );
   }
@@ -151,14 +151,14 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
       math.min(
         _getMinWidth(p[0], p[4]),
         _getMinWidth(p[6], p[2]) *
-            PDF417Common.MODULES_IN_CODEWORD ~/
-            PDF417Common.MODULES_IN_STOP_PATTERN,
+            PDF417Common.modulesInCodeword ~/
+            PDF417Common.modulesInStopPattern,
       ),
       math.min(
         _getMinWidth(p[1], p[5]),
         _getMinWidth(p[7], p[3]) *
-            PDF417Common.MODULES_IN_CODEWORD ~/
-            PDF417Common.MODULES_IN_STOP_PATTERN,
+            PDF417Common.modulesInCodeword ~/
+            PDF417Common.modulesInStopPattern,
       ),
     );
   }

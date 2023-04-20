@@ -25,7 +25,7 @@ import '../utils.dart';
 void main() {
   void doTest(String content, String encoding) {
     final result =
-        UPCEWriter().encode(content, BarcodeFormat.UPC_E, encoding.length, 0);
+        UPCEWriter().encode(content, BarcodeFormat.upcE, encoding.length, 0);
     expect(encoding, matrixToString(result));
   }
 
@@ -53,7 +53,7 @@ void main() {
   //@Test(expected = IllegalArgumentException.class)
   test('testEncodeIllegalCharacters', () {
     try {
-      UPCEWriter().encode('05096abc', BarcodeFormat.UPC_E, 0, 0);
+      UPCEWriter().encode('05096abc', BarcodeFormat.upcE, 0, 0);
       fail('should thrown ArgumentError');
     } catch (_) {
       // passed

@@ -21,11 +21,11 @@ import '../one_dreader.dart';
 /// Superclass of [OneDReader] implementations that read barcodes in the RSS family
 /// of formats.
 abstract class AbstractRSSReader extends OneDReader {
-  static const double _MAX_AVG_VARIANCE = 0.2;
-  static const double _MAX_INDIVIDUAL_VARIANCE = 0.45;
+  static const double _maxAvgVariance = 0.2;
+  static const double _maxIndividualVariance = 0.45;
 
-  static const double _MIN_FINDER_PATTERN_RATIO = 9.5 / 12.0;
-  static const double _MAX_FINDER_PATTERN_RATIO = 12.5 / 14.0;
+  static const double _minFinderPatternRatio = 9.5 / 12.0;
+  static const double _maxFinderPatternRatio = 12.5 / 14.0;
 
   final List<int> _decodeFinderCounters;
   final List<int> _dataCharacterCounters;
@@ -70,9 +70,9 @@ abstract class AbstractRSSReader extends OneDReader {
       if (OneDReader.patternMatchVariance(
             counters,
             finderPatterns[value],
-            _MAX_INDIVIDUAL_VARIANCE,
+            _maxIndividualVariance,
           ) <
-          _MAX_AVG_VARIANCE) {
+          _maxAvgVariance) {
         return value;
       }
     }
@@ -119,11 +119,10 @@ abstract class AbstractRSSReader extends OneDReader {
     final firstTwoSum = counters[0] + counters[1];
     final sum = firstTwoSum + counters[2] + counters[3];
     final ratio = firstTwoSum / sum;
-    if (ratio >= _MIN_FINDER_PATTERN_RATIO &&
-        ratio <= _MAX_FINDER_PATTERN_RATIO) {
+    if (ratio >= _minFinderPatternRatio && ratio <= _maxFinderPatternRatio) {
       // passes ratio test in spec, but see if the counts are unreasonable
-      int minCounter = MathUtils.MAX_VALUE;
-      int maxCounter = MathUtils.MIN_VALUE;
+      int minCounter = MathUtils.maxValue;
+      int maxCounter = MathUtils.minValue;
       for (int counter in counters) {
         if (counter > maxCounter) {
           maxCounter = counter;

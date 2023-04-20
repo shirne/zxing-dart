@@ -57,7 +57,7 @@ void main() {
       fail(re.toString());
     }
 
-    expect(BarcodeFormat.RSS_EXPANDED, result.barcodeFormat);
+    expect(BarcodeFormat.rssExpanded, result.barcodeFormat);
     expect(expected, result.text);
   }
 

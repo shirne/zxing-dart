@@ -11,8 +11,8 @@ class Properties {
       if (!element.startsWith('<')) {
         final int equalPos = element.indexOf('=');
         if (equalPos > 0) {
-          final String key = element.substring(0, equalPos).trim();
-          final String value = element.substring(equalPos + 1).trim();
+          final key = element.substring(0, equalPos).trim();
+          final value = element.substring(equalPos + 1).trim();
           _properties[key] = value;
         }
       }

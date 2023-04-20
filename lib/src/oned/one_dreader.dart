@@ -39,7 +39,7 @@ abstract class OneDReader implements Reader {
       return _doDecode(image, hints);
     } on NotFoundException catch (_) {
       final tryHarder =
-          hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+          hints != null && hints.containsKey(DecodeHintType.tryHarder);
       if (tryHarder && image.isRotateSupported) {
         final rotatedImage = image.rotateCounterClockwise();
         final result = _doDecode(rotatedImage, hints);
@@ -47,13 +47,13 @@ abstract class OneDReader implements Reader {
         final metadata = result.resultMetadata;
         int orientation = 270;
         if (metadata != null &&
-            metadata.containsKey(ResultMetadataType.ORIENTATION)) {
+            metadata.containsKey(ResultMetadataType.orientation)) {
           // But if we found it reversed in doDecode(), add in that result here:
           orientation = (orientation +
-                  (metadata[ResultMetadataType.ORIENTATION] as int)) %
+                  (metadata[ResultMetadataType.orientation] as int)) %
               360;
         }
-        result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
+        result.putMetadata(ResultMetadataType.orientation, orientation);
         // Update result points
         final points = result.resultPoints;
         if (points != null) {
@@ -92,7 +92,7 @@ abstract class OneDReader implements Reader {
     BitArray row = BitArray(width);
 
     final tryHarder =
-        hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+        hints != null && hints.containsKey(DecodeHintType.tryHarder);
     final rowStep = math.max(1, height >> (tryHarder ? 8 : 5));
     late int maxLines;
     if (tryHarder) {
@@ -132,10 +132,10 @@ abstract class OneDReader implements Reader {
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
           if (hints != null &&
-              hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
+              hints.containsKey(DecodeHintType.needResultPointCallback)) {
             final newHints = <DecodeHintType, Object>{};
             newHints.addAll(hints);
-            newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+            newHints.remove(DecodeHintType.needResultPointCallback);
             hints = newHints;
           }
         }
@@ -145,7 +145,7 @@ abstract class OneDReader implements Reader {
           // We found our barcode
           if (attempt == 1) {
             // But it was upside down, so note that
-            result.putMetadata(ResultMetadataType.ORIENTATION, 180);
+            result.putMetadata(ResultMetadataType.orientation, 180);
             // And remember to flip the result points horizontally.
             final points = result.resultPoints;
             if (points != null) {

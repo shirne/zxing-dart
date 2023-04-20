@@ -25,16 +25,16 @@ void main() {
   void doTest(String contents, String normalized, BarcodeFormat format) {
     final fakeResult = Result(contents, null, null, format);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.PRODUCT, result.type);
+    expect(ParsedResultType.product, result.type);
     final productResult = result as ProductParsedResult;
     expect(contents, productResult.productID);
     expect(normalized, productResult.normalizedProductID);
   }
 
   test('testProduct', () {
-    doTest('123456789012', '123456789012', BarcodeFormat.UPC_A);
-    doTest('00393157', '00393157', BarcodeFormat.EAN_8);
-    doTest('5051140178499', '5051140178499', BarcodeFormat.EAN_13);
-    doTest('01234565', '012345000065', BarcodeFormat.UPC_E);
+    doTest('123456789012', '123456789012', BarcodeFormat.upcA);
+    doTest('00393157', '00393157', BarcodeFormat.ean8);
+    doTest('5051140178499', '5051140178499', BarcodeFormat.ean13);
+    doTest('01234565', '012345000065', BarcodeFormat.upcE);
   });
 }

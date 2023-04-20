@@ -65,24 +65,24 @@ class DecodedBitStreamParser {
         // While still another segment to read...
         if (bits.available() < 4) {
           // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
-          mode = Mode.TERMINATOR;
+          mode = Mode.terminator;
         } else {
           mode = Mode.values[bits.readBits(4)]!; // mode is encoded by 4 bits
         }
         switch (mode) {
-          case Mode.TERMINATOR:
+          case Mode.terminator:
             break;
-          case Mode.FNC1_FIRST_POSITION:
+          case Mode.fnc1FirstPosition:
             hasFNC1first = true; // symbology detection
             // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
             break;
-          case Mode.FNC1_SECOND_POSITION:
+          case Mode.fnc1SecondPosition:
             hasFNC1second = true; // symbology detection
             // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
             break;
-          case Mode.STRUCTURED_APPEND:
+          case Mode.structuredAppend:
             if (bits.available() < 16) {
               throw FormatsException('bits.available < 16');
             }
@@ -91,7 +91,7 @@ class DecodedBitStreamParser {
             symbolSequence = bits.readBits(8);
             parityData = bits.readBits(8);
             break;
-          case Mode.ECI:
+          case Mode.eci:
             // Count doesn't apply to ECI
             final value = _parseECIValue(bits);
             currentCharacterSetECI =
@@ -100,7 +100,7 @@ class DecodedBitStreamParser {
               throw FormatsException('CharacterSet is null');
             }
             break;
-          case Mode.HANZI:
+          case Mode.hanzi:
             // First handle Hanzi mode which does not start with character count
             // Chinese mode contains a sub set indicator right after mode indicator
             final subset = bits.readBits(4);
@@ -115,13 +115,13 @@ class DecodedBitStreamParser {
             // How many characters will follow, encoded in this mode?
             final count = bits.readBits(mode.getCharacterCountBits(version));
             switch (mode) {
-              case Mode.NUMERIC:
+              case Mode.numeric:
                 _decodeNumericSegment(bits, result, count);
                 break;
-              case Mode.ALPHANUMERIC:
+              case Mode.alphanumeric:
                 _decodeAlphanumericSegment(bits, result, count, fc1InEffect);
                 break;
-              case Mode.BYTE:
+              case Mode.byte:
                 _decodeByteSegment(
                   bits,
                   result,
@@ -131,7 +131,7 @@ class DecodedBitStreamParser {
                   hints,
                 );
                 break;
-              case Mode.KANJI:
+              case Mode.kanji:
                 _decodeKanjiSegment(bits, result, count);
                 break;
               default:
@@ -139,7 +139,7 @@ class DecodedBitStreamParser {
             }
             break;
         }
-      } while (mode != Mode.TERMINATOR);
+      } while (mode != Mode.terminator);
 
       if (currentCharacterSetECI != null) {
         if (hasFNC1first) {

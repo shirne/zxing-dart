@@ -74,40 +74,40 @@ class MultiFormatReader implements Reader {
   void setHints(Map<DecodeHintType, Object>? hints) {
     _hints = hints;
 
-    final tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
+    final tryHarder = hints?.containsKey(DecodeHintType.tryHarder) ?? false;
     // @SuppressWarnings("unchecked")
     final formats =
-        hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
+        hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
     final readers = <Reader>[];
     if (formats != null) {
-      final addOneDReader = formats.contains(BarcodeFormat.UPC_A) ||
-          formats.contains(BarcodeFormat.UPC_E) ||
-          formats.contains(BarcodeFormat.EAN_13) ||
-          formats.contains(BarcodeFormat.EAN_8) ||
-          formats.contains(BarcodeFormat.CODABAR) ||
-          formats.contains(BarcodeFormat.CODE_39) ||
-          formats.contains(BarcodeFormat.CODE_93) ||
-          formats.contains(BarcodeFormat.CODE_128) ||
-          formats.contains(BarcodeFormat.ITF) ||
-          formats.contains(BarcodeFormat.RSS_14) ||
-          formats.contains(BarcodeFormat.RSS_EXPANDED);
+      final addOneDReader = formats.contains(BarcodeFormat.upcA) ||
+          formats.contains(BarcodeFormat.upcE) ||
+          formats.contains(BarcodeFormat.ean13) ||
+          formats.contains(BarcodeFormat.ean8) ||
+          formats.contains(BarcodeFormat.codabar) ||
+          formats.contains(BarcodeFormat.code39) ||
+          formats.contains(BarcodeFormat.code93) ||
+          formats.contains(BarcodeFormat.code128) ||
+          formats.contains(BarcodeFormat.itf) ||
+          formats.contains(BarcodeFormat.rss14) ||
+          formats.contains(BarcodeFormat.rssExpanded);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
         readers.add(MultiFormatOneDReader(hints));
       }
-      if (formats.contains(BarcodeFormat.QR_CODE)) {
+      if (formats.contains(BarcodeFormat.qrCode)) {
         readers.add(QRCodeReader());
       }
-      if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
+      if (formats.contains(BarcodeFormat.dataMatrix)) {
         readers.add(DataMatrixReader());
       }
-      if (formats.contains(BarcodeFormat.AZTEC)) {
+      if (formats.contains(BarcodeFormat.aztec)) {
         readers.add(AztecReader());
       }
-      if (formats.contains(BarcodeFormat.PDF_417)) {
+      if (formats.contains(BarcodeFormat.pdf417)) {
         readers.add(PDF417Reader());
       }
-      if (formats.contains(BarcodeFormat.MAXICODE)) {
+      if (formats.contains(BarcodeFormat.maxicode)) {
         readers.add(MaxiCodeReader());
       }
       // At end in "try harder" mode
@@ -151,7 +151,7 @@ class MultiFormatReader implements Reader {
           // continue
         }
       }
-      if (_hints != null && _hints!.containsKey(DecodeHintType.ALSO_INVERTED)) {
+      if (_hints != null && _hints!.containsKey(DecodeHintType.alsoInverted)) {
         // Calling all readers again with inverted image
         image.blackMatrix.flip();
         for (Reader reader in _readers!) {

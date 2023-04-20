@@ -39,7 +39,7 @@ class GeoParsedResult extends ParsedResult {
     this.longitude, [
     this.altitude = 0,
     this.query,
-  ]) : super(ParsedResultType.GEO);
+  ]) : super(ParsedResultType.geo);
 
   String get geoURI {
     final result = StringBuffer();

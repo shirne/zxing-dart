@@ -23,7 +23,7 @@ import 'one_dimensional_code_writer.dart';
 class Code93Writer extends OneDimensionalCodeWriter {
   // @protected
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_93];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.code93];
 
   /// @param contents barcode contents to encode. It should not be encoded for extended characters.
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
@@ -50,25 +50,23 @@ class Code93Writer extends OneDimensionalCodeWriter {
     int pos = _appendPattern(result, 0, Code93Reader.asteriskEncoding);
 
     for (int i = 0; i < length; i++) {
-      final indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code93Reader.alphabetString.indexOf(contents[i]);
       pos += _appendPattern(
         result,
         pos,
-        Code93Reader.CHARACTER_ENCODINGS[indexInString],
+        Code93Reader.characterEncodings[indexInString],
       );
     }
 
     //add two checksums
     final check1 = _computeChecksumIndex(contents, 20);
-    pos +=
-        _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check1]);
+    pos += _appendPattern(result, pos, Code93Reader.characterEncodings[check1]);
 
     //append the contents to reflect the first checksum added
-    contents += Code93Reader.ALPHABET_STRING[check1];
+    contents += Code93Reader.alphabetString[check1];
 
     final check2 = _computeChecksumIndex(contents, 15);
-    pos +=
-        _appendPattern(result, pos, Code93Reader.CHARACTER_ENCODINGS[check2]);
+    pos += _appendPattern(result, pos, Code93Reader.characterEncodings[check2]);
 
     //end character (*)
     pos += _appendPattern(result, pos, Code93Reader.asteriskEncoding);
@@ -111,7 +109,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
     int total = 0;
 
     for (int i = contents.length - 1; i >= 0; i--) {
-      final indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code93Reader.alphabetString.indexOf(contents[i]);
       total += indexInString * weight;
       if (++weight > maxWeight) {
         weight = 1;

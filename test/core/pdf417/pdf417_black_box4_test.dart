@@ -47,7 +47,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   final List<TestResult> testResults = [];
 
   PDF417BlackBox4TestCase()
-      : super('test/resources/blackbox/pdf417-4', null, BarcodeFormat.PDF_417) {
+      : super('test/resources/blackbox/pdf417-4', null, BarcodeFormat.pdf417) {
     testResults.add(TestResult(3, 3, 0, 0, 0.0));
   }
 
@@ -159,14 +159,14 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   static PDF417ResultMetadata? getMeta(Result result) {
     return result.resultMetadata == null
         ? null
-        : result.resultMetadata![ResultMetadataType.PDF417_EXTRA_METADATA]
+        : result.resultMetadata![ResultMetadataType.pdf417ExtraMetadata]
             as PDF417ResultMetadata?;
   }
 
   List<Result> decode(BinaryBitmap source, bool tryHarder) {
     final hints = <DecodeHintType, Object>{};
     if (tryHarder) {
-      hints[DecodeHintType.TRY_HARDER] = true;
+      hints[DecodeHintType.tryHarder] = true;
     }
 
     return barcodeReader.decodeMultiple(source, hints);

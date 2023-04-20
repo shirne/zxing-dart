@@ -86,9 +86,9 @@ class StringUtils {
     Uint8List bytes,
     Map<DecodeHintType, Object>? hints,
   ) {
-    if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
+    if (hints != null && hints.containsKey(DecodeHintType.characterSet)) {
       return CharacterSetECI.getCharacterSetECIByName(
-        hints[DecodeHintType.CHARACTER_SET].toString(),
+        hints[DecodeHintType.characterSet].toString(),
       )?.charset;
     }
 

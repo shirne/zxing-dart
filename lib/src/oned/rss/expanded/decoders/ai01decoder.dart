@@ -32,7 +32,7 @@ import 'abstract_expanded_decoder.dart';
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 abstract class AI01decoder extends AbstractExpandedDecoder {
-  static const int GTIN_SIZE = 40;
+  static const int gtinSize = 40;
 
   AI01decoder(BitArray information) : super(information);
 

@@ -30,10 +30,10 @@ class SMSParsedResult extends ParsedResult {
   SMSParsedResult.single(String number, String? via, this.subject, this.body)
       : _numbers = [number],
         _vias = [if (via != null) via],
-        super(ParsedResultType.SMS);
+        super(ParsedResultType.sms);
 
   SMSParsedResult(this._numbers, this._vias, this.subject, this.body)
-      : super(ParsedResultType.SMS);
+      : super(ParsedResultType.sms);
 
   void addNumber(String num, [String? via]) {
     _numbers.add(num);

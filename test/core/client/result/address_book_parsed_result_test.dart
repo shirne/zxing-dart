@@ -38,9 +38,9 @@ void main() {
     String? birthday,
     String? note,
   ) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.qrCode);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.ADDRESS_BOOK, result.type);
+    expect(ParsedResultType.addressBook, result.type);
     final addressResult = result as AddressBookParsedResult;
     expect(addressResult.title, title);
     assertArrayEquals(names, addressResult.names);

@@ -30,7 +30,7 @@ import 'upceanreader.dart';
 class UPCEReader extends UPCEANReader {
   /// The pattern that marks the middle, and end, of a UPC-E pattern.
   /// There is no "second half" to a UPC-E barcode.
-  static const List<int> _MIDDLE_END_PATTERN = [1, 1, 1, 1, 1, 1];
+  static const List<int> _middleEndPattern = [1, 1, 1, 1, 1, 1];
 
   // For an UPC-E barcode, the final digit is represented by the parities used
   // to encode the middle six digits, according to the table below.
@@ -59,7 +59,7 @@ class UPCEReader extends UPCEANReader {
   /// See {@link #L_AND_G_PATTERNS}; these values similarly represent patterns of
   /// even-odd parity encodings of digits that imply both the number system (0 or 1)
   /// used, and the check digit.
-  static const List<List<int>> NUMSYS_AND_CHECK_DIGIT_PATTERNS = [
+  static const List<List<int>> numsysAndCheckDigitPatterns = [
     [0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25],
     [0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A]
   ];
@@ -109,7 +109,7 @@ class UPCEReader extends UPCEANReader {
       row,
       endStart,
       true,
-      _MIDDLE_END_PATTERN,
+      _middleEndPattern,
     );
   }
 
@@ -125,7 +125,7 @@ class UPCEReader extends UPCEANReader {
   ) {
     for (int numSys = 0; numSys <= 1; numSys++) {
       for (int d = 0; d < 10; d++) {
-        if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
+        if (lgPatternFound == numsysAndCheckDigitPatterns[numSys][d]) {
           resultString.insert(0, 48 /* 0 */ + numSys);
           resultString.writeCharCode(48 /* 0 */ + d);
           return;
@@ -136,7 +136,7 @@ class UPCEReader extends UPCEANReader {
   }
 
   @override
-  BarcodeFormat get barcodeFormat => BarcodeFormat.UPC_E;
+  BarcodeFormat get barcodeFormat => BarcodeFormat.upcE;
 
   /// Expands a UPC-E value back into its full, equivalent UPC-A code value.
   ///

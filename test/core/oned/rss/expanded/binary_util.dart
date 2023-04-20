@@ -27,9 +27,9 @@
 import 'package:zxing_lib/common.dart';
 
 class BinaryUtil {
-  static const Pattern ONE = '1';
-  static const Pattern ZERO = '0';
-  static const Pattern SPACE = ' ';
+  static const Pattern one = '1';
+  static const Pattern zero = '0';
+  static const Pattern space = ' ';
 
   BinaryUtil();
 
@@ -37,8 +37,8 @@ class BinaryUtil {
   * Constructs a BitArray from a String like the one returned from BitArray.toString()
   */
   static BitArray buildBitArrayFromString(String data) {
-    final dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
-    final binary = BitArray(dotsAndXs.replaceAll(SPACE, '').length);
+    final dotsAndXs = data.replaceAll(one, 'X').replaceAll(zero, '.');
+    final binary = BitArray(dotsAndXs.replaceAll(space, '').length);
     int counter = 0;
 
     for (int i = 0; i < dotsAndXs.length; ++i) {
@@ -61,7 +61,7 @@ class BinaryUtil {
 
   static BitArray buildBitArrayFromStringWithoutSpaces(String data) {
     final sb = StringBuilder();
-    final dotsAndXs = data.replaceAll(ONE, 'X').replaceAll(ZERO, '.');
+    final dotsAndXs = data.replaceAll(one, 'X').replaceAll(zero, '.');
     int current = 0;
     while (current < dotsAndXs.length) {
       sb.write(' ');

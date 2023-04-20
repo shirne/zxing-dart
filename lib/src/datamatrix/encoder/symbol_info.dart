@@ -20,7 +20,7 @@ import 'symbol_shape_hint.dart';
 
 /// Symbol info table for DataMatrix.
 class SymbolInfo {
-  static const List<SymbolInfo> PROD_SYMBOLS = [
+  static const List<SymbolInfo> prodSymbols = [
     SymbolInfo(false, 3, 5, 8, 8, 1),
     SymbolInfo(false, 5, 7, 10, 10, 1),
     /*rect*/ SymbolInfo(true, 5, 7, 16, 6, 1),
@@ -53,7 +53,7 @@ class SymbolInfo {
     DataMatrixSymbolInfo144(),
   ];
 
-  static List<SymbolInfo> _symbols = PROD_SYMBOLS;
+  static List<SymbolInfo> _symbols = prodSymbols;
 
   final bool _rectangular;
   final int _dataCapacity;
@@ -95,11 +95,11 @@ class SymbolInfo {
     Dimension? minSize;
     if (shapeOrIsRect is bool) {
       shape = shapeOrIsRect
-          ? SymbolShapeHint.FORCE_NONE
-          : SymbolShapeHint.FORCE_SQUARE;
+          ? SymbolShapeHint.forceNone
+          : SymbolShapeHint.forceSquare;
     } else {
       shape = shapeOrIsRect == null
-          ? SymbolShapeHint.FORCE_NONE
+          ? SymbolShapeHint.forceNone
           : (shapeOrIsRect as SymbolShapeHint);
     }
 
@@ -119,10 +119,10 @@ class SymbolInfo {
     bool fail,
   ) {
     for (SymbolInfo symbol in _symbols) {
-      if (shape == SymbolShapeHint.FORCE_SQUARE && symbol._rectangular) {
+      if (shape == SymbolShapeHint.forceSquare && symbol._rectangular) {
         continue;
       }
-      if (shape == SymbolShapeHint.FORCE_RECTANGLE && !symbol._rectangular) {
+      if (shape == SymbolShapeHint.forceRectangle && !symbol._rectangular) {
         continue;
       }
       if (minSize != null &&

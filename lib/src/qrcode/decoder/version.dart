@@ -67,7 +67,7 @@ class ECB {
 class Version {
   /// See ISO 18004:2006 Annex D.
   /// Element i represents the raw version bits that specify version i + 7
-  static const List<int> _VERSION_DECODE_INFO = [
+  static const List<int> _versionDecodeInfo = [
     0x07C94, 0x085BC, 0x09A99, 0x0A4D3, 0x0BBF6, //
     0x0C762, 0x0D847, 0x0E60D, 0x0F928, 0x10B78, //
     0x1145D, 0x12A17, 0x13532, 0x149A6, 0x15683, //
@@ -135,10 +135,10 @@ class Version {
   }
 
   static Version? decodeVersionInformation(int versionBits) {
-    int bestDifference = MathUtils.MAX_VALUE; // int.max
+    int bestDifference = MathUtils.maxValue; // int.max
     int bestVersion = 0;
-    for (int i = 0; i < _VERSION_DECODE_INFO.length; i++) {
-      final targetVersion = _VERSION_DECODE_INFO[i];
+    for (int i = 0; i < _versionDecodeInfo.length; i++) {
+      final targetVersion = _versionDecodeInfo[i];
       // Do the version info bits match exactly? done.
       if (targetVersion == versionBits) {
         return getVersionForNumber(i + 7);

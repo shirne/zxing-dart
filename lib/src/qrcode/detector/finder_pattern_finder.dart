@@ -29,13 +29,15 @@ import 'finder_pattern_info.dart';
 ///
 /// @author Sean Owen
 class FinderPatternFinder {
-  static const int _CENTER_QUORUM = 2;
+  static const int _centerQuorum = 2;
 
   //@protected
-  static const int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
+  // 1 pixel/module times 3 modules/center
+  static const int minSkip = 3;
+
   //@protected
-  static const int MAX_MODULES =
-      97; // support up to version 20 for mobile clients
+  // support up to version 20 for mobile clients
+  static const int maxModules = 97;
 
   final BitMatrix _image;
   final List<FinderPattern> _possibleCenters;
@@ -54,7 +56,7 @@ class FinderPatternFinder {
   List<FinderPattern> get possibleCenters => _possibleCenters;
 
   FinderPatternInfo find([Map<DecodeHintType, Object>? hints]) {
-    final tryHarder = hints?.containsKey(DecodeHintType.TRY_HARDER) ?? false;
+    final tryHarder = hints?.containsKey(DecodeHintType.tryHarder) ?? false;
     final maxI = _image.height;
     final maxJ = _image.width;
     // We are looking for black/white/black/white/black modules in
@@ -64,9 +66,9 @@ class FinderPatternFinder {
     // image, and then account for the center being 3 modules in size. This gives the smallest
     // number of pixels the center could be, so skip this often. When trying harder, look for all
     // QR versions regardless of how dense they are.
-    int iSkip = (3 * maxI) ~/ (4 * MAX_MODULES);
-    if (iSkip < MIN_SKIP || tryHarder) {
-      iSkip = MIN_SKIP;
+    int iSkip = (3 * maxI) ~/ (4 * maxModules);
+    if (iSkip < minSkip || tryHarder) {
+      iSkip = minSkip;
     }
 
     bool done = false;
@@ -557,7 +559,7 @@ class FinderPatternFinder {
     }
     ResultPoint? firstConfirmedCenter;
     for (FinderPattern center in _possibleCenters) {
-      if (center.count >= _CENTER_QUORUM) {
+      if (center.count >= _centerQuorum) {
         if (firstConfirmedCenter == null) {
           firstConfirmedCenter = center;
         } else {
@@ -584,7 +586,7 @@ class FinderPatternFinder {
     double totalModuleSize = 0.0;
     final max = _possibleCenters.length;
     for (FinderPattern pattern in _possibleCenters) {
-      if (pattern.count >= _CENTER_QUORUM) {
+      if (pattern.count >= _centerQuorum) {
         confirmedCount++;
         totalModuleSize += pattern.estimatedModuleSize;
       }
@@ -625,7 +627,7 @@ class FinderPatternFinder {
       throw NotFoundException.instance;
     }
 
-    _possibleCenters.removeWhere((e) => e.count < _CENTER_QUORUM);
+    _possibleCenters.removeWhere((e) => e.count < _centerQuorum);
 
     _possibleCenters.sort(_centerCompare);
 

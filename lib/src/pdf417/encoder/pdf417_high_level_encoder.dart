@@ -71,49 +71,49 @@ class PDF417HighLevelEncoder {
   static final int _blankCode = 32 /*   */;
 
   /// code for Text compaction
-  static const int _TEXT_COMPACTION = 0;
+  static const int _textCompaction = 0;
 
   /// code for Byte compaction
-  static const int _BYTE_COMPACTION = 1;
+  static const int _byteCompaction = 1;
 
   /// code for Numeric compaction
-  static const int _NUMERIC_COMPACTION = 2;
+  static const int _numericCompaction = 2;
 
   /// Text compaction submode Alpha
-  static const int _SUBMODE_ALPHA = 0;
+  static const int _submodeAlpha = 0;
 
   /// Text compaction submode Lower
-  static const int _SUBMODE_LOWER = 1;
+  static const int _submodeLower = 1;
 
   /// Text compaction submode Mixed
-  static const int _SUBMODE_MIXED = 2;
+  static const int _submideMixed = 2;
 
   /// Text compaction submode Punctuation
-  static const int _SUBMODE_PUNCTUATION = 3;
+  static const int _submodePunctuation = 3;
 
   /// mode latch to Text Compaction mode
-  static const int _LATCH_TO_TEXT = 900;
+  static const int _latchToText = 900;
 
   /// mode latch to Byte Compaction mode (number of characters NOT a multiple of 6)
-  static const int _LATCH_TO_BYTE_PADDED = 901;
+  static const int _latchToBytePadded = 901;
 
   /// mode latch to Numeric Compaction mode
-  static const int _LATCH_TO_NUMERIC = 902;
+  static const int _latchToNumeric = 902;
 
   /// mode shift to Byte Compaction mode
-  static const int _SHIFT_TO_BYTE = 913;
+  static const int _shiftToByte = 913;
 
   /// mode latch to Byte Compaction mode (number of characters a multiple of 6)
-  static const int _LATCH_TO_BYTE = 924;
+  static const int _latchToByte = 924;
 
   /// identifier for a user defined Extended Channel Interpretation (ECI)
-  static const int _ECI_USER_DEFINED = 925;
+  static const int _eciUserDefined = 925;
 
   /// identifier for a general purpose ECO format
-  static const int _ECI_GENERAL_PURPOSE = 926;
+  static const int _eciGeneralPurpose = 926;
 
   /// identifier for an ECI of a character set of code page
-  static const int _ECI_CHARSET = 927;
+  static const int _eciCharset = 927;
 
   /// Raw code table for text compaction Mixed sub-mode
   static const List<int> _textMixedRaw = [
@@ -190,28 +190,28 @@ class PDF417HighLevelEncoder {
 
     final len = input.length;
     int p = 0;
-    int textSubMode = _SUBMODE_ALPHA;
+    int textSubMode = _submodeAlpha;
 
     // User selected encoding mode
     switch (compaction) {
-      case Compaction.TEXT:
+      case Compaction.text:
         _encodeText(input, p, len, sb, textSubMode);
         break;
-      case Compaction.BYTE:
+      case Compaction.byte:
         if (autoECI) {
-          _encodeMultiECIBinary(input, 0, input.length, _TEXT_COMPACTION, sb);
+          _encodeMultiECIBinary(input, 0, input.length, _textCompaction, sb);
         } else {
           final msgBytes =
               Uint8List.fromList(encoding!.encode(input.toString()));
-          _encodeBinary(msgBytes, p, msgBytes.length, _BYTE_COMPACTION, sb);
+          _encodeBinary(msgBytes, p, msgBytes.length, _byteCompaction, sb);
         }
         break;
-      case Compaction.NUMERIC:
-        sb.writeCharCode(_LATCH_TO_NUMERIC);
+      case Compaction.numeric:
+        sb.writeCharCode(_latchToNumeric);
         _encodeNumeric(input, p, len, sb);
         break;
       default:
-        int encodingMode = _TEXT_COMPACTION; //Default mode, see 4.4.2.1
+        int encodingMode = _textCompaction; //Default mode, see 4.4.2.1
         while (p < len) {
           while (p < len && input.isECI(p)) {
             _encodingECI(input.getECIValue(p), sb);
@@ -222,19 +222,19 @@ class PDF417HighLevelEncoder {
           }
           final n = _determineConsecutiveDigitCount(input, p);
           if (n >= 13) {
-            sb.writeCharCode(_LATCH_TO_NUMERIC);
-            encodingMode = _NUMERIC_COMPACTION;
-            textSubMode = _SUBMODE_ALPHA; //Reset after latch
+            sb.writeCharCode(_latchToNumeric);
+            encodingMode = _numericCompaction;
+            textSubMode = _submodeAlpha; //Reset after latch
             _encodeNumeric(input, p, n, sb);
             p += n;
           } else {
             final t = _determineConsecutiveTextCount(input, p);
             if (t >= 5 || n == len) {
-              if (encodingMode != _TEXT_COMPACTION) {
-                sb.writeCharCode(_LATCH_TO_TEXT);
-                encodingMode = _TEXT_COMPACTION;
+              if (encodingMode != _textCompaction) {
+                sb.writeCharCode(_latchToText);
+                encodingMode = _textCompaction;
                 //start with submode alpha after latch
-                textSubMode = _SUBMODE_ALPHA;
+                textSubMode = _submodeAlpha;
               }
               textSubMode = _encodeText(input, p, t, sb, textSubMode);
               p += t;
@@ -254,12 +254,12 @@ class PDF417HighLevelEncoder {
                     );
               if ((bytes == null && b == 1) ||
                   (bytes != null && bytes.length == 1) &&
-                      encodingMode == _TEXT_COMPACTION) {
+                      encodingMode == _textCompaction) {
                 //Switch for one byte (instead of latch)
                 if (autoECI) {
-                  _encodeMultiECIBinary(input, p, 1, _TEXT_COMPACTION, sb);
+                  _encodeMultiECIBinary(input, p, 1, _textCompaction, sb);
                 } else {
-                  _encodeBinary(bytes!, 0, 1, _TEXT_COMPACTION, sb);
+                  _encodeBinary(bytes!, 0, 1, _textCompaction, sb);
                 }
               } else {
                 //Mode latch performed by encodeBinary()
@@ -268,8 +268,8 @@ class PDF417HighLevelEncoder {
                 } else {
                   _encodeBinary(bytes!, 0, bytes.length, encodingMode, sb);
                 }
-                encodingMode = _BYTE_COMPACTION;
-                textSubMode = _SUBMODE_ALPHA; //Reset after latch
+                encodingMode = _byteCompaction;
+                textSubMode = _submodeAlpha; //Reset after latch
               }
               p += b;
             }
@@ -307,7 +307,7 @@ class PDF417HighLevelEncoder {
       } else {
         final ch = input.charAt(startpos + idx);
         switch (submode) {
-          case _SUBMODE_ALPHA:
+          case _submodeAlpha:
             if (_isAlphaUpper(ch)) {
               if (ch == _blankCode) {
                 tmp.writeCharCode(26); //space
@@ -316,11 +316,11 @@ class PDF417HighLevelEncoder {
               }
             } else {
               if (_isAlphaLower(ch)) {
-                submode = _SUBMODE_LOWER;
+                submode = _submodeLower;
                 tmp.writeCharCode(27); //ll
                 continue;
               } else if (_isMixed(ch)) {
-                submode = _SUBMODE_MIXED;
+                submode = _submideMixed;
                 tmp.writeCharCode(28); //ml
                 continue;
               } else {
@@ -330,7 +330,7 @@ class PDF417HighLevelEncoder {
               }
             }
             break;
-          case _SUBMODE_LOWER:
+          case _submodeLower:
             if (_isAlphaLower(ch)) {
               if (ch == _blankCode) {
                 tmp.writeCharCode(26); //space
@@ -344,7 +344,7 @@ class PDF417HighLevelEncoder {
                 //space cannot happen here, it is also in "Lower"
                 break;
               } else if (_isMixed(ch)) {
-                submode = _SUBMODE_MIXED;
+                submode = _submideMixed;
                 tmp.writeCharCode(28); //ml
                 continue;
               } else {
@@ -354,23 +354,23 @@ class PDF417HighLevelEncoder {
               }
             }
             break;
-          case _SUBMODE_MIXED:
+          case _submideMixed:
             if (_isMixed(ch)) {
               tmp.writeCharCode(_mixed[ch]);
             } else {
               if (_isAlphaUpper(ch)) {
-                submode = _SUBMODE_ALPHA;
+                submode = _submodeAlpha;
                 tmp.writeCharCode(28); //al
                 continue;
               } else if (_isAlphaLower(ch)) {
-                submode = _SUBMODE_LOWER;
+                submode = _submodeLower;
                 tmp.writeCharCode(27); //ll
                 continue;
               } else {
                 if (startpos + idx + 1 < count &&
                     !input.isECI(startpos + idx + 1) &&
                     _isPunctuation(input.charAt(startpos + idx + 1))) {
-                  submode = _SUBMODE_PUNCTUATION;
+                  submode = _submodePunctuation;
                   tmp.writeCharCode(25); //pl
                   continue;
                 }
@@ -383,7 +383,7 @@ class PDF417HighLevelEncoder {
             if (_isPunctuation(ch)) {
               tmp.writeCharCode(_punctuatuin[ch]);
             } else {
-              submode = _SUBMODE_ALPHA;
+              submode = _submodeAlpha;
               tmp.writeCharCode(29); //al
               continue;
             }
@@ -442,7 +442,7 @@ class PDF417HighLevelEncoder {
           subBytes(input, localStart, localEnd),
           0,
           localCount,
-          localStart == startpos ? startmode : _BYTE_COMPACTION,
+          localStart == startpos ? startmode : _byteCompaction,
           sb,
         );
         localStart = localEnd;
@@ -475,13 +475,13 @@ class PDF417HighLevelEncoder {
     int startmode,
     StringBuffer sb,
   ) {
-    if (count == 1 && startmode == _TEXT_COMPACTION) {
-      sb.writeCharCode(_SHIFT_TO_BYTE);
+    if (count == 1 && startmode == _textCompaction) {
+      sb.writeCharCode(_shiftToByte);
     } else {
       if ((count % 6) == 0) {
-        sb.writeCharCode(_LATCH_TO_BYTE);
+        sb.writeCharCode(_latchToByte);
       } else {
-        sb.writeCharCode(_LATCH_TO_BYTE_PADDED);
+        sb.writeCharCode(_latchToBytePadded);
       }
     }
 
@@ -659,14 +659,14 @@ class PDF417HighLevelEncoder {
 
   static void _encodingECI(int eci, StringBuffer sb) {
     if (eci >= 0 && eci < 900) {
-      sb.writeCharCode(_ECI_CHARSET);
+      sb.writeCharCode(_eciCharset);
       sb.writeCharCode(eci);
     } else if (eci < 810900) {
-      sb.writeCharCode(_ECI_GENERAL_PURPOSE);
+      sb.writeCharCode(_eciGeneralPurpose);
       sb.writeCharCode((eci ~/ 900 - 1));
       sb.writeCharCode((eci % 900));
     } else if (eci < 811800) {
-      sb.writeCharCode(_ECI_USER_DEFINED);
+      sb.writeCharCode(_eciUserDefined);
       sb.writeCharCode((810900 - eci));
     } else {
       throw WriterException(

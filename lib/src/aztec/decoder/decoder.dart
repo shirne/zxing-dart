@@ -26,8 +26,9 @@ import '../../common/reedsolomon/reed_solomon_exception.dart';
 import '../../formats_exception.dart';
 import '../aztec_detector_result.dart';
 
-final Map<String, _Table> _tableMap =
-    Map.fromEntries(_Table.values.map((e) => MapEntry(e.label, e)));
+final _tableMap = Map<String, _Table>.fromEntries(
+  _Table.values.map((e) => MapEntry(e.label, e)),
+);
 
 enum _Table {
   upper('U', [
@@ -87,7 +88,7 @@ class CorrectedBitsResult {
 ///
 /// @author David Olivier
 class Decoder {
-  static const Encoding _DEFAULT_ENCODING = latin1;
+  static const Encoding _defaultEncoding = latin1;
 
   late final AztecDetectorResult _dData;
 
@@ -130,7 +131,7 @@ class Decoder {
     // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
     // when character encoding changes (ECI) or input ends.
     final BytesBuilder decodedBytes = BytesBuilder();
-    Encoding encoding = _DEFAULT_ENCODING;
+    Encoding encoding = _defaultEncoding;
 
     int index = 0;
     while (index < endIndex) {

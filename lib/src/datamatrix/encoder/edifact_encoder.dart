@@ -21,7 +21,7 @@ import 'high_level_encoder.dart';
 
 class EdifactEncoder implements Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.EDIFACT_ENCODATION;
+  int get encodingMode => HighLevelEncoder.edifactEncodation;
 
   @override
   void encode(EncoderContext context) {
@@ -44,7 +44,7 @@ class EdifactEncoder implements Encoder {
         );
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
-          context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+          context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
           break;
         }
       }
@@ -105,7 +105,7 @@ class EdifactEncoder implements Encoder {
         context.writeCodewords(encoded);
       }
     } finally {
-      context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+      context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
     }
   }
 

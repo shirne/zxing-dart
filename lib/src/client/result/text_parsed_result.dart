@@ -25,7 +25,7 @@ class TextParsedResult extends ParsedResult {
   String text;
   String? language;
 
-  TextParsedResult(this.text, [this.language]) : super(ParsedResultType.TEXT);
+  TextParsedResult(this.text, [this.language]) : super(ParsedResultType.text);
 
   @override
   String get displayResult {

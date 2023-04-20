@@ -18,8 +18,8 @@ import 'dart:math' as math;
 
 /// General math-related and numeric utility functions.
 class MathUtils {
-  static const MIN_VALUE = -2147483648;
-  static const MAX_VALUE = 2147483647;
+  static const minValue = -2147483648;
+  static const maxValue = 2147483647;
 
   MathUtils();
 
@@ -34,9 +34,9 @@ class MathUtils {
     if (d.isNaN) return 0;
     if (d.isInfinite) {
       if (d.sign == 1) {
-        return MAX_VALUE;
+        return maxValue;
       } else {
-        return MIN_VALUE;
+        return minValue;
       }
     }
     return (d + (d < 0.0 ? -0.5 : 0.5)).toInt();

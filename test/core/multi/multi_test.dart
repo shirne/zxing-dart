@@ -45,9 +45,9 @@ void main() {
     expect(results.length, 2);
 
     expect('031415926531', results[0].text);
-    expect(BarcodeFormat.UPC_A, results[0].barcodeFormat);
+    expect(BarcodeFormat.upcA, results[0].barcodeFormat);
 
     expect('www.airtable.com/jobs', results[1].text);
-    expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
+    expect(BarcodeFormat.qrCode, results[1].barcodeFormat);
   });
 }

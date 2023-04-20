@@ -23,26 +23,26 @@ import '../pdf417_common.dart';
 class PDF417CodewordDecoder {
   static bool _isInit = false;
   static final List<List<double>> _ratiosTable = List.generate(
-    PDF417Common.SYMBOL_TABLE.length,
-    (index) => List.filled(PDF417Common.BARS_IN_MODULE, 0),
+    PDF417Common.symbolTable.length,
+    (index) => List.filled(PDF417Common.barsInModule, 0),
   );
 
   static void init() {
     if (_isInit) return;
     _isInit = true;
     // Pre-computes the symbol ratio table.
-    for (int i = 0; i < PDF417Common.SYMBOL_TABLE.length; i++) {
-      int currentSymbol = PDF417Common.SYMBOL_TABLE[i];
+    for (int i = 0; i < PDF417Common.symbolTable.length; i++) {
+      int currentSymbol = PDF417Common.symbolTable[i];
       int currentBit = currentSymbol & 0x1;
-      for (int j = 0; j < PDF417Common.BARS_IN_MODULE; j++) {
+      for (int j = 0; j < PDF417Common.barsInModule; j++) {
         double size = 0.0;
         while ((currentSymbol & 0x1) == currentBit) {
           size += 1.0;
           currentSymbol >>= 1;
         }
         currentBit = currentSymbol & 0x1;
-        _ratiosTable[i][PDF417Common.BARS_IN_MODULE - j - 1] =
-            size / PDF417Common.MODULES_IN_CODEWORD;
+        _ratiosTable[i][PDF417Common.barsInModule - j - 1] =
+            size / PDF417Common.modulesInCodeword;
       }
     }
   }
@@ -60,12 +60,12 @@ class PDF417CodewordDecoder {
 
   static List<int> _sampleBitCounts(List<int> moduleBitCount) {
     final bitCountSum = MathUtils.sum(moduleBitCount).toDouble();
-    final result = List.filled(PDF417Common.BARS_IN_MODULE, 0);
+    final result = List.filled(PDF417Common.barsInModule, 0);
     int bitCountIndex = 0;
     int sumPreviousBits = 0;
-    for (int i = 0; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
-      final sampleIndex = bitCountSum / (2 * PDF417Common.MODULES_IN_CODEWORD) +
-          (i * bitCountSum) / PDF417Common.MODULES_IN_CODEWORD;
+    for (int i = 0; i < PDF417Common.modulesInCodeword; i++) {
+      final sampleIndex = bitCountSum / (2 * PDF417Common.modulesInCodeword) +
+          (i * bitCountSum) / PDF417Common.modulesInCodeword;
       if (sumPreviousBits + moduleBitCount[bitCountIndex] <= sampleIndex) {
         sumPreviousBits += moduleBitCount[bitCountIndex];
         bitCountIndex++;
@@ -93,7 +93,7 @@ class PDF417CodewordDecoder {
   static int _getClosestDecodedValue(List<int> moduleBitCount) {
     init();
     final bitCountSum = MathUtils.sum(moduleBitCount);
-    final bitCountRatios = List.filled(PDF417Common.BARS_IN_MODULE, 0.0);
+    final bitCountRatios = List.filled(PDF417Common.barsInModule, 0.0);
     if (bitCountSum > 1) {
       for (int i = 0; i < bitCountRatios.length; i++) {
         bitCountRatios[i] = moduleBitCount[i] / bitCountSum;
@@ -104,7 +104,7 @@ class PDF417CodewordDecoder {
     for (int j = 0; j < _ratiosTable.length; j++) {
       double error = 0.0;
       final ratioTableRow = _ratiosTable[j];
-      for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
+      for (int k = 0; k < PDF417Common.barsInModule; k++) {
         final diff = ratioTableRow[k] - bitCountRatios[k];
         error += diff * diff;
         if (error >= bestMatchError) {
@@ -114,7 +114,7 @@ class PDF417CodewordDecoder {
       // todo the compare may be different with java
       if (error < bestMatchError) {
         bestMatchError = error;
-        bestMatch = PDF417Common.SYMBOL_TABLE[j];
+        bestMatch = PDF417Common.symbolTable[j];
       }
     }
     return bestMatch;

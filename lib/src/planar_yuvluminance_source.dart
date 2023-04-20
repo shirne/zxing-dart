@@ -27,7 +27,7 @@ import 'luminance_source.dart';
 ///
 /// @author dswitkin@google.com (Daniel Switkin)
 class PlanarYUVLuminanceSource extends LuminanceSource {
-  static const int _THUMBNAIL_SCALE_FACTOR = 2;
+  static const int _thumbnailScaleFactor = 2;
 
   final Uint8List _yuvData;
   final int _dataWidth;
@@ -122,8 +122,8 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
   }
 
   List<int> renderThumbnail() {
-    final tWidth = width ~/ _THUMBNAIL_SCALE_FACTOR;
-    final tHeight = height ~/ _THUMBNAIL_SCALE_FACTOR;
+    final tWidth = width ~/ _thumbnailScaleFactor;
+    final tHeight = height ~/ _thumbnailScaleFactor;
     final pixels = List.filled(tWidth * tHeight, 0);
     final yuv = _yuvData;
     int inputOffset = _top * _dataWidth + _left;
@@ -131,19 +131,19 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     for (int y = 0; y < tHeight; y++) {
       final outputOffset = y * tWidth;
       for (int x = 0; x < tWidth; x++) {
-        final grey = yuv[inputOffset + x * _THUMBNAIL_SCALE_FACTOR];
+        final grey = yuv[inputOffset + x * _thumbnailScaleFactor];
         pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
       }
-      inputOffset += _dataWidth * _THUMBNAIL_SCALE_FACTOR;
+      inputOffset += _dataWidth * _thumbnailScaleFactor;
     }
     return pixels;
   }
 
   /// @return width of image from [renderThumbnail]
-  int get thumbnailWidth => width ~/ _THUMBNAIL_SCALE_FACTOR;
+  int get thumbnailWidth => width ~/ _thumbnailScaleFactor;
 
   /// @return height of image from [renderThumbnail]
-  int get getThumbnailHeight => height ~/ _THUMBNAIL_SCALE_FACTOR;
+  int get getThumbnailHeight => height ~/ _thumbnailScaleFactor;
 
   void _reverseHorizontal(int width, int height) {
     final yuvData = _yuvData;

@@ -28,10 +28,10 @@ class ProductResultParser extends ResultParser {
   @override
   ProductParsedResult? parse(Result result) {
     final format = result.barcodeFormat;
-    if (!(format == BarcodeFormat.UPC_A ||
-        format == BarcodeFormat.UPC_E ||
-        format == BarcodeFormat.EAN_8 ||
-        format == BarcodeFormat.EAN_13)) {
+    if (!(format == BarcodeFormat.upcA ||
+        format == BarcodeFormat.upcE ||
+        format == BarcodeFormat.ean8 ||
+        format == BarcodeFormat.ean13)) {
       return null;
     }
     final rawText = ResultParser.getMassagedText(result);
@@ -42,7 +42,7 @@ class ProductResultParser extends ResultParser {
 
     String normalizedProductID;
     // Expand UPC-E for purposes of searching
-    if (format == BarcodeFormat.UPC_E && rawText.length == 8) {
+    if (format == BarcodeFormat.upcE && rawText.length == 8) {
       normalizedProductID = UPCEReader.convertUPCEtoUPCA(rawText);
     } else {
       normalizedProductID = rawText;

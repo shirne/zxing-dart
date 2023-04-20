@@ -26,7 +26,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/qrcode-6',
       MultiFormatReader(),
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
     )
       ..addTest(15, 15, 0.0)
       ..addTest(14, 14, 90.0)

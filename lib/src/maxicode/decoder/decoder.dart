@@ -33,9 +33,9 @@ import 'decoded_bit_stream_parser.dart';
 ///
 /// @author Manuel Kasten
 class Decoder {
-  static const int _ALL = 0;
-  static const int _EVEN = 1;
-  static const int _ODD = 2;
+  static const int _all = 0;
+  static const int _even = 1;
+  static const int _odd = 2;
 
   final ReedSolomonDecoder _rsDecoder;
 
@@ -45,20 +45,20 @@ class Decoder {
     final parser = BitMatrixParser(bits);
     final codewords = parser.readCodewords();
 
-    _correctErrors(codewords, 0, 10, 10, _ALL);
+    _correctErrors(codewords, 0, 10, 10, _all);
     final mode = codewords[0] & 0x0F;
     late Uint8List datawords;
     switch (mode) {
       case 2:
       case 3:
       case 4:
-        _correctErrors(codewords, 20, 84, 40, _EVEN);
-        _correctErrors(codewords, 20, 84, 40, _ODD);
+        _correctErrors(codewords, 20, 84, 40, _even);
+        _correctErrors(codewords, 20, 84, 40, _odd);
         datawords = Uint8List(94);
         break;
       case 5:
-        _correctErrors(codewords, 20, 68, 56, _EVEN);
-        _correctErrors(codewords, 20, 68, 56, _ODD);
+        _correctErrors(codewords, 20, 68, 56, _even);
+        _correctErrors(codewords, 20, 68, 56, _odd);
         datawords = Uint8List(78);
         break;
       default:
@@ -81,12 +81,12 @@ class Decoder {
     final codewords = dataCodewords + ecCodewords;
 
     // in EVEN or ODD mode only half the codewords
-    final divisor = mode == _ALL ? 1 : 2;
+    final divisor = mode == _all ? 1 : 2;
 
     // First read into an array of ints
     final codewordsInts = Int32List(codewords ~/ divisor);
     for (int i = 0; i < codewords; i++) {
-      if ((mode == _ALL) || (i % 2 == (mode - 1))) {
+      if ((mode == _all) || (i % 2 == (mode - 1))) {
         codewordsInts[i ~/ divisor] = codewordBytes[i + start];
       }
     }
@@ -98,7 +98,7 @@ class Decoder {
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords
     for (int i = 0; i < dataCodewords; i++) {
-      if ((mode == _ALL) || (i % 2 == (mode - 1))) {
+      if ((mode == _all) || (i % 2 == (mode - 1))) {
         codewordBytes[i + start] = codewordsInts[i ~/ divisor];
       }
     }

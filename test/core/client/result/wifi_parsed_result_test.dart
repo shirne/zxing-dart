@@ -24,11 +24,11 @@ import 'package:zxing_lib/zxing.dart';
 void main() {
   /// Given the string contents for the barcode, check that it matches our expectations
   void doTest(String contents, String ssid, String? password, String type) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.qrCode);
     final result = ResultParser.parseResult(fakeResult);
 
     // Ensure it is a wifi code
-    expect(ParsedResultType.WIFI, result.type);
+    expect(ParsedResultType.wifi, result.type);
     final wifiResult = result as WifiParsedResult;
 
     expect(ssid, wifiResult.ssid);

@@ -38,21 +38,21 @@ void main() {
     expect(-3, MathUtils.round(-2.5)); // This differs from Math.round()
 
     expect(
-      MathUtils.MAX_VALUE,
-      MathUtils.round(MathUtils.MAX_VALUE.toDouble()),
+      MathUtils.maxValue,
+      MathUtils.round(MathUtils.maxValue.toDouble()),
     );
     expect(
-      MathUtils.MIN_VALUE,
-      MathUtils.round(MathUtils.MIN_VALUE.toDouble()),
+      MathUtils.minValue,
+      MathUtils.round(MathUtils.minValue.toDouble()),
     );
 
     // todo ??
     expect(
-      MathUtils.MAX_VALUE,
+      MathUtils.maxValue,
       MathUtils.round(double.infinity),
     ); //Float.POSITIVE_INFINITY
     expect(
-      MathUtils.MIN_VALUE,
+      MathUtils.minValue,
       MathUtils.round(double.negativeInfinity),
     ); //Float.NEGATIVE_INFINITY
 

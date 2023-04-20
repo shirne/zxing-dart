@@ -35,13 +35,13 @@ import 'one_dreader.dart';
 ///
 /// @author Sean Owen
 class Code39Reader extends OneDReader {
-  static const String ALPHABET_STRING =
+  static const String alphabetString =
       r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%';
 
   /// These represent the encodings of characters, as patterns of wide and narrow bars.
   /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
   /// with 1s representing "wide" and 0s representing narrow.
-  static const List<int> CHARACTER_ENCODINGS = [
+  static const List<int> characterEnncodings = [
     0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
     0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
     0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -49,7 +49,7 @@ class Code39Reader extends OneDReader {
     0x0A2, 0x08A, 0x02A // /-%
   ];
 
-  static const int ASTERISK_ENCODING = 0x094;
+  static const int asteriskEncoding = 0x094;
 
   final bool _usingCheckDigit;
   final bool _extendedMode;
@@ -120,9 +120,9 @@ class Code39Reader extends OneDReader {
       final max = result.length - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(_decodeRowResult.charAt(i));
+        total += alphabetString.indexOf(_decodeRowResult.charAt(i));
       }
-      if (result.codePointAt(max) != ALPHABET_STRING.codeUnitAt(total % 43)) {
+      if (result.codePointAt(max) != alphabetString.codeUnitAt(total % 43)) {
         throw ChecksumException.getChecksumInstance();
       }
       result.setLength(max);
@@ -150,9 +150,9 @@ class Code39Reader extends OneDReader {
         ResultPoint(left, rowNumber.toDouble()),
         ResultPoint(right, rowNumber.toDouble())
       ],
-      BarcodeFormat.CODE_39,
+      BarcodeFormat.code39,
     );
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']A0');
+    resultObject.putMetadata(ResultMetadataType.symbologyIdentifier, ']A0');
     return resultObject;
   }
 
@@ -171,7 +171,7 @@ class Code39Reader extends OneDReader {
       } else {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
-          if (_toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
+          if (_toNarrowWidePattern(counters) == asteriskEncoding &&
               row.isRange(
                 math.max(0, patternStart - ((i - patternStart) ~/ 2)),
                 patternStart,
@@ -201,7 +201,7 @@ class Code39Reader extends OneDReader {
     int maxNarrowCounter = 0;
     int wideCounters;
     do {
-      int minCounter = MathUtils.MAX_VALUE;
+      int minCounter = MathUtils.maxValue;
       for (int counter in counters) {
         if (counter < minCounter && counter > maxNarrowCounter) {
           minCounter = counter;
@@ -240,12 +240,12 @@ class Code39Reader extends OneDReader {
   }
 
   static String _patternToChar(int pattern) {
-    for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
-      if (CHARACTER_ENCODINGS[i] == pattern) {
-        return ALPHABET_STRING[i];
+    for (int i = 0; i < characterEnncodings.length; i++) {
+      if (characterEnncodings[i] == pattern) {
+        return alphabetString[i];
       }
     }
-    if (pattern == ASTERISK_ENCODING) {
+    if (pattern == asteriskEncoding) {
       return '*';
     }
     throw NotFoundException.instance;

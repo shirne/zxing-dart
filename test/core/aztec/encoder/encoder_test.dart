@@ -47,7 +47,7 @@ void main() {
   }
 
   void testEncode(String data, bool compact, int layers, String expected) {
-    final aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
+    final aztec = Encoder.encode(data, 33, Encoder.defaultAztecLayers);
     expect(
       aztec.isCompact,
       compact,
@@ -60,7 +60,7 @@ void main() {
 
   void testEncodeDecode(String data, bool compact, int layers) {
     final AztecCode aztec =
-        Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
+        Encoder.encode(data, 25, Encoder.defaultAztecLayers);
     expect(
       aztec.isCompact,
       compact,
@@ -113,14 +113,14 @@ void main() {
     // Perform an encode-decode round-trip because it can be lossy.
     final Map<EncodeHintType, Object> hints = {};
     if (null != charset) {
-      hints[EncodeHintType.CHARACTER_SET] = charset.name;
+      hints[EncodeHintType.characterSet] = charset.name;
     }
-    hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
+    hints[EncodeHintType.errorCorrection] = eccPercent;
     final AztecWriter writer = AztecWriter();
     final BitMatrix matrix =
-        writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
+        writer.encode(data, BarcodeFormat.aztec, 0, 0, hints);
     final AztecCode aztec =
-        Encoder.encode(data, eccPercent, Encoder.DEFAULT_AZTEC_LAYERS, charset);
+        Encoder.encode(data, eccPercent, Encoder.defaultAztecLayers, charset);
     expect(
       aztec.isCompact,
       compact,
@@ -337,11 +337,11 @@ void main() {
     // Test AztecWriter defaults
     final String data = 'In ut magna vel mauris malesuada';
     final AztecWriter writer = AztecWriter();
-    final BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+    final BitMatrix matrix = writer.encode(data, BarcodeFormat.aztec, 0, 0);
     final AztecCode aztec = Encoder.encode(
       data,
-      Encoder.DEFAULT_EC_PERCENT,
-      Encoder.DEFAULT_AZTEC_LAYERS,
+      Encoder.defaultEcPercent,
+      Encoder.defaultAztecLayers,
     );
     final BitMatrix expectedMatrix = aztec.matrix!;
     expect(matrix, expectedMatrix);
@@ -731,7 +731,7 @@ void main() {
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode =
-        Encoder.encode(alphabet4, 0, Encoder.DEFAULT_AZTEC_LAYERS);
+        Encoder.encode(alphabet4, 0, Encoder.defaultAztecLayers);
     assert(!aztecCode.isCompact);
     expect(aztecCode.layers, 4);
 
@@ -740,7 +740,7 @@ void main() {
     aztecCode = Encoder.encode(
       alphabet4.substring(0, 100),
       10,
-      Encoder.DEFAULT_AZTEC_LAYERS,
+      Encoder.defaultAztecLayers,
     );
     assert(aztecCode.isCompact);
     expect(aztecCode.layers, 4);

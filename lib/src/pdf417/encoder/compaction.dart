@@ -15,4 +15,9 @@
  */
 
 /// Represents possible PDF417 barcode compaction types.
-enum Compaction { AUTO, TEXT, BYTE, NUMERIC }
+enum Compaction {
+  auto,
+  text,
+  byte,
+  numeric,
+}

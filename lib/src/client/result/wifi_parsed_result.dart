@@ -39,7 +39,7 @@ class WifiParsedResult extends ParsedResult {
     this.anonymousIdentity,
     this.eapMethod,
     this.phase2Method,
-  ]) : super(ParsedResultType.WIFI);
+  ]) : super(ParsedResultType.wifi);
 
   @override
   String get displayResult {

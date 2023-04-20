@@ -32,7 +32,7 @@ import 'detector/detector.dart';
 ///
 /// @author bbrown@google.com (Brian Brown)
 class DataMatrixReader implements Reader {
-  static const List<ResultPoint> _NO_POINTS = [];
+  static const List<ResultPoint> _noPoints = [];
 
   final Decoder _decoder = Decoder();
 
@@ -40,10 +40,10 @@ class DataMatrixReader implements Reader {
   Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
     DecoderResult decoderResult;
     List<ResultPoint> points;
-    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+    if (hints != null && hints.containsKey(DecodeHintType.pureBarcode)) {
       final bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits);
-      points = _NO_POINTS;
+      points = _noPoints;
     } else {
       final detectorResult = Detector(image.blackMatrix).detect();
       decoderResult = _decoder.decodeMatrix(detectorResult.bits);
@@ -53,18 +53,18 @@ class DataMatrixReader implements Reader {
       decoderResult.text,
       decoderResult.rawBytes,
       points,
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
     );
     final byteSegments = decoderResult.byteSegments;
     if (byteSegments != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
+      result.putMetadata(ResultMetadataType.byteSegments, byteSegments);
     }
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
+      result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
     result.putMetadata(
-      ResultMetadataType.SYMBOLOGY_IDENTIFIER,
+      ResultMetadataType.symbologyIdentifier,
       ']d${decoderResult.symbologyModifier}',
     );
     return result;

@@ -23,7 +23,7 @@ import 'detection_result_row_indicator_column.dart';
 
 /// @author Guenther Grau
 class DetectionResult {
-  static const int _ADJUST_ROW_NUMBER_SKIP = 2;
+  static const int _adjustRowNumberSkip = 2;
 
   final BarcodeMetadata _barcodeMetadata;
   final List<DetectionResultColumn?> _detectionResultColumns;
@@ -40,7 +40,7 @@ class DetectionResult {
     _adjustIndicatorColumnRowNumbers(
       _detectionResultColumns[_barcodeColumnCount + 1],
     );
-    int unadjustedCodewordCount = PDF417Common.MAX_CODEWORDS_IN_BARCODE;
+    int unadjustedCodewordCount = PDF417Common.maxCodewordsInBarcode;
     int previousUnadjustedCount;
     do {
       previousUnadjustedCount = unadjustedCodewordCount;
@@ -146,7 +146,7 @@ class DetectionResult {
       final rowIndicatorRowNumber = codewords[codewordsRow]!.rowNumber;
       int invalidRowCounts = 0;
       for (int barcodeColumn = _barcodeColumnCount + 1;
-          barcodeColumn > 0 && invalidRowCounts < _ADJUST_ROW_NUMBER_SKIP;
+          barcodeColumn > 0 && invalidRowCounts < _adjustRowNumberSkip;
           barcodeColumn--) {
         final codeword =
             _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];
@@ -181,7 +181,7 @@ class DetectionResult {
       int invalidRowCounts = 0;
       for (int barcodeColumn = 1;
           barcodeColumn < _barcodeColumnCount + 1 &&
-              invalidRowCounts < _ADJUST_ROW_NUMBER_SKIP;
+              invalidRowCounts < _adjustRowNumberSkip;
           barcodeColumn++) {
         final codeword =
             _detectionResultColumns[barcodeColumn]!.codewords[codewordsRow];

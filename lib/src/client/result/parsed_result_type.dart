@@ -19,16 +19,16 @@
 ///
 /// @author Sean Owen
 enum ParsedResultType {
-  ADDRESS_BOOK,
-  EMAIL_ADDRESS,
-  PRODUCT,
-  URI,
-  TEXT,
-  GEO,
-  TEL,
-  SMS,
-  CALENDAR,
-  WIFI,
-  ISBN,
-  VIN,
+  addressBook,
+  emailAddress,
+  product,
+  uri,
+  text,
+  geo,
+  tel,
+  sms,
+  calendar,
+  wifi,
+  isbn,
+  vin,
 }

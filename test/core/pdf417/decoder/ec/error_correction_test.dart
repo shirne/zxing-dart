@@ -22,13 +22,13 @@ import 'package:zxing_lib/zxing.dart';
 import 'abstract_error_correction.dart';
 
 void main() {
-  const List<int> PDF417_TEST = [
+  const List<int> pdf417Test = [
     48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, //
     895, 913, 154, 845, 778, 387, 89, 869, 901, 219, 474, 543, 650, 169, 201,
     9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
     900, 900, 900
   ];
-  const List<int> PDF417_TEST_WITH_EC = [
+  const List<int> pdf417TestWithEc = [
     48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, //
     895, 913, 154, 845, 778, 387, 89, 869, 901, 219, 474, 543, 650, 169, 201,
     9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
@@ -38,7 +38,7 @@ void main() {
     536, 322, 317, 273, 194, 917, 237, 420, 859, 340, 115, 222, 808, 866, 836,
     417, 121, 833, 459, 64, 159
   ];
-  final int eccBytes = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
+  final int eccBytes = pdf417TestWithEc.length - pdf417Test.length;
   final int errorLimit = eccBytes;
   final int maxErrors = errorLimit ~/ 2;
   //final int maxErasures = errorLimit;
@@ -47,21 +47,21 @@ void main() {
 
   void checkDecode(List<int> received, [List<int> erasures = const []]) {
     ec.decode(received, eccBytes, erasures);
-    for (int i = 0; i < PDF417_TEST.length; i++) {
-      expect(received[i], PDF417_TEST[i]);
+    for (int i = 0; i < pdf417Test.length; i++) {
+      expect(received[i], pdf417Test[i]);
     }
   }
 
   test('testNoError', () {
-    final received = PDF417_TEST_WITH_EC.toList();
+    final received = pdf417TestWithEc.toList();
     // no errors
     checkDecode(received);
   });
 
   test('testOneError', () {
     final random = AbstractErrorCorrectionTestCase.getRandom();
-    for (int i = 0; i < PDF417_TEST_WITH_EC.length; i++) {
-      final received = PDF417_TEST_WITH_EC.toList();
+    for (int i = 0; i < pdf417TestWithEc.length; i++) {
+      final received = pdf417TestWithEc.toList();
       received[i] = random.nextInt(256);
       checkDecode(received);
     }
@@ -71,14 +71,14 @@ void main() {
     final random = AbstractErrorCorrectionTestCase.getRandom();
     for (int testIterations = 0; testIterations < 100; testIterations++) {
       // # iterations is kind of arbitrary
-      final received = PDF417_TEST_WITH_EC.toList();
+      final received = pdf417TestWithEc.toList();
       AbstractErrorCorrectionTestCase.corrupt(received, maxErrors, random);
       checkDecode(received);
     }
   });
 
   test('testTooManyErrors', () {
-    final received = PDF417_TEST_WITH_EC.toList();
+    final received = pdf417TestWithEc.toList();
     final random = AbstractErrorCorrectionTestCase.getRandom();
     AbstractErrorCorrectionTestCase.corrupt(received, maxErrors + 1, random);
     expect(

@@ -23,9 +23,9 @@ import 'package:zxing_lib/zxing.dart';
 ///
 void main() {
   void doTest(String contents, String number, String? title) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.qrCode);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEL, result.type);
+    expect(ParsedResultType.tel, result.type);
     final telResult = result as TelParsedResult;
     expect(number, telResult.number);
     expect(title, telResult.title);

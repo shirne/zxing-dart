@@ -24,7 +24,7 @@ import 'upceanreader.dart';
 
 /// See [UPCEANExtension2Support]
 class UPCEANExtension5Support {
-  static const List<int> _CHECK_DIGIT_ENCODINGS = [
+  static const List<int> _checkDigitEncodings = [
     0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05 //
   ];
 
@@ -49,7 +49,7 @@ class UPCEANExtension5Support {
         ),
         ResultPoint(end.toDouble(), rowNumber.toDouble()),
       ],
-      BarcodeFormat.UPC_EAN_EXTENSION,
+      BarcodeFormat.upcEanExtension,
     );
     if (extensionData != null) {
       extensionResult.putAllMetadata(extensionData);
@@ -118,7 +118,7 @@ class UPCEANExtension5Support {
 
   static int _determineCheckDigit(int lgPatternFound) {
     for (int d = 0; d < 10; d++) {
-      if (lgPatternFound == _CHECK_DIGIT_ENCODINGS[d]) {
+      if (lgPatternFound == _checkDigitEncodings[d]) {
         return d;
       }
     }
@@ -137,7 +137,7 @@ class UPCEANExtension5Support {
       return null;
     }
     final result = <ResultMetadataType, Object>{};
-    result[ResultMetadataType.SUGGESTED_PRICE] = value;
+    result[ResultMetadataType.suggestedPrice] = value;
     return result;
   }
 

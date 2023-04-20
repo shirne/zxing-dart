@@ -37,11 +37,11 @@ import 'pdf417_codeword_decoder.dart';
 
 /// @author Guenther Grau
 class PDF417ScanningDecoder {
-  static const int _CODEWORD_SKEW_SIZE = 2;
+  static const int _codewordSkewSize = 2;
 
-  static const int _MAX_ERRORS = 3;
-  static const int _MAX_EC_CODEWORDS = 512;
-  static final ErrorCorrection errorCorrection = ErrorCorrection();
+  static const int _maxErrors = 3;
+  static const int _maxEcCodewords = 512;
+  static final errorCorrection = ErrorCorrection();
 
   PDF417ScanningDecoder._();
 
@@ -315,13 +315,13 @@ class PDF417ScanningDecoder {
             _getNumberOfECCodeWords(detectionResult.barcodeECLevel);
     if (numberOfCodewords.isEmpty) {
       if (calculatedNumberOfCodewords < 1 ||
-          calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
+          calculatedNumberOfCodewords > PDF417Common.maxCodewordsInBarcode) {
         throw NotFoundException.instance;
       }
       barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     } else if (numberOfCodewords[0] != calculatedNumberOfCodewords &&
         calculatedNumberOfCodewords >= 1 &&
-        calculatedNumberOfCodewords <= PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
+        calculatedNumberOfCodewords <= PDF417Common.maxCodewordsInBarcode) {
       // The calculated one is more reliable as it is derived from the row indicator columns
       barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     }
@@ -645,7 +645,7 @@ class PDF417ScanningDecoder {
               : correctedStartColumn < maxColumn) &&
           leftToRight == image.get(correctedStartColumn, imageRow)) {
         if ((codewordStartColumn - correctedStartColumn).abs() >
-            _CODEWORD_SKEW_SIZE) {
+            _codewordSkewSize) {
           return codewordStartColumn;
         }
         correctedStartColumn += increment;
@@ -661,8 +661,8 @@ class PDF417ScanningDecoder {
     int minCodewordWidth,
     int maxCodewordWidth,
   ) {
-    return minCodewordWidth - _CODEWORD_SKEW_SIZE <= codewordSize &&
-        codewordSize <= maxCodewordWidth + _CODEWORD_SKEW_SIZE;
+    return minCodewordWidth - _codewordSkewSize <= codewordSize &&
+        codewordSize <= maxCodewordWidth + _codewordSkewSize;
   }
 
   static DecoderResult _decodeCodewords(
@@ -700,9 +700,9 @@ class PDF417ScanningDecoder {
     int numECCodewords,
   ) {
     if (erasures != null &&
-            erasures.length > numECCodewords ~/ 2 + _MAX_ERRORS ||
+            erasures.length > numECCodewords ~/ 2 + _maxErrors ||
         numECCodewords < 0 ||
-        numECCodewords > _MAX_EC_CODEWORDS) {
+        numECCodewords > _maxEcCodewords) {
       // Too many errors or EC Codewords is corrupted
       throw ChecksumException.getChecksumInstance();
     }

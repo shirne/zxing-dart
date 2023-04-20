@@ -23,7 +23,7 @@ import '../../common/minimal_eci_input.dart';
 import 'high_level_encoder.dart';
 import 'symbol_shape_hint.dart';
 
-enum Mode { ASCII, C40, TEXT, X12, EDF, B256 }
+enum Mode { ascii, c40, text, x12, edf, b256 }
 
 class Edge {
   /* private */ static final List<int> allCodewordCapacities = [
@@ -72,7 +72,7 @@ class Edge {
     * B256 -> ASCII: without latch after n bytes
     */
     switch (mode) {
-      case Mode.ASCII:
+      case Mode.ascii:
         size++;
         if (input.isECI(fromPosition) ||
             MinimalEncoder.isExtendedASCII(
@@ -81,59 +81,59 @@ class Edge {
             )) {
           size++;
         }
-        if (previousMode == Mode.C40 ||
-            previousMode == Mode.TEXT ||
-            previousMode == Mode.X12) {
+        if (previousMode == Mode.c40 ||
+            previousMode == Mode.text ||
+            previousMode == Mode.x12) {
           size++; //unatch 254 to ASCII
         }
         break;
-      case Mode.B256:
+      case Mode.b256:
         size++;
-        if (previousMode != Mode.B256) {
+        if (previousMode != Mode.b256) {
           size++; //byte count
         } else if (getB256Size() == 250) {
           size++; //extra byte count
         }
-        if (previousMode == Mode.ASCII) {
+        if (previousMode == Mode.ascii) {
           size++; //latch to B256
-        } else if (previousMode == Mode.C40 ||
-            previousMode == Mode.TEXT ||
-            previousMode == Mode.X12) {
+        } else if (previousMode == Mode.c40 ||
+            previousMode == Mode.text ||
+            previousMode == Mode.x12) {
           size += 2; //unlatch to ASCII, latch to B256
         }
         break;
-      case Mode.C40:
-      case Mode.TEXT:
-      case Mode.X12:
-        if (mode == Mode.X12) {
+      case Mode.c40:
+      case Mode.text:
+      case Mode.x12:
+        if (mode == Mode.x12) {
           size += 2;
         } else {
           final charLen = [0];
           size += MinimalEncoder.getNumberOfC40Words(
                 input,
                 fromPosition,
-                mode == Mode.C40,
+                mode == Mode.c40,
                 charLen,
               ) *
               2;
         }
 
-        if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
+        if (previousMode == Mode.ascii || previousMode == Mode.b256) {
           size++; //additional byte for latch from ASCII to this mode
         } else if (previousMode != mode &&
-            (previousMode == Mode.C40 ||
-                previousMode == Mode.TEXT ||
-                previousMode == Mode.X12)) {
+            (previousMode == Mode.c40 ||
+                previousMode == Mode.text ||
+                previousMode == Mode.x12)) {
           size += 2; //unlatch 254 to ASCII followed by latch to this mode
         }
         break;
-      case Mode.EDF:
+      case Mode.edf:
         size += 3;
-        if (previousMode == Mode.ASCII || previousMode == Mode.B256) {
+        if (previousMode == Mode.ascii || previousMode == Mode.b256) {
           size++; //additional byte for latch from ASCII to this mode
-        } else if (previousMode == Mode.C40 ||
-            previousMode == Mode.TEXT ||
-            previousMode == Mode.X12) {
+        } else if (previousMode == Mode.c40 ||
+            previousMode == Mode.text ||
+            previousMode == Mode.x12) {
           size += 2; //unlatch 254 to ASCII followed by latch to this mode
         }
         break;
@@ -145,7 +145,7 @@ class Edge {
   int getB256Size() {
     int cnt = 0;
     Edge? current = this;
-    while (current != null && current.mode == Mode.B256 && cnt <= 250) {
+    while (current != null && current.mode == Mode.b256 && cnt <= 250) {
       cnt++;
       current = current.previous;
     }
@@ -153,11 +153,11 @@ class Edge {
   }
 
   Mode get previousStartMode {
-    return previous?.mode ?? Mode.ASCII;
+    return previous?.mode ?? Mode.ascii;
   }
 
   Mode get previousMode {
-    return previous?.endMode ?? Mode.ASCII;
+    return previous?.endMode ?? Mode.ascii;
   }
 
   /// Returns Mode.ASCII in case that:
@@ -166,25 +166,25 @@ class Edge {
   /// - Mode is C40, TEXT or X12 and the remaining characters can be encoded in at most 1 ASCII byte.
   /// Returns mode in all other cases.
   Mode get endMode {
-    if (mode == Mode.EDF) {
+    if (mode == Mode.edf) {
       if (characterLength < 4) {
-        return Mode.ASCII;
+        return Mode.ascii;
       }
       final lastASCII = getLastASCII(); // see 5.2.8.2 EDIFACT encodation Rules
       if (lastASCII > 0 &&
           getCodewordsRemaining(cachedTotalSize + lastASCII) <= 2 - lastASCII) {
-        return Mode.ASCII;
+        return Mode.ascii;
       }
     }
-    if (mode == Mode.C40 || mode == Mode.TEXT || mode == Mode.X12) {
+    if (mode == Mode.c40 || mode == Mode.text || mode == Mode.x12) {
       // see 5.2.5.2 C40 encodation rules and 5.2.7.2 ANSI X12 encodation rules
       if (fromPosition + characterLength >= input.length &&
           getCodewordsRemaining(cachedTotalSize) == 0) {
-        return Mode.ASCII;
+        return Mode.ascii;
       }
       final lastASCII = getLastASCII();
       if (lastASCII == 1 && getCodewordsRemaining(cachedTotalSize + 1) == 0) {
-        return Mode.ASCII;
+        return Mode.ascii;
       }
     }
     return mode;
@@ -261,21 +261,21 @@ class Edge {
   /// number of codewords.
   int getMinSymbolSize(int minimum) {
     switch (input.shapeHint) {
-      case SymbolShapeHint.FORCE_SQUARE:
+      case SymbolShapeHint.forceSquare:
         for (int capacity in squareCodewordCapacities) {
           if (capacity >= minimum) {
             return capacity;
           }
         }
         break;
-      case SymbolShapeHint.FORCE_RECTANGLE:
+      case SymbolShapeHint.forceRectangle:
         for (int capacity in rectangularCodewordCapacities) {
           if (capacity >= minimum) {
             return capacity;
           }
         }
         break;
-      case SymbolShapeHint.FORCE_NONE:
+      case SymbolShapeHint.forceNone:
         break;
     }
     for (int capacity in allCodewordCapacities) {
@@ -487,46 +487,46 @@ class Edge {
 
   Uint8List getLatchBytes() {
     switch (previousMode) {
-      case Mode.ASCII:
-      case Mode.B256: //after B256 ends (via length) we are back to ASCII
+      case Mode.ascii:
+      case Mode.b256: //after B256 ends (via length) we are back to ASCII
         switch (mode) {
-          case Mode.B256:
+          case Mode.b256:
             return getBytes(231);
-          case Mode.C40:
+          case Mode.c40:
             return getBytes(230);
-          case Mode.TEXT:
+          case Mode.text:
             return getBytes(239);
-          case Mode.X12:
+          case Mode.x12:
             return getBytes(238);
-          case Mode.EDF:
+          case Mode.edf:
             return getBytes(240);
-          case Mode.ASCII:
+          case Mode.ascii:
             break;
         }
         break;
-      case Mode.C40:
-      case Mode.TEXT:
-      case Mode.X12:
+      case Mode.c40:
+      case Mode.text:
+      case Mode.x12:
         if (mode != previousMode) {
           switch (mode) {
-            case Mode.ASCII:
+            case Mode.ascii:
               return getBytes(254);
-            case Mode.B256:
+            case Mode.b256:
               return getBytes(254, 231);
-            case Mode.C40:
+            case Mode.c40:
               return getBytes(254, 230);
-            case Mode.TEXT:
+            case Mode.text:
               return getBytes(254, 239);
-            case Mode.X12:
+            case Mode.x12:
               return getBytes(254, 238);
-            case Mode.EDF:
+            case Mode.edf:
               return getBytes(254, 240);
           }
         }
         break;
-      case Mode.EDF:
+      case Mode.edf:
         //The rightmost EDIFACT edge always contains an unlatch character
-        assert(mode == Mode.EDF);
+        assert(mode == Mode.edf);
         break;
     }
     return Uint8List(0);
@@ -535,7 +535,7 @@ class Edge {
   // Important: The function does not return the length bytes (one or two) in case of B256 encoding
   Uint8List getDataBytes() {
     switch (mode) {
-      case Mode.ASCII:
+      case Mode.ascii:
         if (input.isECI(fromPosition)) {
           return getBytes(241, input.getECIValue(fromPosition) + 1);
         } else if (MinimalEncoder.isExtendedASCII(
@@ -555,15 +555,15 @@ class Edge {
         } else {
           return getBytes(input.charAt(fromPosition) + 1);
         }
-      case Mode.B256:
+      case Mode.b256:
         return getBytes(input.charAt(fromPosition));
-      case Mode.C40:
+      case Mode.c40:
         return getC40Words(true, input.fnc1Character);
-      case Mode.TEXT:
+      case Mode.text:
         return getC40Words(false, input.fnc1Character);
-      case Mode.X12:
+      case Mode.x12:
         return getX12Words();
-      case Mode.EDF:
+      case Mode.edf:
         return getEDFBytes();
     }
   }
@@ -578,10 +578,10 @@ class Result {
     final bytesAL = <int>[];
     final randomizePostfixLength = <int>[];
     final randomizeLengths = <int>[];
-    if ((solution.mode == Mode.C40 ||
-            solution.mode == Mode.TEXT ||
-            solution.mode == Mode.X12) &&
-        solution.endMode != Mode.ASCII) {
+    if ((solution.mode == Mode.c40 ||
+            solution.mode == Mode.text ||
+            solution.mode == Mode.x12) &&
+        solution.endMode != Mode.ascii) {
       size += prepend(Edge.getBytes(254), bytesAL);
     }
     Edge? current = solution;
@@ -590,7 +590,7 @@ class Result {
 
       if (current.previous == null ||
           current.previousStartMode != current.getMode()) {
-        if (current.getMode() == Mode.B256) {
+        if (current.getMode() == Mode.b256) {
           if (size <= 249) {
             bytesAL.insert(0, size);
             size++;
@@ -765,21 +765,21 @@ class MinimalEncoder {
     String msg, [
     Encoding? priorityCharset,
     int fnc1 = -1,
-    SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
+    SymbolShapeHint shape = SymbolShapeHint.forceNone,
   ]) {
     int macroId = 0;
-    if (msg.startsWith(HighLevelEncoder.MACRO_05_HEADER) &&
-        msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
+    if (msg.startsWith(HighLevelEncoder.macro05Header) &&
+        msg.endsWith(HighLevelEncoder.macroTrailer)) {
       macroId = 5;
       msg = msg.substring(
-        HighLevelEncoder.MACRO_05_HEADER.length,
+        HighLevelEncoder.macro05Header.length,
         msg.length - 2,
       );
-    } else if (msg.startsWith(HighLevelEncoder.MACRO_06_HEADER) &&
-        msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
+    } else if (msg.startsWith(HighLevelEncoder.macro06Header) &&
+        msg.endsWith(HighLevelEncoder.macroTrailer)) {
       macroId = 6;
       msg = msg.substring(
-        HighLevelEncoder.MACRO_06_HEADER.length,
+        HighLevelEncoder.macro06Header.length,
         msg.length - 2,
       );
     }
@@ -877,31 +877,31 @@ class MinimalEncoder {
     Edge? previous,
   ) {
     if (input.isECI(from)) {
-      addEdge(edges, Edge(input, Mode.ASCII, from, 1, previous));
+      addEdge(edges, Edge(input, Mode.ascii, from, 1, previous));
       return;
     }
 
     final ch = input.charAt(from);
-    if (previous == null || previous.endMode != Mode.EDF) {
+    if (previous == null || previous.endMode != Mode.edf) {
       //not possible to unlatch a full EDF edge to something
       //else
       if (HighLevelEncoder.isDigit(ch) &&
           input.haveNCharacters(from, 2) &&
           HighLevelEncoder.isDigit(input.charAt(from + 1))) {
         // two digits ASCII encoded
-        addEdge(edges, Edge(input, Mode.ASCII, from, 2, previous));
+        addEdge(edges, Edge(input, Mode.ascii, from, 2, previous));
       } else {
         // one ASCII encoded character or an extended character via Upper Shift
-        addEdge(edges, Edge(input, Mode.ASCII, from, 1, previous));
+        addEdge(edges, Edge(input, Mode.ascii, from, 1, previous));
       }
 
-      final modes = [Mode.C40, Mode.TEXT];
+      final modes = [Mode.c40, Mode.text];
       for (Mode mode in modes) {
         final characterLength = [0];
         if (getNumberOfC40Words(
               input,
               from,
-              mode == Mode.C40,
+              mode == Mode.c40,
               characterLength,
             ) >
             0) {
@@ -913,10 +913,10 @@ class MinimalEncoder {
           HighLevelEncoder.isNativeX12(input.charAt(from)) &&
           HighLevelEncoder.isNativeX12(input.charAt(from + 1)) &&
           HighLevelEncoder.isNativeX12(input.charAt(from + 2))) {
-        addEdge(edges, Edge(input, Mode.X12, from, 3, previous));
+        addEdge(edges, Edge(input, Mode.x12, from, 3, previous));
       }
 
-      addEdge(edges, Edge(input, Mode.B256, from, 1, previous));
+      addEdge(edges, Edge(input, Mode.b256, from, 1, previous));
     }
 
     //We create 4 EDF edges,  with 1, 2 3 or 4 characters length. The fourth normally doesn't have a latch to ASCII
@@ -926,7 +926,7 @@ class MinimalEncoder {
       final pos = from + i;
       if (input.haveNCharacters(pos, 1) &&
           HighLevelEncoder.isNativeEDIFACT(input.charAt(pos))) {
-        addEdge(edges, Edge(input, Mode.EDF, from, i + 1, previous));
+        addEdge(edges, Edge(input, Mode.edf, from, i + 1, previous));
       } else {
         break;
       }
@@ -934,7 +934,7 @@ class MinimalEncoder {
     if (i == 3 &&
         input.haveNCharacters(from, 4) &&
         HighLevelEncoder.isNativeEDIFACT(input.charAt(from + 3))) {
-      addEdge(edges, Edge(input, Mode.EDF, from, 4, previous));
+      addEdge(edges, Edge(input, Mode.edf, from, 4, previous));
     }
   }
 
@@ -1145,7 +1145,7 @@ class MinimalEncoder {
     }
 
     int minimalJ = -1;
-    int minimalSize = MathUtils.MAX_VALUE;
+    int minimalSize = MathUtils.maxValue;
     for (int j = 0; j < 6; j++) {
       if (edges[inputLength][j] != null) {
         final edge = edges[inputLength][j]!;

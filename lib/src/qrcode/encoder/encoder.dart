@@ -40,7 +40,7 @@ import 'qrcode.dart';
 /// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class Encoder {
   // The original table is defined in the table 5 of JISX0510:2004 (p.19).
-  static const List<int> _ALPHANUMERIC_TABLE = [
+  static const List<int> _alphanumericTable = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0x00-0x0f
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0x10-0x1f
     36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43, // 0x20-0x2f
@@ -72,24 +72,24 @@ class Encoder {
     Mode mode;
 
     final hasGS1FormatHint = hints != null &&
-        hints.containsKey(EncodeHintType.GS1_FORMAT) &&
-        hints[EncodeHintType.GS1_FORMAT] as bool;
+        hints.containsKey(EncodeHintType.gs1Format) &&
+        hints[EncodeHintType.gs1Format] as bool;
     final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.QR_COMPACT) &&
-        hints[EncodeHintType.QR_COMPACT] as bool;
+        hints.containsKey(EncodeHintType.qrCompact) &&
+        hints[EncodeHintType.qrCompact] as bool;
 
     // Determine what character encoding has been specified by the caller, if any
     Encoding? encoding = defaultByteModeEncoding;
     final hasEncodingHint =
-        hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+        hints != null && hints.containsKey(EncodeHintType.characterSet);
     if (hasEncodingHint) {
       encoding = CharacterSetECI.getCharacterSetECIByName(
-        hints[EncodeHintType.CHARACTER_SET].toString(),
+        hints[EncodeHintType.characterSet].toString(),
       )?.charset;
     }
 
     if (hasCompactionHint) {
-      mode = Mode.BYTE;
+      mode = Mode.byte;
 
       final priorityEncoding =
           encoding == defaultByteModeEncoding ? null : encoding;
@@ -114,7 +114,7 @@ class Encoder {
       final headerBits = BitArray();
 
       // Append ECI segment if applicable
-      if (mode == Mode.BYTE && hasEncodingHint && encoding != null) {
+      if (mode == Mode.byte && hasEncodingHint && encoding != null) {
         final eci = CharacterSetECI.getCharacterSetECI(encoding);
         if (eci != null) {
           _appendECI(eci, headerBits);
@@ -124,7 +124,7 @@ class Encoder {
       // Append the FNC1 mode header for GS1 formatted data if applicable
       if (hasGS1FormatHint) {
         // GS1 formatted codes are prefixed with a FNC1 in first position mode header
-        appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+        appendModeInfo(Mode.fnc1FirstPosition, headerBits);
       }
 
       // (With ECI in place,) Write the mode marker
@@ -135,9 +135,9 @@ class Encoder {
       final dataBits = BitArray();
       appendBytes(content, mode, dataBits, encoding!);
 
-      if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
+      if (hints != null && hints.containsKey(EncodeHintType.qrVersion)) {
         final versionNumber =
-            int.parse(hints[EncodeHintType.QR_VERSION].toString());
+            int.parse(hints[EncodeHintType.qrVersion].toString());
         version = Version.getVersionForNumber(versionNumber);
         final bitsNeeded =
             _calculateBitsNeeded(mode, headerBits, dataBits, version);
@@ -152,7 +152,7 @@ class Encoder {
       headerAndDataBits.appendBitArray(headerBits);
       // Find "length" of main segment and write it
       final numLetters =
-          mode == Mode.BYTE ? dataBits.sizeInBytes : content.length;
+          mode == Mode.byte ? dataBits.sizeInBytes : content.length;
       appendLengthInfo(numLetters, version, mode, headerAndDataBits);
       // Put data together into the overall payload
       headerAndDataBits.appendBitArray(dataBits);
@@ -180,9 +180,9 @@ class Encoder {
 
     // Enable manual selection of the pattern to be used via hint
     int maskPattern = -1;
-    if (hints != null && hints.containsKey(EncodeHintType.QR_MASK_PATTERN)) {
+    if (hints != null && hints.containsKey(EncodeHintType.qrMaskPattern)) {
       final hintMaskPattern =
-          int.parse(hints[EncodeHintType.QR_MASK_PATTERN].toString());
+          int.parse(hints[EncodeHintType.qrMaskPattern].toString());
       maskPattern =
           QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
     }
@@ -239,8 +239,8 @@ class Encoder {
   /// @return the code point of the table used in alphanumeric mode or
   ///  -1 if there is no corresponding code in the table.
   static int getAlphanumericCode(int code) {
-    if (code < _ALPHANUMERIC_TABLE.length) {
-      return _ALPHANUMERIC_TABLE[code];
+    if (code < _alphanumericTable.length) {
+      return _alphanumericTable[code];
     }
     return -1;
   }
@@ -255,7 +255,7 @@ class Encoder {
     if (StringUtils.shiftJisCharset == encoding &&
         isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
-      return Mode.KANJI;
+      return Mode.kanji;
     }
     bool hasNumeric = false;
     bool hasAlphanumeric = false;
@@ -266,16 +266,16 @@ class Encoder {
       } else if (getAlphanumericCode(c) != -1) {
         hasAlphanumeric = true;
       } else {
-        return Mode.BYTE;
+        return Mode.byte;
       }
     }
     if (hasAlphanumeric) {
-      return Mode.ALPHANUMERIC;
+      return Mode.alphanumeric;
     }
     if (hasNumeric) {
-      return Mode.NUMERIC;
+      return Mode.numeric;
     }
-    return Mode.BYTE;
+    return Mode.byte;
   }
 
   static bool isOnlyDoubleByteKanji(String content) {
@@ -300,11 +300,11 @@ class Encoder {
     ByteMatrix matrix,
   ) {
     int minPenalty =
-        MathUtils.MAX_VALUE; //Integer.MAX_VALUE;  // Lower penalty is better.
+        MathUtils.maxValue; //Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
     // We try all mask patterns to choose the best one.
     for (int maskPattern = 0;
-        maskPattern < QRCode.NUM_MASK_PATTERNS;
+        maskPattern < QRCode.numMaskPatterns;
         maskPattern++) {
       MatrixUtil.buildMatrix(bits, ecLevel, version, maskPattern, matrix);
       final penalty = _calculateMaskPenalty(matrix);
@@ -558,16 +558,16 @@ class Encoder {
     Encoding encoding,
   ) {
     switch (mode) {
-      case Mode.NUMERIC:
+      case Mode.numeric:
         appendNumericBytes(content, bits);
         break;
-      case Mode.ALPHANUMERIC:
+      case Mode.alphanumeric:
         appendAlphanumericBytes(content, bits);
         break;
-      case Mode.BYTE:
+      case Mode.byte:
         append8BitBytes(content, bits, encoding);
         break;
-      case Mode.KANJI:
+      case Mode.kanji:
         appendKanjiBytes(content, bits);
         break;
       default:
@@ -659,7 +659,7 @@ class Encoder {
   }
 
   static void _appendECI(CharacterSetECI eci, BitArray bits) {
-    bits.appendBits(Mode.ECI.bits, 4);
+    bits.appendBits(Mode.eci.bits, 4);
     // This is correct for values up to 127, which is all we need now.
     bits.appendBits(eci.value, 8);
   }

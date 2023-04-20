@@ -54,25 +54,25 @@ void main() {
 
   test('testChooseMode', () {
     // Numeric mode.
-    expect(Mode.NUMERIC, Encoder.chooseMode('0'));
-    expect(Mode.NUMERIC, Encoder.chooseMode('0123456789'));
+    expect(Mode.numeric, Encoder.chooseMode('0'));
+    expect(Mode.numeric, Encoder.chooseMode('0123456789'));
     // Alphanumeric mode.
-    expect(Mode.ALPHANUMERIC, Encoder.chooseMode('A'));
+    expect(Mode.alphanumeric, Encoder.chooseMode('A'));
     expect(
-      Mode.ALPHANUMERIC,
+      Mode.alphanumeric,
       Encoder.chooseMode(r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'),
     );
     // 8-bit byte mode.
-    expect(Mode.BYTE, Encoder.chooseMode('a'));
-    expect(Mode.BYTE, Encoder.chooseMode('#'));
-    expect(Mode.BYTE, Encoder.chooseMode(''));
+    expect(Mode.byte, Encoder.chooseMode('a'));
+    expect(Mode.byte, Encoder.chooseMode('#'));
+    expect(Mode.byte, Encoder.chooseMode(''));
     // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
     // doing that as we cannot distinguish Shift_JIS from other encodings
     // from data bytes alone.  See also comments in qrcode_encoder.h.
 
     // AIUE in Hiragana in Shift_JIS
     expect(
-      Mode.BYTE,
+      Mode.byte,
       Encoder.chooseMode(
         shiftJISString(bytes([0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6])),
       ),
@@ -80,13 +80,13 @@ void main() {
 
     // Nihon in Kanji in Shift_JIS.
     expect(
-      Mode.BYTE,
+      Mode.byte,
       Encoder.chooseMode(shiftJISString(bytes([0x9, 0xf, 0x9, 0x7b]))),
     );
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
     expect(
-      Mode.BYTE,
+      Mode.byte,
       Encoder.chooseMode(
         shiftJISString(bytes([0xe, 0x4, 0x9, 0x5, 0x9, 0x61])),
       ),
@@ -128,7 +128,7 @@ void main() {
 
   test('testEncodeWithVersion', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.QR_VERSION] = 7;
+    hints[EncodeHintType.qrVersion] = 7;
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     assert(qrCode.toString().contains(' version: 7\n'));
   });
@@ -136,7 +136,7 @@ void main() {
   //@Test(expected = WriterException.class)
   test('testEncodeWithVersionTooSmall', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.QR_VERSION] = 3;
+    hints[EncodeHintType.qrVersion] = 3;
     expect(
       () => Encoder.encode(
         'THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
@@ -149,7 +149,7 @@ void main() {
 
   test('testSimpleUTF8ECI', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
+    hints[EncodeHintType.characterSet] = 'UTF8';
     final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
     final expected = '<<\n'
         ' mode: BYTE\n'
@@ -184,7 +184,7 @@ void main() {
 
   test('testEncodeKanjiMode', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
+    hints[EncodeHintType.characterSet] = 'Shift_JIS';
     // Nihon in Kanji
     final qrCode =
         Encoder.encode('\u65e5\u672c', ErrorCorrectionLevel.M, hints);
@@ -221,7 +221,7 @@ void main() {
 
   test('testEncodeShiftjisNumeric', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.CHARACTER_SET] = 'Shift_JIS';
+    hints[EncodeHintType.characterSet] = 'Shift_JIS';
     final qrCode = Encoder.encode('0123', ErrorCorrectionLevel.M, hints);
     final expected = '<<\n'
         ' mode: NUMERIC\n'
@@ -256,7 +256,7 @@ void main() {
 
   test('testEncodeGS1WithStringTypeHint', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.GS1_FORMAT] = true;
+    hints[EncodeHintType.gs1Format] = true;
     final qrCode =
         Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
@@ -264,7 +264,7 @@ void main() {
 
   test('testEncodeGS1WithBooleanTypeHint', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.GS1_FORMAT] = true;
+    hints[EncodeHintType.gs1Format] = true;
     final qrCode =
         Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
@@ -272,22 +272,22 @@ void main() {
 
   test('testDoesNotEncodeGS1WhenBooleanTypeHintExplicitlyFalse', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.GS1_FORMAT] = false;
+    hints[EncodeHintType.gs1Format] = false;
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.GS1_FORMAT] = false;
+    hints[EncodeHintType.gs1Format] = false;
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testGS1ModeHeaderWithECI', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.CHARACTER_SET] = 'UTF8';
-    hints[EncodeHintType.GS1_FORMAT] = true;
+    hints[EncodeHintType.characterSet] = 'UTF8';
+    hints[EncodeHintType.gs1Format] = true;
     final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
     final expected = '<<\n'
         ' mode: BYTE\n'
@@ -322,7 +322,7 @@ void main() {
 
   test('testAppendModeInfo', () {
     final bits = BitArray();
-    Encoder.appendModeInfo(Mode.NUMERIC, bits);
+    Encoder.appendModeInfo(Mode.numeric, bits);
     expect(' ...X', bits.toString());
   });
 
@@ -331,7 +331,7 @@ void main() {
     Encoder.appendLengthInfo(
       1, // 1 letter (1/1).
       Version.getVersionForNumber(1),
-      Mode.NUMERIC,
+      Mode.numeric,
       bits,
     );
     expect(' ........ .X', bits.toString()); // 10 bits.
@@ -339,7 +339,7 @@ void main() {
     Encoder.appendLengthInfo(
       2, // 2 letters (2/1).
       Version.getVersionForNumber(10),
-      Mode.ALPHANUMERIC,
+      Mode.alphanumeric,
       bits,
     );
     expect(' ........ .X.', bits.toString()); // 11 bits.
@@ -347,7 +347,7 @@ void main() {
     Encoder.appendLengthInfo(
       255, // 255 letter (255/1).
       Version.getVersionForNumber(27),
-      Mode.BYTE,
+      Mode.byte,
       bits,
     );
     expect(' ........ XXXXXXXX', bits.toString()); // 16 bits.
@@ -355,7 +355,7 @@ void main() {
     Encoder.appendLengthInfo(
       512, // 512 letters (1024/2).
       Version.getVersionForNumber(40),
-      Mode.KANJI,
+      Mode.kanji,
       bits,
     );
     expect(' ..X..... ....', bits.toString()); // 12 bits.
@@ -367,7 +367,7 @@ void main() {
     BitArray bits = BitArray();
     Encoder.appendBytes(
       '1',
-      Mode.NUMERIC,
+      Mode.numeric,
       bits,
       Encoder.defaultByteModeEncoding,
     );
@@ -377,7 +377,7 @@ void main() {
     bits = BitArray();
     Encoder.appendBytes(
       'A',
-      Mode.ALPHANUMERIC,
+      Mode.alphanumeric,
       bits,
       Encoder.defaultByteModeEncoding,
     );
@@ -387,7 +387,7 @@ void main() {
     expect(
       () => Encoder.appendBytes(
         'a',
-        Mode.ALPHANUMERIC,
+        Mode.alphanumeric,
         bits,
         Encoder.defaultByteModeEncoding,
       ),
@@ -399,7 +399,7 @@ void main() {
     bits = BitArray();
     Encoder.appendBytes(
       'abc',
-      Mode.BYTE,
+      Mode.byte,
       bits,
       Encoder.defaultByteModeEncoding,
     );
@@ -407,7 +407,7 @@ void main() {
     // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
     Encoder.appendBytes(
       '\x00',
-      Mode.BYTE,
+      Mode.byte,
       bits,
       Encoder.defaultByteModeEncoding,
     );
@@ -416,7 +416,7 @@ void main() {
     bits = BitArray();
     Encoder.appendBytes(
       shiftJISString(bytes([0x93, 0x5f])),
-      Mode.KANJI,
+      Mode.kanji,
       bits,
       Encoder.defaultByteModeEncoding,
     );

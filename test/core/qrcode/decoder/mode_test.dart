@@ -20,11 +20,11 @@ import 'package:zxing_lib/qrcode.dart';
 
 void main() {
   test('testForBits', () {
-    expect(Mode.TERMINATOR, Mode.forBits(0x00));
-    expect(Mode.NUMERIC, Mode.forBits(0x01));
-    expect(Mode.ALPHANUMERIC, Mode.forBits(0x02));
-    expect(Mode.BYTE, Mode.forBits(0x04));
-    expect(Mode.KANJI, Mode.forBits(0x08));
+    expect(Mode.terminator, Mode.forBits(0x00));
+    expect(Mode.numeric, Mode.forBits(0x01));
+    expect(Mode.alphanumeric, Mode.forBits(0x02));
+    expect(Mode.byte, Mode.forBits(0x04));
+    expect(Mode.kanji, Mode.forBits(0x08));
   });
 
   //@Test(expected = IllegalArgumentException.class)
@@ -41,21 +41,21 @@ void main() {
     // Spot check a few values
     expect(
       10,
-      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)),
+      Mode.numeric.getCharacterCountBits(Version.getVersionForNumber(5)),
     );
     expect(
       12,
-      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)),
+      Mode.numeric.getCharacterCountBits(Version.getVersionForNumber(26)),
     );
     expect(
       14,
-      Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(40)),
+      Mode.numeric.getCharacterCountBits(Version.getVersionForNumber(40)),
     );
     expect(
       9,
-      Mode.ALPHANUMERIC.getCharacterCountBits(Version.getVersionForNumber(6)),
+      Mode.alphanumeric.getCharacterCountBits(Version.getVersionForNumber(6)),
     );
-    expect(8, Mode.BYTE.getCharacterCountBits(Version.getVersionForNumber(7)));
-    expect(8, Mode.KANJI.getCharacterCountBits(Version.getVersionForNumber(8)));
+    expect(8, Mode.byte.getCharacterCountBits(Version.getVersionForNumber(7)));
+    expect(8, Mode.kanji.getCharacterCountBits(Version.getVersionForNumber(8)));
   });
 }

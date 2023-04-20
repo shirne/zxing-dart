@@ -34,13 +34,13 @@ class UPCAWriter implements Writer {
     int height, [
     Map<EncodeHintType, Object>? hints,
   ]) {
-    if (format != BarcodeFormat.UPC_A) {
+    if (format != BarcodeFormat.upcA) {
       throw ArgumentError('Can only encode UPC-A, but got $format');
     }
     // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
     return _subWriter.encode(
       '0$contents',
-      BarcodeFormat.EAN_13,
+      BarcodeFormat.ean13,
       width,
       height,
       hints,

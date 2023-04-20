@@ -32,25 +32,25 @@ import 'ai01decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01393xDecoder extends AI01decoder {
-  static const int _HEADER_SIZE = 5 + 1 + 2;
-  static const int _LAST_DIGIT_SIZE = 2;
-  static const int _FIRST_THREE_DIGITS_SIZE = 10;
+  static const int _headerSize = 5 + 1 + 2;
+  static const int _lastDigitSize = 2;
+  static const int _firstThreeDigitsSize = 10;
 
   AI01393xDecoder(BitArray information) : super(information);
 
   @override
   String parseInformation() {
-    if (information.size < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
+    if (information.size < _headerSize + AI01decoder.gtinSize) {
       throw NotFoundException.instance;
     }
 
     final buf = StringBuilder();
 
-    encodeCompressedGtin(buf, _HEADER_SIZE);
+    encodeCompressedGtin(buf, _headerSize);
 
     final lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE,
-      _LAST_DIGIT_SIZE,
+      _headerSize + AI01decoder.gtinSize,
+      _lastDigitSize,
     );
 
     buf.write('(393');
@@ -58,8 +58,8 @@ class AI01393xDecoder extends AI01decoder {
     buf.write(')');
 
     final firstThreeDigits = generalDecoder.extractNumericValueFromBitArray(
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE,
-      _FIRST_THREE_DIGITS_SIZE,
+      _headerSize + AI01decoder.gtinSize + _lastDigitSize,
+      _firstThreeDigitsSize,
     );
     if (firstThreeDigits ~/ 100 == 0) {
       buf.write('0');
@@ -70,10 +70,10 @@ class AI01393xDecoder extends AI01decoder {
     buf.write(firstThreeDigits);
 
     final generalInformation = generalDecoder.decodeGeneralPurposeField(
-      _HEADER_SIZE +
-          AI01decoder.GTIN_SIZE +
-          _LAST_DIGIT_SIZE +
-          _FIRST_THREE_DIGITS_SIZE,
+      _headerSize +
+          AI01decoder.gtinSize +
+          _lastDigitSize +
+          _firstThreeDigitsSize,
       null,
     );
     buf.write(generalInformation.newString);

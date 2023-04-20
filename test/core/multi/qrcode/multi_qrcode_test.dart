@@ -47,7 +47,7 @@ void main() {
     final barcodeContents = <String>{};
     for (Result result in results) {
       barcodeContents.add(result.text);
-      expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
+      expect(BarcodeFormat.qrCode, result.barcodeFormat);
       assert(result.resultMetadata != null);
     }
     final expectedContents = <String>{};
@@ -67,24 +67,24 @@ void main() {
   });
 
   test('testProcessStructuredAppend', () {
-    final sa1 = Result('SA1', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    final sa2 = Result('SA2', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    final sa3 = Result('SA3', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, 2);
-    sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
+    final sa1 = Result('SA1', [], <ResultPoint>[], BarcodeFormat.qrCode);
+    final sa2 = Result('SA2', [], <ResultPoint>[], BarcodeFormat.qrCode);
+    final sa3 = Result('SA3', [], <ResultPoint>[], BarcodeFormat.qrCode);
+    sa1.putMetadata(ResultMetadataType.structuredAppendSequence, 2);
+    sa1.putMetadata(ResultMetadataType.errorCorrectionLevel, 'L');
     sa2.putMetadata(
-      ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+      ResultMetadataType.structuredAppendSequence,
       (1 << 4) + 2,
     );
-    sa2.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
+    sa2.putMetadata(ResultMetadataType.errorCorrectionLevel, 'L');
     sa3.putMetadata(
-      ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+      ResultMetadataType.structuredAppendSequence,
       (2 << 4) + 2,
     );
-    sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
+    sa3.putMetadata(ResultMetadataType.errorCorrectionLevel, 'L');
 
-    final nsa = Result('NotSA', [], <ResultPoint>[], BarcodeFormat.QR_CODE);
-    nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, 'L');
+    final nsa = Result('NotSA', [], <ResultPoint>[], BarcodeFormat.qrCode);
+    nsa.putMetadata(ResultMetadataType.errorCorrectionLevel, 'L');
 
     final inputs = [sa3, sa1, nsa, sa2];
 

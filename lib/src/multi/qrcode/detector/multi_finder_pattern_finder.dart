@@ -47,19 +47,19 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
   // since it limits the number of regions to decode
 
   // max. legal count of modules per QR code edge (177)
-  static const double _MAX_MODULE_COUNT_PER_EDGE = 180;
+  static const double _maxModuleCountPerEdge = 180;
   // min. legal count per modules per QR code edge (11)
-  static const double _MIN_MODULE_COUNT_PER_EDGE = 9;
+  static const double _minModuleCountPerEdge = 9;
 
   /// More or less arbitrary cutoff point for determining if two finder patterns might belong
   /// to the same code if they differ less than DIFF_MODSIZE_CUTOFF_PERCENT percent in their
   /// estimated modules sizes.
-  static const double _DIFF_MODSIZE_CUTOFF_PERCENT = 0.05;
+  static const double _diffModsizeCutoffPercent = 0.05;
 
   /// More or less arbitrary cutoff point for determining if two finder patterns might belong
   /// to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
   /// estimated modules sizes.
-  static const double _DIFF_MODSIZE_CUTOFF = 0.5;
+  static const double _diffModsizeCutoff = 0.5;
 
   MultiFinderPatternFinder(
     BitMatrix image,
@@ -136,8 +136,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
             math.min(p1.estimatedModuleSize, p2.estimatedModuleSize);
         final vModSize12A =
             (p1.estimatedModuleSize - p2.estimatedModuleSize).abs();
-        if (vModSize12A > _DIFF_MODSIZE_CUTOFF &&
-            vModSize12 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
+        if (vModSize12A > _diffModsizeCutoff &&
+            vModSize12 >= _diffModsizeCutoffPercent) {
           // break, since elements are ordered by the module size deviation there cannot be
           // any more interesting elements for the given p1.
           break;
@@ -154,8 +154,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
               math.min(p2.estimatedModuleSize, p3.estimatedModuleSize);
           final vModSize23A =
               (p2.estimatedModuleSize - p3.estimatedModuleSize).abs();
-          if (vModSize23A > _DIFF_MODSIZE_CUTOFF &&
-              vModSize23 >= _DIFF_MODSIZE_CUTOFF_PERCENT) {
+          if (vModSize23A > _diffModsizeCutoff &&
+              vModSize23 >= _diffModsizeCutoffPercent) {
             // break, since elements are ordered by the module size deviation there cannot be
             // any more interesting elements for the given p1.
             break;
@@ -173,8 +173,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
           // Check the sizes
           final estimatedModuleCount =
               (dA + dB) / (p1.estimatedModuleSize * 2.0);
-          if (estimatedModuleCount > _MAX_MODULE_COUNT_PER_EDGE ||
-              estimatedModuleCount < _MIN_MODULE_COUNT_PER_EDGE) {
+          if (estimatedModuleCount > _maxModuleCountPerEdge ||
+              estimatedModuleCount < _minModuleCountPerEdge) {
             continue;
           }
 
@@ -209,7 +209,7 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
 
   List<FinderPatternInfo> findMulti(Map<DecodeHintType, Object>? hints) {
     final tryHarder =
-        hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+        hints != null && hints.containsKey(DecodeHintType.tryHarder);
     final maxI = image.height;
     final maxJ = image.width;
     // We are looking for black/white/black/white/black modules in
@@ -219,9 +219,9 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     // image, and then account for the center being 3 modules in size. This gives the smallest
     // number of pixels the center could be, so skip this often. When trying harder, look for all
     // QR versions regardless of how dense they are.
-    int iSkip = (3 * maxI) ~/ (4 * FinderPatternFinder.MAX_MODULES);
-    if (iSkip < FinderPatternFinder.MIN_SKIP || tryHarder) {
-      iSkip = FinderPatternFinder.MIN_SKIP;
+    int iSkip = (3 * maxI) ~/ (4 * FinderPatternFinder.maxModules);
+    if (iSkip < FinderPatternFinder.minSkip || tryHarder) {
+      iSkip = FinderPatternFinder.minSkip;
     }
 
     final stateCount = [0, 0, 0, 0, 0];

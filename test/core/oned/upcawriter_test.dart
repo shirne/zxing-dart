@@ -26,7 +26,7 @@ void main() {
     final testStr = '00001010100011011011101100010001011010111101111010'
         '101011100101110100100111011001101101100101110010100000';
     final result = UPCAWriter()
-        .encode('485963095124', BarcodeFormat.UPC_A, testStr.length, 0);
+        .encode('485963095124', BarcodeFormat.upcA, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 
@@ -34,7 +34,7 @@ void main() {
     final testStr = '000010100110010010011011110101000110110001010111101010'
         '10001001001000111010011100101100110110110010100000';
     final result = UPCAWriter()
-        .encode('12345678901', BarcodeFormat.UPC_A, testStr.length, 0);
+        .encode('12345678901', BarcodeFormat.upcA, testStr.length, 0);
     expect(testStr, matrixToString(result));
   });
 }

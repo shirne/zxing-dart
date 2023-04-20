@@ -24,7 +24,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/code128-2',
       MultiFormatReader(),
-      BarcodeFormat.CODE_128,
+      BarcodeFormat.code128,
     )
       ..addTest(36, 39, 0.0)
       ..addTest(36, 39, 180.0)

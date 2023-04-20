@@ -25,7 +25,7 @@ import '../../writer_exception.dart';
 class PDF417ErrorCorrection {
   /// Tables of coefficients for calculating error correction words
   /// (see annex F, ISO/IEC 15438:2001(E))
-  static const List<List<int>> _EC_COEFFICIENTS = [
+  static const List<List<int>> _ecCoefficients = [
     [27, 917], //
     [522, 568, 723, 809], //
     [237, 308, 436, 284, 646, 653, 428, 379], //
@@ -186,11 +186,11 @@ class PDF417ErrorCorrection {
       int t2;
       int t3;
       for (int j = k - 1; j >= 1; j--) {
-        t2 = (t1 * _EC_COEFFICIENTS[errorCorrectionLevel][j]) % 929;
+        t2 = (t1 * _ecCoefficients[errorCorrectionLevel][j]) % 929;
         t3 = 929 - t2;
         e[j] = ((e[j - 1] + t3) % 929);
       }
-      t2 = (t1 * _EC_COEFFICIENTS[errorCorrectionLevel][0]) % 929;
+      t2 = (t1 * _ecCoefficients[errorCorrectionLevel][0]) % 929;
       t3 = 929 - t2;
       e[0] = (t3 % 929);
     }

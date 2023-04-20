@@ -27,8 +27,8 @@ import 'math_utils.dart';
 ///
 /// @author David Olivier
 class WhiteRectangleDetector {
-  static const int _INIT_SIZE = 10;
-  static const int _CORR = 1;
+  static const int _initSize = 10;
+  static const int _corr = 1;
 
   final BitMatrix _image;
   final int _height;
@@ -45,7 +45,7 @@ class WhiteRectangleDetector {
   /// @throws NotFoundException if image is too small to accommodate `initSize`
   WhiteRectangleDetector(
     this._image, [
-    int initSize = _INIT_SIZE,
+    int initSize = _initSize,
     int? x,
     int? y,
   ])  : _height = _image.height,
@@ -298,17 +298,17 @@ class WhiteRectangleDetector {
 
     if (yi < _width / 2.0) {
       return [
-        ResultPoint(ti - _CORR, tj + _CORR),
-        ResultPoint(zi + _CORR, zj + _CORR),
-        ResultPoint(xi - _CORR, xj - _CORR),
-        ResultPoint(yi + _CORR, yj - _CORR)
+        ResultPoint(ti - _corr, tj + _corr),
+        ResultPoint(zi + _corr, zj + _corr),
+        ResultPoint(xi - _corr, xj - _corr),
+        ResultPoint(yi + _corr, yj - _corr)
       ];
     } else {
       return [
-        ResultPoint(ti + _CORR, tj + _CORR),
-        ResultPoint(zi + _CORR, zj - _CORR),
-        ResultPoint(xi - _CORR, xj + _CORR),
-        ResultPoint(yi - _CORR, yj - _CORR)
+        ResultPoint(ti + _corr, tj + _corr),
+        ResultPoint(zi + _corr, zj - _corr),
+        ResultPoint(xi - _corr, xj + _corr),
+        ResultPoint(yi - _corr, yj - _corr)
       ];
     }
   }

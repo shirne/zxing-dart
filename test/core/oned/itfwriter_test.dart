@@ -24,7 +24,7 @@ import '../utils.dart';
 /// Tests [ITFWriter].
 void main() {
   void doTest(String input, String expected) {
-    final result = ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
+    final result = ITFWriter().encode(input, BarcodeFormat.itf, 0, 0);
     expect(expected, matrixToString(result));
   }
 
@@ -37,7 +37,7 @@ void main() {
 
   test('testEncodeIllegalCharacters', () {
     expect(
-      () => ITFWriter().encode('00123456789abc', BarcodeFormat.ITF, 0, 0),
+      () => ITFWriter().encode('00123456789abc', BarcodeFormat.itf, 0, 0),
       throwsArgumentError,
     );
   });

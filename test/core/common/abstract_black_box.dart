@@ -264,8 +264,8 @@ class AbstractBlackBoxTestCase {
 
     final hints = Map<DecodeHintType, Object>.from(_hints);
     if (tryHarder) {
-      hints[DecodeHintType.TRY_HARDER] = true;
-      hints[DecodeHintType.ALSO_INVERTED] = true;
+      hints[DecodeHintType.tryHarder] = true;
+      hints[DecodeHintType.alsoInverted] = true;
     }
 
     // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
@@ -273,7 +273,7 @@ class AbstractBlackBoxTestCase {
     Result? result;
     try {
       final pureHints = Map<DecodeHintType, Object>.from(hints);
-      pureHints[DecodeHintType.PURE_BARCODE] = true;
+      pureHints[DecodeHintType.pureBarcode] = true;
       result = _barcodeReader!.decode(source, pureHints);
     } on ReaderException catch (_) {
       // continue
@@ -298,7 +298,7 @@ class AbstractBlackBoxTestCase {
 
     final resultMetadata = result.resultMetadata;
     for (MapEntry metadatum in expectedMetadata.entries) {
-      final ResultMetadataType key = string2RMType(metadatum.key)!;
+      final key = string2RMType(metadatum.key)!;
       final Object expectedValue = metadatum.value;
       final Object? actualValue = resultMetadata?[key];
       if (expectedValue != actualValue) {
@@ -314,7 +314,7 @@ class AbstractBlackBoxTestCase {
 
   ResultMetadataType? string2RMType(String type) {
     for (ResultMetadataType rType in ResultMetadataType.values) {
-      if (rType.toString().replaceFirst('ResultMetadataType.', '') == type) {
+      if (rType.identifier == type) {
         return rType;
       }
     }

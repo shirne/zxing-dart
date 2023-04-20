@@ -65,7 +65,7 @@ void main() {
       fail(re.toString());
     }
 
-    expect(BarcodeFormat.RSS_EXPANDED, theResult.barcodeFormat);
+    expect(BarcodeFormat.rssExpanded, theResult.barcodeFormat);
 
     final result = ResultParser.parseResult(theResult);
 
@@ -84,7 +84,7 @@ void main() {
       null,
       null,
       '001750',
-      ExpandedProductParsedResult.KILOGRAM,
+      ExpandedProductParsedResult.kilogram,
       '3',
       null,
       null,

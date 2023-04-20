@@ -24,7 +24,7 @@ import '../utils.dart';
 /// Tests [Code39Writer].
 void main() {
   void doTest(String input, String expected) {
-    final result = Code39Writer().encode(input, BarcodeFormat.CODE_39, 0, 0);
+    final result = Code39Writer().encode(input, BarcodeFormat.code39, 0, 0);
     expect(expected, matrixToString(result), reason: input);
   }
 

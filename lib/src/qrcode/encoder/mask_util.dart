@@ -23,10 +23,10 @@ import 'byte_matrix.dart';
 /// @author Sean Owen
 class MaskUtil {
   // Penalty weights from section 6.8.2.1
-  static const int _N1 = 3;
-  static const int _N2 = 3;
-  static const int _N3 = 40;
-  static const int _N4 = 10;
+  static const int _n1 = 3;
+  static const int _n2 = 3;
+  static const int _n3 = 40;
+  static const int _n4 = 10;
 
   MaskUtil._();
 
@@ -56,7 +56,7 @@ class MaskUtil {
         }
       }
     }
-    return _N2 * penalty;
+    return _n2 * penalty;
   }
 
   /// Apply mask penalty rule 3 and return the penalty. Find consecutive runs of 1:1:3:1:1:4
@@ -96,7 +96,7 @@ class MaskUtil {
         }
       }
     }
-    return numPenalties * _N3;
+    return numPenalties * _n3;
   }
 
   static bool _isWhiteHorizontal(Uint8List rowArray, int from, int to) {
@@ -146,7 +146,7 @@ class MaskUtil {
     final numTotalCells = matrix.height * matrix.width;
     final fivePercentVariances =
         (numDarkCells * 2 - numTotalCells).abs() * 10 ~/ numTotalCells;
-    return fivePercentVariances * _N4;
+    return fivePercentVariances * _n4;
   }
 
   /// Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
@@ -207,14 +207,14 @@ class MaskUtil {
           numSameBitCells++;
         } else {
           if (numSameBitCells >= 5) {
-            penalty += _N1 + (numSameBitCells - 5);
+            penalty += _n1 + (numSameBitCells - 5);
           }
           numSameBitCells = 1; // Include the cell itself.
           prevBit = bit;
         }
       }
       if (numSameBitCells >= 5) {
-        penalty += _N1 + (numSameBitCells - 5);
+        penalty += _n1 + (numSameBitCells - 5);
       }
     }
     return penalty;

@@ -41,15 +41,15 @@ import 'one_dreader.dart';
 ///
 /// @author kevin.osullivan@sita.aero, SITA Lab.
 class ITFReader extends OneDReader {
-  static const _MAX_AVG_VARIANCE = 0.38;
-  static const _MAX_INDIVIDUAL_VARIANCE = 0.5;
+  static const _maxAvgVariance = 0.38;
+  static const _maxIndividualVariance = 0.5;
 
-  static const int _W = 3; // Pixel width of a 3x wide line
+  static const int _t = 3; // Pixel width of a 3x wide line
   static const int _w = 2; // Pixel width of a 2x wide line
-  static const int _N = 1; // Pixed width of a narrow line
+  static const int _n = 1; // Pixed width of a narrow line
 
   /// Valid ITF lengths. Anything longer than the largest value is also allowed.
-  static const _DEFAULT_ALLOWED_LENGTHS = [6, 8, 10, 12, 14];
+  static const _defaultAllowedLengths = [6, 8, 10, 12, 14];
 
   // Stores the actual narrow line width of the image being decoded.
   int _narrowLineWidth = -1;
@@ -58,36 +58,36 @@ class ITFReader extends OneDReader {
   ///
   /// Note: The end pattern is reversed because the row is reversed before
   /// searching for the END_PATTERN
-  static const _START_PATTERN = [_N, _N, _N, _N];
-  static const _END_PATTERN_REVERSED = [
-    [_N, _N, _w], // 2x
-    [_N, _N, _W] // 3x
+  static const _startPattern = [_n, _n, _n, _n];
+  static const _endPatternReversed = [
+    [_n, _n, _w], // 2x
+    [_n, _n, _t] // 3x
   ];
 
   // See ITFWriter.PATTERNS
 
   /// Patterns of Wide / Narrow lines to indicate each digit
-  static const _PATTERNS = [
-    [_N, _N, _w, _w, _N], // 0
-    [_w, _N, _N, _N, _w], // 1
-    [_N, _w, _N, _N, _w], // 2
-    [_w, _w, _N, _N, _N], // 3
-    [_N, _N, _w, _N, _w], // 4
-    [_w, _N, _w, _N, _N], // 5
-    [_N, _w, _w, _N, _N], // 6
-    [_N, _N, _N, _w, _w], // 7
-    [_w, _N, _N, _w, _N], // 8
-    [_N, _w, _N, _w, _N], // 9
-    [_N, _N, _W, _W, _N], // 0
-    [_W, _N, _N, _N, _W], // 1
-    [_N, _W, _N, _N, _W], // 2
-    [_W, _W, _N, _N, _N], // 3
-    [_N, _N, _W, _N, _W], // 4
-    [_W, _N, _W, _N, _N], // 5
-    [_N, _W, _W, _N, _N], // 6
-    [_N, _N, _N, _W, _W], // 7
-    [_W, _N, _N, _W, _N], // 8
-    [_N, _W, _N, _W, _N] // 9
+  static const _patterns = [
+    [_n, _n, _w, _w, _n], // 0
+    [_w, _n, _n, _n, _w], // 1
+    [_n, _w, _n, _n, _w], // 2
+    [_w, _w, _n, _n, _n], // 3
+    [_n, _n, _w, _n, _w], // 4
+    [_w, _n, _w, _n, _n], // 5
+    [_n, _w, _w, _n, _n], // 6
+    [_n, _n, _n, _w, _w], // 7
+    [_w, _n, _n, _w, _n], // 8
+    [_n, _w, _n, _w, _n], // 9
+    [_n, _n, _t, _t, _n], // 0
+    [_t, _n, _n, _n, _t], // 1
+    [_n, _t, _n, _n, _t], // 2
+    [_t, _t, _n, _n, _n], // 3
+    [_n, _n, _t, _n, _t], // 4
+    [_t, _n, _t, _n, _n], // 5
+    [_n, _t, _t, _n, _n], // 6
+    [_n, _n, _n, _t, _t], // 7
+    [_t, _n, _n, _t, _n], // 8
+    [_n, _t, _n, _t, _n] // 9
   ];
 
   @override
@@ -105,9 +105,9 @@ class ITFReader extends OneDReader {
     final resultString = result.toString();
 
     List<int>? allowedLengths =
-        hints?[DecodeHintType.ALLOWED_LENGTHS] as List<int>?;
+        hints?[DecodeHintType.allowedLengths] as List<int>?;
 
-    allowedLengths ??= _DEFAULT_ALLOWED_LENGTHS;
+    allowedLengths ??= _defaultAllowedLengths;
 
     // To avoid false positives with 2D barcodes (and other patterns), make
     // an assumption that the decoded string must be a 'standard' length if it's short
@@ -137,9 +137,9 @@ class ITFReader extends OneDReader {
         ResultPoint(startRange[1].toDouble(), rowNumber.toDouble()),
         ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())
       ],
-      BarcodeFormat.ITF,
+      BarcodeFormat.itf,
     );
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']I0');
+    resultObject.putMetadata(ResultMetadataType.symbologyIdentifier, ']I0');
     return resultObject;
   }
 
@@ -190,7 +190,7 @@ class ITFReader extends OneDReader {
   ///         'start block'
   List<int> _decodeStart(BitArray row) {
     final endStart = _skipWhiteSpace(row);
-    final startPattern = _findGuardPattern(row, endStart, _START_PATTERN);
+    final startPattern = _findGuardPattern(row, endStart, _startPattern);
 
     // Determine the width of a narrow line in pixels. We can do this by
     // getting the width of the start pattern and dividing by 4 because its
@@ -262,9 +262,9 @@ class ITFReader extends OneDReader {
       final endStart = _skipWhiteSpace(row);
       List<int> endPattern;
       try {
-        endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[0]);
+        endPattern = _findGuardPattern(row, endStart, _endPatternReversed[0]);
       } on NotFoundException catch (_) {
-        endPattern = _findGuardPattern(row, endStart, _END_PATTERN_REVERSED[1]);
+        endPattern = _findGuardPattern(row, endStart, _endPatternReversed[1]);
       }
 
       // The start & end patterns must be pre/post fixed by a quiet zone. This
@@ -313,9 +313,9 @@ class ITFReader extends OneDReader {
           if (OneDReader.patternMatchVariance(
                 counters,
                 pattern,
-                _MAX_INDIVIDUAL_VARIANCE,
+                _maxIndividualVariance,
               ) <
-              _MAX_AVG_VARIANCE) {
+              _maxAvgVariance) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -340,15 +340,15 @@ class ITFReader extends OneDReader {
   /// @return The decoded digit
   /// @throws NotFoundException if digit cannot be decoded
   static int _decodeDigit(List<int> counters) {
-    double bestVariance = _MAX_AVG_VARIANCE; // worst variance we'll accept
+    double bestVariance = _maxAvgVariance; // worst variance we'll accept
     int bestMatch = -1;
-    final max = _PATTERNS.length;
+    final max = _patterns.length;
     for (int i = 0; i < max; i++) {
-      final pattern = _PATTERNS[i];
+      final pattern = _patterns[i];
       final variance = OneDReader.patternMatchVariance(
         counters,
         pattern,
-        _MAX_INDIVIDUAL_VARIANCE,
+        _maxIndividualVariance,
       );
       if (variance < bestVariance) {
         bestVariance = variance;

@@ -24,7 +24,7 @@ import '../../utils.dart';
 /// Tests [GeoParsedResult].
 ///
 void main() {
-  const int EPSILON = 10;
+  const int epsilon = 10;
 
   void doTest(
     String contents,
@@ -34,13 +34,13 @@ void main() {
     String? query,
     String? uri,
   ) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.qrCode);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.GEO, result.type);
+    expect(ParsedResultType.geo, result.type);
     final geoResult = result as GeoParsedResult;
-    assertEqualOrNaN(latitude, geoResult.latitude, EPSILON);
-    assertEqualOrNaN(longitude, geoResult.longitude, EPSILON);
-    assertEqualOrNaN(altitude, geoResult.altitude, EPSILON);
+    assertEqualOrNaN(latitude, geoResult.latitude, epsilon);
+    assertEqualOrNaN(longitude, geoResult.longitude, epsilon);
+    assertEqualOrNaN(altitude, geoResult.altitude, epsilon);
     expect(query, geoResult.query);
     expect(uri ?? contents.toLowerCase(/*Locale.ENGLISH*/), geoResult.geoURI);
   }

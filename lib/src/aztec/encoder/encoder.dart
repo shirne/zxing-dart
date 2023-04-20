@@ -28,13 +28,13 @@ import 'high_level_encoder.dart';
 ///
 /// @author Rustam Abdullaev
 class Encoder {
-  static const int DEFAULT_EC_PERCENT =
-      33; // default minimal percentage of error check words
-  static const int DEFAULT_AZTEC_LAYERS = 0;
-  static const int _MAX_NB_BITS = 32;
-  static const int _MAX_NB_BITS_COMPACT = 4;
+  // default minimal percentage of error check words
+  static const int defaultEcPercent = 33;
+  static const int defaultAztecLayers = 0;
+  static const int _maxNbBits = 32;
+  static const int _maxNbBitsCompact = 4;
 
-  static const List<int> _WORD_SIZE = [
+  static const List<int> _wordSize = [
     4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, //
     10, 10, 10, 10, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12
   ];
@@ -53,8 +53,8 @@ class Encoder {
   /// @return Aztec symbol matrix with metadata
   static AztecCode encode(
     String data, [
-    int minECCPercent = DEFAULT_AZTEC_LAYERS,
-    int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
+    int minECCPercent = defaultAztecLayers,
+    int userSpecifiedLayers = defaultAztecLayers,
     Encoding? charset,
   ]) {
     final List<int> bytes = (charset ?? latin1).encode(data);
@@ -77,8 +77,8 @@ class Encoder {
   /// @return Aztec symbol matrix with metadata
   static AztecCode encodeData(
     Uint8List data, [
-    int minECCPercent = DEFAULT_AZTEC_LAYERS,
-    int userSpecifiedLayers = DEFAULT_AZTEC_LAYERS,
+    int minECCPercent = defaultAztecLayers,
+    int userSpecifiedLayers = defaultAztecLayers,
     Encoding? charset,
   ]) {
     // High-level encode
@@ -92,14 +92,14 @@ class Encoder {
     int totalBitsLayer;
     int wordSize;
     BitArray? stuffedBits;
-    if (userSpecifiedLayers != DEFAULT_AZTEC_LAYERS) {
+    if (userSpecifiedLayers != defaultAztecLayers) {
       compact = userSpecifiedLayers < 0;
       layers = (userSpecifiedLayers).abs();
-      if (layers > (compact ? _MAX_NB_BITS_COMPACT : _MAX_NB_BITS)) {
+      if (layers > (compact ? _maxNbBitsCompact : _maxNbBits)) {
         throw ArgumentError('Illegal value $userSpecifiedLayers for layers');
       }
       totalBitsLayer = _totalBitsInLayer(layers, compact);
-      wordSize = _WORD_SIZE[layers];
+      wordSize = _wordSize[layers];
       final int usableBitsInLayers =
           totalBitsLayer - (totalBitsLayer % wordSize);
       stuffedBits = stuffBits(bits, wordSize);
@@ -117,7 +117,7 @@ class Encoder {
       // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
       // is the same size, but has more data.
       for (int i = 0;; i++) {
-        if (i > _MAX_NB_BITS) {
+        if (i > _maxNbBits) {
           throw ArgumentError('Data too large for an Aztec code');
         }
         compact = i <= 3;
@@ -128,8 +128,8 @@ class Encoder {
         }
         // [Re]stuff the bits if this is the first opportunity, or if the
         // wordSize has changed
-        if (stuffedBits == null || wordSize != _WORD_SIZE[layers]) {
-          wordSize = _WORD_SIZE[layers];
+        if (stuffedBits == null || wordSize != _wordSize[layers]) {
+          wordSize = _wordSize[layers];
           stuffedBits = stuffBits(bits, wordSize);
         }
         final int usableBitsInLayers =

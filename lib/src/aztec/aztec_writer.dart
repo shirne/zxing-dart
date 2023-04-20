@@ -36,20 +36,20 @@ class AztecWriter implements Writer {
     Map<EncodeHintType, Object>? hints,
   ]) {
     Encoding? charset; // Do not add any ECI code by default
-    int eccPercent = Encoder.DEFAULT_EC_PERCENT;
-    int layers = Encoder.DEFAULT_AZTEC_LAYERS;
+    int eccPercent = Encoder.defaultEcPercent;
+    int layers = Encoder.defaultAztecLayers;
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
+      if (hints.containsKey(EncodeHintType.characterSet)) {
         charset = CharacterSetECI.getCharacterSetECIByName(
-          hints[EncodeHintType.CHARACTER_SET] as String,
+          hints[EncodeHintType.characterSet] as String,
         )?.charset;
       }
-      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+      if (hints.containsKey(EncodeHintType.errorCorrection)) {
         eccPercent =
-            int.parse(hints[EncodeHintType.ERROR_CORRECTION].toString());
+            int.parse(hints[EncodeHintType.errorCorrection].toString());
       }
-      if (hints.containsKey(EncodeHintType.AZTEC_LAYERS)) {
-        layers = int.parse(hints[EncodeHintType.AZTEC_LAYERS].toString());
+      if (hints.containsKey(EncodeHintType.aztecLayers)) {
+        layers = int.parse(hints[EncodeHintType.aztecLayers].toString());
       }
     }
     return _encodeStatic(
@@ -72,7 +72,7 @@ class AztecWriter implements Writer {
     int eccPercent,
     int layers,
   ) {
-    if (format != BarcodeFormat.AZTEC) {
+    if (format != BarcodeFormat.aztec) {
       throw ArgumentError('Can only encode AZTEC, but got $format');
     }
     final AztecCode aztec =

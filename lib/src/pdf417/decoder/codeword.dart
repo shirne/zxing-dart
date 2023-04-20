@@ -16,13 +16,13 @@
 
 /// @author Guenther Grau
 class Codeword {
-  static const int _BARCODE_ROW_UNKNOWN = -1;
+  static const int _barcodeRowUnknown = -1;
 
   final int _startX;
   final int _endX;
   final int _bucket;
   final int _value;
-  int rowNumber = _BARCODE_ROW_UNKNOWN;
+  int rowNumber = _barcodeRowUnknown;
 
   Codeword(this._startX, this._endX, this._bucket, this._value);
 
@@ -31,7 +31,7 @@ class Codeword {
   }
 
   bool isValidRowNumber(int rowNumber) {
-    return rowNumber != _BARCODE_ROW_UNKNOWN && _bucket == (rowNumber % 3) * 3;
+    return rowNumber != _barcodeRowUnknown && _bucket == (rowNumber % 3) * 3;
   }
 
   void setRowNumberAsRowIndicatorColumn() {

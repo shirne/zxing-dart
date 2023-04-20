@@ -25,9 +25,9 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/maxicode-1',
       MultiFormatReader(),
-      BarcodeFormat.MAXICODE,
+      BarcodeFormat.maxicode,
     )
-      ..addHint(DecodeHintType.PURE_BARCODE)
+      ..addHint(DecodeHintType.pureBarcode)
       ..addTest(7, 7, 0.0)
       ..testBlackBox();
   });

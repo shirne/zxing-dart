@@ -32,9 +32,9 @@ void main() {
     String? via,
     String parsedURI,
   ) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.QR_CODE);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.qrCode);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.SMS, result.type);
+    expect(ParsedResultType.sms, result.type);
     final smsResult = result as SMSParsedResult;
     assertArrayEquals(<String>[number], smsResult.numbers);
     expect(subject, smsResult.subject);

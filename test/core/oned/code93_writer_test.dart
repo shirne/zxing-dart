@@ -24,7 +24,7 @@ import '../utils.dart';
 /// Tests [Code93Writer].
 void main() {
   void doTest(String input, String expected) {
-    final result = Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
+    final result = Code93Writer().encode(input, BarcodeFormat.code93, 0, 0);
     expect(expected, matrixToString(result));
   }
 

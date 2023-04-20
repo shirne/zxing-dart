@@ -24,26 +24,26 @@ void main() {
     final writer = DataMatrixWriter();
     final encode = writer.encode(
         'FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7',
-        BarcodeFormat.DATA_MATRIX,
+        BarcodeFormat.dataMatrix,
         52,
         52, {
-      EncodeHintType.DATA_MATRIX_SHAPE: SymbolShapeHint.FORCE_SQUARE,
+      EncodeHintType.dataMatrixShape: SymbolShapeHint.forceSquare,
 
-      // ignore: deprecated_consistency, deprecated_member_use_from_same_package
-      EncodeHintType.MIN_SIZE: Dimension(52, 52)
+      // ignore: deprecated_member_use_from_same_package
+      EncodeHintType.minSize: Dimension(52, 52),
     });
     expect(encode.get(0, 0), true);
   });
 
   test('testDataMatrixImageWriter', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE;
+    hints[EncodeHintType.dataMatrixShape] = SymbolShapeHint.forceSquare;
 
     final bigEnough = 64;
     final writer = DataMatrixWriter();
     final matrix = writer.encode(
       'Hello Google',
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
       bigEnough,
       bigEnough,
       hints,
@@ -56,13 +56,13 @@ void main() {
 
   test('testDataMatrixWriter', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE;
+    hints[EncodeHintType.dataMatrixShape] = SymbolShapeHint.forceSquare;
 
     const bigEnough = 14;
     final writer = DataMatrixWriter();
     final matrix = writer.encode(
       'Hello Me',
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
       bigEnough,
       bigEnough,
       hints,
@@ -78,7 +78,7 @@ void main() {
     final writer = DataMatrixWriter();
     final matrix = writer.encode(
       'http://www.google.com/',
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
       tooSmall,
       tooSmall,
       null,

@@ -44,11 +44,11 @@ import 'expanded_row.dart';
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class RSSExpandedReader extends AbstractRSSReader {
-  static const List<int> _SYMBOL_WIDEST = [7, 5, 4, 3, 1];
-  static const List<int> _EVEN_TOTAL_SUBSET = [4, 20, 52, 104, 204];
-  static const List<int> _GSUM = [0, 348, 1388, 2948, 3988];
+  static const List<int> _symbolWidest = [7, 5, 4, 3, 1];
+  static const List<int> _evenTotalSubset = [4, 20, 52, 104, 204];
+  static const List<int> _gsum = [0, 348, 1388, 2948, 3988];
 
-  static const List<List<int>> _FINDER_PATTERNS = [
+  static const List<List<int>> _finderPatterns = [
     [1, 8, 4, 1], // A
     [3, 6, 4, 1], // B
     [3, 4, 6, 1], // C
@@ -57,7 +57,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     [2, 2, 9, 1] // F
   ];
 
-  static const List<List<int>> _WEIGHTS = [
+  static const List<List<int>> _weights = [
     [1, 3, 9, 27, 81, 32, 96, 77], //
     [20, 60, 180, 118, 143, 7, 21, 63], //
     [189, 145, 13, 39, 117, 140, 209, 205], //
@@ -83,48 +83,48 @@ class RSSExpandedReader extends AbstractRSSReader {
     [45, 135, 194, 160, 58, 174, 100, 89] //
   ];
 
-  static const int _FINDER_PAT_A = 0;
-  static const int _FINDER_PAT_B = 1;
-  static const int _FINDER_PAT_C = 2;
-  static const int _FINDER_PAT_D = 3;
-  static const int _FINDER_PAT_E = 4;
-  static const int _FINDER_PAT_F = 5;
+  static const int _finderPatA = 0;
+  static const int _finderPatB = 1;
+  static const int _finderPatC = 2;
+  static const int _finderPatD = 3;
+  static const int _finderPatE = 4;
+  static const int _finderPatF = 5;
 
   static final List<List<int>> _finderPatternSequences = [
-    [_FINDER_PAT_A, _FINDER_PAT_A],
-    [_FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B],
-    [_FINDER_PAT_A, _FINDER_PAT_C, _FINDER_PAT_B, _FINDER_PAT_D],
-    [_FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, _FINDER_PAT_C],
+    [_finderPatA, _finderPatA],
+    [_finderPatA, _finderPatB, _finderPatB],
+    [_finderPatA, _finderPatC, _finderPatB, _finderPatD],
+    [_finderPatA, _finderPatE, _finderPatB, _finderPatD, _finderPatC],
     [
-      _FINDER_PAT_A,
-      _FINDER_PAT_E,
-      _FINDER_PAT_B,
-      _FINDER_PAT_D,
-      _FINDER_PAT_D,
-      _FINDER_PAT_F
+      _finderPatA,
+      _finderPatE,
+      _finderPatB,
+      _finderPatD,
+      _finderPatD,
+      _finderPatF
     ], //
     [
-      _FINDER_PAT_A, _FINDER_PAT_E, _FINDER_PAT_B, _FINDER_PAT_D, //
-      _FINDER_PAT_E, _FINDER_PAT_F, _FINDER_PAT_F
+      _finderPatA, _finderPatE, _finderPatB, _finderPatD, //
+      _finderPatE, _finderPatF, _finderPatF
     ],
     [
-      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
-      _FINDER_PAT_C, _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_D
+      _finderPatA, _finderPatA, _finderPatB, _finderPatB, //
+      _finderPatC, _finderPatC, _finderPatD, _finderPatD
     ],
     [
-      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B,
-      _FINDER_PAT_C, //
-      _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_E, _FINDER_PAT_E
+      _finderPatA, _finderPatA, _finderPatB, _finderPatB,
+      _finderPatC, //
+      _finderPatC, _finderPatD, _finderPatE, _finderPatE
     ],
     [
-      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
-      _FINDER_PAT_C, _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_E,
-      _FINDER_PAT_F, _FINDER_PAT_F
+      _finderPatA, _finderPatA, _finderPatB, _finderPatB, //
+      _finderPatC, _finderPatC, _finderPatD, _finderPatE,
+      _finderPatF, _finderPatF
     ],
     [
-      _FINDER_PAT_A, _FINDER_PAT_A, _FINDER_PAT_B, _FINDER_PAT_B, //
-      _FINDER_PAT_C, _FINDER_PAT_D, _FINDER_PAT_D, _FINDER_PAT_E,
-      _FINDER_PAT_E, _FINDER_PAT_F, _FINDER_PAT_F
+      _finderPatA, _finderPatA, _finderPatB, _finderPatB, //
+      _finderPatC, _finderPatD, _finderPatD, _finderPatE,
+      _finderPatE, _finderPatF, _finderPatF
     ],
   ];
 
@@ -383,9 +383,9 @@ class RSSExpandedReader extends AbstractRSSReader {
       resultingString,
       null,
       [firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]],
-      BarcodeFormat.RSS_EXPANDED,
+      BarcodeFormat.rssExpanded,
     );
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']e0');
+    result.putMetadata(ResultMetadataType.symbologyIdentifier, ']e0');
     return result;
   }
 
@@ -593,7 +593,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     counters[0] = firstCounter;
     int value;
     try {
-      value = AbstractRSSReader.parseFinderValue(counters, _FINDER_PATTERNS);
+      value = AbstractRSSReader.parseFinderValue(counters, _finderPatterns);
     } on NotFoundException catch (_) {
       return null;
     }
@@ -672,7 +672,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     int oddChecksumPortion = 0;
     for (int i = oddCounts.length - 1; i >= 0; i--) {
       if (_isNotA1left(pattern, isOddPattern, leftChar)) {
-        final weight = _WEIGHTS[weightRowNumber][2 * i];
+        final weight = _weights[weightRowNumber][2 * i];
         oddChecksumPortion += oddCounts[i] * weight;
       }
       oddSum += oddCounts[i];
@@ -680,7 +680,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     int evenChecksumPortion = 0;
     for (int i = evenCounts.length - 1; i >= 0; i--) {
       if (_isNotA1left(pattern, isOddPattern, leftChar)) {
-        final weight = _WEIGHTS[weightRowNumber][2 * i + 1];
+        final weight = _weights[weightRowNumber][2 * i + 1];
         evenChecksumPortion += evenCounts[i] * weight;
       }
     }
@@ -691,12 +691,12 @@ class RSSExpandedReader extends AbstractRSSReader {
     }
 
     final group = (13 - oddSum) ~/ 2;
-    final oddWidest = _SYMBOL_WIDEST[group];
+    final oddWidest = _symbolWidest[group];
     final evenWidest = 9 - oddWidest;
     final vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, true);
     final vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
-    final tEven = _EVEN_TOTAL_SUBSET[group];
-    final gSum = _GSUM[group];
+    final tEven = _evenTotalSubset[group];
+    final gSum = _gsum[group];
     final value = vOdd * tEven + vEven + gSum;
 
     return DataCharacter(value, checksumPortion);

@@ -314,7 +314,7 @@ class MinimalECIInput implements ECIInput {
       }
     }
     int minimalJ = -1;
-    int minimalSize = MathUtils.MAX_VALUE;
+    int minimalSize = MathUtils.maxValue;
     for (int j = 0; j < encoderSet.length; j++) {
       if (edges[inputLength][j] != null) {
         final edge = edges[inputLength][j]!;

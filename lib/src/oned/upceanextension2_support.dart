@@ -46,7 +46,7 @@ class UPCEANExtension2Support {
         ),
         ResultPoint(end.toDouble(), rowNumber.toDouble()),
       ],
-      BarcodeFormat.UPC_EAN_EXTENSION,
+      BarcodeFormat.upcEanExtension,
     );
     if (extensionData != null) {
       extensionResult.putAllMetadata(extensionData);
@@ -110,7 +110,7 @@ class UPCEANExtension2Support {
       return null;
     }
     final result = <ResultMetadataType, Object>{};
-    result[ResultMetadataType.ISSUE_NUMBER] = raw.toString();
+    result[ResultMetadataType.issueNumber] = raw.toString();
     return result;
   }
 }

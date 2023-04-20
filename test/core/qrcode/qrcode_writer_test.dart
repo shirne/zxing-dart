@@ -68,7 +68,7 @@ void main() {
     final writer = QRCodeWriter();
     BitMatrix matrix = writer.encode(
       'http://www.google.com/',
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
       bigEnough,
       bigEnough,
       null,
@@ -81,7 +81,7 @@ void main() {
     final tooSmall = 20;
     matrix = writer.encode(
       'http://www.google.com/',
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
       tooSmall,
       tooSmall,
       null,
@@ -95,7 +95,7 @@ void main() {
     final strangeHeight = 100;
     matrix = writer.encode(
       'http://www.google.com/',
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
       strangeWidth,
       strangeHeight,
       null,
@@ -117,11 +117,11 @@ void main() {
     //assertNotNull(goldenResult);
 
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.ERROR_CORRECTION] = ecLevel;
+    hints[EncodeHintType.errorCorrection] = ecLevel;
     final writer = QRCodeWriter();
     final generatedResult = writer.encode(
       contents,
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
       resolution,
       resolution,
       hints,

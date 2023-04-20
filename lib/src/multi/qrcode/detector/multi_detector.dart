@@ -30,14 +30,13 @@ import 'multi_finder_pattern_finder.dart';
 /// @author Sean Owen
 /// @author Hannes Erven
 class MultiDetector extends Detector {
-  static const List<DetectorResult> _EMPTY_DETECTOR_RESULTS = [];
+  static const _emptyDetectorResults = <DetectorResult>[];
 
   MultiDetector(BitMatrix image) : super(image);
 
   List<DetectorResult> detectMulti(Map<DecodeHintType, Object>? hints) {
     final resultPointCallback =
-        hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-            as ResultPointCallback?;
+        hints?[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
     final finder = MultiFinderPatternFinder(image, resultPointCallback);
     final infos = finder.findMulti(hints);
 
@@ -54,7 +53,7 @@ class MultiDetector extends Detector {
       }
     }
     if (result.isEmpty) {
-      return _EMPTY_DETECTOR_RESULTS;
+      return _emptyDetectorResults;
     } else {
       return result.toList();
     }

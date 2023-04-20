@@ -26,7 +26,7 @@ void main() {
   test('testEncodeAuto', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
       'ABCD',
-      Compaction.AUTO,
+      Compaction.auto,
       utf8,
       false,
     );
@@ -37,7 +37,7 @@ void main() {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
       r'1%§s ?aG$',
-      Compaction.AUTO,
+      Compaction.auto,
       utf8,
       false,
     );
@@ -47,7 +47,7 @@ void main() {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
       'asdfg§asd',
-      Compaction.AUTO,
+      Compaction.auto,
       latin1,
       false,
     );
@@ -56,7 +56,7 @@ void main() {
   test('testEncodeText', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
       'ABCD',
-      Compaction.TEXT,
+      Compaction.text,
       utf8,
       false,
     );
@@ -66,7 +66,7 @@ void main() {
   test('testEncodeNumeric', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
       '1234',
-      Compaction.NUMERIC,
+      Compaction.numeric,
       utf8,
       false,
     );
@@ -76,7 +76,7 @@ void main() {
   test('testEncodeByte', () {
     final encoded = PDF417HighLevelEncoder.encodeHighLevel(
       'abcd',
-      Compaction.BYTE,
+      Compaction.byte,
       utf8,
       false,
     );
@@ -85,7 +85,7 @@ void main() {
 
   test('testEncodeEmptyString', () {
     try {
-      PDF417HighLevelEncoder.encodeHighLevel('', Compaction.AUTO, null, false);
+      PDF417HighLevelEncoder.encodeHighLevel('', Compaction.auto, null, false);
     } on WriterException catch (_) {}
   });
 }

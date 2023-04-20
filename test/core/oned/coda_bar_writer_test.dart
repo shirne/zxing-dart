@@ -24,7 +24,7 @@ import '../utils.dart';
 
 void main() {
   BitMatrix encode(String input) {
-    return CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
+    return CodaBarWriter().encode(input, BarcodeFormat.codabar, 0, 0);
   }
 
   void doTest(String input, String expected) {

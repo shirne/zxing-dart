@@ -61,7 +61,7 @@ class CalendarParsedResult extends ParsedResult {
     this.description,
     this.latitude,
     this.longitude,
-  ) : super(ParsedResultType.CALENDAR) {
+  ) : super(ParsedResultType.calendar) {
     try {
       _start = _parseDate(startString);
     } on ParseException catch (_) {

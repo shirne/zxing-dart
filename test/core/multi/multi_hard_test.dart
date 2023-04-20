@@ -54,10 +54,10 @@ void main() {
     expect(results.length, 2);
 
     expect('031415926531', results[0].text);
-    expect(BarcodeFormat.UPC_A, results[0].barcodeFormat);
+    expect(BarcodeFormat.upcA, results[0].barcodeFormat);
 
     expect('www.airtable.com/jobs', results[1].text);
-    expect(BarcodeFormat.QR_CODE, results[1].barcodeFormat);
+    expect(BarcodeFormat.qrCode, results[1].barcodeFormat);
   });
 
   void testQR(
@@ -98,8 +98,8 @@ void main() {
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     final reader = MultiFormatReader();
     final hints = <DecodeHintType, Object>{
-      DecodeHintType.TRY_HARDER: true,
-      DecodeHintType.ALSO_INVERTED: true
+      DecodeHintType.tryHarder: true,
+      DecodeHintType.alsoInverted: true
     };
 
     Result? result;
@@ -119,7 +119,7 @@ void main() {
       print('decode failed: $name');
     } else {
       expect(text, result.text);
-      expect(BarcodeFormat.QR_CODE, result.barcodeFormat);
+      expect(BarcodeFormat.qrCode, result.barcodeFormat);
       print('decoded:$name');
     }
   }

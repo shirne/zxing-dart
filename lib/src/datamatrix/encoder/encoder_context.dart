@@ -47,7 +47,7 @@ class EncoderContext {
       sb.writeCharCode(ch);
     }
     _msg = sb.toString(); //Not Unicode here!
-    _shape = SymbolShapeHint.FORCE_NONE;
+    _shape = SymbolShapeHint.forceNone;
     _codewords = StringBuffer();
     _newEncoding = -1;
   }

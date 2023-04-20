@@ -20,7 +20,7 @@ import 'high_level_encoder.dart';
 
 class ASCIIEncoder implements Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.ASCII_ENCODATION;
+  int get encodingMode => HighLevelEncoder.asciiEncodation;
 
   @override
   void encode(EncoderContext context) {
@@ -46,31 +46,31 @@ class ASCIIEncoder implements Encoder {
       );
       if (newMode != encodingMode) {
         switch (newMode) {
-          case HighLevelEncoder.BASE256_ENCODATION:
-            context.writeCodeword(HighLevelEncoder.LATCH_TO_BASE256);
-            context.signalEncoderChange(HighLevelEncoder.BASE256_ENCODATION);
+          case HighLevelEncoder.base256Encodation:
+            context.writeCodeword(HighLevelEncoder.latchToBase256);
+            context.signalEncoderChange(HighLevelEncoder.base256Encodation);
             return;
-          case HighLevelEncoder.C40_ENCODATION:
-            context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
-            context.signalEncoderChange(HighLevelEncoder.C40_ENCODATION);
+          case HighLevelEncoder.c40Encodation:
+            context.writeCodeword(HighLevelEncoder.latchToC40);
+            context.signalEncoderChange(HighLevelEncoder.c40Encodation);
             return;
-          case HighLevelEncoder.X12_ENCODATION:
-            context.writeCodeword(HighLevelEncoder.LATCH_TO_ANSIX12);
-            context.signalEncoderChange(HighLevelEncoder.X12_ENCODATION);
+          case HighLevelEncoder.x12Encodation:
+            context.writeCodeword(HighLevelEncoder.latchToAnsix12);
+            context.signalEncoderChange(HighLevelEncoder.x12Encodation);
             break;
-          case HighLevelEncoder.TEXT_ENCODATION:
-            context.writeCodeword(HighLevelEncoder.LATCH_TO_TEXT);
-            context.signalEncoderChange(HighLevelEncoder.TEXT_ENCODATION);
+          case HighLevelEncoder.textEncodation:
+            context.writeCodeword(HighLevelEncoder.latchToText);
+            context.signalEncoderChange(HighLevelEncoder.textEncodation);
             break;
-          case HighLevelEncoder.EDIFACT_ENCODATION:
-            context.writeCodeword(HighLevelEncoder.LATCH_TO_EDIFACT);
-            context.signalEncoderChange(HighLevelEncoder.EDIFACT_ENCODATION);
+          case HighLevelEncoder.edifactEncodation:
+            context.writeCodeword(HighLevelEncoder.latchToEdifact);
+            context.signalEncoderChange(HighLevelEncoder.edifactEncodation);
             break;
           default:
             throw StateError('Illegal mode: $newMode');
         }
       } else if (HighLevelEncoder.isExtendedASCII(c)) {
-        context.writeCodeword(HighLevelEncoder.UPPER_SHIFT);
+        context.writeCodeword(HighLevelEncoder.upperShift);
         context.writeCodeword(c - 128 + 1);
         context.pos++;
       } else {

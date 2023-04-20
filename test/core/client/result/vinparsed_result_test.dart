@@ -32,9 +32,9 @@ void main() {
     int plant,
     String sequential,
   ) {
-    final fakeResult = Result(contents, null, null, BarcodeFormat.CODE_39);
+    final fakeResult = Result(contents, null, null, BarcodeFormat.code39);
     final result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.VIN, result.type);
+    expect(ParsedResultType.vin, result.type);
     final vinResult = result as VINParsedResult;
     expect(wmi, vinResult.worldManufacturerID);
     expect(vds, vinResult.vehicleDescriptorSection);
@@ -48,13 +48,12 @@ void main() {
 
   test('testNotVIN', () {
     Result fakeResult =
-        Result('1M8GDM9A1KP042788', null, null, BarcodeFormat.CODE_39);
+        Result('1M8GDM9A1KP042788', null, null, BarcodeFormat.code39);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.type);
-    fakeResult =
-        Result('1M8GDM9AXKP042788', null, null, BarcodeFormat.CODE_128);
+    expect(ParsedResultType.text, result.type);
+    fakeResult = Result('1M8GDM9AXKP042788', null, null, BarcodeFormat.code128);
     result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.TEXT, result.type);
+    expect(ParsedResultType.text, result.type);
   });
 
   test('testVIN', () {

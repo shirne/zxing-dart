@@ -30,13 +30,13 @@ import 'pdf417_high_level_encoder.dart';
 /// Top-level class for the logic part of the PDF417 implementation.
 class PDF417 {
   /// The start pattern (17 bits)
-  static const int _START_PATTERN = 0x1fea8;
+  static const int _startPattern = 0x1fea8;
 
   /// The stop pattern (18 bits)
-  static const int _STOP_PATTERN = 0x3fa29;
+  static const int _stopPattern = 0x3fa29;
 
   /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
-  static const List<List<int>> _CODEWORD_TABLE = [
+  static const List<List<int>> _codewordTable = [
     [
       0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e, //
       0x1a8c0, 0x1d470, 0x1a860, 0x15040, 0x1a830, 0x15020,
@@ -510,13 +510,13 @@ class PDF417 {
     ]
   ];
 
-  static const double _PREFERRED_RATIO = 3.0;
-  static const double _DEFAULT_MODULE_WIDTH = 0.357; //1px in mm
-  static const double _HEIGHT = 2.0; //mm
+  static const double _preferredRatio = 3.0;
+  static const double _defaultModuleWidth = 0.357; //1px in mm
+  static const double _height = 2.0; //mm
 
   BarcodeMatrix? _barcodeMatrix;
   bool _compact;
-  Compaction _compaction = Compaction.AUTO;
+  Compaction _compaction = Compaction.auto;
   Encoding? _encoding;
   int _minCols = 2;
   int _maxCols = 30;
@@ -587,7 +587,7 @@ class PDF417 {
     for (int y = 0; y < r; y++) {
       final cluster = y % 3;
       logic.startRow();
-      _encodeChar(_START_PATTERN, 17, logic.getCurrentRow());
+      _encodeChar(_startPattern, 17, logic.getCurrentRow());
 
       int left;
       int right;
@@ -602,26 +602,26 @@ class PDF417 {
         right = (30 * (y ~/ 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
       }
 
-      int pattern = _CODEWORD_TABLE[cluster][left];
+      int pattern = _codewordTable[cluster][left];
       _encodeChar(pattern, 17, logic.getCurrentRow());
 
       for (int x = 0; x < c; x++) {
-        pattern = _CODEWORD_TABLE[cluster][fullCodewords.codeUnitAt(idx)];
+        pattern = _codewordTable[cluster][fullCodewords.codeUnitAt(idx)];
         _encodeChar(pattern, 17, logic.getCurrentRow());
         idx++;
       }
 
       if (_compact) {
         _encodeChar(
-          _STOP_PATTERN,
+          _stopPattern,
           1,
           logic.getCurrentRow(),
         ); // encodes stop line for compact pdf417
       } else {
-        pattern = _CODEWORD_TABLE[cluster][right];
+        pattern = _codewordTable[cluster][right];
         _encodeChar(pattern, 17, logic.getCurrentRow());
 
-        _encodeChar(_STOP_PATTERN, 18, logic.getCurrentRow());
+        _encodeChar(_stopPattern, 18, logic.getCurrentRow());
       }
     }
   }
@@ -725,12 +725,12 @@ class PDF417 {
       }
 
       final newRatio =
-          ((17 * cols + 69) * _DEFAULT_MODULE_WIDTH) / (rows * _HEIGHT);
+          ((17 * cols + 69) * _defaultModuleWidth) / (rows * _height);
 
       // ignore if previous ratio is closer to preferred ratio
       if (dimension != null &&
-          (newRatio - _PREFERRED_RATIO).abs() >
-              (ratio - _PREFERRED_RATIO).abs()) {
+          (newRatio - _preferredRatio).abs() >
+              (ratio - _preferredRatio).abs()) {
         continue;
       }
 

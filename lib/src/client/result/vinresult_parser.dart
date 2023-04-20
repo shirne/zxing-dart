@@ -28,7 +28,7 @@ class VINResultParser extends ResultParser {
 
   @override
   VINParsedResult? parse(Result result) {
-    if (result.barcodeFormat != BarcodeFormat.CODE_39) {
+    if (result.barcodeFormat != BarcodeFormat.code39) {
       return null;
     }
     String rawText = result.text;

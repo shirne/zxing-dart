@@ -29,26 +29,27 @@ import 'pdf417_detector_result.dart';
 /// @author dswitkin@google.com (Daniel Switkin)
 /// @author Guenther Grau
 class Detector {
-  static const List<int> _INDEXES_START_PATTERN = [0, 4, 1, 5];
-  static const List<int> _INDEXES_STOP_PATTERN = [6, 2, 7, 3];
-  static const double _MAX_AVG_VARIANCE = 0.42;
-  static const double _MAX_INDIVIDUAL_VARIANCE = 0.8;
+  static const List<int> _indexesStartPattern = [0, 4, 1, 5];
+  static const List<int> _indexesStopPattern = [6, 2, 7, 3];
+  static const double _maxAvgVariance = 0.42;
+  static const double _maxIndividualVariance = 0.8;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
-  static const _START_PATTERN = [8, 1, 1, 1, 1, 1, 1, 3];
+  static const _startPattern = [8, 1, 1, 1, 1, 1, 1, 3];
   // 1111111 0 1 000 1 0 1 00 1
-  static const _STOP_PATTERN = [7, 1, 1, 3, 1, 1, 1, 2, 1];
-  static const _MAX_PIXEL_DRIFT = 3;
-  static const _MAX_PATTERN_DRIFT = 5;
+  static const _stopPattern = [7, 1, 1, 3, 1, 1, 1, 2, 1];
+  static const _maxPixelDrift = 3;
+  static const _maxPatternDrift = 5;
   // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
   // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
-  static const _SKIPPED_ROW_COUNT_MAX = 25;
+  static const _skippedRowCountMax = 25;
   // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
   // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
-  static const _ROW_STEP = 5;
-  static const _BARCODE_MIN_HEIGHT = 10;
-  static const _ROTATIONS = [0, 180, 270, 90];
+  static const _rowStep = 5;
+  static const _barcodeMinHeight = 10;
+  static const _rotations = [0, 180, 270, 90];
+
   Detector._();
 
   /// <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
@@ -71,7 +72,7 @@ class Detector {
     final originalMatrix = image.blackMatrix;
 
     // Try 180, 270, 90 degree rotations, in that order
-    for (int rotation in _ROTATIONS) {
+    for (int rotation in _rotations) {
       final bitMatrix = _applyRotation(originalMatrix, rotation);
       final barcodeCoordinates = _detect(multiple, bitMatrix);
       if (barcodeCoordinates.isNotEmpty) {
@@ -122,7 +123,7 @@ class Detector {
             row = math.max(row, barcodeCoordinate[3]!.y.toInt());
           }
         }
-        row += _ROW_STEP;
+        row += _rowStep;
         continue;
       }
       foundBarcodeInRow = true;
@@ -173,9 +174,9 @@ class Detector {
         width,
         startRow,
         startColumn,
-        _START_PATTERN,
+        _startPattern,
       ),
-      _INDEXES_START_PATTERN,
+      _indexesStartPattern,
     );
 
     if (result[4] != null) {
@@ -191,9 +192,9 @@ class Detector {
         width,
         startRow,
         startColumn,
-        _STOP_PATTERN,
+        _stopPattern,
       ),
-      _INDEXES_STOP_PATTERN,
+      _indexesStopPattern,
     );
 
     return result;
@@ -220,7 +221,7 @@ class Detector {
     final result = List<ResultPoint?>.filled(4, null);
     bool found = false;
     final counters = List.filled(pattern.length, 0);
-    for (; startRow < height; startRow += _ROW_STEP) {
+    for (; startRow < height; startRow += _rowStep) {
       List<int>? loc = _findGuardPattern(
         matrix,
         startColumn,
@@ -271,12 +272,12 @@ class Detector {
         // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
         // larger drift and don't check for skipped rows.
         if (loc != null &&
-            (previousRowLoc[0] - loc[0]).abs() < _MAX_PATTERN_DRIFT &&
-            (previousRowLoc[1] - loc[1]).abs() < _MAX_PATTERN_DRIFT) {
+            (previousRowLoc[0] - loc[0]).abs() < _maxPatternDrift &&
+            (previousRowLoc[1] - loc[1]).abs() < _maxPatternDrift) {
           previousRowLoc = loc;
           skippedRowCount = 0;
         } else {
-          if (skippedRowCount > _SKIPPED_ROW_COUNT_MAX) {
+          if (skippedRowCount > _skippedRowCountMax) {
             break;
           } else {
             skippedRowCount++;
@@ -287,7 +288,7 @@ class Detector {
       result[2] = ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
       result[3] = ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
-    if (stopRow - startRow < _BARCODE_MIN_HEIGHT) {
+    if (stopRow - startRow < _barcodeMinHeight) {
       result.fillRange(0, result.length, null);
     }
     return result;
@@ -316,7 +317,7 @@ class Detector {
     // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels
     while (matrix.get(patternStart, row) &&
         patternStart > 0 &&
-        pixelDrift++ < _MAX_PIXEL_DRIFT) {
+        pixelDrift++ < _maxPixelDrift) {
       patternStart--;
     }
     int x = patternStart;
@@ -328,7 +329,7 @@ class Detector {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (_patternMatchVariance(counters, pattern) < _MAX_AVG_VARIANCE) {
+          if (_patternMatchVariance(counters, pattern) < _maxAvgVariance) {
             return [patternStart, x];
           }
           patternStart += counters[0] + counters[1];
@@ -344,7 +345,7 @@ class Detector {
       }
     }
     if (counterPosition == patternLength - 1 &&
-        _patternMatchVariance(counters, pattern) < _MAX_AVG_VARIANCE) {
+        _patternMatchVariance(counters, pattern) < _maxAvgVariance) {
       return [patternStart, x - 1];
     }
     return null;
@@ -375,7 +376,7 @@ class Detector {
     // Scale up patternLength so that intermediate values below like scaledCounter will have
     // more "significant digits".
     final unitBarWidth = total / patternLength;
-    final maxIndividualVariance = _MAX_INDIVIDUAL_VARIANCE * unitBarWidth;
+    final maxIndividualVariance = _maxIndividualVariance * unitBarWidth;
 
     double totalVariance = 0.0;
     for (int x = 0; x < numCounters; x++) {

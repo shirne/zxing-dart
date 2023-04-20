@@ -47,7 +47,7 @@ class DataMatrixWriter implements Writer {
       throw ArgumentError('Found empty contents');
     }
 
-    if (format != BarcodeFormat.DATA_MATRIX) {
+    if (format != BarcodeFormat.dataMatrix) {
       throw ArgumentError('Can only encode DATA_MATRIX, but got $format');
     }
 
@@ -58,24 +58,24 @@ class DataMatrixWriter implements Writer {
     }
 
     // Try to get force shape & min / max size
-    SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE;
+    SymbolShapeHint shape = SymbolShapeHint.forceNone;
     Dimension? minSize;
     Dimension? maxSize;
     if (hints != null) {
       final requestedShape =
-          hints[EncodeHintType.DATA_MATRIX_SHAPE] as SymbolShapeHint?;
+          hints[EncodeHintType.dataMatrixShape] as SymbolShapeHint?;
       if (requestedShape != null) {
         shape = requestedShape;
       }
 
       // ignore: deprecated_member_use_from_same_package
-      final requestedMinSize = hints[EncodeHintType.MIN_SIZE] as Dimension?;
+      final requestedMinSize = hints[EncodeHintType.minSize] as Dimension?;
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
 
       // ignore: deprecated_member_use_from_same_package
-      final requestedMaxSize = hints[EncodeHintType.MAX_SIZE] as Dimension?;
+      final requestedMaxSize = hints[EncodeHintType.maxSize] as Dimension?;
       if (requestedMaxSize != null) {
         maxSize = requestedMaxSize;
       }
@@ -85,16 +85,16 @@ class DataMatrixWriter implements Writer {
     String encoded;
 
     final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.DATA_MATRIX_COMPACT) &&
-        (hints[EncodeHintType.DATA_MATRIX_COMPACT] as bool);
+        hints.containsKey(EncodeHintType.dataMatrixCompact) &&
+        (hints[EncodeHintType.dataMatrixCompact] as bool);
     if (hasCompactionHint) {
-      final hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
-          (hints[EncodeHintType.GS1_FORMAT] as bool);
+      final hasGS1FormatHint = hints.containsKey(EncodeHintType.gs1Format) &&
+          (hints[EncodeHintType.gs1Format] as bool);
 
       Encoding? charset;
-      final hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
+      final hasEncodingHint = hints.containsKey(EncodeHintType.characterSet);
       if (hasEncodingHint) {
-        charset = (hints[EncodeHintType.CHARACTER_SET] as Encoding?);
+        charset = (hints[EncodeHintType.characterSet] as Encoding?);
       }
       encoded = MinimalEncoder.encodeHighLevel(
         contents,
@@ -103,12 +103,21 @@ class DataMatrixWriter implements Writer {
         shape,
       );
     } else {
-      encoded =
-          HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+      encoded = HighLevelEncoder.encodeHighLevel(
+        contents,
+        shape,
+        minSize,
+        maxSize,
+      );
     }
 
-    final symbolInfo =
-        SymbolInfo.lookup(encoded.length, shape, minSize, maxSize, true);
+    final symbolInfo = SymbolInfo.lookup(
+      encoded.length,
+      shape,
+      minSize,
+      maxSize,
+      true,
+    );
 
     //2. step: ECC generation
     final codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo!);

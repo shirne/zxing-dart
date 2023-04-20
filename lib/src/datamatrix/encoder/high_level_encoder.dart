@@ -33,13 +33,13 @@ import 'x12_encoder.dart';
 /// annex S.
 class HighLevelEncoder {
   /// Padding character
-  static const int _PAD = 129;
+  static const int _pad = 129;
 
   /// mode latch to C40 encodation mode
-  static const int LATCH_TO_C40 = 230;
+  static const int latchToC40 = 230;
 
   /// mode latch to Base 256 encodation mode
-  static const int LATCH_TO_BASE256 = 231;
+  static const int latchToBase256 = 231;
 
   /// FNC1 Codeword
   //static const int _FNC1 = 232;
@@ -48,53 +48,53 @@ class HighLevelEncoder {
   /// Reader Programming
   //static const int _READER_PROGRAMMING = 234;
   /// Upper Shift chr
-  static const int UPPER_SHIFT = 235;
+  static const int upperShift = 235;
 
   /// 05 Macro
-  static const int _MACRO_05 = 236;
+  static const int _macro05 = 236;
 
   /// 06 Macro
-  static const int _MACRO_06 = 237;
+  static const int _macro06 = 237;
 
   /// mode latch to ANSI X.12 encodation mode
-  static const int LATCH_TO_ANSIX12 = 238;
+  static const int latchToAnsix12 = 238;
 
   /// mode latch to Text encodation mode
-  static const int LATCH_TO_TEXT = 239;
+  static const int latchToText = 239;
 
   /// mode latch to EDIFACT encodation mode
-  static const int LATCH_TO_EDIFACT = 240;
+  static const int latchToEdifact = 240;
 
   /// ECI character (Extended Channel Interpretation)
   //static const int _ECI = 241;
 
   /// Unlatch from C40 encodation
-  static const int C40_UNLATCH = 254;
+  static const int c40Unlatch = 254;
 
   /// Unlatch from X12 encodation
-  static const int X12_UNLATCH = 254;
+  static const int x12Unlatch = 254;
 
   /// 05 Macro header
-  static const String MACRO_05_HEADER = '[)>\u001E05\u001D';
+  static const String macro05Header = '[)>\u001E05\u001D';
 
   /// 06 Macro header
-  static const String MACRO_06_HEADER = '[)>\u001E06\u001D';
+  static const String macro06Header = '[)>\u001E06\u001D';
 
   /// Macro trailer
-  static const String MACRO_TRAILER = '\u001E\u0004';
+  static const String macroTrailer = '\u001E\u0004';
 
-  static const int ASCII_ENCODATION = 0;
-  static const int C40_ENCODATION = 1;
-  static const int TEXT_ENCODATION = 2;
-  static const int X12_ENCODATION = 3;
-  static const int EDIFACT_ENCODATION = 4;
-  static const int BASE256_ENCODATION = 5;
+  static const int asciiEncodation = 0;
+  static const int c40Encodation = 1;
+  static const int textEncodation = 2;
+  static const int x12Encodation = 3;
+  static const int edifactEncodation = 4;
+  static const int base256Encodation = 5;
 
   HighLevelEncoder._();
 
   static int _randomize253State(int codewordPosition) {
     final pseudoRandom = ((149 * codewordPosition) % 253) + 1;
-    final tempVariable = _PAD + pseudoRandom;
+    final tempVariable = _pad + pseudoRandom;
     return tempVariable <= 254 ? tempVariable : tempVariable - 254;
   }
 
@@ -109,7 +109,7 @@ class HighLevelEncoder {
   /// @return the encoded message (the char values range from 0 to 255)
   static String encodeHighLevel(
     String msg, [
-    SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE,
+    SymbolShapeHint shape = SymbolShapeHint.forceNone,
     Dimension? minSize,
     Dimension? maxSize,
     bool forceC40 = false,
@@ -129,18 +129,18 @@ class HighLevelEncoder {
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
 
-    if (msg.startsWith(MACRO_05_HEADER) && msg.endsWith(MACRO_TRAILER)) {
-      context.writeCodeword(_MACRO_05);
+    if (msg.startsWith(macro05Header) && msg.endsWith(macroTrailer)) {
+      context.writeCodeword(_macro05);
       context.skipAtEnd = 2;
-      context.pos += MACRO_05_HEADER.length;
-    } else if (msg.startsWith(MACRO_06_HEADER) && msg.endsWith(MACRO_TRAILER)) {
-      context.writeCodeword(_MACRO_06);
+      context.pos += macro05Header.length;
+    } else if (msg.startsWith(macro06Header) && msg.endsWith(macroTrailer)) {
+      context.writeCodeword(_macro06);
       context.skipAtEnd = 2;
-      context.pos += MACRO_06_HEADER.length;
+      context.pos += macro06Header.length;
     }
 
     //Default mode
-    int encodingMode = ASCII_ENCODATION;
+    int encodingMode = asciiEncodation;
 
     if (forceC40) {
       c40Encoder.encodeMaximal(context);
@@ -159,15 +159,15 @@ class HighLevelEncoder {
     context.updateSymbolInfo();
     final capacity = context.symbolInfo!.dataCapacity;
     if (len < capacity &&
-        encodingMode != ASCII_ENCODATION &&
-        encodingMode != BASE256_ENCODATION &&
-        encodingMode != EDIFACT_ENCODATION) {
+        encodingMode != asciiEncodation &&
+        encodingMode != base256Encodation &&
+        encodingMode != edifactEncodation) {
       context.writeCodeword('\u00fe'); //Unlatch (254)
     }
     //Padding
     final codewords = context.codewords;
     if (codewords.length < capacity) {
-      codewords.writeCharCode(_PAD);
+      codewords.writeCharCode(_pad);
     }
     while (codewords.length < capacity) {
       codewords.writeCharCode(_randomize253State(codewords.length + 1));
@@ -178,19 +178,19 @@ class HighLevelEncoder {
 
   static int lookAheadTest(String msg, int startPos, int currentMode) {
     final newMode = lookAheadTestIntern(msg, startPos, currentMode);
-    if (currentMode == X12_ENCODATION && newMode == X12_ENCODATION) {
+    if (currentMode == x12Encodation && newMode == x12Encodation) {
       final endPos = math.min(startPos + 3, msg.length);
       for (int i = startPos; i < endPos; i++) {
         if (!isNativeX12(msg.codeUnitAt(i))) {
-          return ASCII_ENCODATION;
+          return asciiEncodation;
         }
       }
-    } else if (currentMode == EDIFACT_ENCODATION &&
-        newMode == EDIFACT_ENCODATION) {
+    } else if (currentMode == edifactEncodation &&
+        newMode == edifactEncodation) {
       final endPos = math.min(startPos + 4, msg.length);
       for (int i = startPos; i < endPos; i++) {
         if (!isNativeEDIFACT(msg.codeUnitAt(i))) {
-          return ASCII_ENCODATION;
+          return asciiEncodation;
         }
       }
     }
@@ -203,7 +203,7 @@ class HighLevelEncoder {
     }
     List<double> charCounts;
     //step J
-    if (currentMode == ASCII_ENCODATION) {
+    if (currentMode == asciiEncodation) {
       charCounts = [0, 1, 1, 1, 1, 1.25];
     } else {
       charCounts = [1, 2, 2, 2, 2, 2.25];
@@ -219,42 +219,42 @@ class HighLevelEncoder {
         mins.fillRange(0, mins.length, 0);
         intCharCounts.fillRange(0, mins.length, 0);
         final min =
-            _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
+            _findMinimums(charCounts, intCharCounts, MathUtils.maxValue, mins);
         int minCount = _getMinimumCount(mins);
 
-        if (intCharCounts[ASCII_ENCODATION] == min) {
-          return ASCII_ENCODATION;
+        if (intCharCounts[asciiEncodation] == min) {
+          return asciiEncodation;
         }
         if (minCount == 1) {
-          if (mins[BASE256_ENCODATION] > 0) {
-            return BASE256_ENCODATION;
+          if (mins[base256Encodation] > 0) {
+            return base256Encodation;
           }
-          if (mins[EDIFACT_ENCODATION] > 0) {
-            return EDIFACT_ENCODATION;
+          if (mins[edifactEncodation] > 0) {
+            return edifactEncodation;
           }
-          if (mins[TEXT_ENCODATION] > 0) {
-            return TEXT_ENCODATION;
+          if (mins[textEncodation] > 0) {
+            return textEncodation;
           }
-          if (mins[X12_ENCODATION] > 0) {
-            return X12_ENCODATION;
+          if (mins[x12Encodation] > 0) {
+            return x12Encodation;
           }
         }
 
         // to fix result
         final dmin = charCounts.fold<double>(
-          MathUtils.MAX_VALUE.toDouble(),
+          MathUtils.maxValue.toDouble(),
           (previousValue, element) => math.min(previousValue, element),
         );
         minCount = charCounts.where((element) => element == dmin).length;
 
-        if (charCounts[ASCII_ENCODATION] == dmin) {
-          return ASCII_ENCODATION;
+        if (charCounts[asciiEncodation] == dmin) {
+          return asciiEncodation;
         }
         if (minCount == 1) {
           return charCounts.indexOf(dmin);
         }
 
-        return C40_ENCODATION;
+        return c40Encodation;
       }
 
       final c = msg.codeUnitAt(startPos + charsProcessed);
@@ -262,140 +262,139 @@ class HighLevelEncoder {
 
       //step L
       if (isDigit(c)) {
-        charCounts[ASCII_ENCODATION] += 0.5;
+        charCounts[asciiEncodation] += 0.5;
       } else if (isExtendedASCII(c)) {
-        charCounts[ASCII_ENCODATION] =
-            (charCounts[ASCII_ENCODATION]).ceil().toDouble();
-        charCounts[ASCII_ENCODATION] += 2.0;
+        charCounts[asciiEncodation] =
+            (charCounts[asciiEncodation]).ceil().toDouble();
+        charCounts[asciiEncodation] += 2.0;
       } else {
-        charCounts[ASCII_ENCODATION] =
-            (charCounts[ASCII_ENCODATION]).ceil().toDouble();
-        charCounts[ASCII_ENCODATION]++;
+        charCounts[asciiEncodation] =
+            (charCounts[asciiEncodation]).ceil().toDouble();
+        charCounts[asciiEncodation]++;
       }
 
       //step M
       if (isNativeC40(c)) {
-        charCounts[C40_ENCODATION] += 2.0 / 3.0; //0.6666667;
+        charCounts[c40Encodation] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[C40_ENCODATION] += 8.0 / 3.0; //2.6666667;
+        charCounts[c40Encodation] += 8.0 / 3.0; //2.6666667;
       } else {
-        charCounts[C40_ENCODATION] += 4.0 / 3.0; //1.3333334;
+        charCounts[c40Encodation] += 4.0 / 3.0; //1.3333334;
       }
 
       //step N
       if (isNativeText(c)) {
-        charCounts[TEXT_ENCODATION] += 2.0 / 3.0; //0.6666667;
+        charCounts[textEncodation] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[TEXT_ENCODATION] += 8.0 / 3.0; //2.6666667;
+        charCounts[textEncodation] += 8.0 / 3.0; //2.6666667;
       } else {
-        charCounts[TEXT_ENCODATION] += 4.0 / 3.0; //1.3333334;
+        charCounts[textEncodation] += 4.0 / 3.0; //1.3333334;
       }
 
       //step O
       if (isNativeX12(c)) {
-        charCounts[X12_ENCODATION] += 2.0 / 3.0; //0.6666667;
+        charCounts[x12Encodation] += 2.0 / 3.0; //0.6666667;
       } else if (isExtendedASCII(c)) {
-        charCounts[X12_ENCODATION] += 13.0 / 3.0; //4.3333335;
+        charCounts[x12Encodation] += 13.0 / 3.0; //4.3333335;
       } else {
-        charCounts[X12_ENCODATION] += 10.0 / 3.0; //3.3333333;
+        charCounts[x12Encodation] += 10.0 / 3.0; //3.3333333;
       }
 
       //step P
       if (isNativeEDIFACT(c)) {
-        charCounts[EDIFACT_ENCODATION] += 0.75; //3.0 / 4.0;
+        charCounts[edifactEncodation] += 0.75; //3.0 / 4.0;
       } else if (isExtendedASCII(c)) {
-        charCounts[EDIFACT_ENCODATION] += 4.25; //17.0 / 4.0;
+        charCounts[edifactEncodation] += 4.25; //17.0 / 4.0;
       } else {
-        charCounts[EDIFACT_ENCODATION] += 3.25; //13.0 / 4.0;
+        charCounts[edifactEncodation] += 3.25; //13.0 / 4.0;
       }
 
       // step Q
       if (_isSpecialB256(c)) {
-        charCounts[BASE256_ENCODATION] += 4.0;
+        charCounts[base256Encodation] += 4.0;
       } else {
-        charCounts[BASE256_ENCODATION]++;
+        charCounts[base256Encodation]++;
       }
 
       //step R
       if (charsProcessed >= 4) {
         mins.fillRange(0, mins.length, 0);
         intCharCounts.fillRange(0, mins.length, 0);
-        _findMinimums(charCounts, intCharCounts, MathUtils.MAX_VALUE, mins);
+        _findMinimums(charCounts, intCharCounts, MathUtils.maxValue, mins);
 
-        if (intCharCounts[ASCII_ENCODATION] <
+        if (intCharCounts[asciiEncodation] <
             min([
-              intCharCounts[BASE256_ENCODATION],
-              intCharCounts[C40_ENCODATION],
-              intCharCounts[TEXT_ENCODATION],
-              intCharCounts[X12_ENCODATION],
-              intCharCounts[EDIFACT_ENCODATION],
+              intCharCounts[base256Encodation],
+              intCharCounts[c40Encodation],
+              intCharCounts[textEncodation],
+              intCharCounts[x12Encodation],
+              intCharCounts[edifactEncodation],
             ])) {
-          return ASCII_ENCODATION;
+          return asciiEncodation;
         }
-        if (intCharCounts[BASE256_ENCODATION] <
-                intCharCounts[ASCII_ENCODATION] ||
-            intCharCounts[BASE256_ENCODATION] + 1 <
+        if (intCharCounts[base256Encodation] < intCharCounts[asciiEncodation] ||
+            intCharCounts[base256Encodation] + 1 <
                 min([
-                  intCharCounts[C40_ENCODATION],
-                  intCharCounts[TEXT_ENCODATION],
-                  intCharCounts[X12_ENCODATION],
-                  intCharCounts[EDIFACT_ENCODATION],
+                  intCharCounts[c40Encodation],
+                  intCharCounts[textEncodation],
+                  intCharCounts[x12Encodation],
+                  intCharCounts[edifactEncodation],
                 ])) {
-          return BASE256_ENCODATION;
+          return base256Encodation;
         }
-        if (intCharCounts[EDIFACT_ENCODATION] + 1 <
+        if (intCharCounts[edifactEncodation] + 1 <
             min([
-              intCharCounts[BASE256_ENCODATION],
-              intCharCounts[C40_ENCODATION],
-              intCharCounts[TEXT_ENCODATION],
-              intCharCounts[X12_ENCODATION],
-              intCharCounts[ASCII_ENCODATION],
+              intCharCounts[base256Encodation],
+              intCharCounts[c40Encodation],
+              intCharCounts[textEncodation],
+              intCharCounts[x12Encodation],
+              intCharCounts[asciiEncodation],
             ])) {
-          return EDIFACT_ENCODATION;
+          return edifactEncodation;
         }
-        if (intCharCounts[TEXT_ENCODATION] + 1 <
+        if (intCharCounts[textEncodation] + 1 <
             min([
-              intCharCounts[BASE256_ENCODATION],
-              intCharCounts[C40_ENCODATION],
-              intCharCounts[EDIFACT_ENCODATION],
-              intCharCounts[X12_ENCODATION],
-              intCharCounts[ASCII_ENCODATION],
+              intCharCounts[base256Encodation],
+              intCharCounts[c40Encodation],
+              intCharCounts[edifactEncodation],
+              intCharCounts[x12Encodation],
+              intCharCounts[asciiEncodation],
             ])) {
-          return TEXT_ENCODATION;
+          return textEncodation;
         }
-        if (intCharCounts[X12_ENCODATION] + 1 <
+        if (intCharCounts[x12Encodation] + 1 <
             min([
-              intCharCounts[BASE256_ENCODATION],
-              intCharCounts[C40_ENCODATION],
-              intCharCounts[EDIFACT_ENCODATION],
-              intCharCounts[TEXT_ENCODATION],
-              intCharCounts[ASCII_ENCODATION],
+              intCharCounts[base256Encodation],
+              intCharCounts[c40Encodation],
+              intCharCounts[edifactEncodation],
+              intCharCounts[textEncodation],
+              intCharCounts[asciiEncodation],
             ])) {
-          return X12_ENCODATION;
+          return x12Encodation;
         }
-        if (intCharCounts[C40_ENCODATION] + 1 <
+        if (intCharCounts[c40Encodation] + 1 <
             min([
-              intCharCounts[ASCII_ENCODATION],
-              intCharCounts[BASE256_ENCODATION],
-              intCharCounts[EDIFACT_ENCODATION],
-              intCharCounts[TEXT_ENCODATION]
+              intCharCounts[asciiEncodation],
+              intCharCounts[base256Encodation],
+              intCharCounts[edifactEncodation],
+              intCharCounts[textEncodation]
             ])) {
-          if (intCharCounts[C40_ENCODATION] < intCharCounts[X12_ENCODATION]) {
-            return C40_ENCODATION;
+          if (intCharCounts[c40Encodation] < intCharCounts[x12Encodation]) {
+            return c40Encodation;
           }
-          if (intCharCounts[C40_ENCODATION] == intCharCounts[X12_ENCODATION]) {
+          if (intCharCounts[c40Encodation] == intCharCounts[x12Encodation]) {
             int p = startPos + charsProcessed + 1;
             while (p < msg.length) {
               final tc = msg.codeUnitAt(p);
               if (_isX12TermSep(tc)) {
-                return X12_ENCODATION;
+                return x12Encodation;
               }
               if (!isNativeX12(tc)) {
                 break;
               }
               p++;
             }
-            return C40_ENCODATION;
+            return c40Encodation;
           }
         }
       }

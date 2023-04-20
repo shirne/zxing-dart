@@ -29,7 +29,7 @@ import '../bit_matrix.dart';
 /// @deprecated without replacement since 3.3.0
 @Deprecated('no replacement since 3.3.0')
 class MonochromeRectangleDetector {
-  static const int _MAX_MODULES = 32;
+  static const int _maxModules = 32;
 
   final BitMatrix _image;
 
@@ -48,8 +48,8 @@ class MonochromeRectangleDetector {
     final width = _image.width;
     final halfHeight = height ~/ 2;
     final halfWidth = width ~/ 2;
-    final deltaY = math.max(1, height ~/ (_MAX_MODULES * 8));
-    final deltaX = math.max(1, width ~/ (_MAX_MODULES * 8));
+    final deltaY = math.max(1, height ~/ (_maxModules * 8));
+    final deltaX = math.max(1, width ~/ (_maxModules * 8));
 
     int top = 0;
     int bottom = height;

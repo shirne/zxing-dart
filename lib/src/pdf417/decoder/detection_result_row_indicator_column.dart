@@ -200,10 +200,10 @@ class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
         barcodeColumnCount.getValue()[0] < 1 ||
         barcodeRowCountUpperPart.getValue()[0] +
                 barcodeRowCountLowerPart.getValue()[0] <
-            PDF417Common.MIN_ROWS_IN_BARCODE ||
+            PDF417Common.minRowsInBarcode ||
         barcodeRowCountUpperPart.getValue()[0] +
                 barcodeRowCountLowerPart.getValue()[0] >
-            PDF417Common.MAX_ROWS_IN_BARCODE) {
+            PDF417Common.maxRowsInBarcode) {
       return null;
     }
     final barcodeMetadata = BarcodeMetadata(

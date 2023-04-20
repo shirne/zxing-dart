@@ -24,7 +24,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/upce-2',
       MultiFormatReader(),
-      BarcodeFormat.UPC_E,
+      BarcodeFormat.upcE,
     )
       ..addTest(31, 35, 0.0, 0, 1)
       ..addTest(31, 35, 180.0, 1, 1)

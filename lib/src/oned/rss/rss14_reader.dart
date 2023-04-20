@@ -34,14 +34,14 @@ import 'rssutils.dart';
 
 /// Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
 class RSS14Reader extends AbstractRSSReader {
-  static const List<int> _OUTSIDE_EVEN_TOTAL_SUBSET = [1, 10, 34, 70, 126];
-  static const List<int> _INSIDE_ODD_TOTAL_SUBSET = [4, 20, 48, 81];
-  static const List<int> _OUTSIDE_GSUM = [0, 161, 961, 2015, 2715];
-  static const List<int> _INSIDE_GSUM = [0, 336, 1036, 1516];
-  static const List<int> _OUTSIDE_ODD_WIDEST = [8, 6, 4, 3, 1];
-  static const List<int> _INSIDE_ODD_WIDEST = [2, 4, 6, 8];
+  static const List<int> _outsizeEvenTotalSubset = [1, 10, 34, 70, 126];
+  static const List<int> _insideOddTotalSubset = [4, 20, 48, 81];
+  static const List<int> _outsideGsum = [0, 161, 961, 2015, 2715];
+  static const List<int> _insideGsum = [0, 336, 1036, 1516];
+  static const List<int> _outsideOddWidest = [8, 6, 4, 3, 1];
+  static const List<int> _insideOddWidest = [2, 4, 6, 8];
 
-  static const List<List<int>> _FINDER_PATTERNS = [
+  static const List<List<int>> _finderPatterns = [
     [3, 8, 2, 1],
     [3, 5, 5, 1],
     [3, 3, 7, 1],
@@ -137,9 +137,9 @@ class RSS14Reader extends AbstractRSSReader {
         rightPoints[0],
         rightPoints[1],
       ],
-      BarcodeFormat.RSS_14,
+      BarcodeFormat.rss14,
     );
-    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, ']e0');
+    result.putMetadata(ResultMetadataType.symbologyIdentifier, ']e0');
     return result;
   }
 
@@ -167,9 +167,8 @@ class RSS14Reader extends AbstractRSSReader {
       List<int> startEnd = _findFinderPattern(row, right);
       final pattern = _parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-      final resultPointCallback =
-          hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-              as ResultPointCallback?;
+      final resultPointCallback = hints?[DecodeHintType.needResultPointCallback]
+          as ResultPointCallback?;
 
       if (resultPointCallback != null) {
         startEnd = pattern.startEnd;
@@ -265,24 +264,24 @@ class RSS14Reader extends AbstractRSSReader {
         throw NotFoundException.instance;
       }
       final group = (12 - oddSum) ~/ 2;
-      final oddWidest = _OUTSIDE_ODD_WIDEST[group];
+      final oddWidest = _outsideOddWidest[group];
       final evenWidest = 9 - oddWidest;
       final vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, false);
       final vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, true);
-      final tEven = _OUTSIDE_EVEN_TOTAL_SUBSET[group];
-      final gSum = _OUTSIDE_GSUM[group];
+      final tEven = _outsizeEvenTotalSubset[group];
+      final gSum = _outsideGsum[group];
       return DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
     } else {
       if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
         throw NotFoundException.instance;
       }
       final group = (10 - evenSum) ~/ 2;
-      final oddWidest = _INSIDE_ODD_WIDEST[group];
+      final oddWidest = _insideOddWidest[group];
       final evenWidest = 9 - oddWidest;
       final vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, true);
       final vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
-      final tOdd = _INSIDE_ODD_TOTAL_SUBSET[group];
-      final gSum = _INSIDE_GSUM[group];
+      final tOdd = _insideOddTotalSubset[group];
+      final gSum = _insideGsum[group];
       return DataCharacter(vEven * tOdd + vOdd + gSum, checksumPortion);
     }
   }
@@ -350,8 +349,7 @@ class RSS14Reader extends AbstractRSSReader {
     List.copyRange(counters, 1, counters, 0, counters.length - 1);
 
     counters[0] = firstCounter;
-    final value =
-        AbstractRSSReader.parseFinderValue(counters, _FINDER_PATTERNS);
+    final value = AbstractRSSReader.parseFinderValue(counters, _finderPatterns);
     int start = firstElementStart;
     int end = startEnd[1];
     if (right) {

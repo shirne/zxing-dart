@@ -184,8 +184,8 @@ Future<void> decodeFromCamera(SendPort callerSP) async {
       final bitmap = BinaryBitmap(HybridBinarizer(imageSource));
       try {
         final results = reader.decodeMultiple(bitmap, {
-          DecodeHintType.TRY_HARDER: false,
-          DecodeHintType.ALSO_INVERTED: false,
+          DecodeHintType.tryHarder: false,
+          DecodeHintType.alsoInverted: false,
         });
         callerSP.send(IsoMessage.result(results));
         print('Isolate: $results');

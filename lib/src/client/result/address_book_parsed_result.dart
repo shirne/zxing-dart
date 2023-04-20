@@ -78,7 +78,7 @@ class AddressBookParsedResult extends ParsedResult {
         _addresses = addresses,
         _addressTypes = addressTypes,
         _urls = urls,
-        super(ParsedResultType.ADDRESS_BOOK);
+        super(ParsedResultType.addressBook);
 
   AddressBookParsedResult.quick(
     List<String>? names,
@@ -124,7 +124,7 @@ class AddressBookParsedResult extends ParsedResult {
     this.title,
     this._urls,
     this.geo,
-  ) : super(ParsedResultType.ADDRESS_BOOK) {
+  ) : super(ParsedResultType.addressBook) {
     if (_phoneNumbers != null &&
         _phoneTypes != null &&
         _phoneNumbers!.length != _phoneTypes!.length) {

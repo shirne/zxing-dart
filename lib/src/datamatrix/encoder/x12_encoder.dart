@@ -22,7 +22,7 @@ import 'high_level_encoder.dart';
 
 class X12Encoder extends C40Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.X12_ENCODATION;
+  int get encodingMode => HighLevelEncoder.x12Encodation;
 
   @override
   void encode(EncoderContext context) {
@@ -45,7 +45,7 @@ class X12Encoder extends C40Encoder {
         );
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
-          context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+          context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
           break;
         }
       }
@@ -90,10 +90,10 @@ class X12Encoder extends C40Encoder {
     if (context.remainingCharacters > 1 ||
         available > 1 ||
         context.remainingCharacters != available) {
-      context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
+      context.writeCodeword(HighLevelEncoder.x12Unlatch);
     }
     if (context.newEncoding < 0) {
-      context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+      context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
     }
   }
 }

@@ -42,36 +42,36 @@ class MultiFormatOneDReader extends OneDReader {
   MultiFormatOneDReader(Map<DecodeHintType, Object>? hints) {
     // @SuppressWarnings("unchecked")
     final possibleFormats =
-        hints?[DecodeHintType.POSSIBLE_FORMATS] as List<BarcodeFormat>?;
-    final useCode39CheckDigit = hints != null &&
-        hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+        hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
+    final useCode39CheckDigit =
+        hints != null && hints[DecodeHintType.assumeCode39CheckDigit] != null;
     final readers = <OneDReader>[];
     if (possibleFormats != null) {
-      if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
-          possibleFormats.contains(BarcodeFormat.UPC_A) ||
-          possibleFormats.contains(BarcodeFormat.EAN_8) ||
-          possibleFormats.contains(BarcodeFormat.UPC_E)) {
+      if (possibleFormats.contains(BarcodeFormat.ean13) ||
+          possibleFormats.contains(BarcodeFormat.upcA) ||
+          possibleFormats.contains(BarcodeFormat.ean8) ||
+          possibleFormats.contains(BarcodeFormat.upcE)) {
         readers.add(MultiFormatUPCEANReader(hints));
       }
-      if (possibleFormats.contains(BarcodeFormat.CODE_39)) {
+      if (possibleFormats.contains(BarcodeFormat.code39)) {
         readers.add(Code39Reader(useCode39CheckDigit));
       }
-      if (possibleFormats.contains(BarcodeFormat.CODE_93)) {
+      if (possibleFormats.contains(BarcodeFormat.code93)) {
         readers.add(Code93Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.CODE_128)) {
+      if (possibleFormats.contains(BarcodeFormat.code128)) {
         readers.add(Code128Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.ITF)) {
+      if (possibleFormats.contains(BarcodeFormat.itf)) {
         readers.add(ITFReader());
       }
-      if (possibleFormats.contains(BarcodeFormat.CODABAR)) {
+      if (possibleFormats.contains(BarcodeFormat.codabar)) {
         readers.add(CodaBarReader());
       }
-      if (possibleFormats.contains(BarcodeFormat.RSS_14)) {
+      if (possibleFormats.contains(BarcodeFormat.rss14)) {
         readers.add(RSS14Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)) {
+      if (possibleFormats.contains(BarcodeFormat.rssExpanded)) {
         readers.add(RSSExpandedReader());
       }
     }

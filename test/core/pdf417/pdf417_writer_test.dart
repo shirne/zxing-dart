@@ -23,11 +23,11 @@ import 'package:zxing_lib/zxing.dart';
 void main() {
   test('testDataMatrixImageWriter', () {
     final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.MARGIN] = 0;
+    hints[EncodeHintType.margin] = 0;
     const size = 64;
     final writer = PDF417Writer();
     final matrix =
-        writer.encode('Hello Google', BarcodeFormat.PDF_417, size, size, hints);
+        writer.encode('Hello Google', BarcodeFormat.pdf417, size, size, hints);
     // assertNotNull(matrix);
     final expected =
         'X X X X X X X X   X   X   X       X X X X   X   X   X X X X         X X   X   X           X X         X X X X   X X     X     X X X     X X   X           X       X X     X X X X X   X   X   X X X X X     X X X X X X X   X       X   X     X \n'

@@ -147,8 +147,8 @@ List<Result>? decodeImage(IsoMessage message) {
   try {
     print('start decode...');
     var results = reader.decodeMultiple(bitmap, {
-      DecodeHintType.TRY_HARDER: true,
-      DecodeHintType.ALSO_INVERTED: true,
+      DecodeHintType.tryHarder: true,
+      DecodeHintType.alsoInverted: true,
     });
 
     message.sendPort?.send(results);
@@ -172,8 +172,8 @@ List<Result>? decodeCamera(IsoMessage message) {
   final reader = GenericMultipleBarcodeReader(MultiFormatReader());
   try {
     final results = reader.decodeMultiple(bitmap, {
-      DecodeHintType.TRY_HARDER: false,
-      DecodeHintType.ALSO_INVERTED: false,
+      DecodeHintType.tryHarder: false,
+      DecodeHintType.alsoInverted: false,
     });
     message.sendPort?.send(results);
     return results;

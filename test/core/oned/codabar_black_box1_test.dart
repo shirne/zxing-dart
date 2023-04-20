@@ -24,7 +24,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/codabar-1',
       MultiFormatReader(),
-      BarcodeFormat.CODABAR,
+      BarcodeFormat.codabar,
     )
       ..addTest(11, 11, 0.0)
       ..addTest(11, 11, 180.0)

@@ -28,7 +28,7 @@ import 'encoder/qrcode.dart';
 ///
 /// @author dswitkin@google.com (Daniel Switkin)
 class QRCodeWriter implements Writer {
-  static const int _QUIET_ZONE_SIZE = 4;
+  static const int _quietZoneSize = 4;
 
   @override
   BitMatrix encode(
@@ -42,7 +42,7 @@ class QRCodeWriter implements Writer {
       throw ArgumentError('Found empty contents');
     }
 
-    if (format != BarcodeFormat.QR_CODE) {
+    if (format != BarcodeFormat.qrCode) {
       throw ArgumentError('Can only encode QR_CODE, but got $format');
     }
 
@@ -53,14 +53,14 @@ class QRCodeWriter implements Writer {
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
-    int quietZone = _QUIET_ZONE_SIZE;
+    int quietZone = _quietZoneSize;
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+      if (hints.containsKey(EncodeHintType.errorCorrection)) {
         errorCorrectionLevel = ErrorCorrectionLevel
-            .values[hints[EncodeHintType.ERROR_CORRECTION] as int];
+            .values[hints[EncodeHintType.errorCorrection] as int];
       }
-      if (hints.containsKey(EncodeHintType.MARGIN)) {
-        quietZone = int.parse(hints[EncodeHintType.MARGIN].toString());
+      if (hints.containsKey(EncodeHintType.margin)) {
+        quietZone = int.parse(hints[EncodeHintType.margin].toString());
       }
     }
 

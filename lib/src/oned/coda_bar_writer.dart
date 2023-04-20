@@ -24,17 +24,17 @@ import 'one_dimensional_code_writer.dart';
 ///
 /// @author dsbnatut@gmail.com (Kazuki Nishiura)
 class CodaBarWriter extends OneDimensionalCodeWriter {
-  static const List<String> _START_END_CHARS = ['A', 'B', 'C', 'D'];
-  static const List<String> _ALT_START_END_CHARS = ['T', 'N', '*', 'E'];
-  static const List<String> _CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = [
+  static const List<String> _startEndChars = ['A', 'B', 'C', 'D'];
+  static const List<String> _altStartEndChars = ['T', 'N', '*', 'E'];
+  static const List<String> _charsWhichAreTenLengthEachAfterDecoded = [
     '/', ':', '+', '.' //
   ];
   //START_END_CHARS[0];
-  static const String _DEFAULT_GUARD = 'A';
+  static const String _defaultGuard = 'A';
 
   //@protected
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODABAR];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.codabar];
 
   @override
   List<bool> encodeContent(
@@ -43,15 +43,15 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   ]) {
     if (contents.length < 2) {
       // Can't have a start/end guard, so tentatively add default guards
-      contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;
+      contents = _defaultGuard + contents + _defaultGuard;
     } else {
       // Verify input and calculate decoded length.
       final firstChar = contents[0].toUpperCase();
       final lastChar = contents[contents.length - 1].toUpperCase();
-      final startsNormal = _START_END_CHARS.contains(firstChar);
-      final endsNormal = _START_END_CHARS.contains(lastChar);
-      final startsAlt = _ALT_START_END_CHARS.contains(firstChar);
-      final endsAlt = _ALT_START_END_CHARS.contains(lastChar);
+      final startsNormal = _startEndChars.contains(firstChar);
+      final endsNormal = _startEndChars.contains(lastChar);
+      final startsAlt = _altStartEndChars.contains(firstChar);
+      final endsAlt = _altStartEndChars.contains(lastChar);
       if (startsNormal) {
         if (!endsNormal) {
           throw ArgumentError('Invalid start/end guards: $contents');
@@ -68,7 +68,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
           throw ArgumentError('Invalid start/end guards: $contents');
         }
         // else doesn't end with guard either, so add a default
-        contents = _DEFAULT_GUARD + contents + _DEFAULT_GUARD;
+        contents = _defaultGuard + contents + _defaultGuard;
       }
     }
 
@@ -79,7 +79,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
           contents[i] == '-' ||
           contents[i] == r'$') {
         resultLength += 9;
-      } else if (_CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED
+      } else if (_charsWhichAreTenLengthEachAfterDecoded
           .contains(contents[i])) {
         resultLength += 10;
       } else {
@@ -114,7 +114,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
       for (int i = 0; i < CodaBarReader.alphaBet.length; i++) {
         // Found any, because I checked above.
         if (c.codeUnitAt(0) == CodaBarReader.alphaBet[i]) {
-          code = CodaBarReader.CHARACTER_ENCODINGS[i];
+          code = CodaBarReader.characterEncodings[i];
           break;
         }
       }

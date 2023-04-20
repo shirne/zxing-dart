@@ -26,7 +26,7 @@ import 'qrcode.dart';
 /// @author satorux@google.com (Satoru Takabayashi) - creator
 /// @author dswitkin@google.com (Daniel Switkin) - ported from C++
 class MatrixUtil {
-  static const List<List<int>> _POSITION_DETECTION_PATTERN = [
+  static const List<List<int>> _positionDetectionPattern = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 0, 1],
@@ -36,7 +36,7 @@ class MatrixUtil {
     [1, 1, 1, 1, 1, 1, 1],
   ];
 
-  static const List<List<int>> _POSITION_ADJUSTMENT_PATTERN = [
+  static const List<List<int>> _positionAdjustmentPattern = [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
     [1, 0, 1, 0, 1],
@@ -45,7 +45,7 @@ class MatrixUtil {
   ];
 
   // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
-  static const List<List<int>> _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE = [
+  static const List<List<int>> _positionAdjustmentPatternCoordinateTable = [
     [-1, -1, -1, -1, -1, -1, -1], // Version 1
     [6, 18, -1, -1, -1, -1, -1], // Version 2
     [6, 22, -1, -1, -1, -1, -1], // Version 3
@@ -89,7 +89,7 @@ class MatrixUtil {
   ];
 
   // Type info cells at the left top corner.
-  static const List<List<int>> _TYPE_INFO_COORDINATES = [
+  static const List<List<int>> _typeInfoCoordinates = [
     [8, 0],
     [8, 1],
     [8, 2],
@@ -108,11 +108,11 @@ class MatrixUtil {
   ];
 
   // From Appendix D in JISX0510:2004 (p. 67)
-  static const int _VERSION_INFO_POLY = 0x1f25; // 1 1111 0010 0101
+  static const int _versionInfoPoly = 0x1f25; // 1 1111 0010 0101
 
   // From Appendix C in JISX0510:2004 (p.65).
-  static const int _TYPE_INFO_POLY = 0x537;
-  static const int _TYPE_INFO_MASK_PATTERN = 0x5412;
+  static const int _typeInfoPoly = 0x537;
+  static const int _typeInfoMaskPattern = 0x5412;
 
   MatrixUtil._();
 
@@ -176,7 +176,7 @@ class MatrixUtil {
       final bit = typeInfoBits.get(typeInfoBits.size - 1 - i);
 
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
-      final coordinates = _TYPE_INFO_COORDINATES[i];
+      final coordinates = _typeInfoCoordinates[i];
       final x1 = coordinates[0];
       final y1 = coordinates[1];
       matrix.set(x1, y1, bit ? 1 : 0);
@@ -340,11 +340,11 @@ class MatrixUtil {
     final typeInfo = (ecLevel.index << 3) | maskPattern;
     bits.appendBits(typeInfo, 5);
 
-    final bchCode = calculateBCHCode(typeInfo, _TYPE_INFO_POLY);
+    final bchCode = calculateBCHCode(typeInfo, _typeInfoPoly);
     bits.appendBits(bchCode, 10);
 
     final maskBits = BitArray();
-    maskBits.appendBits(_TYPE_INFO_MASK_PATTERN, 15);
+    maskBits.appendBits(_typeInfoMaskPattern, 15);
     bits.xor(maskBits);
 
     if (bits.size != 15) {
@@ -357,7 +357,7 @@ class MatrixUtil {
   // See 8.10 of JISX0510:2004 (p.45) for details.
   static void makeVersionInfoBits(Version version, BitArray bits) {
     bits.appendBits(version.versionNumber, 6);
-    final bchCode = calculateBCHCode(version.versionNumber, _VERSION_INFO_POLY);
+    final bchCode = calculateBCHCode(version.versionNumber, _versionInfoPoly);
     bits.appendBits(bchCode, 12);
 
     if (bits.size != 18) {
@@ -427,7 +427,7 @@ class MatrixUtil {
     ByteMatrix matrix,
   ) {
     for (int y = 0; y < 5; ++y) {
-      final patternY = _POSITION_ADJUSTMENT_PATTERN[y];
+      final patternY = _positionAdjustmentPattern[y];
       for (int x = 0; x < 5; ++x) {
         matrix.set(xStart + x, yStart + y, patternY[x]);
       }
@@ -440,7 +440,7 @@ class MatrixUtil {
     ByteMatrix matrix,
   ) {
     for (int y = 0; y < 7; ++y) {
-      final patternY = _POSITION_DETECTION_PATTERN[y];
+      final patternY = _positionDetectionPattern[y];
       for (int x = 0; x < 7; ++x) {
         matrix.set(xStart + x, yStart + y, patternY[x]);
       }
@@ -450,7 +450,7 @@ class MatrixUtil {
   // Embed position detection patterns and surrounding vertical/horizontal separators.
   static void _embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) {
     // Embed three big squares at corners.
-    final pdpWidth = _POSITION_DETECTION_PATTERN[0].length;
+    final pdpWidth = _positionDetectionPattern[0].length;
     // Left top corner.
     _embedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
@@ -491,7 +491,7 @@ class MatrixUtil {
       return;
     }
     final index = version.versionNumber - 1;
-    final coordinates = _POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
+    final coordinates = _positionAdjustmentPatternCoordinateTable[index];
     for (int y in coordinates) {
       if (y >= 0) {
         for (int x in coordinates) {

@@ -26,7 +26,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/ean13-2',
       MultiFormatReader(),
-      BarcodeFormat.EAN_13,
+      BarcodeFormat.ean13,
     )
       ..addTest(12, 17, 0.0, 0, 1)
       ..addTest(11, 17, 180.0, 0, 1)

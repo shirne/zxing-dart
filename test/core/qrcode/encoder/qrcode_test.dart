@@ -23,13 +23,13 @@ void main() {
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
     final qrCode = QRCode(
-      mode: Mode.BYTE,
+      mode: Mode.byte,
       ecLevel: ErrorCorrectionLevel.H,
       version: Version.getVersionForNumber(7),
       maskPattern: 3,
     );
 
-    expect(Mode.BYTE, qrCode.mode);
+    expect(Mode.byte, qrCode.mode);
     expect(ErrorCorrectionLevel.H, qrCode.ecLevel);
     expect(7, qrCode.version!.versionNumber);
     expect(3, qrCode.maskPattern);
@@ -62,7 +62,7 @@ void main() {
 
   test('testToString2', () {
     final qrCode = QRCode(
-      mode: Mode.BYTE,
+      mode: Mode.byte,
       ecLevel: ErrorCorrectionLevel.H,
       version: Version.getVersionForNumber(1),
       maskPattern: 3,

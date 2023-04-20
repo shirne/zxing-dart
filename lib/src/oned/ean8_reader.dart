@@ -39,7 +39,7 @@ class EAN8Reader extends UPCEANReader {
         row,
         counters,
         rowOffset,
-        UPCEANReader.L_PATTERNS,
+        UPCEANReader.lPatterns,
       );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
@@ -51,7 +51,7 @@ class EAN8Reader extends UPCEANReader {
       row,
       rowOffset,
       true,
-      UPCEANReader.MIDDLE_PATTERN,
+      UPCEANReader.middlePattern,
     );
     rowOffset = middleRange[1];
 
@@ -60,7 +60,7 @@ class EAN8Reader extends UPCEANReader {
         row,
         counters,
         rowOffset,
-        UPCEANReader.L_PATTERNS,
+        UPCEANReader.lPatterns,
       );
       result.writeCharCode(48 /* 0 */ + bestMatch);
       for (int counter in counters) {
@@ -72,5 +72,5 @@ class EAN8Reader extends UPCEANReader {
   }
 
   @override
-  BarcodeFormat get barcodeFormat => BarcodeFormat.EAN_8;
+  BarcodeFormat get barcodeFormat => BarcodeFormat.ean8;
 }

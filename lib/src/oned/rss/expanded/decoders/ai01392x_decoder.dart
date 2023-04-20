@@ -32,31 +32,31 @@ import 'ai01decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI01392xDecoder extends AI01decoder {
-  static const int _HEADER_SIZE = 5 + 1 + 2;
-  static const int _LAST_DIGIT_SIZE = 2;
+  static const int _headerSize = 5 + 1 + 2;
+  static const int _lastDigitSize = 2;
 
   AI01392xDecoder(BitArray information) : super(information);
 
   @override
   String parseInformation() {
-    if (information.size < _HEADER_SIZE + AI01decoder.GTIN_SIZE) {
+    if (information.size < _headerSize + AI01decoder.gtinSize) {
       throw NotFoundException.instance;
     }
 
     final buf = StringBuilder();
 
-    encodeCompressedGtin(buf, _HEADER_SIZE);
+    encodeCompressedGtin(buf, _headerSize);
 
     final lastAIdigit = generalDecoder.extractNumericValueFromBitArray(
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE,
-      _LAST_DIGIT_SIZE,
+      _headerSize + AI01decoder.gtinSize,
+      _lastDigitSize,
     );
     buf.write('(392');
     buf.write(lastAIdigit);
     buf.write(')');
 
     final decodedInformation = generalDecoder.decodeGeneralPurposeField(
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE + _LAST_DIGIT_SIZE,
+      _headerSize + AI01decoder.gtinSize + _lastDigitSize,
       null,
     );
     buf.write(decodedInformation.newString);

@@ -27,7 +27,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/aztec-2',
       AztecReader(),
-      BarcodeFormat.AZTEC,
+      BarcodeFormat.aztec,
     )
       ..addTest(5, 5, 0.0)
       ..addTest(4, 4, 90.0)

@@ -24,7 +24,7 @@ import 'one_dimensional_code_writer.dart';
 /// @author erik.barbara@gmail.com (Erik Barbara)
 class Code39Writer extends OneDimensionalCodeWriter {
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.CODE_39];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.code39];
 
   @override
   List<bool> encodeContent(
@@ -39,7 +39,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
     }
 
     for (int i = 0; i < length; i++) {
-      final indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
+      final indexInString = Code39Reader.alphabetString.indexOf(contents[i]);
       if (indexInString < 0) {
         contents = _tryToConvertToExtendedMode(contents);
         length = contents.length;
@@ -56,15 +56,15 @@ class Code39Writer extends OneDimensionalCodeWriter {
     final widths = List.filled(9, 0);
     final codeWidth = 24 + 1 + (13 * length);
     final result = List.filled(codeWidth, false);
-    _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
+    _toIntArray(Code39Reader.asteriskEncoding, widths);
     int pos = OneDimensionalCodeWriter.appendPattern(result, 0, widths, true);
     final narrowWhite = <int>[1];
     pos +=
         OneDimensionalCodeWriter.appendPattern(result, pos, narrowWhite, false);
     //append next character to byte matrix
     for (int i = 0; i < length; i++) {
-      final indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents[i]);
-      _toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
+      final indexInString = Code39Reader.alphabetString.indexOf(contents[i]);
+      _toIntArray(Code39Reader.characterEnncodings[indexInString], widths);
       pos += OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
       pos += OneDimensionalCodeWriter.appendPattern(
         result,
@@ -73,7 +73,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
         false,
       );
     }
-    _toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
+    _toIntArray(Code39Reader.asteriskEncoding, widths);
     OneDimensionalCodeWriter.appendPattern(result, pos, widths, true);
     return result;
   }

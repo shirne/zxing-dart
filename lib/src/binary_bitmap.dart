@@ -17,7 +17,6 @@
 import 'binarizer.dart';
 import 'common/bit_array.dart';
 import 'common/bit_matrix.dart';
-import 'luminance_source.dart';
 
 /// This class is the core bitmap class used by ZXing to represent 1 bit data. Reader objects
 /// accept a BinaryBitmap and attempt to decode it.
@@ -96,13 +95,10 @@ class BinaryBitmap {
   ///
   /// @return A rotated version of this object.
   BinaryBitmap rotateCounterClockwise45() {
-    final LuminanceSource newSource =
-        _binarizer.luminanceSource.rotateCounterClockwise45();
+    final newSource = _binarizer.luminanceSource.rotateCounterClockwise45();
     return BinaryBitmap(_binarizer.createBinarizer(newSource));
   }
 
   @override
-  String toString() {
-    return blackMatrix.toString();
-  }
+  String toString() => blackMatrix.toString();
 }

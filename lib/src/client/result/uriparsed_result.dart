@@ -26,7 +26,7 @@ class URIParsedResult extends ParsedResult {
 
   URIParsedResult(String uri, [this.title])
       : uri = _massageURI(uri),
-        super(ParsedResultType.URI);
+        super(ParsedResultType.uri);
 
   /// @return true if the URI contains suspicious patterns that may suggest it intends to
   ///  mislead the user about its true nature

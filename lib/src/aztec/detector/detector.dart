@@ -48,7 +48,7 @@ class Point {
 /// @author David Olivier
 /// @author Frank Yellin
 class Detector {
-  static const List<int> _EXPECTED_CORNER_BITS = [
+  static const List<int> _expectedCornerBits = [
     0xee0, // 07340  XXX .XX X.. ...
     0x1dc, // 00734  ... XXX .XX X..
     0x83b, // 04073  X.. ... XXX .XX
@@ -188,7 +188,7 @@ class Detector {
     // corner. Since the four rotation values have a Hamming distance of 8, we
     // can easily tolerate two errors.
     for (int shift = 0; shift < 4; shift++) {
-      if (MathUtils.bitCount(cornerBits ^ _EXPECTED_CORNER_BITS[shift]) <= 2) {
+      if (MathUtils.bitCount(cornerBits ^ _expectedCornerBits[shift]) <= 2) {
         return shift;
       }
     }

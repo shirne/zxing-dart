@@ -25,7 +25,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/pdf417-3',
       MultiFormatReader(),
-      BarcodeFormat.PDF_417,
+      BarcodeFormat.pdf417,
     )
       ..addTest(19, 19, 0.0, 0, 0)
       ..addTest(19, 19, 180.0, 0, 0)

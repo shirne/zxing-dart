@@ -24,7 +24,7 @@ void main() {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/datamatrix-2',
       MultiFormatReader(),
-      BarcodeFormat.DATA_MATRIX,
+      BarcodeFormat.dataMatrix,
     )
       ..addTest(13, 13, 0.0, 0, 1)
       ..addTest(15, 15, 90.0, 0, 1)

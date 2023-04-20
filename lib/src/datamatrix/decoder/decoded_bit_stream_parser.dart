@@ -24,14 +24,14 @@ import '../../common/string_builder.dart';
 import '../../formats_exception.dart';
 
 enum _Mode {
-  PAD_ENCODE, // Not really a mode
-  ASCII_ENCODE,
-  C40_ENCODE,
-  TEXT_ENCODE,
-  ANSIX12_ENCODE,
-  EDIFACT_ENCODE,
-  BASE256_ENCODE,
-  ECI_ENCODE
+  padEncode, // Not really a mode
+  asciiEncode,
+  c40Encode,
+  textEncode,
+  ansix12Encode,
+  edifactEncode,
+  base256Encode,
+  eciEncode,
 }
 
 /// Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -44,29 +44,29 @@ enum _Mode {
 class DecodedBitStreamParser {
   /// See ISO 16022:2006, Annex C Table C.1
   /// The C40 Basic Character Set (*'s used for placeholders for the shift values)
-  static const List<String> _C40_BASIC_SET_CHARS = [
+  static const List<String> _c40BasicSetChars = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', //
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   ];
 
-  static const List<String> _C40_SHIFT2_SET_CHARS = [
+  static const List<String> _c40Shift2SetChars = [
     '!', '"', '#', r'$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', //
     '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
   ];
 
   /// See ISO 16022:2006, Annex C Table C.2
   /// The Text Basic Character Set (*'s used for placeholders for the shift values)
-  static const List<String> _TEXT_BASIC_SET_CHARS = [
+  static const List<String> _textBasicSetChars = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
     'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   ];
 
   // Shift 2 for Text is the same encoding as C40
-  static const List<String> _TEXT_SHIFT2_SET_CHARS = _C40_SHIFT2_SET_CHARS;
+  static const List<String> _textShift2SetChars = _c40Shift2SetChars;
 
-  static const List<String> _TEXT_SHIFT3_SET_CHARS = [
+  static const List<String> _textShift3SetChars = [
     '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', //
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}',
@@ -80,32 +80,32 @@ class DecodedBitStreamParser {
     final result = ECIStringBuilder();
     final resultTrailer = StringBuilder();
     final byteSegments = <Uint8List>[];
-    _Mode mode = _Mode.ASCII_ENCODE;
+    _Mode mode = _Mode.asciiEncode;
     // Could be replaceable by looking directly at 'bytes', if we're sure of not having to account for multi byte values.
     final fnc1Positions = <int>{};
     int symbologyModifier = 0;
     bool isECIencoded = false;
     do {
-      if (mode == _Mode.ASCII_ENCODE) {
+      if (mode == _Mode.asciiEncode) {
         mode = _decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions);
       } else {
         switch (mode) {
-          case _Mode.C40_ENCODE:
+          case _Mode.c40Encode:
             _decodeC40Segment(bits, result, fnc1Positions);
             break;
-          case _Mode.TEXT_ENCODE:
+          case _Mode.textEncode:
             _decodeTextSegment(bits, result, fnc1Positions);
             break;
-          case _Mode.ANSIX12_ENCODE:
+          case _Mode.ansix12Encode:
             _decodeAnsiX12Segment(bits, result);
             break;
-          case _Mode.EDIFACT_ENCODE:
+          case _Mode.edifactEncode:
             _decodeEdifactSegment(bits, result);
             break;
-          case _Mode.BASE256_ENCODE:
+          case _Mode.base256Encode:
             _decodeBase256Segment(bits, result, byteSegments);
             break;
-          case _Mode.ECI_ENCODE:
+          case _Mode.eciEncode:
             _decodeECISegment(bits, result);
             // ECI detection only, atm continue decoding as ASCII
             isECIencoded = true;
@@ -113,9 +113,9 @@ class DecodedBitStreamParser {
           default:
             throw FormatsException.instance;
         }
-        mode = _Mode.ASCII_ENCODE;
+        mode = _Mode.asciiEncode;
       }
-    } while (mode != _Mode.PAD_ENCODE && bits.available() > 0);
+    } while (mode != _Mode.padEncode && bits.available() > 0);
     if (resultTrailer.length > 0) {
       result.write(resultTrailer);
     }
@@ -167,10 +167,10 @@ class DecodedBitStreamParser {
           //upperShift = false;
         }
         result.writeCharCode(oneByte - 1);
-        return _Mode.ASCII_ENCODE;
+        return _Mode.asciiEncode;
       } else if (oneByte == 129) {
         // Pad
-        return _Mode.PAD_ENCODE;
+        return _Mode.padEncode;
       } else if (oneByte <= 229) {
         // 2-digit data 00-99 (Numeric Value + 130)
         final value = oneByte - 130;
@@ -182,9 +182,9 @@ class DecodedBitStreamParser {
       } else {
         switch (oneByte) {
           case 230: // Latch to C40 encodation
-            return _Mode.C40_ENCODE;
+            return _Mode.c40Encode;
           case 231: // Latch to Base 256 encodation
-            return _Mode.BASE256_ENCODE;
+            return _Mode.base256Encode;
           case 232: // FNC1
             fnc1positions.add(result.length);
             result.writeCharCode(29); // translate as ASCII 29
@@ -206,13 +206,13 @@ class DecodedBitStreamParser {
             resultTrailer.insert(0, '\u001E\u0004');
             break;
           case 238: // Latch to ANSI X12 encodation
-            return _Mode.ANSIX12_ENCODE;
+            return _Mode.ansix12Encode;
           case 239: // Latch to Text encodation
-            return _Mode.TEXT_ENCODE;
+            return _Mode.textEncode;
           case 240: // Latch to EDIFACT encodation
-            return _Mode.EDIFACT_ENCODE;
+            return _Mode.edifactEncode;
           case 241: // ECI Character
-            return _Mode.ECI_ENCODE;
+            return _Mode.eciEncode;
           default:
             // Not to be used in ASCII encodation
             // but work around encoders that end with 254, latch back to ASCII
@@ -223,7 +223,7 @@ class DecodedBitStreamParser {
         }
       }
     } while (bits.available() > 0);
-    return _Mode.ASCII_ENCODE;
+    return _Mode.asciiEncode;
   }
 
   /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
@@ -259,8 +259,8 @@ class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else if (cValue < _C40_BASIC_SET_CHARS.length) {
-              final c40char = _C40_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+            } else if (cValue < _c40BasicSetChars.length) {
+              final c40char = _c40BasicSetChars[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(c40char + 128);
                 upperShift = false;
@@ -281,8 +281,8 @@ class DecodedBitStreamParser {
             shift = 0;
             break;
           case 2:
-            if (cValue < _C40_SHIFT2_SET_CHARS.length) {
-              final c40char = _C40_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _c40Shift2SetChars.length) {
+              final c40char = _c40Shift2SetChars[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(c40char + 128);
                 upperShift = false;
@@ -352,8 +352,8 @@ class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else if (cValue < _TEXT_BASIC_SET_CHARS.length) {
-              final textChar = _TEXT_BASIC_SET_CHARS[cValue].codeUnitAt(0);
+            } else if (cValue < _textBasicSetChars.length) {
+              final textChar = _textBasicSetChars[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
@@ -375,8 +375,8 @@ class DecodedBitStreamParser {
             break;
           case 2:
             // Shift 2 for Text is the same encoding as C40
-            if (cValue < _TEXT_SHIFT2_SET_CHARS.length) {
-              final textChar = _TEXT_SHIFT2_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _textShift2SetChars.length) {
+              final textChar = _textShift2SetChars[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;
@@ -399,8 +399,8 @@ class DecodedBitStreamParser {
             shift = 0;
             break;
           case 3:
-            if (cValue < _TEXT_SHIFT3_SET_CHARS.length) {
-              final textChar = _TEXT_SHIFT3_SET_CHARS[cValue].codeUnitAt(0);
+            if (cValue < _textShift3SetChars.length) {
+              final textChar = _textShift3SetChars[cValue].codeUnitAt(0);
               if (upperShift) {
                 result.writeCharCode(textChar + 128);
                 upperShift = false;

@@ -20,6 +20,18 @@ import '../../common/bit_array.dart';
 import '../../common/character_set_eci.dart';
 import 'state.dart';
 
+enum HighLevelEncoderMode {
+  upper('UPPER', 5),
+  lower('LOWER', 5),
+  digit('DIGIT', 4),
+  mixed('MIXED', 5),
+  punct('PUNCT', 5);
+
+  final String mode;
+  final int bits;
+  const HighLevelEncoderMode(this.mode, this.bits);
+}
+
 /// This produces nearly optimal encodings of text into the first-level of
 /// encoding used by Aztec code.
 ///
@@ -31,26 +43,12 @@ import 'state.dart';
 /// @author Frank Yellin
 /// @author Rustam Abdullaev
 class HighLevelEncoder {
-  static const List<String> MODE_NAMES = [
-    'UPPER',
-    'LOWER',
-    'DIGIT',
-    'MIXED',
-    'PUNCT'
-  ];
-
-  static const int MODE_UPPER = 0; // 5 bits
-  static const int MODE_LOWER = 1; // 5 bits
-  static const int MODE_DIGIT = 2; // 4 bits
-  static const int MODE_MIXED = 3; // 5 bits
-  static const int MODE_PUNCT = 4; // 5 bits
-
   // The Latch Table shows, for each pair of Modes, the optimal method for
   // getting from one mode to another.  In the worst possible case, this can
   // be up to 14 bits.  In the best possible case, we are already there!
   // The high half-word of each entry gives the number of bits.
   // The low half-word of each entry are the actual bits necessary to change
-  static const List<List<int>> LATCH_TABLE = [
+  static const List<List<int>> latchTable = [
     [
       0,
       (5 << 16) + 28, // UPPER -> LOWER
@@ -129,16 +127,16 @@ class HighLevelEncoder {
   static final List<List<int>> shiftTable = List.generate(
     6,
     (idx) => List.generate(6, (index) {
-      if (idx == MODE_UPPER) {
-        if (index == MODE_PUNCT) return 0;
-      } else if (idx == MODE_LOWER) {
-        if (index == MODE_PUNCT) return 0;
-        if (index == MODE_UPPER) return 28;
-      } else if (idx == MODE_MIXED) {
-        if (index == MODE_PUNCT) return 0;
-      } else if (idx == MODE_DIGIT) {
-        if (index == MODE_PUNCT) return 0;
-        if (index == MODE_UPPER) return 15;
+      if (idx == HighLevelEncoderMode.upper.index) {
+        if (index == HighLevelEncoderMode.punct.index) return 0;
+      } else if (idx == HighLevelEncoderMode.lower.index) {
+        if (index == HighLevelEncoderMode.punct.index) return 0;
+        if (index == HighLevelEncoderMode.upper.index) return 28;
+      } else if (idx == HighLevelEncoderMode.mixed.index) {
+        if (index == HighLevelEncoderMode.punct.index) return 0;
+      } else if (idx == HighLevelEncoderMode.digit.index) {
+        if (index == HighLevelEncoderMode.punct.index) return 0;
+        if (index == HighLevelEncoderMode.upper.index) return 15;
       }
 
       return -1;
@@ -221,15 +219,17 @@ class HighLevelEncoder {
   // the "result" list.
   void _updateStateForChar(State state, int index, List<State> result) {
     final int ch = _text[index] & 0xFF;
-    final bool charInCurrentTable = _charMap[state.mode].containsKey(ch);
+    final bool charInCurrentTable = _charMap[state.mode.index].containsKey(ch);
     State? stateNoBinary;
-    for (int mode = 0; mode <= MODE_PUNCT; mode++) {
-      final int charInMode = _charMap[mode][ch] ?? 0;
+    for (HighLevelEncoderMode mode in HighLevelEncoderMode.values) {
+      final int charInMode = _charMap[mode.index][ch] ?? 0;
       if (charInMode > 0) {
         // Only create stateNoBinary the first time it's required.
         stateNoBinary ??= state.endBinaryShift(index);
         // Try generating the character by latching to its mode
-        if (!charInCurrentTable || mode == state.mode || mode == MODE_DIGIT) {
+        if (!charInCurrentTable ||
+            mode == state.mode ||
+            mode == HighLevelEncoderMode.digit) {
           // If the character is in the current table, we don't want to latch to
           // any other mode except possibly digit (which uses only 4 bits).  Any
           // other latch would be equally successful *after* this character, and
@@ -239,7 +239,8 @@ class HighLevelEncoder {
           result.add(latchState);
         }
         // Try generating the character by switching to its mode.
-        if (!charInCurrentTable && shiftTable[state.mode][mode] >= 0) {
+        if (!charInCurrentTable &&
+            shiftTable[state.mode.index][mode.index] >= 0) {
           // It never makes sense to temporarily shift to another mode if the
           // character exists in the current mode.  That can never save bits.
           final State shiftState =
@@ -249,7 +250,7 @@ class HighLevelEncoder {
       }
     }
     if (state.binaryShiftByteCount > 0 ||
-        !_charMap[state.mode].containsKey(ch)) {
+        !_charMap[state.mode.index].containsKey(ch)) {
       // It's never worthwhile to go into binary shift mode if you're not already
       // in binary shift mode, and the character exists in your current mode.
       // That can never save bits over just outputting the char in the current mode.
@@ -278,17 +279,24 @@ class HighLevelEncoder {
   ) {
     final State stateNoBinary = state.endBinaryShift(index);
     // Possibility 1.  Latch to MODE_PUNCT, and then append this code
-    result.add(stateNoBinary.latchAndAppend(MODE_PUNCT, pairCode));
-    if (state.mode != MODE_PUNCT) {
+    result.add(
+      stateNoBinary.latchAndAppend(HighLevelEncoderMode.punct, pairCode),
+    );
+    if (state.mode != HighLevelEncoderMode.punct) {
       // Possibility 2.  Shift to MODE_PUNCT, and then append this code.
       // Every state except MODE_PUNCT (handled above) can shift
-      result.add(stateNoBinary.shiftAndAppend(MODE_PUNCT, pairCode));
+      result.add(
+        stateNoBinary.shiftAndAppend(HighLevelEncoderMode.punct, pairCode),
+      );
     }
     if (pairCode == 3 || pairCode == 4) {
       // both characters are in DIGITS.  Sometimes better to just add two digits
       final State digitState = stateNoBinary
-          .latchAndAppend(MODE_DIGIT, 16 - pairCode) // period or comma in DIGIT
-          .latchAndAppend(MODE_DIGIT, 1); // space in DIGIT
+          .latchAndAppend(
+            HighLevelEncoderMode.digit,
+            16 - pairCode,
+          ) // period or comma in DIGIT
+          .latchAndAppend(HighLevelEncoderMode.digit, 1); // space in DIGIT
       result.add(digitState);
     }
     if (state.binaryShiftByteCount > 0) {

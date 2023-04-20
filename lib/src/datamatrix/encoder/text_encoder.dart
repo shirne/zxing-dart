@@ -19,7 +19,7 @@ import 'high_level_encoder.dart';
 
 class TextEncoder extends C40Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.TEXT_ENCODATION;
+  int get encodingMode => HighLevelEncoder.textEncodation;
 
   @override
   int encodeChar(int chr, StringBuffer sb) {

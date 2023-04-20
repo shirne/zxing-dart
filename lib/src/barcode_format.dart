@@ -19,53 +19,53 @@
 /// Please keep alphabetized.
 enum BarcodeFormat {
   /// Aztec 2D barcode format.
-  AZTEC,
+  aztec,
 
   /// CODABAR 1D format.
-  CODABAR,
+  codabar,
 
   /// Code 39 1D format.
-  CODE_39,
+  code39,
 
   /// Code 93 1D format.
-  CODE_93,
+  code93,
 
   /// Code 128 1D format.
-  CODE_128,
+  code128,
 
   /// Data Matrix 2D barcode format.
-  DATA_MATRIX,
+  dataMatrix,
 
   /// EAN-8 1D format.
-  EAN_8,
+  ean8,
 
   /// EAN-13 1D format.
-  EAN_13,
+  ean13,
 
   /// ITF (Interleaved Two of Five) 1D format.
-  ITF,
+  itf,
 
   /// MaxiCode 2D barcode format.
-  MAXICODE,
+  maxicode,
 
   /// PDF417 format.
-  PDF_417,
+  pdf417,
 
   /// QR Code 2D barcode format.
-  QR_CODE,
+  qrCode,
 
   /// RSS 14
-  RSS_14,
+  rss14,
 
   /// RSS EXPANDED
-  RSS_EXPANDED,
+  rssExpanded,
 
   /// UPC-A 1D format.
-  UPC_A,
+  upcA,
 
   /// UPC-E 1D format.
-  UPC_E,
+  upcE,
 
   /// UPC/EAN extension format. Not a stand-alone format.
-  UPC_EAN_EXTENSION
+  upcEanExtension,
 }

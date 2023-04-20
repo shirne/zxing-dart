@@ -41,11 +41,11 @@ import 'global_histogram_binarizer.dart';
 class HybridBinarizer extends GlobalHistogramBinarizer {
   // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
   // So this is the smallest dimension in each axis we can accept.
-  static const int BLOCK_SIZE_POWER = 3;
-  static const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
-  static const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1; // ...0011...11
-  static const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
-  static const int MIN_DYNAMIC_RANGE = 24;
+  static const int blockSizePower = 3;
+  static const int blockSize = 1 << blockSizePower; // ...0100...00
+  static const int blockSizeMask = blockSize - 1; // ...0011...11
+  static const int minimumDimension = blockSize * 5;
+  static const int minDynamicRange = 24;
 
   BitMatrix? _matrix;
 
@@ -62,14 +62,14 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     final source = luminanceSource;
     final width = source.width;
     final height = source.height;
-    if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
+    if (width >= minimumDimension && height >= minimumDimension) {
       final luminances = source.matrix;
-      int subWidth = width >> BLOCK_SIZE_POWER;
-      if ((width & BLOCK_SIZE_MASK) != 0) {
+      int subWidth = width >> blockSizePower;
+      if ((width & blockSizeMask) != 0) {
         subWidth++;
       }
-      int subHeight = height >> BLOCK_SIZE_POWER;
-      if ((height & BLOCK_SIZE_MASK) != 0) {
+      int subHeight = height >> blockSizePower;
+      if ((height & blockSizeMask) != 0) {
         subHeight++;
       }
       final blackPoints =
@@ -110,16 +110,16 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     List<List<int>> blackPoints,
     BitMatrix matrix,
   ) {
-    final maxYOffset = height - BLOCK_SIZE;
-    final maxXOffset = width - BLOCK_SIZE;
+    final maxYOffset = height - blockSize;
+    final maxXOffset = width - blockSize;
     for (int y = 0; y < subHeight; y++) {
-      int yOffset = y << BLOCK_SIZE_POWER;
+      int yOffset = y << blockSizePower;
       if (yOffset > maxYOffset) {
         yOffset = maxYOffset;
       }
       final top = _cap(y, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
-        int xOffset = x << BLOCK_SIZE_POWER;
+        int xOffset = x << blockSizePower;
         if (xOffset > maxXOffset) {
           xOffset = maxXOffset;
         }
@@ -153,9 +153,9 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     BitMatrix matrix,
   ) {
     for (int y = 0, offset = yoffset * stride + xoffset;
-        y < BLOCK_SIZE;
+        y < blockSize;
         y++, offset += stride) {
-      for (int x = 0; x < BLOCK_SIZE; x++) {
+      for (int x = 0; x < blockSize; x++) {
         // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
         if (luminances[offset + x] <= threshold) {
           matrix.set(xoffset + x, yoffset + y);
@@ -174,17 +174,17 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
     int width,
     int height,
   ) {
-    final maxYOffset = height - BLOCK_SIZE;
-    final maxXOffset = width - BLOCK_SIZE;
+    final maxYOffset = height - blockSize;
+    final maxXOffset = width - blockSize;
     final blackPoints =
         List.generate(subHeight, (index) => List.filled(subWidth, 0));
     for (int y = 0; y < subHeight; y++) {
-      int yOffset = y << BLOCK_SIZE_POWER;
+      int yOffset = y << blockSizePower;
       if (yOffset > maxYOffset) {
         yOffset = maxYOffset;
       }
       for (int x = 0; x < subWidth; x++) {
-        int xOffset = x << BLOCK_SIZE_POWER;
+        int xOffset = x << blockSizePower;
         if (xOffset > maxXOffset) {
           xOffset = maxXOffset;
         }
@@ -192,9 +192,9 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         int min = 0xFF;
         int max = 0;
         for (int yy = 0, offset = yOffset * width + xOffset;
-            yy < BLOCK_SIZE;
+            yy < blockSize;
             yy++, offset += width) {
-          for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+          for (int xx = 0; xx < blockSize; xx++) {
             final pixel = luminances[offset + xx];
             sum += pixel;
             // still looking for good contrast
@@ -206,12 +206,12 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
             }
           }
           // short-circuit min/max tests once dynamic range is met
-          if (max - min > MIN_DYNAMIC_RANGE) {
+          if (max - min > minDynamicRange) {
             // finish the rest of the rows quickly
             yy++;
             offset += width;
-            for (; yy < BLOCK_SIZE; yy++, offset += width) {
-              for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+            for (; yy < blockSize; yy++, offset += width) {
+              for (int xx = 0; xx < blockSize; xx++) {
                 sum += luminances[offset + xx];
               }
             }
@@ -219,8 +219,8 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
         }
 
         // The default estimate is the average of the values in the block.
-        int average = sum >> (BLOCK_SIZE_POWER * 2);
-        if (max - min <= MIN_DYNAMIC_RANGE) {
+        int average = sum >> (blockSizePower * 2);
+        if (max - min <= minDynamicRange) {
           // If variation within the block is low, assume this is a block with only light or only
           // dark pixels. In that case we do not want to use the average, as it would divide this
           // low contrast area into black and white pixels, essentially creating data out of noise.

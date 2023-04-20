@@ -130,7 +130,7 @@ class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
     // Try "try harder" getMode
     final hints = <DecodeHintType, Object>{};
-    hints[DecodeHintType.TRY_HARDER] = true;
+    hints[DecodeHintType.tryHarder] = true;
     try {
       result = reader!.decode(bitmap, hints);
       log.info(

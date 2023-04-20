@@ -29,7 +29,7 @@ void main() {
     expect(10, info.symbolWidth);
     expect(10, info.symbolHeight);
 
-    info = SymbolInfo.lookup(3, SymbolShapeHint.FORCE_RECTANGLE)!;
+    info = SymbolInfo.lookup(3, SymbolShapeHint.forceRectangle)!;
     expect(7, info.errorCodewords);
     expect(16, info.matrixWidth);
     expect(6, info.matrixHeight);
@@ -43,7 +43,7 @@ void main() {
     expect(32, info.symbolWidth);
     expect(8, info.symbolHeight);
 
-    info = SymbolInfo.lookup(9, SymbolShapeHint.FORCE_SQUARE)!;
+    info = SymbolInfo.lookup(9, SymbolShapeHint.forceSquare)!;
     expect(12, info.errorCodewords);
     expect(14, info.matrixWidth);
     expect(14, info.matrixHeight);
@@ -57,7 +57,7 @@ void main() {
     );
 
     expect(
-      () => SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE),
+      () => SymbolInfo.lookup(50, SymbolShapeHint.forceRectangle),
       throwsArgumentError,
       reason: 'There\'s no rectangular symbol for 50 data codewords',
     );
@@ -69,7 +69,7 @@ void main() {
     final fixedSize = Dimension(26, 26);
     info = SymbolInfo.lookup(
       35,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       fixedSize,
       fixedSize,
       false,
@@ -79,7 +79,7 @@ void main() {
 
     info = SymbolInfo.lookup(
       45,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       fixedSize,
       fixedSize,
       false,
@@ -91,7 +91,7 @@ void main() {
 
     info = SymbolInfo.lookup(
       35,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       minSize,
       maxSize,
       false,
@@ -102,7 +102,7 @@ void main() {
 
     info = SymbolInfo.lookup(
       40,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       minSize,
       maxSize,
       false,
@@ -113,7 +113,7 @@ void main() {
 
     info = SymbolInfo.lookup(
       45,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       minSize,
       maxSize,
       false,
@@ -124,7 +124,7 @@ void main() {
 
     info = SymbolInfo.lookup(
       63,
-      SymbolShapeHint.FORCE_NONE,
+      SymbolShapeHint.forceNone,
       minSize,
       maxSize,
       false,

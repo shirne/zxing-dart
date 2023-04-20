@@ -19,7 +19,7 @@ import 'codeword.dart';
 
 /// @author Guenther Grau
 class DetectionResultColumn {
-  static const int _MAX_NEARBY_DISTANCE = 5;
+  static const int _maxNearbyDistance = 5;
 
   final BoundingBox _boundingBox;
   final List<Codeword?> _codewords;
@@ -33,7 +33,7 @@ class DetectionResultColumn {
     if (codeword != null) {
       return codeword;
     }
-    for (int i = 1; i < _MAX_NEARBY_DISTANCE; i++) {
+    for (int i = 1; i < _maxNearbyDistance; i++) {
       int nearImageRow = imageRowToCodewordIndex(imageRow) - i;
       if (nearImageRow >= 0) {
         codeword = _codewords[nearImageRow];

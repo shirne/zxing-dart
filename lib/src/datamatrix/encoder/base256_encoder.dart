@@ -21,7 +21,7 @@ import 'high_level_encoder.dart';
 
 class Base256Encoder implements Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.BASE256_ENCODATION;
+  int get encodingMode => HighLevelEncoder.base256Encodation;
 
   @override
   void encode(EncoderContext context) {
@@ -40,7 +40,7 @@ class Base256Encoder implements Encoder {
       );
       if (newMode != encodingMode) {
         // Return to ASCII encodation, which will actually handle latch to new mode
-        context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+        context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
         break;
       }
     }

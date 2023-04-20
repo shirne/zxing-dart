@@ -47,43 +47,43 @@ class MultiFormatWriter implements Writer {
   ]) {
     Writer writer;
     switch (format) {
-      case BarcodeFormat.EAN_8:
+      case BarcodeFormat.ean8:
         writer = EAN8Writer();
         break;
-      case BarcodeFormat.UPC_E:
+      case BarcodeFormat.upcE:
         writer = UPCEWriter();
         break;
-      case BarcodeFormat.EAN_13:
+      case BarcodeFormat.ean13:
         writer = EAN13Writer();
         break;
-      case BarcodeFormat.UPC_A:
+      case BarcodeFormat.upcA:
         writer = UPCAWriter();
         break;
-      case BarcodeFormat.QR_CODE:
+      case BarcodeFormat.qrCode:
         writer = QRCodeWriter();
         break;
-      case BarcodeFormat.CODE_39:
+      case BarcodeFormat.code39:
         writer = Code39Writer();
         break;
-      case BarcodeFormat.CODE_93:
+      case BarcodeFormat.code93:
         writer = Code93Writer();
         break;
-      case BarcodeFormat.CODE_128:
+      case BarcodeFormat.code128:
         writer = Code128Writer();
         break;
-      case BarcodeFormat.ITF:
+      case BarcodeFormat.itf:
         writer = ITFWriter();
         break;
-      case BarcodeFormat.PDF_417:
+      case BarcodeFormat.pdf417:
         writer = PDF417Writer();
         break;
-      case BarcodeFormat.CODABAR:
+      case BarcodeFormat.codabar:
         writer = CodaBarWriter();
         break;
-      case BarcodeFormat.DATA_MATRIX:
+      case BarcodeFormat.dataMatrix:
         writer = DataMatrixWriter();
         break;
-      case BarcodeFormat.AZTEC:
+      case BarcodeFormat.aztec:
         writer = AztecWriter();
         break;
       default:

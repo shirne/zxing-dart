@@ -22,7 +22,7 @@ import 'package:zxing_lib/zxing.dart';
 
 /// Tests [PlanarYUVLuminanceSource].
 void main() {
-  const List<int> YUV = [
+  const List<int> yuv = [
     0, 1, 1, 2, 3, 5, //
     8, 13, 21, 34, 55, 89,
     0, 255, 255, 254, 253, 251,
@@ -30,57 +30,57 @@ void main() {
     127, 127, 127, 127, 127, 127,
     127, 127, 127, 127, 127, 127,
   ];
-  const int COLS = 6;
-  const int ROWS = 4;
+  const int cols = 6;
+  const int rows = 4;
   final List<int> Y = List.generate(
-    COLS * ROWS,
-    (index) => index < YUV.length ? YUV[index] : 0,
+    cols * rows,
+    (index) => index < yuv.length ? yuv[index] : 0,
   );
 
   test('testNoCrop', () {
     final source =
-        PlanarYUVLuminanceSource(Uint8List.fromList(YUV), COLS, ROWS);
+        PlanarYUVLuminanceSource(Uint8List.fromList(yuv), cols, rows);
     assertListEquals(Y, 0, source.matrix, 0, Y.length);
-    for (int r = 0; r < ROWS; r++) {
-      assertListEquals(Y, r * COLS, source.getRow(r, null), 0, COLS);
+    for (int r = 0; r < rows; r++) {
+      assertListEquals(Y, r * cols, source.getRow(r, null), 0, cols);
     }
   });
 
   test('testCrop', () {
     final source = PlanarYUVLuminanceSource(
-      Uint8List.fromList(YUV),
-      COLS,
-      ROWS,
+      Uint8List.fromList(yuv),
+      cols,
+      rows,
       left: 1,
       top: 1,
-      width: COLS - 2,
-      height: ROWS - 2,
+      width: cols - 2,
+      height: rows - 2,
     );
     expect(source.isCropSupported, true);
     final cropMatrix = source.matrix;
-    for (int r = 0; r < ROWS - 2; r++) {
+    for (int r = 0; r < rows - 2; r++) {
       assertListEquals(
         Y,
-        (r + 1) * COLS + 1,
+        (r + 1) * cols + 1,
         cropMatrix,
-        r * (COLS - 2),
-        COLS - 2,
+        r * (cols - 2),
+        cols - 2,
       );
     }
-    for (int r = 0; r < ROWS - 2; r++) {
+    for (int r = 0; r < rows - 2; r++) {
       assertListEquals(
         Y,
-        (r + 1) * COLS + 1,
+        (r + 1) * cols + 1,
         source.getRow(r, null),
         0,
-        COLS - 2,
+        cols - 2,
       );
     }
   });
 
   test('testThumbnail', () {
     final source =
-        PlanarYUVLuminanceSource(Uint8List.fromList(YUV), COLS, ROWS);
+        PlanarYUVLuminanceSource(Uint8List.fromList(yuv), cols, rows);
     expect(source.renderThumbnail(), [
       0xFF000000,
       0xFF010101,

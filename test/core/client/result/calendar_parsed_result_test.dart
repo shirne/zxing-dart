@@ -52,9 +52,9 @@ void main() {
     double longitude = double.nan,
   ]) {
     final Result fakeResult =
-        Result(contents, null, null, BarcodeFormat.QR_CODE);
+        Result(contents, null, null, BarcodeFormat.qrCode);
     final ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(ParsedResultType.CALENDAR, result.type);
+    expect(ParsedResultType.calendar, result.type);
     final CalendarParsedResult calResult = result as CalendarParsedResult;
     expect(calResult.description, description);
     expect(calResult.summary, summary);
@@ -215,10 +215,10 @@ void main() {
       'END:VEVENT\r\nEND:VCALENDAR',
       null,
       null,
-      BarcodeFormat.QR_CODE,
+      BarcodeFormat.qrCode,
     );
     final ParsedResult result = ResultParser.parseResult(fakeResult);
-    expect(result.type, ParsedResultType.TEXT);
+    expect(result.type, ParsedResultType.text);
   });
 
   test('testOrganizer', () {

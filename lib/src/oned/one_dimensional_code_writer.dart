@@ -55,8 +55,8 @@ abstract class OneDimensionalCodeWriter implements Writer {
     }
 
     int sidesMargin = defaultMargin;
-    if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
-      sidesMargin = int.parse(hints[EncodeHintType.MARGIN].toString());
+    if (hints != null && hints.containsKey(EncodeHintType.margin)) {
+      sidesMargin = int.parse(hints[EncodeHintType.margin].toString());
     }
 
     final code = encodeContent(contents, hints);

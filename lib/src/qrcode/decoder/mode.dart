@@ -22,49 +22,49 @@ import 'version.dart';
 /// @author Sean Owen
 class Mode {
   // Not really a mode...
-  static const TERMINATOR = Mode([0, 0, 0], 0x00, 'TERMINATOR');
-  static const NUMERIC = Mode([10, 12, 14], 0x01, 'NUMERIC');
-  static const ALPHANUMERIC = Mode([9, 11, 13], 0x02, 'ALPHANUMERIC');
+  static const terminator = Mode([0, 0, 0], 0x00, 'TERMINATOR');
+  static const numeric = Mode([10, 12, 14], 0x01, 'NUMERIC');
+  static const alphanumeric = Mode([9, 11, 13], 0x02, 'ALPHANUMERIC');
   // Not supported
-  static const STRUCTURED_APPEND = Mode(
+  static const structuredAppend = Mode(
     [0, 0, 0],
     0x03,
     'STRUCTURED_APPEND',
   );
-  static const BYTE = Mode([8, 16, 16], 0x04, 'BYTE');
-  static const FNC1_FIRST_POSITION = Mode(
+  static const byte = Mode([8, 16, 16], 0x04, 'BYTE');
+  static const fnc1FirstPosition = Mode(
     [0, 0, 0],
     0x05,
     'FNC1_FIRST_POSITION',
   );
 
   // character counts don't apply
-  static const ECI = Mode([0, 0, 0], 0x07, 'ECI');
-  static const KANJI = Mode([8, 10, 12], 0x08, 'KANJI');
-  static const FNC1_SECOND_POSITION = Mode(
+  static const eci = Mode([0, 0, 0], 0x07, 'ECI');
+  static const kanji = Mode([8, 10, 12], 0x08, 'KANJI');
+  static const fnc1SecondPosition = Mode(
     [0, 0, 0],
     0x09,
     'FNC1_SECOND_POSITION',
   );
 
   /// See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
-  static const HANZI = Mode([8, 10, 12], 0x0D, 'HANZI');
+  static const hanzi = Mode([8, 10, 12], 0x0D, 'HANZI');
 
   static const values = [
-    TERMINATOR,
-    NUMERIC,
-    ALPHANUMERIC,
-    STRUCTURED_APPEND,
-    BYTE,
-    FNC1_FIRST_POSITION,
+    terminator,
+    numeric,
+    alphanumeric,
+    structuredAppend,
+    byte,
+    fnc1FirstPosition,
     null,
-    ECI,
-    KANJI,
-    FNC1_SECOND_POSITION,
+    eci,
+    kanji,
+    fnc1SecondPosition,
     null,
     null,
     null,
-    HANZI
+    hanzi
   ];
 
   final List<int> _characterCountBitsForVersions;
@@ -82,26 +82,26 @@ class Mode {
   static Mode forBits(int bits) {
     switch (bits) {
       case 0x0:
-        return TERMINATOR;
+        return terminator;
       case 0x1:
-        return NUMERIC;
+        return numeric;
       case 0x2:
-        return ALPHANUMERIC;
+        return alphanumeric;
       case 0x3:
-        return STRUCTURED_APPEND;
+        return structuredAppend;
       case 0x4:
-        return BYTE;
+        return byte;
       case 0x5:
-        return FNC1_FIRST_POSITION;
+        return fnc1FirstPosition;
       case 0x7:
-        return ECI;
+        return eci;
       case 0x8:
-        return KANJI;
+        return kanji;
       case 0x9:
-        return FNC1_SECOND_POSITION;
+        return fnc1SecondPosition;
       case 0xD:
         // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
-        return HANZI;
+        return hanzi;
       default:
         throw ArgumentError();
     }

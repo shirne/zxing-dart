@@ -26,7 +26,7 @@ class TelParsedResult extends ParsedResult {
   String? title;
 
   TelParsedResult(this.number, this.telURI, this.title)
-      : super(ParsedResultType.TEL);
+      : super(ParsedResultType.tel);
 
   @override
   String get displayResult {

@@ -52,8 +52,8 @@ class Detector {
   /// @throws NotFoundException if QR Code cannot be found
   /// @throws FormatException if a QR Code cannot be decoded
   DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
-    _resultPointCallback = hints?[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
-        as ResultPointCallback?;
+    _resultPointCallback =
+        hints?[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
 
     final finder = FinderPatternFinder(_image, _resultPointCallback);
     final info = finder.find(hints);

@@ -21,7 +21,7 @@ import 'high_level_encoder.dart';
 
 class C40Encoder implements Encoder {
   @override
-  int get encodingMode => HighLevelEncoder.C40_ENCODATION;
+  int get encodingMode => HighLevelEncoder.c40Encodation;
 
   void encodeMaximal(EncoderContext context) {
     final buffer = StringBuilder();
@@ -52,7 +52,7 @@ class C40Encoder implements Encoder {
       }
     }
     if (buffer.length > 0) {
-      context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
+      context.writeCodeword(HighLevelEncoder.latchToC40);
     }
 
     handleEOD(context, buffer);
@@ -98,7 +98,7 @@ class C40Encoder implements Encoder {
         );
         if (newMode != encodingMode) {
           // Return to ASCII encodation, which will actually handle latch to new mode
-          context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+          context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
           break;
         }
       }
@@ -144,14 +144,14 @@ class C40Encoder implements Encoder {
         writeNextTriplet(context, buffer);
       }
       if (context.hasMoreCharacters) {
-        context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
+        context.writeCodeword(HighLevelEncoder.c40Unlatch);
       }
     } else if (available == 1 && rest == 1) {
       while (buffer.length >= 3) {
         writeNextTriplet(context, buffer);
       }
       if (context.hasMoreCharacters) {
-        context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
+        context.writeCodeword(HighLevelEncoder.c40Unlatch);
       }
       // else no unlatch
       context.pos--;
@@ -160,12 +160,12 @@ class C40Encoder implements Encoder {
         writeNextTriplet(context, buffer);
       }
       if (available > 0 || context.hasMoreCharacters) {
-        context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
+        context.writeCodeword(HighLevelEncoder.c40Unlatch);
       }
     } else {
       throw StateError('Unexpected case. Please report!');
     }
-    context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+    context.signalEncoderChange(HighLevelEncoder.asciiEncodation);
   }
 
   int encodeChar(int chr, StringBuffer sb) {

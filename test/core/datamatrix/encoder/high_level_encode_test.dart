@@ -40,7 +40,7 @@ void main() {
   }
 
   void resetSymbols() {
-    SymbolInfo.overrideSymbolSet(SymbolInfo.PROD_SYMBOLS);
+    SymbolInfo.overrideSymbolSet(SymbolInfo.prodSymbols);
   }
 
   String createBinaryMessage(int len) {
@@ -564,7 +564,7 @@ void main() {
         '\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)',
         utf8,
         -1,
-        SymbolShapeHint.FORCE_NONE,
+        SymbolShapeHint.forceNone,
       ),
     );
     expect(

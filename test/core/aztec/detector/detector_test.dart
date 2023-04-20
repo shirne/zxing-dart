@@ -108,7 +108,7 @@ void main() {
 
   // Test that we can tolerate errors in the parameter locator bits
   void testErrorInParameterLocator(String data) {
-    final aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    final aztec = Encoder.encode(data, 25, Encoder.defaultAztecLayers);
     // pseudo-random, but deterministic
     final random = Random(aztec.matrix!.hashCode);
     final int layers = aztec.layers;

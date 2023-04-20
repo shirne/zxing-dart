@@ -25,7 +25,7 @@ import 'upceanwriter.dart';
 ///
 /// @author aripollak@gmail.com (Ari Pollak)
 class EAN8Writer extends UPCEANWriter {
-  static const int _CODE_WIDTH = 3 + // start guard
+  static const int _codeWidth = 3 + // start guard
       (7 * 4) + // left bars
       5 + // middle guard
       (7 * 4) + // right bars
@@ -33,7 +33,7 @@ class EAN8Writer extends UPCEANWriter {
 
   // @protected
   @override
-  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.EAN_8];
+  List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.ean8];
 
   /// @return a byte array of horizontal pixels (false = white, true = black)
   @override
@@ -72,13 +72,13 @@ class EAN8Writer extends UPCEANWriter {
 
     OneDimensionalCodeWriter.checkNumeric(contents);
 
-    final result = List.filled(_CODE_WIDTH, false);
+    final result = List.filled(_codeWidth, false);
     int pos = 0;
 
     pos += OneDimensionalCodeWriter.appendPattern(
       result,
       pos,
-      UPCEANReader.START_END_PATTERN,
+      UPCEANReader.startEndPattern,
       true,
     );
 
@@ -87,7 +87,7 @@ class EAN8Writer extends UPCEANWriter {
       pos += OneDimensionalCodeWriter.appendPattern(
         result,
         pos,
-        UPCEANReader.L_PATTERNS[digit],
+        UPCEANReader.lPatterns[digit],
         false,
       );
     }
@@ -95,7 +95,7 @@ class EAN8Writer extends UPCEANWriter {
     pos += OneDimensionalCodeWriter.appendPattern(
       result,
       pos,
-      UPCEANReader.MIDDLE_PATTERN,
+      UPCEANReader.middlePattern,
       false,
     );
 
@@ -104,14 +104,14 @@ class EAN8Writer extends UPCEANWriter {
       pos += OneDimensionalCodeWriter.appendPattern(
         result,
         pos,
-        UPCEANReader.L_PATTERNS[digit],
+        UPCEANReader.lPatterns[digit],
         true,
       );
     }
     OneDimensionalCodeWriter.appendPattern(
       result,
       pos,
-      UPCEANReader.START_END_PATTERN,
+      UPCEANReader.startEndPattern,
       true,
     );
 

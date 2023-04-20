@@ -37,7 +37,7 @@ class ExpandedProductResultParser extends ResultParser {
   @override
   ExpandedProductParsedResult? parse(Result result) {
     final format = result.barcodeFormat;
-    if (format != BarcodeFormat.RSS_EXPANDED) {
+    if (format != BarcodeFormat.rssExpanded) {
       // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
       return null;
     }
@@ -104,7 +104,7 @@ class ExpandedProductResultParser extends ResultParser {
         case '3108':
         case '3109':
           weight = value;
-          weightType = ExpandedProductParsedResult.KILOGRAM;
+          weightType = ExpandedProductParsedResult.kilogram;
           weightIncrement = ai.substring(3);
           break;
         case '3200':
@@ -118,7 +118,7 @@ class ExpandedProductResultParser extends ResultParser {
         case '3208':
         case '3209':
           weight = value;
-          weightType = ExpandedProductParsedResult.POUND;
+          weightType = ExpandedProductParsedResult.pound;
           weightIncrement = ai.substring(3);
           break;
         case '3920':

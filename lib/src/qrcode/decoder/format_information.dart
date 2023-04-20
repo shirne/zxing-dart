@@ -25,10 +25,10 @@ import 'error_correction_level.dart';
 ///
 /// @author Sean Owen
 class FormatInformation {
-  static const int _FORMAT_INFO_MASK_QR = 0x5412;
+  static const int _formatInfoMaskQr = 0x5412;
 
   /// See ISO 18004:2006, Annex C, Table C.1
-  static const List<List<int>> _FORMAT_INFO_DECODE_LOOKUP = [
+  static const List<List<int>> _formatInfoDecodeLookup = [
     [0x5412, 0x00],
     [0x5125, 0x01],
     [0x5E7C, 0x02],
@@ -96,8 +96,8 @@ class FormatInformation {
     // do not mask this info. Try again by actually masking the pattern
     // first
     return _doDecodeFormatInformation(
-      maskedFormatInfo1 ^ _FORMAT_INFO_MASK_QR,
-      maskedFormatInfo2 ^ _FORMAT_INFO_MASK_QR,
+      maskedFormatInfo1 ^ _formatInfoMaskQr,
+      maskedFormatInfo2 ^ _formatInfoMaskQr,
     );
   }
 
@@ -106,9 +106,9 @@ class FormatInformation {
     int maskedFormatInfo2,
   ) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
-    int bestDifference = MathUtils.MAX_VALUE; //Integer.MAX_VALUE;
+    int bestDifference = MathUtils.maxValue; //Integer.MAX_VALUE;
     int bestFormatInfo = 0;
-    for (List<int> decodeInfo in _FORMAT_INFO_DECODE_LOOKUP) {
+    for (List<int> decodeInfo in _formatInfoDecodeLookup) {
       final targetInfo = decodeInfo[0];
       if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match

@@ -29,9 +29,9 @@ import 'decoder/decoder.dart';
 
 /// This implementation can detect and decode a MaxiCode in an image.
 class MaxiCodeReader implements Reader {
-  static const List<ResultPoint> _NO_POINTS = [];
-  static const int _MATRIX_WIDTH = 30;
-  static const int _MATRIX_HEIGHT = 33;
+  static const List<ResultPoint> _noPoints = [];
+  static const int _matrixWidth = 30;
+  static const int _matrixHeight = 33;
 
   final Decoder _decoder = Decoder();
 
@@ -44,13 +44,13 @@ class MaxiCodeReader implements Reader {
     final result = Result(
       decoderResult.text,
       decoderResult.rawBytes,
-      _NO_POINTS,
-      BarcodeFormat.MAXICODE,
+      _noPoints,
+      BarcodeFormat.maxicode,
     );
 
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
+      result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
     return result;
   }
@@ -76,19 +76,19 @@ class MaxiCodeReader implements Reader {
     final height = enclosingRectangle[3];
 
     // Now just read off the bits
-    final bits = BitMatrix(_MATRIX_WIDTH, _MATRIX_HEIGHT);
-    for (int y = 0; y < _MATRIX_HEIGHT; y++) {
+    final bits = BitMatrix(_matrixWidth, _matrixHeight);
+    for (int y = 0; y < _matrixHeight; y++) {
       final iy = math.min(
-        top + (y * height + height ~/ 2) ~/ _MATRIX_HEIGHT,
+        top + (y * height + height ~/ 2) ~/ _matrixHeight,
         height - 1,
       );
-      for (int x = 0; x < _MATRIX_WIDTH; x++) {
+      for (int x = 0; x < _matrixWidth; x++) {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
         final ix = left +
             math.min<int>(
               (x * width + width ~/ 2 + (y & 0x01) * width ~/ 2) ~/
-                  _MATRIX_WIDTH,
+                  _matrixWidth,
               width - 1,
             );
         if (image.get(ix, iy)) {

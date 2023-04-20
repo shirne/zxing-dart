@@ -34,9 +34,9 @@ import 'ai01weight_decoder.dart';
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
 class AI013x0x1xDecoder extends AI01weightDecoder {
-  static const int _HEADER_SIZE = 7 + 1;
-  static const int _WEIGHT_SIZE = 20;
-  static const int _DATE_SIZE = 16;
+  static const int _headerSize = 7 + 1;
+  static const int _weightSize = 20;
+  static const int _dateSize = 16;
 
   final String _dateCode;
   final String _firstAIdigits;
@@ -47,21 +47,21 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
   @override
   String parseInformation() {
     if (information.size !=
-        _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE + _DATE_SIZE) {
+        _headerSize + AI01decoder.gtinSize + _weightSize + _dateSize) {
       throw NotFoundException.instance;
     }
 
     final buf = StringBuilder();
 
-    encodeCompressedGtin(buf, _HEADER_SIZE);
+    encodeCompressedGtin(buf, _headerSize);
     encodeCompressedWeight(
       buf,
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE,
-      _WEIGHT_SIZE,
+      _headerSize + AI01decoder.gtinSize,
+      _weightSize,
     );
     _encodeCompressedDate(
       buf,
-      _HEADER_SIZE + AI01decoder.GTIN_SIZE + _WEIGHT_SIZE,
+      _headerSize + AI01decoder.gtinSize + _weightSize,
     );
 
     return buf.toString();
@@ -69,7 +69,7 @@ class AI013x0x1xDecoder extends AI01weightDecoder {
 
   void _encodeCompressedDate(StringBuffer buf, int currentPos) {
     int numericDate =
-        generalDecoder.extractNumericValueFromBitArray(currentPos, _DATE_SIZE);
+        generalDecoder.extractNumericValueFromBitArray(currentPos, _dateSize);
     if (numericDate == 38400) {
       return;
     }

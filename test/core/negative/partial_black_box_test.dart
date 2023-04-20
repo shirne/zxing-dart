@@ -51,7 +51,7 @@ void main() {
 
     try {
       final result = UPCEReader().decodeRow(128, row, {
-        DecodeHintType.TRY_HARDER: true,
+        DecodeHintType.tryHarder: true,
       });
 
       // what ever is ok

@@ -24,7 +24,7 @@ import 'modulus_poly.dart';
 /// @author Sean Owen
 class ModulusGF {
   static final ModulusGF pdf417Gf =
-      ModulusGF._(PDF417Common.NUMBER_OF_CODEWORDS, 3);
+      ModulusGF._(PDF417Common.numerOfCodewords, 3);
 
   late List<int> _expTable;
   late List<int> _logTable;
