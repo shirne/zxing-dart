@@ -18,13 +18,14 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:zxing_lib/src/encode_hint.dart';
+
 import '../../common/bit_array.dart';
 import '../../common/character_set_eci.dart';
 import '../../common/detector/math_utils.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_encoder.dart';
 import '../../common/string_utils.dart';
-import '../../encode_hint_type.dart';
 import '../../qrcode/decoder/mode.dart';
 import '../../qrcode/decoder/version.dart';
 import '../../writer_exception.dart';
@@ -65,26 +66,22 @@ class Encoder {
   static QRCode encode(
     String content, [
     ErrorCorrectionLevel ecLevel = ErrorCorrectionLevel.H,
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     Version version;
     BitArray headerAndDataBits;
     Mode mode;
 
-    final hasGS1FormatHint = hints != null &&
-        hints.containsKey(EncodeHintType.gs1Format) &&
-        hints[EncodeHintType.gs1Format] as bool;
-    final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.qrCompact) &&
-        hints[EncodeHintType.qrCompact] as bool;
+    final hasGS1FormatHint = hints?.gs1Format ?? false;
+
+    final hasCompactionHint = hints?.qrCompact ?? false;
 
     // Determine what character encoding has been specified by the caller, if any
     Encoding? encoding = defaultByteModeEncoding;
-    final hasEncodingHint =
-        hints != null && hints.containsKey(EncodeHintType.characterSet);
+    final hasEncodingHint = hints?.characterSet != null;
     if (hasEncodingHint) {
       encoding = CharacterSetECI.getCharacterSetECIByName(
-        hints[EncodeHintType.characterSet].toString(),
+        hints!.characterSet!,
       )?.charset;
     }
 
@@ -135,12 +132,15 @@ class Encoder {
       final dataBits = BitArray();
       appendBytes(content, mode, dataBits, encoding!);
 
-      if (hints != null && hints.containsKey(EncodeHintType.qrVersion)) {
-        final versionNumber =
-            int.parse(hints[EncodeHintType.qrVersion].toString());
+      if (hints?.qrVersion != null) {
+        final versionNumber = hints!.qrVersion!;
         version = Version.getVersionForNumber(versionNumber);
-        final bitsNeeded =
-            _calculateBitsNeeded(mode, headerBits, dataBits, version);
+        final bitsNeeded = _calculateBitsNeeded(
+          mode,
+          headerBits,
+          dataBits,
+          version,
+        );
         if (!willFit(bitsNeeded, version, ecLevel)) {
           throw WriterException('Data too big for requested version');
         }
@@ -180,9 +180,8 @@ class Encoder {
 
     // Enable manual selection of the pattern to be used via hint
     int maskPattern = -1;
-    if (hints != null && hints.containsKey(EncodeHintType.qrMaskPattern)) {
-      final hintMaskPattern =
-          int.parse(hints[EncodeHintType.qrMaskPattern].toString());
+    if (hints?.qrMaskPattern != null) {
+      final hintMaskPattern = hints!.qrMaskPattern!;
       maskPattern =
           QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
     }

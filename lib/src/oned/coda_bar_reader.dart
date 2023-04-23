@@ -18,7 +18,7 @@ import '../barcode_format.dart';
 import '../common/bit_array.dart';
 import '../common/detector/math_utils.dart';
 import '../common/string_builder.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
@@ -74,7 +74,7 @@ class CodaBarReader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     _counters.fillRange(0, _counters.length, 0);
     _setCounters(row);
@@ -138,8 +138,7 @@ class CodaBarReader extends OneDReader {
       throw NotFoundException.instance;
     }
 
-    if (hints == null ||
-        !hints.containsKey(DecodeHintType.returnCodabarStartEnd)) {
+    if (!(hints?.returnCodabarStartEnd ?? false)) {
       _decodeRowResult.deleteCharAt(_decodeRowResult.length - 1);
       _decodeRowResult.deleteCharAt(0);
     }

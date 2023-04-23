@@ -15,7 +15,7 @@
  */
 
 import '../binary_bitmap.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../result.dart';
@@ -36,7 +36,7 @@ class ByQuadrantReader implements Reader {
   ByQuadrantReader(this._delegate);
 
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     final width = image.width;
     final height = image.height;
     final halfWidth = width ~/ 2;

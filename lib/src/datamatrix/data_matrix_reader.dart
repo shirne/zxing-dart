@@ -19,7 +19,7 @@ import '../common/bit_matrix.dart';
 import '../common/decoder_result.dart';
 
 import '../binary_bitmap.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../result.dart';
@@ -37,10 +37,10 @@ class DataMatrixReader implements Reader {
   final Decoder _decoder = Decoder();
 
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     DecoderResult decoderResult;
     List<ResultPoint> points;
-    if (hints != null && hints.containsKey(DecodeHintType.pureBarcode)) {
+    if (hints?.pureBarcode ?? false) {
       final bits = _extractPureBits(image.blackMatrix);
       decoderResult = _decoder.decodeMatrix(bits);
       points = _noPoints;

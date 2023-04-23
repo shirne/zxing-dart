@@ -21,7 +21,7 @@ import '../../common/detector/math_utils.dart';
 import '../../common/detector_result.dart';
 import '../../common/grid_sampler.dart';
 import '../../common/perspective_transform.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../not_found_exception.dart';
 import '../../qrcode/decoder/version.dart';
 import '../../result_point.dart';
@@ -51,9 +51,8 @@ class Detector {
   /// @return [DetectorResult] encapsulating results of detecting a QR Code
   /// @throws NotFoundException if QR Code cannot be found
   /// @throws FormatException if a QR Code cannot be decoded
-  DetectorResult detect([Map<DecodeHintType, Object>? hints]) {
-    _resultPointCallback =
-        hints?[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
+  DetectorResult detect([DecodeHint? hints]) {
+    _resultPointCallback = hints?.needResultPointCallback;
 
     final finder = FinderPatternFinder(_image, _resultPointCallback);
     final info = finder.find(hints);

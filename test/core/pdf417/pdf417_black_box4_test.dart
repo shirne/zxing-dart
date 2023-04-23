@@ -62,8 +62,6 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     final passedCounts = List.filled(testCount, 0);
     final tryHarderCounts = List.filled(testCount, 0);
 
-    final testBase = getTestBase();
-
     for (MapEntry<String, List<File>> testImageGroup in imageFiles.entries) {
       log.fine('Starting Image Group ${testImageGroup.key}');
 
@@ -164,10 +162,7 @@ class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   List<Result> decode(BinaryBitmap source, bool tryHarder) {
-    final hints = <DecodeHintType, Object>{};
-    if (tryHarder) {
-      hints[DecodeHintType.tryHarder] = true;
-    }
+    final hints = DecodeHint(tryHarder: tryHarder);
 
     return barcodeReader.decodeMultiple(source, hints);
   }

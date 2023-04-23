@@ -15,6 +15,7 @@
  */
 
 import 'binary_bitmap.dart';
+import 'decode_hint.dart';
 import 'decode_hint_type.dart';
 import 'result.dart';
 
@@ -41,7 +42,7 @@ abstract class Reader {
   /// @throws NotFoundException if no potential barcode is found
   /// @throws ChecksumException if a potential barcode is found but does not pass its checksum
   /// @throws FormatException if a potential barcode is found but format is invalid
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]);
+  Result decode(BinaryBitmap image, [DecodeHint? hints]);
 
   /// Resets any internal state the implementation has after a decode, to prepare it
   /// for reuse.

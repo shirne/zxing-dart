@@ -23,7 +23,7 @@ import '../../common/reedsolomon/reed_solomon_decoder.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
 
 import '../../checksum_exception.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'decoded_bit_stream_parser.dart';
@@ -41,7 +41,7 @@ class Decoder {
 
   Decoder() : _rsDecoder = ReedSolomonDecoder(GenericGF.maxicodeField64);
 
-  DecoderResult decode(BitMatrix bits, [Map<DecodeHintType, Object>? hints]) {
+  DecoderResult decode(BitMatrix bits, [DecodeHint? hints]) {
     final parser = BitMatrixParser(bits);
     final codewords = parser.readCodewords();
 

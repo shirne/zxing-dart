@@ -16,7 +16,7 @@
 
 import '../barcode_format.dart';
 import '../common/detector/math_utils.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import 'code128_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -318,20 +318,18 @@ class Code128Writer extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     final forcedCodeSet = _check(contents, hints);
 
-    final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.code128Compact) &&
-        (hints[EncodeHintType.code128Compact] as bool);
+    final hasCompactionHint = hints?.code128Compact ?? false;
 
     return hasCompactionHint
         ? MinimalEncoder().encode(contents)
         : encodeFast(contents, hints, forcedCodeSet);
   }
 
-  static int _check(String contents, Map<EncodeHintType, Object?>? hints) {
+  static int _check(String contents, EncodeHint? hints) {
     final length = contents.length;
     // Check length
     if (length < 1 || length > 80) {
@@ -341,8 +339,8 @@ class Code128Writer extends OneDimensionalCodeWriter {
     }
     // Check for forced code set hint.
     int forcedCodeSet = -1;
-    if (hints != null && hints.containsKey(EncodeHintType.forceCodeSet)) {
-      final codeSetHint = hints[EncodeHintType.forceCodeSet] as String;
+    if (hints?.forceCodeSet != null) {
+      final codeSetHint = hints!.forceCodeSet!;
       switch (codeSetHint) {
         case 'A':
           forcedCodeSet = _codeCodeA;
@@ -411,7 +409,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
 
   static List<bool> encodeFast(
     String contents,
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
     int forcedCodeSet,
   ) {
     final length = contents.length;

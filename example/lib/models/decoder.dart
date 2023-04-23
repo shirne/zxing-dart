@@ -183,10 +183,13 @@ Future<void> decodeFromCamera(SendPort callerSP) async {
 
       final bitmap = BinaryBitmap(HybridBinarizer(imageSource));
       try {
-        final results = reader.decodeMultiple(bitmap, {
-          DecodeHintType.tryHarder: false,
-          DecodeHintType.alsoInverted: false,
-        });
+        final results = reader.decodeMultiple(
+          bitmap,
+          const DecodeHint(
+            tryHarder: false,
+            alsoInverted: false,
+          ),
+        );
         callerSP.send(IsoMessage.result(results));
         print('Isolate: $results');
       } on NotFoundException catch (_) {

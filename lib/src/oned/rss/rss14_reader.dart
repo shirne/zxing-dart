@@ -19,12 +19,11 @@ import '../../common/detector/math_utils.dart';
 import '../../common/string_builder.dart';
 
 import '../../barcode_format.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../not_found_exception.dart';
 import '../../result.dart';
 import '../../result_metadata_type.dart';
 import '../../result_point.dart';
-import '../../result_point_callback.dart';
 import '../one_dreader.dart';
 import 'abstract_rssreader.dart';
 import 'data_character.dart';
@@ -62,7 +61,7 @@ class RSS14Reader extends AbstractRSSReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     final leftPair = _decodePair(row, false, rowNumber, hints);
     _addOrTally(_possibleLeftPairs, leftPair);
@@ -161,14 +160,13 @@ class RSS14Reader extends AbstractRSSReader {
     BitArray row,
     bool right,
     int rowNumber,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     try {
       List<int> startEnd = _findFinderPattern(row, right);
       final pattern = _parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-      final resultPointCallback = hints?[DecodeHintType.needResultPointCallback]
-          as ResultPointCallback?;
+      final resultPointCallback = hints?.needResultPointCallback;
 
       if (resultPointCallback != null) {
         startEnd = pattern.startEnd;

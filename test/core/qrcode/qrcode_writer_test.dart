@@ -116,15 +116,13 @@ void main() {
     final goldenResult = createMatrixFromImage(image);
     //assertNotNull(goldenResult);
 
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.errorCorrection] = ecLevel;
     final writer = QRCodeWriter();
     final generatedResult = writer.encode(
       contents,
       BarcodeFormat.qrCode,
       resolution,
       resolution,
-      hints,
+      EncodeHint(errorCorrectionLevel: ecLevel),
     );
 
     expect(resolution, generatedResult.width);

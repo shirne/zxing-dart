@@ -21,7 +21,7 @@ import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
@@ -245,10 +245,9 @@ class Code128Reader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
-    final convertFNC1 =
-        hints != null && hints.containsKey(DecodeHintType.assumeGs1);
+    final convertFNC1 = hints?.assumeGs1 ?? false;
 
     int symbologyModifier = 0;
 

@@ -66,7 +66,7 @@ void main() {
       'test/resources/blackbox/qrcode-7',
       MultiFormatReader(),
       BarcodeFormat.qrCode,
-      dispatcher,
+      imageProcess: dispatcher,
     )
       ..addTest(2, 2, 0.0)
       ..addTest(2, 2, 90.0)

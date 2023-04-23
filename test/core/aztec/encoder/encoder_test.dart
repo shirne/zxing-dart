@@ -111,14 +111,14 @@ void main() {
     int layers,
   ) {
     // Perform an encode-decode round-trip because it can be lossy.
-    final Map<EncodeHintType, Object> hints = {};
-    if (null != charset) {
-      hints[EncodeHintType.characterSet] = charset.name;
-    }
-    hints[EncodeHintType.errorCorrection] = eccPercent;
     final AztecWriter writer = AztecWriter();
-    final BitMatrix matrix =
-        writer.encode(data, BarcodeFormat.aztec, 0, 0, hints);
+    final BitMatrix matrix = writer.encode(
+      data,
+      BarcodeFormat.aztec,
+      0,
+      0,
+      EncodeHint(characterSet: charset?.name, errorCorrection: eccPercent),
+    );
     final AztecCode aztec =
         Encoder.encode(data, eccPercent, Encoder.defaultAztecLayers, charset);
     expect(

@@ -42,12 +42,15 @@ void main() {
   final reader = Code128Reader();
 
   BitMatrix encode(String toEncode, bool compact, String? expectedLoopback) {
-    final hints = <EncodeHintType, Object>{};
-    if (compact) {
-      hints[EncodeHintType.code128Compact] = true;
-    }
-    final encResult =
-        writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints);
+    final hints = EncodeHint(code128Compact: compact);
+
+    final encResult = writer.encode(
+      toEncode,
+      BarcodeFormat.code128,
+      0,
+      0,
+      hints,
+    );
     if (expectedLoopback != null) {
       final row = encResult.getRow(0, null);
       final rtResult = reader.decodeRow(0, row, null);
@@ -281,7 +284,7 @@ void main() {
   test('testEncodeWithForcedCodeSetFailureCodeSetABadCharacter', () {
     final toEncode = 'ASDFx0123';
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'A'};
+    final hints = EncodeHint(forceCodeSet: 'A');
 
     expect(
       () => writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints),
@@ -294,7 +297,7 @@ void main() {
     final toEncode = 'ASdf\x000123'; // \0 (ascii value 0)
     // Characters with ASCII value below 32 should not be accepted when the code set is forced to B.
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'B'};
+    final hints = EncodeHint(forceCodeSet: 'B');
 
     expect(
       () => writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints),
@@ -308,7 +311,7 @@ void main() {
     final toEncode = '123a5678';
     // Non-digit characters should not be accepted when the code set is forced to C.
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'C'};
+    final hints = EncodeHint(forceCodeSet: 'C');
 
     expect(
       () => writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints),
@@ -322,7 +325,7 @@ void main() {
     final toEncode = '123\u00f2a678';
     // Function codes other than 1 should not be accepted when the code set is forced to C.
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'C'};
+    final hints = EncodeHint(forceCodeSet: 'C');
 
     expect(
       () => writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints),
@@ -336,7 +339,7 @@ void main() {
     final toEncode = '123456789';
     // An uneven amount of digits should not be accepted when the code set is forced to C.
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'C'};
+    final hints = EncodeHint(forceCodeSet: 'C');
 
     expect(
       () => writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints),
@@ -358,7 +361,7 @@ void main() {
         '11001000100' //check digit 10
         '$stop$quietSpace';
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'A'};
+    final hints = EncodeHint(forceCodeSet: 'A');
 
     final result = writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints);
 
@@ -377,7 +380,7 @@ void main() {
         '11110010010' //check digit 88
         '$stop$quietSpace';
 
-    final hints = <EncodeHintType, Object>{EncodeHintType.forceCodeSet: 'B'};
+    final hints = EncodeHint(forceCodeSet: 'B');
     final result = writer.encode(toEncode, BarcodeFormat.code128, 0, 0, hints);
 
     final actual = matrixToString(result);

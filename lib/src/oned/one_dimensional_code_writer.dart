@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../writer.dart';
 
 /// Encapsulates functionality and implementation that is common to one-dimensional barcodes.
@@ -38,7 +38,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     if (contents.isEmpty) {
       throw ArgumentError('Found empty contents');
@@ -55,8 +55,8 @@ abstract class OneDimensionalCodeWriter implements Writer {
     }
 
     int sidesMargin = defaultMargin;
-    if (hints != null && hints.containsKey(EncodeHintType.margin)) {
-      sidesMargin = int.parse(hints[EncodeHintType.margin].toString());
+    if (hints?.margin != null) {
+      sidesMargin = hints!.margin!;
     }
 
     final code = encodeContent(contents, hints);
@@ -134,6 +134,6 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]);
 }

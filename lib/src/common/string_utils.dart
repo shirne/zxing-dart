@@ -19,7 +19,7 @@ import 'dart:typed_data';
 
 import 'package:charset/charset.dart';
 
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import 'character_set_eci.dart';
 
 /// Common string-related functions.
@@ -48,7 +48,7 @@ class StringUtils {
   ///  of these can possibly be correct
   static String guessEncoding(
     Uint8List bytes,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     final c = guessCharset(bytes, hints);
     if (c?.name == shiftJisCharset.name) {
@@ -84,11 +84,11 @@ class StringUtils {
   ///  none of these can possibly be correct
   static Encoding? guessCharset(
     Uint8List bytes,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
-    if (hints != null && hints.containsKey(DecodeHintType.characterSet)) {
+    if (hints?.characterSet != null) {
       return CharacterSetECI.getCharacterSetECIByName(
-        hints[DecodeHintType.characterSet].toString(),
+        hints!.characterSet!,
       )?.charset;
     }
 

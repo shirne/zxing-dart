@@ -23,21 +23,22 @@ void main() {
   test('testSpecial', () {
     final writer = DataMatrixWriter();
     final encode = writer.encode(
-        'FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7',
-        BarcodeFormat.dataMatrix,
-        52,
-        52, {
-      EncodeHintType.dataMatrixShape: SymbolShapeHint.forceSquare,
+      'FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7FR03AV011E7F1E7',
+      BarcodeFormat.dataMatrix,
+      52,
+      52,
+      EncodeHint(
+        dataMatrixShape: SymbolShapeHint.forceSquare,
 
-      // ignore: deprecated_member_use_from_same_package
-      EncodeHintType.minSize: Dimension(52, 52),
-    });
+        // ignore: deprecated_member_use_from_same_package
+        minSize: Dimension(52, 52),
+      ),
+    );
     expect(encode.get(0, 0), true);
   });
 
   test('testDataMatrixImageWriter', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.dataMatrixShape] = SymbolShapeHint.forceSquare;
+    final hints = EncodeHint(dataMatrixShape: SymbolShapeHint.forceSquare);
 
     final bigEnough = 64;
     final writer = DataMatrixWriter();
@@ -55,8 +56,7 @@ void main() {
   });
 
   test('testDataMatrixWriter', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.dataMatrixShape] = SymbolShapeHint.forceSquare;
+    final hints = EncodeHint(dataMatrixShape: SymbolShapeHint.forceSquare);
 
     const bigEnough = 14;
     final writer = DataMatrixWriter();

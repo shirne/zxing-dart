@@ -39,10 +39,13 @@ void main() {
     final source = BufferedImageLuminanceSource(image);
     final bitmap = BinaryBitmap(HybridBinarizer(source));
     try {
-      final result = PDF417Reader().decode(bitmap, {
-        DecodeHintType.pureBarcode: true,
-        DecodeHintType.tryHarder: true,
-      });
+      final result = PDF417Reader().decode(
+        bitmap,
+        DecodeHint(
+          pureBarcode: true,
+          tryHarder: true,
+        ),
+      );
       print(result.text);
     } on ReaderException catch (_) {}
   });

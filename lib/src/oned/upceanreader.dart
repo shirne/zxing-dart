@@ -18,14 +18,13 @@ import '../barcode_format.dart';
 import '../checksum_exception.dart';
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../reader_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
-import '../result_point_callback.dart';
 import 'eanmanufacturer_org_support.dart';
 import 'one_dreader.dart';
 import 'upceanextension_support.dart';
@@ -136,12 +135,11 @@ abstract class UPCEANReader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints, [
+    DecodeHint? hints, [
     List<int>? startGuardRange,
   ]) {
     startGuardRange ??= findStartGuardPattern(row);
-    final resultPointCallback =
-        hints?[DecodeHintType.needResultPointCallback] as ResultPointCallback?;
+    final resultPointCallback = hints?.needResultPointCallback;
     int symbologyIdentifier = 0;
 
     if (resultPointCallback != null) {
@@ -217,8 +215,7 @@ abstract class UPCEANReader extends OneDReader {
       // continue
     }
 
-    final allowedExtensions =
-        hints?[DecodeHintType.allowedEanExtensions] as List<int>?;
+    final allowedExtensions = hints?.allowedEanExtensions;
     if (allowedExtensions != null) {
       bool valid = false;
       for (int length in allowedExtensions) {

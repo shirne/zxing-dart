@@ -15,7 +15,7 @@
  */
 
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import 'code93_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -30,7 +30,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     contents = convertToExtended(contents);
     final length = contents.length;

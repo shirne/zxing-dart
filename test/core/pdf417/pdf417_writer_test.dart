@@ -22,8 +22,7 @@ import 'package:zxing_lib/zxing.dart';
 /// Tests [PDF417Writer].
 void main() {
   test('testDataMatrixImageWriter', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.margin] = 0;
+    final hints = EncodeHint(margin: 0);
     const size = 64;
     final writer = PDF417Writer();
     final matrix =

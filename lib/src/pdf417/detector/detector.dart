@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import '../../binary_bitmap.dart';
 import '../../common/bit_matrix.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../result_point.dart';
 import 'pdf417_detector_result.dart';
 
@@ -62,7 +62,7 @@ class Detector {
   /// @throws NotFoundException if no PDF417 Code can be found
   static PDF417DetectorResult detect(
     BinaryBitmap image,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
     bool multiple,
   ) {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even

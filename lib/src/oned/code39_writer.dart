@@ -15,7 +15,7 @@
  */
 
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import 'code39_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -29,7 +29,7 @@ class Code39Writer extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     int length = contents.length;
     if (length > 80) {

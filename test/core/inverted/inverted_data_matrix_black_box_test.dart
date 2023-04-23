@@ -26,8 +26,10 @@ void main() {
       'test/resources/blackbox/inverted',
       MultiFormatReader(),
       BarcodeFormat.dataMatrix,
+      hints: DecodeHint(
+        alsoInverted: true,
+      ),
     )
-      ..addHint(DecodeHintType.alsoInverted)
       ..addTest(1, 1, 0.0)
       ..addTest(1, 1, 90.0)
       ..addTest(1, 1, 180.0)

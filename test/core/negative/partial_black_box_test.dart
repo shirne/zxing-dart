@@ -50,9 +50,13 @@ void main() {
     );
 
     try {
-      final result = UPCEReader().decodeRow(128, row, {
-        DecodeHintType.tryHarder: true,
-      });
+      final result = UPCEReader().decodeRow(
+        128,
+        row,
+        DecodeHint(
+          tryHarder: true,
+        ),
+      );
 
       // what ever is ok
       expect('05111169', result.text);

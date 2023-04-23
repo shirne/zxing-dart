@@ -97,10 +97,7 @@ void main() {
 
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     final reader = MultiFormatReader();
-    final hints = <DecodeHintType, Object>{
-      DecodeHintType.tryHarder: true,
-      DecodeHintType.alsoInverted: true
-    };
+    final hints = DecodeHint(tryHarder: true, alsoInverted: true);
 
     Result? result;
 

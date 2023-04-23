@@ -20,7 +20,7 @@ import 'dart:math' as math;
 import '../common/bit_matrix.dart';
 import '../common/character_set_eci.dart';
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../writer.dart';
 import 'encoder/aztec_code.dart';
 import 'encoder/encoder.dart';
@@ -33,23 +33,22 @@ class AztecWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     Encoding? charset; // Do not add any ECI code by default
     int eccPercent = Encoder.defaultEcPercent;
     int layers = Encoder.defaultAztecLayers;
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.characterSet)) {
+      if (hints.characterSet != null) {
         charset = CharacterSetECI.getCharacterSetECIByName(
-          hints[EncodeHintType.characterSet] as String,
+          hints.characterSet!,
         )?.charset;
       }
-      if (hints.containsKey(EncodeHintType.errorCorrection)) {
-        eccPercent =
-            int.parse(hints[EncodeHintType.errorCorrection].toString());
+      if (hints.errorCorrection != null) {
+        eccPercent = hints.errorCorrection!;
       }
-      if (hints.containsKey(EncodeHintType.aztecLayers)) {
-        layers = int.parse(hints[EncodeHintType.aztecLayers].toString());
+      if (hints.aztecLayers != null) {
+        layers = hints.aztecLayers!;
       }
     }
     return _encodeStatic(

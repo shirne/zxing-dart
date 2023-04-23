@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../writer.dart';
 import 'decoder/error_correction_level.dart';
 import 'encoder/encoder.dart';
@@ -36,7 +36,7 @@ class QRCodeWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     if (contents.isEmpty) {
       throw ArgumentError('Found empty contents');
@@ -55,12 +55,14 @@ class QRCodeWriter implements Writer {
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
     int quietZone = _quietZoneSize;
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.errorCorrection)) {
-        errorCorrectionLevel = ErrorCorrectionLevel
-            .values[hints[EncodeHintType.errorCorrection] as int];
+      if (hints.errorCorrectionLevel != null) {
+        errorCorrectionLevel = hints.errorCorrectionLevel!;
+      } else if (hints.errorCorrection != null) {
+        errorCorrectionLevel =
+            ErrorCorrectionLevel.values[hints.errorCorrection!];
       }
-      if (hints.containsKey(EncodeHintType.margin)) {
-        quietZone = int.parse(hints[EncodeHintType.margin].toString());
+      if (hints.margin != null) {
+        quietZone = hints.margin!;
       }
     }
 

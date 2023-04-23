@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import '../binary_bitmap.dart';
 import '../common/bit_array.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../reader_exception.dart';
@@ -34,13 +34,11 @@ import '../result_point.dart';
 abstract class OneDReader implements Reader {
   // Note that we don't try rotation without the try harder flag, even if rotation was supported.
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     try {
       return _doDecode(image, hints);
     } on NotFoundException catch (_) {
-      final tryHarder =
-          hints != null && hints.containsKey(DecodeHintType.tryHarder);
-      if (tryHarder && image.isRotateSupported) {
+      if (hints?.tryHarder == true && image.isRotateSupported) {
         final rotatedImage = image.rotateCounterClockwise();
         final result = _doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
@@ -86,13 +84,12 @@ abstract class OneDReader implements Reader {
   /// @param hints Any hints that were requested
   /// @return The contents of the decoded barcode
   /// @throws NotFoundException Any spontaneous errors which occur
-  Result _doDecode(BinaryBitmap image, Map<DecodeHintType, Object>? hints) {
+  Result _doDecode(BinaryBitmap image, DecodeHint? hints) {
     final width = image.width;
     final height = image.height;
     BitArray row = BitArray(width);
 
-    final tryHarder =
-        hints != null && hints.containsKey(DecodeHintType.tryHarder);
+    final tryHarder = hints?.tryHarder ?? false;
     final rowStep = math.max(1, height >> (tryHarder ? 8 : 5));
     late int maxLines;
     if (tryHarder) {
@@ -131,12 +128,8 @@ abstract class OneDReader implements Reader {
           // since we want to avoid drawing the wrong points after flipping the row, and,
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
-          if (hints != null &&
-              hints.containsKey(DecodeHintType.needResultPointCallback)) {
-            final newHints = <DecodeHintType, Object>{};
-            newHints.addAll(hints);
-            newHints.remove(DecodeHintType.needResultPointCallback);
-            hints = newHints;
+          if (hints?.needResultPointCallback != null) {
+            hints = hints?.withoutCallback();
           }
         }
         try {
@@ -282,6 +275,6 @@ abstract class OneDReader implements Reader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   );
 }

@@ -16,7 +16,7 @@
 
 import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../writer.dart';
 import 'ean13_writer.dart';
 
@@ -32,7 +32,7 @@ class UPCAWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     if (format != BarcodeFormat.upcA) {
       throw ArgumentError('Can only encode UPC-A, but got $format');

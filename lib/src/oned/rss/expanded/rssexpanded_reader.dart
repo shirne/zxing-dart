@@ -27,7 +27,7 @@ import '../../../barcode_format.dart';
 
 import '../../../common/bit_array.dart';
 import '../../../common/detector/math_utils.dart';
-import '../../../decode_hint_type.dart';
+import '../../../decode_hint.dart';
 import '../../../not_found_exception.dart';
 import '../../../result.dart';
 import '../../../result_metadata_type.dart';
@@ -139,7 +139,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     // Rows can start with even pattern in case in prev rows there where odd number of patters.
     // So lets try twice

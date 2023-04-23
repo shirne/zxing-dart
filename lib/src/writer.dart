@@ -16,7 +16,7 @@
 
 import 'barcode_format.dart';
 import 'common/bit_matrix.dart';
-import 'encode_hint_type.dart';
+import 'encode_hint.dart';
 
 /// The base class for all objects which encode/generate a barcode image.
 ///
@@ -34,6 +34,6 @@ abstract class Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]);
 }

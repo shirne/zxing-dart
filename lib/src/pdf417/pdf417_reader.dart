@@ -20,7 +20,7 @@ import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../checksum_exception.dart';
 import '../common/detector/math_utils.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../multi/multiple_barcode_reader.dart';
 import '../not_found_exception.dart';
@@ -45,7 +45,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   /// @throws NotFoundException if a PDF417 code cannot be found,
   /// @throws FormatException if a PDF417 cannot be decoded
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     final result = _decodeStatic(image, hints, false);
     if (result.isEmpty) {
       // || result[0] == null
@@ -57,7 +57,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
   @override
   List<Result> decodeMultiple(
     BinaryBitmap image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     try {
       return _decodeStatic(image, hints, true);
@@ -70,7 +70,7 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   static List<Result> _decodeStatic(
     BinaryBitmap image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
     bool multiple = true,
   ]) {
     final results = <Result>[];

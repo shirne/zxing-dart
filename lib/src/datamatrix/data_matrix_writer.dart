@@ -19,8 +19,9 @@ import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../common/bit_matrix.dart';
+import '../common/character_set_eci.dart';
 import '../dimension.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../qrcode/encoder/byte_matrix.dart';
 import '../writer.dart';
 import 'encoder/default_placement.dart';
@@ -41,7 +42,7 @@ class DataMatrixWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     if (contents.isEmpty) {
       throw ArgumentError('Found empty contents');
@@ -62,20 +63,19 @@ class DataMatrixWriter implements Writer {
     Dimension? minSize;
     Dimension? maxSize;
     if (hints != null) {
-      final requestedShape =
-          hints[EncodeHintType.dataMatrixShape] as SymbolShapeHint?;
+      final requestedShape = hints.dataMatrixShape;
       if (requestedShape != null) {
         shape = requestedShape;
       }
 
       // ignore: deprecated_member_use_from_same_package
-      final requestedMinSize = hints[EncodeHintType.minSize] as Dimension?;
+      final requestedMinSize = hints.minSize;
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
 
       // ignore: deprecated_member_use_from_same_package
-      final requestedMaxSize = hints[EncodeHintType.maxSize] as Dimension?;
+      final requestedMaxSize = hints.maxSize;
       if (requestedMaxSize != null) {
         maxSize = requestedMaxSize;
       }
@@ -84,17 +84,16 @@ class DataMatrixWriter implements Writer {
     //1. step: Data encodation
     String encoded;
 
-    final hasCompactionHint = hints != null &&
-        hints.containsKey(EncodeHintType.dataMatrixCompact) &&
-        (hints[EncodeHintType.dataMatrixCompact] as bool);
+    final hasCompactionHint = hints?.dataMatrixCompact ?? false;
     if (hasCompactionHint) {
-      final hasGS1FormatHint = hints.containsKey(EncodeHintType.gs1Format) &&
-          (hints[EncodeHintType.gs1Format] as bool);
+      final hasGS1FormatHint = hints?.gs1Format ?? false;
 
       Encoding? charset;
-      final hasEncodingHint = hints.containsKey(EncodeHintType.characterSet);
-      if (hasEncodingHint) {
-        charset = (hints[EncodeHintType.characterSet] as Encoding?);
+
+      if (hints?.characterSet != null) {
+        charset = CharacterSetECI.getCharacterSetECIByName(
+          hints!.characterSet!,
+        )?.charset;
       }
       encoded = MinimalEncoder.encodeHighLevel(
         contents,

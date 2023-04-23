@@ -18,7 +18,7 @@ import 'aztec/aztec_reader.dart';
 import 'barcode_format.dart';
 import 'binary_bitmap.dart';
 import 'datamatrix/data_matrix_reader.dart';
-import 'decode_hint_type.dart';
+import 'decode_hint.dart';
 import 'maxicode/maxi_code_reader.dart';
 import 'not_found_exception.dart';
 import 'oned/multi_format_one_dreader.dart';
@@ -37,7 +37,7 @@ import 'result.dart';
 class MultiFormatReader implements Reader {
   //static final List<Reader> _emptyReaderArray = [];
 
-  Map<DecodeHintType, Object>? _hints;
+  DecodeHint? _hints;
   List<Reader>? _readers;
 
   /// Decode an image using the hints provided. Does not honor existing state.
@@ -47,7 +47,7 @@ class MultiFormatReader implements Reader {
   /// @return The contents of the image
   /// @throws NotFoundException Any errors which occurred
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     setHints(hints);
     return _decodeInternal(image);
   }
@@ -71,13 +71,12 @@ class MultiFormatReader implements Reader {
   /// is important for performance in continuous scan clients.
   ///
   /// @param hints The set of hints to use for subsequent calls to decode(image)
-  void setHints(Map<DecodeHintType, Object>? hints) {
+  void setHints(DecodeHint? hints) {
     _hints = hints;
 
-    final tryHarder = hints?.containsKey(DecodeHintType.tryHarder) ?? false;
+    final tryHarder = hints?.tryHarder ?? false;
     // @SuppressWarnings("unchecked")
-    final formats =
-        hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
+    final formats = hints?.possibleFormats;
     final readers = <Reader>[];
     if (formats != null) {
       final addOneDReader = formats.contains(BarcodeFormat.upcA) ||
@@ -151,7 +150,7 @@ class MultiFormatReader implements Reader {
           // continue
         }
       }
-      if (_hints != null && _hints!.containsKey(DecodeHintType.alsoInverted)) {
+      if (_hints?.alsoInverted == true) {
         // Calling all readers again with inverted image
         image.blackMatrix.flip();
         for (Reader reader in _readers!) {

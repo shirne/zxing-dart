@@ -127,30 +127,29 @@ void main() {
   });
 
   test('testEncodeWithVersion', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.qrVersion] = 7;
+    final hints = EncodeHint(qrVersion: 7);
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     assert(qrCode.toString().contains(' version: 7\n'));
   });
 
   //@Test(expected = WriterException.class)
   test('testEncodeWithVersionTooSmall', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.qrVersion] = 3;
     expect(
       () => Encoder.encode(
         'THISMESSAGEISTOOLONGFORAQRCODEVERSION3',
         ErrorCorrectionLevel.H,
-        hints,
+        EncodeHint(qrVersion: 3),
       ),
       throwsA(TypeMatcher<WriterException>()),
     );
   });
 
   test('testSimpleUTF8ECI', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.characterSet] = 'UTF8';
-    final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
+    final qrCode = Encoder.encode(
+      'hello',
+      ErrorCorrectionLevel.H,
+      EncodeHint(characterSet: 'UTF8'),
+    );
     final expected = '<<\n'
         ' mode: BYTE\n'
         ' ecLevel: H\n'
@@ -183,8 +182,7 @@ void main() {
   });
 
   test('testEncodeKanjiMode', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.characterSet] = 'Shift_JIS';
+    final hints = EncodeHint(characterSet: 'Shift_JIS');
     // Nihon in Kanji
     final qrCode =
         Encoder.encode('\u65e5\u672c', ErrorCorrectionLevel.M, hints);
@@ -220,8 +218,7 @@ void main() {
   });
 
   test('testEncodeShiftjisNumeric', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.characterSet] = 'Shift_JIS';
+    final hints = EncodeHint(characterSet: 'Shift_JIS');
     final qrCode = Encoder.encode('0123', ErrorCorrectionLevel.M, hints);
     final expected = '<<\n'
         ' mode: NUMERIC\n'
@@ -255,39 +252,38 @@ void main() {
   });
 
   test('testEncodeGS1WithStringTypeHint', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.gs1Format] = true;
-    final qrCode =
-        Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
+    final hints = EncodeHint(gs1Format: true);
+
+    final qrCode = Encoder.encode(
+      '100001%11171218',
+      ErrorCorrectionLevel.H,
+      hints,
+    );
     verifyGS1EncodedData(qrCode);
   });
 
   test('testEncodeGS1WithBooleanTypeHint', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.gs1Format] = true;
+    final hints = EncodeHint(gs1Format: true);
     final qrCode =
         Encoder.encode('100001%11171218', ErrorCorrectionLevel.H, hints);
     verifyGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenBooleanTypeHintExplicitlyFalse', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.gs1Format] = false;
+    final hints = EncodeHint(gs1Format: false);
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.gs1Format] = false;
+    final hints = EncodeHint(gs1Format: false);
     final qrCode = Encoder.encode('ABCDEF', ErrorCorrectionLevel.H, hints);
     verifyNotGS1EncodedData(qrCode);
   });
 
   test('testGS1ModeHeaderWithECI', () {
-    final hints = <EncodeHintType, Object>{};
-    hints[EncodeHintType.characterSet] = 'UTF8';
-    hints[EncodeHintType.gs1Format] = true;
+    final hints = EncodeHint(gs1Format: true, characterSet: 'UTF8');
+
     final qrCode = Encoder.encode('hello', ErrorCorrectionLevel.H, hints);
     final expected = '<<\n'
         ' mode: BYTE\n'

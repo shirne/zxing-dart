@@ -15,7 +15,7 @@
  */
 
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';
 import 'upceanreader.dart';
@@ -39,7 +39,7 @@ class EAN8Writer extends UPCEANWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     final length = contents.length;
     switch (length) {

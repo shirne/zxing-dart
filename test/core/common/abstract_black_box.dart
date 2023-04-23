@@ -30,12 +30,12 @@ class AbstractBlackBoxTestCase {
   static final Logger _log = Logger.getLogger(AbstractBlackBoxTestCase);
 
   final RegExp imageSuffix = RegExp(r'\.(jpe?g|gif|png)$');
-  final Directory _testBase;
+  final Directory testBase;
   final Reader? _barcodeReader;
   final BarcodeFormat? _expectedFormat;
   final List<TestResult> _testResults = [];
-  final Map<DecodeHintType, Object> _hints = {};
-  final Image Function(Image, String)? _imageProcess;
+  final DecodeHint hints;
+  final Image Function(Image, String)? imageProcess;
 
   static Directory buildTestBase(String testBasePathSuffix) {
     // A little workaround to prevent aggravation in my IDE
@@ -47,17 +47,10 @@ class AbstractBlackBoxTestCase {
   AbstractBlackBoxTestCase(
     String testBasePathSuffix,
     this._barcodeReader,
-    this._expectedFormat, [
-    this._imageProcess,
-  ]) : _testBase = buildTestBase(testBasePathSuffix);
-
-  Directory getTestBase() {
-    return _testBase;
-  }
-
-  void addHint(DecodeHintType hint) {
-    _hints[hint] = true;
-  }
+    this._expectedFormat, {
+    this.imageProcess,
+    this.hints = const DecodeHint(),
+  }) : testBase = buildTestBase(testBasePathSuffix);
 
   void testBlackBox() {
     assert(_testResults.isNotEmpty);
@@ -74,25 +67,25 @@ class AbstractBlackBoxTestCase {
       _log.info('Starting ${testImage.path}');
 
       Image image = decodeImage(testImage.readAsBytesSync())!;
-      if (_imageProcess != null) {
-        image = _imageProcess!.call(image, testImage.absolute.path);
+      if (imageProcess != null) {
+        image = imageProcess!.call(image, testImage.absolute.path);
       }
 
       final testImageFileName = testImage.uri.pathSegments.last;
       final fileBaseName =
           testImageFileName.substring(0, testImageFileName.indexOf('.'));
-      File expectedTextFile = File('${_testBase.path}/$fileBaseName.txt');
+      File expectedTextFile = File('${testBase.path}/$fileBaseName.txt');
       String expectedText;
       if (expectedTextFile.existsSync()) {
         expectedText = expectedTextFile.readAsStringSync();
       } else {
-        expectedTextFile = File('${_testBase.path}/$fileBaseName.bin');
+        expectedTextFile = File('${testBase.path}/$fileBaseName.bin');
         assert(expectedTextFile.existsSync());
         expectedText = expectedTextFile.readAsStringSync(encoding: latin1);
       }
 
       final expectedMetadataFile =
-          File('${_testBase.path}/$fileBaseName.metadata.txt');
+          File('${testBase.path}/$fileBaseName.metadata.txt');
       final expectedMetadata = Properties();
       if (expectedMetadataFile.existsSync()) {
         expectedMetadata.load(expectedMetadataFile.readAsStringSync());
@@ -235,11 +228,11 @@ class AbstractBlackBoxTestCase {
 
   List<File> getImageFiles() {
     assert(
-      _testBase.existsSync(),
+      testBase.existsSync(),
       "Please download and install test images, and run from the 'test' directory",
     );
     final paths = <File>[];
-    final files = _testBase.listSync();
+    final files = testBase.listSync();
     for (var element in files) {
       if (element is File && imageSuffix.hasMatch(element.path)) {
         // "*.{jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG}"
@@ -258,23 +251,25 @@ class AbstractBlackBoxTestCase {
     String expectedText,
     Map<Object, Object> expectedMetadata, {
     bool tryHarder = false,
-    filename = '',
+    String filename = '',
   }) {
     final suffix = " (${tryHarder ? 'try harder, ' : ''}rotation: $rotation)";
 
-    final hints = Map<DecodeHintType, Object>.from(_hints);
-    if (tryHarder) {
-      hints[DecodeHintType.tryHarder] = true;
-      hints[DecodeHintType.alsoInverted] = true;
-    }
+    final hints = tryHarder
+        ? this.hints.copyWith(
+              tryHarder: true,
+              alsoInverted: true,
+            )
+        : this.hints;
 
     // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
     // not expected to pass, generally
     Result? result;
     try {
-      final pureHints = Map<DecodeHintType, Object>.from(hints);
-      pureHints[DecodeHintType.pureBarcode] = true;
-      result = _barcodeReader!.decode(source, pureHints);
+      result = _barcodeReader!.decode(
+        source,
+        hints.copyWith(pureBarcode: true),
+      );
     } on ReaderException catch (_) {
       // continue
     }
@@ -283,7 +278,8 @@ class AbstractBlackBoxTestCase {
 
     if (_expectedFormat != result.barcodeFormat) {
       _log.warning(
-        "Format mismatch: $filename expected '$_expectedFormat' but got '${result.barcodeFormat}'$suffix",
+        "Format mismatch: $filename expected '$_expectedFormat'"
+        " but got '${result.barcodeFormat}'$suffix",
       );
       return false;
     }
@@ -291,7 +287,8 @@ class AbstractBlackBoxTestCase {
     final resultText = result.text;
     if (expectedText != resultText) {
       _log.warning(
-        "Content mismatch: $filename expected '$expectedText' but got '$resultText'$suffix",
+        "Content mismatch: $filename expected '$expectedText'"
+        " but got '$resultText'$suffix",
       );
       return false;
     }

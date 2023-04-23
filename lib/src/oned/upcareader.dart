@@ -18,7 +18,7 @@ import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../result.dart';
 import 'ean13_reader.dart';
@@ -35,7 +35,7 @@ class UPCAReader extends UPCEANReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints, [
+    DecodeHint? hints, [
     List<int>? startGuardRange,
   ]) {
     return _maybeReturnResult(
@@ -44,7 +44,7 @@ class UPCAReader extends UPCEANReader {
   }
 
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     return _maybeReturnResult(_ean13Reader.decode(image, hints));
   }
 

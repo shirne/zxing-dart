@@ -18,7 +18,7 @@ import 'dart:core';
 import 'dart:math' as math;
 
 import '../../../common/bit_matrix.dart';
-import '../../../decode_hint_type.dart';
+import '../../../decode_hint.dart';
 import '../../../not_found_exception.dart';
 import '../../../qrcode/detector/finder_pattern.dart';
 import '../../../qrcode/detector/finder_pattern_finder.dart';
@@ -207,9 +207,8 @@ class MultiFinderPatternFinder extends FinderPatternFinder {
     throw NotFoundException.instance;
   }
 
-  List<FinderPatternInfo> findMulti(Map<DecodeHintType, Object>? hints) {
-    final tryHarder =
-        hints != null && hints.containsKey(DecodeHintType.tryHarder);
+  List<FinderPatternInfo> findMulti(DecodeHint? hints) {
+    final tryHarder = hints?.tryHarder ?? false;
     final maxI = image.height;
     final maxJ = image.width;
     // We are looking for black/white/black/white/black modules in

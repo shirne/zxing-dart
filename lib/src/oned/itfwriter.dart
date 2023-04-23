@@ -15,7 +15,7 @@
  */
 
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import 'one_dimensional_code_writer.dart';
 
 /// This object renders a ITF code as a [BitMatrix].
@@ -49,7 +49,7 @@ class ITFWriter extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     final length = contents.length;
     if (length % 2 != 0) {

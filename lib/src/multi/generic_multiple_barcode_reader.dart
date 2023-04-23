@@ -15,7 +15,7 @@
  */
 
 import '../binary_bitmap.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../reader_exception.dart';
@@ -48,7 +48,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
   @override
   List<Result> decodeMultiple(
     BinaryBitmap image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     final results = <Result>[];
     _doDecodeMultiple(image, hints, results, 0, 0, 0);
@@ -60,7 +60,7 @@ class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
 
   void _doDecodeMultiple(
     BinaryBitmap image,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
     List<Result> results,
     int xOffset,
     int yOffset,

@@ -18,7 +18,7 @@ import 'aztec/aztec_writer.dart';
 import 'barcode_format.dart';
 import 'common/bit_matrix.dart';
 import 'datamatrix/data_matrix_writer.dart';
-import 'encode_hint_type.dart';
+import 'encode_hint.dart';
 import 'oned/coda_bar_writer.dart';
 import 'oned/code128_writer.dart';
 import 'oned/code39_writer.dart';
@@ -43,7 +43,7 @@ class MultiFormatWriter implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     Writer writer;
     switch (format) {

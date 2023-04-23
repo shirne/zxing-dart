@@ -17,7 +17,7 @@
 import '../common/bit_array.dart';
 
 import '../barcode_format.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../reader_exception.dart';
@@ -41,10 +41,9 @@ class MultiFormatUPCEANReader extends OneDReader {
 
   late List<UPCEANReader> _readers;
 
-  MultiFormatUPCEANReader(Map<DecodeHintType, Object>? hints) {
+  MultiFormatUPCEANReader(DecodeHint? hints) {
     // @SuppressWarnings("unchecked")
-    final possibleFormats =
-        hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
+    final possibleFormats = hints?.possibleFormats;
     final readers = <UPCEANReader>[];
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.ean13)) {
@@ -72,7 +71,7 @@ class MultiFormatUPCEANReader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     // Compute this location once and reuse it on multiple implementations
     final startGuardPattern = UPCEANReader.findStartGuardPattern(row);
@@ -95,8 +94,7 @@ class MultiFormatUPCEANReader extends OneDReader {
         final ean13MayBeUPCA = result.barcodeFormat == BarcodeFormat.ean13 &&
             result.text[0] == '0';
         // @SuppressWarnings("unchecked")
-        final possibleFormats =
-            hints?[DecodeHintType.possibleFormats] as List<BarcodeFormat>?;
+        final possibleFormats = hints?.possibleFormats;
         final canReturnUPCA = possibleFormats == null ||
             possibleFormats.contains(BarcodeFormat.upcA);
 

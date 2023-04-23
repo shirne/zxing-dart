@@ -19,10 +19,8 @@ import 'dart:typed_data';
 
 import '../../common.dart';
 import '../barcode_format.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import '../writer.dart';
-import 'encoder/compaction.dart';
-import 'encoder/dimensions.dart';
 import 'encoder/pdf417.dart';
 
 /// @author Jacob Haynes
@@ -40,7 +38,7 @@ class PDF417Writer implements Writer {
     BarcodeFormat format,
     int width,
     int height, [
-    Map<EncodeHintType, Object>? hints,
+    EncodeHint? hints,
   ]) {
     if (format != BarcodeFormat.pdf417) {
       throw ArgumentError('Can only encode PDF_417, but got $format');
@@ -52,16 +50,14 @@ class PDF417Writer implements Writer {
     bool autoECI = false;
 
     if (hints != null) {
-      if (hints.containsKey(EncodeHintType.pdf417Compact)) {
-        encoder.setCompact(hints[EncodeHintType.pdf417Compact] as bool);
+      if (hints.pdf417Compact == true) {
+        encoder.setCompact(hints.pdf417Compact);
       }
-      if (hints.containsKey(EncodeHintType.pdf417Compaction)) {
-        encoder.setCompaction(
-          hints[EncodeHintType.pdf417Compaction] as Compaction,
-        );
+      if (hints.pdf417Compaction != null) {
+        encoder.setCompaction(hints.pdf417Compaction!);
       }
-      if (hints.containsKey(EncodeHintType.pdf417Dimensions)) {
-        final dimensions = hints[EncodeHintType.pdf417Dimensions] as Dimensions;
+      if (hints.pdf417Dimensions != null) {
+        final dimensions = hints.pdf417Dimensions!;
         encoder.setDimensions(
           dimensions.maxCols,
           dimensions.minCols,
@@ -69,20 +65,19 @@ class PDF417Writer implements Writer {
           dimensions.minRows,
         );
       }
-      if (hints.containsKey(EncodeHintType.margin)) {
-        margin = int.parse(hints[EncodeHintType.margin].toString());
+      if (hints.margin != null) {
+        margin = hints.margin!;
       }
-      if (hints.containsKey(EncodeHintType.errorCorrection)) {
-        errorCorrectionLevel =
-            int.parse(hints[EncodeHintType.errorCorrection].toString());
+      if (hints.errorCorrection != null) {
+        errorCorrectionLevel = hints.errorCorrection!;
       }
-      if (hints.containsKey(EncodeHintType.characterSet)) {
+      if (hints.characterSet != null) {
         final encoding = CharacterSetECI.getCharacterSetECIByName(
-          hints[EncodeHintType.characterSet].toString(),
+          hints.characterSet!,
         )?.charset;
         if (encoding != null) encoder.setEncoding(encoding);
       }
-      autoECI = (hints[EncodeHintType.pdf417AutoEci] as bool?) ?? false;
+      autoECI = hints.pdf417AutoEci;
     }
 
     return _bitMatrixFromEncoder(

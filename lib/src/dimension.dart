@@ -16,36 +16,25 @@
 
 /// Simply encapsulates a width and height.
 class Dimension {
-  final int _width;
-  final int _height;
-
-  Dimension(this._width, this._height) {
-    if (_width < 0 || _height < 0) {
-      throw ArgumentError('Argument width & height must greater then zero');
-    }
-  }
+  const Dimension(this.width, this.height) : assert(width >= 0 || height >= 0);
 
   /// width of this
-  int get width => _width;
+  final int width;
 
   /// height of this
-  int get height => _height;
+  final int height;
 
   @override
   bool operator ==(Object other) {
     if (other is Dimension) {
-      return _width == other._width && _height == other._height;
+      return width == other.width && height == other.height;
     }
     return false;
   }
 
   @override
-  int get hashCode {
-    return _width * 32713 + _height;
-  }
+  int get hashCode => width * 32713 + height;
 
   @override
-  String toString() {
-    return '$_width x $_height';
-  }
+  String toString() => '$width x $height';
 }

@@ -26,8 +26,8 @@ void main() {
       'test/resources/blackbox/maxicode-1',
       MultiFormatReader(),
       BarcodeFormat.maxicode,
+      hints: DecodeHint(pureBarcode: true),
     )
-      ..addHint(DecodeHintType.pureBarcode)
       ..addTest(7, 7, 0.0)
       ..testBlackBox();
   });

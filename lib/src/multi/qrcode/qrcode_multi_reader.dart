@@ -20,7 +20,7 @@ import '../../qrcode/decoder/qrcode_decoder_meta_data.dart';
 import '../../barcode_format.dart';
 import '../../common/detector_result.dart';
 import '../../binary_bitmap.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../qrcode/qrcode_reader.dart';
 import '../../reader_exception.dart';
 import '../../result.dart';
@@ -40,7 +40,7 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
   @override
   List<Result> decodeMultiple(
     BinaryBitmap image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     List<Result> results = [];
     final detectorResults = MultiDetector(image.blackMatrix).detectMulti(hints);

@@ -22,7 +22,7 @@ import '../../common/decoder_result.dart';
 import '../../common/reedsolomon/reed_solomon_exception.dart';
 import '../../common/reedsolomon/generic_gf.dart';
 import '../../common/reedsolomon/reed_solomon_decoder.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../formats_exception.dart';
 import 'bit_matrix_parser.dart';
 import 'data_block.dart';
@@ -48,7 +48,7 @@ class Decoder {
   /// @throws ChecksumException if error correction fails
   DecoderResult decode(
     List<List<bool>> image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     return decodeMatrix(BitMatrix.parse(image), hints);
   }
@@ -62,7 +62,7 @@ class Decoder {
   /// @throws ChecksumException if error correction fails
   DecoderResult decodeMatrix(
     BitMatrix bits, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     // Construct a parser and read version, error-correction level
     final parser = BitMatrixParser(bits);
@@ -121,7 +121,7 @@ class Decoder {
 
   DecoderResult _decodeParser(
     BitMatrixParser parser, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     final version = parser.readVersion();
     final ecLevel = parser.readFormatInformation().errorCorrectionLevel;

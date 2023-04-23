@@ -22,7 +22,7 @@ import '../../common/character_set_eci.dart';
 import '../../common/decoder_result.dart';
 import '../../common/string_builder.dart';
 import '../../common/string_utils.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../formats_exception.dart';
 import 'error_correction_level.dart';
 import 'mode.dart';
@@ -46,7 +46,7 @@ class DecodedBitStreamParser {
     Uint8List bytes,
     Version version,
     ErrorCorrectionLevel? ecLevel,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     final bits = BitSource(bytes);
     final result = StringBuilder();
@@ -251,7 +251,7 @@ class DecodedBitStreamParser {
     int count,
     CharacterSetECI? currentCharacterSetECI,
     List<Uint8List> byteSegments, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]) {
     // Don't crash trying to read more bits than we have available.
     if (8 * count > bits.available()) {

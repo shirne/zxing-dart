@@ -15,7 +15,7 @@
  */
 
 import '../binary_bitmap.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../result.dart';
 
 /// Implementation of this interface attempt to read several barcodes from one image.
@@ -27,6 +27,6 @@ import '../result.dart';
 abstract class MultipleBarcodeReader {
   List<Result> decodeMultiple(
     BinaryBitmap image, [
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ]);
 }

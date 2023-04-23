@@ -16,7 +16,7 @@
 
 import '../barcode_format.dart';
 import '../common/detector/math_utils.dart';
-import '../encode_hint_type.dart';
+import '../encode_hint.dart';
 import 'coda_bar_reader.dart';
 import 'one_dimensional_code_writer.dart';
 
@@ -39,7 +39,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   @override
   List<bool> encodeContent(
     String contents, [
-    Map<EncodeHintType, Object?>? hints,
+    EncodeHint? hints,
   ]) {
     if (contents.length < 2) {
       // Can't have a start/end guard, so tentatively add default guards

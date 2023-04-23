@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import '../barcode_format.dart';
 import '../common/bit_array.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result.dart';
@@ -94,7 +94,7 @@ class ITFReader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     // Find out where the Middle section (payload) starts & ends
     final startRange = _decodeStart(row);
@@ -104,10 +104,7 @@ class ITFReader extends OneDReader {
     _decodeMiddle(row, startRange[1], endRange[0], result);
     final resultString = result.toString();
 
-    List<int>? allowedLengths =
-        hints?[DecodeHintType.allowedLengths] as List<int>?;
-
-    allowedLengths ??= _defaultAllowedLengths;
+    final allowedLengths = hints?.allowedLengths ?? _defaultAllowedLengths;
 
     // To avoid false positives with 2D barcodes (and other patterns), make
     // an assumption that the decoded string must be a 'standard' length if it's short

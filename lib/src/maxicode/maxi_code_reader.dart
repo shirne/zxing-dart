@@ -19,7 +19,7 @@ import 'dart:math' as math;
 import '../barcode_format.dart';
 import '../binary_bitmap.dart';
 import '../common/bit_matrix.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../not_found_exception.dart';
 import '../reader.dart';
 import '../result.dart';
@@ -36,7 +36,7 @@ class MaxiCodeReader implements Reader {
   final Decoder _decoder = Decoder();
 
   @override
-  Result decode(BinaryBitmap image, [Map<DecodeHintType, Object>? hints]) {
+  Result decode(BinaryBitmap image, [DecodeHint? hints]) {
     // Note that MaxiCode reader effectively always assumes PURE_BARCODE mode
     // and can't detect it in an image
     final bits = _extractPureBits(image.blackMatrix);

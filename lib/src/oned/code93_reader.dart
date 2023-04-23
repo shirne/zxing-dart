@@ -19,7 +19,7 @@ import '../common/string_builder.dart';
 
 import '../barcode_format.dart';
 import '../checksum_exception.dart';
-import '../decode_hint_type.dart';
+import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../not_found_exception.dart';
 import '../result_metadata_type.dart';
@@ -61,7 +61,7 @@ class Code93Reader extends OneDReader {
   Result decodeRow(
     int rowNumber,
     BitArray row,
-    Map<DecodeHintType, Object>? hints,
+    DecodeHint? hints,
   ) {
     final start = _findAsteriskPattern(row);
     // Read off white space

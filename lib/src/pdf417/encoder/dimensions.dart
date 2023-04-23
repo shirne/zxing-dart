@@ -18,18 +18,10 @@
 ///
 /// @author qwandor@google.com (Andrew Walbran)
 class Dimensions {
-  final int _minCols;
-  final int _maxCols;
-  final int _minRows;
-  final int _maxRows;
+  final int minCols;
+  final int maxCols;
+  final int minRows;
+  final int maxRows;
 
-  Dimensions(this._minCols, this._maxCols, this._minRows, this._maxRows);
-
-  int get minCols => _minCols;
-
-  int get maxCols => _maxCols;
-
-  int get minRows => _minRows;
-
-  int get maxRows => _maxRows;
+  Dimensions(this.minCols, this.maxCols, this.minRows, this.maxRows);
 }

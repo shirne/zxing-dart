@@ -15,7 +15,7 @@
  */
 
 import '../../common/bit_matrix.dart';
-import '../../decode_hint_type.dart';
+import '../../decode_hint.dart';
 import '../../not_found_exception.dart';
 import '../../result_point.dart';
 import '../../result_point_callback.dart';
@@ -55,8 +55,8 @@ class FinderPatternFinder {
   //@protected
   List<FinderPattern> get possibleCenters => _possibleCenters;
 
-  FinderPatternInfo find([Map<DecodeHintType, Object>? hints]) {
-    final tryHarder = hints?.containsKey(DecodeHintType.tryHarder) ?? false;
+  FinderPatternInfo find([DecodeHint? hints]) {
+    final tryHarder = hints?.tryHarder ?? false;
     final maxI = _image.height;
     final maxJ = _image.width;
     // We are looking for black/white/black/white/black modules in
