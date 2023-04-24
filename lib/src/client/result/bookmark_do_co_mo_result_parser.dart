@@ -16,8 +16,8 @@
 
 import '../../result.dart';
 import 'abstract_do_co_mo_result_parser.dart';
-import 'uriparsed_result.dart';
-import 'uriresult_parser.dart';
+import 'uri_parsed_result.dart';
+import 'uri_result_parser.dart';
 
 /// @author Sean Owen
 class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {

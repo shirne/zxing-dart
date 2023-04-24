@@ -19,8 +19,8 @@ import '../encode_hint.dart';
 import '../formats_exception.dart';
 import 'ean13_reader.dart';
 import 'one_dimensional_code_writer.dart';
-import 'upceanreader.dart';
-import 'upceanwriter.dart';
+import 'upcean_reader.dart';
+import 'upcean_writer.dart';
 
 /// This object renders an EAN13 code as a [BitMatrix].
 ///

@@ -20,7 +20,7 @@ import 'package:zxing_lib/zxing.dart';
 import '../common/abstract_black_box.dart';
 
 void main() {
-  test('CodabarBlackBox1TestCase', () {
+  test('CodaBarBlackBox1TestCase', () {
     AbstractBlackBoxTestCase(
       'test/resources/blackbox/codabar-1',
       MultiFormatReader(),

@@ -27,11 +27,11 @@
 import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
-import 'ai01decoder.dart';
+import 'ai01_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
-class AI01AndOtherAIs extends AI01decoder {
+class AI01AndOtherAIs extends AI01Decoder {
   //first bit encodes the linkage flag,
   static const int _headerSize = 1 + 1 + 2;
   //the second one is the encodation method, and the other two are for the variable length

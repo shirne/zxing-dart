@@ -15,7 +15,7 @@
  */
 
 import '../../result.dart';
-import 'uriparsed_result.dart';
+import 'uri_parsed_result.dart';
 import 'result_parser.dart';
 
 /// Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".

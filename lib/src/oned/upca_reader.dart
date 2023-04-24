@@ -22,7 +22,7 @@ import '../decode_hint.dart';
 import '../formats_exception.dart';
 import '../result.dart';
 import 'ean13_reader.dart';
-import 'upceanreader.dart';
+import 'upcean_reader.dart';
 
 /// Implements decoding of the UPC-A format.
 ///

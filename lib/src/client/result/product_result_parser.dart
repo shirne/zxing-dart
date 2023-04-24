@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../../oned/upcereader.dart';
+import '../../oned/upce_reader.dart';
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'product_parsed_result.dart';

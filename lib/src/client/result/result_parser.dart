@@ -25,19 +25,19 @@ import 'email_address_result_parser.dart';
 import 'email_do_co_mo_result_parser.dart';
 import 'expanded_product_result_parser.dart';
 import 'geo_result_parser.dart';
-import 'isbnresult_parser.dart';
+import 'isbn_result_parser.dart';
 import 'parsed_result.dart';
 import 'product_result_parser.dart';
-import 'smsmmsresult_parser.dart';
-import 'smstommstoresult_parser.dart';
-import 'smtpresult_parser.dart';
+import 'sms_mms_result_parser.dart';
+import 'smsto_mmsto_result_parser.dart';
+import 'smtp_result_parser.dart';
 import 'tel_result_parser.dart';
 import 'text_parsed_result.dart';
-import 'uriresult_parser.dart';
-import 'urltoresult_parser.dart';
+import 'uri_result_parser.dart';
+import 'urlto_result_parser.dart';
 import 'vcard_result_parser.dart';
 import 'vevent_result_parser.dart';
-import 'vinresult_parser.dart';
+import 'vin_result_parser.dart';
 import 'wifi_result_parser.dart';
 
 /// Abstract class representing the result of decoding a barcode, as more than

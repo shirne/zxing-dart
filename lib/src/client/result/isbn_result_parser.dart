@@ -16,7 +16,7 @@
 
 import '../../barcode_format.dart';
 import '../../result.dart';
-import 'isbnparsed_result.dart';
+import 'isbn_parsed_result.dart';
 import 'result_parser.dart';
 
 /// Parses strings of digits that represent a ISBN.

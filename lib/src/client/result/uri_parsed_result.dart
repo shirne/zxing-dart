@@ -17,7 +17,7 @@
 import 'parsed_result.dart';
 import 'parsed_result_type.dart';
 import 'result_parser.dart';
-import 'uriresult_parser.dart';
+import 'uri_result_parser.dart';
 
 /// A simple result type encapsulating a URI that has no further interpretation.
 class URIParsedResult extends ParsedResult {

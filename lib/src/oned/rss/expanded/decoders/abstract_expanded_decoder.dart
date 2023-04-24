@@ -25,7 +25,7 @@
  */
 
 import '../../../../common/bit_array.dart';
-import 'ai013103decoder.dart';
+import 'ai013103_decoder.dart';
 import 'ai01320x_decoder.dart';
 import 'ai01392x_decoder.dart';
 import 'ai01393x_decoder.dart';
@@ -62,7 +62,7 @@ abstract class AbstractExpandedDecoder {
 
     switch (fourBitEncodationMethod) {
       case 4:
-        return AI013103decoder(information);
+        return AI013103Decoder(information);
       case 5:
         return AI01320xDecoder(information);
     }

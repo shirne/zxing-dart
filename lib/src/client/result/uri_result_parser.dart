@@ -16,7 +16,7 @@
 
 import '../../result.dart';
 import 'result_parser.dart';
-import 'uriparsed_result.dart';
+import 'uri_parsed_result.dart';
 
 /// Tries to parse results that are a URI of some kind.
 ///

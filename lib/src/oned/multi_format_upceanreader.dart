@@ -25,9 +25,9 @@ import '../result.dart';
 import 'ean13_reader.dart';
 import 'ean8_reader.dart';
 import 'one_dreader.dart';
-import 'upcareader.dart';
-import 'upceanreader.dart';
-import 'upcereader.dart';
+import 'upca_reader.dart';
+import 'upcean_reader.dart';
+import 'upce_reader.dart';
 
 /// A reader that can read all available UPC/EAN formats.
 ///

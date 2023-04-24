@@ -31,10 +31,10 @@ import 'abstract_expanded_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 /// @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
-abstract class AI01decoder extends AbstractExpandedDecoder {
+abstract class AI01Decoder extends AbstractExpandedDecoder {
   static const int gtinSize = 40;
 
-  AI01decoder(BitArray information) : super(information);
+  AI01Decoder(BitArray information) : super(information);
 
   void encodeCompressedGtin(StringBuilder buf, int currentPos) {
     buf.write('(01)');

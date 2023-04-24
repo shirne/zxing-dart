@@ -26,10 +26,10 @@ import 'coda_bar_reader.dart';
 import 'code128_reader.dart';
 import 'code39_reader.dart';
 import 'code93_reader.dart';
-import 'itfreader.dart';
+import 'itf_reader.dart';
 import 'multi_format_upceanreader.dart';
 import 'one_dreader.dart';
-import 'rss/expanded/rssexpanded_reader.dart';
+import 'rss/expanded/rss_expanded_reader.dart';
 import 'rss/rss14_reader.dart';
 
 /// @author dswitkin@google.com (Daniel Switkin)

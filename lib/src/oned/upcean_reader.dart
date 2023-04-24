@@ -25,9 +25,9 @@ import '../reader_exception.dart';
 import '../result.dart';
 import '../result_metadata_type.dart';
 import '../result_point.dart';
-import 'eanmanufacturer_org_support.dart';
+import 'ean_manufacturer_org_support.dart';
 import 'one_dreader.dart';
-import 'upceanextension_support.dart';
+import 'upcean_extension_support.dart';
 
 /// Encapsulates functionality and implementation that is common to UPC and EAN families
 /// of one-dimensional barcodes.

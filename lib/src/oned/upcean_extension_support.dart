@@ -17,9 +17,9 @@
 import '../common/bit_array.dart';
 import '../reader_exception.dart';
 import '../result.dart';
-import 'upceanextension2_support.dart';
-import 'upceanextension5_support.dart';
-import 'upceanreader.dart';
+import 'upcean_extension2_support.dart';
+import 'upcean_extension5_support.dart';
+import 'upcean_reader.dart';
 
 class UPCEANExtensionSupport {
   static const List<int> _extensionStartPattern = [1, 1, 2];

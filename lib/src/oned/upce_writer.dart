@@ -18,9 +18,9 @@ import '../barcode_format.dart';
 import '../encode_hint.dart';
 import '../formats_exception.dart';
 import 'one_dimensional_code_writer.dart';
-import 'upceanreader.dart';
-import 'upceanwriter.dart';
-import 'upcereader.dart';
+import 'upcean_reader.dart';
+import 'upcean_writer.dart';
+import 'upce_reader.dart';
 
 /// This object renders an UPC-E code as a [BitMatrix].
 ///

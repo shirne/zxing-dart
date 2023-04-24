@@ -26,21 +26,36 @@
 
 import '../../../../common/bit_array.dart';
 
-import 'ai013x0x_decoder.dart';
+import 'ai01_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
-class AI013103decoder extends AI013x0xDecoder {
-  AI013103decoder(BitArray information) : super(information);
+abstract class AI01WeightDecoder extends AI01Decoder {
+  AI01WeightDecoder(BitArray information) : super(information);
 
-  //@protected
-  @override
-  void addWeightCode(StringBuffer buf, int weight) {
-    buf.write('(3103)');
+  void encodeCompressedWeight(
+    StringBuffer buf,
+    int currentPos,
+    int weightSize,
+  ) {
+    final originalWeightNumeric =
+        generalDecoder.extractNumericValueFromBitArray(currentPos, weightSize);
+    addWeightCode(buf, originalWeightNumeric);
+
+    final weightNumeric = checkWeight(originalWeightNumeric);
+
+    int currentDivisor = 100000;
+    for (int i = 0; i < 5; ++i) {
+      if (weightNumeric ~/ currentDivisor == 0) {
+        buf.write('0');
+      }
+      currentDivisor = currentDivisor ~/ 10;
+    }
+    buf.write(weightNumeric);
   }
 
   //@protected
-  @override
-  int checkWeight(int weight) {
-    return weight;
-  }
+  void addWeightCode(StringBuffer buf, int weight);
+
+  //@protected
+  int checkWeight(int weight);
 }

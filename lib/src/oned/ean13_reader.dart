@@ -18,7 +18,7 @@ import '../barcode_format.dart';
 import '../common/bit_array.dart';
 import '../common/string_builder.dart';
 import '../not_found_exception.dart';
-import 'upceanreader.dart';
+import 'upcean_reader.dart';
 
 /// Implements decoding of the EAN-13 format.
 ///

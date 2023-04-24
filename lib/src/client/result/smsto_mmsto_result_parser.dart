@@ -16,7 +16,7 @@
 
 import '../../result.dart';
 import 'result_parser.dart';
-import 'smsparsed_result.dart';
+import 'sms_parsed_result.dart';
 
 /// Parses an "smsto:" URI result, whose format is not standardized but appears to be like:
 /// `smsto:number(:body)`.

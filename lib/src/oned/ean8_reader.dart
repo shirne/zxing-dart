@@ -17,7 +17,7 @@
 import '../common/bit_array.dart';
 
 import '../barcode_format.dart';
-import 'upceanreader.dart';
+import 'upcean_reader.dart';
 
 /// Implements decoding of the EAN-8 format.
 ///

@@ -21,6 +21,6 @@ export 'src/result.dart';
 export 'src/result_metadata_type.dart';
 export 'src/result_point.dart';
 export 'src/result_point_callback.dart';
-export 'src/rgbluminance_source.dart';
+export 'src/rgb_luminance_source.dart';
 export 'src/writer.dart';
 export 'src/writer_exception.dart';

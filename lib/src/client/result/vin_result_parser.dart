@@ -17,7 +17,7 @@
 import '../../barcode_format.dart';
 import '../../result.dart';
 import 'result_parser.dart';
-import 'vinparsed_result.dart';
+import 'vin_parsed_result.dart';
 
 /// Detects a result that is likely a vehicle identification number.
 ///
