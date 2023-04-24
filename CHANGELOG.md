@@ -1,3 +1,11 @@
+## [1.0.0]
+* refactor with dart language style
+
+Breakings:
+* encode hints: Map<EncodeHintType, dynamic> => EncodeHint
+* decode hints: Map<DecodeHintType, dynamic> => DecodeHint
+* oned.rss.expanded.decoders Case adjustment of some class names
+
 ## [0.9.0]
 * upgrade for dart3.0
 
