@@ -633,12 +633,6 @@ class RSSExpandedReader extends AbstractRSSReader {
       throw NotFoundException.instance;
     }
 
-    // TODO is need?
-    // List<int> oddCounts = this.oddCounts;
-    // List<int> evenCounts = this.evenCounts;
-    // List<double> oddRoundingErrors = this.oddRoundingErrors;
-    // List<double> evenRoundingErrors = this.evenRoundingErrors;
-
     for (int i = 0; i < counters.length; i++) {
       final value = 1.0 * counters[i] / elementWidth;
       int count = (value + 0.5).toInt(); // Round

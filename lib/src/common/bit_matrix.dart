@@ -22,13 +22,13 @@ import 'utils.dart';
 
 /// Represents a 2D matrix of bits.
 ///
-/// In function arguments below, and throughout the common
-/// module, x is the column position, and y is the row position. The ordering is always x, y.
-/// The origin is at the top-left.
+/// In function arguments below, and throughout the common module,
+/// x is the column position, and y is the row position.
+/// The ordering is always x, y. The origin is at the top-left.
 ///
-/// Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
-/// with a new int. This is done intentionally so that we can copy out a row into a BitArray very
-/// efficiently.
+/// Internally the bits are represented in a 1-D array of 32-bit ints.
+/// However, each row begins with a new int. This is done intentionally
+/// so that we can copy out a row into a BitArray very efficiently.
 ///
 /// The ordering of bits is row-major. Within each int, the least significant bits are used first,
 /// meaning they represent lower x values. This is compatible with BitArray's implementation.
@@ -423,13 +423,13 @@ class BitMatrix {
     return [x, y];
   }
 
-  /// @return The width of the matrix
+  /// The width of the matrix
   int get width => _width;
 
-  /// @return The height of the matrix
+  /// The height of the matrix
   int get height => _height;
 
-  /// @return The row size of the matrix
+  /// The row size of the matrix
   int get rowSize => _rowSize;
 
   @override

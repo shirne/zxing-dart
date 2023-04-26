@@ -72,8 +72,10 @@ class AbstractBlackBoxTestCase {
       }
 
       final testImageFileName = testImage.uri.pathSegments.last;
-      final fileBaseName =
-          testImageFileName.substring(0, testImageFileName.indexOf('.'));
+      final fileBaseName = testImageFileName.substring(
+        0,
+        testImageFileName.indexOf('.'),
+      );
       File expectedTextFile = File('${testBase.path}/$fileBaseName.txt');
       String expectedText;
       if (expectedTextFile.existsSync()) {

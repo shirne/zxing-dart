@@ -159,10 +159,6 @@ class BitArray {
   /// Clears all bits (sets to false).
   void clear() {
     _bits.fillRange(0, _bits.length, 0);
-    /*int max = _bits.length;
-    for (int i = 0; i < max; i++) {
-      _bits[i] = 0;
-    }*/
   }
 
   /// Efficient method to check if a range of bits is set, or not set.

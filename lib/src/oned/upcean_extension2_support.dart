@@ -59,7 +59,6 @@ class UPCEANExtension2Support {
     List<int> startRange,
     StringBuffer resultString,
   ) {
-    // TODO is need ?
     final counters = _decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;

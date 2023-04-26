@@ -138,9 +138,6 @@ class GlobalHistogramBinarizer extends Binarizer {
       _luminances = Uint8List(luminanceSize);
     }
     _buckets.fillRange(0, _luminanceBuckets, 0);
-    /*for (int x = 0; x < _luminanceBuckets; x++) {
-      _buckets[x] = 0;
-    }*/
   }
 
   static int _estimateBlackPoint(List<int> buckets) {
