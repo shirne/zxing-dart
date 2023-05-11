@@ -30,13 +30,8 @@ class BitArray {
   late Uint32List _bits;
   int _size;
 
-  BitArray([this._size = 0]) {
-    if (_size == 0) {
-      _bits = emptyBits;
-    } else {
-      _bits = _makeArray(_size);
-    }
-  }
+  BitArray([this._size = 0])
+      : _bits = _size == 0 ? emptyBits : _makeArray(_size);
 
   BitArray.test(this._bits, this._size);
 
@@ -75,9 +70,7 @@ class BitArray {
   /// Flips bit i.
   ///
   /// @param i bit to set
-  void flip(int i) {
-    _bits[i ~/ 32] ^= 1 << (i & 0x1F);
-  }
+  void flip(int i) => _bits[i ~/ 32] ^= 1 << (i & 0x1F);
 
   /// @param from first bit to check
   /// @return index of first bit that is set, starting from the given index, or size if none are set
@@ -129,9 +122,7 @@ class BitArray {
   /// @param i first bit to set
   /// @param newBits the new value of the next 32 bits. Note again that the least-significant bit
   /// corresponds to bit i, the next-least-significant to i+1, and so on.
-  void setBulk(int i, int newBits) {
-    _bits[i ~/ 32] = newBits;
-  }
+  void setBulk(int i, int newBits) => _bits[i ~/ 32] = newBits;
 
   /// Sets a range of bits.
   ///
@@ -157,9 +148,7 @@ class BitArray {
   }
 
   /// Clears all bits (sets to false).
-  void clear() {
-    _bits.fillRange(0, _bits.length, 0);
-  }
+  void clear() => _bits.fillRange(0, _bits.length, 0);
 
   /// Efficient method to check if a range of bits is set, or not set.
   ///
@@ -263,9 +252,7 @@ class BitArray {
 
   /// @return underlying array of ints. The first element holds the first 32 bits, and the least
   ///         significant bit is bit 0.
-  Uint32List getBitArray() {
-    return _bits;
-  }
+  Uint32List getBitArray() => _bits;
 
   /// Reverses all bits in the array.
   void reverse() {
@@ -291,9 +278,7 @@ class BitArray {
     _bits = newBits;
   }
 
-  static Uint32List _makeArray(int size) {
-    return Uint32List((size + 31) ~/ 32);
-  }
+  static Uint32List _makeArray(int size) => Uint32List((size + 31) ~/ 32);
 
   @override
   bool operator ==(Object other) {
@@ -304,9 +289,7 @@ class BitArray {
   }
 
   @override
-  int get hashCode {
-    return 31 * _size + Utils.arrayHashCode(_bits);
-  }
+  int get hashCode => 31 * _size + Utils.arrayHashCode(_bits);
 
   @override
   String toString() {

@@ -482,12 +482,6 @@ class BitMatrix {
   }
 
   // @override
-  BitMatrix clone() {
-    return BitMatrix._(
-      _width,
-      _height,
-      _rowSize,
-      Uint32List.fromList(_bits.toList()),
-    );
-  }
+  BitMatrix clone() =>
+      BitMatrix._(_width, _height, _rowSize, Uint32List.fromList(_bits));
 }

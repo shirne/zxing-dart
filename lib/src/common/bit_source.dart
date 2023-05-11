@@ -17,8 +17,8 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-/// This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
-/// number of bits read is not often a multiple of 8.
+/// This provides an easy abstraction to read bits at a time from a sequence of bytes,
+/// where the number of bits read is not often a multiple of 8.
 ///
 /// This class is thread-safe but not reentrant -- unless the caller modifies the bytes array
 /// it passed in, in which case all bets are off.
@@ -87,7 +87,5 @@ class BitSource {
   }
 
   /// @return number of bits that can be read successfully
-  int available() {
-    return 8 * (_bytes.length - _byteOffset) - _bitOffset;
-  }
+  int available() => 8 * (_bytes.length - _byteOffset) - _bitOffset;
 }

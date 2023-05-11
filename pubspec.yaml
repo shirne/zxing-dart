@@ -5,7 +5,7 @@ homepage: https://shirne.github.io/
 repository: https://github.com/shirne/zxing-dart
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   intl: ^0.18.0
