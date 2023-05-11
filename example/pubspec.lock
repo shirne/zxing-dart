@@ -78,10 +78,10 @@ packages:
     dependency: transitive
     description:
       name: charset
-      sha256: "69e9095855be737e50eecc8a906987c3617a408ac6ad48044db8d1b107423608"
+      sha256: "814885f908431411919435ddddaeffa90179d16e59380155327291259b3e4384"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.1"
+    version: "2.0.0"
   clock:
     dependency: transitive
     description:

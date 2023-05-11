@@ -334,29 +334,10 @@ class AbstractBlackBoxTestCase {
       return original;
     }
 
-    //double radians = Math.pi * 2 * (degrees / 360);
-
-    // Transform simply to find out the new bounding box (don't actually run the image through it)
-    //AffineTransform at = AffineTransform();
-    //at.rotate(radians, original.width / 2.0, original.height / 2.0);
-    //BufferedImageOp op = AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-    //original.rotate(radians);
-
-    //RectangularShape r = op.getBounds2D(original);
-    //int width = (int) Math.ceil(r.width);
-    //int height = (int) Math.ceil(r.height);
-
-    // Real transform, now that we know the size of the new image and how to translate after we rotate
-    // to keep it centered
-    //at = AffineTransform();
-    //at.rotate(radians, width / 2.0, height / 2.0);
-    //at.translate((width - original.width) / 2.0,
-    //             (height - original.height) / 2.0);
-    //op = AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-    //return op.filter(original, BufferedImage(width, height, original.getType()));
-
-    return copyRotate(original, degrees, interpolation: Interpolation.linear);
+    return copyRotate(
+      original,
+      angle: degrees,
+      interpolation: Interpolation.linear,
+    );
   }
 }

@@ -30,7 +30,9 @@ void main() {
     path = path.replaceAll('\\', '/');
     final filename = path.substring(path.lastIndexOf('/') + 1);
     Uint8List data;
-    final origData = image.getBytes(format: Format.luminance);
+    final origData = Uint8List.fromList(
+      image.map<int>((e) => (e.luminanceNormalized * 255).round()).toList(),
+    );
     switch (filename) {
       case 'over_dark.png':
         data = OverDarkScale().dispatch(origData, image.width, image.height);
@@ -52,12 +54,12 @@ void main() {
         data = origData;
     }
     final result = Image.fromBytes(
-      image.width,
-      image.height,
-      data,
-      format: Format.luminance,
+      width: image.width,
+      height: image.height,
+      bytes: data.buffer,
+      format: Format.uint8,
+      order: ChannelOrder.red,
     );
-    // File(path.replaceAll('.png', '-p.png')).writeAsBytes(encodePng(result));
     return result;
   }
 

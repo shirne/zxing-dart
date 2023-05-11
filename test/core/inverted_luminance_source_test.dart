@@ -24,11 +24,12 @@ import 'buffered_image_luminance_source.dart';
 /// Tests [InvertedLuminanceSource].
 void main() {
   test('testInverted', () async {
-    final image = Image(2, 1);
-    image.fill(getColor(0, 0, 0, 255));
-    //BufferedImage image = BufferedImage(2, 1, BufferedImage.TYPE_INT_RGB);
-    //image.setRGB(0, 0, 0xFFFFFF);
-    image.setPixel(0, 0, 0xffffffff);
+    final image = Image(width: 2, height: 1, numChannels: 4);
+    image
+        .map((e) => image.setPixel(e.x, e.y, ColorInt32.rgba(0, 0, 0, 255)))
+        .toList();
+
+    image.setPixel(0, 0, ColorInt32.rgba(255, 255, 255, 255));
 
     final source = BufferedImageLuminanceSource(image);
 

@@ -15,6 +15,7 @@
  */
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:image/image.dart';
 import 'package:test/expect.dart';
@@ -81,19 +82,14 @@ void main() {
         interpolation: Interpolation.average,
       );
     }
-    final pixels = <int>[];
-    for (int y = 0; y < image.height; y++) {
-      for (int x = 0; x < image.width; x++) {
-        final color = image.getPixel(x, y);
-        pixels.add(
-          ((color & 0xff) << 16) +
-              ((color >> 8) & 0xff) +
-              ((color >> 16) & 0xff),
-        );
-      }
-    }
 
-    final source = RGBLuminanceSource(image.width, image.height, pixels);
+    final source = RGBLuminanceSource.orig(
+      image.width,
+      image.height,
+      Uint8List.fromList(
+        image.map<int>((e) => (e.luminanceNormalized * 255).round()).toList(),
+      ),
+    );
 
     //MultipleBarcodeReader reader = GenericMultipleBarcodeReader(MultiFormatReader());
     final reader = MultiFormatReader();

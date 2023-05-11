@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: charset
-      sha256: e8346cf597b6cea278d2d3a29b2d01ed8fb325aad718e70f22b0cb653cb31700
+      sha256: "814885f908431411919435ddddaeffa90179d16e59380155327291259b3e4384"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0"
   clock:
     dependency: transitive
     description:
@@ -149,10 +149,10 @@ packages:
     dependency: "direct dev"
     description:
       name: image
-      sha256: "8e9d133755c3e84c73288363e6343157c383a0c6c56fc51afcc5d4d7180306d6"
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.3.0"
+    version: "4.0.17"
   intl:
     dependency: "direct main"
     description:

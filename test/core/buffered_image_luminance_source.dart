@@ -48,26 +48,20 @@ class BufferedImageLuminanceSource extends LuminanceSource {
     }
 
     buffer = Uint8List(width * height);
+    final color = image.getPixel(0, 0);
     for (int y = top; y < top + height; y++) {
       for (int x = 0; x < width; x++) {
-        final int color = image.getPixel(x + left, y);
-        final int alpha = getAlpha(color);
-
-        // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
-        // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
-        // barcode image. Force any such pixel to be white:
-        if (alpha == 0) {
-          // white, so we know its luminance is 255
-          buffer[(y - top) * width + x] = 0xff;
+        image.getPixel(x + left, y, color);
+        if (image.numChannels > 3 && color.a == 0) {
+          buffer[(y - top) * width + x] = 255;
+        } else if (image.numChannels == 1) {
+          buffer[(y - top) * width + x] = (color.rNormalized * 255).round();
         } else {
-          // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC),
-          // (306*R) >> 10 is approximately equal to R*0.299, and so on.
-          // 0x200 >> 10 is 0.5, it implements rounding.
-          buffer[(y - top) * width + x] = (306 * getRed(color) +
-                  601 * getGreen(color) +
-                  117 * getBlue(color) +
-                  0x200) >>
-              10;
+          // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+          // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+          // barcode image. Force any such pixel to be white:
+          buffer[(y - top) * width + x] =
+              (color.luminanceNormalized * 255).round();
         }
       }
     }
@@ -124,7 +118,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     // Rotate 90 degrees counterclockwise.
     // Note width/height are flipped since we are rotating 90 degrees.
-    final newImage = copyRotate(image, 90);
+    final newImage = copyRotate(image, angle: 90);
 
     // Maintain the cropped region, but rotate it too.
     return BufferedImageLuminanceSource(
@@ -146,7 +140,7 @@ class BufferedImageLuminanceSource extends LuminanceSource {
 
     final int sourceDimension = math.max(image.width, image.height);
     //BufferedImage rotatedImage = BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
-    final newImage = copyRotate(image, 45);
+    final newImage = copyRotate(image, angle: 45);
 
     final int halfDimension = math.max(width, height) ~/ 2;
     final int newLeft = math.max(0, oldCenterX - halfDimension);
