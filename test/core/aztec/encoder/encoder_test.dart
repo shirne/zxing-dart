@@ -74,6 +74,7 @@ void main() {
       aztec.isCompact,
       aztec.codeWords,
       aztec.layers,
+      0,
     );
     DecoderResult res = Decoder().decode(r);
     expect(
@@ -98,6 +99,7 @@ void main() {
       aztec.isCompact,
       aztec.codeWords,
       aztec.layers,
+      0,
     );
     res = Decoder().decode(r);
     expect(res.text, data);
@@ -135,6 +137,7 @@ void main() {
       aztec.isCompact,
       aztec.codeWords,
       aztec.layers,
+      0,
     );
     DecoderResult res = Decoder().decode(r);
     expect(
@@ -160,6 +163,7 @@ void main() {
       aztec.isCompact,
       aztec.codeWords,
       aztec.layers,
+      0,
     );
     res = Decoder().decode(r);
     expect(res.text, data);

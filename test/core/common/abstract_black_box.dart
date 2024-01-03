@@ -91,6 +91,9 @@ class AbstractBlackBoxTestCase {
       final expectedMetadata = Properties();
       if (expectedMetadataFile.existsSync()) {
         expectedMetadata.load(expectedMetadataFile.readAsStringSync());
+
+        correctInteger(expectedMetadata, ResultMetadataType.errorsCorrected);
+        correctInteger(expectedMetadata, ResultMetadataType.erasuresCorrected);
       }
 
       for (int x = 0; x < testCount; x++) {
@@ -185,15 +188,15 @@ class AbstractBlackBoxTestCase {
     // Then run through again and assert if any failed
     for (int x = 0; x < testCount; x++) {
       final testResult = _testResults[x];
-      String label =
-          'Rotation ${testResult.rotation} degrees: Too many images failed';
+      String label = 'Rotation ${testResult.rotation} degrees: '
+          'Too many images failed(${passedCounts[x]}/${testResult.mustPassCount})';
       assert(passedCounts[x] >= testResult.mustPassCount, label);
       assert(
         tryHarderCounts[x] >= testResult.tryHarderCount,
         'Try harder, $label',
       );
-      label =
-          'Rotation ${testResult.rotation} degrees: Too many images misread';
+      label = 'Rotation ${testResult.rotation} degrees: '
+          'Too many images misread(${passedCounts[x]}/${testResult.mustPassCount})';
       assert(misreadCounts[x] <= testResult.maxMisreads, label);
       assert(
         tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads,
@@ -245,13 +248,22 @@ class AbstractBlackBoxTestCase {
     return paths;
   }
 
+  void correctInteger(Properties metadata, ResultMetadataType key) {
+    final skey = key.identifier;
+    if (metadata.properties.containsKey(skey)) {
+      final sval = metadata.getProperty(skey) ?? '';
+      final ival = int.tryParse(sval) ?? 0;
+      metadata.setProperty(skey, ival);
+    }
+  }
+
   Reader? get reader => _barcodeReader;
 
   bool _decode(
     BinaryBitmap source,
     double rotation,
     String expectedText,
-    Map<Object, Object> expectedMetadata, {
+    Map<Object, dynamic> expectedMetadata, {
     bool tryHarder = false,
     String filename = '',
   }) {

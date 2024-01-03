@@ -27,10 +27,10 @@ void main() {
       AztecReader(),
       BarcodeFormat.aztec,
     )
-      ..addTest(14, 14, 0.0)
-      ..addTest(14, 14, 90.0)
-      ..addTest(14, 14, 180.0)
-      ..addTest(14, 14, 270.0)
+      ..addTest(15, 15, 0.0)
+      ..addTest(15, 15, 90.0)
+      ..addTest(15, 15, 180.0)
+      ..addTest(15, 15, 270.0)
       ..testBlackBox();
   });
 }

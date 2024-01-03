@@ -28,10 +28,10 @@ void main() {
       MultiFormatReader(),
       BarcodeFormat.pdf417,
     )
-      ..addTest(10, 10, 0.0)
-      ..addTest(10, 10, 90.0)
-      ..addTest(10, 10, 180.0)
-      ..addTest(10, 10, 270.0)
+      ..addTest(13, 13, 0.0)
+      ..addTest(13, 13, 90.0)
+      ..addTest(13, 13, 180.0)
+      ..addTest(13, 13, 270.0)
       ..testBlackBox();
   });
 }

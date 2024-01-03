@@ -1,6 +1,6 @@
 /// A simple property reader
 class Properties {
-  final Map<String, String> _properties = {};
+  final Map<String, dynamic> _properties = {};
   final Properties? _defaults;
 
   Properties([this._defaults]);
@@ -19,13 +19,13 @@ class Properties {
     }
   }
 
-  Map<String, String> get properties => _properties;
+  Map<String, dynamic> get properties => _properties;
 
-  String? getProperty(String key, [String? defaultValue]) {
+  String? getProperty(String key, [dynamic defaultValue]) {
     return _properties[key] ?? (_defaults?.getProperty(key) ?? defaultValue);
   }
 
-  void setProperty(String key, String value) {
+  void setProperty(String key, dynamic value) {
     _properties[key] = value;
   }
 }

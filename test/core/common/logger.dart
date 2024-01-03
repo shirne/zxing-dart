@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 /// A simple logger
 class Logger {
   final String prefix;
@@ -27,7 +29,7 @@ class Logger {
   }
 
   void record(Object message, [LoggerType type = LoggerType.info]) {
-    print('[${_logTypes[type]}] $prefix $message');
+    log('$prefix $message', name: _logTypes[type] ?? '');
   }
 
   static final _loggers = <Type, Logger>{};

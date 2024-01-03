@@ -26,10 +26,10 @@ void main() {
       MultiFormatReader(),
       BarcodeFormat.qrCode,
     )
-      ..addTest(31, 31, 0.0)
-      ..addTest(29, 29, 90.0)
-      ..addTest(30, 30, 180.0)
-      ..addTest(30, 30, 270.0)
+      ..addTest(32, 32, 0.0)
+      ..addTest(30, 30, 90.0)
+      ..addTest(31, 31, 180.0)
+      ..addTest(31, 31, 270.0)
       ..testBlackBox();
   });
 }

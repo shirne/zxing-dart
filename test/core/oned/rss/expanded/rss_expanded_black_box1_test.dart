@@ -37,8 +37,8 @@ void main() {
       MultiFormatReader(),
       BarcodeFormat.rssExpanded,
     )
-      ..addTest(32, 32, 0.0)
-      ..addTest(32, 32, 180.0)
+      ..addTest(35, 35, 0.0)
+      ..addTest(35, 35, 180.0)
       ..testBlackBox();
   });
 }

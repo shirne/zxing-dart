@@ -26,10 +26,10 @@ void main() {
       MultiFormatReader(),
       BarcodeFormat.dataMatrix,
     )
-      ..addTest(21, 21, 0.0)
-      ..addTest(21, 21, 90.0)
-      ..addTest(21, 21, 180.0)
-      ..addTest(21, 21, 270.0)
+      ..addTest(22, 22, 0.0)
+      ..addTest(22, 22, 90.0)
+      ..addTest(22, 22, 180.0)
+      ..addTest(22, 22, 270.0)
       ..testBlackBox();
   });
 }
