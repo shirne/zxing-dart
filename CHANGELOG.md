@@ -1,3 +1,12 @@
+## [1.1.2]
+* Sync zxing to 2023-12-25
+
+## [1.1.1]
+* fix tests
+
+## [1.1.0]
+* Sync zxing to 2023/9/7
+
 ## [1.0.0]
 * refactor with dart language style
 
