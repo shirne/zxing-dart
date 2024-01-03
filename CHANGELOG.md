@@ -1,10 +1,10 @@
-## [1.1.2]
+## [1.0.3]
+* fix dart version sytax
+
+## [1.0.2]
 * Sync zxing to 2023-12-25
 
-## [1.1.1]
-* fix tests
-
-## [1.1.0]
+## [1.0.1]
 * Sync zxing to 2023/9/7
 
 ## [1.0.0]
