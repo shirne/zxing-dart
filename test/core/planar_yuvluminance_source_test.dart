@@ -87,7 +87,7 @@ void main() {
       0xFF030303,
       0xFF000000,
       0xFFFFFFFF,
-      0xFFFDFDFD
+      0xFFFDFDFD,
     ]);
   });
 }

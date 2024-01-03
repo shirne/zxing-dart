@@ -27,7 +27,7 @@ class CodaBarWriter extends OneDimensionalCodeWriter {
   static const List<String> _startEndChars = ['A', 'B', 'C', 'D'];
   static const List<String> _altStartEndChars = ['T', 'N', '*', 'E'];
   static const List<String> _charsWhichAreTenLengthEachAfterDecoded = [
-    '/', ':', '+', '.' //
+    '/', ':', '+', '.', //
   ];
   //START_END_CHARS[0];
   static const String _defaultGuard = 'A';

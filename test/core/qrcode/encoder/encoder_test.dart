@@ -552,7 +552,7 @@ void main() {
       32, 65, 205, 69, 41, 220, 46, 128, 236,
       // Error correction bytes.
       42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
-      237, 85, 224, 96, 74, 219, 61
+      237, 85, 224, 96, 74, 219, 61,
     ]);
     expect(expected.length, out.sizeInBytes);
     Uint8List outArray = Uint8List(expected.length);
@@ -568,7 +568,7 @@ void main() {
       151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
       182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
       135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
-      17
+      17,
     ]);
     inArr = BitArray();
     for (int dataByte in dataBytes) {
@@ -591,7 +591,7 @@ void main() {
       190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
       211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
       140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
-      187, 49, 156, 214
+      187, 49, 156, 214,
     ]);
     expect(expected.length, out.sizeInBytes);
     outArray = Uint8List(expected.length);
@@ -677,7 +677,7 @@ void main() {
     Uint8List ecBytes = Encoder.generateECBytes(dataBytes, 17);
     List<int> expected = [
       42, 159, 74, 221, 244, 169, 239, 150, 138, //
-      70, 237, 85, 224, 96, 74, 219, 61
+      70, 237, 85, 224, 96, 74, 219, 61,
     ];
     expect(expected.length, ecBytes.length);
     for (int x = 0; x < expected.length; x++) {
@@ -689,7 +689,7 @@ void main() {
     ecBytes = Encoder.generateECBytes(dataBytes, 18);
     expected = [
       175, 80, 155, 64, 178, 45, 214, 233, 65, //
-      209, 12, 155, 117, 31, 140, 214, 27, 187
+      209, 12, 155, 117, 31, 140, 214, 27, 187,
     ];
 
     expect(expected.length, ecBytes.length);
@@ -701,7 +701,7 @@ void main() {
     ecBytes = Encoder.generateECBytes(dataBytes, 17);
     expected = [
       0, 3, 130, 179, 194, 0, 55, 211, 110, //
-      79, 98, 72, 170, 96, 211, 137, 213
+      79, 98, 72, 170, 96, 211, 137, 213,
     ];
     expect(expected.length, ecBytes.length);
     for (int x = 0; x < expected.length; x++) {

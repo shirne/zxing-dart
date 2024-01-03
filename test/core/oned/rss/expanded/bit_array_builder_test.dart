@@ -66,7 +66,7 @@ void main() {
   test('testBuildBitArray1', () {
     final pairValues = [
       [19],
-      [673, 16]
+      [673, 16],
     ];
 
     final expected = ' .......X ..XX..X. X.X....X .......X ....';

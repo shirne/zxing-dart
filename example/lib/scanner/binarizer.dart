@@ -282,7 +282,7 @@ class _TakePhotoState extends State<TakePhoto> {
                         icon: const Icon(CupertinoIcons.camera),
                         onPressed: takePicture,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

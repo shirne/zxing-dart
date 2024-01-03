@@ -45,15 +45,15 @@ class DecodedBitStreamParser {
   static const _rs = '\u001E';
 
   static final _countryBytes = [
-    53, 54, 43, 44, 45, 46, 47, 48, 37, 38 //
+    53, 54, 43, 44, 45, 46, 47, 48, 37, 38, //
   ];
   static final _serviceClassBytes = [
-    55, 56, 57, 58, 59, 60, 49, 50, 51, 52 //
+    55, 56, 57, 58, 59, 60, 49, 50, 51, 52, //
   ];
   static final _postcode2LengthBytes = [39, 40, 41, 42, 31, 32];
   static final _postcode2Bytes = [
     33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19, //
-    20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2
+    20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2,
   ];
   static final _postcode3Bytes = [
     [39, 40, 41, 42, 31, 32],
@@ -61,7 +61,7 @@ class DecodedBitStreamParser {
     [27, 28, 29, 30, 19, 20],
     [21, 22, 23, 24, 13, 14],
     [15, 16, 17, 18, 7, 8],
-    [9, 10, 11, 12, 1, 2]
+    [9, 10, 11, 12, 1, 2],
   ];
 
   static final _sets = [

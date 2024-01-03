@@ -28,14 +28,14 @@ enum Mode { ascii, c40, text, x12, edf, b256 }
 class Edge {
   /* private */ static final List<int> allCodewordCapacities = [
     3, 5, 8, 10, 12, 16, 18, 22, 30, 32, 36, 44, 49, 62, 86, 114, //
-    144, 174, 204, 280, 368, 456, 576, 696, 816, 1050, 1304, 1558
+    144, 174, 204, 280, 368, 456, 576, 696, 816, 1050, 1304, 1558,
   ];
   /* private */ static final List<int> squareCodewordCapacities = [
     3, 5, 8, 12, 18, 22, 30, 36, 44, 62, 86, 114, 144, 174, 204, //
-    280, 368, 456, 576, 696, 816, 1050, 1304, 1558
+    280, 368, 456, 576, 696, 816, 1050, 1304, 1558,
   ];
   /* private */ static final List<int> rectangularCodewordCapacities = [
-    5, 10, 16, 33, 32, 49 //
+    5, 10, 16, 33, 32, 49, //
   ];
   /* private */ final Input input;
   /* private */ final Mode mode; //the mode at the start of this edge.
@@ -720,7 +720,7 @@ class MinimalEncoder {
   static final c40Shift2Chars = [
     '!', '"', '#', '\$', '%', '&', '\'', '(', ')', '*', //
     '+', ',', '-', '.', '/', ':', ';', '<', '=', '>',
-    '?', '@', '[', '\\', ']', '^', '_'
+    '?', '@', '[', '\\', ']', '^', '_',
   ].map((e) => e.codeUnitAt(0)).toList();
 
   /* private */ MinimalEncoder();

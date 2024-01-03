@@ -31,7 +31,7 @@ void main() {
     SymbolInfo(false, 8, 10, 12, 12, 1),
     /*rect*/ SymbolInfo(true, 10, 11, 14, 6, 2),
     SymbolInfo(false, 13, 0, 0, 0, 1),
-    SymbolInfo(false, 77, 0, 0, 0, 1)
+    SymbolInfo(false, 77, 0, 0, 0, 1),
     //The last entries are fake entries to test special conditions with C40 encoding
   ];
 

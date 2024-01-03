@@ -597,7 +597,7 @@ void main() {
     // places where the encoding changes: 31, 62, and 2047+31=2078
     for (int i in [
       1, 2, 3, 10, 29, 30, 31, 32, 33, 60, //
-      61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 2100
+      61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 2100,
     ]) {
       // This is the expected length of a binary string of length "i"
       final int expectedLength = (8 * i) +

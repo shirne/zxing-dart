@@ -76,7 +76,7 @@ Future<T?>? pickerType<T>(BuildContext context, List<T> values, T value) {
                   onPressed: () {
                     Navigator.of(context).pop(value);
                   },
-                )
+                ),
               ],
             ),
           ),

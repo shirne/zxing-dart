@@ -121,7 +121,7 @@ class Code93Reader extends OneDReader {
       null,
       [
         ResultPoint(left, rowNumber.toDouble()),
-        ResultPoint(right, rowNumber.toDouble())
+        ResultPoint(right, rowNumber.toDouble()),
       ],
       BarcodeFormat.code93,
     );

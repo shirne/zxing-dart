@@ -118,13 +118,13 @@ class PDF417HighLevelEncoder {
   /// Raw code table for text compaction Mixed sub-mode
   static const List<int> _textMixedRaw = [
     48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58, //
-    35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
+    35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0,
   ];
 
   /// Raw code table for text compaction: Punctuation sub-mode
   static final List<int> _textPunctuationRaw = [
     59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58, //
-    10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
+    10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0,
   ];
 
   static final Uint8List _mixed = Uint8List.fromList(

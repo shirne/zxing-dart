@@ -128,7 +128,7 @@ void main() {
       Uint8List.fromList([
         -11, 85, 85, 117, 107, 90, -42, -75, -83, 107, //
         90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
-        90, -42, -80
+        90, -42, -80,
       ]),
       result.rawBytes,
     );
@@ -272,14 +272,14 @@ void main() {
       true,
       false,
       true,
-      false
+      false,
     ];
     final List<bool> bool9 = [
-      true, false, true, false, true, false, true, false, true //
+      true, false, true, false, true, false, true, false, true, //
     ];
     final List<bool> bool16 = [
       false, true, true, false, false, false, true, true, true, //
-      true, false, false, false, false, false, true
+      true, false, false, false, false, false, true,
     ];
     final Uint8List byte0 = Uint8List.fromList([]);
     final Uint8List byte1 = Uint8List.fromList([-128]);

@@ -40,7 +40,7 @@ void main() {
       '001100001101',
       '100010010111',
       '011101011010',
-      '001011001010'
+      '001011001010',
     ];
     final actual = placement.toBitFieldStringArray();
     for (int i = 0; i < actual.length; i++) {

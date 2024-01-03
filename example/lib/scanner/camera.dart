@@ -220,7 +220,7 @@ class _CameraPageState extends State<CameraPage> {
                           onPressed: changeBoltMode,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

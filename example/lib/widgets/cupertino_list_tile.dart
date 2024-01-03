@@ -59,7 +59,7 @@ class CupertinoListTile extends StatelessWidget {
                   CupertinoIcons.right_chevron,
                   color: CupertinoColors.inactiveGray,
                 ),
-              )
+              ),
           ],
         ),
       ),

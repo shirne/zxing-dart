@@ -67,7 +67,7 @@ class DataMask {
     dataMask100,
     dataMask101,
     dataMask110,
-    dataMask111
+    dataMask111,
   ];
 
   // End of enum constants.

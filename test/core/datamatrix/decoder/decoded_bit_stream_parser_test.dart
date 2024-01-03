@@ -29,7 +29,7 @@ void main() {
       (99 /* c */ + 1),
       (65 /* A */ + 1),
       (66 /* B */ + 1),
-      (67 /* C */ + 1)
+      (67 /* C */ + 1),
     ]);
     final decodedString = DecodedBitStreamParser.decode(bytes).text;
     expect('abcABC', decodedString);

@@ -92,7 +92,7 @@ class IconItem extends StatelessWidget {
                 style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle,
               )
             else
-              const Text(' ')
+              const Text(' '),
           ],
         ),
       ),

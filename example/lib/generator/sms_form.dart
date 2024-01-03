@@ -59,7 +59,7 @@ class _SMSFormState extends State<SMSForm> {
             maxLines: 5,
             controller: _controller,
           ),
-        )
+        ),
       ],
     );
   }

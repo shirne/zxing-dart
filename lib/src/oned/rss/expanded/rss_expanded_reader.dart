@@ -660,7 +660,7 @@ class RSSExpandedReader extends AbstractRSSReader {
 
     // Check that the finder pattern that we *think* we found is not too far from where we would expect to find it,
     // given that finder patterns are 15 modules wide and the data characters between them are 17 modules wide.
-    if (!previousPairs.isEmpty) {
+    if (previousPairs.isNotEmpty) {
       final prev = previousPairs[previousPairs.length - 1];
       final prevStart = prev.finderPattern?.startEnd[0] ?? 0;
       final prevEnd = prev.finderPattern?.startEnd[1] ?? 0;

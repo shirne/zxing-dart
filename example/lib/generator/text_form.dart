@@ -39,7 +39,7 @@ class _TextFormState extends State<TextForm> {
             maxLines: 5,
             controller: _controller,
           ),
-        )
+        ),
       ],
     );
   }

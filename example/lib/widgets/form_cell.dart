@@ -49,7 +49,7 @@ class FormCell extends StatelessWidget {
                 CupertinoIcons.right_chevron,
                 color: CupertinoColors.inactiveGray,
               ),
-            )
+            ),
         ],
       ),
     );

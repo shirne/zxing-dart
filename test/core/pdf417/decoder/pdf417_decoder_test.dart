@@ -172,7 +172,7 @@ void main() {
       20, 928, 111, 100, 17, 53, 923, 1, 111, 104, 923, 3, 64, 416, 34,
       923, 4, 258, 446, 67,
       // we should never reach these
-      1000, 1000, 1000
+      1000, 1000, 1000,
     ];
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
@@ -206,7 +206,7 @@ void main() {
     final sampleCodes = [
       11, 928, 111, 103, 17, 53, 923, 1, 111, 104, 922,
       // we should never reach these
-      1000, 1000, 1000
+      1000, 1000, 1000,
     ];
 
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
@@ -264,7 +264,7 @@ void main() {
       23, 477, 928, 111, 100, 0, 252, 21, 86, 923, 0, 815, 251, 133, 12, //
       148, 537, 593, 599, 923, 1, 111, 102, 98, 311, 355, 522, 920, 779,
       40, 628, 33, 749, 267, 506, 213, 928, 465, 248, 493, 72, 780, 699,
-      780, 493, 755, 84, 198, 628, 368, 156, 198, 809, 19, 113
+      780, 493, 755, 84, 198, 628, 368, 156, 198, 809, 19, 113,
     ];
     final resultMetadata = PDF417ResultMetadata();
 
@@ -282,7 +282,7 @@ void main() {
   test('testSampleWithNumericValues', () {
     final sampleCodes = [
       25, 477, 928, 111, 100, 0, 252, 21, 86, 923, 2, 2, 0, 1, 0, 0, 0, //
-      923, 5, 130, 923, 6, 1, 500, 13, 0
+      923, 5, 130, 923, 6, 1, 500, 13, 0,
     ];
     final resultMetadata = PDF417ResultMetadata();
 
@@ -580,7 +580,7 @@ void main() {
     performDecodeTest(
       [
         16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858,
-        567 //
+        567, //
       ],
       '\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f',
     );

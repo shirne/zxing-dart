@@ -140,7 +140,7 @@ class Code128Reader extends OneDReader {
     [2, 1, 1, 4, 1, 2],
     [2, 1, 1, 2, 1, 4],
     [2, 1, 1, 2, 3, 2], // 105
-    [2, 3, 3, 1, 1, 1, 2]
+    [2, 3, 3, 1, 1, 1, 2],
   ];
 
   static const double _maxAvgVariance = 0.25;
@@ -565,7 +565,7 @@ class Code128Reader extends OneDReader {
       rawBytes,
       [
         ResultPoint(left, rowNumber.toDouble()),
-        ResultPoint(right, rowNumber.toDouble())
+        ResultPoint(right, rowNumber.toDouble()),
       ],
       BarcodeFormat.code128,
     );

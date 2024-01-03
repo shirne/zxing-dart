@@ -158,7 +158,7 @@ class CodaBarReader extends OneDReader {
       null,
       [
         ResultPoint(left, rowNumber.toDouble()),
-        ResultPoint(right, rowNumber.toDouble())
+        ResultPoint(right, rowNumber.toDouble()),
       ],
       BarcodeFormat.codabar,
     );

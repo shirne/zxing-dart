@@ -437,12 +437,12 @@ class MinimalEncoder {
       final versions = [
         getVersion(VersionSize.small),
         getVersion(VersionSize.medium),
-        getVersion(VersionSize.large)
+        getVersion(VersionSize.large),
       ];
       final results = [
         encodeSpecificVersion(versions[0]),
         encodeSpecificVersion(versions[1]),
-        encodeSpecificVersion(versions[2])
+        encodeSpecificVersion(versions[2]),
       ];
       int smallestSize = MathUtils.maxValue;
       int smallestResult = -1;

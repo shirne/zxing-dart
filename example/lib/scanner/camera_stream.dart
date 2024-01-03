@@ -187,7 +187,7 @@ class _CameraStreamPageState extends State<CameraStreamPage> {
                           onPressed: changeBoltMode,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

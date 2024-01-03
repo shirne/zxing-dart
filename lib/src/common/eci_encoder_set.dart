@@ -74,7 +74,7 @@ class ECIEncoderSet {
     'windows-1251',
     'windows-1252',
     'windows-1256',
-    'Shift_JIS'
+    'Shift_JIS',
   ];
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
   static final _encoders = _encoderNames

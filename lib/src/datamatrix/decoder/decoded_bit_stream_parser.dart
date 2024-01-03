@@ -47,12 +47,12 @@ class DecodedBitStreamParser {
   static const List<String> _c40BasicSetChars = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', //
-    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
   ];
 
   static const List<String> _c40Shift2SetChars = [
     '!', '"', '#', r'$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', //
-    '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
+    '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_',
   ];
 
   /// See ISO 16022:2006, Annex C Table C.2
@@ -60,7 +60,7 @@ class DecodedBitStreamParser {
   static const List<String> _textBasicSetChars = [
     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
-    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
   ];
 
   // Shift 2 for Text is the same encoding as C40
@@ -70,7 +70,7 @@ class DecodedBitStreamParser {
     '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', //
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}',
-    '~', '\x7f'
+    '~', '\x7f',
   ];
 
   DecodedBitStreamParser._();

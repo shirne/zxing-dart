@@ -122,7 +122,7 @@ class HighLevelEncoder {
       TextEncoder(),
       X12Encoder(),
       EdifactEncoder(),
-      Base256Encoder()
+      Base256Encoder(),
     ];
 
     final context = EncoderContext(msg);
@@ -377,7 +377,7 @@ class HighLevelEncoder {
               intCharCounts[asciiEncodation],
               intCharCounts[base256Encodation],
               intCharCounts[edifactEncodation],
-              intCharCounts[textEncodation]
+              intCharCounts[textEncodation],
             ])) {
           if (intCharCounts[c40Encodation] < intCharCounts[x12Encodation]) {
             return c40Encodation;

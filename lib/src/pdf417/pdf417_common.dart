@@ -531,7 +531,7 @@ class PDF417Common {
     0x1faec, 0x1fb16, 0x1fb26, 0x1fb2c,
     0x1fb3a, 0x1fb46, 0x1fb4c, 0x1fb58, 0x1fb6e, 0x1fb72, 0x1fb74, 0x1fb8a,
     0x1fb92, 0x1fb94, 0x1fba2, 0x1fba4,
-    0x1fba8, 0x1fbb6, 0x1fbda
+    0x1fba8, 0x1fbb6, 0x1fbda,
   ];
 
   /// This table contains to codewords for all symbols.
@@ -815,6 +815,6 @@ class PDF417Common {
     1001, 998, 1924, 1921, 1918, 1928, 937, 934, 931, 1879, 1876, 1873, 1870,
     945, 1885, 1882, 1323, 1273, 1270,
     2105, 1202, 1199, 1196, 1211, 2061, 2057, 1576, 1543, 1540, 1484, 1481,
-    1478, 1491, 1700
+    1478, 1491, 1700,
   ];
 }

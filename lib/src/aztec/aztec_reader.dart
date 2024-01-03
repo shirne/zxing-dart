@@ -94,7 +94,7 @@ class AztecReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
-    errorsCorrected += decoderResult.errorsCorrected;
+    errorsCorrected += decoderResult.errorsCorrected ?? 0;
     result.putMetadata(ResultMetadataType.errorsCorrected, errorsCorrected);
     result.putMetadata(
       ResultMetadataType.symbologyIdentifier,

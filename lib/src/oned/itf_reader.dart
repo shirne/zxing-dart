@@ -61,7 +61,7 @@ class ITFReader extends OneDReader {
   static const _startPattern = [_n, _n, _n, _n];
   static const _endPatternReversed = [
     [_n, _n, _w], // 2x
-    [_n, _n, _t] // 3x
+    [_n, _n, _t], // 3x
   ];
 
   // See ITFWriter.PATTERNS
@@ -87,7 +87,7 @@ class ITFReader extends OneDReader {
     [_n, _t, _t, _n, _n], // 6
     [_n, _n, _n, _t, _t], // 7
     [_t, _n, _n, _t, _n], // 8
-    [_n, _t, _n, _t, _n] // 9
+    [_n, _t, _n, _t, _n], // 9
   ];
 
   @override
@@ -132,7 +132,7 @@ class ITFReader extends OneDReader {
       null, // no natural byte representation for these barcodes
       [
         ResultPoint(startRange[1].toDouble(), rowNumber.toDouble()),
-        ResultPoint(endRange[0].toDouble(), rowNumber.toDouble())
+        ResultPoint(endRange[0].toDouble(), rowNumber.toDouble()),
       ],
       BarcodeFormat.itf,
     );

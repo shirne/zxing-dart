@@ -25,7 +25,7 @@ class FinderPattern {
   FinderPattern(this._value, this._startEnd, int start, int end, int rowNumber)
       : _resultPoints = [
           ResultPoint(start.toDouble(), rowNumber.toDouble()),
-          ResultPoint(end.toDouble(), rowNumber.toDouble())
+          ResultPoint(end.toDouble(), rowNumber.toDouble()),
         ];
 
   int get value => _value;

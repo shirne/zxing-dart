@@ -64,7 +64,7 @@ class Mode {
     null,
     null,
     null,
-    hanzi
+    hanzi,
   ];
 
   final List<int> _characterCountBitsForVersions;

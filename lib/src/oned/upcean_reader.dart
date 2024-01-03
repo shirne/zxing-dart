@@ -62,7 +62,7 @@ abstract class UPCEANReader extends OneDReader {
     [1, 1, 1, 4], // 6
     [1, 3, 1, 2], // 7
     [1, 2, 1, 3], // 8
-    [3, 1, 1, 2] // 9
+    [3, 1, 1, 2], // 9
   ];
 
   /// As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
@@ -194,7 +194,7 @@ abstract class UPCEANReader extends OneDReader {
       null, // no natural byte representation for these barcodes
       [
         ResultPoint(left, rowNumber.toDouble()),
-        ResultPoint(right, rowNumber.toDouble())
+        ResultPoint(right, rowNumber.toDouble()),
       ],
       format,
     );

@@ -89,7 +89,7 @@ class _TextFormState extends State<VCardForm> {
             maxLines: 5,
             controller: _controller,
           ),
-        )
+        ),
       ],
     );
   }

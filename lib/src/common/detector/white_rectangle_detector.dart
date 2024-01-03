@@ -301,14 +301,14 @@ class WhiteRectangleDetector {
         ResultPoint(ti - _corr, tj + _corr),
         ResultPoint(zi + _corr, zj + _corr),
         ResultPoint(xi - _corr, xj - _corr),
-        ResultPoint(yi + _corr, yj - _corr)
+        ResultPoint(yi + _corr, yj - _corr),
       ];
     } else {
       return [
         ResultPoint(ti + _corr, tj + _corr),
         ResultPoint(zi + _corr, zj - _corr),
         ResultPoint(xi - _corr, xj + _corr),
-        ResultPoint(yi - _corr, yj - _corr)
+        ResultPoint(yi - _corr, yj - _corr),
       ];
     }
   }

@@ -36,7 +36,7 @@ Future<bool?> alert<bool>(
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                  )
+                  ),
                 ],
           ),
         ),
@@ -98,7 +98,7 @@ Uint8List color2Uint(int color) {
     color >> 16 & 0xff,
     color >> 8 & 0xff,
     color & 0xff,
-    color >> 16 & 0xff
+    color >> 16 & 0xff,
   ]);
 }
 

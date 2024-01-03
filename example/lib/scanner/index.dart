@@ -158,7 +158,7 @@ class _IndexPageState extends State<_IndexPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (isReading) const CupertinoActivityIndicator(),
-                  const Text('Image discern from clipboard')
+                  const Text('Image discern from clipboard'),
                 ],
               ),
             ),
@@ -170,7 +170,7 @@ class _IndexPageState extends State<_IndexPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (isReading) const CupertinoActivityIndicator(),
-                  const Text('Image discern')
+                  const Text('Image discern'),
                 ],
               ),
             ),

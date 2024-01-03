@@ -174,7 +174,7 @@ class Version {
       Version._(45, 24, 64, 22, 14, ECBlocks(46, ECB(1, 108))),
       Version._(46, 26, 40, 24, 18, ECBlocks(38, ECB(1, 70))),
       Version._(47, 26, 48, 24, 22, ECBlocks(42, ECB(1, 90))),
-      Version._(48, 26, 64, 24, 14, ECBlocks(50, ECB(1, 118)))
+      Version._(48, 26, 64, 24, 14, ECBlocks(50, ECB(1, 118))),
     ];
   }
 }

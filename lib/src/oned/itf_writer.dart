@@ -39,7 +39,7 @@ class ITFWriter extends OneDimensionalCodeWriter {
     [_n, _t, _t, _n, _n], // 6
     [_n, _n, _n, _t, _t], // 7
     [_t, _n, _n, _t, _n], // 8
-    [_n, _t, _n, _t, _n] // 9
+    [_n, _t, _n, _t, _n], // 9
   ];
 
   // @protected

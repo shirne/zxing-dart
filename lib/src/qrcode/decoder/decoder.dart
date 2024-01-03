@@ -173,7 +173,7 @@ class Decoder {
     int errorsCorrected = 0;
     try {
       errorsCorrected = _rsDecoder.decodeWithECCount(
-          codewordsInts, codewordBytes.length - numDataCodewords);
+          codewordsInts, codewordBytes.length - numDataCodewords,);
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }

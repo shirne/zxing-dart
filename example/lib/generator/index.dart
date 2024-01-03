@@ -212,7 +212,7 @@ class _IndexPageState extends State<IndexPage> {
                   ),
                 ],
               ),
-              forms.putIfAbsent(result, () => formWidget(result))
+              forms.putIfAbsent(result, () => formWidget(result)),
             ],
           ),
         ),
