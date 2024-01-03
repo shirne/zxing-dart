@@ -42,6 +42,13 @@ class Point {
   String toString() => '<$x $y>';
 }
 
+class CorrectedParameter {
+  final int data;
+  final int errorsCorrected;
+
+  CorrectedParameter(this.data, this.errorsCorrected);
+}
+
 /// Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
 /// is rotated or skewed, or partially obscured.
 ///
@@ -85,7 +92,7 @@ class Detector {
     }
 
     // 3. Get the size of the matrix and other parameters from the bull's eye
-    _extractParameters(bullsEyeCorners);
+    final errorsCorrected = _extractParameters(bullsEyeCorners);
 
     // 4. Sample the grid
     final BitMatrix bits = _sampleGrid(
@@ -105,14 +112,16 @@ class Detector {
       _compact,
       _nbDataBlocks,
       _nbLayers,
+      errorsCorrected,
     );
   }
 
   /// Extracts the number of data layers and data blocks from the layer around the bull's eye.
   ///
   /// @param bullsEyeCorners the array of bull's eye corners
+  /// @return the number of errors corrected during parameter extraction
   /// @throws NotFoundException in case of too many errors or invalid parameters
-  void _extractParameters(List<ResultPoint> bullsEyeCorners) {
+  int _extractParameters(List<ResultPoint> bullsEyeCorners) {
     if (!_isValidPoint(bullsEyeCorners[0]) ||
         !_isValidPoint(bullsEyeCorners[1]) ||
         !_isValidPoint(bullsEyeCorners[2]) ||
@@ -125,7 +134,7 @@ class Detector {
       _sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], length), // Right side
       _sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length), // Bottom
       _sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], length), // Left side
-      _sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length) // Top
+      _sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length), // Top
     ];
 
     // bullsEyeCorners[shift] is the corner of the bulls'eye that has three
@@ -151,7 +160,8 @@ class Detector {
 
     // Corrects parameter data using RS.  Returns just the data portion
     // without the error correction.
-    final correctedData = _getCorrectedParameterData(parameterData, _compact);
+    final correctedParam = _getCorrectedParameterData(parameterData, _compact);
+    final correctedData = correctedParam.data;
 
     if (_compact) {
       // 8 bits:  2 bits layers and 6 bits data blocks
@@ -162,6 +172,7 @@ class Detector {
       _nbLayers = (correctedData >> 11) + 1;
       _nbDataBlocks = (correctedData & 0x7FF) + 1;
     }
+    return correctedParam.errorsCorrected;
   }
 
   static int _getRotation(List<int> sides, int length) {
@@ -200,7 +211,10 @@ class Detector {
   /// @param parameterData parameter bits
   /// @param compact true if this is a compact Aztec code
   /// @throws NotFoundException if the array contains too many errors
-  static int _getCorrectedParameterData(int parameterData, bool compact) {
+  static CorrectedParameter _getCorrectedParameterData(
+    int parameterData,
+    bool compact,
+  ) {
     int numCodewords;
     int numDataCodewords;
 
@@ -218,10 +232,13 @@ class Detector {
       parameterWords[i] = parameterData & 0xF;
       parameterData >>= 4;
     }
+
+    int errorsCorrected = 0;
     try {
       final ReedSolomonDecoder rsDecoder =
           ReedSolomonDecoder(GenericGF.aztecParam);
-      rsDecoder.decode(parameterWords, numECCodewords);
+      errorsCorrected =
+          rsDecoder.decodeWithECCount(parameterWords, numECCodewords);
     } on ReedSolomonException catch (_) {
       throw NotFoundException.instance;
     }
@@ -230,7 +247,7 @@ class Detector {
     for (int i = 0; i < numDataCodewords; i++) {
       result = (result << 4) + parameterWords[i];
     }
-    return result;
+    return CorrectedParameter(result, errorsCorrected);
   }
 
   /// Finds the corners of a bull-eye centered on the passed point.

@@ -27,12 +27,14 @@ class AztecDetectorResult extends DetectorResult {
   final bool isCompact;
   final int nbDataBlocks;
   final int nbLayers;
+  final int errorsCorrected;
 
   AztecDetectorResult(
     BitMatrix bits,
     List<ResultPoint> points,
     this.isCompact,
     this.nbDataBlocks,
-    this.nbLayers,
-  ) : super(bits, points);
+    this.nbLayers, [
+    this.errorsCorrected = 0,
+  ]) : super(bits, points);
 }

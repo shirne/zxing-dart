@@ -33,6 +33,7 @@ class Detector {
   static const List<int> _indexesStopPattern = [6, 2, 7, 3];
   static const double _maxAvgVariance = 0.42;
   static const double _maxIndividualVariance = 0.8;
+  static const double _maxStopPatternHeightVariance = 0.5;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
@@ -166,6 +167,7 @@ class Detector {
     final width = matrix.width;
 
     final result = List<ResultPoint?>.filled(8, null);
+    int minHeight = _barcodeMinHeight;
     _copyToResult(
       result,
       _findRowsWithPattern(
@@ -174,6 +176,7 @@ class Detector {
         width,
         startRow,
         startColumn,
+        minHeight,
         _startPattern,
       ),
       _indexesStartPattern,
@@ -182,6 +185,14 @@ class Detector {
     if (result[4] != null) {
       startColumn = result[4]!.x.toInt();
       startRow = result[4]!.y.toInt();
+      if (result[5] != null) {
+        final endRow = result[5]!.y.toInt();
+        final startPatternHeight = endRow - startRow;
+        minHeight = math.max(
+          (startPatternHeight * _maxStopPatternHeightVariance).toInt(),
+          _barcodeMinHeight,
+        );
+      }
     }
 
     _copyToResult(
@@ -192,6 +203,7 @@ class Detector {
         width,
         startRow,
         startColumn,
+        minHeight,
         _stopPattern,
       ),
       _indexesStopPattern,
@@ -216,6 +228,7 @@ class Detector {
     int width,
     int startRow,
     int startColumn,
+    int minHeight,
     List<int> pattern,
   ) {
     final result = List<ResultPoint?>.filled(4, null);
@@ -288,7 +301,7 @@ class Detector {
       result[2] = ResultPoint(previousRowLoc[0].toDouble(), stopRow.toDouble());
       result[3] = ResultPoint(previousRowLoc[1].toDouble(), stopRow.toDouble());
     }
-    if (stopRow - startRow < _barcodeMinHeight) {
+    if (stopRow - startRow < minHeight) {
       result.fillRange(0, result.length, null);
     }
     return result;

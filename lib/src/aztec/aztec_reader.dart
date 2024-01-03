@@ -38,9 +38,11 @@ class AztecReader implements Reader {
     final detector = Detector(image.blackMatrix);
     List<ResultPoint>? points;
     DecoderResult? decoderResult;
+    int errorsCorrected = 0;
     try {
       final detectorResult = detector.detect(false);
       points = detectorResult.points;
+      errorsCorrected = detectorResult.errorsCorrected;
       decoderResult = Decoder().decode(detectorResult);
     } on NotFoundException catch (e) {
       notFoundException = e;
@@ -51,6 +53,7 @@ class AztecReader implements Reader {
       try {
         final detectorResult = detector.detect(true);
         points = detectorResult.points;
+        errorsCorrected = detectorResult.errorsCorrected;
         decoderResult = Decoder().decode(detectorResult);
       } on NotFoundException catch (_) {
         if (notFoundException != null) {
@@ -91,6 +94,8 @@ class AztecReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
+    errorsCorrected += decoderResult.errorsCorrected;
+    result.putMetadata(ResultMetadataType.errorsCorrected, errorsCorrected);
     result.putMetadata(
       ResultMetadataType.symbologyIdentifier,
       ']z${decoderResult.symbologyModifier}',

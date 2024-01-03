@@ -48,6 +48,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   static const List<int> _evenTotalSubset = [4, 20, 52, 104, 204];
   static const List<int> _gsum = [0, 348, 1388, 2948, 3988];
 
+  /// Finder pattern element widths, from section 7.2.7 of ISO/IEC 24724:2006.
   static const List<List<int>> _finderPatterns = [
     [1, 8, 4, 1], // A
     [3, 6, 4, 1], // B
@@ -57,6 +58,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     [2, 2, 9, 1], // F
   ];
 
+  /// The element weights used in the checksum calculation, from section 7.2.6 of ISO/IEC 24724:2006.
   static const List<List<int>> _weights = [
     [1, 3, 9, 27, 81, 32, 96, 77], //
     [20, 60, 180, 118, 143, 7, 21, 63], //
@@ -90,6 +92,7 @@ class RSSExpandedReader extends AbstractRSSReader {
   static const int _finderPatE = 4;
   static const int _finderPatF = 5;
 
+  /// The possible finder pattern sequences, from section 7.2.7 of ISO/IEC 24724:2006.
   static final List<List<int>> _finderPatternSequences = [
     [_finderPatA, _finderPatA],
     [_finderPatA, _finderPatB, _finderPatB],
@@ -128,7 +131,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     ],
   ];
 
-  //static const int _MAX_PAIRS = 11;
+  //static const _maxPairs = 11;
 
   static const finderPatternModules = 15.0;
   static final dataCharacterModules = 17.0;
@@ -264,7 +267,7 @@ class RSSExpandedReader extends AbstractRSSReader {
     throw NotFoundException.instance;
   }
 
-  // Whether the pairs form a valid find pattern sequence,
+  // Whether the pairs form a valid finder pattern sequence,
   // either complete or a prefix
   static bool _isValidSequence(List<ExpandedPair> pairs, bool complete) {
     for (List<int> sequence in _finderPatternSequences) {
@@ -500,7 +503,7 @@ class RSSExpandedReader extends AbstractRSSReader {
         forcedOffset = _getNextSecondBar(row, _startEnd[0]);
       } else {
         try {
-          leftChar = this.decodeDataCharacter(row, pattern, isOddPattern, true);
+          leftChar = decodeDataCharacter(row, pattern, isOddPattern, true);
           keepFinding = false;
         } on NotFoundException catch (_) {
           // probable false positive, keep looking

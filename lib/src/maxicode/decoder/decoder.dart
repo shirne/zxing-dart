@@ -45,20 +45,20 @@ class Decoder {
     final parser = BitMatrixParser(bits);
     final codewords = parser.readCodewords();
 
-    _correctErrors(codewords, 0, 10, 10, _all);
+    int errorsCorrected = _correctErrors(codewords, 0, 10, 10, _all);
     final mode = codewords[0] & 0x0F;
     late Uint8List datawords;
     switch (mode) {
       case 2:
       case 3:
       case 4:
-        _correctErrors(codewords, 20, 84, 40, _even);
-        _correctErrors(codewords, 20, 84, 40, _odd);
+        errorsCorrected += _correctErrors(codewords, 20, 84, 40, _even);
+        errorsCorrected += _correctErrors(codewords, 20, 84, 40, _odd);
         datawords = Uint8List(94);
         break;
       case 5:
-        _correctErrors(codewords, 20, 68, 56, _even);
-        _correctErrors(codewords, 20, 68, 56, _odd);
+        errorsCorrected += _correctErrors(codewords, 20, 68, 56, _even);
+        errorsCorrected += _correctErrors(codewords, 20, 68, 56, _odd);
         datawords = Uint8List(78);
         break;
       default:
@@ -68,10 +68,11 @@ class Decoder {
     List.copyRange(datawords, 0, codewords, 0, 10);
     List.copyRange(datawords, 10, codewords, 20, datawords.length + 10);
 
-    return DecodedBitStreamParser.decode(datawords, mode);
+    return DecodedBitStreamParser.decode(datawords, mode)
+      ..errorsCorrected = errorsCorrected;
   }
 
-  void _correctErrors(
+  int _correctErrors(
     Uint8List codewordBytes,
     int start,
     int dataCodewords,
@@ -90,8 +91,11 @@ class Decoder {
         codewordsInts[i ~/ divisor] = codewordBytes[i + start];
       }
     }
+
+    int errorsCorrected = 0;
     try {
-      _rsDecoder.decode(codewordsInts, ecCodewords ~/ divisor);
+      errorsCorrected =
+          _rsDecoder.decodeWithECCount(codewordsInts, ecCodewords ~/ divisor);
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }
@@ -102,5 +106,6 @@ class Decoder {
         codewordBytes[i + start] = codewordsInts[i ~/ divisor];
       }
     }
+    return errorsCorrected;
   }
 }

@@ -63,11 +63,15 @@ class DataMatrixReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
     }
-    result.putMetadata(
-      ResultMetadataType.symbologyIdentifier,
-      ']d${decoderResult.symbologyModifier}',
-    );
-    return result;
+    return result
+      ..putMetadata(
+        ResultMetadataType.errorsCorrected,
+        decoderResult.errorsCorrected ?? 0,
+      )
+      ..putMetadata(
+        ResultMetadataType.symbologyIdentifier,
+        ']d${decoderResult.symbologyModifier}',
+      );
   }
 
   @override

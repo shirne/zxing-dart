@@ -40,6 +40,14 @@ enum ResultMetadataType {
   /// format, but is typically a String.
   errorCorrectionLevel('ERROR_CORRECTION_LEVEL'),
 
+  /// The number of errors corrected. If applicable, maps to an {@link Integer} of value
+  /// greater than or equal to zero.
+  errorsCorrected('ERRORS_CORRECTED'),
+
+  /// The number of erasures corrected. If applicable, maps to an {@link Integer} of value
+  /// greater than or equal to zero.
+  erasuresCorrected('ERASURES_CORRECTED'),
+
   /// For some periodicals, indicates the issue number as an [Integer].
   issueNumber('ISSUE_NUMBER'),
 
@@ -51,10 +59,10 @@ enum ResultMetadataType {
   /// ISO country code. Some map to multiple possible countries, like "US/CA".
   possibleCountry('POSSIBLE_COUNTRY'),
 
-  /// For some products, the extension text
+  /// For some products, the extension text.
   upcEanExtension('UPC_EAN_EXTENSION'),
 
-  /// PDF417-specific metadata
+  /// PDF417-specific metadata.
   pdf417ExtraMetadata('PDF417_EXTRA_METADATA'),
 
   /// If the code format supports structured append and the current scanned code is part of one then the

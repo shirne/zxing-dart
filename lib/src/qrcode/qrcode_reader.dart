@@ -83,11 +83,15 @@ class QRCodeReader implements Reader {
         decoderResult.structuredAppendParity,
       );
     }
-    result.putMetadata(
-      ResultMetadataType.symbologyIdentifier,
-      ']Q${decoderResult.symbologyModifier}',
-    );
-    return result;
+    return result
+      ..putMetadata(
+        ResultMetadataType.symbologyIdentifier,
+        ']Q${decoderResult.symbologyModifier}',
+      )
+      ..putMetadata(
+        ResultMetadataType.errorsCorrected,
+        decoderResult.errorsCorrected ?? 0,
+      );
   }
 
   @override

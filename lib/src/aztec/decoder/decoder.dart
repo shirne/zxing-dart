@@ -39,7 +39,7 @@ enum _Table {
   lower('L', [
     'CTRL_PS', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', //
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', //
-    'x', 'y', 'z', 'CTRL_US', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS'
+    'x', 'y', 'z', 'CTRL_US', 'CTRL_ML', 'CTRL_DL', 'CTRL_BS',
   ]),
   mixed('M', [
     'CTRL_PS', ' ', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07',
@@ -47,17 +47,17 @@ enum _Table {
     '\n', //
     '\x0e', '\f', '\r', '\x1b', '\x1c', '\x1d', '\x1e', '\x1f', '@', '\\', '^',
     '_',
-    '`', '|', '~', '\x7f', 'CTRL_LL', 'CTRL_UL', 'CTRL_PL', 'CTRL_BS'
+    '`', '|', '~', '\x7f', 'CTRL_LL', 'CTRL_UL', 'CTRL_PL', 'CTRL_BS',
   ]),
   digit('D', [
     'CTRL_PS', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', //
-    '9', ',', '.', 'CTRL_UL', 'CTRL_US'
+    '9', ',', '.', 'CTRL_UL', 'CTRL_US',
   ]),
   punct('P', [
     'FLG(n)', '\r', '\r\n', '. ', ', ', ': ', '!', '"', '#', r'$', '%', '&',
     "'", '(', ')', //
     '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '[', ']', '{',
-    '}', 'CTRL_UL'
+    '}', 'CTRL_UL',
   ]),
   binary('B', []);
 
@@ -78,9 +78,10 @@ enum _Table {
 
 class CorrectedBitsResult {
   final List<bool> correctBits;
+  final int errorsCorrected;
   final int ecLevel;
 
-  CorrectedBitsResult(this.correctBits, this.ecLevel);
+  CorrectedBitsResult(this.correctBits, this.errorsCorrected, this.ecLevel);
 }
 
 /// The main class which implements Aztec Code decoding -- as opposed to locating and extracting
@@ -108,6 +109,7 @@ class Decoder {
       '${correctedBits.ecLevel}%',
     );
     decoderResult.numBits = correctedBits.correctBits.length;
+    decoderResult.errorsCorrected = correctedBits.errorsCorrected;
     return decoderResult;
   }
 
@@ -275,9 +277,13 @@ class Decoder {
       dataWords[i] = _readCode(rawbits, offset, codewordSize);
     }
 
+    int errorsCorrected = 0;
     try {
       final ReedSolomonDecoder rsDecoder = ReedSolomonDecoder(gf);
-      rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
+      errorsCorrected = rsDecoder.decodeWithECCount(
+        dataWords,
+        numCodewords - numDataCodewords,
+      );
     } on ReedSolomonException catch (ex) {
       throw FormatsException(ex.toString());
     }
@@ -312,10 +318,8 @@ class Decoder {
       }
     }
 
-    return CorrectedBitsResult(
-      correctedBits,
-      100 * (numCodewords - numDataCodewords) ~/ numCodewords,
-    );
+    final ecLevel = 100 * (numCodewords - numDataCodewords) ~/ numCodewords;
+    return CorrectedBitsResult(correctedBits, errorsCorrected, ecLevel);
   }
 
   /// Gets the array of bits from an Aztec Code matrix

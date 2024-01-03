@@ -71,13 +71,14 @@ class Decoder {
     }
     final resultBytes = Uint8List(totalBytes);
 
+    int errorsCorrected = 0;
     final dataBlocksCount = dataBlocks.length;
     // Error-correct and copy data blocks together into a stream of bytes
     for (int j = 0; j < dataBlocksCount; j++) {
       final dataBlock = dataBlocks[j];
       final codewordBytes = dataBlock.codewords;
       final numDataCodewords = dataBlock.numDataCodewords;
-      _correctErrors(codewordBytes, numDataCodewords);
+      errorsCorrected += _correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
         // De-interlace data blocks.
         resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
@@ -85,7 +86,8 @@ class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    return DecodedBitStreamParser.decode(resultBytes);
+    return DecodedBitStreamParser.decode(resultBytes)
+      ..errorsCorrected = errorsCorrected;
   }
 
   /// <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
@@ -93,16 +95,21 @@ class Decoder {
   ///
   /// @param codewordBytes data and error correction codewords
   /// @param numDataCodewords number of codewords that are data bytes
+  /// @return the number of errors corrected
   /// @throws ChecksumException if error correction fails
-  void _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
+  int _correctErrors(Uint8List codewordBytes, int numDataCodewords) {
     final numCodewords = codewordBytes.length;
     // First read into an array of ints
     final codewordsInts = Int32List.fromList(
       List.generate(numCodewords, (index) => codewordBytes[index]),
     );
 
+    int errorsCorrected = 0;
     try {
-      _rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
+      errorsCorrected += _rsDecoder.decodeWithECCount(
+        codewordsInts,
+        codewordBytes.length - numDataCodewords,
+      );
     } on ReedSolomonException catch (_) {
       throw ChecksumException.getChecksumInstance();
     }
@@ -111,5 +118,6 @@ class Decoder {
     for (int i = 0; i < numDataCodewords; i++) {
       codewordBytes[i] = codewordsInts[i];
     }
+    return errorsCorrected;
   }
 }

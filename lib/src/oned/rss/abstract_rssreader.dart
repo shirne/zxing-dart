@@ -24,7 +24,10 @@ abstract class AbstractRSSReader extends OneDReader {
   static const double _maxAvgVariance = 0.2;
   static const double _maxIndividualVariance = 0.45;
 
+  /// Minimum ratio 10:12 (minus 0.5 for variance), from section 7.2.7 of ISO/IEC 24724:2006.
   static const double _minFinderPatternRatio = 9.5 / 12.0;
+
+  /// Maximum ratio 12:14 (plus 0.5 for variance), from section 7.2.7 of ISO/IEC 24724:2006.
   static const double _maxFinderPatternRatio = 12.5 / 14.0;
 
   final List<int> _decodeFinderCounters;

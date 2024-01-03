@@ -95,6 +95,14 @@ class PDF417Reader implements Reader, MultipleBarcodeReader {
         ResultMetadataType.errorCorrectionLevel,
         decoderResult.ecLevel!,
       );
+      result.putMetadata(
+        ResultMetadataType.errorsCorrected,
+        decoderResult.errorsCorrected ?? 0,
+      );
+      result.putMetadata(
+        ResultMetadataType.erasuresCorrected,
+        decoderResult.erasures ?? 0,
+      );
       final pdf417ResultMetadata = decoderResult.other as PDF417ResultMetadata?;
       if (pdf417ResultMetadata != null) {
         result.putMetadata(

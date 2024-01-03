@@ -48,6 +48,10 @@ class MaxiCodeReader implements Reader {
       BarcodeFormat.maxicode,
     );
 
+    result.putMetadata(
+      ResultMetadataType.errorsCorrected,
+      decoderResult.errorsCorrected ?? 0,
+    );
     final ecLevel = decoderResult.ecLevel;
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.errorCorrectionLevel, ecLevel);
@@ -78,10 +82,11 @@ class MaxiCodeReader implements Reader {
     // Now just read off the bits
     final bits = BitMatrix(_matrixWidth, _matrixHeight);
     for (int y = 0; y < _matrixHeight; y++) {
-      final iy = math.min(
-        top + (y * height + height ~/ 2) ~/ _matrixHeight,
-        height - 1,
-      );
+      final iy = top +
+          math.min<int>(
+            (y * height + height ~/ 2) ~/ _matrixHeight,
+            height - 1,
+          );
       for (int x = 0; x < _matrixWidth; x++) {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.

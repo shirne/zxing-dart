@@ -330,13 +330,6 @@ class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   static int _check(String contents, EncodeHint? hints) {
-    final length = contents.length;
-    // Check length
-    if (length < 1 || length > 80) {
-      throw ArgumentError(
-          'Contents length should be between 1 and 80 characters,'
-          ' but got $length');
-    }
     // Check for forced code set hint.
     int forcedCodeSet = -1;
     if (hints?.forceCodeSet != null) {
@@ -357,7 +350,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
     }
 
     // Check content
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < contents.length; i++) {
       final c = contents.codeUnitAt(i);
       // check for non ascii characters that are not special GS1 characters
       switch (c) {
@@ -386,7 +379,7 @@ class Code128Writer extends OneDimensionalCodeWriter {
           break;
         case _codeCodeB:
           // allows no ascii below 32 (terminal symbols)
-          if (c <= 32) {
+          if (c < 32) {
             throw ArgumentError('Bad character in input for forced code set B:'
                 ' ASCII value=$c');
           }
@@ -515,6 +508,9 @@ class Code128Writer extends OneDimensionalCodeWriter {
   static List<bool> produceResult(List<List<int>> patterns, int checkSum) {
     // Compute and append checksum
     checkSum %= 103;
+    if (checkSum < 0) {
+      throw ArgumentError('Unable to compute a valid input checksum');
+    }
     patterns.add(Code128Reader.codePatterns[checkSum]);
 
     // Append stop code
