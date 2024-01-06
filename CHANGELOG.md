@@ -7,6 +7,15 @@
 ## [1.1.0]
 * Sync zxing to 2023/9/7
 
+## [1.0.3]
+* fix dart version sytax
+
+## [1.0.2]
+* Sync zxing to 2023-12-25
+
+## [1.0.1]
+* Sync zxing to 2023/9/7
+
 ## [1.0.0]
 * refactor with dart language style
 
