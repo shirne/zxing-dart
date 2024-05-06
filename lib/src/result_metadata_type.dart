@@ -23,7 +23,7 @@ enum ResultMetadataType {
   /// Denotes the likely approximate orientation of the barcode in the image. This value
   /// is given as degrees rotated clockwise from the normal, upright orientation.
   /// For example a 1D barcode which was found by reading top-to-bottom would be
-  /// said to have orientation "90". This key maps to an [Integer] whose
+  /// said to have orientation "90". This key maps to an [int] whose
   /// value is in the range [0,360).
   orientation('ORIENTATION'),
 
@@ -40,15 +40,15 @@ enum ResultMetadataType {
   /// format, but is typically a String.
   errorCorrectionLevel('ERROR_CORRECTION_LEVEL'),
 
-  /// The number of errors corrected. If applicable, maps to an {@link Integer} of value
+  /// The number of errors corrected. If applicable, maps to an [int] of value
   /// greater than or equal to zero.
   errorsCorrected('ERRORS_CORRECTED'),
 
-  /// The number of erasures corrected. If applicable, maps to an {@link Integer} of value
+  /// The number of erasures corrected. If applicable, maps to an [int] of value
   /// greater than or equal to zero.
   erasuresCorrected('ERASURES_CORRECTED'),
 
-  /// For some periodicals, indicates the issue number as an [Integer].
+  /// For some periodicals, indicates the issue number as an [int].
   issueNumber('ISSUE_NUMBER'),
 
   /// For some products, indicates the suggested retail price in the barcode as a

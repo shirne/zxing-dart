@@ -242,25 +242,26 @@ class RSSExpandedReader extends AbstractRSSReader {
   ) {
     for (int i = currentRow; i < _rows.length; i++) {
       final row = _rows[i];
-      _pairs.clear();
-      for (ExpandedRow collectedRow in collectedRows) {
-        _pairs.addAll(collectedRow.pairs);
-      }
+
       _pairs.addAll(row.pairs);
+      final addSize = row.pairs.length;
 
       if (_isValidSequence(_pairs, false)) {
         if (_checkChecksum()) {
           return _pairs;
         }
 
-        final rs = collectedRows.toList();
-        rs.add(row);
+        collectedRows.add(row);
         try {
           // Recursion: try to add more rows
-          return _checkRowsCurrent(rs, i + 1);
+          return _checkRowsCurrent(collectedRows, i + 1);
         } on NotFoundException catch (_) {
           // We failed, try the next candidate
+          collectedRows.removeAt(collectedRows.length - 1);
+          _pairs.removeRange(_pairs.length - addSize, _pairs.length);
         }
+      } else {
+        _pairs.removeRange(_pairs.length - addSize, _pairs.length);
       }
     }
 

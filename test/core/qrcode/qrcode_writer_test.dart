@@ -141,4 +141,55 @@ void main() {
       'renderer-test-01.png',
     );
   });
+
+  test('renderResultScalesNothing', () {
+    final int expectedSize = 33; // Original Size (25) + quietZone
+    BitMatrix result;
+    ByteMatrix matrix;
+    QRCode code;
+
+    matrix = ByteMatrix(25, 25); // QR Version 2! It's all white
+    // but it doesn't matter here
+
+    code = QRCode();
+    code.matrix = matrix;
+
+    // Test:
+    result = QRCodeWriter.renderResult(code, -1, -1, 4);
+
+    // assert(result!=null);
+    expect(result.height, expectedSize);
+    expect(result.width, expectedSize);
+  });
+
+  test('renderResultScalesWhenRequired', () {
+    final int expectedSize = 66;
+    BitMatrix result;
+    ByteMatrix matrix;
+    QRCode code;
+
+    matrix = ByteMatrix(25, 25); // QR Version 2! It's all white
+    // but it doesn't matter here
+
+    code = QRCode();
+    code.matrix = matrix;
+
+    // Test:
+    result = QRCodeWriter.renderResult(code, 66, 66, 4);
+
+    // assertNotNull(result);
+    expect(result.height, expectedSize);
+    expect(result.width, expectedSize);
+  });
+
+  // @Test(expected = NullPointerException.class)
+  // test('renderResultThrowsExIfCcodeIsNull', () {
+  //   QRCodeWriter.renderResult(null, 0, 0, 0);
+  // });
+
+  //@Test(expected = IllegalStateException.class)
+  test('renderResultThrowsExIfCodeIsIncomplete', () {
+    expect(() => QRCodeWriter.renderResult(QRCode(), 0, 0, 0),
+        throwsA(TypeMatcher<StateError>()));
+  });
 }
