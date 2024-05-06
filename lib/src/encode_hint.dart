@@ -62,7 +62,7 @@ class EncodeHint {
   /// Specifies a minimum barcode size (type [Dimension]). Only applicable to Data Matrix now.
   ///
   /// @deprecated use width/height params in
-  /// {@link com.google.zxing.datamatrix.DataMatrixWriter#encode(String, BarcodeFormat, int, int)}
+  /// [zxing.datamatrix.DataMatrixWriter.encode]
   @Deprecated('use width/height params instead')
   final Dimension? minSize;
 

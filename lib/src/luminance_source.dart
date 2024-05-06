@@ -44,7 +44,7 @@ abstract class LuminanceSource {
   Uint8List getRow(int y, Uint8List? row);
 
   /// Fetches luminance data for the underlying bitmap. Values should be fetched using:
-  /// {@code int luminance = array[y * width + x]}
+  /// `int luminance = array[y * width + x]`
   ///
   /// @return A row-major 2D array of luminance values. Do not use result.length as it may be
   ///         larger than width * height bytes on some platforms. Do not modify the contents

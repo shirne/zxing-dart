@@ -408,18 +408,18 @@ class MinimalEncoder {
   /// Encodes the string minimally
   ///
   /// @param stringToEncode The string to encode
-  /// @param version The preferred {@link Version}. A minimal version is computed (see
-  ///   {@link ResultList#getVersion method} when the value of the argument is null
-  /// @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
+  /// @param version The preferred [Version]. A minimal version is computed (see
+  ///   [ResultList.getVersion] when the value of the argument is null
+  /// @param priorityCharset The preferred [Charset]. When the value of the argument is null, the algorithm
   ///   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
   ///   charset to encode any character in the input that can be encoded by it if the charset is among the
   ///   supported charsets.
-  /// @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
+  /// @param isGS1 `true` if a FNC1 is to be prepended; `false` otherwise
   /// @param ecLevel The error correction level.
-  /// @return An instance of {@code ResultList} representing the minimal solution.
-  /// @see ResultList#getBits
-  /// @see ResultList#getVersion
-  /// @see ResultList#getSize
+  /// @return An instance of [ResultList] representing the minimal solution.
+  /// @see [ResultList.getBits]
+  /// @see [ResultList.getVersion]
+  /// @see [ResultList.getSize]
   static ResultList encode(
     String stringToEncode,
     Version? version,

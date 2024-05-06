@@ -102,8 +102,8 @@ class HighLevelEncoder {
   /// of ISO/IEC 16022:2000(E).
   ///
   /// @param msg     the message
-  /// @param shape   requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
-  ///                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
+  /// @param shape   requested shape. May be [SymbolShapeHint.forceNone],
+  ///                [SymbolShapeHint.forceSquare] or [SymbolShapeHint.forceRectangle].
   /// @param minSize the minimum symbol size constraint or null for no constraint
   /// @param maxSize the maximum symbol size constraint or null for no constraint
   /// @return the encoded message (the char values range from 0 to 255)

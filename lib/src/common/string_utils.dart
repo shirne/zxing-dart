@@ -78,8 +78,7 @@ class StringUtils {
   /// @param bytes bytes encoding a string, whose encoding should be guessed
   /// @param hints decode hints if applicable
   /// @return Charset of guessed encoding; at the moment will only guess one of:
-  ///  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
-  ///  {@link StandardCharsets#ISO_8859_1}, {@link StandardCharsets#UTF_16},
+  /// [SHIFT_JIS_CHARSET], [utf8], [latin1],
   ///  or the platform default encoding if
   ///  none of these can possibly be correct
   static Encoding? guessCharset(

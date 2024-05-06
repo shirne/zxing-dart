@@ -19,10 +19,9 @@
 /// @author dswitkin@google.com (Daniel Switkin)
 enum EncodeHintType {
   /// Specifies what degree of error correction to use, for example in QR Codes.
-  /// Type depends on the encoder. For example for QR codes it's type
-  /// {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
-  /// For Aztec it is of type [Integer], representing the minimal percentage of error correction words.
-  /// For PDF417 it is of type [Integer], valid values being 0 to 8.
+  /// Type depends on the encoder. For example for QR codes it's type [ErrorCorrectionLevel].
+  /// For Aztec it is of type [int], representing the minimal percentage of error correction words.
+  /// For PDF417 it is of type [int], valid values being 0 to 8.
   /// In all cases, it can also be a [String] representation of the desired value as well.
   /// Note: an Aztec symbol should have a minimum of 25% EC words.
   errorCorrection,
@@ -39,17 +38,17 @@ enum EncodeHintType {
   /// Please note that in that case, the most compact character encoding is chosen for characters in
   /// the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
   /// support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
-  /// means of the {@link #CHARACTER_SET} encoding hint.
+  /// means of the [CHARACTER_SET] encoding hint.
   /// Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
   /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
   /// for the purpose of delimiting AIs.
-  /// This option and [FORCE_C40] are mutually exclusive.
+  /// This option and [forceC40] are mutually exclusive.
   dataMatrixCompact,
 
   /// Specifies a minimum barcode size (type [Dimension]). Only applicable to Data Matrix now.
   ///
   /// @deprecated use width/height params in
-  /// {@link com.google.zxing.datamatrix.DataMatrixWriter#encode(String, BarcodeFormat, int, int)}
+  /// [DataMatrixWriter.encode]
   @Deprecated('use width/height params instead')
   minSize,
 
@@ -69,12 +68,11 @@ enum EncodeHintType {
   pdf417Compact,
 
   /// Specifies what compaction mode to use for PDF417 (type
-  /// {@link com.google.zxing.pdf417.encoder.Compaction Compaction} or [String] value of one of its
+  /// [pdf417.Compaction] or [String] value of one of its
   /// enum values).
   pdf417Compaction,
 
-  /// Specifies the minimum and maximum number of rows and columns for PDF417 (type
-  /// {@link com.google.zxing.pdf417.encoder.Dimensions Dimensions}).
+  /// Specifies the minimum and maximum number of rows and columns for PDF417 (type [pdf417.Dimensions]).
   pdf417Dimensions,
 
   /// Specifies whether to automatically insert ECIs when encoding PDF417 (type [bool]).

@@ -230,7 +230,7 @@ class Detector {
   }
 
   /// <p>Estimates module size based on two finder patterns -- it uses
-  /// {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
+  /// [sizeOfBlackWhiteBlackRunBothWays] to figure the
   /// width of each, measuring along the axis between their centers.</p>
   double _calculateModuleSizeOneWay(
     ResultPoint pattern,

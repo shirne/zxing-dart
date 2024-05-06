@@ -189,7 +189,9 @@ void main() {
 
   //@Test(expected = IllegalStateException.class)
   test('renderResultThrowsExIfCodeIsIncomplete', () {
-    expect(() => QRCodeWriter.renderResult(QRCode(), 0, 0, 0),
-        throwsA(TypeMatcher<StateError>()));
+    expect(
+      () => QRCodeWriter.renderResult(QRCode(), 0, 0, 0),
+      throwsA(TypeMatcher<StateError>()),
+    );
   });
 }
