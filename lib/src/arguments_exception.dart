@@ -24,5 +24,5 @@ class ArgumentsException extends ReaderException {
 
   static ArgumentsException get instance => _instance;
 
-  ArgumentsException([dynamic message]) : super(message);
+  ArgumentsException([super.message]);
 }

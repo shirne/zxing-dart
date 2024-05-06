@@ -25,5 +25,5 @@ class NotFoundException extends ReaderException {
 
   static NotFoundException get instance => _instance;
 
-  NotFoundException([dynamic message]) : super(message);
+  NotFoundException([super.message]);
 }

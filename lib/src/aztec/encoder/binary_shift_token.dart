@@ -24,10 +24,10 @@ class BinaryShiftToken extends Token {
   final int _binaryShiftByteCount;
 
   BinaryShiftToken(
-    Token previous,
+    Token super.previous,
     this._binaryShiftStart,
     this._binaryShiftByteCount,
-  ) : super(previous);
+  );
 
   @override
   void appendTo(BitArray bitArray, List<int> text) {

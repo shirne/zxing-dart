@@ -26,11 +26,11 @@ class FinderPattern extends ResultPoint {
   final int _count;
 
   FinderPattern(
-    double posX,
-    double posY,
+    super.posX,
+    super.posY,
     this._estimatedModuleSize, [
     this._count = 1,
-  ]) : super(posX, posY);
+  ]);
 
   double get estimatedModuleSize => _estimatedModuleSize;
 

@@ -2,7 +2,7 @@
 class StringBuilder extends StringBuffer {
   String? _buffer;
 
-  StringBuilder([String content = '']) : super(content);
+  StringBuilder([String super.content]);
 
   void _initBuffer([force = false]) {
     if (_buffer == null || force) {

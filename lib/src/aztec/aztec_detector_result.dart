@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import '../common/bit_matrix.dart';
 import '../common/detector_result.dart';
-
-import '../result_point.dart';
 
 /// Extends [DetectorResult] with more information specific to the Aztec format,
 /// like the number of layers and whether it's compact.
@@ -30,11 +27,11 @@ class AztecDetectorResult extends DetectorResult {
   final int errorsCorrected;
 
   AztecDetectorResult(
-    BitMatrix bits,
-    List<ResultPoint> points,
+    super.bits,
+    super.points,
     this.isCompact,
     this.nbDataBlocks,
     this.nbLayers, [
     this.errorsCorrected = 0,
-  ]) : super(bits, points);
+  ]);
 }

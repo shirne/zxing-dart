@@ -23,8 +23,7 @@ import '../../result_point.dart';
 class AlignmentPattern extends ResultPoint {
   final double _estimatedModuleSize;
 
-  AlignmentPattern(double posX, double posY, this._estimatedModuleSize)
-      : super(posX, posY);
+  AlignmentPattern(super.posX, super.posY, this._estimatedModuleSize);
 
   /// Determines if this alignment pattern "about equals" an alignment pattern at the stated
   /// position and size -- meaning, it is at nearly the same center with nearly the same size.

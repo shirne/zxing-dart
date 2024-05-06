@@ -35,8 +35,7 @@ class DecodedNumeric extends DecodedObject {
 
   static final int fnc1 = 10;
 
-  DecodedNumeric(int newPosition, this._firstDigit, this._secondDigit)
-      : super(newPosition) {
+  DecodedNumeric(super.newPosition, this._firstDigit, this._secondDigit) {
     if (_firstDigit < 0 ||
         _firstDigit > 10 ||
         _secondDigit < 0 ||

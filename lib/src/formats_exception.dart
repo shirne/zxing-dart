@@ -26,5 +26,5 @@ class FormatsException extends ReaderException {
 
   static FormatsException get instance => _instance;
 
-  FormatsException([dynamic message]) : super(message);
+  FormatsException([super.message]);
 }

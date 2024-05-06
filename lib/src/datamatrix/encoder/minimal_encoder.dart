@@ -673,12 +673,12 @@ class Input extends MinimalECIInput {
   /* private */ final int macroId;
 
   Input(
-    String stringToEncode,
-    Encoding? priorityCharset,
-    int fnc1,
+    super.stringToEncode,
+    super.priorityCharset,
+    super.fnc1,
     this.shape,
     this.macroId,
-  ) : super(stringToEncode, priorityCharset, fnc1);
+  );
 
   SymbolShapeHint get shapeHint => shape;
 }

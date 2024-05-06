@@ -19,7 +19,6 @@ import 'dart:math' as math;
 import '../pdf417_common.dart';
 import 'barcode_metadata.dart';
 import 'barcode_value.dart';
-import 'bounding_box.dart';
 import 'codeword.dart';
 import 'detection_result_column.dart';
 
@@ -27,8 +26,7 @@ import 'detection_result_column.dart';
 class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   final bool isLeft;
 
-  DetectionResultRowIndicatorColumn(BoundingBox boundingBox, this.isLeft)
-      : super(boundingBox);
+  DetectionResultRowIndicatorColumn(super.boundingBox, this.isLeft);
 
   void _setRowNumbers() {
     for (Codeword? codeword in codewords) {

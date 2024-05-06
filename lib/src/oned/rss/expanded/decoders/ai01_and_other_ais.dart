@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
 import 'ai01_decoder.dart';
@@ -35,7 +34,7 @@ class AI01AndOtherAIs extends AI01Decoder {
   //first bit encodes the linkage flag,
   static const int _headerSize = 1 + 1 + 2;
   //the second one is the encodation method, and the other two are for the variable length
-  AI01AndOtherAIs(BitArray information) : super(information);
+  AI01AndOtherAIs(super.information);
 
   @override
   String parseInformation() {

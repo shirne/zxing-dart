@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
 import 'abstract_expanded_decoder.dart';
@@ -34,7 +33,7 @@ import 'abstract_expanded_decoder.dart';
 abstract class AI01Decoder extends AbstractExpandedDecoder {
   static const int gtinSize = 40;
 
-  AI01Decoder(BitArray information) : super(information);
+  AI01Decoder(super.information);
 
   void encodeCompressedGtin(StringBuilder buf, int currentPos) {
     buf.write('(01)');

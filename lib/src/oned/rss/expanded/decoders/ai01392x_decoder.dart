@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
 import '../../../../not_found_exception.dart';
@@ -35,7 +34,7 @@ class AI01392xDecoder extends AI01Decoder {
   static const int _headerSize = 5 + 1 + 2;
   static const int _lastDigitSize = 2;
 
-  AI01392xDecoder(BitArray information) : super(information);
+  AI01392xDecoder(super.information);
 
   @override
   String parseInformation() {

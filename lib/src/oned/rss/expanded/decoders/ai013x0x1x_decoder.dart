@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
 import '../../../../not_found_exception.dart';
@@ -41,8 +40,7 @@ class AI013x0x1xDecoder extends AI01WeightDecoder {
   final String _dateCode;
   final String _firstAIdigits;
 
-  AI013x0x1xDecoder(BitArray information, this._firstAIdigits, this._dateCode)
-      : super(information);
+  AI013x0x1xDecoder(super.information, this._firstAIdigits, this._dateCode);
 
   @override
   String parseInformation() {

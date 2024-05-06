@@ -34,7 +34,7 @@ class DecodedChar extends DecodedObject {
   static final int fnc1 = r'$'
       .codeUnitAt(0); // It's not in Alphanumeric neither in ISO/IEC 646 charset
 
-  DecodedChar(int newPosition, this._value) : super(newPosition);
+  DecodedChar(super.newPosition, this._value);
 
   int get value => _value;
 

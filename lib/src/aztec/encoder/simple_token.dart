@@ -23,7 +23,7 @@ class SimpleToken extends Token {
   final int _value;
   final int _bitCount;
 
-  SimpleToken(Token? previous, this._value, this._bitCount) : super(previous);
+  SimpleToken(super.previous, this._value, this._bitCount);
 
   @override
   void appendTo(BitArray bitArray, List<int> text) {

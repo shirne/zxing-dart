@@ -49,7 +49,7 @@ class HybridBinarizer extends GlobalHistogramBinarizer {
 
   BitMatrix? _matrix;
 
-  HybridBinarizer(LuminanceSource source) : super(source);
+  HybridBinarizer(super.source);
 
   /// Calculates the final BitMatrix once for all requests. This could be called once from the
   /// constructor instead, but there are some advantages to doing it lazily, such as making

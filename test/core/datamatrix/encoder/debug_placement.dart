@@ -17,8 +17,7 @@
 import 'package:zxing_lib/datamatrix.dart';
 
 class DebugPlacement extends DefaultPlacement {
-  DebugPlacement(String codewords, int numcols, int numrows)
-      : super(codewords, numcols, numrows);
+  DebugPlacement(super.codewords, super.numcols, super.numrows);
 
   List<String> toBitFieldStringArray() {
     final array = List.filled(numRows, '');

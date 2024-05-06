@@ -21,8 +21,7 @@ class Pair extends DataCharacter {
   final FinderPattern _finderPattern;
   int _count = 0;
 
-  Pair(int value, int checksumPortion, this._finderPattern)
-      : super(value, checksumPortion);
+  Pair(super.value, super.checksumPortion, this._finderPattern);
 
   FinderPattern get finderPattern => _finderPattern;
 

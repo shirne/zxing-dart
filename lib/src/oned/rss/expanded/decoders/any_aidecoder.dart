@@ -24,8 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
-
 import 'abstract_expanded_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -33,7 +31,7 @@ import 'abstract_expanded_decoder.dart';
 class AnyAIDecoder extends AbstractExpandedDecoder {
   static const int _headerSize = 2 + 1 + 2;
 
-  AnyAIDecoder(BitArray information) : super(information);
+  AnyAIDecoder(super.information);
 
   @override
   String parseInformation() {

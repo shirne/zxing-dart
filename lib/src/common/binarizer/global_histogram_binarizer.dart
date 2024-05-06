@@ -41,10 +41,9 @@ class GlobalHistogramBinarizer extends Binarizer {
   Uint8List _luminances;
   final List<int> _buckets;
 
-  GlobalHistogramBinarizer(LuminanceSource source)
+  GlobalHistogramBinarizer(super.source)
       : _luminances = _empty,
-        _buckets = List.filled(_luminanceBuckets, 0),
-        super(source);
+        _buckets = List.filled(_luminanceBuckets, 0);
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
   @override

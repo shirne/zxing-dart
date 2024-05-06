@@ -24,13 +24,11 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
-
 import 'ai01_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 abstract class AI01WeightDecoder extends AI01Decoder {
-  AI01WeightDecoder(BitArray information) : super(information);
+  AI01WeightDecoder(super.information);
 
   void encodeCompressedWeight(
     StringBuffer buf,

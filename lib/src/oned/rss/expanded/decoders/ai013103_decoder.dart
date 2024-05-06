@@ -24,13 +24,11 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
-
 import 'ai013x0x_decoder.dart';
 
 /// @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
 class AI013103Decoder extends AI013x0xDecoder {
-  AI013103Decoder(BitArray information) : super(information);
+  AI013103Decoder(super.information);
 
   //@protected
   @override

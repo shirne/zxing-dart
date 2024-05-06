@@ -34,11 +34,10 @@ class DecodedInformation extends DecodedObject {
   final bool _remaining;
 
   DecodedInformation(
-    int newPosition,
+    super.newPosition,
     this._newString, [
     this._remainingValue = 0,
-  ])  : _remaining = _remainingValue > 0,
-        super(newPosition);
+  ])  : _remaining = _remainingValue > 0;
 
   String get newString => _newString;
 

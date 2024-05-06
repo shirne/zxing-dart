@@ -24,7 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-import '../../../../common/bit_array.dart';
 import '../../../../common/string_builder.dart';
 
 import '../../../../not_found_exception.dart';
@@ -36,7 +35,7 @@ abstract class AI013x0xDecoder extends AI01WeightDecoder {
   static const int _headerSize = 4 + 1;
   static const int _weightSize = 15;
 
-  AI013x0xDecoder(BitArray information) : super(information);
+  AI013x0xDecoder(super.information);
 
   @override
   String parseInformation() {

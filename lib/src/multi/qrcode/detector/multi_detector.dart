@@ -15,7 +15,6 @@
  */
 
 import '../../../qrcode/detector/finder_pattern_info.dart';
-import '../../../common/bit_matrix.dart';
 import '../../../common/detector_result.dart';
 import '../../../decode_hint.dart';
 import '../../../not_found_exception.dart';
@@ -31,7 +30,7 @@ import 'multi_finder_pattern_finder.dart';
 class MultiDetector extends Detector {
   static const _emptyDetectorResults = <DetectorResult>[];
 
-  MultiDetector(BitMatrix image) : super(image);
+  MultiDetector(super.image);
 
   List<DetectorResult> detectMulti(DecodeHint? hints) {
     final finder = MultiFinderPatternFinder(
