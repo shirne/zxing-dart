@@ -32,8 +32,9 @@ void main() {
 
     final exists = await file.exists();
     expect(
-      !exists,
-      "Please download and install test images($fileName), and run from the 'core' directory",
+      exists,
+      true,
+      reason:"Please download and install test images($fileName), and run from the 'core' directory",
     );
 
     return decodeImage(file.readAsBytesSync())!;
