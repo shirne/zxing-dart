@@ -34,7 +34,8 @@ void main() {
     expect(
       exists,
       true,
-      reason:"Please download and install test images($fileName), and run from the 'core' directory",
+      reason:
+          "Please download and install test images($fileName), and run from the 'core' directory",
     );
 
     return decodeImage(file.readAsBytesSync())!;
@@ -44,18 +45,23 @@ void main() {
   BitMatrix createMatrixFromImage(Image image) {
     final width = image.width;
     final height = image.height;
-    final pixels = List.generate(
-      width * height,
-      (index) => image.getPixel(index % width, index ~/ width),
-    );
+
+    // final pixels = List.generate(
+    //   width * height,
+    //   (index) => image.getPixel(index % width, index ~/ width),
+    // );
     //image.getRGB(0, 0, width, height, pixels, 0, width);
 
     final matrix = BitMatrix(width, height);
+    final lumianceLevel = 0x7f / 0xff;
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        final pixel = pixels[y * width + x];
-        final luminance = getLuminance(pixel);
-        if (luminance <= 0x7F) {
+        final pixel = image.getPixel(x, y);
+
+        // Format.uint1 is monochromatic
+        final luminance =
+            pixel.format == Format.uint1 ? pixel.r : getLuminance(pixel);
+        if (luminance <= lumianceLevel) {
           matrix.set(x, y);
         }
       }
@@ -106,7 +112,7 @@ void main() {
     expect(strangeHeight, matrix.height);
   });
 
-  void compareToGoldenFile(
+  Future<void> compareToGoldenFile(
     String contents,
     ErrorCorrectionLevel ecLevel,
     int resolution,
@@ -134,8 +140,8 @@ void main() {
   // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly.
-  test('testRegressionTest', () {
-    compareToGoldenFile(
+  test('testRegressionTest', () async {
+    await compareToGoldenFile(
       'http://www.google.com/',
       ErrorCorrectionLevel.M,
       99,

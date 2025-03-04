@@ -15,9 +15,8 @@ dev_dependencies:
   test:
   fixnum: ^1.0.1
   lints:
-  image: ^4.0.17
+  image: ^4.5.3
   collection:
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
