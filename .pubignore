@@ -1,3 +1,9 @@
 build/
 preview/
 test/resources
+example/android
+example/ios
+example/linux
+example/macos
+example/web
+example/windows
