@@ -39,7 +39,5 @@ int ecOrdinal(ErrorCorrectionLevel ecLevel) {
       return 2;
     case ErrorCorrectionLevel.H:
       return 3;
-    default:
-      return 0;
   }
 }

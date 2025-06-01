@@ -41,9 +41,9 @@ class StringUtils {
 
   StringUtils._();
 
-  /// @param bytes bytes encoding a string, whose encoding should be guessed
-  /// @param hints decode hints if applicable
-  /// @return name of guessed encoding; at the moment will only guess one of:
+  /// [bytes] bytes encoding a string, whose encoding should be guessed
+  /// [hints] decode hints if applicable
+  /// return name of guessed encoding; at the moment will only guess one of:
   ///  "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
   ///  of these can possibly be correct
   static String guessEncoding(
@@ -75,9 +75,9 @@ class StringUtils {
     return true;
   }
 
-  /// @param bytes bytes encoding a string, whose encoding should be guessed
-  /// @param hints decode hints if applicable
-  /// @return Charset of guessed encoding; at the moment will only guess one of:
+  /// [bytes] bytes encoding a string, whose encoding should be guessed
+  /// [hints] decode hints if applicable
+  /// return Charset of guessed encoding; at the moment will only guess one of:
   /// [shiftJis], [utf8], [latin1],
   ///  or the platform default encoding if
   ///  none of these can possibly be correct
