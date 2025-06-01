@@ -41,16 +41,16 @@ class ImageLuminanceSource extends LuminanceSource {
         // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
         // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
         // barcode image. Force any such pixel to be white:
-        if (color.alpha == 0) {
+        if (color.a == 0) {
           // white, so we know its luminance is 255
           buffer[(y - top) * width + x] = 0xff;
         } else {
           // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC),
           // (306*R) >> 10 is approximately equal to R*0.299, and so on.
           // 0x200 >> 10 is 0.5, it implements rounding.
-          buffer[(y - top) * width + x] = (306 * color.red +
-                  601 * color.green +
-                  117 * color.blue +
+          buffer[(y - top) * width + x] = (306 * (color.r * 255).round() +
+                  601 * (color.g * 255).round() +
+                  117 * (color.b * 255).round() +
                   0x200) >>
               10;
         }
@@ -85,10 +85,10 @@ class ImageLuminanceSource extends LuminanceSource {
         int blue = 0;
         for (Color? color in colors) {
           if (color != null) {
-            alpha += color.alpha;
-            red += color.red;
-            green += color.green;
-            blue += color.blue;
+            alpha += (color.a * 255).round();
+            red += (color.r * 255).round();
+            green += (color.g * 255).round();
+            blue += (color.b * 255).round();
           }
         }
         newImage.setColor(

@@ -6,11 +6,11 @@ class TypePicker<T> extends StatefulWidget {
   final void Function(T type)? onChange;
 
   const TypePicker({
-    Key? key,
+    super.key,
     required this.value,
     this.onChange,
     required this.values,
-  }) : super(key: key);
+  });
 
   @override
   State<TypePicker> createState() => _TypePickerState<T>();

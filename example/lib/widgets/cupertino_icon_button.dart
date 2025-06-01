@@ -7,12 +7,12 @@ class CupertinoIconButton extends StatelessWidget {
   final void Function()? onPressed;
 
   const CupertinoIconButton({
-    Key? key,
+    super.key,
     this.icon,
     this.onPressed,
     this.color = const Color(0x00000000),
     this.shape = BoxShape.circle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

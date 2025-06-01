@@ -4,14 +4,13 @@ import 'list_tile_group.dart';
 
 class FormCell extends StatelessWidget {
   const FormCell({
-    Key? key,
+    super.key,
     required this.label,
     required this.field,
     this.labelWidth,
     bool? isLink,
     this.onTap,
-  })  : isLink = isLink ?? onTap != null,
-        super(key: key);
+  }) : isLink = isLink ?? onTap != null;
 
   final Widget label;
   final Widget field;

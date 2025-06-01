@@ -11,7 +11,7 @@ import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+  const CameraPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _CameraPageState();

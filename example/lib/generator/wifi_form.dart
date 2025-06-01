@@ -7,7 +7,7 @@ import '../widgets/list_tile_group.dart';
 class WIFIForm extends StatefulWidget {
   final WifiParsedResult result;
 
-  const WIFIForm({Key? key, required this.result}) : super(key: key);
+  const WIFIForm({super.key, required this.result});
 
   @override
   State<WIFIForm> createState() => _TextFormState();

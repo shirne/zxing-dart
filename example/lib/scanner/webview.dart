@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebviewPage extends StatefulWidget {
-  const WebviewPage({Key? key}) : super(key: key);
+  const WebviewPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _WebviewPageState();

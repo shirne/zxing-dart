@@ -14,7 +14,7 @@ import 'camera_stream.dart';
 import 'result.dart';
 
 class IndexPage extends StatelessWidget {
-  const IndexPage({Key? key}) : super(key: key);
+  const IndexPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,8 @@ class _IndexPageState extends State<_IndexPage> {
   }
 
   void fromClipBoard() async {
-    final reader = await ClipboardReader.readClipboard();
+    final reader = await SystemClipboard.instance?.read();
+    if (reader == null) return;
 
     if (reader.canProvide(Formats.jpeg)) {
       reader.getFile(Formats.jpeg, (file) async {

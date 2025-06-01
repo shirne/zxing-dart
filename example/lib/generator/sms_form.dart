@@ -7,7 +7,7 @@ import '../widgets/list_tile_group.dart';
 class SMSForm extends StatefulWidget {
   final SMSParsedResult result;
 
-  const SMSForm({Key? key, required this.result}) : super(key: key);
+  const SMSForm({super.key, required this.result});
 
   @override
   State<SMSForm> createState() => _SMSFormState();

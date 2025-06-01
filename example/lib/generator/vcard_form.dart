@@ -7,7 +7,7 @@ import '../widgets/list_tile_group.dart';
 class VCardForm extends StatefulWidget {
   final AddressBookParsedResult result;
 
-  const VCardForm({Key? key, required this.result}) : super(key: key);
+  const VCardForm({super.key, required this.result});
 
   @override
   State<VCardForm> createState() => _TextFormState();

@@ -12,7 +12,7 @@ import '../models/utils.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class BinarizerPage extends StatefulWidget {
-  const BinarizerPage({Key? key}) : super(key: key);
+  const BinarizerPage({super.key});
 
   @override
   State<BinarizerPage> createState() => _BinarizerPageState();
@@ -209,7 +209,7 @@ class _BinarizerPageState extends State<BinarizerPage> {
 }
 
 class TakePhoto extends StatefulWidget {
-  const TakePhoto({Key? key}) : super(key: key);
+  const TakePhoto({super.key});
 
   @override
   State<TakePhoto> createState() => _TakePhotoState();

@@ -193,7 +193,6 @@ Future<void> decodeFromCamera(SendPort callerSP) async {
         callerSP.send(IsoMessage.result(results));
         print('Isolate: $results');
       } on NotFoundException catch (_) {
-        print(_);
         callerSP.send(IsoMessage.fail());
       }
     }

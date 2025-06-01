@@ -10,7 +10,7 @@ import '../models/decoder.dart';
 import '../widgets/cupertino_icon_button.dart';
 
 class CameraStreamPage extends StatefulWidget {
-  const CameraStreamPage({Key? key}) : super(key: key);
+  const CameraStreamPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _CameraStreamPageState();

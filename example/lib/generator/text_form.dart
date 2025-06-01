@@ -7,7 +7,7 @@ import '../widgets/list_tile_group.dart';
 class TextForm extends StatefulWidget {
   final TextParsedResult result;
 
-  const TextForm({Key? key, required this.result}) : super(key: key);
+  const TextForm({super.key, required this.result});
 
   @override
   State<TextForm> createState() => _TextFormState();

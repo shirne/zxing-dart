@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 
 class CupertinoListTile extends StatelessWidget {
   const CupertinoListTile({
-    Key? key,
+    super.key,
     required this.title,
     this.trailing,
     this.leading,
     this.subtitle,
     this.onTap,
     this.isLink = false,
-  }) : super(key: key);
+  });
 
   final Widget? trailing;
   final Widget title;

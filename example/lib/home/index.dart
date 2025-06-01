@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({Key? key}) : super(key: key);
+  const IndexPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _IndexPageState();
@@ -58,12 +58,12 @@ class IconItem extends StatelessWidget {
   final void Function()? onTap;
 
   const IconItem({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
     this.onTap,
     this.isAvailable = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

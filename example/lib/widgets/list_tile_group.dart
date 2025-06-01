@@ -12,7 +12,7 @@ class ListTileGroup extends StatelessWidget {
   final EdgeInsetsGeometry? labelPadding;
 
   const ListTileGroup({
-    Key? key,
+    super.key,
     required this.children,
     this.dividerWith = 0.5,
     this.paddingBottom = 10,
@@ -22,7 +22,7 @@ class ListTileGroup extends StatelessWidget {
     this.labelWidth,
     this.labelAlign = Alignment.centerRight,
     this.labelPadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:zxing_lib/zxing.dart';
 class ResultPage extends StatefulWidget {
   final List<Result> results;
 
-  const ResultPage(this.results, {Key? key}) : super(key: key);
+  const ResultPage(this.results, {super.key});
 
   @override
   State<ResultPage> createState() => _ResultPageState();

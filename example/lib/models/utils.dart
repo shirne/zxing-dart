@@ -157,7 +157,6 @@ List<Result>? decodeImage(IsoMessage message) {
     message.sendPort?.send(results);
     return results;
   } on NotFoundException catch (_) {
-    print(_);
     message.sendPort?.send(null);
   }
   return null;
@@ -184,7 +183,6 @@ List<Result>? decodeCamera(IsoMessage message) {
     message.sendPort?.send(results);
     return results;
   } on NotFoundException catch (_) {
-    print(_);
     message.sendPort?.send(null);
   }
   return null;

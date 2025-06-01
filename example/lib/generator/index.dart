@@ -16,7 +16,7 @@ import 'vcard_form.dart';
 import 'wifi_form.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({Key? key}) : super(key: key);
+  const IndexPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _IndexPageState();

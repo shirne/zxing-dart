@@ -7,7 +7,7 @@ import '../widgets/list_tile_group.dart';
 class GeoForm extends StatefulWidget {
   final GeoParsedResult result;
 
-  const GeoForm({Key? key, required this.result}) : super(key: key);
+  const GeoForm({super.key, required this.result});
 
   @override
   State<GeoForm> createState() => _GeoFormState();
