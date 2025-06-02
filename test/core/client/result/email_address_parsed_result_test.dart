@@ -47,6 +47,30 @@ void main() {
     doTest(contents, [to], null, null, subject, body);
   }
 
+  test('testEmailAddresses', () {
+    final parser = EmailDoCoMoResultParser();
+    assert(!parser.isBasicallyValidEmailAddress(null));
+    assert(!parser.isBasicallyValidEmailAddress(''));
+    assert(!parser.isBasicallyValidEmailAddress('123.365.com'));
+    assert(!parser.isBasicallyValidEmailAddress('abc.def.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@abcd.c'));
+    assert(!parser.isBasicallyValidEmailAddress('123@abcd'));
+    assert(!parser.isBasicallyValidEmailAddress('123@ab,cd.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@ab#cd.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@ab!#cd.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@ab_cd.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@-abcd.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@abcd-.com'));
+    assert(!parser.isBasicallyValidEmailAddress('123@abcd.c-m'));
+    assert(parser.isBasicallyValidEmailAddress('123@abcd.com'));
+    assert(parser.isBasicallyValidEmailAddress('123@ab-cd.com'));
+    assert(parser.isBasicallyValidEmailAddress('abc.456@ab-cd.com'));
+    assert(parser.isBasicallyValidEmailAddress('abc.456@ab-cd.BB-EZ-12.com'));
+    assert(parser.isBasicallyValidEmailAddress('建設省.456@ab-cd.com'));
+    assert(parser.isBasicallyValidEmailAddress('abc.Z456@ab-Cd9Z.co'));
+    assert(parser.isBasicallyValidEmailAddress('建設省.aZ456@Ab-cd9Z.co'));
+  });
+
   test('testEmailAddress', () {
     doTestSingle('srowen@example.org', 'srowen@example.org', null, null);
     doTestSingle('mailto:srowen@example.org', 'srowen@example.org', null, null);

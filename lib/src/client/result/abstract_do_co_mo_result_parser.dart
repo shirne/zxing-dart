@@ -24,8 +24,10 @@ import 'result_parser.dart';
 ///
 /// @author Sean Owen
 abstract class AbstractDoCoMoResultParser extends ResultParser {
-  static final RegExp _aTextAlphaNumeric =
-      RegExp(r"^[a-zA-Z0-9@.!#$%&'*+\-/=?^_`{|}~]+$");
+  static const emailLocal = '[^:]+';
+  static const emailDomain =
+      '([0-9a-zA-Z]+[0-9a-zA-Z\\-]+[0-9a-zA-Z]+\\.)+[a-zA-Z]{2,}';
+  static final emailRegExp = RegExp('^$emailLocal@$emailDomain\$');
 
   List<String>? matchDoCoMoPrefixedField(String prefix, String rawText) =>
       matchPrefixedField(prefix, rawText, ';', true);
@@ -42,7 +44,5 @@ abstract class AbstractDoCoMoResultParser extends ResultParser {
   /// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
   /// in a barcode, not "judge" it.
   bool isBasicallyValidEmailAddress(String? email) =>
-      email != null &&
-      _aTextAlphaNumeric.hasMatch(email) &&
-      email.contains('@');
+      email != null && emailRegExp.hasMatch(email) && email.contains('@');
 }

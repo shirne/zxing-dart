@@ -184,9 +184,14 @@ void main() {
       ParsedResultType.emailAddress,
     );
     doTestResult(
-      'srowen@example',
-      'srowen@example',
+      'srowen@example.com',
+      'srowen@example.com',
       ParsedResultType.emailAddress,
+    );
+    doTestResult(
+      'srowen@example',
+      'srowen@example',
+      ParsedResultType.text,
     );
     doTestResult('srowen', 'srowen', ParsedResultType.text);
     doTestResult("Let's meet @ 2", "Let's meet @ 2", ParsedResultType.text);

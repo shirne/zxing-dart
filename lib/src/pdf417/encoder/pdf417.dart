@@ -648,6 +648,10 @@ class PDF417 {
     final sourceCodeWords = highLevel.length;
 
     final dimension = _determineDimensions(
+      _minCols,
+      _maxCols,
+      _minRows,
+      _maxRows,
       sourceCodeWords,
       errorCorrectionCodeWords,
     );
@@ -696,31 +700,64 @@ class PDF417 {
     );
   }
 
+  /// for testing
+  static List<int>? determineDimensions(
+    int minCols,
+    int maxCols,
+    int minRows,
+    int maxRows,
+    int sourceCodeWords,
+    int errorCorrectionCodeWords,
+  ) {
+    try {
+      return _determineDimensions(
+        minCols,
+        maxCols,
+        minRows,
+        maxRows,
+        sourceCodeWords,
+        errorCorrectionCodeWords,
+      );
+    } on WriterException catch (_) {
+      return null;
+    }
+  }
+
   /// Determine optimal nr of columns and rows for the specified number of
   /// codewords.
   ///
+  /// @param minCols minimum number of columns
+  /// @param maxCols maximum number of columns
+  /// @param minRows minimum number of rows
+  /// @param maxRows maximum number of rows
   /// @param sourceCodeWords number of code words
   /// @param errorCorrectionCodeWords number of error correction code words
   /// @return dimension object containing cols as width and rows as height
-  List<int> _determineDimensions(
+  static List<int> _determineDimensions(
+    int minCols,
+    int maxCols,
+    int minRows,
+    int maxRows,
     int sourceCodeWords,
     int errorCorrectionCodeWords,
   ) {
     double ratio = 0.0;
     List<int>? dimension;
+    int currentCol = minCols;
 
-    for (int cols = _minCols; cols <= _maxCols; cols++) {
+    for (int cols = minCols; cols <= maxCols; cols++) {
+      currentCol = cols;
       final rows = _calculateNumberOfRows(
         sourceCodeWords,
         errorCorrectionCodeWords,
         cols,
       );
 
-      if (rows < _minRows) {
+      if (rows < minRows) {
         break;
       }
 
-      if (rows > _maxRows) {
+      if (rows > maxRows) {
         continue;
       }
 
@@ -743,10 +780,10 @@ class PDF417 {
       final rows = _calculateNumberOfRows(
         sourceCodeWords,
         errorCorrectionCodeWords,
-        _minCols,
+        currentCol,
       );
-      if (rows < _minRows) {
-        dimension = [_minCols, _minRows];
+      if (rows < minRows) {
+        dimension = [minCols, minRows];
       }
     }
 

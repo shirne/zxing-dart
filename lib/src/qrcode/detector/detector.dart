@@ -205,7 +205,8 @@ class Detector {
         dimension--;
         break;
       case 3:
-        throw NotFoundException.instance;
+        dimension -= 2;
+        break;
     }
     return dimension;
   }

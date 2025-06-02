@@ -80,6 +80,13 @@ class QRCodeMultiReader extends QRCodeReader implements MultipleBarcodeReader {
             decoderResult.structuredAppendParity,
           );
         }
+
+        // Fix SYMBOLOGY_IDENTIFIER loss in QRCodeMultiReader
+        result.putMetadata(
+          ResultMetadataType.symbologyIdentifier,
+          ']Q${decoderResult.symbologyModifier}',
+        );
+
         results.add(result);
       } on ReaderException catch (_) {
         // ignore and continue

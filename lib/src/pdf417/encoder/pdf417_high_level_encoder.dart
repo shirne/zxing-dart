@@ -162,7 +162,20 @@ class PDF417HighLevelEncoder {
     if (msg.isEmpty) {
       throw WriterException('Empty message not allowed');
     }
+    if (Compaction.text == compaction) {
+      checkCharset(
+        msg,
+        127,
+        'Consider specifying Compaction.AUTO instead of Compaction.TEXT',
+      );
+    }
+
     if (encoding == null && !autoECI) {
+      checkCharset(
+        msg,
+        255,
+        'Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET',
+      );
       for (int i = 0; i < msg.length; i++) {
         if (msg.codeUnitAt(i) > 255) {
           throw WriterException(
@@ -279,6 +292,21 @@ class PDF417HighLevelEncoder {
     }
 
     return sb.toString();
+  }
+
+  /// Check if input is only made of characters between 0 and the upper limit
+  /// @param input          the input
+  /// @param max            the upper limit for charset
+  /// @param errorMessage   the message to explain the error
+  /// @throws WriterException exception highlighting the offending character and a suggestion to avoid the error
+  static void checkCharset(String input, int max, String errorMessage) {
+    for (int i = 0; i < input.length; i++) {
+      if (input.codeUnitAt(i) > max) {
+        throw WriterException(
+          'Non-encodable character detected: ${input[i]} (Unicode: ${input.codeUnitAt(i)}) at position #$i - $errorMessage',
+        );
+      }
+    }
   }
 
   /// Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),

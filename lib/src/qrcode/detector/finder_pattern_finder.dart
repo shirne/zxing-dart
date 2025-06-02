@@ -692,6 +692,8 @@ class FinderPatternFinder {
           // we need to check both two equal sides separately.
           // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
           // from isosceles right triangle.
+          // Heuristically it seems that the following formula works better (although it's
+          // not clear any more why...)
           final d = (c - 2 * b).abs() + (c - 2 * a).abs();
           if (d < distortion) {
             distortion = d;
