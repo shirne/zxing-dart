@@ -1,5 +1,5 @@
 /// common lib
-library zxing_lib.common;
+library;
 
 export 'src/common/binarizer/global_histogram_binarizer.dart';
 export 'src/common/binarizer/hybrid_binarizer.dart';

@@ -1,7 +1,7 @@
 /// multi decode lib
 ///
 /// decode multi qrcode in one image
-library zxing_lib.multi;
+library;
 
 export 'src/multi/by_quadrant_reader.dart';
 export 'src/multi/generic_multiple_barcode_reader.dart';

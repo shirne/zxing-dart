@@ -1,5 +1,5 @@
 /// pdf417 lib
-library zxing_lib.pdf417;
+library;
 
 export 'src/pdf417/pdf417_common.dart';
 export 'src/pdf417/pdf417_reader.dart';

@@ -26,7 +26,7 @@ class Code93Writer extends OneDimensionalCodeWriter {
   List<BarcodeFormat> get supportedWriteFormats => [BarcodeFormat.code93];
 
   /// @param contents barcode contents to encode. It should not be encoded for extended characters.
-  /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
+  /// @return a `List<bool>` of horizontal pixels (false = white, true = black)
   @override
   List<bool> encodeContent(
     String contents, [

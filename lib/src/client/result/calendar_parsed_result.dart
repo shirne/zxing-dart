@@ -64,8 +64,8 @@ class CalendarParsedResult extends ParsedResult {
   ) : super(ParsedResultType.calendar) {
     try {
       _start = _parseDate(startString);
-    } on ParseException catch (_) {
-      throw ArgumentError(_.toString());
+    } on ParseException catch (e) {
+      throw ArgumentError(e.toString());
     }
 
     if (endString == null) {
@@ -74,8 +74,8 @@ class CalendarParsedResult extends ParsedResult {
     } else {
       try {
         _end = _parseDate(endString);
-      } on ParseException catch (_) {
-        throw ArgumentError(_.toString());
+      } on ParseException catch (e) {
+        throw ArgumentError(e.toString());
       }
     }
 

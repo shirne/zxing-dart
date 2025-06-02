@@ -1,5 +1,5 @@
 /// oned lib
-library zxing_lib.oned;
+library;
 
 export 'src/oned/coda_bar_reader.dart';
 export 'src/oned/coda_bar_writer.dart';

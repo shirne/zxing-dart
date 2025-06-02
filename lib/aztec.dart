@@ -1,5 +1,5 @@
 /// aztec lib
-library zxing_lib.aztec;
+library;
 
 export 'src/aztec/aztec_detector_result.dart';
 export 'src/aztec/aztec_reader.dart';

@@ -1,5 +1,5 @@
 /// core lib
-library zxing_lib;
+library;
 
 export 'src/barcode_format.dart';
 export 'src/binarizer.dart';

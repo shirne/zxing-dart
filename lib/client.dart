@@ -1,5 +1,5 @@
 /// decode parsers and results
-library zxing_lib.client;
+library;
 
 export 'src/client/result/abstract_do_co_mo_result_parser.dart';
 export 'src/client/result/address_book_auresult_parser.dart';

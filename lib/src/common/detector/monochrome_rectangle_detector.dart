@@ -208,7 +208,7 @@ class MonochromeRectangleDetector {
   /// @param minDim minimum pixel location, horizontally or vertically, to consider
   /// @param maxDim maximum pixel location, horizontally or vertically, to consider
   /// @param horizontal if true, we're scanning left-right, instead of up-down
-  /// @return List<int> with start and end of found range, or null if no such range is found
+  /// @return `List<int>` with start and end of found range, or null if no such range is found
   ///  (e.g. only white was found)
   List<int>? blackWhiteRange(
     int fixedDimension,

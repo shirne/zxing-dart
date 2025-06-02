@@ -1,5 +1,5 @@
 /// grayscale lib
-library zxing_lib.grayscale;
+library;
 
 export 'src/grayscale/dispatch.dart';
 export 'src/grayscale/grayscale_dispatch.dart';

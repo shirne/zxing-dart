@@ -1,5 +1,5 @@
 /// maxicode lib
-library zxing_lib.maxicode;
+library;
 
 export 'src/maxicode/maxi_code_reader.dart';
 export 'src/maxicode/decoder/bit_matrix_parser.dart';

@@ -131,7 +131,7 @@ abstract class OneDimensionalCodeWriter implements Writer {
   /// Start code and end code should be included in result, and side margins should not be included.
   ///
   /// @param contents barcode contents to encode
-  /// @return a {@code List<bool>} of horizontal pixels (false = white, true = black)
+  /// @return a `List<bool>` of horizontal pixels (false = white, true = black)
   List<bool> encodeContent(
     String contents, [
     EncodeHint? hints,

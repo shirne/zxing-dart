@@ -4,7 +4,7 @@ class StringBuilder extends StringBuffer {
 
   StringBuilder([String super.content]);
 
-  void _initBuffer([force = false]) {
+  void _initBuffer([bool force = false]) {
     if (_buffer == null || force) {
       _buffer = super.toString();
     }
@@ -14,7 +14,7 @@ class StringBuilder extends StringBuffer {
     return charAt(idx);
   }
 
-  operator []=(int idx, String char) {
+  void operator []=(int idx, String char) {
     setCharAt(idx, char);
   }
 

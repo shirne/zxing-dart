@@ -84,7 +84,7 @@ abstract class AbstractRSSReader extends OneDReader {
 
   /// @param array values to sum
   /// @return sum of values
-  /// @deprecated call {@link MathUtils#sum(List<int>)}
+  /// @deprecated call [MathUtils.sum(List<int>)]
   // @protected
   @Deprecated('call [MathUtils::sum]')
   static int count(List<int> array) {

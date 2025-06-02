@@ -23,7 +23,7 @@ class ChecksumException extends ReaderException {
 
   ChecksumException([super.cause]);
 
-  static ChecksumException getChecksumInstance([cause]) {
+  static ChecksumException getChecksumInstance([dynamic cause]) {
     return _instance;
   }
 }

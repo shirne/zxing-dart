@@ -1,5 +1,5 @@
 /// qrcode lib
-library zxing_lib.qrcode;
+library;
 
 export 'src/qrcode/decoder/bit_matrix_parser.dart';
 export 'src/qrcode/decoder/data_block.dart';

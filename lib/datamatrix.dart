@@ -1,5 +1,5 @@
 /// data matrix lib
-library zxing_lib.datamatrix;
+library;
 
 export 'src/datamatrix/data_matrix_reader.dart';
 export 'src/datamatrix/data_matrix_writer.dart';
