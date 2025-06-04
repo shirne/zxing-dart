@@ -37,7 +37,7 @@ class DecodedInformation extends DecodedObject {
     super.newPosition,
     this._newString, [
     this._remainingValue = 0,
-  ])  : _remaining = _remainingValue > 0;
+  ]) : _remaining = _remainingValue > 0;
 
   String get newString => _newString;
 
