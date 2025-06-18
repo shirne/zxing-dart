@@ -2,6 +2,7 @@
 library;
 
 export 'src/grayscale/dispatch.dart';
+export 'src/grayscale/crop_background.dart';
 export 'src/grayscale/grayscale_dispatch.dart';
 export 'src/grayscale/interrupt_grayscale.dart';
 export 'src/grayscale/light_grayscale.dart';

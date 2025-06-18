@@ -11,6 +11,9 @@ class Rect {
 
   int get width => right - left;
   int get height => bottom - top;
+
+  @override
+  String toString() => 'Rect($left, $top, $right, $bottom)';
 }
 
 abstract class Dispatch {
@@ -29,4 +32,6 @@ abstract class Dispatch {
 
   Uint8List dispatchFull(Uint8List data, int width, int height);
   Uint8List dispatchRect(Uint8List data, int width, int height, Rect rect);
+
+  Rect? get cropRect => null;
 }

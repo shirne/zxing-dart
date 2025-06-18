@@ -22,10 +22,12 @@ import 'package:zxing_lib/grayscale.dart';
 import 'package:zxing_lib/zxing.dart';
 
 import '../common/abstract_black_box.dart';
+import '../common/logger.dart' show Logger;
 
 /// These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
 /// rotation, which was a weak spot.
 void main() {
+  final Logger logger = Logger.getLogger(AbstractBlackBoxTestCase);
   Image dispatcher(Image image, String path) {
     path = path.replaceAll('\\', '/');
     final filename = path.substring(path.lastIndexOf('/') + 1);
@@ -33,29 +35,48 @@ void main() {
     final origData = Uint8List.fromList(
       image.map<int>((e) => (e.luminanceNormalized * 255).round()).toList(),
     );
+    int width = image.width;
+    int height = image.height;
+    Dispatch? dispatcher;
     switch (filename) {
       case 'over_dark.png':
-        data = OverDarkScale().dispatch(origData, image.width, image.height);
+        dispatcher = OverDarkScale();
         break;
       case 'over_light.png':
-        data = OverBrightScale().dispatch(origData, image.width, image.height);
+        dispatcher = OverBrightScale();
         break;
       case 'reverse.png':
-        data = RevGrayscale().dispatch(origData, image.width, image.height);
+        dispatcher = RevGrayscale();
         break;
       case 'test_inter.png':
-        data =
-            InterruptGrayscale().dispatch(origData, image.width, image.height);
+        dispatcher = InterruptGrayscale();
         break;
       case 'test_gray.png':
-        data = LightGrayscale().dispatch(origData, image.width, image.height);
+        dispatcher = LightGrayscale();
+        break;
+      case 'test1.png':
+        dispatcher = CropBackground(purity: 0.95, tolerance: 0.1);
+        break;
+      case 'test3.png':
+        dispatcher = CropBackground();
         break;
       default:
-        data = origData;
     }
+    if (dispatcher != null) {
+      data = dispatcher.dispatch(origData, width, height);
+      final rect = dispatcher.cropRect;
+      if (rect != null) {
+        logger.info('cropped $filename:$rect ${rect.width}  ${rect.height}');
+        width = rect.width;
+        height = rect.height;
+      }
+    } else {
+      data = origData;
+    }
+
     final result = Image.fromBytes(
-      width: image.width,
-      height: image.height,
+      width: width,
+      height: height,
       bytes: data.buffer,
       format: Format.uint8,
       order: ChannelOrder.red,
