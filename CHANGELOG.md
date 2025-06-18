@@ -1,3 +1,6 @@
+## [1.1.4]
+* add CropBackgroud for crop Luminance data
+
 ## [1.1.3]
 * Sync zxing to 2025-02-10
   
