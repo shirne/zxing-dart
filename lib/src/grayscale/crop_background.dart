@@ -5,12 +5,12 @@ import 'dispatch.dart';
 class CropBackground extends Dispatch {
   final double tolerance;
   final double purity;
-  final int wrapper;
+  final int cropIn;
 
   CropBackground({
     this.tolerance = 0.05,
     this.purity = 0.99,
-    this.wrapper = 255,
+    this.cropIn = 5,
   });
 
   int? lastColor;
@@ -69,6 +69,48 @@ class CropBackground extends Dispatch {
     }
   }
 
+  void cropData(Uint8List data, int width, int height) {
+    // 顶
+    for (int i = 0; i < width; i++) {
+      final deepInColor = data[cropIn * width + i];
+      if ((deepInColor - lastColor!).abs() / 255 > tolerance) {
+        for (int j = 0; j < cropIn; j++) {
+          data[j * width + i] = deepInColor;
+        }
+      }
+    }
+
+    // 底
+    for (int i = 0; i < width; i++) {
+      final deepInColor = data[(height - cropIn - 1) * width + i];
+      if ((deepInColor - lastColor!).abs() / 255 > tolerance) {
+        for (int j = 1; j <= cropIn; j++) {
+          data[(height - j) * width + i] = deepInColor;
+        }
+      }
+    }
+
+    // 左
+    for (int i = 0; i < height; i++) {
+      final deepInColor = data[i * width + cropIn];
+      if ((deepInColor - lastColor!).abs() / 255 > tolerance) {
+        for (int j = 0; j < cropIn; j++) {
+          data[i * width + j] = deepInColor;
+        }
+      }
+    }
+
+    // 右
+    for (int i = 0; i < height; i++) {
+      final deepInColor = data[i * width + (width - cropIn - 1)];
+      if ((deepInColor - lastColor!).abs() / 255 > tolerance) {
+        for (int j = 1; j <= cropIn; j++) {
+          data[i * width + (width - j)] = deepInColor;
+        }
+      }
+    }
+  }
+
   @override
   Uint8List dispatchFull(Uint8List data, int width, int height) {
     int cropTop = 0, cropLeft = 0, cropRight = 0, cropBottom = 0;
@@ -111,27 +153,31 @@ class CropBackground extends Dispatch {
     }
 
     if (cropTop > 0 || cropLeft > 0 || cropRight > 0 || cropBottom > 0) {
-      _cropRect =
-          Rect(cropLeft, cropTop, width - cropRight, height - cropBottom);
+      final newWidth = width - cropRight - cropLeft;
+      final newHeight = height - cropBottom - cropTop;
 
-      final newWidth = _cropRect!.width;
-      final newHeight = _cropRect!.height;
-
-      // math.max(math.min(newWidth, newHeight) * 0.1, 10).round();
-      final padding = 0;
-      final newData = Uint8List(
-        (newWidth + padding * 2) * (newHeight + padding * 2),
+      _cropRect = Rect(
+        cropLeft,
+        cropTop,
+        width - cropRight,
+        height - cropBottom,
       );
+
+      final newData = Uint8List(newWidth * newHeight);
       //newData.fillRange(0, newData.length, wrapper);
+
       for (int i = 0; i < newHeight; i++) {
         final start = (i + cropTop) * width + cropLeft;
         List.copyRange(
           newData,
-          (i + padding) * newWidth + padding,
+          i * newWidth,
           data,
           start,
           start + newWidth,
         );
+      }
+      if (cropIn > 0 && lastColor != null) {
+        cropData(newData, newWidth, newHeight);
       }
       lastColor = null;
       return newData;
