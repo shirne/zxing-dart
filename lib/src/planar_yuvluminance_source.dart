@@ -128,7 +128,10 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
       List.copyRange(
         newData,
         i * _dataHeight,
-        List.generate(_dataHeight, (j) => _yuvData[j * _dataWidth + i]),
+        List.generate(
+          _dataHeight,
+          (j) => _yuvData[(_dataHeight - j - 1) * _dataWidth + i],
+        ),
       );
     }
 

@@ -89,7 +89,20 @@ void main() {
     expect(cols, rotated.height);
 
     assertListEquals(
-        [0, 8, 0, 248, 127, 127], 0, rotated.getRow(0, null), 0, rotated.width);
+      [248, 0, 8, 0],
+      0,
+      rotated.getRow(0, null),
+      0,
+      rotated.width,
+    );
+
+    assertListEquals(
+      [222, 254, 34, 2],
+      0,
+      rotated.getRow(3, null),
+      0,
+      rotated.width,
+    );
   });
 
   test('testThumbnail', () {
