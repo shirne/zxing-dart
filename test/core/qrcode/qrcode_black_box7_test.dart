@@ -61,7 +61,7 @@ void main() {
         dispatcher = CropBackground(cropIn: 2);
         break;
       case 'test4.png':
-        dispatcher = CropBackground(cropIn: 6);
+        dispatcher = CropBackground(tolerance: 0.2, cropIn: 6);
         break;
       default:
     }

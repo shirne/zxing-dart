@@ -28,15 +28,20 @@ void main() {
     var byteData =
         Uint8List.fromList(plane['bytes'].map<int>((e) => e as int).toList());
 
-    final dispacter = CropBackground(cropIn: 5);
+    final dispacter = CropBackground(tolerance: 0.2, cropIn: 6);
     byteData = dispacter.dispatch(byteData, width, height);
+    final rect = dispacter.cropRect;
+    logger.info('Cropped: $rect ${rect?.width},${rect?.height} ');
     final luminance = PlanarYUVLuminanceSource(
       byteData,
-      dispacter.cropRect?.width ?? width,
-      dispacter.cropRect?.height ?? height,
+      rect?.width ?? width,
+      rect?.height ?? height,
     );
 
     var bmp = BinaryBitmap(HybridBinarizer(luminance));
+
+    // File(file.path.replaceFirst('.json', '-croped-rotated.txt'))
+    //    .writeAsStringSync(luminance.rotateCounterClockwise().toString());
 
     final metadata =
         File(file.path.replaceFirst('.json', '.txt')).readAsStringSync();
