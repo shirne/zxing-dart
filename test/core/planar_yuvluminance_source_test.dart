@@ -78,6 +78,20 @@ void main() {
     }
   });
 
+  test('testRotate', () {
+    final source = PlanarYUVLuminanceSource(
+      Uint8List.fromList(yuv),
+      cols,
+      rows,
+    );
+    final rotated = source.rotateCounterClockwise();
+    expect(rows, rotated.width);
+    expect(cols, rotated.height);
+
+    assertListEquals(
+        [0, 8, 0, 248, 127, 127], 0, rotated.getRow(0, null), 0, rotated.width);
+  });
+
   test('testThumbnail', () {
     final source =
         PlanarYUVLuminanceSource(Uint8List.fromList(yuv), cols, rows);

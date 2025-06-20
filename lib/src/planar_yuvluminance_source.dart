@@ -121,6 +121,24 @@ class PlanarYUVLuminanceSource extends LuminanceSource {
     );
   }
 
+  @override
+  LuminanceSource rotateCounterClockwise() {
+    final newData = Uint8List(_yuvData.length);
+    for (int i = 0; i < _dataWidth; i++) {
+      List.copyRange(
+        newData,
+        i * _dataHeight,
+        List.generate(_dataHeight, (j) => _yuvData[j * _dataWidth + i]),
+      );
+    }
+
+    return PlanarYUVLuminanceSource(
+      newData,
+      _dataHeight,
+      _dataWidth,
+    );
+  }
+
   List<int> renderThumbnail() {
     final tWidth = width ~/ _thumbnailScaleFactor;
     final tHeight = height ~/ _thumbnailScaleFactor;
